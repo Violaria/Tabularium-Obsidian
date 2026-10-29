@@ -83,6 +83,33 @@
         }
     }
 
+    /** A link of the form /notes/#<vault>/<path> (from Tabularius citations) opens that vault, then that note. */
+    function linked() {
+        const [id, ...rest] = location.hash.slice(1).split("/");
+        if (!id) return undefined;
+        try {
+            return { vault: decodeURIComponent(id), path: rest.map(decodeURIComponent).join("/") };
+        } catch {
+            return undefined;
+        }
+    }
+    let pending = linked();
+    function followLink() {
+        const target = pending && vaults.find((v) => v.id === pending!.vault);
+        if (target) chooseVault(target);
+    }
+    window.addEventListener("hashchange", () => {
+        pending = linked();
+        if (phase === "open" && pending && pending.vault === vault?.id) void showLinked();
+        else if (phase === "vaults" || phase === "unlock") followLink();
+    });
+    async function showLinked() {
+        const path = pending?.path;
+        pending = undefined;
+        history.replaceState(null, "", location.pathname + location.search);
+        if (path && files.some((f) => f.path === path)) await show(path);
+    }
+
     async function start() {
         try {
             user = await restoreSession();
@@ -115,6 +142,7 @@
         offline = true;
         vaults = (await recordsOf(last.id)).filter((r) => r.fetched).map((r) => ({ id: r.key.slice(r.key.indexOf(":") + 1), name: r.vaultName, state: "ready" }));
         phase = "vaults";
+        followLink();
     }
 
     async function submitLogin(event: SubmitEvent) {
@@ -138,6 +166,7 @@
         rememberUser(user!);
         vaults = await listVaults();
         phase = "vaults";
+        followLink();
     }
 
     function chooseVault(chosen: Vault) {
@@ -198,6 +227,7 @@
         status = offline ? t("notes.offlineStatus") : t("notes.synced");
         stateTimer = window.setInterval(() => void watchState(), 1000);
         phase = "open";
+        if (pending?.vault === target.id) await showLinked();
     }
 
     /** Save state from the replication progress, and reconnection once the network is back. */
