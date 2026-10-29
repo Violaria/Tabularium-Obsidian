@@ -1,0 +1,1915 @@
+import { mkdir, readFile, rename as renameFilesystemPath, rm, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { SALT_OF_PASSPHRASE } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { encryptString } from "@vrtmrz/livesync-commonlib/compat/encryption/stringEncryption";
+import { deriveIdKey } from "@vrtmrz/livesync-commonlib/settings";
+import { CENTRAL_COMPATIBILITY_REJECTION_REASONS } from "@vrtmrz/livesync-commonlib/replication";
+import { evalObsidianJson } from "../runner/cli.ts";
+import {
+    assertCouchDbReachable,
+    createCouchDbDatabase,
+    deleteCouchDbDatabase,
+    fetchAllCouchDbDocs,
+    fetchCouchDbDocument,
+    fetchCouchDbLocalDocs,
+    loadCouchDbConfig,
+    makeUniqueDatabaseName,
+    waitForCouchDbDocs,
+    type CouchDbConfig,
+} from "../runner/couchdb.ts";
+import { discoverObsidianCli, requireObsidianBinary } from "../runner/environment.ts";
+import { waitForExactCaseOnlyRename } from "../runner/pathAssertions.ts";
+import {
+    assertEqual,
+    assertE2eCompatibilityUnpaused,
+    configureCouchDb,
+    createE2eCouchDbPluginData,
+    createE2eObsidianDeviceLocalState,
+    prepareRemote,
+    pushLocalChanges,
+    waitForLiveSyncCoreReady,
+    waitForLocalDatabaseEntry,
+    type LocalDatabaseEntry,
+} from "../runner/liveSyncWorkflow.ts";
+import { startObsidianLiveSyncSession, type ObsidianLiveSyncSession } from "../runner/session.ts";
+import { createTemporaryVault, type TemporaryVault } from "../runner/vault.ts";
+import { captureObsidianPage } from "../runner/ui.ts";
+import { FILE_REFLECTION_PROVENANCE_STORE } from "../../../src/serviceModules/FileReflectionProvenance.ts";
+
+process.env.E2E_OBSIDIAN_CLI_TIMEOUT_MS ??= "30000";
+process.env.E2E_OBSIDIAN_COUCHDB_TIMEOUT_MS ??= "20000";
+
+const createPath = "E2E/two-vault/create.md";
+const updatePath = "E2E/two-vault/update.md";
+const deletePath = "E2E/two-vault/delete.md";
+const renameFromPath = "E2E/two-vault/rename-source.md";
+const renameToPath = "E2E/two-vault/renamed/rename-target.md";
+const caseRenameFromPath = "E2E/two-vault/Case-Rename.md";
+const caseRenameToPath = "E2E/two-vault/case-rename.md";
+const conflictPath = "E2E/two-vault/conflict.md";
+const conflictEditPath = "E2E/two-vault/conflict-operations/edit.md";
+const conflictDeletePath = "E2E/two-vault/conflict-operations/delete.md";
+const conflictCaseFromPath = "E2E/two-vault/conflict-operations/Case-Rename.md";
+const conflictCaseToPath = "E2E/two-vault/conflict-operations/case-rename.md";
+const conflictRenameFromPath = "E2E/two-vault/conflict-operations/rename-source.md";
+const conflictRenameToPath = "E2E/two-vault/conflict-operations/renamed/rename-target.md";
+const targetMismatchPath = "E2E/two-vault/target-mismatch.md";
+const encryptedPath = "E2E/two-vault/encrypted.md";
+const parentCaseRenameFromDirectoryPath = "E2E/two-vault/parent/test3";
+const parentCaseRenameToDirectoryPath = "E2E/two-vault/parent/Test3";
+const parentCaseRenameFromPath = `${parentCaseRenameFromDirectoryPath}/note.md`;
+const parentCaseRenameToPath = `${parentCaseRenameToDirectoryPath}/note.md`;
+const parentCaseEventObserverKey = "__livesyncE2eParentCaseEventObserver";
+
+type RunnerContext = {
+    binary: string;
+    cliBinary: string;
+    couchDb: CouchDbConfig;
+    dbName: string;
+    activeSessions: Set<ObsidianLiveSyncSession>;
+};
+
+type FileConflictState = {
+    currentRev: string;
+    branches: {
+        rev: string;
+        parentRev?: string;
+        content: string;
+        deleted: boolean;
+        path: string;
+    }[];
+};
+
+type ParentCaseVaultEvent = {
+    type: "create" | "delete" | "rename";
+    path: string;
+    oldPath: string | null;
+};
+
+type ParentCaseMetadataState = {
+    id: string;
+    found: boolean;
+    rev: string | null;
+    path: string | null;
+    deleted: boolean;
+    children: string[];
+    contentMatches: boolean;
+    childrenMatch: boolean;
+    chunksPresent: boolean;
+    chunkReferenceCount: number;
+    availableChunkCount: number;
+};
+
+type ParentCaseRemoteMetadataState = {
+    id: string;
+    rev: string | null;
+    path: string | null;
+    deleted: boolean;
+    children: string[];
+};
+
+async function writeVaultFile(vaultPath: string, path: string, content: string): Promise<void> {
+    const fullPath = join(vaultPath, path);
+    await mkdir(dirname(fullPath), { recursive: true });
+    await writeFile(fullPath, content, "utf-8");
+}
+
+async function removeVaultFile(vaultPath: string, path: string): Promise<void> {
+    await rm(join(vaultPath, path), { force: true });
+}
+
+async function readVaultFile(vaultPath: string, path: string): Promise<string> {
+    return await readFile(join(vaultPath, path), "utf-8");
+}
+
+async function pathExists(vaultPath: string, path: string): Promise<boolean> {
+    try {
+        await readFile(join(vaultPath, path));
+        return true;
+    } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+            return false;
+        }
+        throw error;
+    }
+}
+
+function metadataDeletionModePath(path: string, deleteMetadataOfDeletedFiles?: boolean): string {
+    if (deleteMetadataOfDeletedFiles === undefined) return path;
+    const prefix = "E2E/two-vault/";
+    return `${prefix}delete-metadata-of-deleted-files-${deleteMetadataOfDeletedFiles}/${path.slice(prefix.length)}`;
+}
+
+async function installParentCaseEventObserver(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    observedPaths: readonly string[]
+): Promise<string> {
+    return await evalObsidianJson<string>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const key=${JSON.stringify(parentCaseEventObserverKey)};`,
+            `const observedPaths=${JSON.stringify(observedPaths)};`,
+            "const previous=globalThis[key];",
+            "if(previous){for(const ref of previous.refs??[]) app.vault.offref(ref);}",
+            "const events=[];",
+            "const record=(type,file,oldPath)=>{",
+            "  const path=typeof file?.path==='string'?file.path:'';",
+            "  const previousPath=typeof oldPath==='string'?oldPath:null;",
+            "  if(!observedPaths.includes(path)&&(!previousPath||!observedPaths.includes(previousPath))) return;",
+            "  globalThis[key].lastEventAt=Date.now();",
+            "  if(events.length<32) events.push({type,path,oldPath:previousPath});",
+            "};",
+            "const refs=[",
+            "  app.vault.on('create',(file)=>record('create',file)),",
+            "  app.vault.on('delete',(file)=>record('delete',file)),",
+            "  app.vault.on('rename',(file,oldPath)=>record('rename',file,oldPath)),",
+            "];",
+            "globalThis[key]={events,refs,lastEventAt:Date.now()};",
+            "return JSON.stringify(app.plugins.plugins['obsidian-livesync'].core.services.API.getAppVersion());",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function takeParentCaseEventEvidence(cliBinary: string, env: NodeJS.ProcessEnv): Promise<ParentCaseVaultEvent[]> {
+    return await evalObsidianJson<ParentCaseVaultEvent[]>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const key=${JSON.stringify(parentCaseEventObserverKey)};`,
+            "const observer=globalThis[key];",
+            "if(!observer) return JSON.stringify([]);",
+            "const events=Array.isArray(observer.events)?observer.events.slice(0,32):[];",
+            "try{for(const ref of observer.refs??[]) app.vault.offref(ref);}finally{delete globalThis[key];}",
+            "return JSON.stringify(events);",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function stopTrackedSession(context: RunnerContext, session: ObsidianLiveSyncSession): Promise<void> {
+    if (!context.activeSessions.has(session)) return;
+    await session.app.stop();
+    context.activeSessions.delete(session);
+}
+
+async function stopTrackedSessions(context: RunnerContext): Promise<void> {
+    for (const session of [...context.activeSessions]) {
+        await stopTrackedSession(context, session);
+    }
+}
+
+async function waitForPathContent(
+    vaultPath: string,
+    path: string,
+    predicate: (content: string) => boolean,
+    timeoutMs = Number(process.env.E2E_OBSIDIAN_FILE_TIMEOUT_MS ?? 10000)
+): Promise<string> {
+    const deadline = Date.now() + timeoutMs;
+    let lastContent = "";
+    while (Date.now() < deadline) {
+        if (await pathExists(vaultPath, path)) {
+            lastContent = await readVaultFile(vaultPath, path);
+            if (predicate(lastContent)) {
+                return lastContent;
+            }
+        }
+        await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new Error(`Timed out waiting for ${path}. Last content:\n${lastContent}`);
+}
+
+async function waitForPathDeleted(
+    vaultPath: string,
+    path: string,
+    timeoutMs = Number(process.env.E2E_OBSIDIAN_FILE_TIMEOUT_MS ?? 10000)
+): Promise<void> {
+    const deadline = Date.now() + timeoutMs;
+    while (Date.now() < deadline) {
+        if (!(await pathExists(vaultPath, path))) {
+            return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new Error(`Timed out waiting for deleted file: ${join(vaultPath, path)}`);
+}
+
+async function waitForLocalDeletedMetadataMarker(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    id: string,
+    path: string,
+    deleteMetadataOfDeletedFiles: boolean
+): Promise<void> {
+    const timeoutMs = Number(process.env.E2E_OBSIDIAN_LOCAL_DB_TIMEOUT_MS ?? 15000);
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const id=${JSON.stringify(id)};`,
+            `const path=${JSON.stringify(path)};`,
+            `const expectHardDeletion=${JSON.stringify(deleteMetadataOfDeletedFiles)};`,
+            `const timeoutMs=${JSON.stringify(timeoutMs)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const deadline=Date.now()+timeoutMs;",
+            "let state={id,path,rowFound:false,hardDeleted:false,logicallyDeleted:false,documentPresent:false,documentPath:null};",
+            "while(Date.now()<deadline){",
+            "  const rows=(await core.localDatabase.allDocsRaw({keys:[id],include_docs:true})).rows??[];",
+            "  const row=rows.find((candidate)=>candidate.id===id||candidate.key===id);",
+            "  const doc=row?.doc??null;",
+            "  const hardDeleted=Boolean(row?.value?.deleted||doc?._deleted);",
+            "  const logicallyDeleted=Boolean(doc?.deleted);",
+            "  const documentPresent=Boolean(doc&&!doc._deleted);",
+            "  state={id,path,rowFound:Boolean(row),hardDeleted,logicallyDeleted,documentPresent,documentPath:doc?.path??null};",
+            "  const matches=expectHardDeletion?Boolean(row&&hardDeleted&&!documentPresent):Boolean(row&&!hardDeleted&&logicallyDeleted&&documentPresent&&doc.path===path);",
+            "  if(matches) return JSON.stringify(state);",
+            "  await new Promise((resolve)=>setTimeout(resolve,250));",
+            "}",
+            "throw new Error(`Timed out waiting for the expected local Metadata deletion marker: ${JSON.stringify(state)}`);",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function waitForExactObsidianPath(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string,
+    oldPath: string,
+    timeoutMs = Number(process.env.E2E_OBSIDIAN_FILE_TIMEOUT_MS ?? 10000)
+): Promise<void> {
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const expectedPath=${JSON.stringify(path)};`,
+            `const oldPath=${JSON.stringify(oldPath)};`,
+            `const observerKey=${JSON.stringify(parentCaseEventObserverKey)};`,
+            `const timeoutMs=${JSON.stringify(timeoutMs)};`,
+            "const deadline=Date.now()+timeoutMs;",
+            "let observedPath=null;",
+            "while(Date.now()<deadline){",
+            "  const files=app.vault.getFiles();",
+            "  const file=files.find((candidate)=>candidate.path===expectedPath);",
+            "  observedPath=typeof file?.path==='string'?file.path:null;",
+            "  const observer=globalThis[observerKey];",
+            "  if(observedPath===expectedPath&&!files.some((candidate)=>candidate.path===oldPath)&&observer?.events.length>0&&Date.now()-observer.lastEventAt>=500) return JSON.stringify({path:observedPath});",
+            "  await new Promise((resolve)=>setTimeout(resolve,100));",
+            "}",
+            "throw new Error(`Timed out waiting for Obsidian to recognise the exact path: ${JSON.stringify({expectedPath,observedPath})}`);",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function waitForEitherPathContent(
+    vaultPath: string,
+    paths: readonly string[],
+    expectedContent: string,
+    timeoutMs = Number(process.env.E2E_OBSIDIAN_FILE_TIMEOUT_MS ?? 10000)
+): Promise<{ path: string }> {
+    const deadline = Date.now() + timeoutMs;
+    let lastPath: string | null = null;
+    let contentMatched = false;
+    while (Date.now() < deadline) {
+        for (const path of paths) {
+            if (!(await pathExists(vaultPath, path))) continue;
+            lastPath = path;
+            contentMatched = (await readVaultFile(vaultPath, path)) === expectedContent;
+            if (contentMatched) return { path };
+        }
+        await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    throw new Error(
+        `Timed out waiting for content at either case variant: ${JSON.stringify({
+            paths,
+            lastPath,
+            contentMatched,
+        })}`
+    );
+}
+
+async function waitForParentCaseMetadata(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    id: string,
+    expectedPath: string,
+    expectedContent: string,
+    expectedChildren: readonly string[],
+    expectedRevision?: string
+): Promise<ParentCaseMetadataState> {
+    const timeoutMs = Number(process.env.E2E_OBSIDIAN_LOCAL_DB_TIMEOUT_MS ?? 15000);
+    return await evalObsidianJson<ParentCaseMetadataState>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const id=${JSON.stringify(id)};`,
+            `const expectedPath=${JSON.stringify(expectedPath)};`,
+            `const expectedContent=${JSON.stringify(expectedContent)};`,
+            `const expectedChildren=${JSON.stringify(expectedChildren)};`,
+            `const expectedRevision=${JSON.stringify(expectedRevision ?? null)};`,
+            `const timeoutMs=${JSON.stringify(timeoutMs)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const deadline=Date.now()+timeoutMs;",
+            "let state={id,found:false,rev:null,path:null,deleted:false,children:[],contentMatches:false,childrenMatch:false,chunksPresent:false,chunkReferenceCount:0,availableChunkCount:0};",
+            "while(Date.now()<deadline){",
+            "  await core.services.fileProcessing.commitPendingFileEvents();",
+            "  const raw=await core.localDatabase.getRaw(id,{revs_info:true}).catch(()=>null);",
+            "  const row=((await core.localDatabase.allDocsRaw({keys:[id],include_docs:true})).rows??[])[0];",
+            "  const rawDoc=raw??row?.doc??null;",
+            "  const deleted=Boolean(raw?.deleted||raw?._deleted||row?.value?.deleted||row?.doc?.deleted||row?.doc?._deleted);",
+            "  const children=Array.isArray(rawDoc?.children)?rawDoc.children:[];",
+            "  const rev=rawDoc?._rev??row?.value?.rev??null;",
+            "  if(deleted) throw new Error(`Parent case rename marked Metadata as deleted (deleted or _deleted): ${JSON.stringify({id,rev,path:rawDoc?.path??null})}`);",
+            "  if(rawDoc){",
+            "    const loaded=await core.localDatabase.getDBEntry(expectedPath,{rev},false,true,true).catch(()=>false);",
+            "    const content=loaded===false?'':Array.isArray(loaded.data)?loaded.data.join(''):typeof loaded.data==='string'?loaded.data:'';",
+            "    const chunkRows=children.length===0?{rows:[]}:await core.localDatabase.allDocsRaw({keys:children,include_docs:true});",
+            "    const availableChunkCount=chunkRows.rows.filter((chunkRow)=>Boolean(chunkRow.doc)&&!Boolean(chunkRow.value?.deleted)&&!Boolean(chunkRow.doc?.deleted)&&!Boolean(chunkRow.doc?._deleted)).length;",
+            "    state={id,found:true,rev,path:rawDoc?.path??null,deleted:false,children,contentMatches:content===expectedContent,childrenMatch:children.length===expectedChildren.length&&children.every((child,index)=>child===expectedChildren[index]),chunksPresent:availableChunkCount===children.length&&children.length===expectedChildren.length,chunkReferenceCount:children.length,availableChunkCount};",
+            "    if(state.contentMatches&&state.childrenMatch&&state.chunksPresent&&(!expectedRevision||state.rev===expectedRevision)) return JSON.stringify(state);",
+            "  }",
+            "  await new Promise((resolve)=>setTimeout(resolve,250));",
+            "}",
+            "throw new Error(`Timed out waiting for parent case Metadata and Chunks: ${JSON.stringify(state)}`);",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function waitForParentCaseRemoteMetadata(
+    context: RunnerContext,
+    entry: LocalDatabaseEntry
+): Promise<ParentCaseRemoteMetadataState> {
+    const timeoutMs = Number(process.env.E2E_OBSIDIAN_COUCHDB_TIMEOUT_MS ?? 15000);
+    const deadline = Date.now() + timeoutMs;
+    let lastState: ParentCaseRemoteMetadataState | null = null;
+    while (Date.now() < deadline) {
+        const response = await fetchAllCouchDbDocs(context.couchDb, context.dbName);
+        const row = response.rows.find((candidate) => candidate.id === entry.id);
+        const doc = row?.doc;
+        const deleted = Boolean(row?.value.deleted || doc?.deleted || doc?._deleted);
+        lastState = {
+            id: entry.id,
+            rev: row?.value.rev ?? doc?._rev ?? null,
+            path: doc?.path ?? null,
+            deleted,
+            children: Array.isArray(doc?.children) ? doc.children : [],
+        };
+        if (deleted) {
+            throw new Error(
+                `Parent case rename uploaded deleted remote Metadata: ${JSON.stringify({
+                    id: entry.id,
+                    rev: lastState.rev,
+                    path: lastState.path,
+                })}`
+            );
+        }
+        if (
+            doc &&
+            lastState.children.length === entry.children.length &&
+            lastState.children.every(
+                (child, index) =>
+                    child === entry.children[index] &&
+                    response.rows.some(
+                        (chunk) =>
+                            chunk.id === child &&
+                            chunk.doc &&
+                            !chunk.value.deleted &&
+                            !chunk.doc.deleted &&
+                            !chunk.doc._deleted
+                    )
+            )
+        ) {
+            return lastState;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    throw new Error(`Timed out waiting for non-deleted remote Metadata: ${JSON.stringify(lastState)}`);
+}
+
+async function writeNoteViaObsidian(cliBinary: string, env: NodeJS.ProcessEnv, path: string, content: string) {
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            `const content=${JSON.stringify(content)};`,
+            "const folder=path.split('/').slice(0,-1).join('/');",
+            "if(folder&&!(await app.vault.adapter.exists(folder))) await app.vault.createFolder(folder);",
+            "const existing=app.vault.getAbstractFileByPath(path);",
+            "if(existing) await app.vault.modify(existing,content);",
+            "else await app.vault.create(path,content);",
+            "return JSON.stringify({ok:true});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function deleteNoteViaObsidian(cliBinary: string, env: NodeJS.ProcessEnv, path: string) {
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            "const existing=app.vault.getAbstractFileByPath(path);",
+            "if(existing) await app.vault.delete(existing);",
+            "return JSON.stringify({ok:true});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function renameNoteViaObsidian(cliBinary: string, env: NodeJS.ProcessEnv, fromPath: string, toPath: string) {
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const fromPath=${JSON.stringify(fromPath)};`,
+            `const toPath=${JSON.stringify(toPath)};`,
+            "const folder=toPath.split('/').slice(0,-1).join('/');",
+            "if(folder&&!(await app.vault.adapter.exists(folder))) await app.vault.createFolder(folder);",
+            "const existing=app.vault.getAbstractFileByPath(fromPath);",
+            "if(!existing) throw new Error(`Could not find note to rename: ${fromPath}`);",
+            "await app.vault.rename(existing,toPath);",
+            "return JSON.stringify({ok:true});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function startConfiguredSession(
+    context: RunnerContext,
+    vault: TemporaryVault,
+    overrides: Record<string, unknown> = {},
+    persistedOverrides: Record<string, unknown> = overrides
+): Promise<ObsidianLiveSyncSession> {
+    const couchDbSettings = {
+        uri: context.couchDb.uri,
+        username: context.couchDb.username,
+        password: context.couchDb.password,
+        dbName: context.dbName,
+    };
+    const session = await startObsidianLiveSyncSession({
+        binary: context.binary,
+        cliBinary: context.cliBinary,
+        vault,
+        artifactRoot: process.env.E2E_OBSIDIAN_ARTIFACT_ROOT,
+        startupGraceMs: Number(process.env.E2E_OBSIDIAN_STARTUP_GRACE_MS ?? 1000),
+        pluginData: createE2eCouchDbPluginData(couchDbSettings, persistedOverrides),
+    });
+    context.activeSessions.add(session);
+    try {
+        await waitForLiveSyncCoreReady(context.cliBinary, session.cliEnv);
+        await assertE2eCompatibilityUnpaused(context.cliBinary, session.cliEnv, session.remoteDebuggingPort);
+        await configureCouchDb(context.cliBinary, session.cliEnv, couchDbSettings, overrides);
+        await waitForLiveSyncCoreReady(context.cliBinary, session.cliEnv);
+        await prepareRemote(context.cliBinary, session.cliEnv);
+        return session;
+    } catch (error) {
+        try {
+            await stopTrackedSession(context, session);
+        } catch (stopError) {
+            throw Object.assign(new Error("Could not stop Obsidian after session setup failed."), {
+                cause: error,
+                stopError,
+            });
+        }
+        throw error;
+    }
+}
+
+async function uploadNote(
+    context: RunnerContext,
+    session: ObsidianLiveSyncSession,
+    path: string
+): Promise<LocalDatabaseEntry> {
+    const entry = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, path);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await waitForCouchDbDocs(context.couchDb, context.dbName, (docs) => {
+        const ids = new Set(docs.map((doc) => doc._id));
+        return ids.has(entry.id) && entry.children.every((childId) => ids.has(childId));
+    });
+    return entry;
+}
+
+async function syncAndApply(context: RunnerContext, session: ObsidianLiveSyncSession): Promise<void> {
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+}
+
+async function storeFileRevision(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string,
+    content: string,
+    baseRev?: string
+): Promise<string> {
+    const result = await evalObsidianJson<{ rev: string }>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            `const content=${JSON.stringify(content)};`,
+            `const baseRev=${JSON.stringify(baseRev ?? "")};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const blob=new Blob([content],{type:'text/plain'});",
+            "const id=await core.services.path.path2id(path);",
+            "const now=Date.now();",
+            "const result=await core.localDatabase.putDBEntry({",
+            "  _id:id,",
+            "  path,",
+            "  data:blob,",
+            "  ctime:now,",
+            "  mtime:now,",
+            "  size:(await blob.arrayBuffer()).byteLength,",
+            "  children:[],",
+            "  datatype:'plain',",
+            "  type:'plain',",
+            "  eden:{},",
+            "},false,baseRev||undefined);",
+            "if(!result?.ok) throw new Error(`Could not store file revision: ${path}`);",
+            "return JSON.stringify({ok:true,rev:result.rev});",
+            "})()",
+        ].join(""),
+        env
+    );
+    return result.rev;
+}
+
+async function readFileConflictState(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string
+): Promise<FileConflictState> {
+    return await evalObsidianJson<FileConflictState>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const meta=await core.localDatabase.getDBEntryMeta(path,{conflicts:true},true);",
+            "if(!meta) throw new Error(`Could not find conflict metadata: ${path}`);",
+            "const revisions=[meta._rev,...(meta._conflicts??[])];",
+            "const branches=[];",
+            "for(const rev of revisions){",
+            "  const branchMeta=await core.localDatabase.getDBEntryMeta(path,{rev,revs:true},true);",
+            "  const entry=await core.localDatabase.getDBEntry(path,{rev},false,true,true);",
+            "  if(!branchMeta||!entry) throw new Error(`Could not read conflict revision: ${path} ${rev}`);",
+            "  const content=Array.isArray(entry.data)?entry.data.join(''):entry.data;",
+            "  if(typeof content!=='string') throw new Error(`Conflict revision was not text: ${path} ${rev}`);",
+            "  const ids=branchMeta._revisions?.ids??[];",
+            "  const parentRev=ids[1]?`${branchMeta._revisions.start-1}-${ids[1]}`:undefined;",
+            "  branches.push({rev,parentRev,content,deleted:Boolean(branchMeta.deleted||branchMeta._deleted),path:branchMeta.path});",
+            "}",
+            "return JSON.stringify({currentRev:meta._rev,branches});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function waitForFileConflict(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string
+): Promise<FileConflictState> {
+    const deadline = Date.now() + Number(process.env.E2E_OBSIDIAN_LOCAL_DB_TIMEOUT_MS ?? 15000);
+    let state = await readFileConflictState(cliBinary, env, path);
+    while (state.branches.length < 2 && Date.now() < deadline) {
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        state = await readFileConflictState(cliBinary, env, path);
+    }
+    if (state.branches.length < 2) {
+        throw new Error(`Timed out waiting for a file conflict: ${path}`);
+    }
+    return state;
+}
+
+async function waitForConflictBranch(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string,
+    predicate: (branch: FileConflictState["branches"][number]) => boolean
+): Promise<FileConflictState["branches"][number]> {
+    const deadline = Date.now() + Number(process.env.E2E_OBSIDIAN_LOCAL_DB_TIMEOUT_MS ?? 15000);
+    let state = await readFileConflictState(cliBinary, env, path);
+    while (Date.now() < deadline) {
+        const branch = state.branches.find(predicate);
+        if (branch) return branch;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+        state = await readFileConflictState(cliBinary, env, path);
+    }
+    throw new Error(`Timed out waiting for the expected conflict branch: ${path}; ${JSON.stringify(state)}`);
+}
+
+async function readFileReflectionProvenance(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string
+): Promise<{ revision: string; observedStorageMtime?: number } | null> {
+    return await evalObsidianJson<{ revision: string; observedStorageMtime?: number } | null>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const store=core.services.keyValueDB.openSimpleStore('file-reflection-provenance-v1');",
+            "return JSON.stringify((await store.get(path))??null);",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function readPathIdentity(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    paths: readonly string[]
+): Promise<{ caseSensitive: boolean; ids: Record<string, string> }> {
+    return await evalObsidianJson<{ caseSensitive: boolean; ids: Record<string, string> }>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const paths=${JSON.stringify(paths)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const ids={};",
+            "for(const path of paths) ids[path]=await core.services.path.path2id(path);",
+            "return JSON.stringify({",
+            "  caseSensitive:Boolean(core.services.setting.currentSettings().handleFilenameCaseSensitive),",
+            "  ids,",
+            "});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function calculateMarkdownAutoMerge(cliBinary: string, env: NodeJS.ProcessEnv, path: string): Promise<string> {
+    const result = await evalObsidianJson<{ content: string }>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const result=await core.localDatabase.managers.conflictManager.tryAutoMerge(path,true);",
+            "if(!('result' in result)){",
+            "  throw new Error(`Markdown conflict was not auto-mergeable: ${path}; ${JSON.stringify(result)}`);",
+            "}",
+            "return JSON.stringify({content:result.result});",
+            "})()",
+        ].join(""),
+        env
+    );
+    return result.content;
+}
+
+async function deleteRevisionAndReflect(
+    cliBinary: string,
+    env: NodeJS.ProcessEnv,
+    path: string,
+    revision: string
+): Promise<void> {
+    await evalObsidianJson<unknown>(
+        cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            `const revision=${JSON.stringify(revision)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "if(!(await core.fileHandler.deleteRevisionFromDB(path,revision))){",
+            "  throw new Error(`Could not delete conflicted revision: ${path} ${revision}`);",
+            "}",
+            "if(!(await core.fileHandler.dbToStorage(path,path,true))){",
+            "  throw new Error(`Could not reflect merged Markdown content: ${path}`);",
+            "}",
+            "return JSON.stringify({ok:true});",
+            "})()",
+        ].join(""),
+        env
+    );
+}
+
+async function runMetadataDeletionRestoration(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const path = "E2E/two-vault/delete-metadata-of-deleted-files-true/restored-during-deletion.md";
+    const content = "# Restored note\n\nThese bytes must survive the final deletion check.\n";
+    const overrides = { deleteMetadataOfDeletedFiles: true };
+    let session = await startConfiguredSession(context, vaultA, overrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, path, content);
+    const entry = await uploadNote(context, session, path);
+    const originalMetadata = await fetchCouchDbDocument(context.couchDb, context.dbName, entry.id);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, overrides);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultB.path, path, (value) => value === content);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, overrides);
+    await deleteNoteViaObsidian(context.cliBinary, session.cliEnv, path);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await waitForLocalDeletedMetadataMarker(context.cliBinary, session.cliEnv, entry.id, path, true);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, overrides);
+    await evalObsidianJson<unknown>(
+        context.cliBinary,
+        [
+            "(async()=>{",
+            `const path=${JSON.stringify(path)};`,
+            `const content=${JSON.stringify(content)};`,
+            `const originalMetadata=${JSON.stringify(originalMetadata)};`,
+            `const storeName=${JSON.stringify(FILE_REFLECTION_PROVENANCE_STORE)};`,
+            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const access=core.serviceModules.databaseFileAccess;",
+            "const db=core.localDatabase.localDatabase;",
+            "const store=core.services.keyValueDB.openSimpleStore(storeName);",
+            "const base=await store.get(path);",
+            "if(base?.revision!==originalMetadata._rev) throw new Error('The receiving Vault has no matching displayed base revision');",
+            "const fetchEntryMeta=access.fetchEntryMeta;",
+            "const allDocs=db.allDocs;",
+            "let latestReads=0;",
+            "let restoredRevision='';",
+            "let gateError='';",
+            "let gatePhase='index';",
+            "let indexReads=0;",
+            "let deletionEvents=0;",
+            "const ref=app.vault.on('delete',(file)=>{if(file.path===path) deletionEvents++;});",
+            "try{",
+            // Keep the production reflection path; control only the arrival of a
+            // real remote restoration after the final deleted-winner index read.
+            "access.fetchEntryMeta=async function(file,rev,...args){",
+            "  const target=typeof file==='string'?file:file?.path;",
+            "  if(target===path&&rev===undefined&&++latestReads===2){",
+            "    db.allDocs=async function(...options){",
+            "      indexReads++;",
+            "      try{",
+            "      const snapshot=await allDocs.apply(this,options);",
+            "      if(options[0]?.keys?.length!==1||options[0].keys[0]!==originalMetadata._id) return snapshot;",
+            "      db.allDocs=allDocs;",
+            "      const row=snapshot.rows[0];",
+            "      if(!row?.value?.deleted) throw new Error('The final lookup did not observe a PouchDB tombstone');",
+            "      const replicator=core.services.replicator.getActiveReplicator();",
+            "      gatePhase='connection';",
+            "      const connection=await replicator.connectRemoteCouchDBWithSetting(core.services.setting.currentSettings(),false,false,true);",
+            "      if(typeof connection==='string') throw new Error('Could not open the restoration fixture connection');",
+            "      let restorationSource;",
+            "      try{",
+            "        const remoteRow=(await connection.db.allDocs({keys:[originalMetadata._id]})).rows[0];",
+            "        if(remoteRow?.value?.rev!==row.value.rev||!remoteRow.value.deleted) throw new Error(`Remote deletion differs from the snapshot: ${JSON.stringify({local:row.value,remote:remoteRow?.value})}`);",
+            "        gatePhase='restoration source';",
+            "        restorationSource=new db.constructor(`e2e-deletion-restoration-${Date.now()}`,{adapter:db.adapter});",
+            "        await restorationSource.replicate.from(connection.db,{doc_ids:[originalMetadata._id]});",
+            "        const restored=await restorationSource.put({...originalMetadata,_rev:row.value.rev,deleted:false,mtime:Number(originalMetadata.mtime)+10000});",
+            "        gatePhase='restoration replication';",
+            "        await restorationSource.replicate.to(connection.db,{doc_ids:[originalMetadata._id]});",
+            "        await db.replicate.from(connection.db,{doc_ids:[originalMetadata._id]});",
+            "        const winner=await db.get(originalMetadata._id);",
+            "        if(winner._rev!==restored.rev||winner._deleted||winner.deleted) throw new Error('The restoration did not become the local winning revision');",
+            "        restoredRevision=restored.rev;",
+            "      }finally{try{if(restorationSource) await restorationSource.destroy();}finally{await connection.close();}}",
+            "      return snapshot;",
+            "      }catch(error){gateError=JSON.stringify({phase:gatePhase,name:error?.name,message:error?.message,status:error?.status,reason:error?.reason});throw error;}",
+            "    };",
+            "  }",
+            "  return await fetchEntryMeta.call(this,file,rev,...args);",
+            "};",
+            "await core.services.fileProcessing.commitPendingFileEvents();",
+            "if(!(await core.services.replication.replicate(true))) throw new Error('Finite replication did not complete');",
+            "const deadline=Date.now()+15000;",
+            "while(Date.now()<deadline){",
+            "  if(gateError) throw new Error(`The restoration timing gate failed: ${gateError}`);",
+            "  if(restoredRevision){",
+            "    if(deletionEvents>0) throw new Error('The restored note was deleted during the final deletion check');",
+            "    const file=app.vault.getAbstractFileByPath(path);",
+            "    if(!file) throw new Error('The restored note is missing from the receiving Vault');",
+            "    const record=await store.get(path);",
+            "    if(record?.revision===restoredRevision){",
+            "      if(await app.vault.read(file)!==content) throw new Error('The restored Vault bytes changed');",
+            "      const winner=await db.get(originalMetadata._id,{conflicts:true});",
+            "      if(winner._rev!==restoredRevision||winner._deleted||winner.deleted||(winner._conflicts??[]).length>0) throw new Error('The restored winning revision was not retained');",
+            "      return JSON.stringify({restoredRevision,deletionEvents});",
+            "    }",
+            "  }",
+            "  await new Promise((resolve)=>setTimeout(resolve,100));",
+            "}",
+            "throw new Error(`The restoration race did not settle: ${JSON.stringify({latestReads,indexReads,restoredRevision,deletionEvents})}`);",
+            "}finally{access.fetchEntryMeta=fetchEntryMeta;db.allDocs=allDocs;app.vault.offref(ref);}",
+            "})()",
+        ].join(""),
+        session.cliEnv
+    );
+    assertEqual(
+        await readVaultFile(vaultB.path, path),
+        content,
+        "Restored file bytes did not survive deletion reflection."
+    );
+    await stopTrackedSession(context, session);
+    console.log("A restoration replicated during the final deletion check preserved the receiving Vault file.");
+}
+
+async function runCreateUpdateDelete(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault,
+    deleteMetadataOfDeletedFiles?: boolean
+): Promise<void> {
+    const deletionOverrides = deleteMetadataOfDeletedFiles === undefined ? {} : { deleteMetadataOfDeletedFiles };
+    const currentCreatePath = metadataDeletionModePath(createPath, deleteMetadataOfDeletedFiles);
+    const currentUpdatePath = metadataDeletionModePath(updatePath, deleteMetadataOfDeletedFiles);
+    const currentDeletePath = metadataDeletionModePath(deletePath, deleteMetadataOfDeletedFiles);
+    const createdContent = "# Created on A\n\nThis note should appear on B.\n";
+    let session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, currentCreatePath, createdContent);
+    await uploadNote(context, session, currentCreatePath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    const createdOnB = await waitForPathContent(
+        vaultB.path,
+        currentCreatePath,
+        (content) => content === createdContent
+    );
+    await stopTrackedSession(context, session);
+    assertEqual(createdOnB, createdContent, "Created note did not round-trip to the second vault.");
+
+    const initialUpdateContent = "# Update target\n\nInitial content.\n";
+    const updatedContent = "# Update target\n\nUpdated content from A.\n";
+    session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, currentUpdatePath, initialUpdateContent);
+    await uploadNote(context, session, currentUpdatePath);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, currentUpdatePath, updatedContent);
+    await uploadNote(context, session, currentUpdatePath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    const updatedOnB = await waitForPathContent(
+        vaultB.path,
+        currentUpdatePath,
+        (content) => content === updatedContent
+    );
+    await stopTrackedSession(context, session);
+    assertEqual(updatedOnB, updatedContent, "Updated note content did not round-trip to the second vault.");
+
+    const deleteContent = "# Delete target\n\nThis note should be removed from B.\n";
+    session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, currentDeletePath, deleteContent);
+    await uploadNote(context, session, currentDeletePath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultB.path, currentDeletePath, (content) => content === deleteContent);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    const deleteEntry = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, currentDeletePath);
+    await deleteNoteViaObsidian(context.cliBinary, session.cliEnv, currentDeletePath);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    if (deleteMetadataOfDeletedFiles !== undefined) {
+        await waitForLocalDeletedMetadataMarker(
+            context.cliBinary,
+            session.cliEnv,
+            deleteEntry.id,
+            currentDeletePath,
+            deleteMetadataOfDeletedFiles
+        );
+    }
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    await waitForPathDeleted(vaultB.path, currentDeletePath);
+    await stopTrackedSession(context, session);
+
+    const deletionModeLabel =
+        deleteMetadataOfDeletedFiles === undefined
+            ? ""
+            : ` with deleteMetadataOfDeletedFiles=${deleteMetadataOfDeletedFiles}`;
+    console.log(`Two-vault note creation, update, and deletion round-tripped${deletionModeLabel}.`);
+}
+
+async function runRename(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault,
+    deleteMetadataOfDeletedFiles?: boolean
+): Promise<void> {
+    const deletionOverrides = deleteMetadataOfDeletedFiles === undefined ? {} : { deleteMetadataOfDeletedFiles };
+    const currentRenameFromPath = metadataDeletionModePath(renameFromPath, deleteMetadataOfDeletedFiles);
+    const currentRenameToPath = metadataDeletionModePath(renameToPath, deleteMetadataOfDeletedFiles);
+    const renamedContent = "# Rename target\n\nThis note should move from A to B.\n";
+
+    let session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, currentRenameFromPath, renamedContent);
+    await uploadNote(context, session, currentRenameFromPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    const originalOnB = await waitForPathContent(
+        vaultB.path,
+        currentRenameFromPath,
+        (content) => content === renamedContent
+    );
+    await stopTrackedSession(context, session);
+    assertEqual(originalOnB, renamedContent, "Original note content did not reach the second vault before rename.");
+
+    session = await startConfiguredSession(context, vaultA, deletionOverrides);
+    const renamedEntry = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, currentRenameFromPath);
+    await renameNoteViaObsidian(context.cliBinary, session.cliEnv, currentRenameFromPath, currentRenameToPath);
+    await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, currentRenameToPath);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    if (deleteMetadataOfDeletedFiles !== undefined) {
+        await waitForLocalDeletedMetadataMarker(
+            context.cliBinary,
+            session.cliEnv,
+            renamedEntry.id,
+            currentRenameFromPath,
+            deleteMetadataOfDeletedFiles
+        );
+    }
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, deletionOverrides);
+    await syncAndApply(context, session);
+    const renamedOnB = await waitForPathContent(
+        vaultB.path,
+        currentRenameToPath,
+        (content) => content === renamedContent
+    );
+    await waitForPathDeleted(vaultB.path, currentRenameFromPath);
+    await stopTrackedSession(context, session);
+
+    assertEqual(renamedOnB, renamedContent, "Renamed note content did not round-trip to the second vault.");
+    const deletionModeLabel =
+        deleteMetadataOfDeletedFiles === undefined
+            ? ""
+            : ` with deleteMetadataOfDeletedFiles=${deleteMetadataOfDeletedFiles}`;
+    console.log(`Two-vault note rename round-tripped${deletionModeLabel}.`);
+}
+
+async function runCaseOnlyRename(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const fileContent = "# Case-only rename\n\nThe document ID should remain live.\n";
+
+    let session = await startConfiguredSession(context, vaultA);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, caseRenameFromPath, fileContent);
+    await uploadNote(context, session, caseRenameFromPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultB.path, caseRenameFromPath, (content) => content === fileContent);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA);
+    await renameNoteViaObsidian(context.cliBinary, session.cliEnv, caseRenameFromPath, caseRenameToPath);
+    await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, caseRenameToPath);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB);
+    await syncAndApply(context, session);
+    const renamedOnB = await waitForPathContent(vaultB.path, caseRenameToPath, (content) => content === fileContent);
+    await waitForExactCaseOnlyRename(vaultB.path, caseRenameFromPath, caseRenameToPath);
+    await stopTrackedSession(context, session);
+
+    assertEqual(renamedOnB, fileContent, "Case-only note rename did not round-trip to the second vault.");
+    console.log("Two-vault case-only note rename round-tripped without a tombstone.");
+}
+
+async function runParentCaseDeletionProtection(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const fileContent = "# Parent case rename\n\nThe document must remain live after an external parent rename.\n";
+    const parentCaseOverrides = {
+        handleFilenameCaseSensitive: false,
+        batchSave: false,
+    };
+    const observedPaths = [
+        parentCaseRenameFromDirectoryPath,
+        parentCaseRenameToDirectoryPath,
+        parentCaseRenameFromPath,
+        parentCaseRenameToPath,
+    ];
+    let session: ObsidianLiveSyncSession | undefined;
+    let observerInstalled = false;
+    let obsidianVersion: string | undefined;
+    let observedEvents: ParentCaseVaultEvent[] = [];
+    let localMetadataEvidence: ParentCaseMetadataState | undefined;
+    let remoteMetadataEvidence: ParentCaseRemoteMetadataState | undefined;
+    let restartedMetadataEvidence: ParentCaseMetadataState | undefined;
+
+    try {
+        session = await startConfiguredSession(context, vaultA, parentCaseOverrides);
+        await writeNoteViaObsidian(context.cliBinary, session.cliEnv, parentCaseRenameFromPath, fileContent);
+        const initialEntry = await uploadNote(context, session, parentCaseRenameFromPath);
+        if (initialEntry.children.length === 0) {
+            throw new Error(`Parent case fixture did not retain a Chunk reference: ${initialEntry.id}`);
+        }
+        await stopTrackedSession(context, session);
+        session = undefined;
+
+        session = await startConfiguredSession(context, vaultB, parentCaseOverrides);
+        await syncAndApply(context, session);
+        await waitForPathContent(vaultB.path, parentCaseRenameFromPath, (content) => content === fileContent);
+        await stopTrackedSession(context, session);
+        session = undefined;
+
+        session = await startConfiguredSession(context, vaultA, parentCaseOverrides);
+        await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, parentCaseRenameFromPath);
+        obsidianVersion = await installParentCaseEventObserver(context.cliBinary, session.cliEnv, observedPaths);
+        observerInstalled = true;
+
+        await renameFilesystemPath(
+            join(vaultA.path, parentCaseRenameFromDirectoryPath),
+            join(vaultA.path, parentCaseRenameToDirectoryPath)
+        );
+        await waitForExactObsidianPath(
+            context.cliBinary,
+            session.cliEnv,
+            parentCaseRenameToPath,
+            parentCaseRenameFromPath
+        );
+        localMetadataEvidence = await waitForParentCaseMetadata(
+            context.cliBinary,
+            session.cliEnv,
+            initialEntry.id,
+            parentCaseRenameToPath,
+            fileContent,
+            initialEntry.children
+        );
+        await pushLocalChanges(context.cliBinary, session.cliEnv);
+        const remoteMetadata = await waitForParentCaseRemoteMetadata(context, initialEntry);
+        remoteMetadataEvidence = remoteMetadata;
+        observedEvents = await takeParentCaseEventEvidence(context.cliBinary, session.cliEnv);
+        observerInstalled = false;
+        await stopTrackedSession(context, session);
+        session = undefined;
+
+        session = await startConfiguredSession(context, vaultB, parentCaseOverrides);
+        await syncAndApply(context, session);
+        await waitForParentCaseMetadata(
+            context.cliBinary,
+            session.cliEnv,
+            initialEntry.id,
+            parentCaseRenameToPath,
+            fileContent,
+            initialEntry.children,
+            remoteMetadata.rev ?? undefined
+        );
+        await waitForEitherPathContent(vaultB.path, [parentCaseRenameFromPath, parentCaseRenameToPath], fileContent);
+        await stopTrackedSession(context, session);
+        session = undefined;
+
+        session = await startConfiguredSession(context, vaultA, parentCaseOverrides);
+        await syncAndApply(context, session);
+        await waitForEitherPathContent(vaultA.path, [parentCaseRenameFromPath, parentCaseRenameToPath], fileContent);
+        restartedMetadataEvidence = await waitForParentCaseMetadata(
+            context.cliBinary,
+            session.cliEnv,
+            initialEntry.id,
+            parentCaseRenameToPath,
+            fileContent,
+            initialEntry.children,
+            remoteMetadata.rev ?? undefined
+        );
+        await stopTrackedSession(context, session);
+        session = undefined;
+    } catch (error) {
+        if (session) {
+            await captureObsidianPage(session.remoteDebuggingPort, "parent-case-deletion-failure.png", async () => {})
+                .then((path) => console.error(`Parent case failure screenshot: ${path}`))
+                .catch((captureError: unknown) => {
+                    console.warn(captureError instanceof Error ? captureError.message : captureError);
+                });
+        }
+        throw error;
+    } finally {
+        if (observerInstalled && session) {
+            try {
+                observedEvents = await takeParentCaseEventEvidence(context.cliBinary, session.cliEnv);
+            } catch (error) {
+                console.warn(
+                    `Could not collect parent case rename event evidence: ${
+                        error instanceof Error ? error.message : String(error)
+                    }`
+                );
+            }
+        }
+        try {
+            if (session) await stopTrackedSession(context, session);
+        } finally {
+            console.log(
+                `Parent case rename evidence: ${JSON.stringify({
+                    obsidianVersion,
+                    events: observedEvents,
+                    localMetadata: localMetadataEvidence ?? null,
+                    remoteMetadata: remoteMetadataEvidence ?? null,
+                    restartedMetadata: restartedMetadataEvidence ?? null,
+                })}`
+            );
+        }
+    }
+
+    console.log("External parent case rename preserved the note Metadata, Chunks, and content.");
+}
+
+async function runEncryptedRoundTrip(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const encryptedContent = "# Encrypted round-trip\n\nThis note should synchronise with E2EE enabled.\n";
+    const encryptedOverrides = {
+        encrypt: true,
+        passphrase: "real-obsidian-e2e-passphrase",
+        usePathObfuscation: true,
+        E2EEAlgorithm: "v2",
+    };
+
+    let session = await startConfiguredSession(context, vaultA, encryptedOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, encryptedPath, encryptedContent);
+    await uploadNote(context, session, encryptedPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, encryptedOverrides);
+    await syncAndApply(context, session);
+    const received = await waitForPathContent(vaultB.path, encryptedPath, (content) => content === encryptedContent);
+    await stopTrackedSession(context, session);
+
+    assertEqual(received, encryptedContent, "Encrypted note did not round-trip to the second vault.");
+    console.log("Two-vault encrypted note synchronisation round-tripped.");
+}
+
+async function runIndependentIdRoundTrip(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const source = "real-obsidian-e2e-independent-id-source";
+    const key = await deriveIdKey(source);
+    const content = "# Shared content with an independent ID key.\n";
+    const pathA = "E2E/independent-ids/from-a.md";
+    const pathB = "E2E/independent-ids/from-b.md";
+    const overrides = {
+        encrypt: true,
+        passphrase: "real-obsidian-e2e-independent-passphrase",
+        usePathObfuscation: true,
+        E2EEAlgorithm: "v2",
+        idDerivationVersion: 1,
+        idDerivationKey: key,
+    };
+    const persistedOverrides = {
+        ...overrides,
+        idDerivationKey: "",
+        encryptedIdDerivationKey: await encryptString(key, `*${SALT_OF_PASSPHRASE}`),
+    };
+
+    let session = await startConfiguredSession(context, vaultA, overrides, persistedOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, pathA, content);
+    const entryA = await uploadNote(context, session, pathA);
+    if (entryA.children.length === 0) throw new Error("Independent ID mode produced no Chunks.");
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, overrides, persistedOverrides);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultB.path, pathA, (received) => received === content);
+    const receivedA = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, pathA);
+    assertEqual(receivedA.id, entryA.id, "The second device did not preserve the obfuscated document ID.");
+
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, pathB, content);
+    const entryB = await uploadNote(context, session, pathB);
+    assertEqual(
+        JSON.stringify(entryB.children),
+        JSON.stringify(entryA.children),
+        "The second device did not reuse the same content-derived Chunk IDs."
+    );
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, overrides, persistedOverrides);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultA.path, pathB, (received) => received === content);
+    const receivedB = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, pathB);
+    assertEqual(receivedB.id, entryB.id, "The first device did not preserve the return document ID.");
+    await stopTrackedSession(context, session);
+    console.log("Two real Obsidian devices shared independent document and Chunk IDs in both directions.");
+
+    for (const [label, candidateKey] of [
+        ["different key", "cd".repeat(32)],
+        ["legacy IDs", ""],
+    ] as const) {
+        const remoteBefore = await fetchAllCouchDbDocs(context.couchDb, context.dbName);
+        const checkpointsBefore = await fetchCouchDbLocalDocs(context.couchDb, context.dbName);
+        const rejectedVault = await createTemporaryVault();
+        let rejectedSession: ObsidianLiveSyncSession | undefined;
+        try {
+            rejectedSession = await startObsidianLiveSyncSession({
+                binary: context.binary,
+                cliBinary: context.cliBinary,
+                artifactRoot: process.env.E2E_OBSIDIAN_ARTIFACT_ROOT,
+                vault: rejectedVault,
+                localStorageEntries: createE2eObsidianDeviceLocalState(rejectedVault.name),
+                pluginData: createE2eCouchDbPluginData(
+                    { ...context.couchDb, dbName: context.dbName },
+                    {
+                        ...overrides,
+                        idDerivationVersion: candidateKey ? 1 : 0,
+                        idDerivationKey: "",
+                        encryptedIdDerivationKey: candidateKey
+                            ? await encryptString(candidateKey, `*${SALT_OF_PASSPHRASE}`)
+                            : "",
+                    }
+                ),
+            });
+            context.activeSessions.add(rejectedSession);
+            await waitForLiveSyncCoreReady(context.cliBinary, rejectedSession.cliEnv);
+            const unsentPath = "E2E/independent-ids/rejected.md";
+            await writeNoteViaObsidian(context.cliBinary, rejectedSession.cliEnv, unsentPath, content);
+            await waitForLocalDatabaseEntry(context.cliBinary, rejectedSession.cliEnv, unsentPath);
+            const attempt = await evalObsidianJson<{ admitted: boolean; reason: string; replicated: boolean }>(
+                context.cliBinary,
+                [
+                    "(async()=>{",
+                    "const core=app.plugins.plugins['obsidian-livesync'].core;",
+                    "const replicator=core.services.replicator.getActiveReplicator();",
+                    "const settings=core.services.setting.currentSettings();",
+                    "let reason='';",
+                    "const connection=await replicator.checkReplicationConnectivity(settings,false,false,false,false,undefined,(decision)=>{reason=decision.reason??'';});",
+                    "if(connection) await connection.close();",
+                    "const replicated=await core.services.replication.replicate(true);",
+                    "return JSON.stringify({admitted:!!connection,reason,replicated:!!replicated});",
+                    "})()",
+                ].join(""),
+                rejectedSession.cliEnv
+            );
+            assertEqual(attempt.admitted, false, `CouchDB admitted ${label} for obfuscated document IDs.`);
+            assertEqual(
+                attempt.reason,
+                CENTRAL_COMPATIBILITY_REJECTION_REASONS.ID_DERIVATION_MISMATCH,
+                `CouchDB rejected ${label} for an unrelated reason.`
+            );
+            assertEqual(attempt.replicated, false, `Ordinary replication accepted ${label}.`);
+            assertEqual(
+                await pathExists(rejectedVault.path, pathA),
+                false,
+                "A rejected device received a remote note."
+            );
+            await stopTrackedSession(context, rejectedSession);
+            rejectedSession = undefined;
+            assertEqual(
+                JSON.stringify(await fetchAllCouchDbDocs(context.couchDb, context.dbName)),
+                JSON.stringify(remoteBefore),
+                `A rejected ${label} connection changed remote documents.`
+            );
+            assertEqual(
+                JSON.stringify(await fetchCouchDbLocalDocs(context.couchDb, context.dbName)),
+                JSON.stringify(checkpointsBefore),
+                `A rejected ${label} connection changed remote checkpoints.`
+            );
+        } finally {
+            if (rejectedSession) await stopTrackedSession(context, rejectedSession);
+            await rejectedVault.dispose();
+        }
+    }
+    console.log("Ordinary CouchDB replication rejected different and legacy document ID keys without remote writes.");
+}
+
+async function runDifferentChunkIdKeysRoundTrip(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const keyA = await deriveIdKey("real-obsidian-e2e-chunk-source-a");
+    const keyB = await deriveIdKey("real-obsidian-e2e-chunk-source-b");
+    const content = "# Shared content with different Chunk ID keys.\n";
+    const pathA = "E2E/chunk-id-keys/from-a.md";
+    const pathB = "E2E/chunk-id-keys/from-b.md";
+    const commonSettings = {
+        encrypt: true,
+        passphrase: "real-obsidian-e2e-chunk-passphrase",
+        usePathObfuscation: false,
+        E2EEAlgorithm: "v2",
+        idDerivationVersion: 1,
+    };
+    const settingsFor = (key: string) => ({ ...commonSettings, idDerivationKey: key });
+    const persistedSettingsFor = async (key: string) => ({
+        ...settingsFor(key),
+        idDerivationKey: "",
+        encryptedIdDerivationKey: await encryptString(key, `*${SALT_OF_PASSPHRASE}`),
+    });
+    const persistedA = await persistedSettingsFor(keyA);
+    const persistedB = await persistedSettingsFor(keyB);
+
+    let session = await startConfiguredSession(context, vaultA, settingsFor(keyA), persistedA);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, pathA, content);
+    const entryA = await uploadNote(context, session, pathA);
+    if (entryA.children.length === 0) throw new Error("The first device produced no Chunks.");
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, settingsFor(keyB), persistedB);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultB.path, pathA, (received) => received === content);
+    const receivedA = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, pathA);
+    assertEqual(receivedA.id, entryA.id, "The second device changed the visible document ID.");
+
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, pathB, content);
+    const entryB = await uploadNote(context, session, pathB);
+    if (entryB.children.length === 0) throw new Error("The second device produced no Chunks.");
+    if (JSON.stringify(entryB.children) === JSON.stringify(entryA.children)) {
+        throw new Error("Different ID keys unexpectedly generated the same Chunk IDs.");
+    }
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, settingsFor(keyA), persistedA);
+    await syncAndApply(context, session);
+    await waitForPathContent(vaultA.path, pathB, (received) => received === content);
+    const receivedB = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, pathB);
+    assertEqual(receivedB.id, entryB.id, "The first device changed the return document ID.");
+    await stopTrackedSession(context, session);
+    console.log("Two real Obsidian devices exchanged notes with different Chunk ID keys and visible document paths.");
+}
+
+async function runMarkdownAutoMerge(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const base = "# Conflict\n\nTop anchor\n\nMiddle anchor\n\nBottom anchor\n";
+    const left = "# Conflict\n\nTop anchor\n\nLeft line\n\nMiddle anchor\n\nBottom anchor\n";
+    const right = "# Conflict\n\nTop anchor\n\nMiddle anchor\n\nRight tail\n\nBottom anchor\n";
+    const conflictOverrides = {
+        disableMarkdownAutoMerge: true,
+        checkConflictOnlyOnOpen: true,
+        showMergeDialogOnlyOnActive: true,
+    };
+
+    let session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, conflictPath, base);
+    await uploadNote(context, session, conflictPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, conflictOverrides);
+    await syncAndApply(context, session);
+    const baseOnB = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, conflictPath);
+    await waitForPathContent(vaultB.path, conflictPath, (content) => content === base);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    const baseOnA = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, conflictPath);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, conflictPath, left);
+    const storedLeft = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictPath,
+        (branch) => branch.content === left
+    );
+    assertEqual(storedLeft.parentRev, baseOnA.rev, "Vault A's edit did not extend its displayed base.");
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, conflictOverrides);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, conflictPath, right);
+    const storedRight = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictPath,
+        (branch) => branch.content === right
+    );
+    assertEqual(storedRight.parentRev, baseOnB.rev, "Vault B's edit did not extend its displayed base.");
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    const conflict = await waitForFileConflict(context.cliBinary, session.cliEnv, conflictPath);
+    const leftBranch = conflict.branches.find((branch) => branch.content === left);
+    const rightBranch = conflict.branches.find((branch) => branch.content === right);
+    if (!leftBranch || !rightBranch) {
+        throw new Error(`The two Vault edits did not form the expected conflict: ${JSON.stringify(conflict)}`);
+    }
+
+    const merged = await calculateMarkdownAutoMerge(context.cliBinary, session.cliEnv, conflictPath);
+    if (!merged.includes("Left line") || !merged.includes("Right tail")) {
+        throw new Error(`Markdown auto-merge discarded a non-overlapping edit: ${JSON.stringify({ merged })}`);
+    }
+    const mergedRev = await storeFileRevision(context.cliBinary, session.cliEnv, conflictPath, merged, rightBranch.rev);
+    await deleteRevisionAndReflect(context.cliBinary, session.cliEnv, conflictPath, leftBranch.rev);
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    const mergedOnB = await waitForPathContent(
+        vaultB.path,
+        conflictPath,
+        (content) => content === merged,
+        Number(process.env.E2E_OBSIDIAN_MERGE_FILE_TIMEOUT_MS ?? 30000)
+    );
+
+    const afterResolution = `${merged.trimEnd()}\n\nPost-resolution edit on B.\n`;
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, conflictPath, afterResolution);
+    const storedAfterResolution = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictPath,
+        (branch) => branch.content === afterResolution
+    );
+    assertEqual(
+        storedAfterResolution.parentRev,
+        mergedRev,
+        "The post-resolution edit did not extend the merged revision."
+    );
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    await syncAndApply(context, session);
+    const resolvedOnA = await waitForPathContent(
+        vaultA.path,
+        conflictPath,
+        (content) => content === afterResolution,
+        Number(process.env.E2E_OBSIDIAN_MERGE_FILE_TIMEOUT_MS ?? 30000)
+    );
+    const resolvedState = await readFileConflictState(context.cliBinary, session.cliEnv, conflictPath);
+    await stopTrackedSession(context, session);
+
+    assertEqual(mergedOnB, merged, "The resolving Vault did not reflect the merged Markdown content.");
+    assertEqual(
+        resolvedOnA,
+        afterResolution,
+        "The resolved Markdown content did not replace the known losing revision."
+    );
+    assertEqual(
+        resolvedState.branches.length,
+        1,
+        "The receiving Vault recreated a conflict from the known losing revision."
+    );
+    console.log(
+        "A two-Vault Markdown conflict was merged, edited again, and propagated to the Vault holding the resolved losing revision."
+    );
+}
+
+async function runConflictTimeStorageOperations(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const paths = [conflictEditPath, conflictDeletePath, conflictCaseFromPath, conflictRenameFromPath] as const;
+    const conflictOverrides = {
+        disableMarkdownAutoMerge: true,
+        checkConflictOnlyOnOpen: true,
+        showMergeDialogOnlyOnActive: true,
+        handleFilenameCaseSensitive: false,
+    };
+    const baseContent = Object.fromEntries(
+        paths.map((path) => [path, `# Conflict operation\n\nBase for ${path}.\n`])
+    ) as Record<(typeof paths)[number], string>;
+    const leftContent = Object.fromEntries(
+        paths.map((path) => [path, `${baseContent[path]}\nEdit made on Vault A.\n`])
+    ) as Record<(typeof paths)[number], string>;
+    const rightContent = Object.fromEntries(
+        paths.map((path) => [path, `${baseContent[path]}\nDisplayed edit made on Vault B.\n`])
+    ) as Record<(typeof paths)[number], string>;
+
+    let session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    for (const path of paths) {
+        await writeNoteViaObsidian(context.cliBinary, session.cliEnv, path, baseContent[path]);
+        await uploadNote(context, session, path);
+    }
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, conflictOverrides);
+    await syncAndApply(context, session);
+    for (const path of paths) {
+        await waitForPathContent(vaultB.path, path, (content) => content === baseContent[path]);
+    }
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    for (const path of paths) {
+        await writeNoteViaObsidian(context.cliBinary, session.cliEnv, path, leftContent[path]);
+        await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, path);
+    }
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, conflictOverrides);
+    for (const path of paths) {
+        await writeNoteViaObsidian(context.cliBinary, session.cliEnv, path, rightContent[path]);
+        await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, path);
+    }
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+
+    const displayedRevisions = new Map<string, string>();
+    const initialBranchRevisions = new Map<string, Set<string>>();
+    for (const path of paths) {
+        const state = await waitForFileConflict(context.cliBinary, session.cliEnv, path);
+        const displayedBranch = state.branches.find(
+            (branch) => branch.content === rightContent[path] && !branch.deleted
+        );
+        if (!displayedBranch) {
+            throw new Error(`Could not identify the branch displayed by Vault B: ${path}; ${JSON.stringify(state)}`);
+        }
+        const provenance = await readFileReflectionProvenance(context.cliBinary, session.cliEnv, path);
+        assertEqual(
+            provenance?.revision,
+            displayedBranch.rev,
+            `Vault B did not retain the exact displayed revision for ${path}.`
+        );
+        displayedRevisions.set(path, displayedBranch.rev);
+        initialBranchRevisions.set(path, new Set(state.branches.map((branch) => branch.rev)));
+    }
+
+    const editedAgain = `${rightContent[conflictEditPath]}\nSecond edit while the conflict is active.\n`;
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, conflictEditPath, editedAgain);
+    const editedBranch = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictEditPath,
+        (branch) => branch.content === editedAgain
+    );
+    assertEqual(
+        editedBranch.parentRev,
+        displayedRevisions.get(conflictEditPath),
+        "A conflict-time edit did not extend the displayed revision."
+    );
+
+    await deleteNoteViaObsidian(context.cliBinary, session.cliEnv, conflictDeletePath);
+    const deletedBranch = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictDeletePath,
+        (branch) => branch.deleted
+    );
+    assertEqual(
+        deletedBranch.parentRev,
+        displayedRevisions.get(conflictDeletePath),
+        "A conflict-time deletion did not extend the displayed revision."
+    );
+
+    await renameNoteViaObsidian(context.cliBinary, session.cliEnv, conflictCaseFromPath, conflictCaseToPath);
+    const caseRenamedBranch = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictCaseToPath,
+        (branch) =>
+            !initialBranchRevisions.get(conflictCaseFromPath)?.has(branch.rev) &&
+            branch.path === conflictCaseToPath &&
+            branch.content === rightContent[conflictCaseFromPath] &&
+            !branch.deleted
+    );
+    const expectedCaseParent = displayedRevisions.get(conflictCaseFromPath);
+    if (caseRenamedBranch.parentRev !== expectedCaseParent) {
+        const [state, oldProvenance, newProvenance, identity] = await Promise.all([
+            readFileConflictState(context.cliBinary, session.cliEnv, conflictCaseToPath),
+            readFileReflectionProvenance(context.cliBinary, session.cliEnv, conflictCaseFromPath),
+            readFileReflectionProvenance(context.cliBinary, session.cliEnv, conflictCaseToPath),
+            readPathIdentity(context.cliBinary, session.cliEnv, [conflictCaseFromPath, conflictCaseToPath]),
+        ]);
+        throw new Error(
+            `A conflict-time case-only rename did not extend the displayed revision: ${JSON.stringify({
+                expectedCaseParent,
+                caseRenamedBranch,
+                state,
+                oldProvenance,
+                newProvenance,
+                identity,
+            })}`
+        );
+    }
+    const [oldCaseProvenance, newCaseProvenance] = await Promise.all([
+        readFileReflectionProvenance(context.cliBinary, session.cliEnv, conflictCaseFromPath),
+        readFileReflectionProvenance(context.cliBinary, session.cliEnv, conflictCaseToPath),
+    ]);
+    assertEqual(oldCaseProvenance, null, "A conflict-time case-only rename retained the old provenance path.");
+    assertEqual(
+        newCaseProvenance?.revision,
+        caseRenamedBranch.rev,
+        "A conflict-time case-only rename did not record the new displayed revision."
+    );
+
+    await renameNoteViaObsidian(context.cliBinary, session.cliEnv, conflictRenameFromPath, conflictRenameToPath);
+    const renamedTarget = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, conflictRenameToPath);
+    const renamedSourceDeletion = await waitForConflictBranch(
+        context.cliBinary,
+        session.cliEnv,
+        conflictRenameFromPath,
+        (branch) => branch.deleted
+    );
+    assertEqual(
+        renamedSourceDeletion.parentRev,
+        displayedRevisions.get(conflictRenameFromPath),
+        "A conflict-time cross-path rename did not soft-delete the displayed source revision."
+    );
+    await pushLocalChanges(context.cliBinary, session.cliEnv);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultA, conflictOverrides);
+    await syncAndApply(context, session);
+    const replicatedBranches = [
+        [conflictEditPath, editedBranch],
+        [conflictDeletePath, deletedBranch],
+        [conflictCaseToPath, caseRenamedBranch],
+        [conflictRenameFromPath, renamedSourceDeletion],
+    ] as const;
+    for (const [path, expectedBranch] of replicatedBranches) {
+        const replicated = await waitForConflictBranch(
+            context.cliBinary,
+            session.cliEnv,
+            path,
+            (branch) => branch.rev === expectedBranch.rev
+        );
+        assertEqual(
+            replicated.parentRev,
+            expectedBranch.parentRev,
+            `The exact conflict-operation revision tree did not replicate for ${path}.`
+        );
+    }
+    await waitForPathContent(
+        vaultA.path,
+        conflictRenameToPath,
+        (content) => content === rightContent[conflictRenameFromPath]
+    );
+    const targetOnA = await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, conflictRenameToPath);
+    assertEqual(targetOnA.id, renamedTarget.id, "The cross-path rename target did not replicate as the same document.");
+    assertEqual(
+        await readVaultFile(vaultA.path, conflictDeletePath),
+        leftContent[conflictDeletePath],
+        "A logical deletion from one conflict branch removed the other Vault's live branch."
+    );
+    await stopTrackedSession(context, session);
+
+    console.log(
+        "Conflict-time edit, logical deletion, case-only rename, and cross-path rename extended the displayed branches and replicated their revision trees."
+    );
+}
+
+async function runTargetMismatch(
+    context: RunnerContext,
+    vaultA: TemporaryVault,
+    vaultB: TemporaryVault
+): Promise<void> {
+    const ignoredContent = "# Target mismatch\n\nB should ignore this revision.\n";
+    const acceptedContent = "# Target mismatch\n\nB should accept this revision after its target filter changes.\n";
+
+    let session = await startConfiguredSession(context, vaultA);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, targetMismatchPath, ignoredContent);
+    await uploadNote(context, session, targetMismatchPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, {
+        syncOnlyRegEx: "^E2E/two-vault/allowed/.*",
+    });
+    await syncAndApply(context, session);
+    await waitForLocalDatabaseEntry(context.cliBinary, session.cliEnv, targetMismatchPath);
+    assertEqual(
+        await pathExists(vaultB.path, targetMismatchPath),
+        false,
+        "A note was reflected on a device where it was not a target file."
+    );
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, {
+        syncOnlyRegEx: "^E2E/two-vault/allowed/.*",
+    });
+    assertEqual(
+        await pathExists(vaultB.path, targetMismatchPath),
+        false,
+        "A checkpointed non-target note was reflected before its target filter changed."
+    );
+    await configureCouchDb(
+        context.cliBinary,
+        session.cliEnv,
+        {
+            uri: context.couchDb.uri,
+            username: context.couchDb.username,
+            password: context.couchDb.password,
+            dbName: context.dbName,
+        },
+        { syncOnlyRegEx: "" }
+    );
+    await syncAndApply(context, session);
+    const reflectedAfterEnabling = await waitForPathContent(
+        vaultB.path,
+        targetMismatchPath,
+        (content) => content === ignoredContent
+    );
+    await stopTrackedSession(context, session);
+
+    assertEqual(
+        reflectedAfterEnabling,
+        ignoredContent,
+        "Target file was not reflected after the device accepted the path."
+    );
+
+    session = await startConfiguredSession(context, vaultA);
+    await writeNoteViaObsidian(context.cliBinary, session.cliEnv, targetMismatchPath, acceptedContent);
+    await uploadNote(context, session, targetMismatchPath);
+    await stopTrackedSession(context, session);
+
+    session = await startConfiguredSession(context, vaultB, {
+        syncOnlyRegEx: "",
+    });
+    await syncAndApply(context, session);
+    const received = await waitForPathContent(
+        vaultB.path,
+        targetMismatchPath,
+        (content) => content === acceptedContent
+    );
+    await stopTrackedSession(context, session);
+
+    assertEqual(received, acceptedContent, "Target file update was not reflected after the device accepted the path.");
+    console.log(
+        "Two-vault target mismatch skipped a non-target note, reflected it after enabling the target, and accepted a later update."
+    );
+}
+
+async function main(): Promise<void> {
+    const binary = requireObsidianBinary();
+    const cli = discoverObsidianCli();
+    if (!cli.binary) {
+        throw new Error(`Could not find obsidian-cli. Checked paths: ${cli.checked.join(", ")}`);
+    }
+
+    const couchDb = await loadCouchDbConfig();
+    const dbName = makeUniqueDatabaseName(couchDb.dbPrefix, "two-vault-sync");
+    const encryptedDbName = makeUniqueDatabaseName(couchDb.dbPrefix, "two-vault-sync-e2ee");
+    const independentDbName = makeUniqueDatabaseName(couchDb.dbPrefix, "two-vault-sync-independent-ids");
+    const vaultA = await createTemporaryVault();
+    const vaultB = await createTemporaryVault();
+    const encryptedVaultA = await createTemporaryVault();
+    const encryptedVaultB = await createTemporaryVault();
+    const independentVaultA = await createTemporaryVault();
+    const independentVaultB = await createTemporaryVault();
+    const context: RunnerContext = {
+        binary,
+        cliBinary: cli.binary,
+        couchDb,
+        dbName,
+        activeSessions: new Set(),
+    };
+    const encryptedContext: RunnerContext = {
+        binary,
+        cliBinary: cli.binary,
+        couchDb,
+        dbName: encryptedDbName,
+        activeSessions: new Set(),
+    };
+    const independentContext: RunnerContext = {
+        binary,
+        cliBinary: cli.binary,
+        couchDb,
+        dbName: independentDbName,
+        activeSessions: new Set(),
+    };
+
+    try {
+        await assertCouchDbReachable(couchDb);
+        await createCouchDbDatabase(couchDb, dbName);
+        await createCouchDbDatabase(couchDb, encryptedDbName);
+        await createCouchDbDatabase(couchDb, independentDbName);
+
+        console.log(`Using Obsidian executable: ${binary}`);
+        console.log(`Temporary vault A: ${vaultA.path}`);
+        console.log(`Temporary vault B: ${vaultB.path}`);
+        console.log(`Temporary CouchDB database: ${dbName}`);
+        console.log(`Temporary encrypted CouchDB database: ${encryptedDbName}`);
+
+        const onlyMetadataDeletion = process.env.E2E_OBSIDIAN_ONLY_METADATA_DELETION === "true";
+        const onlyParentCaseDeletion = process.env.E2E_OBSIDIAN_ONLY_PARENT_CASE_DELETION === "true";
+        const onlyIndependentIds = process.env.E2E_OBSIDIAN_ONLY_INDEPENDENT_IDS === "true";
+        const onlyDifferentChunkIdKeys = process.env.E2E_OBSIDIAN_ONLY_DIFFERENT_CHUNK_ID_KEYS === "true";
+        if (onlyMetadataDeletion) {
+            await runMetadataDeletionRestoration(context, vaultA, vaultB);
+            for (const deleteMetadataOfDeletedFiles of [false, true]) {
+                await runCreateUpdateDelete(context, vaultA, vaultB, deleteMetadataOfDeletedFiles);
+                await runRename(context, vaultA, vaultB, deleteMetadataOfDeletedFiles);
+            }
+        }
+        if (!onlyMetadataDeletion && onlyParentCaseDeletion) {
+            await runParentCaseDeletionProtection(context, vaultA, vaultB);
+        }
+        const onlyConflictOperations = process.env.E2E_OBSIDIAN_ONLY_CONFLICT_OPERATIONS === "true";
+        if (
+            !onlyMetadataDeletion &&
+            !onlyParentCaseDeletion &&
+            !onlyConflictOperations &&
+            !onlyIndependentIds &&
+            !onlyDifferentChunkIdKeys
+        ) {
+            await runMetadataDeletionRestoration(context, vaultA, vaultB);
+            for (const deleteMetadataOfDeletedFiles of [false, true]) {
+                await runCreateUpdateDelete(context, vaultA, vaultB, deleteMetadataOfDeletedFiles);
+                await runRename(context, vaultA, vaultB, deleteMetadataOfDeletedFiles);
+            }
+            await runCaseOnlyRename(context, vaultA, vaultB);
+            if (process.env.E2E_OBSIDIAN_INCLUDE_MARKDOWN_CONFLICT === "true") {
+                await runMarkdownAutoMerge(context, vaultA, vaultB);
+            }
+        }
+        if (
+            !onlyMetadataDeletion &&
+            !onlyParentCaseDeletion &&
+            (onlyConflictOperations || process.env.E2E_OBSIDIAN_INCLUDE_CONFLICT_OPERATIONS === "true")
+        ) {
+            await runConflictTimeStorageOperations(context, vaultA, vaultB);
+        }
+        if (
+            !onlyMetadataDeletion &&
+            !onlyParentCaseDeletion &&
+            !onlyConflictOperations &&
+            !onlyIndependentIds &&
+            !onlyDifferentChunkIdKeys
+        ) {
+            await runTargetMismatch(context, vaultA, vaultB);
+            await runEncryptedRoundTrip(encryptedContext, encryptedVaultA, encryptedVaultB);
+        }
+        if (!onlyMetadataDeletion && !onlyParentCaseDeletion && !onlyConflictOperations) {
+            if (onlyDifferentChunkIdKeys) {
+                await runDifferentChunkIdKeysRoundTrip(independentContext, independentVaultA, independentVaultB);
+            } else {
+                await runIndependentIdRoundTrip(independentContext, independentVaultA, independentVaultB);
+            }
+        }
+    } finally {
+        await stopTrackedSessions(context);
+        await stopTrackedSessions(encryptedContext);
+        await stopTrackedSessions(independentContext);
+        await vaultA.dispose();
+        await vaultB.dispose();
+        await encryptedVaultA.dispose();
+        await encryptedVaultB.dispose();
+        await independentVaultA.dispose();
+        await independentVaultB.dispose();
+        if (process.env.E2E_OBSIDIAN_KEEP_COUCHDB !== "true") {
+            await deleteCouchDbDatabase(couchDb, dbName).catch((error: unknown) => {
+                console.warn(error instanceof Error ? error.message : error);
+            });
+            await deleteCouchDbDatabase(couchDb, encryptedDbName).catch((error: unknown) => {
+                console.warn(error instanceof Error ? error.message : error);
+            });
+            await deleteCouchDbDatabase(couchDb, independentDbName).catch((error: unknown) => {
+                console.warn(error instanceof Error ? error.message : error);
+            });
+        }
+    }
+}
+
+main().catch((error: unknown) => {
+    console.error(error instanceof Error ? error.stack : error);
+    process.exit(1);
+});

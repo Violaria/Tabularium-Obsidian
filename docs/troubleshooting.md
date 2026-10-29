@@ -1,0 +1,258 @@
+# Troubleshooting
+
+Start with the symptom which is visible now. Do not reset a database, change transport, or enable P2P merely to see whether the problem disappears.
+
+> [!IMPORTANT]
+> If Obsidian will not start, do not give up. Close it, create `redflag.md` at the Vault root with the operating system's file manager, then follow [Recovery and flag files](recovery.md). This is the supported route for intervening before ordinary LiveSync start-up work.
+
+Before changing settings:
+
+1. Back up the affected Vaults and, where possible, the remote database or bucket.
+2. Stop editing on other devices.
+3. Confirm that every participating device uses the intended plug-in version.
+4. Identify whether the active main remote is CouchDB, Object Storage, or P2P.
+5. Open `Show log` and note the first error, rather than only the final summary.
+
+For a report, run `Generate full report for opening the issue with debug info`, remove credentials and private server details, and include the steps which caused the symptom.
+
+## CouchDB does not connect
+
+Check the connection in this order:
+
+1. Confirm that the URL is complete and points to the intended server.
+2. On mobile, use HTTPS with a certificate trusted by the operating system. Plain HTTP and self-signed certificates are not supported.
+3. Confirm the username, password, database name, and any custom headers.
+4. Confirm that the server responds outside the plug-in and that the database exists on additional devices.
+5. Use the setup dialogue's connection test.
+6. If basic access works, run **Check server requirements**. Its initial check is read-only. Each offered server change requires separate confirmation.
+
+Configure CouchDB CORS first. Reverse-proxy examples belong in [Set up your own CouchDB server](setup_own_server.md), alongside the rest of the server configuration.
+
+`Use Internal API` is a compatibility workaround for a trusted server. It sends the configured credentials through Obsidian's internal request API. Enable it only after checking the destination, and do not treat a fallback through that API as proof that the server or proxy is correctly configured.
+
+A Cloudflare `524` response means that Cloudflare timed out while waiting for the origin. The response may also lack the CORS headers which would have been present on an ordinary CouchDB response. Correct the long-running server or proxy request first. The advanced CouchDB option `Use timeouts instead of heartbeats` may help only when the underlying operation is otherwise healthy.
+
+For JWT-specific setup and key-format errors, see [JWT Authentication on CouchDB](tips/jwt-on-couchdb.md).
+
+## CouchDB was working but synchronisation stopped
+
+Do not switch to P2P or reset the database as the first response. Check:
+
+1. the active remote profile and connection state;
+2. the plug-in version on every device;
+3. the CouchDB response and server logs;
+4. pending LiveSync progress indicators;
+5. `Check server requirements`; and
+6. the LiveSync log and full report.
+
+If the remote is healthy but one device's local database is not, use [Reset Synchronisation on This Device](recovery.md#reset-synchronisation-on-this-device) only after backing up unsynchronised local files.
+
+## An unchanged file appears as a conflict after restart
+
+If the log says `Preserved unsynchronised local changes as a conflict`, keep both versions available until you have checked their contents. The message means that LiveSync could not prove that the Vault file was unchanged; it does not establish that you edited the file. Use **Inspect conflicts and file/database differences** in Hatch to review the current branches before selecting a version.
+
+At start-up, LiveSync can restore a missing device-local revision record when the file exactly matches the conflict-free current local database revision. For a saved record, it compares the Vault file with that exact revision when the revision body is readable. It also saves a device-local content hash and byte length. Evidence saved before pruning lets LiveSync recognise an unchanged Vault file even after its recorded revision has been pruned.
+
+If the recorded body is unavailable and no matching content evidence exists, LiveSync cannot prove that the file is unchanged and preserves it for review. Genuine edits and files with unknown origins remain protected; content evidence does not recreate missing revision history. A conflict which was already recorded is not automatically removed or resolved. Use **Inspect conflicts and file/database differences** to review its current branches. If the problem recurs, include the first relevant log entries, plug-in versions on both devices, and a redacted full report with the issue steps.
+
+## Synchronisation is paused for compatibility review
+
+A compatibility review is separate from the Change Log. It can appear after an internal database or settings-format change, when the saved version marker is invalid, or when an earlier review remains pending. Adding a device or opening a copied Vault with no device-local acknowledgement does not itself trigger a review. A pause already saved by an earlier release still needs the explicit resume action, because the saved message does not identify its original cause.
+
+The **Synchronisation paused for compatibility review** dialogue opens after the Obsidian layout is ready. If it has been closed, use the persistent Notice's **Review why** link, or run `Review why synchronisation is paused` from the command palette. Opening **Change Log** does not clear the pause.
+
+Review the stated reason before continuing. When **Resume synchronisation** is available, first update every synchronising device, then use that action to record the current internal database version and restore the configured synchronisation behaviour. If the action is unavailable, the running installation is older than the recorded database or settings format. Update that installation instead of resetting the database merely to remove the warning.
+
+## Files are missing or excluded
+
+Check Obsidian's `Detect all file extensions`, LiveSync selectors, ignore files, file-size limits, modification-time limits, and Hidden File Sync rules. A filtered file is different from a file which reached the database but could not be reconstructed from its chunks.
+
+If the log reports missing chunks or a size mismatch:
+
+1. stop editing the affected file and keep a separate copy of any readable content;
+2. restart Obsidian once to rule out an interrupted fetch;
+3. synchronise a device or restore a backup which still has the correct content;
+4. on that healthy device, run `Recreate chunks for current Vault files`, then synchronise;
+5. follow [Recover a conflicted or mismatched file](recovery.md#recover-a-conflicted-or-mismatched-file); run `Inspect conflicts and file/database differences` from `Hatch`, then use each revision's wrench menu to review and act on that exact branch; and
+6. use `Discard this branch` only after confirming that the exact current branch is no longer wanted. Use the separate `Discard unreadable revision` recovery action only when an unreadable revision is the sole current leaf.
+
+The repair card uses compact diagnostic rows which remain readable in a narrow mobile settings pane. `🧩 Missing chunks: N` marks an unreadable revision. In the database row, `Δsize` means decoded size minus recorded size; `Δsize vs DB` means Vault size minus decoded database size; and `Δtime` means Vault modification time minus database modification time. These are diagnostic values, not a rule for deciding which revision is correct. `✅ Vault matches winner · ⚠️ Conflicts: N` means that the current Vault bytes agree with the database winner while other conflict branches still need a decision. Every mutating action rechecks that its selected revision is still a current leaf. Applying a logical deletion to an existing Vault file requires confirmation; a logical-deletion winner with no Vault file already agrees and is omitted.
+
+`Retry reading revision` does not change the revision tree. `Discard this branch` creates a logical deletion on one exact current leaf while another current leaf remains and leaves the current Vault file unchanged. If the discarded revision was recorded as the Vault's exact source, that stale device-local provenance is removed. `Discard unreadable revision` provides the corresponding explicit escape hatch for a sole unreadable current leaf. Neither action purges history or reconstructs missing content. An unavailable ancestor which is not a current leaf cannot be deleted through this workflow; it disables conservative three-way merge but does not prevent explicit selection between readable current leaves.
+
+`Recreate chunks for current Vault files` uses current Vault content. It cannot recreate unique bytes which exist only in an unreadable historical or conflict revision.
+
+## A Metadata entry requires review
+
+When **Inspect conflicts and file/database differences** reports `Metadata entry requires review and was left unchanged`, the local database contains Metadata whose stored document ID does not agree with the ID derived from its recorded path. LiveSync withholds that entry from ordinary file reflection and deletion rather than guessing which identity is intended. The inspection is local and does not query the remote.
+
+Do not change file-name case handling or path obfuscation merely to make the displayed IDs agree. Follow [Repair a Metadata document ID mismatch](recovery.md#repair-a-metadata-document-id-mismatch) when the card offers **Repair this Metadata document ID**. If no repair action is offered, the entry is ambiguous, conflicted, deleted, outside the normal-file namespace, or otherwise unsafe for one-entry repair. Preserve the evidence and use the wider recovery guidance instead of forcing a target ID.
+
+If many entries reflect deliberate folder-name or ID-derivation differences across devices, choose an authoritative Vault and use the established Rebuild workflow. A one-entry repair is not a distributed rename or database migration.
+
+## A configuration mismatch dialogue blocks synchronisation
+
+Some settings must match across devices. LiveSync pauses synchronisation when the local and remote values differ rather than propagating an unexpected change silently.
+
+Current releases automatically align compatible settings which control how new chunks are created, by default and where possible. This applies to the chunk hash algorithm, chunk size, and splitter version. Existing content remains readable across these choices, although using different choices can reduce chunk reuse and increase storage or transfer work. An explicit opt-out retains the manual review. A mismatch involving encryption, path obfuscation, file-name case handling, or any combination which includes one of those settings always remains a manual decision.
+
+A missing legacy file-name case setting means case-insensitive handling. It matches an explicit disabled setting and does not require a rebuild for that difference. An explicitly enabled setting can use different document IDs and still requires a compatibility decision against either value. Other configuration differences shown in the dialogue must still be resolved.
+
+The saved **Encrypt internal file Properties** preference is effective only for CouchDB when E2EE V2 and **Property Encryption** are also enabled. An inactive preference difference alone does not change Metadata behaviour or require a Rebuild. Applying settings retains that preference only when doing so leaves the adopted effective encryption settings unchanged.
+
+When active, this option affects subsequent Metadata writes for Hidden File Sync and Customisation Sync; it does not automatically protect existing Metadata. To protect existing paths, times, sizes, and Chunk references, update every device and manually Rebuild the remote database.
+
+The `Sync now` command keeps routine replication progress quiet so that it is convenient to assign to a keyboard shortcut; assign one in Obsidian if that suits your workflow. A quiet command may still open this dialogue when a mismatch or another decision requires your attention.
+
+The available actions depend on when the mismatch is found:
+
+- While checking a remote profile, `Use configured settings` accepts the shared values already stored in that remote. `Dismiss` leaves this device's settings unchanged.
+- For a mismatch found before synchronisation, `Apply settings to this device` accepts the remote values. Choose `Update remote database settings` only when this device's values are intended to become the shared values.
+- When the change requires local or remote reconstruction, the action itself states that Fetch or Rebuild will follow. Make sure that the intended authoritative copy is available before choosing it.
+- `Dismiss` postpones a mismatch found before synchronisation. Synchronisation remains paused until the mismatch is resolved.
+
+![Configuration mismatch dialogue](tweak_mismatch_dialogue.png)
+
+Historic defect notices and renamed controls are retained in the [0.25 release history](releases/0.25.md) and [legacy release history](releases/legacy.md), rather than in the current troubleshooting path.
+
+## The remote database uses an unknown feature
+
+When a notice identifies an unknown feature, update this device and every other client of the same CouchDB database, including the CLI. The notice includes the feature identifier even if this version has no descriptive name for it. New synchronisation is refused, and receiving an unsupported requirement stops active replication, because an older client may not interpret the Metadata and its Chunk references correctly. Already queued file changes are not rolled back. The cleaned-remote recovery path also checks compatibility before counting Chunk references. Do not remove the feature name from the remote version document to bypass the check. After updating, reconnect and review any pending file changes before running Garbage Collection.
+
+## Setup and settings questions
+
+### LiveSync asks for a configuration encryption passphrase at start-up
+
+When **Use a custom passphrase** is selected and this device has no usable saved key, enter the passphrase which protects the sensitive configuration. LiveSync validates it against the saved settings, then saves the validated key on this device before continuing start-up. **Ask an passphrase at every launch** requests a masked passphrase at start-up and caches a successfully entered key in memory for that launch.
+
+For the custom-key recovery prompt used by **Use a custom passphrase**, cancelling or closing the prompt stops this start-up attempt and preserves the encrypted configuration. Start Obsidian again to retry. A headless command-line process cannot complete that interactive recovery prompt, so it declines to load protected settings when recovery input is required.
+
+### Share a configuration with another device
+
+Generate an encrypted Setup URI from a working device. This preserves the intended remote profiles and selections while allowing the additional device to keep its own device-specific name. Store the URI and its passphrase separately.
+
+Choose **Time-bound** for sharing until the displayed end time, or **Compatible (no time limit)** when the URI must remain reusable or the receiving client only supports the existing format. If a Time-bound URI can no longer be opened, check the device clock and generate a fresh URI on a working device. See the [Setup URI sharing choices](settings.md#copy-the-current-settings-to-a-setup-uri).
+
+Adding a device or opening a copied Vault does not require a compatibility pause solely because its device-local version record is absent. If an earlier release already saved a compatibility pause, review the settings and resume synchronisation explicitly. Actual version or settings incompatibilities still require review.
+
+For deliberate setting changes during normal use, use `Sync Settings via Markdown` under `Sync settings`.
+
+### Choose a Setup URI passphrase
+
+Use a strong passphrase which is distinct from the Vault encryption passphrase. Record enough context outside the encrypted URI to identify the intended Vault and date, but do not rely on a reused human-readable pattern alone.
+
+### Why synchronising LiveSync's own settings is disabled by default
+
+An automatically propagated transport, database, or exclusion setting can disable the mechanism needed to reverse it. LiveSync therefore keeps its own settings out of Customisation Sync by default. Enable that advanced behaviour only with an independent recovery path and device-specific database suffixes.
+
+### The plug-in reports that something went wrong
+
+Use the first specific error in `Show log` to choose the relevant section. When it names chunks or a size mismatch, follow [Files are missing or excluded](#files-are-missing-or-excluded). Do not rebuild solely from the generic final message.
+
+### A large deletion propagated
+
+Stop every device, preserve the available copies, and follow [Recovery and flag files](recovery.md). If the deletion time is known, `Maximum file modification time for reflected file events` under `Remediation` can limit which remote events are applied while recovering into a separate, backed-up Vault. Treat that as a forensic recovery constraint, not as an ordinary synchronisation setting.
+
+### An old database adapter is still selected
+
+Very old Vaults may retain the compatibility adapter until a deliberate local database migration or reset. Do not toggle it merely to troubleshoot an unrelated current failure. The history and migration notes are in the [legacy release history](releases/legacy.md).
+
+### ZIP or another extension is not synchronised
+
+Enable Obsidian's `Detect all file extensions`, then check LiveSync selectors, ignore rules, and size limits as described in [Files are missing or excluded](#files-are-missing-or-excluded).
+
+## Collect a report
+
+For a database-wide inspection, use **Hatch** → **Inspect database integrity**. Choose **Pseudonyms (recommended)** or **Original names** before beginning. Both choices are visible as radio buttons, with pseudonyms selected initially. **Include remote database** is selected by default; clear it to inspect the local database and current Vault files without making diagnostic requests to the remote. This choice applies to one run, and the report marks the remote as excluded with coverage not checked. When included, the inspection reads normal-file Metadata and current conflict branches locally and in CouchDB, then compares bytes within suspect groups and against the current Vault files. It reports unavailable sources, unreadable content, and detected changes during the run. Older revision history and other remote types are outside this inspection. A completed run means the stated inspection finished; it does not mean every entry is healthy or safe to delete.
+
+The result dialogue provides Markdown and JSON reports with the same name policy. Available formats are displayed as radio buttons. Pseudonyms preserve exact path equality across sources while keeping different document IDs distinct. Each report uses a random eight-character public salt; path tokens are derived from the exact stored Vault-relative path without lower-casing or Unicode NFC normalisation. The same salt reproduces path, document, revision, and Chunk pseudonyms for a targeted follow-up. Because the salt is public, a guessed path can be checked against its token. Earlier ordinal pseudonyms cannot be looked up this way. Pseudonyms are temporary and are not saved as a global setting. Counts and relationships remain visible. Both modes omit file contents and credentials; review the report before sharing it. Cancelling keeps the evidence collected so far and marks the result as cancelled.
+
+Integrity observations include recorded Metadata type, size, and total, unique, and embedded Chunk-reference counts. When suspect content has already been read, they also include measured decoded and Vault sizes, their differences from recorded or reconstructed sizes, and the Vault-to-Metadata modification-time difference. Case-only and NFC-equivalent path groups are listed once. The inspection uses content already needed for its comparisons and does not add database, HTTP, or Vault reads. Values which were not inspected remain absent or `not-checked`.
+
+### Read the compact Markdown integrity report
+
+Markdown keeps its status, settings, scope, coverage, and count summary, and adds separate counts for content and Vault checks which were not performed. **State counts** count observations, not unique files; each local or remote observation contributes to its state total. The **Review index** lists references to observations which match review conditions, before **Findings**. Those conditions include identity mismatches, current conflicts, case- or NFC-equivalent paths, non-NFC paths, a missing group in the other inspected database, missing or unreadable content or Vault files, unavailable Chunks, different or unavailable comparisons, non-zero measured differences, and absent Metadata. These are review candidates, not proof of corruption. A report with no review-index entry still does not confirm that unchecked content is healthy. JSON data and its schema are unchanged.
+
+Each observation is shown in a compact form, while retaining every observation and its full paths, IDs, revisions, and references for follow-up:
+
+```text
+### `remote:4410` source=remote
+path: `<salt>$<hash>`
+doc: `<document-id>` rev=`<revision>` expected=self
+state: consistent-winner-logicallyLive-NFC-newnote conflicts=0
+paths: case=none nfcPeers=none | otherDB=present
+data: recorded=47584B chunks=1/1/0 read=0
+check: content=not-checked vault=not-checked@`vault:remote:4410`
+```
+
+The `state` values always appear in this order: identity, current branch, logical deletion, exact stored path normalisation, and Metadata type. Identity is `consistent`, `documentIdMismatch`, or `namespaceMismatch`; JSON retains `document-id-mismatch` and `namespace-mismatch`. `winner` is the selected current branch and can coexist with conflicts, shown by `conflicts`. `logicallyLive` and `logicallyDeleted` describe the deletion marker. `NFC` means the stored path is NFC-normalised; `nonNFC` means it is not. The Metadata type is `plain`, `newnote`, `notes`, or `unknown`; `notRecorded` means Metadata is absent. A `consistent` identity says only that the ID matches its expected form; it does not show that content is readable or equal across sources.
+
+In `paths`, `case` and `nfcPeers` describe case-equivalent and NFC-equivalent paths: `none` means no equivalent path was found, `yes` means one was found, and `yes@` followed by a reference identifies the available group. `otherDB` says whether the same identity and path group occurs in the other inspected source. It does not compare content. If that source was excluded or unavailable, the field is `not-checked`.
+
+In `data`, `chunks` is total/unique/embedded Chunk references, and `read` counts Chunk reads, not HTTP requests. A `?` means a value was not recorded; it is distinct from zero, missing, unreadable, and `not-checked`. If Metadata is absent, its recorded size and Chunk counts are `?`. In `doc`, `expected=self` means the actual document ID exactly matches the expected ID. Otherwise, the report shows the expected ID or `?` when it was not recorded.
+
+The `check` statuses distinguish `available`, `missing`, `unreadable`, and `not-checked`; a recorded reason follows the status in parentheses. An optional `measure` line includes only available values: decoded content size and Vault size in bytes, `deltaContent` (decoded content minus recorded Metadata size), `deltaVault` (Vault minus decoded content), and `deltaMtime` (Vault minus Metadata modification time) in milliseconds. Positive differences have a `+` prefix, negative differences retain `-`, and zero is `0`. These measurements describe the evidence collected and do not select an authoritative version. Unavailable Chunk names, comparison results, path-equivalence groups, and errors retain their reasons and references. All observations remain in the report's collapsible section and fenced copy.
+
+Usage progress first follows available-revision discovery, so its `n/m` total can grow and remains provisional until discovery ends. It then shows separate progress for accounting. Cancellation during revision reading keeps the collected evidence; cancellation during accounting omits incomplete statistics.
+
+For storage accounting, use **Hatch** → **Analyse database usage** → **Analyse**. It offers the same name choice and reads existing local revisions without changing on-demand Chunk fetching. Complete runs retain the existing TSV columns and first-reference unique/shared Chunk accounting. Sizes count stored string units, not physical database size. Incomplete runs provide JSON so their status and reasons remain attached to the rows. **Save report** requests a download; **Copy report** remains available on devices which do not support downloads.
+
+Follow [How to report an issue](to_issue_reporting.md) for the complete reporting checklist, including Obsidian debug information and the privacy review required before sharing evidence.
+
+Run `Generate full report for opening the issue with debug info` to copy the current settings summary and recent verbose log lines. Remove credentials, remote URLs, Vault names, file contents, and other private information before sharing it.
+
+When a problem concerns one file, run **Copy database information for the active file**, or use **Hatch** → **Copy database information for a file** to select another file. The report describes this device's local database view, including the Vault-relative path, document and chunk identifiers, local database revisions, conflicts, and local chunk availability. It does not query the remote server or include file contents. Treat paths and identifiers as private metadata before sharing.
+
+To follow up on a path pseudonym from a report, use **Hatch** → **Find a file from a report pseudonym**, paste the token, and select **Find file**. The lookup checks the current Vault and local normal-file Metadata only; it does not contact the remote database. It lists every local candidate, with real paths and document IDs visible only in the local dialogue. Multiple IDs for the same path remain distinct. A Vault-only candidate means local Metadata was not inspected. No match may mean the file was renamed or deleted, or that the matching Metadata exists only remotely.
+
+For a selected candidate, the tool can open an existing Vault file or prepare a shareable local report using the original salt and selected document ID. That report shows current, conflict, and history status, Chunk availability, merge bases, and Vault size facts, without file contents or credentials. Its history status is a listing; it does not inspect every historical body.
+
+Use `Show log` for live inspection. Logs are intentionally kept in memory for a limited time to reduce accidental disclosure. Enable `Write logs into the file` only while reproducing a problem, then disable it and remove the file after review because persistent logging affects performance and may contain private data.
+
+![Write logs into the file](../images/write_logs_into_the_file.png)
+
+Browser security errors, particularly CORS failures, may reach the plug-in only as a general network error. Use the network inspector when the ordinary log cannot show the rejected response.
+
+## The database remains large after files are deleted
+
+LiveSync stores file metadata, chunks, revision history, conflicts, deletions, and tombstones. Deleting or shortening a file therefore does not immediately remove every object which once represented it.
+
+Garbage Collection V3 can remove unreferenced chunks from a healthy CouchDB setup, but it is appropriate only when the Vault and local database are healthy and all relevant devices have synchronised. Current files and conflict branches protect their required chunks; an ordinary superseded revision does not. Tombstones and retained metadata are not free, so Garbage Collection does not guarantee a minimal database. Review the [Garbage Collection V3 specification](specs_garbage_collection.md) before using it.
+
+`Overwrite Server Data with This Device's Files` is a separate rebuild operation and is the more certain way to reconstruct a central remote from a chosen authoritative Vault. It is also destructive and may discard changes which exist only on another device. Review [Recovery and flag files](recovery.md#garbage-collection-is-not-rebuild) before choosing between them.
+
+## Inspect a network failure
+
+### Desktop
+
+Open Developer Tools with `Ctrl`+`Shift`+`I`, or `Command`+`Option`+`I` on macOS.
+
+### Android
+
+Follow Chrome's [Remote debug Android devices](https://developer.chrome.com/docs/devtools/remote-debugging/) guide.
+
+### iOS and iPadOS
+
+Use Safari on a Mac and follow Apple's [Inspecting iOS and iPadOS](https://developer.apple.com/documentation/safari-developer-tools/inspecting-ios) guide.
+
+### Network evidence
+
+1. Open the network pane.
+2. Reproduce the failure and select the request marked in red.
+   ![Errored](../images/devtools1.png)
+3. Record the status, timing, and a sanitised version of the headers, payload, and response.
+4. Remove the request path, remote address, authority, authorisation, cookies, credentials, and response secrets before sharing.
+
+   ![Concealed sample](../images/devtools2.png)
+
+## P2P does not connect or transfer changes
+
+Use [Peer-to-Peer Synchronisation Tips](tips/p2p-sync-tips.md). Check signalling discovery separately from the WebRTC data path, and confirm which devices announce and follow changes. P2P is not a repair step for another transport.
+
+## Obsidian or LiveSync remains suspended
+
+Follow [Recovery and flag files](recovery.md). A `redflag.md` emergency stop remains active until it is removed outside Obsidian. Fetch and rebuild flags have different, potentially destructive meanings; do not create them merely to clear a warning.
+
+## Further technical context
+
+See [Technical Information](tech_info.md) for database and synchronisation internals. Current behaviour belongs in this guide; instructions for older defects remain in the release histories.

@@ -1,0 +1,252 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { main as runCliMain, parseArgs as parseCliArgs } from "./main";
+
+function createStandardIoMock() {
+    return {
+        readStdin: vi.fn(async () => ""),
+        prompt: vi.fn(async () => ""),
+        writeStdout: vi.fn(),
+        writeStderr: vi.fn(),
+    };
+}
+
+function mockProcessExit() {
+    const exitMock = vi.spyOn(process, "exit").mockImplementation(((code?: number) => {
+        throw new Error(`__EXIT__:${code ?? 0}`);
+    }) as any);
+    return exitMock;
+}
+
+describe("CLI parseArgs", () => {
+    const originalArgv = process.argv.slice();
+    const originalExitCode = process.exitCode;
+    let standardIo: ReturnType<typeof createStandardIoMock>;
+
+    beforeEach(() => {
+        standardIo = createStandardIoMock();
+    });
+
+    const parseArgs = () => parseCliArgs(standardIo);
+
+    afterEach(() => {
+        process.argv = originalArgv.slice();
+        process.exitCode = originalExitCode;
+        vi.restoreAllMocks();
+    });
+
+    it("exits 1 when --settings has no value", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "--settings"];
+        const exitMock = mockProcessExit();
+
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+        expect(exitMock).toHaveBeenCalledWith(1);
+        expect(standardIo.writeStderr).toHaveBeenCalledWith("Error: Missing value for --settings\n");
+    });
+
+    it("exits 1 when database-path is missing", () => {
+        process.argv = ["node", "livesync-cli", "sync"];
+        const exitMock = mockProcessExit();
+
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+        expect(exitMock).toHaveBeenCalledWith(1);
+        expect(standardIo.writeStderr).toHaveBeenCalledWith("Error: database-path is required\n");
+    });
+
+    it("exits 1 for unknown command after database-path", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "unknown-cmd"];
+        const exitMock = mockProcessExit();
+
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+        expect(exitMock).toHaveBeenCalledWith(1);
+        expect(standardIo.writeStderr).toHaveBeenCalledWith("Error: Unknown command 'unknown-cmd'\n");
+    });
+
+    it("exits 0 and prints help for --help", () => {
+        process.argv = ["node", "livesync-cli", "--help"];
+        const exitMock = mockProcessExit();
+
+        expect(() => parseArgs()).toThrowError("__EXIT__:0");
+        expect(exitMock).toHaveBeenCalledWith(0);
+        expect(standardIo.writeStdout).toHaveBeenCalled();
+        const combined = standardIo.writeStdout.mock.calls.flat().join("");
+        expect(combined).toContain("Usage:");
+        expect(combined).toContain("livesync-cli <database-path> [options] <command> [command-args]");
+        expect(combined).toContain("--compat-remote-admin-exit-zero");
+    });
+
+    it("parses p2p-peers command and timeout", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "p2p-peers", "5"];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("p2p-peers");
+        expect(parsed.commandArgs).toEqual(["5"]);
+    });
+
+    it("parses p2p-sync command with peer and timeout", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "p2p-sync", "peer-1", "12"];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("p2p-sync");
+        expect(parsed.commandArgs).toEqual(["peer-1", "12"]);
+    });
+
+    it("parses p2p-host command", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "p2p-host"];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("p2p-host");
+        expect(parsed.commandArgs).toEqual([]);
+    });
+
+    it.each(["rebuild", "fetch"] as const)("parses %s and its force flag", (command) => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "--force", command];
+        const parsed = parseArgs();
+
+        expect(parsed.command).toBe(command);
+        expect(parsed.force).toBe(true);
+        expect(parsed.commandArgs).toEqual([]);
+    });
+
+    it.each(["rebuild", "fetch"] as const)("rejects %s without force before database access", async (command) => {
+        process.argv = ["node", "livesync-cli", "./missing-database", command];
+        process.exitCode = undefined;
+        const runner = vi.fn(async () => true);
+
+        await expect(runCliMain(standardIo, runner as any)).resolves.toBeUndefined();
+
+        expect(runner).not.toHaveBeenCalled();
+        expect(process.exitCode).toBe(1);
+        expect(standardIo.writeStderr).toHaveBeenCalledWith(expect.stringContaining("requires --force"));
+        expect(standardIo.writeStderr).not.toHaveBeenCalledWith(expect.stringContaining("Database directory"));
+    });
+
+    it("parses remote-add command", () => {
+        process.argv = [
+            "node",
+            "livesync-cli",
+            "./databasePath",
+            "remote-add",
+            "my-remote",
+            "sls+https://user:pass@example.com/db",
+        ];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("remote-add");
+        expect(parsed.commandArgs).toEqual(["my-remote", "sls+https://user:pass@example.com/db"]);
+    });
+
+    it("parses remote-activate command", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "remote-activate", "remote-abc"];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("remote-activate");
+        expect(parsed.commandArgs).toEqual(["remote-abc"]);
+    });
+
+    it("parses remote-export command", () => {
+        process.argv = ["node", "livesync-cli", "./databasePath", "remote-export", "remote-abc"];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("remote-export");
+        expect(parsed.commandArgs).toEqual(["remote-abc"]);
+    });
+
+    it("parses remote-set command", () => {
+        process.argv = [
+            "node",
+            "livesync-cli",
+            "./databasePath",
+            "remote-set",
+            "remote-abc",
+            "sls+p2p://room-1?passphrase=abc",
+        ];
+        const parsed = parseArgs();
+
+        expect(parsed.databasePath).toBe("./databasePath");
+        expect(parsed.command).toBe("remote-set");
+        expect(parsed.commandArgs).toEqual(["remote-abc", "sls+p2p://room-1?passphrase=abc"]);
+    });
+
+    it("parses --interval flag with valid integer", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--interval", "30"];
+        const parsed = parseArgs();
+        expect(parsed.command).toBe("daemon");
+        expect(parsed.interval).toBe(30);
+    });
+
+    it("parses -i shorthand for --interval", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "-i", "10"];
+        const parsed = parseArgs();
+        expect(parsed.interval).toBe(10);
+    });
+
+    it("exits 1 when --interval has no value", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--interval"];
+        const exitMock = mockProcessExit();
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+        expect(exitMock).toHaveBeenCalledWith(1);
+    });
+
+    it("exits 1 when --interval is not a positive integer", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--interval", "0"];
+        const exitMock = mockProcessExit();
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+        expect(exitMock).toHaveBeenCalledWith(1);
+    });
+
+    it("exits 1 when --interval is negative", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--interval", "-5"];
+        mockProcessExit();
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+    });
+
+    it("exits 1 when --interval is not numeric", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--interval", "abc"];
+        mockProcessExit();
+        expect(() => parseArgs()).toThrowError("__EXIT__:1");
+    });
+
+    it("parses explicit daemon command", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "daemon"];
+        const parsed = parseArgs();
+        expect(parsed.command).toBe("daemon");
+        expect(parsed.databasePath).toBe("./vault");
+    });
+
+    it("defaults to daemon when no command specified", () => {
+        process.argv = ["node", "livesync-cli", "./vault"];
+        const parsed = parseArgs();
+        expect(parsed.command).toBe("daemon");
+    });
+
+    it("parses explicit daemon command with --interval", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "daemon", "--interval", "30"];
+        const parsed = parseArgs();
+        expect(parsed.command).toBe("daemon");
+        expect(parsed.interval).toBe(30);
+    });
+
+    it("parses --write-settings as a global option", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--write-settings", "ls"];
+        const parsed = parseArgs();
+
+        expect(parsed.command).toBe("ls");
+        expect(parsed.writeSettings).toBe(true);
+        expect(parsed.commandArgs).toEqual([]);
+    });
+
+    it("parses the remote-administration exit compatibility option globally", () => {
+        process.argv = ["node", "livesync-cli", "./vault", "--compat-remote-admin-exit-zero", "mark-resolved"];
+        const parsed = parseArgs();
+
+        expect(parsed.command).toBe("mark-resolved");
+        expect(parsed.compatRemoteAdminExitZero).toBe(true);
+        expect(parsed.commandArgs).toEqual([]);
+    });
+});
