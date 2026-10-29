@@ -1,5 +1,4 @@
 import { Modal, Notice, Setting, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
-import type { LiveSyncCore } from "@/main";
 import type { TabulariumServer } from "./ServerLogin";
 import { MAX_BOOK_BYTES, assembleBook, kindleErrors, notesIn, type BookSource } from "./kindleBook";
 
@@ -14,12 +13,10 @@ const sendable = (file: TAbstractFile): file is TFile | TFolder => file instance
 /** Builds EPUBs from notes on this device and sends them through the Tabularium server's mail relay. */
 export class TabulariumKindle {
     readonly plugin: Plugin;
-    private readonly core: LiveSyncCore;
     private readonly server: TabulariumServer;
 
-    constructor(plugin: Plugin, core: LiveSyncCore, server: TabulariumServer) {
+    constructor(plugin: Plugin, server: TabulariumServer) {
         this.plugin = plugin;
-        this.core = core;
         this.server = server;
     }
 
@@ -76,8 +73,7 @@ export class TabulariumKindle {
     private credentials() {
         const connection = this.server.connection;
         if (!connection) throw new Error("请先登录 Tabularium 服务器。");
-        const settings = this.core.services.setting.currentSettings();
-        return { server: connection.server, authorization: `Basic ${btoa(String.fromCharCode(...new TextEncoder().encode(`${settings.couchDB_USER}:${settings.couchDB_PASSWORD}`)))}` };
+        return { server: connection.server, authorization: this.server.deviceAuthorization() };
     }
 
     async status(): Promise<KindleStatus> {
@@ -155,8 +151,8 @@ class KindleModal extends Modal {
     }
 }
 
-export function installKindle(plugin: Plugin, core: LiveSyncCore, server: TabulariumServer) {
-    const kindle = new TabulariumKindle(plugin, core, server);
+export function installKindle(plugin: Plugin, server: TabulariumServer) {
+    const kindle = new TabulariumKindle(plugin, server);
     kindle.install();
     return kindle;
 }

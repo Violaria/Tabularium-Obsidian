@@ -63,4 +63,13 @@ export async function logout() {
 }
 export const listVaults = () => api<Vault[]>("/vaults");
 export const issueDevice = (vaultId: string, name: string) => api<IssuedDevice>(`/vaults/${vaultId}/devices`, "POST", { name });
+/** Basic authorization with a device's sync credentials, for the gateway's device routes. */
+export const basicAuth = (username: string, password: string) => `Basic ${btoa(String.fromCharCode(...new TextEncoder().encode(`${username}:${password}`)))}`;
+/** Restarts the device's expiry; the secret stays the same. */
+export async function renewDevice(authorization: string) {
+    const response = await fetch("/api/v1/devices/current/renew", { method: "POST", headers: { authorization } });
+    const data = (await response.json().catch(() => ({}))) as { expiresAt?: number; error?: string };
+    if (!response.ok) throw new ApiError(response.status, data.error ?? `HTTP ${response.status}`);
+    return data.expiresAt!;
+}
 export const revokeDevice = (vaultId: string, deviceId: string) => api(`/vaults/${vaultId}/devices/${deviceId}`, "DELETE");

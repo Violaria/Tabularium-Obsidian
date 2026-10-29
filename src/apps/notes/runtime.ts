@@ -12,6 +12,7 @@ import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { decrypt as decryptHKDF } from "octagonal-wheels/encryption/hkdf";
 import { createLiveSyncBrowserServiceHub } from "@/apps/browser/createLiveSyncBrowserServiceHub";
 import { initialiseServiceModulesFSAPI, type FSAPIServiceModules } from "@/apps/webapp/serviceModules/FSAPIServiceModules";
+import { basicAuth } from "./api";
 
 export interface NotesFile {
     path: string;
@@ -99,7 +100,7 @@ export class NotesRuntime {
     }
 
     private get auth() {
-        return `Basic ${btoa(String.fromCharCode(...new TextEncoder().encode(`${this.connection.username}:${this.connection.password}`)))}`;
+        return basicAuth(this.connection.username, this.connection.password);
     }
 
     /**

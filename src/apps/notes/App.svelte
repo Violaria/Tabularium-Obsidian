@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onDestroy, tick } from "svelte";
-    import { issueDevice, listVaults, login, logout, restoreSession, revokeDevice, ApiError, type User, type Vault } from "./api";
+    import { basicAuth, issueDevice, listVaults, login, logout, renewDevice, restoreSession, revokeDevice, ApiError, type User, type Vault } from "./api";
     import { deleteRecord, readRecord, recordKey, writeRecord, type VaultRecord } from "./store";
     import { CredentialsRejectedError, NotesRuntime, WrongPassphraseError, clearLocalVault, type NotesFile } from "./runtime";
     import { renderPreview } from "./preview";
@@ -32,6 +32,8 @@
     let objectUrls: string[] = [];
     let refreshTimer: number | undefined;
 
+    /** Device credentials are renewed once less than half of their 30-day life is left. */
+    const RENEW_BEFORE_MS = 15 * 86_400_000;
     const MIME: Record<string, string> = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif", svg: "image/svg+xml", webp: "image/webp", bmp: "image/bmp", avif: "image/avif" };
     const message = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
@@ -100,7 +102,7 @@
         record = await readRecord(key);
         if (!record) {
             const device = await issueDevice(target.id, browserName());
-            record = { key, deviceId: device.id, username: device.username, password: device.password, fetched: false };
+            record = { key, deviceId: device.id, username: device.username, password: device.password, expiresAt: device.expiresAt, fetched: false };
             await writeRecord(record);
         }
         runtime = new NotesRuntime(
@@ -122,7 +124,10 @@
             throw e instanceof WrongPassphraseError ? e : new Error(`打开笔记库失败：${message(e)}`);
         }
         passphrase = "";
-        if (!record.fetched) {
+        // Records written before renewal existed have no expiry and are renewed too.
+        const renew = !(record.expiresAt > Date.now() + RENEW_BEFORE_MS);
+        if (renew) record.expiresAt = await renewDevice(basicAuth(record.username, record.password));
+        if (!record.fetched || renew) {
             record.fetched = true;
             await writeRecord({ ...record });
         }
@@ -222,7 +227,7 @@
         sending = true;
         notice = "";
         error = "";
-        const authorization = `Basic ${btoa(`${record.username}:${record.password}`)}`;
+        const authorization = basicAuth(record.username, record.password);
         try {
             const sent = await sendToKindle(runtime, items, vault.name, authorization, (title) => (notice = `正在推送《${title}》…`));
             notice = `已推送至 Kindle：${sent.map((t) => `《${t}》`).join("、")}`;

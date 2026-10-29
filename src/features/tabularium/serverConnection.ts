@@ -73,12 +73,12 @@ export class TabulariumApi {
         this.server = normaliseServer(server);
         this.fetcher = fetcher;
     }
-    private async request<T>(path: string, method = "GET", body?: unknown): Promise<T> {
+    private async request<T>(path: string, method = "GET", body?: unknown, authorization = this.token ? `Bearer ${this.token}` : undefined): Promise<T> {
         let response: Response;
         try {
             response = await this.fetcher(`${this.server}/api/v1${path}`, {
                 method,
-                headers: { "content-type": "application/json", ...(this.token ? { authorization: `Bearer ${this.token}` } : {}) },
+                headers: { "content-type": "application/json", ...(authorization ? { authorization } : {}) },
                 body: body === undefined ? undefined : JSON.stringify(body),
             });
         } catch {
@@ -105,6 +105,10 @@ export class TabulariumApi {
     }
     issueDevice(vaultId: string, name: string): Promise<TabulariumDevice> {
         return this.request(`/vaults/${encodeURIComponent(vaultId)}/devices`, "POST", { name });
+    }
+    /** Restarts the expiry of the device whose sync credentials are given; the secret stays the same. */
+    renewDevice(deviceAuthorization: string): Promise<{ expiresAt: number }> {
+        return this.request("/devices/current/renew", "POST", undefined, deviceAuthorization);
     }
     async logout(): Promise<void> {
         if (!this.token) return;

@@ -202,7 +202,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 );
                 setupManager.registerP2PSetupConnectionProbe(replicator.connectionProbe);
                 this.tabularium = installTabulariumServer(this, core, setupManager);
-                this.kindle = installKindle(this, core, this.tabularium);
+                this.kindle = installKindle(this, this.tabularium);
                 useP2PReplicatorCommands(core, replicator);
                 useP2PReplicatorUI(core, core, replicator, createInteractiveP2PReplication(replicator));
                 useObsidianReplicationRibbonFeature(core);

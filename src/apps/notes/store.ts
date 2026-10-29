@@ -5,6 +5,7 @@ export interface VaultRecord {
     deviceId: string;
     username: string;
     password: string;
+    expiresAt: number;
     /** The vault has been fetched completely at least once. */
     fetched: boolean;
 }

@@ -26,6 +26,10 @@ export interface ConnectOptions {
 /** A new vault is empty, so the device uploads through ordinary sync; an existing vault is fetched first. */
 type Initialise = "upload" | "fetch";
 
+/** Credentials are renewed once less than half of their 30-day life is left. */
+export const RENEW_BEFORE_MS = 15 * 86_400_000;
+const RENEW_CHECK_MS = 6 * 3_600_000;
+
 const randomKey = () => Array.from(crypto.getRandomValues(new Uint8Array(32)), (byte) => byte.toString(16).padStart(2, "0")).join("");
 
 /** Connects this plug-in to a Tabularium server and keeps the connection encrypted. */
@@ -65,6 +69,39 @@ export class TabulariumServer {
             return true;
         });
         this.plugin.addCommand({ id: "server-connection", name: "服务器连接", callback: () => this.open() });
+        this.app.workspace.onLayoutReady(() => {
+            void this.renew();
+        });
+        this.plugin.registerInterval(
+            window.setInterval(() => {
+                void this.renew();
+            }, RENEW_CHECK_MS)
+        );
+    }
+
+    /** Basic authorization with this device's sync credentials, for the gateway's device routes. */
+    deviceAuthorization() {
+        const settings = this.core.services.setting.currentSettings();
+        return `Basic ${btoa(String.fromCharCode(...new TextEncoder().encode(`${settings.couchDB_USER}:${settings.couchDB_PASSWORD}`)))}`;
+    }
+
+    /**
+     * Renews the device credentials when they are close to expiry. Being offline is not reported: the next check retries.
+     * Returns whether the credentials were renewed.
+     */
+    async renew() {
+        const connection = this.connection;
+        if (!connection || connection.expiresAt - Date.now() > RENEW_BEFORE_MS) return false;
+        try {
+            const { expiresAt } = await this.api(connection.server).renewDevice(this.deviceAuthorization());
+            this.connection = { ...connection, expiresAt };
+            await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(this.connection, null, 2));
+            return true;
+        } catch (error) {
+            if (!(error instanceof TabulariumApiError) || error.status === 0) return false;
+            new Notice(error.status === 401 ? "Tabularium 设备凭据已失效，请在「服务器连接」中重新登录。" : `Tabularium 凭据续期失败：${error.message}`);
+            return false;
+        }
     }
 
     api(server: string) {
