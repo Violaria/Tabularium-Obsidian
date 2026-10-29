@@ -1,12 +1,13 @@
 {
     "name": "obsidian-livesync",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "description": "Reflect your vault changes to some other devices immediately. Please make sure to disable other synchronize solutions to avoid content corruption or duplication.",
     "main": "main.js",
     "type": "module",
     "scripts": {
         "dev": "node --env-file=.env esbuild.config.mjs",
         "build": "node esbuild.config.mjs production",
+        "build:notes": "vite build --config src/apps/notes/vite.config.ts src/apps/notes",
         "buildVite": "npx dotenv-cli -e .env  -- vite build --mode production",
         "buildViteOriginal": "npx dotenv-cli -e .env  -- vite build --mode original",
         "buildDev": "node esbuild.config.mjs dev",
@@ -15,7 +16,7 @@
         "lint:community:tools": "eslint --config eslint.community.config.mjs --concurrency off --max-warnings 0 _tools",
         "svelte-check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
         "tsc-check": "tsc --noEmit",
-        "tsc-check:apps": "tsc --noEmit -p src/apps/browser/tsconfig.json && tsc --noEmit -p src/apps/cli/tsconfig.json && tsc --noEmit -p src/apps/webapp/tsconfig.json && tsc --noEmit -p src/apps/webpeer/tsconfig.app.json && tsc --noEmit -p src/apps/webpeer/tsconfig.node.json",
+        "tsc-check:apps": "tsc --noEmit -p src/apps/browser/tsconfig.json && tsc --noEmit -p src/apps/notes/tsconfig.json && tsc --noEmit -p src/apps/cli/tsconfig.json && tsc --noEmit -p src/apps/webapp/tsconfig.json && tsc --noEmit -p src/apps/webpeer/tsconfig.app.json && tsc --noEmit -p src/apps/webpeer/tsconfig.node.json",
         "pretty:importpath": "cd utilsdeno && deno run -A ./normalise-imports.ts",
         "pretty:json": "prettier --config ./.prettierrc.mjs \"**/*.json\" --write --log-level error",
         "pretty": "npm run prettyNoWrite -- --write --log-level error",

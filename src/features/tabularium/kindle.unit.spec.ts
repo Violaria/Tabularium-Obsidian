@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { buildEpub, zip } from "./epub";
 import { renderNote } from "./render";
+import { assembleBook, notesIn, type BookSource } from "./kindleBook";
+import { resolveLinkpath } from "./linkpath";
 
 const decode = (data: Uint8Array) => new TextDecoder().decode(data);
 // Reads the stored entries back from a ZIP produced by zip().
@@ -81,5 +83,38 @@ describe("renderNote", () => {
         expect(body).toContain("<code>[[行内]]</code>");
         expect(headings).toEqual([{ id: "h-1", title: "第一节" }]);
         expect(body).toContain('<h2 id="h-1">第一节</h2>');
+    });
+});
+
+describe("resolveLinkpath", () => {
+    const files = ["根.md", "a/图.png", "a/b/图.png", "c/图.png", "a/笔记.md", "d/深/目标.md", "assets/Logo.PNG"];
+    it("follows Obsidian's rules for paths and bare names", () => {
+        expect(resolveLinkpath("图.png", "a/笔记.md", files)).toBe("a/图.png");
+        expect(resolveLinkpath("图.png", "根.md", files)).toBe("a/图.png");
+        expect(resolveLinkpath("b/图.png", "a/笔记.md", files)).toBe("a/b/图.png");
+        expect(resolveLinkpath("../c/图.png", "a/笔记.md", files)).toBe("c/图.png");
+        expect(resolveLinkpath("目标#标题", "根.md", files)).toBe("d/深/目标.md");
+        expect(resolveLinkpath("assets/logo.png", "根.md", files)).toBe("assets/Logo.PNG");
+        expect(resolveLinkpath("不存在", "根.md", files)).toBeUndefined();
+    });
+});
+
+describe("assembleBook", () => {
+    it("packs each image once and groups sub-folder notes", async () => {
+        const vault: Record<string, string | Uint8Array> = {
+            "书/一.md": "![[图.png]]\n\n![[图.png]]", "书/子/二.md": "二", "书/图.png": new Uint8Array([1, 2, 3]), "其他.md": "x",
+        };
+        const files = Object.keys(vault);
+        const source: BookSource = {
+            read: async (path) => vault[path] as string,
+            readBinary: async (path) => vault[path] as Uint8Array,
+            resolve: (target, from) => resolveLinkpath(target, from, files),
+        };
+        const notes = notesIn("书", files);
+        expect(notes).toEqual(["书/一.md", "书/子/二.md"]);
+        const book = entries(await assembleBook(source, notes, "书", "书"));
+        expect(book.filter((f) => f.name.startsWith("OEBPS/images/")).map((f) => [f.name, [...f.data]])).toEqual([["OEBPS/images/image-1.png", [1, 2, 3]]]);
+        expect(book.some((f) => f.name === "OEBPS/part-1.xhtml")).toBe(true);
+        expect(notesIn("", files)).toEqual(["其他.md", "书/一.md", "书/子/二.md"]);
     });
 });

@@ -12,6 +12,7 @@ const lintProjects = [
     "./src/apps/browser/tsconfig.json",
     "./src/apps/cli/tsconfig.json",
     "./src/apps/webapp/tsconfig.json",
+    "./src/apps/notes/tsconfig.json",
     "./src/apps/webpeer/tsconfig.app.json",
     "./src/apps/webpeer/tsconfig.node.json",
 ];
@@ -43,6 +44,7 @@ export default defineConfig([
         ".prettierrc.mjs",
         "*.config.mjs",
         "vite.*",
+        "src/apps/notes/vite.config.ts",
         "vitest.*",
         // Testing files (Simplified patterns)
         "test/**",
@@ -121,11 +123,18 @@ export default defineConfig([
         },
     },
     {
-        files: ["src/apps/browser/**/*.{ts,svelte}", "src/apps/webapp/**/*.ts"],
+        files: ["src/apps/browser/**/*.{ts,svelte}", "src/apps/webapp/**/*.ts", "src/apps/notes/**/*.{ts,svelte}"],
         rules: {
             // Browser applications use the DOM rather than Obsidian's DOM extensions.
             "obsidianmd/prefer-create-el": "off",
             "obsidianmd/prefer-active-doc": "off",
+        },
+    },
+    {
+        files: ["src/apps/notes/**/*.{ts,svelte}"],
+        rules: {
+            // A standalone web page: Obsidian's requestUrl and vault-scoped storage do not exist there.
+            "no-restricted-globals": "off",
         },
     },
 ]);

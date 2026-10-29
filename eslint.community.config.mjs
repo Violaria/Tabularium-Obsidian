@@ -21,6 +21,7 @@ export default defineConfig(
         "**/test/**",
         "src/apps/_test/**",
         "src/apps/cli/testdeno/**",
+        "src/apps/notes/vite.config.ts",
     ]),
     {
         languageOptions: {
@@ -38,6 +39,7 @@ export default defineConfig(
                     "./src/apps/browser/tsconfig.json",
                     "./src/apps/cli/tsconfig.json",
                     "./src/apps/webapp/tsconfig.json",
+                    "./src/apps/notes/tsconfig.json",
                     "./src/apps/webpeer/tsconfig.app.json",
                     "./src/apps/webpeer/tsconfig.node.json",
                 ],
@@ -76,6 +78,14 @@ export default defineConfig(
         files: ["src/apps/browser/**/*.ts", "src/apps/webapp/**/*.ts"],
         rules: {
             "obsidianmd/prefer-active-doc": "off",
+        },
+    },
+    {
+        // A standalone web page: Obsidian's requestUrl, vault-scoped storage and DOM helpers do not exist there.
+        files: ["src/apps/notes/**/*.ts"],
+        rules: {
+            "obsidianmd/prefer-active-doc": "off",
+            "no-restricted-globals": "off",
         },
     }
 );

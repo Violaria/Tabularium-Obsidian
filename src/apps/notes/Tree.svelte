@@ -1,0 +1,63 @@
+<script module lang="ts">
+    export interface TreeNode {
+        name: string;
+        path: string;
+        folder: boolean;
+        children: TreeNode[];
+    }
+</script>
+
+<script lang="ts">
+    import Self from "./Tree.svelte";
+    import type { KindleItem } from "./kindle";
+
+    interface Props {
+        node: TreeNode;
+        current?: string;
+        selecting: boolean;
+        selected: KindleItem[];
+        expandAll: boolean;
+        open(path: string): void;
+        toggle(item: KindleItem): void;
+        send(item: KindleItem): void;
+        select(item: KindleItem): void;
+    }
+    let { node, current, selecting, selected, expandAll, open, toggle, send, select }: Props = $props();
+    let expanded = $state<Record<string, boolean>>({});
+    let menu = $state<string>();
+
+    const sendable = (child: TreeNode) => child.folder || /\.md$/i.test(child.name);
+    const item = (child: TreeNode): KindleItem => ({ path: child.path, folder: child.folder });
+    const label = (child: TreeNode) => (child.folder ? child.name : child.name.replace(/\.md$/i, ""));
+</script>
+
+<ul>
+    {#each node.children as child (child.path + (child.folder ? "/" : ""))}
+        <li>
+            <div class="row" class:current={child.path === current}>
+                {#if selecting && sendable(child)}
+                    <input type="checkbox" aria-label="选择 {child.name}" checked={selected.some((s) => s.path === child.path)} onchange={() => toggle(item(child))} />
+                {/if}
+                {#if child.folder}
+                    <button class="name folder" aria-expanded={expandAll || !!expanded[child.path]} onclick={() => (expanded[child.path] = !expanded[child.path])}>
+                        {expandAll || expanded[child.path] ? "▾" : "▸"} {child.name}
+                    </button>
+                {:else}
+                    <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}>{label(child)}</button>
+                {/if}
+                {#if sendable(child) && !selecting}
+                    <button class="more" aria-label="更多操作" title="更多操作" onclick={() => (menu = menu === child.path ? undefined : child.path)}>⋯</button>
+                {/if}
+            </div>
+            {#if menu === child.path}
+                <div class="menu" role="menu">
+                    <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>推送至 Kindle</button>
+                    <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>多选…</button>
+                </div>
+            {/if}
+            {#if child.folder && (expandAll || expanded[child.path])}
+                <Self node={child} {current} {selecting} {selected} {expandAll} {open} {toggle} {send} {select} />
+            {/if}
+        </li>
+    {/each}
+</ul>

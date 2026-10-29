@@ -1,8 +1,7 @@
 import { Modal, Notice, Setting, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
 import type { LiveSyncCore } from "@/main";
 import type { TabulariumServer } from "./ServerLogin";
-import { buildEpub, type EpubChapter, type EpubImage } from "./epub";
-import { isPackableImage, renderNote } from "./render";
+import { MAX_BOOK_BYTES, assembleBook, kindleErrors, notesIn, type BookSource } from "./kindleBook";
 
 interface KindleStatus {
     configured: boolean;
@@ -10,15 +9,6 @@ interface KindleStatus {
     dailyLimit: number;
     remaining: number;
 }
-const MAX_BYTES = 50 * 1024 * 1024;
-const MEDIA_TYPES: Record<string, string> = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif" };
-const errors: Record<string, string> = {
-    "Kindle address not set": "请先在服务器控制台的 Kindle 页面填写 Kindle 地址。",
-    "Mail delivery is not configured": "服务器尚未配置发信。",
-    "Daily Kindle delivery limit reached": "今天的发送次数已用完。",
-    "Request body too large": "电子书超过 50 MB，请分开发送。",
-};
-
 const sendable = (file: TAbstractFile): file is TFile | TFolder => file instanceof TFolder || (file instanceof TFile && file.extension === "md");
 
 /** Builds EPUBs from notes on this device and sends them through the Tabularium server's mail relay. */
@@ -64,53 +54,23 @@ export class TabulariumKindle {
 
     /** A note becomes a book of its own; a folder becomes one book of all notes below it. */
     book(item: TFile | TFolder) {
-        if (item instanceof TFile) return { files: [item], title: item.basename };
-        return { files: this.notes(item), title: item.name || this.plugin.app.vault.getName(), folder: item.path };
+        if (item instanceof TFile) return { notes: [item.path], title: item.basename };
+        const folder = item.isRoot() ? "" : item.path;
+        return { notes: notesIn(folder, this.plugin.app.vault.getMarkdownFiles().map((file) => file.path)), title: item.name || this.plugin.app.vault.getName(), folder };
     }
 
-    private notes(folder: TFolder): TFile[] {
-        const files: TFile[] = [];
-        const walk = (folder: TFolder) => {
-            for (const child of folder.children) {
-                if (child instanceof TFolder) walk(child);
-                else if (child instanceof TFile && child.extension === "md") files.push(child);
-            }
+    private get source(): BookSource {
+        const { vault, metadataCache } = this.plugin.app;
+        const file = (path: string) => {
+            const found = vault.getFileByPath(path);
+            if (!found) throw new Error(`找不到文件：${path}`);
+            return found;
         };
-        walk(folder);
-        return files.sort((a, b) => a.path.localeCompare(b.path, "zh"));
-    }
-
-    /**
-     * Builds the book in memory; images are packed once each, in the order they are first referenced.
-     * For a folder book, notes in sub-folders of `folder` are grouped by their relative folder path.
-     */
-    async build(files: TFile[], title: string, folder?: string) {
-        const { app } = this.plugin;
-        const images: EpubImage[] = [];
-        const packed = new Map<string, string>();
-        const queued: { file: TFile; href: string }[] = [];
-        const root = folder === "/" ? "" : folder;
-        const chapters: EpubChapter[] = [];
-        for (const file of files) {
-            const resolve = (target: string) => {
-                const image = app.metadataCache.getFirstLinkpathDest(target, file.path);
-                if (!image || !isPackableImage(image.path)) return undefined;
-                if (!packed.has(image.path)) {
-                    const href = `images/image-${packed.size + 1}.${image.extension.toLowerCase()}`;
-                    packed.set(image.path, href);
-                    queued.push({ file: image, href });
-                }
-                return packed.get(image.path);
-            };
-            const rendered = renderNote(await app.vault.cachedRead(file), resolve);
-            const parent = file.parent?.path === "/" ? "" : (file.parent?.path ?? "");
-            const group = root !== undefined && parent !== root ? parent.slice(root ? root.length + 1 : 0) : undefined;
-            chapters.push({ title: file.basename, ...rendered, group });
-        }
-        for (const { file, href } of queued) {
-            images.push({ href, mediaType: MEDIA_TYPES[file.extension.toLowerCase()], data: new Uint8Array(await app.vault.readBinary(file)) });
-        }
-        return buildEpub({ title, language: "zh", identifier: `urn:uuid:${crypto.randomUUID()}`, modified: new Date(), chapters, images });
+        return {
+            read: (path) => vault.cachedRead(file(path)),
+            readBinary: async (path) => new Uint8Array(await vault.readBinary(file(path))),
+            resolve: (target, from) => metadataCache.getFirstLinkpathDest(target, from)?.path,
+        };
     }
 
     private credentials() {
@@ -128,11 +88,11 @@ export class TabulariumKindle {
     }
 
     /** Sends the notes as one book; throws with a readable message on failure. */
-    async send(files: TFile[], title: string, folder?: string) {
-        if (!files.length) throw new Error("没有可发送的笔记。");
+    async send(notes: string[], title: string, folder?: string) {
+        if (!notes.length) throw new Error("没有可发送的笔记。");
         const { server, authorization } = this.credentials();
-        const book = await this.build(files, title, folder);
-        if (book.length > MAX_BYTES) throw new Error(errors["Request body too large"]);
+        const book = await assembleBook(this.source, notes, title, folder);
+        if (book.length > MAX_BOOK_BYTES) throw new Error(kindleErrors["Request body too large"]);
         const response = await requestUrl({
             url: `${server}/api/v1/kindle/send`,
             method: "POST",
@@ -143,7 +103,7 @@ export class TabulariumKindle {
         });
         if (response.status !== 200) {
             const reason = (response.json as { error?: string } | undefined)?.error ?? `HTTP ${response.status}`;
-            throw new Error(errors[reason] ?? reason);
+            throw new Error(kindleErrors[reason] ?? reason);
         }
         return book.length;
     }
@@ -151,9 +111,9 @@ export class TabulariumKindle {
     /** Sends each item as its own book, one after another; stops at the first failure. */
     private async run(items: (TFile | TFolder)[]) {
         for (const item of items) {
-            const { files, title, folder } = this.book(item);
+            const { notes, title, folder } = this.book(item);
             try {
-                const size = await this.send(files, title, folder);
+                const size = await this.send(notes, title, folder);
                 new Notice(`已发送《${title}》到 Kindle（${(size / 1024).toFixed(0)} KB）。`);
             } catch (error) {
                 new Notice(`发送《${title}》到 Kindle 失败：${(error as Error).message}`);

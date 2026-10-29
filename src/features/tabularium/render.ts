@@ -9,19 +9,27 @@ export const isPackableImage = (path: string) => IMAGE.test(path);
 
 // Obsidian syntax is rewritten outside code only: fenced blocks and inline code are kept as written.
 const CODE = /(^```[\s\S]*?^```|^~~~[\s\S]*?^~~~|`[^`\n]*`)/m;
-function rewriteObsidian(markdown: string) {
+export function outsideCode(markdown: string, transform: (text: string) => string) {
     return markdown
         .split(new RegExp(CODE.source, "gm"))
-        .map((part, index) => {
-            if (index % 2) return part;
-            return part
-                .replace(/%%[\s\S]*?%%/g, "")
-                .replace(/!\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]*))?\]\]/g, (_, target: string, alias = "") =>
-                    `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`)
-                .replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias?: string) =>
-                    alias ?? target.replace(/#.*$/, "").split("/").pop()!);
-        })
+        .map((part, index) => (index % 2 ? part : transform(part)))
         .join("");
+}
+/** Front matter and characters that XML does not allow are dropped. */
+export const stripFrontMatter = (markdown: string) =>
+    markdown
+        .replace(/^---\r?\n[\s\S]*?\r?\n---(\r?\n|$)/, "")
+        // eslint-disable-next-line no-control-regex -- matching control characters is the purpose here
+        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/g, "");
+function rewriteObsidian(markdown: string) {
+    return outsideCode(markdown, (part) =>
+        part
+            .replace(/%%[\s\S]*?%%/g, "")
+            .replace(/!\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]*))?\]\]/g, (_, target: string, alias = "") =>
+                `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`)
+            .replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias?: string) =>
+                alias ?? target.replace(/#.*$/, "").split("/").pop()!)
+    );
 }
 
 export function renderNote(markdown: string, resolveImage: ImageResolver) {
@@ -57,10 +65,5 @@ export function renderNote(markdown: string, resolveImage: ImageResolver) {
         }
         return self.renderToken(tokens, index, options);
     };
-    const source = markdown
-        .replace(/^---\r?\n[\s\S]*?\r?\n---(\r?\n|$)/, "")
-        // Characters that XML does not allow.
-        // eslint-disable-next-line no-control-regex -- matching control characters is the purpose here
-        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/g, "");
-    return { body: md.render(rewriteObsidian(source)), headings };
+    return { body: md.render(rewriteObsidian(stripFrontMatter(markdown))), headings };
 }
