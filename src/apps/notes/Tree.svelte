@@ -17,13 +17,16 @@
         current?: string;
         selecting: boolean;
         selected: KindleItem[];
+        conflicted: Set<string>;
         expandAll: boolean;
         open(path: string): void;
         toggle(item: KindleItem): void;
         send(item: KindleItem): void;
         select(item: KindleItem): void;
+        rename(item: KindleItem): void;
+        remove(item: KindleItem): void;
     }
-    let { node, current, selecting, selected, expandAll, open, toggle, send, select }: Props = $props();
+    let { node, current, selecting, selected, conflicted, expandAll, open, toggle, send, select, rename, remove }: Props = $props();
     let expanded = $state<Record<string, boolean>>({});
     let menu = $state<string>();
 
@@ -45,19 +48,24 @@
                     </button>
                 {:else}
                     <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}>{label(child)}</button>
+                    {#if conflicted.has(child.path)}<span class="conflict-mark" title={t("notes.stateConflict")}>{t("notes.conflictMark")}</span>{/if}
                 {/if}
-                {#if sendable(child) && !selecting}
+                {#if !selecting}
                     <button class="more" aria-label={t("notes.more")} title={t("notes.more")} onclick={() => (menu = menu === child.path ? undefined : child.path)}>⋯</button>
                 {/if}
             </div>
             {#if menu === child.path}
                 <div class="menu" role="menu">
-                    <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>{t("notes.send")}</button>
-                    <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>{t("notes.select")}</button>
+                    {#if sendable(child)}
+                        <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>{t("notes.send")}</button>
+                        <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>{t("notes.select")}</button>
+                    {/if}
+                    <button role="menuitem" onclick={() => ((menu = undefined), rename(item(child)))}>{t("notes.rename")}</button>
+                    <button role="menuitem" onclick={() => ((menu = undefined), remove(item(child)))}>{t("notes.delete")}</button>
                 </div>
             {/if}
             {#if child.folder && (expandAll || expanded[child.path])}
-                <Self node={child} {current} {selecting} {selected} {expandAll} {open} {toggle} {send} {select} />
+                <Self node={child} {current} {selecting} {selected} {conflicted} {expandAll} {open} {toggle} {send} {select} {rename} {remove} />
             {/if}
         </li>
     {/each}

@@ -13,12 +13,17 @@ import { decrypt as decryptHKDF } from "octagonal-wheels/encryption/hkdf";
 import { createLiveSyncBrowserServiceHub } from "@/apps/browser/createLiveSyncBrowserServiceHub";
 import { initialiseServiceModulesFSAPI, type FSAPIServiceModules } from "@/apps/webapp/serviceModules/FSAPIServiceModules";
 import { basicAuth } from "./api";
+import type { VaultRecord } from "./store";
+import { createBinaryBlob, createTextBlob } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+import type { FilePathWithPrefix, UXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { t } from "../../../../server/ui/i18n";
 
 export interface NotesFile {
     path: string;
     size: number;
     mtime: number;
+    rev: string;
+    conflicted: boolean;
 }
 export interface NotesConnection {
     userId: string;
@@ -34,6 +39,29 @@ export class WrongPassphraseError extends Error {
     }
 }
 export class CredentialsRejectedError extends Error {}
+/** The server could not be reached; a vault fetched before can still be opened offline. */
+export class NetworkError extends Error {}
+
+/** An encrypted metadata path and the vault's salt: not secret, enough to check a passphrase offline. */
+export interface Verifier {
+    path: string;
+    salt: string;
+}
+export interface StartResult {
+    offline: boolean;
+    verifier?: Verifier;
+    tweaks?: Record<string, unknown>;
+}
+
+async function verifyLocally(verifier: Verifier | undefined, passphrase: string) {
+    if (!verifier) return;
+    const salt = Uint8Array.from(atob(verifier.salt), (c) => c.charCodeAt(0));
+    try {
+        await decryptHKDF(verifier.path.slice(ENCRYPTED_META_PREFIX.length), passphrase, salt);
+    } catch {
+        throw new WrongPassphraseError();
+    }
+}
 
 const ENCRYPTED_META_PREFIX = "/\\:";
 const storagePrefix = (vaultId: string) => `tabularium-notes:${vaultId}:`;
@@ -80,6 +108,9 @@ export class NotesRuntime {
         this.settings = {
             couchDB_URI: `${location.origin}/sync`,
             couchDB_DBNAME: connection.vaultId,
+            // The first fetch resets the local database under this suffix (the app ID, which is the system vault name);
+            // setting it from the start keeps one database name on every opening.
+            additionalSuffixOfDatabaseName: databaseName(connection.vaultId),
             couchDB_USER: connection.username,
             couchDB_PASSWORD: connection.password,
             passphrase: connection.passphrase,
@@ -105,10 +136,11 @@ export class NotesRuntime {
     }
 
     /**
-     * Opens the vault: verifies the passphrase, adopts the server's chunk parameters, fetches everything
-     * on first use and then keeps a live replication running.
+     * Opens the vault: verifies the passphrase, adopts the server's chunk parameters, fetches everything on first
+     * use and then keeps a live replication running. Without a network, a vault fetched before opens from its local
+     * copy: the passphrase is checked against the saved encrypted sample and the saved chunk parameters are used.
      */
-    async start(fetched: boolean) {
+    async start(saved: Pick<VaultRecord, "fetched" | "verifier" | "tweaks">): Promise<StartResult> {
         const { vaultId, userId } = this.connection;
         const root = await vaultDirectory(userId, vaultId, true);
         const hub = createLiveSyncBrowserServiceHub<ServiceContext>({
@@ -133,64 +165,165 @@ export class NotesRuntime {
         const { services, serviceModules } = this.core;
         if (!(await services.control.onLoad())) throw new Error(t("notes.coreFailed"));
         await services.control.onReady();
-        await this.verifyPassphrase();
-        const preferred = await this.withReplicator((replicator, settings) => replicator.getRemotePreferredTweakValues(settings));
-        if (preferred.status === "available") await services.setting.applyPartial(preferred.values, true);
-        if (!fetched) await serviceModules.rebuilder.$fetchLocal(false, true);
+        let result: StartResult;
+        try {
+            const verifier = await this.verifyPassphrase();
+            const preferred = await this.withReplicator((replicator, settings) => replicator.getRemotePreferredTweakValues(settings));
+            const tweaks = preferred.status === "available" ? (preferred.values as Record<string, unknown>) : saved.tweaks;
+            if (tweaks) await services.setting.applyPartial(tweaks, true);
+            if (!saved.fetched) await serviceModules.rebuilder.$fetchLocal(false, true);
+            result = { offline: false, verifier: verifier ?? saved.verifier, tweaks };
+        } catch (error) {
+            // Only a network failure on a vault fetched before falls back to the local copy.
+            if (!(error instanceof NetworkError) || !saved.fetched) throw error;
+            await verifyLocally(saved.verifier, this.connection.passphrase);
+            if (saved.tweaks) await services.setting.applyPartial(saved.tweaks, true);
+            result = { offline: true, verifier: saved.verifier, tweaks: saved.tweaks };
+        }
         await services.setting.applyPartial({ liveSync: true }, true);
         await services.control.applySettings();
+        // Offline there is no network round trip in between: wait until the local database can be read.
+        for (const deadline = Date.now() + 30_000; !services.database.isDatabaseReady(); ) {
+            if (Date.now() > deadline) throw new Error(t("notes.coreFailed"));
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
         this.changes = services.database.localDatabase.localDatabase
             .changes({ since: "now", live: true })
             .on("change", () => this.events.changed());
+        return result;
+    }
+
+    /** Restarts the live replication, for example when the network comes back. */
+    async reconnect() {
+        await this.core?.services.control.applySettings();
     }
 
     /** Runs a task on the replicator that is active now; the core replaces it whenever settings change. */
     private async withReplicator<T>(task: (replicator: LiveSyncAbstractReplicator, settings: ObsidianLiveSyncSettings) => Promise<T>) {
         const { services } = this.core;
         const result = await services.replicator.runWithActiveReplicatorContext((context) => task(context.replicator as LiveSyncAbstractReplicator, services.setting.currentSettings()));
-        if (result === undefined) throw new Error(t("notes.noConnection"));
+        if (result === undefined) throw new NetworkError(t("notes.noConnection"));
         return result;
     }
 
-    /** Decrypts the path of one metadata document; an empty vault cannot be checked and is accepted. */
-    private async verifyPassphrase() {
+    /**
+     * Decrypts the path of one metadata document and returns it with the salt as a sample for offline checks.
+     * An empty vault cannot be checked and is accepted.
+     */
+    private async verifyPassphrase(): Promise<Verifier | undefined> {
         const range = `startkey=${encodeURIComponent('"f:"')}&endkey=${encodeURIComponent('"f:\ufff0"')}`;
-        const response = await fetch(`/sync/${this.connection.vaultId}/_all_docs?include_docs=true&limit=1&${range}`, {
-            headers: { authorization: this.auth },
-        });
+        let response: Response;
+        try {
+            response = await fetch(`/sync/${this.connection.vaultId}/_all_docs?include_docs=true&limit=1&${range}`, {
+                headers: { authorization: this.auth },
+            });
+        } catch {
+            throw new NetworkError(t("notes.offline"));
+        }
         if (response.status === 401 || response.status === 403) throw new CredentialsRejectedError(t("notes.credentialsRejected"));
+        if (response.status >= 500) throw new NetworkError(t("notes.readFailed", { status: response.status }));
         if (!response.ok) throw new Error(t("notes.readFailed", { status: response.status }));
         const { rows } = (await response.json()) as { rows: { doc: { path: string } }[] };
         const path = rows[0]?.doc.path;
-        if (!path?.startsWith(ENCRYPTED_META_PREFIX)) return;
-        const salt = await this.withReplicator((replicator, settings) => replicator.getReplicationPBKDF2Salt(settings));
+        if (!path?.startsWith(ENCRYPTED_META_PREFIX)) return undefined;
+        let salt: Uint8Array<ArrayBuffer>;
         try {
-            await decryptHKDF(path.slice(ENCRYPTED_META_PREFIX.length), this.connection.passphrase, salt);
+            salt = await this.withReplicator((replicator, settings) => replicator.getReplicationPBKDF2Salt(settings));
         } catch {
-            throw new WrongPassphraseError();
+            throw new NetworkError(t("notes.offline"));
         }
+        const verifier = { path, salt: btoa(String.fromCharCode(...salt)) };
+        await verifyLocally(verifier, this.connection.passphrase);
+        return verifier;
     }
 
     async files(): Promise<NotesFile[]> {
         const files: NotesFile[] = [];
-        for await (const doc of this.core.services.database.localDatabase.findAllNormalDocs()) {
+        for await (const doc of this.core.services.database.localDatabase.findAllNormalDocs({ conflicts: true })) {
             if (doc._deleted || doc.deleted) continue;
             const path = stripAllPrefixes(doc.path);
-            if (!hidden(path)) files.push({ path, size: doc.size, mtime: doc.mtime });
+            if (!hidden(path)) files.push({ path, size: doc.size, mtime: doc.mtime, rev: doc._rev ?? "", conflicted: (doc._conflicts?.length ?? 0) > 0 });
         }
         return files;
     }
 
-    private async body(path: string) {
-        const entry = await this.core.serviceModules.databaseFileAccess.fetch(path as never, undefined, true);
+    private get access() {
+        return this.core.serviceModules.databaseFileAccess;
+    }
+
+    private async entry(path: string, rev?: string) {
+        const entry = await this.access.fetch(path as FilePathWithPrefix, rev, true);
         if (!entry || entry.deleted) throw new Error(t("notes.fileMissing", { path }));
-        return entry.body;
+        return entry;
     }
     async read(path: string) {
-        return (await this.body(path)).text();
+        return (await this.entry(path)).body.text();
     }
     async readBinary(path: string) {
-        return new Uint8Array(await (await this.body(path)).arrayBuffer());
+        return new Uint8Array(await (await this.entry(path)).body.arrayBuffer());
+    }
+    async readRevisionBinary(path: string, rev: string) {
+        return new Uint8Array(await (await this.entry(path, rev)).body.arrayBuffer());
+    }
+    /** The text of a note and the revision it was read at, as the base for saving. */
+    async open(path: string, rev?: string) {
+        const entry = await this.entry(path, rev);
+        const meta = await this.access.fetchEntryMeta(path as FilePathWithPrefix, rev, true);
+        return { text: await entry.body.text(), rev: (meta && meta._rev) || "" , mtime: entry.stat.mtime };
+    }
+    async exists(path: string) {
+        const meta = await this.access.fetchEntryMeta(path as FilePathWithPrefix, undefined, true);
+        return !!meta && !meta.deleted && !meta._deleted;
+    }
+
+    private file(path: string, content: string | Uint8Array<ArrayBuffer>): UXFileInfo {
+        const body = typeof content === "string" ? createTextBlob(content) : createBinaryBlob(content);
+        const now = Date.now();
+        return { name: path.slice(path.lastIndexOf("/") + 1), path: path as FilePathWithPrefix, stat: { size: body.size, ctime: now, mtime: now, type: "file" }, body };
+    }
+
+    /**
+     * Saves on top of `baseRev`. When another device has changed the note since, the content is kept as a conflicting
+     * revision next to theirs instead of replacing it. Without `baseRev` the file must be new.
+     */
+    async save(path: string, content: string | Uint8Array<ArrayBuffer>, baseRev?: string): Promise<{ rev: string; conflicted: boolean }> {
+        const file = this.file(path, content);
+        if (baseRev === undefined) {
+            if (await this.exists(path)) throw new Error(t("notes.exists", { path }));
+            if (!(await this.access.store(file, true))) throw new Error(t("notes.saveFailed"));
+            const meta = await this.access.fetchEntryMeta(path as FilePathWithPrefix, undefined, true);
+            return { rev: (meta && meta._rev) || "", conflicted: false };
+        }
+        const rev = await this.access.storeWithLiveBaseRevision(file, baseRev);
+        if (rev) return { rev, conflicted: false };
+        const conflict = await this.access.storeAsConflictedRevisionWithResult(file, baseRev);
+        if (!conflict) throw new Error(t("notes.saveFailed"));
+        return { rev: conflict, conflicted: true };
+    }
+
+    /** Deletes a file, or with `rev` only that revision leaf (used to settle conflicts). */
+    async remove(path: string, rev?: string) {
+        if (!(await this.access.delete(path as FilePathWithPrefix, rev))) throw new Error(t("notes.deleteFailed", { path }));
+    }
+
+    /** The current revision and the conflicting revisions of a file. */
+    async revisions(path: string) {
+        const meta = await this.access.fetchEntryMeta(path as FilePathWithPrefix, undefined, true);
+        return { current: (meta && meta._rev) || "", conflicts: await this.access.getConflictedRevs(path as FilePathWithPrefix) };
+    }
+
+    /** Local database sequence now, and how far the replication has pushed it to the server. */
+    async localSeq() {
+        const info = await this.core.services.database.localDatabase.localDatabase.info();
+        return Number(String(info.update_seq).split("-")[0]);
+    }
+    pushedSeq() {
+        const statics = this.core?.services.replicator.replicationStatics.value;
+        return statics ? Number(String(statics.lastSyncPushSeq).split("-")[0]) : 0;
+    }
+    connected() {
+        const status = this.core?.services.replicator.replicationStatics.value.syncStatus;
+        return status === "CONNECTED" || status === "COMPLETED" || status === "PAUSED";
     }
 
     async stop() {

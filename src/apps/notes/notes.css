@@ -289,3 +289,130 @@ article a {
     font-size: 13px;
     padding: 2px 6px;
 }
+.aside-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.note-head {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px 24px 0;
+}
+.note-head .title {
+    margin: 0;
+    flex: 1;
+    font-size: 22px;
+}
+.note-head button {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+}
+.note-head button.primary,
+.conflict button.primary {
+    background: var(--accent);
+    color: #fff;
+    border: 0;
+}
+.save-state {
+    font-size: 12px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0 8px;
+}
+.save-state[data-state="unsaved"],
+.save-state[data-state="pending"] {
+    color: var(--accent);
+}
+.save-state[data-state="conflict"],
+.conflict-mark {
+    color: var(--error);
+    border-color: var(--error);
+}
+.conflict-mark {
+    font-size: 11px;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 0 5px;
+}
+.status.offline {
+    color: var(--error);
+}
+.editor {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    margin: 12px 24px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--panel);
+}
+.editor .cm-editor {
+    height: 100%;
+    min-height: 60vh;
+    font-size: 15px;
+}
+.editor .cm-editor.cm-focused {
+    outline: none;
+}
+.editor .cm-content {
+    padding: 12px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.main > .hint {
+    padding: 6px 24px;
+}
+.conflict {
+    overflow: auto;
+    padding: 12px 24px 32px;
+}
+.versions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+.version {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--panel);
+    overflow: hidden;
+}
+.version header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+}
+.version header small {
+    flex: 1;
+    color: var(--muted);
+}
+.version pre {
+    margin: 0;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 40vh;
+    overflow: auto;
+}
+.version ins {
+    background: rgba(46, 160, 67, 0.25);
+    text-decoration: none;
+}
+.version del {
+    background: rgba(248, 81, 73, 0.25);
+}
+.conflict .editor {
+    margin: 8px 0 12px;
+}
+.conflict .editor .cm-editor {
+    min-height: 30vh;
+}

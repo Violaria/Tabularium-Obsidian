@@ -45,6 +45,7 @@ export default defineConfig([
         "*.config.mjs",
         "vite.*",
         "src/apps/notes/vite.config.ts",
+        "src/apps/notes/public/**",
         "vitest.*",
         // Testing files (Simplified patterns)
         "test/**",

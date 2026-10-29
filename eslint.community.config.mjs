@@ -22,6 +22,7 @@ export default defineConfig(
         "src/apps/_test/**",
         "src/apps/cli/testdeno/**",
         "src/apps/notes/vite.config.ts",
+        "src/apps/notes/public/**",
     ]),
     {
         languageOptions: {

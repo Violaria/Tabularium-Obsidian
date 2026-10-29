@@ -1,3 +1,4 @@
+import type { Verifier } from "./runtime";
 // Per-browser state for each account and vault, kept in IndexedDB. Never holds the passphrase.
 
 export interface VaultRecord {
@@ -8,6 +9,12 @@ export interface VaultRecord {
     expiresAt: number;
     /** The vault has been fetched completely at least once. */
     fetched: boolean;
+    /** Shown in the vault list when the server cannot be reached. */
+    vaultName: string;
+    /** Encrypted sample for checking the passphrase offline; contains no secret. */
+    verifier?: Verifier;
+    /** The server's chunk parameters, used when opening offline. */
+    tweaks?: Record<string, unknown>;
 }
 
 const DB = "tabularium-notes";
@@ -35,6 +42,11 @@ async function run<T>(mode: IDBTransactionMode, action: (store: IDBObjectStore) 
     }
 }
 
+/** Every saved vault of an account, for opening without a network. */
+export async function recordsOf(userId: string) {
+    const all = await run<VaultRecord[]>("readonly", (store) => store.getAll() as IDBRequest<VaultRecord[]>);
+    return all.filter((record) => record.key.startsWith(`${userId}:`));
+}
 export const readRecord = (key: string) => run<VaultRecord | undefined>("readonly", (store) => store.get(key) as IDBRequest<VaultRecord | undefined>);
 export const writeRecord = (record: VaultRecord) => run("readwrite", (store) => store.put(record));
 export const deleteRecord = (key: string) => run("readwrite", (store) => store.delete(key));
