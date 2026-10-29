@@ -112,9 +112,9 @@ export const liveSyncProvisionalEnglishMessages = {
     "Find matching paths in this Vault and local Metadata, then prepare a follow-up report using the same pseudonyms.":
         "Find matching paths in this Vault and local Metadata, then prepare a follow-up report using the same pseudonyms.",
     "Find file": "Find file",
-    "⚠️ Initialise or overwrite the remote": "⚠️ Initialise or overwrite the remote",
-    "🔗 Join this device": "🔗 Join this device",
-    "⚙️ Apply settings only (advanced)": "⚙️ Apply settings only (advanced)",
+    "Initialise or overwrite the remote": "Initialise or overwrite the remote",
+    "Join this device": "Join this device",
+    "Apply settings only (advanced)": "Apply settings only (advanced)",
     "Configure TURN when a direct connection cannot be established or when you select TURN relay only.":
         "Configure TURN when a direct connection cannot be established or when you select TURN relay only.",
     "TURN configuration": "TURN configuration",
@@ -214,9 +214,9 @@ export const liveSyncProvisionalEnglishMessages = {
     "Database information for ${FILE}": "Database information for ${FILE}",
     "All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.":
         "All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.",
-    "📁 Vault: ${SIZE} B · ${TIME}": "📁 Vault: ${SIZE} B · ${TIME}",
-    "📁 Vault: missing": "📁 Vault: missing",
-    "🗄️ Local DB: missing": "🗄️ Local DB: missing",
+    "Vault: ${SIZE} B · ${TIME}": "Vault: ${SIZE} B · ${TIME}",
+    "Vault: missing": "Vault: missing",
+    "Local DB: missing": "Local DB: missing",
     "Vault and database revision": "Vault and database revision",
     "Vault file": "Vault file",
     "Database revision": "Database revision",
@@ -228,20 +228,20 @@ export const liveSyncProvisionalEnglishMessages = {
     "Winner revision": "Winner revision",
     "Conflict revision": "Conflict revision",
     "Unknown revision": "Unknown revision",
-    "🗑️ Logical deletion": "🗑️ Logical deletion",
+    "Logical deletion": "Logical deletion",
     "Readable on this device; recorded size ${RECORDED}, decoded size ${ACTUAL}":
         "Readable on this device; recorded size ${RECORDED}, decoded size ${ACTUAL}",
-    "🧩 Missing chunks: ${COUNT}": "🧩 Missing chunks: ${COUNT}",
-    "📦 DB: recorded ${RECORDED} B · decoded ${DECODED} B · Δsize ${DIFFERENCE} B":
-        "📦 DB: recorded ${RECORDED} B · decoded ${DECODED} B · Δsize ${DIFFERENCE} B",
-    "📦 DB: recorded ${RECORDED} B · decoded unavailable": "📦 DB: recorded ${RECORDED} B · decoded unavailable",
-    "📁 Vault: ${VAULT} B · Δsize vs DB ${DIFFERENCE} B": "📁 Vault: ${VAULT} B · Δsize vs DB ${DIFFERENCE} B",
-    "🕒 DB ${DATABASE_TIME} · Vault ${VAULT_TIME} · Δtime ${DIFFERENCE} ms (${RELATION})":
-        "🕒 DB ${DATABASE_TIME} · Vault ${VAULT_TIME} · Δtime ${DIFFERENCE} ms (${RELATION})",
-    "✅ Matches Vault": "✅ Matches Vault",
-    "⚠️ Differs from Vault": "⚠️ Differs from Vault",
-    "✅ Vault matches winner": "✅ Vault matches winner",
-    "⚠️ Conflicts: ${COUNT}": "⚠️ Conflicts: ${COUNT}",
+    "Missing chunks: ${COUNT}": "Missing chunks: ${COUNT}",
+    "DB: recorded ${RECORDED} B · decoded ${DECODED} B · Δsize ${DIFFERENCE} B":
+        "DB: recorded ${RECORDED} B · decoded ${DECODED} B · Δsize ${DIFFERENCE} B",
+    "DB: recorded ${RECORDED} B · decoded unavailable": "DB: recorded ${RECORDED} B · decoded unavailable",
+    "Vault: ${VAULT} B · Δsize vs DB ${DIFFERENCE} B": "Vault: ${VAULT} B · Δsize vs DB ${DIFFERENCE} B",
+    "DB ${DATABASE_TIME} · Vault ${VAULT_TIME} · Δtime ${DIFFERENCE} ms (${RELATION})":
+        "DB ${DATABASE_TIME} · Vault ${VAULT_TIME} · Δtime ${DIFFERENCE} ms (${RELATION})",
+    "Matches Vault": "Matches Vault",
+    "Differs from Vault": "Differs from Vault",
+    "Vault matches winner": "Vault matches winner",
+    "Conflicts: ${COUNT}": "Conflicts: ${COUNT}",
     "Compare with Vault": "Compare with Vault",
     "Apply this revision to Vault": "Apply this revision to Vault",
     "Apply database revision ${REVISION} to ${FILE}? The current Vault file will be overwritten.":

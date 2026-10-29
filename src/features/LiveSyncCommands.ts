@@ -1,3 +1,4 @@
+import { $msg } from "@/common/translation";
 import { LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import {
     LOG_LEVEL_INFO,
@@ -78,7 +79,7 @@ export abstract class LiveSyncCommands {
             once: (msg: string) => {
                 this._log(prefix + msg, level);
             },
-            done: (msg: string = "Done") => {
+            done: (msg: string = $msg("Done")) => {
                 this._log(prefix + msg + MARK_DONE, level, key);
             },
         };

@@ -7,13 +7,13 @@ describe("setting manifest labels", () => {
     afterEach(() => setLang("def"));
 
     it("renders names and descriptions in the selected display language", () => {
-        setLang("zh-tw");
+        setLang("zh");
 
         expect(getConfName("liveSync")).toBe("同步模式");
-        expect(getConfig("couchDB_URI")).toMatchObject({ name: "伺服器 URI" });
+        expect(getConfig("couchDB_URI")).toMatchObject({ name: "服务器 URI" });
         expect(getConfig("encrypt")).toMatchObject({
-            name: "端對端加密",
-            desc: "加密遠端資料庫中的內容。如果你使用外掛的同步功能，建議啟用此選項。",
+            name: "端到端加密",
+            desc: "加密远程数据库中的内容。如果您使用插件的同步功能,则建议启用此功能 ",
         });
     });
 
@@ -25,9 +25,9 @@ describe("setting manifest labels", () => {
         });
     });
 
-    it("passes through labels which Commonlib owns but the catalogue does not carry", () => {
-        setLang("zh-tw");
+    it("translates labels which Commonlib owns", () => {
+        setLang("zh");
 
-        expect(getConfName("chunkSplitterVersion")).toBe("Chunk Splitter");
+        expect(getConfName("chunkSplitterVersion")).toBe("块分割器");
     });
 });

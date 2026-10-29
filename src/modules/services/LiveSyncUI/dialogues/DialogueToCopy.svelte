@@ -37,17 +37,17 @@
     }
 </script>
 
-<DialogHeader title="Your {title || 'Data'} is ready to be copied" />
+<DialogHeader title={translateMessage("dialog.copy.ready", { title: title || translateMessage("dialog.copy.defaultTitle") })} />
 <Instruction>
     <InputRow label={title || translateMessage("Data to Copy")}>
         <textarea readonly rows="4">{dataToCopy}</textarea>
         <button onclick={() => copyToClipboard()}
-            >{#if !copied}📋{:else}✔️{/if}
+            >{#if !copied}{translateMessage("Copy")}{:else}✓ {translateMessage("Copied")}{/if}
         </button>
     </InputRow>
 </Instruction>
 <InfoNote visible={copied}>
-    Your {title || "data"} has been copied to the clipboard.
+    {translateMessage("dialog.copy.copied", { title: title || translateMessage("dialog.copy.defaultTitle") })}
 </InfoNote>
 <UserDecisions>
     <Decision title={translateMessage("Ok")} important={true} {commit} />

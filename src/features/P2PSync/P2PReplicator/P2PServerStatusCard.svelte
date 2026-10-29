@@ -100,7 +100,7 @@
     <div class="status-item">
         <span>{translateMessage("Connection:")}</span>
         <span class="status-value {isConnected ? 'connected' : 'disconnected'}">
-            {isConnected ? translateMessage("🟢 Connected") : translateMessage("🔴 Disconnected")}
+            {isConnected ? `● ${translateMessage("Connected")}` : `○ ${translateMessage("Disconnected")}`}
         </span>
     </div>
 
@@ -146,7 +146,7 @@
                 ? translateMessage("Stop announcing changes")
                 : translateMessage("Start announcing changes")}
         >
-            {isBroadcasting ? translateMessage("📡 On") : translateMessage("📡 Off")}
+            {isBroadcasting ? translateMessage("On") : translateMessage("Off")}
         </button>
     </div>
     {/if}
@@ -154,7 +154,7 @@
     {#if core}
     <div class="status-item status-action diag-toggle-row">
         <label class="broadcast-label" for="diag-toggle">
-            {translateMessage("🕵️ Diag")}
+            {translateMessage("Diag")}
         </label>
         <button
             id="diag-toggle"

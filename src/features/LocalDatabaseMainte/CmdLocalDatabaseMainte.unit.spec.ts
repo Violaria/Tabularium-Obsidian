@@ -48,9 +48,9 @@ function createPrerequisites(settingsOverride: Partial<typeof DEFAULT_SETTINGS> 
     const askSelectStringDialogue = vi.fn(
         async (
             _message: string,
-            _buttons: readonly ["Apply and continue", "Cancel"],
-            _options: { title: string; defaultAction: "Cancel" }
-        ): Promise<"Apply and continue" | "Cancel" | false | undefined> => "Apply and continue"
+            _buttons: readonly string[],
+            _options: { title: string; defaultAction: string }
+        ): Promise<string | false | undefined> => "Apply and continue"
     );
     const applyPartial = vi.fn(async () => undefined);
     const settings = {

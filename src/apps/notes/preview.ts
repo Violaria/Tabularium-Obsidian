@@ -4,6 +4,7 @@
 import MarkdownIt from "markdown-it";
 import { escapeXml } from "@/features/tabularium/epub";
 import { outsideCode, stripFrontMatter } from "@/features/tabularium/render";
+import { t } from "../../../../server/ui/i18n";
 
 export type Resolver = (target: string) => string | undefined;
 
@@ -41,11 +42,11 @@ export function renderPreview(markdown: string, resolve: Resolver) {
         const src = tokens[index].attrGet("src") ?? "";
         const alt = tokens[index].content;
         if (EXTERNAL.test(src)) {
-            return `<a class="remote-image" href="${escapeXml(src)}" target="_blank" rel="noopener noreferrer">[远程图片：${escapeXml(alt || src)}]</a>`;
+            return `<a class="remote-image" href="${escapeXml(src)}" target="_blank" rel="noopener noreferrer">${escapeXml(t("notes.remoteImage", { name: alt || src }))}</a>`;
         }
         const written = target(src) ?? src;
         const path = resolve(written);
-        if (!path) return `<span class="missing">[未找到：${escapeXml(written)}]</span>`;
+        if (!path) return `<span class="missing">${escapeXml(t("notes.notFound", { name: written }))}</span>`;
         if (IMAGE.test(path)) return `<img data-vault-src="${escapeXml(path)}" alt="${escapeXml(alt)}"/>`;
         return `<a class="internal" href="#" data-note="${escapeXml(path)}">${escapeXml(alt || name(path))}</a>`;
     };

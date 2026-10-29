@@ -1,3 +1,4 @@
+import { $msg } from "@/common/translation";
 import { mount, unmount } from "svelte";
 import { App, Modal } from "@/deps.ts";
 import ObsidianLiveSyncPlugin from "@/main.ts";
@@ -21,7 +22,7 @@ export class PluginDialogModal extends Modal {
             display: "flex",
             flexDirection: "column",
         });
-        this.titleEl.setText("Customization Sync (Beta3)");
+        this.titleEl.setText($msg("Customization Sync (Beta3)"));
         if (!this.component) {
             this.component = mount(PluginPane, {
                 target: contentEl,

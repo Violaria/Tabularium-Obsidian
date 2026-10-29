@@ -12,6 +12,7 @@
     // import { askString } from "../../common/utils";
     import { Menu } from "@/deps.ts";
     import { $msg as translateMessage } from "@/common/translation";
+    import { lucideIcon } from "@/common/obsidianIcon";
     import { selectSourceTerms } from "./PluginTerms.ts";
 
     export let list: IPluginDataExDisplay[] = [];
@@ -71,12 +72,10 @@
             const dtDiff = (local?.mtime ?? 0) - (remote?.mtime ?? 0);
             const diff = timeDeltaToHumanReadable(Math.abs(dtDiff));
             if (dtDiff / 1000 < -10) {
-                // freshness = "✓ Newer";
                 freshness = translateMessage("Newer (${diff})", { diff });
                 canApply = true;
                 contentCheck = true;
             } else if (dtDiff / 1000 > 10) {
-                // freshness = "⚠ Older";
                 freshness = translateMessage("Older (${diff})", { diff });
                 canApply = true;
                 contentCheck = true;
@@ -360,9 +359,9 @@
     <span class="spacer"></span>
     {#if !hidden}
         <span class="chip-wrap">
-            <span class="chip modified">{freshness}</span>
-            <span class="chip content">{equivalency}</span>
-            <span class="chip version">{version}</span>
+            <span class="chip modified" data-label={translateMessage("Modified")}>{freshness}</span>
+            <span class="chip content" data-label={translateMessage("Content")}>{equivalency}</span>
+            <span class="chip version" data-label={translateMessage("Version")}>{version}</span>
         </span>
         <select bind:value={selected}>
             <option value={""}>-</option>
@@ -373,9 +372,13 @@
         {#if canApply || (isMaintenanceMode && selected != "")}
             {#if canCompare}
                 {#if pickToCompare}
-                    <button on:click={pickCompareItem}>🗃️</button>
+                    <button
+                        title={translateMessage("Compare file")}
+                        aria-label={translateMessage("Compare file")}
+                        use:lucideIcon={"files"}
+                        on:click={pickCompareItem}
+                    ></button>
                 {:else}
-                    <!--🔍  -->
                     <button on:click={compareSelected}>⮂</button>
                 {/if}
             {:else}
@@ -391,9 +394,19 @@
         {/if}
         {#if isMaintenanceMode}
             {#if selected != ""}
-                <button on:click={deleteSelected}>🗑️</button>
+                <button
+                    title={translateMessage("Delete")}
+                    aria-label={translateMessage("Delete")}
+                    use:lucideIcon={"trash-2"}
+                    on:click={deleteSelected}
+                ></button>
             {:else}
-                <button on:click={duplicateItem}>📑</button>
+                <button
+                    title={translateMessage("Duplicate")}
+                    aria-label={translateMessage("Duplicate")}
+                    use:lucideIcon={"copy"}
+                    on:click={duplicateItem}
+                ></button>
             {/if}
         {/if}
     {/if}
@@ -464,16 +477,6 @@
         display: none;
     }
     .chip:not(:empty)::before {
-        min-width: 1.8em;
-        display: inline-block;
-    }
-    .chip.content:not(:empty)::before {
-        content: "📄: ";
-    }
-    .chip.version:not(:empty)::before {
-        content: "🏷️: ";
-    }
-    .chip.modified:not(:empty)::before {
-        content: "📅: ";
+        content: attr(data-label) ": ";
     }
 </style>

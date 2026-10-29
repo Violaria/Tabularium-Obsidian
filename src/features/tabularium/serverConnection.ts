@@ -1,4 +1,6 @@
 import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { $msg } from "@/common/translation";
+import { serverError } from "./texts";
 
 /** Server details kept next to the plug-in settings; contains no secrets. */
 export interface TabulariumConnection {
@@ -36,19 +38,10 @@ export const ENFORCED_SETTINGS = {
     usePluginSync: false,
 } as const satisfies Partial<ObsidianLiveSyncSettings>;
 
-const messages: Record<string, string> = {
-    "Invalid username or password": "用户名或密码不正确。",
-    "Invalid current password": "当前密码不正确。",
-    "Change initial password first": "需要先修改初始密码。",
-    "Too many requests": "尝试次数过多，请稍后再试。",
-    "Vault is not ready": "笔记库尚未创建完成，请在服务器控制台重试建库。",
-    "Invalid password": "新密码至少需要 12 个字符。",
-};
-
 export class TabulariumApiError extends Error {
     readonly status: number;
     constructor(status: number, message: string) {
-        super(messages[message] ?? message);
+        super(serverError(message));
         this.status = status;
     }
 }
@@ -58,9 +51,10 @@ export function normaliseServer(input: string): string {
     try {
         url = new URL(input.trim());
     } catch {
-        throw new TabulariumApiError(0, "服务器地址无效。");
+        throw new TabulariumApiError(0, $msg("tabularium.server.invalidAddress"));
     }
-    if (url.protocol !== "https:" && url.protocol !== "http:") throw new TabulariumApiError(0, "服务器地址须以 https:// 或 http:// 开头。");
+    if (url.protocol !== "https:" && url.protocol !== "http:")
+        throw new TabulariumApiError(0, $msg("tabularium.server.addressScheme"));
     return `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
 }
 
@@ -73,7 +67,12 @@ export class TabulariumApi {
         this.server = normaliseServer(server);
         this.fetcher = fetcher;
     }
-    private async request<T>(path: string, method = "GET", body?: unknown, authorization = this.token ? `Bearer ${this.token}` : undefined): Promise<T> {
+    private async request<T>(
+        path: string,
+        method = "GET",
+        body?: unknown,
+        authorization = this.token ? `Bearer ${this.token}` : undefined
+    ): Promise<T> {
         let response: Response;
         try {
             response = await this.fetcher(`${this.server}/api/v1${path}`, {
@@ -82,14 +81,17 @@ export class TabulariumApi {
                 body: body === undefined ? undefined : JSON.stringify(body),
             });
         } catch {
-            throw new TabulariumApiError(0, "无法连接服务器，请检查地址和网络。");
+            throw new TabulariumApiError(0, $msg("tabularium.server.unreachable"));
         }
         const data = (await response.json().catch(() => ({}))) as { error?: string };
         if (!response.ok) throw new TabulariumApiError(response.status, data.error ?? `HTTP ${response.status}`);
         return data as T;
     }
     async login(username: string, password: string): Promise<TabulariumUser> {
-        const result = await this.request<{ token: string; user: TabulariumUser }>("/sessions", "POST", { username, password });
+        const result = await this.request<{ token: string; user: TabulariumUser }>("/sessions", "POST", {
+            username,
+            password,
+        });
         this.token = result.token;
         return result.user;
     }
@@ -118,7 +120,7 @@ export class TabulariumApi {
 }
 
 export function connectionSettings(server: string, vaultId: string, device: TabulariumDevice, passphrase: string) {
-    if (!passphrase) throw new TabulariumApiError(0, "需要设置笔记解密口令。");
+    if (!passphrase) throw new TabulariumApiError(0, $msg("tabularium.server.passphraseRequired"));
     return {
         ...ENFORCED_SETTINGS,
         couchDB_URI: `${normaliseServer(server)}/sync`,
@@ -132,7 +134,10 @@ export function connectionSettings(server: string, vaultId: string, device: Tabu
 }
 
 /** Values to restore when settings about to be saved would weaken a Tabularium connection. */
-export function enforcedOverrides(next: ObsidianLiveSyncSettings, previous: ObsidianLiveSyncSettings): Partial<ObsidianLiveSyncSettings> {
+export function enforcedOverrides(
+    next: ObsidianLiveSyncSettings,
+    previous: ObsidianLiveSyncSettings
+): Partial<ObsidianLiveSyncSettings> {
     const overrides: Partial<ObsidianLiveSyncSettings> = {};
     for (const [key, value] of Object.entries(ENFORCED_SETTINGS)) {
         if (next[key as keyof ObsidianLiveSyncSettings] !== value) Object.assign(overrides, { [key]: value });

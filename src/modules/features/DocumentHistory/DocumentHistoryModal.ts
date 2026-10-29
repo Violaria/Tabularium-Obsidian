@@ -1,5 +1,6 @@
 import { TFile, Modal, App, DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT, diff_match_patch } from "@/deps.ts";
 import { getPathFromTFile, isValidPath } from "@/common/utils.ts";
+import { $msg } from "@/common/translation";
 import { decodeBinary, readString } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/convert";
 import ObsidianLiveSyncPlugin from "@/main.ts";
 import {
@@ -142,10 +143,10 @@ export class DocumentHistoryModal extends Modal {
                 this.range.max = "0";
                 this.range.value = "";
                 this.range.disabled = true;
-                this.contentView.setText(`We don't have any history for this note.`);
+                this.contentView.setText($msg("We don't have any history for this note."));
                 this.updateRevisionNavUI();
             } else {
-                this.contentView.setText(`Error while loading file.`);
+                this.contentView.setText($msg("Error while loading file."));
                 Logger(ex, LOG_LEVEL_VERBOSE);
             }
         }
@@ -294,7 +295,7 @@ export class DocumentHistoryModal extends Modal {
             this.contentView.appendText(`(${rev})`);
         } else {
             this.currentDoc = w;
-            this.info.setText(`Modified:${new Date(w.mtime).toLocaleString()}`);
+            this.info.setText($msg("Modified: ${date}", { date: new Date(w.mtime).toLocaleString() }));
             const w1data = readDocument(w);
             this.currentDeleted = !!w.deleted;
             if (typeof w1data == "string") {
@@ -445,7 +446,7 @@ export class DocumentHistoryModal extends Modal {
         const totalRevs = this.revs_info.length;
         const end = Math.min(totalRevs, limit);
 
-        this.searchProgressIndicator.setText("Searching...");
+        this.searchProgressIndicator.setText($msg("Searching..."));
 
         const dmp = new diff_match_patch();
 
@@ -454,7 +455,7 @@ export class DocumentHistoryModal extends Modal {
             const revInfo = this.revs_info[i];
             const rev = revInfo.rev;
 
-            this.searchProgressIndicator.setText(`Searching ${i + 1}/${end}...`);
+            this.searchProgressIndicator.setText($msg("Searching ${current}/${total}...", { current: String(i + 1), total: String(end) }));
 
             const doc = await db.getDBEntry(this.file, { rev: rev }, false, false, true);
             if (doc === false) continue;
@@ -499,7 +500,7 @@ export class DocumentHistoryModal extends Modal {
             }
         }
 
-        this.searchProgressIndicator.setText("Done");
+        this.searchProgressIndicator.setText($msg("Done"));
         this.updateSearchUI();
     }
 
@@ -540,7 +541,7 @@ export class DocumentHistoryModal extends Modal {
 
     override onOpen() {
         const { contentEl } = this;
-        this.titleEl.setText("Document History");
+        this.titleEl.setText($msg("Document History"));
         contentEl.empty();
         this.fileInfo = contentEl.createDiv("");
         this.fileInfo.addClass("op-info");
@@ -680,17 +681,17 @@ export class DocumentHistoryModal extends Modal {
         this.info = contentEl.createDiv("");
         this.info.addClass("op-info");
         fireAndForget(async () => await this.loadFile(this.initialRev));
-        const div = contentEl.createDiv({ text: "Loading old revisions..." });
+        const div = contentEl.createDiv({ text: $msg("Loading old revisions...") });
         this.contentView = div;
         div.addClass("op-scrollable");
         div.addClass("op-pre");
         const buttons = contentEl.createDiv("");
-        buttons.createEl("button", { text: "Copy to clipboard" }, (e) => {
+        buttons.createEl("button", { text: $msg("Copy to clipboard") }, (e) => {
             e.addClass("mod-cta");
             e.addEventListener("click", () => {
                 fireAndForget(async () => {
                     await compatGlobal.navigator.clipboard.writeText(this.currentText);
-                    Logger(`Old content copied to clipboard`, LOG_LEVEL_NOTICE);
+                    Logger($msg("Old content copied to clipboard"), LOG_LEVEL_NOTICE);
                 });
             });
         });
@@ -700,10 +701,10 @@ export class DocumentHistoryModal extends Modal {
                 const leaf = this.plugin.app.workspace.getLeaf(false);
                 await leaf.openFile(targetFile);
             } else {
-                Logger("Unable to display the file in the editor", LOG_LEVEL_NOTICE);
+                Logger($msg("Unable to display the file in the editor"), LOG_LEVEL_NOTICE);
             }
         };
-        buttons.createEl("button", { text: "Back to this revision" }, (e) => {
+        buttons.createEl("button", { text: $msg("Back to this revision") }, (e) => {
             e.addClass("mod-cta");
             e.addEventListener("click", () => {
                 fireAndForget(async () => {

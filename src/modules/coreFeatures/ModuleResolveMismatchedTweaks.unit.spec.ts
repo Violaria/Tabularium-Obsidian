@@ -784,12 +784,12 @@ describe("ModuleResolvingMismatchedTweaks setting labels", () => {
     }
 
     it("localises the setting names and keeps the status suffix", async () => {
-        setLang("zh-tw");
+        setLang("zh");
 
         const message = await renderMismatchTable();
 
-        expect(message).toContain("chunk ID 的雜湊演算法 (Experimental)");
-        expect(message).toContain("端對端加密");
+        expect(message).toContain("块 ID 的哈希算法");
+        expect(message).toContain("端到端加密");
         expect(message).not.toContain("The Hash algorithm for chunk IDs");
     });
 

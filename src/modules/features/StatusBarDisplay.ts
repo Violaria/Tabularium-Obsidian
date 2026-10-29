@@ -6,6 +6,9 @@ const STATUS_COUNTER_PADDING = "\u2007".repeat(10);
 
 export const STATUS_COUNTER_INACTIVE_LINGER_MS = 3_000;
 
+/** Marks for chunks fetched for the first time and chunks being fetched again. */
+export const CHUNK_FETCH_MARKS = { initial: "C", retrying: "C!" } as const;
+
 export type DisposableReactiveValue<T> = ReactiveValue<T> & {
     dispose(): void;
 };
@@ -168,8 +171,8 @@ export function createChunkFetchCounterLabel(
 ): ChunkFetchCounterLabel {
     const initialCount = reactiveSource(0);
     const retryingCount = reactiveSource(0);
-    const initialLabel = createPaddedCounterLabel(initialCount, "🛄");
-    const retryingLabel = createPaddedCounterLabel(retryingCount, "🔁");
+    const initialLabel = createPaddedCounterLabel(initialCount, CHUNK_FETCH_MARKS.initial);
+    const retryingLabel = createPaddedCounterLabel(retryingCount, CHUNK_FETCH_MARKS.retrying);
     const formatted = reactiveSource(`${initialLabel.value}${retryingLabel.value}`);
     let updatingCounts = false;
     let disposed = false;

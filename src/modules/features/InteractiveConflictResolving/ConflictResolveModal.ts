@@ -7,6 +7,7 @@ import {
     type FilePathWithPrefix,
 } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { EVENT_CONFLICT_CANCELLED, EVENT_PLUGIN_UNLOADED, eventHub } from "@/common/events.ts";
+import { $msg } from "@/common/translation";
 import { promiseWithResolvers } from "octagonal-wheels/promises";
 import { POSTPONED, type MergeDialogResult } from "@/serviceFeatures/interactiveConflictResolution/types";
 
@@ -186,21 +187,21 @@ export class ConflictResolveModal extends Modal {
         this.appendVersionInfo(div2, "added", this.remoteName, date2);
         const actionContainer = contentEl.createDiv("conflict-action-container");
         if (this.readOnly) {
-            actionContainer.createEl("button", { text: "Close" }, (e) => {
+            actionContainer.createEl("button", { text: $msg("Close") }, (e) => {
                 e.addClass("conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(CANCELLED));
             });
         } else {
-            actionContainer.createEl("button", { text: `Use ${this.localName}` }, (e) => {
+            actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.localName }) }, (e) => {
                 e.addClass("conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.result.right.rev));
             });
-            actionContainer.createEl("button", { text: `Use ${this.remoteName}` }, (e) => {
+            actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.remoteName }) }, (e) => {
                 e.addClass("conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.result.left.rev));
             });
             if (!this.pluginPickMode) {
-                actionContainer.createEl("button", { text: "Concat both" }, (e) => {
+                actionContainer.createEl("button", { text: $msg("Concat both") }, (e) => {
                     e.addClass("conflict-action-button");
                     e.addEventListener("click", () => this.sendResponse(LEAVE_TO_SUBSEQUENT));
                 });

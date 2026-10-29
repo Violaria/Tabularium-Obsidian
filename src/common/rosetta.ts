@@ -22,44 +22,17 @@ To see details, please refer to the LICENSES file on each repository.
 5. Send me the PR!
 */
 
-const LANG_DE = "de";
-const LANG_ES = "es";
-const LANG_FR = "fr";
-const LANG_HE = "he";
-const LANG_JA = "ja";
-const LANG_RU = "ru";
+// Tabularium ships three interface languages: English (the default), Chinese and Latin.
+const LANG_LA = "la";
 const LANG_ZH = "zh";
-const LANG_KO = "ko";
-const LANG_ZH_TW = "zh-tw";
 const LANG_DEF = "def"; // Default language: English
 
-// Also please order in alphabetic order except for the default language.
+export const SUPPORTED_I18N_LANGS = [LANG_DEF, LANG_ZH, LANG_LA];
 
-export const SUPPORTED_I18N_LANGS = [
-    LANG_DEF,
-    LANG_DE,
-    LANG_ES,
-    LANG_FR,
-    LANG_HE,
-    LANG_JA,
-    LANG_KO,
-    LANG_RU,
-    LANG_ZH,
-    LANG_ZH_TW,
-];
-
-// Also this.
 export type I18N_LANGS =
     | typeof LANG_DEF // Default language: English
-    | typeof LANG_DE
-    | typeof LANG_ES
-    | typeof LANG_FR
-    | typeof LANG_HE
-    | typeof LANG_JA
-    | typeof LANG_KO
-    | typeof LANG_RU
+    | typeof LANG_LA
     | typeof LANG_ZH
-    | typeof LANG_ZH_TW
     | "";
 
 export type MESSAGE = { [key in I18N_LANGS]?: string };

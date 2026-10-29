@@ -50,17 +50,16 @@ export async function deleteFlagFile(host: NecessaryServices<never, "storageAcce
             await host.serviceModules.storageAccess.delete(path, true);
         }
     } catch (ex) {
-        log(`Could not delete ${path}`);
+        log($msg("RedFlag.CouldNotDeleteFlag", { path }));
         log(ex, LOG_LEVEL_VERBOSE);
     }
 }
-const REMOTE_KEEP_CURRENT = "Use active remote";
-const REMOTE_CANCEL = "Cancel";
 async function askAndActivateRemoteDatabase(host: NecessaryServices<"UI" | "setting", never>, log: LogFunction) {
     const settings = host.services.setting.currentSettings();
     if (settings.remoteConfigurations && Object.keys(settings.remoteConfigurations).length > 1) {
-        const message =
-            "Multiple remote configurations detected. Please select the remote configuration you want to fetch from.";
+        const REMOTE_KEEP_CURRENT = $msg("RedFlag.SelectRemote.Buttons.UseActive");
+        const REMOTE_CANCEL = $msg("Cancel");
+        const message = $msg("RedFlag.SelectRemote.Message");
         const options = Object.entries(settings.remoteConfigurations).map(([id, config]) => {
             const parsed = ConnectionStringParser.parse(config.uri);
             const displayURI = (config.uri.split("@").pop() || "").substring(0, 20) + "..."; // Show only the last part of URI for better readability and privacy.
@@ -82,30 +81,30 @@ async function askAndActivateRemoteDatabase(host: NecessaryServices<"UI" | "sett
         // const defaultAction =
         //     options.find((option) => option.id === settings.activeConfigurationId)?.name || selections[0];
         const selectedId = await host.services.UI.confirm.askSelectStringDialogue(message, selections, {
-            title: "Select Remote Configuration",
+            title: $msg("RedFlag.SelectRemote.Title"),
             defaultAction: REMOTE_KEEP_CURRENT,
         });
         const selectedConfig = options.find((option) => option.name === selectedId);
         if (selectedConfig) {
             if (selectedConfig.id === "keep_current") {
-                log(`Keeping current remote configuration.`, LOG_LEVEL_INFO);
+                log($msg("RedFlag.SelectRemote.KeepCurrent"), LOG_LEVEL_INFO);
                 return true;
             }
             if (selectedConfig.id === "cancel") {
-                log(`Remote configuration selection cancelled.`, LOG_LEVEL_NOTICE);
+                log($msg("RedFlag.SelectRemote.Cancelled"), LOG_LEVEL_NOTICE);
                 return false;
             }
             const activated = activateRemoteConfiguration(settings, selectedConfig.id);
             if (activated) {
                 await host.services.setting.applyPartial(activated);
-                log(`Activated remote configuration: ${selectedConfig.name}`, LOG_LEVEL_INFO);
+                log($msg("RedFlag.SelectRemote.Activated", { name: selectedConfig.name }), LOG_LEVEL_INFO);
                 return true;
             } else {
-                log(`Failed to activate remote configuration: ${selectedConfig.name}`, LOG_LEVEL_NOTICE);
+                log($msg("RedFlag.SelectRemote.ActivationFailed", { name: selectedConfig.name }), LOG_LEVEL_NOTICE);
                 return false;
             }
         } else {
-            log(`No remote configuration selected.`, LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.SelectRemote.NoneSelected"), LOG_LEVEL_NOTICE);
             return false;
         }
     }
@@ -159,7 +158,7 @@ export function createFetchAllFlagHandler(
         const method =
             await host.services.UI.dialogManager.openWithExplicitCancel<FetchEverythingResult>(FetchEverything);
         if (method === "cancelled") {
-            log("Fetch everything cancelled by user.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Fetch.Cancelled"), LOG_LEVEL_NOTICE);
             return await cancelScheduledInitialisation(host, cleanupFlag);
         }
         const { vault, extra } = method;
@@ -186,19 +185,22 @@ export function createFetchAllFlagHandler(
         } as const;
 
         if (!(await adjustSettingToRemoteIfNeeded(host, log, extra, settings))) {
-            log("Fetch initialisation cancelled by user.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Fetch.InitialisationCancelled"), LOG_LEVEL_NOTICE);
             return await cancelScheduledInitialisation(host, cleanupFlag);
         }
         return await processVaultInitialisation(host, log, async () => {
             const vaultStateToAction = mapVaultStateToAction[vault];
             const { makeLocalChunkBeforeSync, makeLocalFilesBeforeSync } = vaultStateToAction;
             log(
-                `Fetching everything with settings: makeLocalChunkBeforeSync=${makeLocalChunkBeforeSync}, makeLocalFilesBeforeSync=${makeLocalFilesBeforeSync}`,
+                $msg("RedFlag.Fetch.Starting", {
+                    makeLocalChunkBeforeSync: `${makeLocalChunkBeforeSync}`,
+                    makeLocalFilesBeforeSync: `${makeLocalFilesBeforeSync}`,
+                }),
                 LOG_LEVEL_INFO
             );
             await host.serviceModules.rebuilder.$fetchLocal(makeLocalChunkBeforeSync, !makeLocalFilesBeforeSync);
             await cleanupFlag();
-            log("Fetch everything operation completed. Vault files will be gradually synced.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Fetch.Completed"), LOG_LEVEL_NOTICE);
             return true;
         });
     };
@@ -233,7 +235,7 @@ export async function adjustSettingToRemote(
         if (remoteResult.status === RemotePreferredTweakStatuses.NOT_CONFIGURED) {
             const useDeviceSettings = $msg("Use this device's settings");
             const cancelInitialisation = $msg("Cancel");
-            log(`Remote synchronisation settings are not configured (${remoteResult.reason}).`, LOG_LEVEL_INFO);
+            log($msg("RedFlag.RemoteSettings.NotConfigured", { reason: `${remoteResult.reason}` }), LOG_LEVEL_INFO);
             const choice = await host.services.UI.confirm.askSelectStringDialogue(
                 $msg(
                     "The selected remote has no saved synchronisation settings. This is normal for a new remote. Use this device's settings, or cancel if you expected existing settings."
@@ -251,7 +253,7 @@ export async function adjustSettingToRemote(
             const retryRemoteSettings = $msg("Retry");
             const useDeviceSettings = $msg("Use this device's settings");
             const cancelInitialisation = $msg("Cancel");
-            log("Could not read synchronisation settings from the remote.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.RemoteSettings.Unavailable"), LOG_LEVEL_NOTICE);
             log(remoteResult.error, LOG_LEVEL_VERBOSE);
             if (operation === "rebuild") {
                 const choice = await host.services.UI.confirm.askSelectStringDialogue(
@@ -283,7 +285,7 @@ export async function adjustSettingToRemote(
             return false;
         }
         if (remoteResult.status === RemotePreferredTweakStatuses.UNSUPPORTED) {
-            log("Remote synchronisation settings are not supported by this remote type.", LOG_LEVEL_INFO);
+            log($msg("RedFlag.RemoteSettings.Unsupported"), LOG_LEVEL_INFO);
             return true;
         }
 
@@ -292,20 +294,21 @@ export async function adjustSettingToRemote(
             // shared synchronisation settings. The remote lookup above remains a connection
             // preflight, but settings from the database which is about to be replaced must not
             // overwrite intentional local changes such as enabling E2EE.
-            log("Rebuild will use this device's synchronisation settings.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.RemoteSettings.RebuildUsesLocal"), LOG_LEVEL_NOTICE);
             return true;
         }
 
         const remoteTweaks = remoteResult.values;
         const assessment = assessTweakCompatibility(config, remoteTweaks);
         if (assessment.alignment === "matched") {
-            log("Remote configuration matches local configuration. No changes applied.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.RemoteSettings.Matched"), LOG_LEVEL_NOTICE);
         } else {
+            const ok = $msg("RedFlag.RemoteSettings.Buttons.OK");
             await host.services.UI.confirm.askSelectStringDialogue(
-                "Your settings differed slightly from the server's. The plug-in has supplemented the incompatible parts with the server settings!",
-                ["OK"] as const,
+                $msg("RedFlag.RemoteSettings.Supplemented"),
+                [ok] as const,
                 {
-                    defaultAction: "OK",
+                    defaultAction: ok,
                     timeout: 0,
                 }
             );
@@ -316,7 +319,7 @@ export async function adjustSettingToRemote(
             ...assessment.adoptPreferred.changes,
         } satisfies ObsidianLiveSyncSettings;
         await host.services.setting.applyExternalSettings(config, true);
-        log("Remote configuration applied.", LOG_LEVEL_NOTICE);
+        log($msg("RedFlag.RemoteSettings.Applied"), LOG_LEVEL_NOTICE);
         return true;
     }
 }
@@ -341,13 +344,13 @@ export async function adjustSettingToRemoteIfNeeded(
     // P2P has no centralised remote configuration; skip to avoid a spurious
     // "Failed to connect to the remote server" error dialog.
     if (config.remoteType === REMOTE_P2P) {
-        log("Remote configuration fetch skipped (P2P mode).", LOG_LEVEL_INFO);
+        log($msg("RedFlag.RemoteSettings.SkippedP2P"), LOG_LEVEL_INFO);
         return true;
     }
 
     const canProceed = await adjustSettingToRemote(host, log, config, operation);
     if (!canProceed) {
-        log("Remote configuration not applied.", LOG_LEVEL_NOTICE);
+        log($msg("RedFlag.RemoteSettings.NotApplied"), LOG_LEVEL_NOTICE);
     }
     return canProceed;
 }
@@ -404,12 +407,12 @@ export async function processVaultInitialisation(
             completed = result;
             return result;
         } catch (ex) {
-            log("Error during vault initialisation process.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Initialisation.ProcessError"), LOG_LEVEL_NOTICE);
             log(ex, LOG_LEVEL_VERBOSE);
             return false;
         }
     } catch (ex) {
-        log("Error during vault initialisation.", LOG_LEVEL_NOTICE);
+        log($msg("RedFlag.Initialisation.Error"), LOG_LEVEL_NOTICE);
         log(ex, LOG_LEVEL_VERBOSE);
         return false;
     } finally {
@@ -440,10 +443,10 @@ export async function verifyAndUnlockSuspension(
         return true;
     }
     if (
-        (await host.services.UI.confirm.askYesNoDialog(
-            "Do you want to resume file and database processing, and restart obsidian now?",
-            { defaultOption: "Yes", timeout: 15 }
-        )) != "yes"
+        (await host.services.UI.confirm.askYesNoDialog($msg("RedFlag.ResumeAndRestart"), {
+            defaultOption: "Yes",
+            timeout: 15,
+        })) != "yes"
     ) {
         // TODO: Confirm actually proceed to next process.
         return true;
@@ -480,18 +483,18 @@ export function createRebuildFlagHandler(
             { isP2P: boolean }
         >(RebuildEverything, { isP2P: isP2PMainRemote(settings) });
         if (method === "cancelled") {
-            log("Rebuild everything cancelled by user.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Rebuild.Cancelled"), LOG_LEVEL_NOTICE);
             return await cancelScheduledInitialisation(host, cleanupFlag);
         }
         const { extra } = method;
         if (!(await adjustSettingToRemoteIfNeeded(host, log, extra, settings, "rebuild"))) {
-            log("Rebuild initialisation cancelled by user.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Rebuild.InitialisationCancelled"), LOG_LEVEL_NOTICE);
             return await cancelScheduledInitialisation(host, cleanupFlag);
         }
         return await processVaultInitialisation(host, log, async () => {
             await host.serviceModules.rebuilder.$rebuildEverything();
             await cleanupFlag();
-            log("Rebuild everything operation completed.", LOG_LEVEL_NOTICE);
+            log($msg("RedFlag.Rebuild.Completed"), LOG_LEVEL_NOTICE);
             return true;
         });
     };
@@ -522,15 +525,12 @@ export function createSuspendFlagHandler(
 
     // Handle the suspend all scheduled operation
     const onScheduled = async () => {
-        log("SCRAM is detected. All operations are suspended.", LOG_LEVEL_NOTICE);
+        log($msg("RedFlag.Suspend.Detected"), LOG_LEVEL_NOTICE);
         return await processVaultInitialisation(
             host,
             log,
             async () => {
-                log(
-                    "All operations are suspended as per SCRAM.\nLogs will be written to the file. This might be a performance impact.",
-                    LOG_LEVEL_NOTICE
-                );
+                log($msg("RedFlag.Suspend.Suspended"), LOG_LEVEL_NOTICE);
                 await host.services.setting.applyPartial({ writeLogToTheFile: true }, true);
                 return Promise.resolve(false);
             },

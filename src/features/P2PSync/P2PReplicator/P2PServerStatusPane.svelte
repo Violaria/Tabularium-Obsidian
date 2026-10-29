@@ -24,6 +24,7 @@
     import { extractP2PRoomSuffix } from "@vrtmrz/livesync-commonlib/compat/common/utils";
     import { SetupManager } from "@/modules/features/SetupManager";
     import { Menu } from "@/deps";
+    import { lucideIcon } from "@/common/obsidianIcon";
     import { $msg as translateMessage } from "@/common/translation";
     import {
         hasExactP2PPeer,
@@ -438,9 +439,8 @@
                 onclick={openConnectionSettings}
                 title={translateMessage("Open P2P Setup...")}
                 aria-label={translateMessage("Open P2P Setup...")}
-            >
-                ⚙
-            </button>
+                use:lucideIcon={"settings"}
+            ></button>
         </div>
     </div>
 
@@ -470,8 +470,9 @@
                                     <span
                                         class="comm-icon"
                                         title={translateMessage("Communicating")}
-                                        aria-label={translateMessage("Communicating")}>📡</span
-                                    >
+                                        aria-label={translateMessage("Communicating")}
+                                        use:lucideIcon={"radio"}
+                                    ></span>
                                 {/if}
                             </div>
                             <div class="peer-meta">
@@ -494,9 +495,8 @@
                                             ? translateMessage("Replicating")
                                             : translateMessage("Replicate now")}
                                         onclick={() => startReplication(peer)}
-                                    >
-                                        {replicatingPeerId === peer.peerId ? "⏳" : "🔄"}
-                                    </button>
+                                        use:lucideIcon={replicatingPeerId === peer.peerId ? "loader" : "refresh-cw"}
+                                    ></button>
                                     <button
                                         class="action-button"
                                         disabled={decidingPeerId !== null}
@@ -528,9 +528,8 @@
                                             : translateMessage("Follow changes from this device")}
                                         disabled={!canEditP2PSettings()}
                                         onclick={() => toggleWatch(peer.peerId)}
-                                    >
-                                        {isWatching(peer.peerId) ? "🔔" : "🔕"}
-                                    </button>
+                                        use:lucideIcon={isWatching(peer.peerId) ? "bell" : "bell-off"}
+                                    ></button>
                                 </div>
                             {:else}
                                 <div class="decision-status">
@@ -546,18 +545,16 @@
                                         aria-label={translateMessage("Allow permanently")}
                                         disabled={decidingPeerId !== null}
                                         onclick={() => makeDecision(peer, true, false)}
-                                    >
-                                        ✅
-                                    </button>
+                                        use:lucideIcon={"check"}
+                                    ></button>
                                     <button
                                         class="emoji-button mod-warning"
                                         title={translateMessage("Deny permanently")}
                                         aria-label={translateMessage("Deny permanently")}
                                         disabled={decidingPeerId !== null}
                                         onclick={() => makeDecision(peer, false, false)}
-                                    >
-                                        🚫
-                                    </button>
+                                        use:lucideIcon={"ban"}
+                                    ></button>
                                 </div>
                                 <div class="decision-row">
                                     <span class="decision-label">{translateMessage("SESSION")}</span>
@@ -567,18 +564,16 @@
                                         aria-label={translateMessage("Allow in session")}
                                         disabled={decidingPeerId !== null}
                                         onclick={() => makeDecision(peer, true, true)}
-                                    >
-                                        ✅
-                                    </button>
+                                        use:lucideIcon={"check"}
+                                    ></button>
                                     <button
                                         class="emoji-button mod-warning"
                                         title={translateMessage("Deny in session")}
                                         aria-label={translateMessage("Deny in session")}
                                         disabled={decidingPeerId !== null}
                                         onclick={() => makeDecision(peer, false, true)}
-                                    >
-                                        🚫
-                                    </button>
+                                        use:lucideIcon={"ban"}
+                                    ></button>
                                 </div>
                             {/if}
                             {#if !isAccepted(peer) && (peer.isAccepted !== undefined || peer.isTemporaryAccepted !== undefined)}

@@ -11,18 +11,30 @@ export interface BookSource {
 }
 
 export const MAX_BOOK_BYTES = 50 * 1024 * 1024;
-const MEDIA_TYPES: Record<string, string> = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", gif: "image/gif" };
+const MEDIA_TYPES: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    gif: "image/gif",
+};
 const extension = (path: string) => path.slice(path.lastIndexOf(".") + 1).toLowerCase();
 const folderOf = (path: string) => path.slice(0, Math.max(0, path.lastIndexOf("/")));
 export const noteTitle = (path: string) => path.slice(path.lastIndexOf("/") + 1).replace(/\.md$/i, "");
 
-/** Server error messages shown to the user. */
-export const kindleErrors: Record<string, string> = {
-    "Kindle address not set": "请先在服务器控制台的 Kindle 页面填写 Kindle 地址。",
-    "Mail delivery is not configured": "服务器尚未配置发信。",
-    "Daily Kindle delivery limit reached": "今天的发送次数已用完。",
-    "Request body too large": "电子书超过 50 MB，请分开发送。",
-};
+/** Server errors the clients translate for the user. */
+export const KINDLE_ERRORS = [
+    "Kindle address not set",
+    "Mail delivery is not configured",
+    "Daily Kindle delivery limit reached",
+    "Request body too large",
+];
+
+/** Interface texts placed inside the book. */
+export interface BookTexts {
+    language: string;
+    contents: string;
+    missingImage: (name: string) => string;
+}
 
 /** Markdown notes below `folder` (vault root when empty), sorted by path. */
 export function notesIn(folder: string, files: readonly string[]) {
@@ -35,7 +47,13 @@ export function notesIn(folder: string, files: readonly string[]) {
  * Builds the book in memory; images are packed once each, in the order they are first referenced.
  * For a folder book, notes in sub-folders of `folder` are grouped by their relative folder path.
  */
-export async function assembleBook(source: BookSource, notes: readonly string[], title: string, folder?: string) {
+export async function assembleBook(
+    source: BookSource,
+    notes: readonly string[],
+    title: string,
+    texts: BookTexts,
+    folder?: string
+) {
     const images: EpubImage[] = [];
     const packed = new Map<string, string>();
     const chapters: EpubChapter[] = [];
@@ -50,11 +68,21 @@ export async function assembleBook(source: BookSource, notes: readonly string[],
             }
             return packed.get(image);
         };
-        const rendered = renderNote(await source.read(note), resolve);
+        const rendered = renderNote(await source.read(note), resolve, texts.missingImage);
         const parent = folderOf(note);
-        const group = folder !== undefined && parent !== folder ? parent.slice(folder ? folder.length + 1 : 0) : undefined;
+        const group =
+            folder !== undefined && parent !== folder ? parent.slice(folder ? folder.length + 1 : 0) : undefined;
         chapters.push({ title: noteTitle(note), ...rendered, group });
     }
-    for (const [path, href] of packed) images.find((image) => image.href === href)!.data = await source.readBinary(path);
-    return buildEpub({ title, language: "zh", identifier: `urn:uuid:${crypto.randomUUID()}`, modified: new Date(), chapters, images });
+    for (const [path, href] of packed)
+        images.find((image) => image.href === href)!.data = await source.readBinary(path);
+    return buildEpub({
+        title,
+        language: texts.language,
+        contentsTitle: texts.contents,
+        identifier: `urn:uuid:${crypto.randomUUID()}`,
+        modified: new Date(),
+        chapters,
+        images,
+    });
 }

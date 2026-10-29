@@ -35,17 +35,6 @@
 "↓: Overwrite Local": "↓: Overwrite Local"
 "⇅: Use newer": "⇅: Use newer"
 +1 week: +1 week
-⚠️ Important Notice: ⚠️ Important Notice
-⚠️ Please Confirm the Following: ⚠️ Please Confirm the Following
-✔ SELECT: ✔ SELECT
-✔ SYNC: ✔ SYNC
-✔ WATCH: ✔ WATCH
-📡 Off: 📡 Off
-📡 On: 📡 On
-🔴 Disconnected: 🔴 Disconnected
-🕵️ Diag: 🕵️ Diag
-🗑 Delete: 🗑 Delete
-🟢 Connected: 🟢 Connected
 ${count} issue(s) detected!: ${count} issue(s) detected!
 Accept: Accept
 Accept in session: Accept in session
@@ -56,6 +45,7 @@ Access Key ID: Access Key ID
 Action: Action
 Activate: Activate
 Active Remote Configuration: Active Remote Configuration
+Add: Add
 Add default patterns: Add default patterns
 Add new connection: Add new connection
 AddOn Module (ConfigSync) has not been loaded. This is very unexpected situation. Please report this issue.:
@@ -103,6 +93,7 @@ Automatically Sync all files when opening Obsidian.: Automatically Sync all file
 Available Peers: Available Peers
 Back: Back
 Back to non-configured: Back to non-configured
+Back to this revision: Back to this revision
 Batch database update: Batch database update
 Batch limit: Batch limit
 Batch size: Batch size
@@ -138,6 +129,155 @@ Close this dialog: Close this dialog
 "Closed:": "Closed:"
 cmdConfigSync:
     showCustomizationSync: Show Customization sync
+cmdHiddenFileSync:
+    progressStorageToDB: "[Storage -> DB ]"
+    progressScanningStorageToDB: "[Scanning Storage -> DB ]"
+    progressDBToStorage: "[DB -> Storage ]"
+    progressScanningDBToStorage: "[Scanning DB -> Storage ]"
+    progressApplyUntracked: "[Apply untracked changes ]"
+    progressRebuildByMerge: "[Rebuild by Merge ]"
+    progressRebuildByStorage: "[Rebuild by Storage ]"
+    progressRebuildByDatabase: "[Rebuild by Database ]"
+    progressInitialise: "[Initialise]"
+    failedStorageChange: "Failed to process storage change file:${file}"
+    scanningStorageFiles: Scanning storage files...
+    scanningDatabaseFiles: Scanning database files...
+    storageStatics: |-
+        [Storage hidden file statics]
+        Known files: ${known}
+        Actual files: ${actual}
+        All files: ${all}
+        Offline Changed files: ${changed}
+    trackChanges: Track changes.
+    enumeratingLocalFiles: Enumerating local files...
+    enumeratingDatabaseFiles: Enumerating database files...
+    applyingUntrackedChanges: Applying untracked changes...
+    trackingStatics: |-
+        Tracking statics:
+        Local files: ${local}
+        Database files: ${database}
+        Untracked local files: ${untrackedLocal}
+        Untracked database files: ${untrackedDatabase}
+        Common untracked files: ${common}
+    rebuildingByMerge: Rebuilding hidden files from the storage and the local database.
+    rebuildingFromStorage: Rebuilding hidden files from the storage.
+    checkingProgress: Checking ${progress}/${total}
+    mergeSummary: |-
+        Storage to Database: ${toDatabase} files
+         Database to Storage: ${toStorage} files
+    startProcessing: Start processing...
+    storageToDatabaseCount: "Storage to Database: ${count} files."
+    databaseToStorageCount: "Database to Storage: ${count} files."
+    initialising: Initialising hidden files sync...
+    startedPush: "Started: Storage --> Database"
+    startedPushOnlyNew: "Started: Storage --> Database (Only New)"
+    startedPull: "Started: Database --> Storage"
+    startedPullOnlyNew: "Started: Database --> Storage (Only New)"
+    startedMerge: "Started: Database <--> Storage (by modified date)"
+    checkingRemainingStorageFirst: Checking for remaining storage and database changes...
+    checkingRemainingDatabaseFirst: Checking for remaining database and storage changes...
+    preparing: Preparing Hidden File Sync...
+cmdLocalDatabaseMainte:
+    commandGCV3: Garbage Collection V3 (advanced, beta)
+    retrievingChunks: Retrieving chunks informations..
+    operation:
+        resurrectChunks: Resurrect Chunks
+        deleteFiles: Delete Files
+        deleteChunks: Delete Chunks
+        markUnusedChunks: Mark unused chunks
+        deleteUnusedChunks: Delete unused chunks
+        trackChunkUsage: Track chunk usage
+        garbageCollection: Garbage Collection
+    buttonResurrect: Resurrect
+    buttonMark: Mark
+    deletionCancelled: Deletion operation is cancelled.
+    resurrect:
+        none: No chunks are found to be resurrected.
+        message: |-
+            We have following chunks that are deleted but still used in the database.
+
+            - Completely lost chunks: ${lost}
+            - Resurrectable chunks: ${resurrectable}
+
+            Do you want to resurrect these chunks?
+        result: "Resurrected chunks: ${resurrected} / ${total}"
+        cancelled: Resurrect operation is cancelled.
+    deleteFiles:
+        searching: Searching for deleted files..
+        none: No deleted files found.
+        found: Found ${count} deleted files.
+        message: |-
+            We have following files that are marked as deleted.
+
+            - Deleted files: ${count}
+
+            Are you sure to delete these files permanently?
+
+            Note: **Make sure to synchronise all devices before deletion.**
+
+            > [!Note]
+            > This operation affects the database permanently. Deleted files will not be recovered after this operation.
+            > And, the chunks that are used in the deleted files will be ready for compaction.
+        result: Deleted ${deleted} / ${total} files.
+    deleteChunks:
+        none: No deleted chunks found.
+        message: |-
+            We have following chunks that are marked as deleted.
+
+            - Deleted chunks: ${count} (${size})
+
+            Are you sure to delete these chunks permanently?
+
+            Note: **Make sure to synchronise all devices before deletion.**
+
+            > [!Note]
+            > This operation finally reduces the capacity of the remote.
+        result: "Deleted chunks: ${deleted} / ${total}"
+    unusedChunks:
+        none: No unused chunks found.
+        markMessage: |-
+            We have following chunks that are not used from any files.
+
+            - Chunks: ${count} (${size})
+
+            Are you sure to mark these chunks to be deleted?
+
+            Note: **Make sure to synchronise all devices before deletion.**
+
+            > [!Note]
+            > This operation will not reduces the capacity of the remote until permanent deletion.
+        markResult: "Marked chunks: ${marked} / ${total}"
+        deleteMessage: |-
+            We have following chunks that are not used from any files.
+
+            - Chunks: ${count} (${size})
+
+            Are you sure to delete these chunks?
+
+            Note: **Make sure to synchronise all devices before deletion.**
+
+            > [!Note]
+            > Chunks referenced from deleted files are not deleted. Please run "Commit File Deletion" before this operation.
+    trackSummary: |-
+        Total chunks: ${total}
+        Unused chunks: ${unused}
+    gc:
+        title: Are all devices synchronised?
+        message: |-
+            This function deletes unused chunks from the device. If there are differences between devices, some chunks may be missing when resolving conflicts.
+            Be sure to synchronise before executing.
+
+            If chunks used by current Vault files are deleted, Hatch -> Recreate chunks for current Vault files can recreate them only from files currently present in the Vault. It cannot recover unreadable historical or conflict content.
+
+            Are you ready to delete unused chunks?
+        buttonDelete: Yes, delete chunks
+        cancelled: User cancelled chunk deletion
+        deleting: "Deleting chunks: ${count}"
+        completed: |-
+            Garbage Collection completed.
+            Success: ${success}, Errored: ${errored}
+    oldRevisionsFound: Found ${count} old revisions for ${id} . ${toCheck} items to check
+    revisionLookupFailed: Error finding revisions for ${id}
 Comma separated `.gitignore, .dockerignore`: Comma separated `.gitignore, .dockerignore`
 Command: Command
 Communicating: Communicating
@@ -152,6 +292,7 @@ Compatibility (Metadata): Compatibility (Metadata)
 Compatibility (Remote Database): Compatibility (Remote Database)
 Compatibility (Trouble addressed): Compatibility (Trouble addressed)
 Compute revisions for chunks: Compute revisions for chunks
+Concat both: Concat both
 Configuration: Configuration
 Configuration Encryption: Configuration Encryption
 Configure: Configure
@@ -160,13 +301,17 @@ Configure E2EE: Configure E2EE
 Configure Remote: Configure Remote
 Connect: Connect
 Connect to existing database and continue: Connect to existing database and continue
+Connected: Connected
 "Connected to Signaling Server (as Peer ID: ${peerId})": "Connected to Signaling Server (as Peer ID: ${peerId})"
 "Connected:": "Connected:"
 Connection Settings: Connection Settings
 "Connection:": "Connection:"
+Content: Content
 Continue anyway: Continue anyway
+Copied: Copied
 Copy: Copy
 Copy Report to clipboard: Copy Report to clipboard
+Copy to clipboard: Copy to clipboard
 CouchDB Configuration: CouchDB Configuration
 CouchDB Connection Tweak: CouchDB Connection Tweak
 "CouchDB only. Version 0 preserves legacy path identity; version 1 uses Unicode NFC. Physical file names stay unchanged. Update every device and stop synchronisation, then Rebuild both databases from a complete authoritative Vault and Fetch on the other devices. Resolve colliding file names first. P2P and Object Storage do not support version 1.":
@@ -200,6 +345,7 @@ Delete old metadata of deleted files on start-up: Delete old metadata of deleted
 Delete Remote Configuration: Delete Remote Configuration
 Delete remote configuration '{name}'?: Delete remote configuration '{name}'?
 Delete remote configuration '${name}'?: Delete remote configuration '${name}'?
+Deleted: Deleted
 DENIED: DENIED
 DENIED (in session): DENIED (in session)
 Deny: Deny
@@ -216,6 +362,7 @@ Device name to identify the device. Please use shorter one for the stable peer d
     peer detection, i.e., "iphone-16" or "macbook-2021".
 Device Peer ID: Device Peer ID
 "Devices:": "Devices:"
+Diag: Diag
 Diagnostic RTCPeerConnection is enabled: Diagnostic RTCPeerConnection is enabled
 dialog:
     yourLanguageAvailable:
@@ -234,6 +381,10 @@ dialog:
             May you find it easy to use!
         btnRevertToDefault: Keep %{lang-def}
         Title: " Translation is available!"
+    copy:
+        ready: Your ${title} is ready to be copied
+        copied: Your ${title} has been copied to the clipboard.
+        defaultTitle: data
 Diff: Diff
 Different: Different
 Disables all synchronization and restart.: Disables all synchronization and restart.
@@ -241,6 +392,7 @@ Disables logging, only shows notifications. Please disable if you report an issu
     Disables logging, only shows notifications. Please disable if you report an
     issue.
 Disconnect: Disconnect
+Disconnected: Disconnected
 Dismiss: Dismiss
 Display Language: Display Language
 Display name: Display name
@@ -371,6 +523,23 @@ Export: Export
 "Failed to connect to the server: ${reason}": "Failed to connect to the server: ${reason}"
 Failed to connect to the server. Please check your settings.: Failed to connect to the server. Please check your settings.
 "Failed to connect to the signalling relay: ${reason}": "Failed to connect to the signalling relay: ${reason}"
+Get Configuration: Get Configuration
+Hide: Hide
+Important Notice: Important Notice
+Loading old revisions...: Loading old revisions...
+Modified: Modified
+Old content copied to clipboard: Old content copied to clipboard
+Only Fetch: Only Fetch
+Only Send: Only Send
+Please Confirm the Following: Please Confirm the Following
+Revert: Revert
+Review why: Review why
+SELECT: SELECT
+Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Self-hosted LiveSync has paused remote synchronisation for compatibility review.
+Show: Show
+Start live: Start live
+Stop live: Stop live
+SYNC: SYNC
 The connection test cannot add a signalling relay while P2P is active. Use the active relay settings, or disconnect P2P before testing.: The connection test cannot add a signalling relay while P2P is active. Use the active relay settings, or disconnect P2P before testing.
 Failed to create replicator instance.: Failed to create replicator instance.
 Failed to parse Setup-URI.: Failed to parse Setup-URI.
@@ -450,7 +619,7 @@ If enabled, newly created chunks are temporarily kept within the document, and g
     If enabled, newly created chunks are temporarily kept within the document, and
     graduated to become independent chunks once stabilised.
 If enabled, the ⛔ icon will be shown inside the status instead of the file warnings banner. No details will be shown.:
-    If enabled, the ⛔ icon will be shown inside the status instead of the file
+    If enabled, a SKIP marker will be shown inside the status instead of the file
     warnings banner. No details will be shown.
 If enabled, the file under 1kb will be processed in the UI thread.: If enabled, the file under 1kb will be processed in the UI thread.
 If enabled, the notification of hidden files change will be suppressed.: If enabled, the notification of hidden files change will be suppressed.
@@ -546,17 +715,11 @@ K:
     short_p2p_sync: P2P Sync
     title_p2p_sync: Peer-to-Peer Sync
 Keep empty folder: Keep empty folder
-lang_def: Default
-lang-de: Deutsche
+lang_def: English
 lang-def: "%{lang_def}"
-lang-es: Español
-lang-fr: Français
-lang-he: Hebrew
-lang-ja: 日本語
-lang-ko: 한국어
-lang-ru: Русский
-lang-zh: 简体中文
-lang-zh-tw: 繁體中文
+lang-auto: Default (follow Obsidian)
+lang-la: Latina
+lang-zh: 中文
 Later: Later
 Legacy path identity: Legacy path identity
 "Limit: {datetime} ({timestamp})": "Limit: {datetime} ({timestamp})"
@@ -739,6 +902,42 @@ moduleLog:
         This path contains a file or folder name longer than ${maxBytes} UTF-8
         bytes. It may not work on some Android and Linux file systems.
     showLog: Show Log
+    networkErrorIcon: Network ✗
+    fileInvalidPath: This file has an invalid path under the current settings
+    filePlatformIncompatible: "Some platforms may be unable to process this file correctly: ${platforms}"
+    fileCaseConflict: There are multiple files with the same name (case-insensitive match)
+    fileIgnored: This file is ignored by the ignore rules
+    fileTooLarge: This file size exceeds the configured limit
+    fileNotSynchronised: "Not synchronised: ${reasons}"
+    fileWarning: "Warning: ${reasons}"
+    restartScheduled: WARNING! RESTARTING OBSIDIAN IS SCHEDULED!
+    debugInfoTitle: Debug info
+    debugInfoCopied: >-
+        Debug info copied to clipboard. You can paste it in the issue. Be careful as
+        it may contain sensitive information, review it before sharing.
+    statusFileProcessing: Files being processed
+    statusFilePending: Files waiting to be processed
+    statusFileBatched: Files waiting for the batch delay
+    statusQueueReplication: Received changes waiting to be applied
+    statusQueueDatabase: Changes waiting to be written to the local database
+    statusQueueStorage: Changes waiting to be written to the vault
+    statusQueueChunkInitial: Chunks being fetched
+    statusQueueChunkRetrying: Chunks being fetched again
+    statusQueuePluginScan: Plug-ins waiting to be scanned
+    statusQueueHiddenFiles: Hidden files waiting to be processed
+    statusQueueConflicts: Conflicts waiting to be checked
+    statusRemoteRequests: Remote requests in progress
+    statusRemoteOperation: Remote operation in progress
+    statusFastForwardCompared: Compared CouchDB feed entries
+    syncStatusStopped: Not synchronising
+    syncStatusStarting: Connecting
+    syncStatusPaused: Up to date, waiting for changes
+    syncStatusConnected: Synchronising
+    syncStatusJournalSend: Sending journal
+    syncStatusJournalReceive: Receiving journal
+    syncStatusErrored: Synchronisation error
+    syncStatusFastForward: Checking the remote feed
+    statusSyncPrefix: "Sync:"
 moduleMigration:
     fix0256:
         buttons:
@@ -938,20 +1137,20 @@ obsidianLiveSyncSettingTab:
         not found and you have permission to create a database, the database will be
         created.
     descValidateDatabaseConfig: Checks and fixes any potential issues with the database config.
-    errAccessForbidden: ❗ Access forbidden.
+    errAccessForbidden: ✗ Access forbidden.
     errCannotContinueTest: We could not continue the test.
-    errCorsCredentials: ❗ cors.credentials is wrong
-    errCorsNotAllowingCredentials: ❗ CORS is not allowing credentials
-    errCorsOrigins: ❗ cors.origins is wrong
-    errEnableCors: ❗ httpd.enable_cors is wrong
-    errEnableCorsChttpd: ❗ chttpd.enable_cors is wrong
-    errMaxDocumentSize: ❗ couchdb.max_document_size is low)
-    errMaxRequestSize: ❗ chttpd.max_http_request_size is low)
-    errMissingWwwAuth: ❗ httpd.WWW-Authenticate is missing
-    errRequireValidUser: ❗ chttpd.require_valid_user is wrong.
-    errRequireValidUserAuth: ❗ chttpd_auth.require_valid_user is wrong.
-    labelDisabled: "⏹️ : Disabled"
-    labelEnabled: "🔁 : Enabled"
+    errCorsCredentials: ✗ cors.credentials is wrong
+    errCorsNotAllowingCredentials: ✗ CORS is not allowing credentials
+    errCorsOrigins: ✗ cors.origins is wrong
+    errEnableCors: ✗ httpd.enable_cors is wrong
+    errEnableCorsChttpd: ✗ chttpd.enable_cors is wrong
+    errMaxDocumentSize: ✗ couchdb.max_document_size is low)
+    errMaxRequestSize: ✗ chttpd.max_http_request_size is low)
+    errMissingWwwAuth: ✗ httpd.WWW-Authenticate is missing
+    errRequireValidUser: ✗ chttpd.require_valid_user is wrong.
+    errRequireValidUserAuth: ✗ chttpd_auth.require_valid_user is wrong.
+    labelDisabled: "Status: Disabled"
+    labelEnabled: "Status: Enabled"
     levelAdvanced: " (Advanced)"
     levelEdgeCase: " (Edge Case)"
     levelPowerUser: " (Power User)"
@@ -1057,7 +1256,7 @@ obsidianLiveSyncSettingTab:
 
         ## ${OPTION_REBUILD_BOTH}
 
-        At a glance:  📄 ⇒¹ 💻 ⇒² 🛰️ ⇢ⁿ 💻 ⇄ⁿ⁺¹ 📄
+        At a glance: Files ⇒¹ Local DB ⇒² Remote ⇢ⁿ Local DB ⇄ⁿ⁺¹ Files
 
         Reconstruct both the local and remote databases using existing files from
         this device.
@@ -1066,7 +1265,7 @@ obsidianLiveSyncSettingTab:
 
         ## ${OPTION_FETCH}
 
-        At a glance: 📄 ⇄² 💻 ⇐¹ 🛰️ ⇔ 💻 ⇔ 📄
+        At a glance: Files ⇄² Local DB ⇐¹ Remote ⇔ Local DB ⇔ Files
 
         Initialise the local database and reconstruct it using data fetched from the
         remote database.
@@ -1101,18 +1300,18 @@ obsidianLiveSyncSettingTab:
     nameTestConnection: Test Connection
     nameTestDatabaseConnection: Test Database Connection
     nameValidateDatabaseConfig: Validate Database Configuration
-    okAdminPrivileges: ✔ You have administrator privileges.
-    okCorsCredentials: ✔ cors.credentials is ok.
+    okAdminPrivileges: ✓ You have administrator privileges.
+    okCorsCredentials: ✓ cors.credentials is ok.
     okCorsCredentialsForOrigin: CORS credentials OK
-    okCorsOriginMatched: ✔ CORS origin OK
-    okCorsOrigins: ✔ cors.origins is ok.
-    okEnableCors: ✔ httpd.enable_cors is ok.
-    okEnableCorsChttpd: ✔ chttpd.enable_cors is ok.
-    okMaxDocumentSize: ✔ couchdb.max_document_size is ok.
-    okMaxRequestSize: ✔ chttpd.max_http_request_size is ok.
-    okRequireValidUser: ✔ chttpd.require_valid_user is ok.
-    okRequireValidUserAuth: ✔ chttpd_auth.require_valid_user is ok.
-    okWwwAuth: ✔ httpd.WWW-Authenticate is ok.
+    okCorsOriginMatched: ✓ CORS origin OK
+    okCorsOrigins: ✓ cors.origins is ok.
+    okEnableCors: ✓ httpd.enable_cors is ok.
+    okEnableCorsChttpd: ✓ chttpd.enable_cors is ok.
+    okMaxDocumentSize: ✓ couchdb.max_document_size is ok.
+    okMaxRequestSize: ✓ chttpd.max_http_request_size is ok.
+    okRequireValidUser: ✓ chttpd.require_valid_user is ok.
+    okRequireValidUserAuth: ✓ chttpd_auth.require_valid_user is ok.
+    okWwwAuth: ✓ httpd.WWW-Authenticate is ok.
     optionApply: Apply
     optionCancel: Cancel
     optionCouchDB: CouchDB
@@ -1127,10 +1326,17 @@ obsidianLiveSyncSettingTab:
     optionPeriodicWithBatch: Periodic w/ batch
     optionRebuildBoth: Rebuild Both from This Device
     optionSaveOnlySettings: (Danger) Save Only Settings
+    panelAdvanced: Advanced
     panelChangeLog: Change Log
+    panelCustomisationSync: Customisation sync
     panelGeneralSettings: General Settings
+    panelHatch: Hatch
+    panelMaintenance: Maintenance
+    panelPatches: Patches
+    panelPowerUsers: Power users
     panelPrivacyEncryption: Privacy & Encryption
     panelRemoteConfiguration: Remote Configuration
+    panelSelector: Selector
     panelSetup: Setup
     serverVersion: "Server info: ${info}"
     titleActiveRemoteServer: Active Remote Server
@@ -1167,8 +1373,8 @@ obsidianLiveSyncSettingTab:
     titleSyncSettings: Sync Settings
     titleSyncSettingsViaMarkdown: Sync Settings via Markdown
     titleUpdateThinning: Update Thinning
-    warnCorsOriginUnmatched: ⚠ CORS Origin is unmatched ${from}->${to}
-    warnNoAdmin: ⚠ You do not have administrator privileges.
+    warnCorsOriginUnmatched: ! CORS Origin is unmatched ${from}->${to}
+    warnNoAdmin: ! You do not have administrator privileges.
 Of course, we can back up the data before proceeding.: Of course, we can back up the data before proceeding.
 Off: Off
 Ok: Ok
@@ -1240,6 +1446,24 @@ P2P:
     SyncAlreadyRunning: P2P Sync is already running.
     SyncCompleted: P2P Sync completed.
     SyncStartedWith: P2P Sync with ${name} have been started.
+    ApplyRemoteConfig:
+        Requesting: Requesting remote config for ${name}. Please input the passphrase on the remote device
+        Retrieved: Remote config for ${name} is retrieved successfully
+        Title: Apply Remote Config
+        Message: |-
+            Do you really want to apply the remote config? This will overwrite your current config immediately and restart.
+            And you can also drop the local database to rebuild from the remote device.
+        Buttons:
+            Drop: Yes, and drop local database
+            Keep: Yes, but keep local database
+            Cancel: No, cancel
+        AskRebuildByP2P: Do you want to set the remote type to "P2P Sync" to rebuild by "P2P replication"?
+        RebuildTitle: Rebuild from remote device
+        Cancelled: |-
+            Cancelled
+            Remote config for ${name} is not applied
+        RetrieveFailed: Cannot retrieve remote config for ${peerId}
+    ReplicatorViewTitle: Peer-to-Peer Replicator
 P2P Configuration: P2P Configuration
 P2P Status: P2P Status
 paneMaintenance:
@@ -1394,6 +1618,46 @@ RedFlag:
             FetchSmoother: Create local file chunks before fetching
             FetchTraditional: Fetch everything from the remote
             Title: How do you want to fetch?
+        Cancelled: Fetch everything cancelled by user.
+        InitialisationCancelled: Fetch initialisation cancelled by user.
+        Starting: "Fetching everything with settings: makeLocalChunkBeforeSync=${makeLocalChunkBeforeSync}, makeLocalFilesBeforeSync=${makeLocalFilesBeforeSync}"
+        Completed: Fetch everything operation completed. Vault files will be gradually synced.
+    CouldNotDeleteFlag: Could not delete ${path}
+    SelectRemote:
+        Title: Select Remote Configuration
+        Message: Multiple remote configurations detected. Please select the remote configuration you want to fetch from.
+        Buttons:
+            UseActive: Use active remote
+        KeepCurrent: Keeping current remote configuration.
+        Cancelled: Remote configuration selection cancelled.
+        Activated: "Activated remote configuration: ${name}"
+        ActivationFailed: "Failed to activate remote configuration: ${name}"
+        NoneSelected: No remote configuration selected.
+    RemoteSettings:
+        NotConfigured: Remote synchronisation settings are not configured (${reason}).
+        Unavailable: Could not read synchronisation settings from the remote.
+        Unsupported: Remote synchronisation settings are not supported by this remote type.
+        RebuildUsesLocal: Rebuild will use this device's synchronisation settings.
+        Matched: Remote configuration matches local configuration. No changes applied.
+        Supplemented: Your settings differed slightly from the server's. The plug-in has supplemented the incompatible parts with the server settings!
+        Buttons:
+            OK: OK
+        Applied: Remote configuration applied.
+        SkippedP2P: Remote configuration fetch skipped (P2P mode).
+        NotApplied: Remote configuration not applied.
+    Initialisation:
+        ProcessError: Error during vault initialisation process.
+        Error: Error during vault initialisation.
+    ResumeAndRestart: Do you want to resume file and database processing, and restart obsidian now?
+    Rebuild:
+        Cancelled: Rebuild everything cancelled by user.
+        InitialisationCancelled: Rebuild initialisation cancelled by user.
+        Completed: Rebuild everything operation completed.
+    Suspend:
+        Detected: SCRAM is detected. All operations are suspended.
+        Suspended: |-
+            All operations are suspended as per SCRAM.
+            Logs will be written to the file. This might be a performance impact.
     FetchRemoteConfig:
         Buttons:
             Cancel: No, use local settings
@@ -1737,6 +2001,32 @@ Setup:
         Step3: On the source device, from the command palette, run the 'Show settings as a QR code' command.
         Step4: On this device, switch to the camera app or use a QR code scanner to scan the displayed QR code.
         ButtonClose: Close this dialog
+    Manager:
+        onboardingCancelled: Onboarding cancelled by user.
+        manualConfigurationCancelled: Manual configuration cancelled.
+        e2eeConfigurationCancelled: E2EE configuration cancelled.
+        noChangesDetected: No changes in settings detected. Skipping applying settings from wizard.
+        settingApplied: Setting Applied
+        wizardSettingsApplied: Settings from wizard applied.
+        applyCancelled: User cancelled applying settings from wizard.
+        qrDecodeFailed: The QR configuration could not be decoded or contains unsupported settings.
+        EncryptInternalMetadata:
+            Title: Encrypt internal file Properties
+            Message: A manual remote Rebuild is strongly recommended to protect existing file properties. Before continuing without rebuilding, update every other synchronising device to a version which supports this option, including devices currently running LiveSync. Existing properties remain unchanged until they are rewritten or rebuilt.
+            Buttons:
+                Proceed: Enable without rebuilding — update every other device first
+    CopySetupURI:
+        CommandCopy: Copy settings as a new setup URI
+        CommandCopyWithCustomizationSync: Copy settings as a new setup URI (With customization sync)
+        CommandCopyFull: Copy settings as a new setup URI (Full)
+        PassphraseTitle: Encrypt your settings
+        PassphraseLabel: The passphrase to encrypt the setup URI
+        ModeTitle: Setup URI availability
+        ModeTimeBound: Time-bound
+        ModeCompatible: Compatible (no time limit)
+        ModeMessageNoClock: Time-bound Setup URIs require a valid device clock. Compatible URIs have no time limit and work with older clients.
+        ModeMessage: Time-bound Setup URIs can be opened until ${until}. This is the end of the current fixed seven-day UTC window, not seven days from now. Compatible URIs have no time limit and work with older clients.
+        Copied: Setup URI copied to clipboard
 "Please enable 'Compute revisions for chunks' in settings to use Garbage Collection.": Please enable 'Compute revisions for chunks' in settings to use Garbage Collection.
 "Please disable 'Read chunks online' in settings to use Garbage Collection.": Please disable 'Read chunks online' in settings to use Garbage Collection.
 "Setup Complete: Preparing to Fetch Synchronisation Data": "Setup Complete: Preparing to Fetch Synchronisation Data"
@@ -1762,7 +2052,6 @@ Start change-broadcasting on Connect: Start change-broadcasting on Connect
 Start Sync & Close: Start Sync & Close
 Stat: Stat
 Stats: Stats
-Stop ⚡: Stop ⚡
 Stop Broadcasting: Stop Broadcasting
 Strongly Recommended: Strongly Recommended
 Sync: Sync
@@ -1929,6 +2218,10 @@ This will recreate chunks for all files. If there were missing chunks, this may 
     This will recreate chunks for all files. If there were missing chunks, this
     may fix the errors.
 To minimise the creation of new conflicts: To minimise the creation of new conflicts
+To stop the countdown, tap anywhere on the dialogue: To stop the countdown, tap anywhere on the dialogue
+Toggle Sync on `Replicate now` command: Toggle Sync on `Replicate now` command
+Toggle Sync on connect: Toggle Sync on connect
+Toggle Watch on connect: Toggle Watch on connect
 Transfer Tweak: Transfer Tweak
 TURN Credential: TURN Credential
 TURN server settings are only necessary if you are behind a strict NAT or firewall that prevents direct P2P connections. In most cases, you can leave these fields blank.:
@@ -2046,6 +2339,7 @@ TweakMismatchResolve:
         TweakResolving: Configuration Mismatch Detected
         UseRemoteConfig: Use Remote Configuration
         AutoAcceptCompatible: Auto-Accept Available
+Unable to display the file in the editor: Unable to display the file in the editor
 Unicode NFC path identity: Unicode NFC path identity
 Unique name between all synchronized devices. To edit this setting, please disable customization sync once.:
     Unique name between all synchronized devices. To edit this setting, please
@@ -2056,6 +2350,7 @@ Unless you are certain, selecting this options is bit dangerous. It assumes that
     the case, data loss may occur. Please ensure you know what you are doing.
 Updating list...: Updating list...
 URL: URL
+Use ${name}: Use ${name}
 Use a custom passphrase: Use a custom passphrase
 Use Custom HTTP Handler: Use Custom HTTP Handler
 Use Diagnostic RTCPeerConnection for statistics: Use Diagnostic RTCPeerConnection for statistics
@@ -2075,10 +2370,12 @@ Username: Username
 Verbose Log: Verbose Log
 Verify all: Verify all
 Verify and repair all files: Verify and repair all files
+Version: Version
 Warning! This will have a serious impact on performance. And the logs will not be synchronised under the default name. Please be careful with logs; they often contain your confidential information.:
     Warning! This will have a serious impact on performance. And the logs will not
     be synchronised under the default name. Please be careful with logs; they
     often contain your confidential information.
+WATCH: WATCH
 WATCHING: WATCHING
 We can not use "/" to the device name: We can not use "/" to the device name
 We can use only Secure (HTTPS) connections on Obsidian Mobile.: We can use only Secure (HTTPS) connections on Obsidian Mobile.
@@ -2429,7 +2726,7 @@ Ui:
         RebuildEverythingP2P:
             ConfirmLocalReset: I understand that this resets only this device's local synchronisation database.
             ConfirmLocalResetNote: The files currently in this Vault are used to rebuild it.
-            ConfirmTitle: "⚠️ Please Confirm the Following"
+            ConfirmTitle: Please Confirm the Following
             Guidance: This procedure will discard the local LiveSync database on this device and rebuild it from the current files in this Vault. It does not delete or overwrite data on another device.
             Note: Keep this device online after initialisation so that another device can fetch the Vault from it.
             Proceed: I Understand, Prepare This Device
@@ -2479,3 +2776,123 @@ You should perform this operation only in exceptional circumstances, such as whe
 "Synchronisation Issues Detected": "Synchronisation Issues Detected"
 "Use the detailed flow": "Use the detailed flow"
 "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow."
+tabularium:
+  server:
+    title: Tabularium server
+    command: Server connection
+    settingDesc: Sign in to a server, view the connection or disconnect.
+    connectedTo: "Connected to ${vault}"
+    notConnected: Sign in to a server to start synchronising.
+    open: Open
+    enforced: Tabularium requires end-to-end encryption and path obfuscation; those settings have been restored.
+    credentialsInvalid: The Tabularium device credentials are no longer valid. Sign in again in Server connection.
+    renewFailed: "Renewing Tabularium credentials failed: ${error}"
+    vaultMissing: The vault does not exist.
+    server: Server
+    vault: Vault
+    device: This device
+    deviceExpiry: "${device}, credentials valid until ${date}"
+    disconnectHint: Disconnecting only clears this device's connection settings; notes are kept. Revoke the device credentials in the console.
+    signInAgain: Sign in again
+    disconnect: Disconnect
+    disconnected: Disconnected from the Tabularium server.
+    address: Server address
+    username: Username
+    password: Password
+    signIn: Sign in
+    firstLogin: The first sign-in requires a new password of at least 12 characters.
+    newPassword: New password
+    confirmPassword: Confirm new password
+    saveAndContinue: Save and continue
+    passwordsDiffer: The two passwords do not match.
+    newVault: New vault
+    newVaultName: New vault name
+    deviceName: Device name
+    passphrase: Encryption passphrase
+    passphraseNew: Notes are encrypted on this device before upload; the server cannot read them. A lost passphrase cannot be recovered.
+    passphraseExisting: Enter the passphrase this vault uses on your other devices.
+    confirmPassphrase: Confirm passphrase
+    afterUpload: Obsidian reloads after connecting, then uploads this device's notes to the new vault.
+    afterFetch: Obsidian reloads after connecting and fetches the notes from the server. To replace the server's copy with this device's notes, connect first, then have the owner authorise this device to rebuild in the console.
+    connect: Connect
+    passphrasesDiffer: The two passphrases do not match.
+    passphraseRequired: An encryption passphrase is required.
+    invalidAddress: The server address is not valid.
+    addressScheme: The server address must start with https:// or http://.
+    unreachable: Cannot reach the server. Check the address and the network.
+  serverError:
+    Invalid username or password: The username or password is incorrect.
+    Invalid current password: The current password is incorrect.
+    Change initial password first: The initial password must be changed first.
+    Too many requests: Too many attempts. Try again later.
+    Vault is not ready: The vault is not ready yet. Retry provisioning in the server console.
+    Invalid password: The new password needs at least 12 characters.
+    Kindle address not set: Enter your Kindle address on the Kindle page of the server console first.
+    Mail delivery is not configured: The server has no mail delivery configured.
+    Daily Kindle delivery limit reached: Today's sends are used up.
+    Request body too large: The book exceeds 50 MB. Send it in parts.
+  kindle:
+    sendCurrent: Send current note to Kindle
+    status: Kindle delivery status
+    send: Send to Kindle
+    sendItems: "Send ${count} items to Kindle"
+    settingDesc: View the Kindle delivery status. Right-click notes or folders in the file list (several can be selected) to send.
+    fileMissing: "File not found: ${path}"
+    signInFirst: Sign in to a Tabularium server first.
+    statusFailed: "Reading the status failed (HTTP ${status})."
+    noNotes: There are no notes to send.
+    sent: "Sent ${title} to Kindle (${size} KB)."
+    sendFailed: "Sending ${title} to Kindle failed: ${error}"
+    serverStatus: Server status
+    sendingTo: "Sending to ${address}; ${remaining} sends left today."
+    contents: Contents
+    missingImage: "[Image: ${name}]"
+  sorting:
+    title: Tabularium file sorting
+    settingDesc: Arrange notes and folders using sorting rules or bookmarks.
+    apply: Apply sorting rules
+    applyDesc: Read sorting-spec from your notes and update the file explorer.
+    applyButton: Apply
+    pause: Pause
+    standalone: Disable the standalone Custom Sort plug-in, then reload Tabularium to use its built-in file sorting.
+    command: Open file sorting settings
+Apply: Apply
+Auto Accepting: Auto Accepting
+Done: Done
+Error while loading file.: Error while loading file.
+'From:': 'From:'
+'Info:': 'Info:'
+'Modified: ${date}': 'Modified: ${date}'
+Next: Next
+OK: OK
+Searching ${current}/${total}...: Searching ${current}/${total}...
+Searching...: Searching...
+Setup.QRCodeAggregated: 'The setting is too large for a single QR code.
+
+  We are using the aggregator to combine multiple QR codes.
+
+  Your settings will not be sent to any server; they will be processed only on your device.
+
+  Please scan this QR code with your mobile''s camera, and open the page in your browser.
+
+  After all parts are collected, the page will navigate you back to Obsidian with the aggregated settings.
+
+
+  Progress: ${current} / ${total}
+
+  ${part}'
+Setup.QRCodeAggregatedTitle: Settings QR Code (Aggregated)
+Setup.QRCodeTitle: Settings QR Code
+'To:': 'To:'
+Vault history: Vault history
+We don't have any history for this note.: We don't have any history for this note.
+maintenancePrerequisites.apply: Apply and continue
+maintenancePrerequisites.fetchChunksOff: '- Fetch chunks on demand: Off (currently On)'
+maintenancePrerequisites.message: '${operation} requires the following settings:
+
+
+  ${settings}
+
+
+  Apply these settings and continue?'
+maintenancePrerequisites.title: ${operation} prerequisites

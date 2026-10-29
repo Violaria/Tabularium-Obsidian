@@ -1,3 +1,4 @@
+import { $msg } from "@/common/translation";
 import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
 import {
     encodeQR,
@@ -18,40 +19,38 @@ export async function encodeSetupSettingsAsQR(host: SetupFeatureHost) {
 
     if (typeof result === "string") {
         const msg = host.services.context.translate("Setup.QRCode", { qr_image: result });
-        await host.services.UI.confirm.confirmWithMessage("Settings QR Code", msg, ["OK"], "OK");
+        const ok = $msg("OK");
+        await host.services.UI.confirm.confirmWithMessage($msg("Setup.QRCodeTitle"), msg, [ok], ok);
         return result;
     } else {
         // Multi-page QR code
         let currentIndex = 0;
         while (currentIndex < result.total) {
-            const msg = `The setting is too large for a single QR code.
-We are using the aggregator to combine multiple QR codes.
-Your settings will not be sent to any server; they will be processed only on your device.
-Please scan this QR code with your mobile's camera, and open the page in your browser.
-After all parts are collected, the page will navigate you back to Obsidian with the aggregated settings.
-
-Progress: ${currentIndex + 1} / ${result.total}
-${result.parts[currentIndex]}`;
-
+            const msg = $msg("Setup.QRCodeAggregated", {
+                current: String(currentIndex + 1),
+                total: String(result.total),
+                part: result.parts[currentIndex],
+            });
+            const [back, next, cancel, done] = [$msg("Back"), $msg("Next"), $msg("Cancel"), $msg("Done")];
             const buttons = [];
-            if (currentIndex > 0) buttons.push("Back");
+            if (currentIndex > 0) buttons.push(back);
             if (currentIndex < result.total - 1) {
-                buttons.push("Next");
-                buttons.push("Cancel");
+                buttons.push(next);
+                buttons.push(cancel);
             } else {
-                buttons.push("Done");
+                buttons.push(done);
             }
 
             const choice = await host.services.UI.confirm.confirmWithMessage(
-                "Settings QR Code (Aggregated)",
+                $msg("Setup.QRCodeAggregatedTitle"),
                 msg,
                 buttons,
-                buttons[buttons.indexOf("Next") !== -1 ? buttons.indexOf("Next") : buttons.indexOf("Done")]
+                buttons.includes(next) ? next : done
             );
 
-            if (choice === "Next") {
+            if (choice === next) {
                 currentIndex++;
-            } else if (choice === "Back") {
+            } else if (choice === back) {
                 currentIndex--;
             } else {
                 break;

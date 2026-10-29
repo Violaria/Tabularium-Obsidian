@@ -43,6 +43,7 @@ export type SettingsPageContent = "native" | "custom";
 export type SettingsPageEntry = {
     id: string;
     name: () => string;
+    /** Lucide icon name shown in the legacy settings menu. */
     icon: string;
     order: number;
     level?: ConfigLevel;
@@ -51,49 +52,40 @@ export type SettingsPageEntry = {
 };
 
 export type SettingsRootGroupEntry = {
-    icon: string;
     name: () => string;
 };
 
 /** Root groups used only by Obsidian's declarative settings landing page. */
 const SETTINGS_ROOT_GROUP_CATALOGUE = {
     "quick-setup": {
-        icon: "🧙‍♂️",
         name: () => $msg("obsidianLiveSyncSettingTab.titleQuickSetup"),
     },
     synchronisation: {
-        icon: "🔄",
         name: () => $msg("obsidianLiveSyncSettingTab.titleSynchronisation"),
     },
     "general-settings": {
-        icon: "⚙️",
         name: () => $msg("obsidianLiveSyncSettingTab.panelGeneralSettings"),
     },
     "setup-other-devices": {
-        icon: "📲",
         name: () => $msg("obsidianLiveSyncSettingTab.titleSetupOtherDevices"),
     },
     "maintenance-and-recovery": {
-        icon: "🛠️",
         name: () => $msg("obsidianLiveSyncSettingTab.titleMaintenanceAndRecovery"),
     },
     "extra-features": {
-        icon: "🧩",
         name: () => $msg("obsidianLiveSyncSettingTab.titleExtraFeaturesGroup"),
     },
     "advanced-settings": {
-        icon: "🔧",
         name: () => $msg("obsidianLiveSyncSettingTab.titleAdvancedSettings"),
     },
     "help-and-information": {
-        icon: "ℹ️",
         name: () => $msg("obsidianLiveSyncSettingTab.titleHelpAndInformation"),
     },
 } as const satisfies Record<string, SettingsRootGroupEntry>;
 
 export type SettingsRootGroupId = keyof typeof SETTINGS_ROOT_GROUP_CATALOGUE;
 
-/** Resolve a late-translated root-group label while keeping its icon separate until the Obsidian API boundary. */
+/** Resolve a late-translated root-group label. */
 export function getSettingsRootGroupEntry(id: SettingsRootGroupId): SettingsRootGroupEntry {
     return SETTINGS_ROOT_GROUP_CATALOGUE[id];
 }
@@ -109,7 +101,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "change-log",
             name: () => $msg("obsidianLiveSyncSettingTab.panelChangeLog"),
-            icon: "💬",
+            icon: "scroll-text",
             order: 100,
             level: undefined,
             content: "custom",
@@ -118,7 +110,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "quick-setup",
             name: () => $msg("obsidianLiveSyncSettingTab.titleQuickSetup"),
-            icon: "🧙‍♂️",
+            icon: "wand-2",
             order: 110,
             level: undefined,
             content: "custom",
@@ -127,7 +119,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "general",
             name: () => $msg("obsidianLiveSyncSettingTab.panelGeneralSettings"),
-            icon: "⚙️",
+            icon: "settings",
             order: 20,
             level: undefined,
             content: "custom",
@@ -136,7 +128,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "remote-configuration",
             name: () => $msg("obsidianLiveSyncSettingTab.panelRemoteConfiguration"),
-            icon: "🛰️",
+            icon: "server",
             order: 0,
             level: undefined,
             content: "custom",
@@ -145,7 +137,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "synchronisation",
             name: () => $msg("obsidianLiveSyncSettingTab.titleSyncSettings"),
-            icon: "🔄",
+            icon: "refresh-cw",
             order: 30,
             level: undefined,
             content: "custom",
@@ -153,8 +145,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "selector",
-            name: () => "Selector",
-            icon: "🚦",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelSelector"),
+            icon: "filter",
             order: 33,
             level: LEVEL_ADVANCED,
             content: "custom",
@@ -162,8 +154,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "customisation-sync",
-            name: () => "Customisation sync",
-            icon: "🔌",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelCustomisationSync"),
+            icon: "plug",
             order: 60,
             level: LEVEL_ADVANCED,
             content: "custom",
@@ -171,8 +163,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "hatch",
-            name: () => "Hatch",
-            icon: "🧰",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelHatch"),
+            icon: "life-buoy",
             order: 50,
             level: undefined,
             content: "custom",
@@ -180,8 +172,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "advanced",
-            name: () => "Advanced",
-            icon: "🔧",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelAdvanced"),
+            icon: "wrench",
             order: 46,
             level: LEVEL_ADVANCED,
             content: "native",
@@ -189,8 +181,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "power-users",
-            name: () => "Power users",
-            icon: "💪",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelPowerUsers"),
+            icon: "zap",
             order: 47,
             level: LEVEL_POWER_USER,
             content: "custom",
@@ -198,8 +190,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "patches",
-            name: () => "Patches",
-            icon: "🩹",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelPatches"),
+            icon: "puzzle",
             order: 51,
             level: LEVEL_EDGE_CASE,
             content: "custom",
@@ -207,8 +199,8 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         },
         {
             id: "maintenance",
-            name: () => "Maintenance",
-            icon: "🎛️",
+            name: () => $msg("obsidianLiveSyncSettingTab.panelMaintenance"),
+            icon: "sliders-horizontal",
             order: 70,
             level: undefined,
             content: "custom",
@@ -217,7 +209,7 @@ export function createSettingsPageCatalogue(): SettingsPageEntry[] {
         {
             id: "help",
             name: () => $msg("obsidianLiveSyncSettingTab.titleHelpAndTroubleshooting"),
-            icon: "❓",
+            icon: "help-circle",
             order: 90,
             level: undefined,
             content: "custom",

@@ -18,6 +18,8 @@ export interface EpubChapter {
 export interface EpubBook {
     title: string;
     language: string;
+    /** Heading of the table of contents in the interface language. */
+    contentsTitle: string;
     identifier: string;
     modified: Date;
     chapters: EpubChapter[];
@@ -26,7 +28,10 @@ export interface EpubBook {
 
 const encoder = new TextEncoder();
 export const escapeXml = (value: string) =>
-    value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!);
+    value.replace(
+        /[&<>"']/g,
+        (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]!
+    );
 
 let crcTable: Uint32Array | undefined;
 function crc32(data: Uint8Array) {
@@ -143,19 +148,42 @@ export function buildEpub(book: EpubBook): Uint8Array {
         if (chapter.group && chapter.group !== current?.title) {
             // A divider page gives the group entry a target of its own, so no two navigation points share one.
             const href = `part-${++parts}.xhtml`;
-            add(`OEBPS/${href}`, page(lang, chapter.group, `<section epub:type="part"><h1 class="part">${escapeXml(chapter.group)}</h1></section>`, link));
+            add(
+                `OEBPS/${href}`,
+                page(
+                    lang,
+                    chapter.group,
+                    `<section epub:type="part"><h1 class="part">${escapeXml(chapter.group)}</h1></section>`,
+                    link
+                )
+            );
             items.push(`<item id="part-${parts}" href="${href}" media-type="application/xhtml+xml"/>`);
             spine.push(`<itemref idref="part-${parts}"/>`);
             current = { title: chapter.group, href, children: [] };
             nav.push(current);
         } else if (!chapter.group) current = undefined;
         const href = `chapter-${index + 1}.xhtml`;
-        add(`OEBPS/${href}`, page(lang, chapter.title, `<section epub:type="chapter">\n<h1>${escapeXml(chapter.title)}</h1>\n${chapter.body}\n</section>`, link));
+        add(
+            `OEBPS/${href}`,
+            page(
+                lang,
+                chapter.title,
+                `<section epub:type="chapter">\n<h1>${escapeXml(chapter.title)}</h1>\n${chapter.body}\n</section>`,
+                link
+            )
+        );
         items.push(`<item id="chapter-${index + 1}" href="${href}" media-type="application/xhtml+xml"/>`);
         spine.push(`<itemref idref="chapter-${index + 1}"/>`);
         const entry = { title: chapter.title, href };
         if (current) current.children.push(entry);
-        else nav.push({ ...entry, children: book.chapters.length === 1 ? chapter.headings.map((h) => ({ title: h.title, href: `${href}#${h.id}` })) : [] });
+        else
+            nav.push({
+                ...entry,
+                children:
+                    book.chapters.length === 1
+                        ? chapter.headings.map((h) => ({ title: h.title, href: `${href}#${h.id}` }))
+                        : [],
+            });
     });
     for (const [index, image] of book.images.entries()) {
         files.push({ name: `OEBPS/${image.href}`, data: image.data });
@@ -164,14 +192,23 @@ export function buildEpub(book: EpubBook): Uint8Array {
 
     const list = (entries: { title: string; href: string; children?: { title: string; href: string }[] }[]): string =>
         `<ol>\n${entries.map((e) => `<li><a href="${escapeXml(e.href)}">${escapeXml(e.title)}</a>${e.children?.length ? list(e.children) : ""}</li>`).join("\n")}\n</ol>`;
-    add("OEBPS/nav.xhtml", page(lang, "目录", `<nav epub:type="toc" id="toc">\n<h1>目录</h1>\n${list(nav)}\n</nav>`));
+    add(
+        "OEBPS/nav.xhtml",
+        page(
+            lang,
+            book.contentsTitle,
+            `<nav epub:type="toc" id="toc">\n<h1>${escapeXml(book.contentsTitle)}</h1>\n${list(nav)}\n</nav>`
+        )
+    );
     let order = 0;
     const point = (entry: { title: string; href: string; children?: { title: string; href: string }[] }): string => {
         order++;
         return `<navPoint id="nav-${order}" playOrder="${order}"><navLabel><text>${escapeXml(entry.title)}</text></navLabel><content src="${escapeXml(entry.href)}"/>${(entry.children ?? []).map(point).join("")}</navPoint>`;
     };
     const navMap = nav.map(point).join("\n");
-    add("OEBPS/toc.ncx", `<?xml version="1.0" encoding="UTF-8"?>
+    add(
+        "OEBPS/toc.ncx",
+        `<?xml version="1.0" encoding="UTF-8"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="${lang}">
 <head>
 <meta name="dtb:uid" content="${escapeXml(book.identifier)}"/>
@@ -184,9 +221,12 @@ export function buildEpub(book: EpubBook): Uint8Array {
 ${navMap}
 </navMap>
 </ncx>
-`);
+`
+    );
     add("OEBPS/style.css", style);
-    add("OEBPS/content.opf", `<?xml version="1.0" encoding="UTF-8"?>
+    add(
+        "OEBPS/content.opf",
+        `<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" xml:lang="${lang}">
 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 <dc:identifier id="book-id">${escapeXml(book.identifier)}</dc:identifier>
@@ -204,13 +244,17 @@ ${items.join("\n")}
 ${spine.join("\n")}
 </spine>
 </package>
-`);
-    add("META-INF/container.xml", `<?xml version="1.0" encoding="UTF-8"?>
+`
+    );
+    add(
+        "META-INF/container.xml",
+        `<?xml version="1.0" encoding="UTF-8"?>
 <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
 <rootfiles>
 <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
 </rootfiles>
 </container>
-`);
+`
+    );
     return zip([{ name: "mimetype", data: encoder.encode("application/epub+zip") }, ...files], book.modified);
 }

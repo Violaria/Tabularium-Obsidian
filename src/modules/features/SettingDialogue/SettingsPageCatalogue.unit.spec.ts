@@ -26,22 +26,22 @@ import {
 } from "./SettingsPageCatalogue.ts";
 
 const EXPECTED_ROOT_GROUPS = [
-    ["quick-setup", "🧙‍♂️", "obsidianLiveSyncSettingTab.titleQuickSetup"],
-    ["synchronisation", "🔄", "obsidianLiveSyncSettingTab.titleSynchronisation"],
-    ["general-settings", "⚙️", "obsidianLiveSyncSettingTab.panelGeneralSettings"],
-    ["setup-other-devices", "📲", "obsidianLiveSyncSettingTab.titleSetupOtherDevices"],
-    ["maintenance-and-recovery", "🛠️", "obsidianLiveSyncSettingTab.titleMaintenanceAndRecovery"],
-    ["extra-features", "🧩", "obsidianLiveSyncSettingTab.titleExtraFeaturesGroup"],
-    ["advanced-settings", "🔧", "obsidianLiveSyncSettingTab.titleAdvancedSettings"],
-    ["help-and-information", "ℹ️", "obsidianLiveSyncSettingTab.titleHelpAndInformation"],
-] as const satisfies readonly (readonly [SettingsRootGroupId, string, string])[];
+    ["quick-setup", "obsidianLiveSyncSettingTab.titleQuickSetup"],
+    ["synchronisation", "obsidianLiveSyncSettingTab.titleSynchronisation"],
+    ["general-settings", "obsidianLiveSyncSettingTab.panelGeneralSettings"],
+    ["setup-other-devices", "obsidianLiveSyncSettingTab.titleSetupOtherDevices"],
+    ["maintenance-and-recovery", "obsidianLiveSyncSettingTab.titleMaintenanceAndRecovery"],
+    ["extra-features", "obsidianLiveSyncSettingTab.titleExtraFeaturesGroup"],
+    ["advanced-settings", "obsidianLiveSyncSettingTab.titleAdvancedSettings"],
+    ["help-and-information", "obsidianLiveSyncSettingTab.titleHelpAndInformation"],
+] as const satisfies readonly (readonly [SettingsRootGroupId, string])[];
 
 describe("settings page catalogue", () => {
-    it("keeps each declarative root-group icon separate from its late-translated name", () => {
+    it("resolves each declarative root-group name late", () => {
         expect(
             EXPECTED_ROOT_GROUPS.map(([id]) => {
-                const { icon, name } = getSettingsRootGroupEntry(id);
-                return [id, icon, name()];
+                const { name } = getSettingsRootGroupEntry(id);
+                return [id, name()];
             })
         ).toEqual(EXPECTED_ROOT_GROUPS);
     });

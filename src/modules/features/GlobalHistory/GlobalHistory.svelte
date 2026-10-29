@@ -111,7 +111,7 @@
                         }
                         const isDeleted = doc._deleted || (doc as any)?.deleted || false;
                         if (isDeleted) {
-                            diffDetail += " 🗑️";
+                            diffDetail += ` ${translateMessage("Deleted")}`;
                         }
                         if (rev == docA._rev) {
                             if (checkStorageDiff) {
@@ -125,9 +125,9 @@
                                     const d = readAsBlob(doc);
                                     const result = await isDocContentSame(data, d);
                                     if (result) {
-                                        diffDetail += " ⚖️";
+                                        diffDetail += ` ${translateMessage("Matches Vault")}`;
                                     } else {
-                                        diffDetail += " ⚠️";
+                                        diffDetail += ` ${translateMessage("Differs from Vault")}`;
                                     }
                                 }
                             }
@@ -142,9 +142,9 @@
                             const totalCount = loadedChunks.rows.length;
                             const errorCount = loadedChunks.rows.filter((e) => "error" in e).length;
                             if (errorCount == 0) {
-                                chunksStatus = `✅ ${totalCount}`;
+                                chunksStatus = `✓ ${totalCount}`;
                             } else {
-                                chunksStatus = `🔎 ${errorCount} ✅ ${totalCount}`;
+                                chunksStatus = `✗ ${errorCount} / ${totalCount}`;
                             }
                         }
 
@@ -200,14 +200,14 @@
 </script>
 
 <div class="globalhistory">
-    <h1>Vault history</h1>
+    <h1>{translateMessage("Vault history")}</h1>
     <div class="control">
         <div class="row">
-            <label for="">From:</label><input type="date" bind:value={dispDateFrom} disabled={loading} />
+            <label for="">{translateMessage("From:")}</label><input type="date" bind:value={dispDateFrom} disabled={loading} />
         </div>
-        <div class="row"><label for="">To:</label><input type="date" bind:value={dispDateTo} disabled={loading} /></div>
+        <div class="row"><label for="">{translateMessage("To:")}</label><input type="date" bind:value={dispDateTo} disabled={loading} /></div>
         <div class="row">
-            <label for="">Info:</label>
+            <label for="">{translateMessage("Info:")}</label>
             <label
                 ><input type="checkbox" bind:checked={showDiffInfo} disabled={loading} /><span
                     >{translateMessage("Diff")}</span

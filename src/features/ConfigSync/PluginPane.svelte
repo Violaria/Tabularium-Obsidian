@@ -27,6 +27,7 @@
     import { LOG_LEVEL_NOTICE, Logger } from "octagonal-wheels/common/logger";
     import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore.ts";
     import { $msg as translateMessage } from "@/common/translation";
+    import { lucideIcon } from "@/common/obsidianIcon";
     import { getAutomaticSyncTargetFiles } from "./getAutomaticSyncTargetFiles.ts";
     import {
         REPLICATION_PROGRESS_PRESENTATIONS,
@@ -155,7 +156,8 @@
         const prevMode = automaticList.get(key) ?? MODE_SELECTIVE;
         for (const mode of [MODE_SELECTIVE, MODE_AUTOMATIC, MODE_PAUSED, MODE_SHINY]) {
             menu.addItem((item) => {
-                item.setTitle(`${getIcon(mode as SYNC_MODE)}:${TITLES[mode]}`)
+                item.setTitle(TITLES[mode])
+                    .setIcon(getIcon(mode as SYNC_MODE))
                     .onClick((e) => {
                         if (mode === MODE_AUTOMATIC) {
                             if (!checkAutomaticSyncAvailable()) return;
@@ -212,16 +214,12 @@
         isMaintenanceMode,
     };
 
-    const ICON_EMOJI_PAUSED = `⛔`;
-    const ICON_EMOJI_AUTOMATIC = `✨`;
-    const ICON_EMOJI_SELECTIVE = `🔀`;
-    const ICON_EMOJI_FLAGGED = `🚩`;
-
+    // Lucide icon names for each sync mode.
     const ICONS: { [key: number]: string } = {
-        [MODE_SELECTIVE]: ICON_EMOJI_SELECTIVE,
-        [MODE_PAUSED]: ICON_EMOJI_PAUSED,
-        [MODE_AUTOMATIC]: ICON_EMOJI_AUTOMATIC,
-        [MODE_SHINY]: ICON_EMOJI_FLAGGED,
+        [MODE_SELECTIVE]: "shuffle",
+        [MODE_PAUSED]: "ban",
+        [MODE_AUTOMATIC]: "sparkles",
+        [MODE_SHINY]: "flag",
     };
     const TITLES: { [key: number]: string } = {
         [MODE_SELECTIVE]: translateMessage("Selective"),
@@ -265,12 +263,8 @@
         }
         core.services.setting.saveSettingData();
     }
-    function getIcon(mode: SYNC_MODE) {
-        if (mode in ICONS) {
-            return ICONS[mode];
-        } else {
-            ("");
-        }
+    function getIcon(mode: SYNC_MODE): string {
+        return ICONS[mode] ?? "";
     }
     let automaticList = new Map<string, SYNC_MODE>();
     let automaticListDisp = new Map<string, SYNC_MODE>();
@@ -362,7 +356,7 @@
     <div class="buttons">
         <button on:click={() => selectAllNewest(true)}>{translateMessage("Select All Shiny")}</button>
         <button on:click={() => selectAllNewest(false)}
-            >{ICON_EMOJI_FLAGGED} {translateMessage("Select Flagged Shiny")}</button
+            >{translateMessage("Select Flagged Shiny")}</button
         >
         <button on:click={() => resetSelectNewest()}>{translateMessage("Deselect all")}</button>
         <button on:click={() => applyAll()} class="mod-cta">{translateMessage("Apply All Selected")}</button>
@@ -385,9 +379,13 @@
                     {@const mode = automaticListDisp.get(bindKey) ?? MODE_SELECTIVE}
                     <div class="labelrow {hideEven ? 'hideeven' : ''}">
                         <div class="title">
-                            <button class="status" on:click={(evt) => askMode(evt, `${key}/${name}`, bindKey)}>
-                                {getIcon(mode)}
-                            </button>
+                            <button
+                                class="status"
+                                title={TITLES[mode]}
+                                aria-label={TITLES[mode]}
+                                use:lucideIcon={getIcon(mode)}
+                                on:click={(evt) => askMode(evt, `${key}/${name}`, bindKey)}
+                            ></button>
                             <span class="name">{(key == "THEME" && nameMap.get(`themes/${name}`)) || name}</span>
                         </div>
                         <div class="body">
@@ -422,9 +420,10 @@
                         <button
                             class="status"
                             on:click={(evt) => askMode(evt, `${PREFIX_PLUGIN_ALL}/${name}`, bindKeyAll)}
-                        >
-                            {getIcon(modeAll)}
-                        </button>
+                            title={TITLES[modeAll]}
+                            aria-label={TITLES[modeAll]}
+                            use:lucideIcon={getIcon(modeAll)}
+                        ></button>
                         <span class="name">{nameMap.get(`plugins/${name}`) || name}</span>
                     </div>
                     <div class="body">
@@ -439,9 +438,10 @@
                             <button
                                 class="status"
                                 on:click={(evt) => askMode(evt, `${PREFIX_PLUGIN_MAIN}/${name}/MAIN`, bindKeyMain)}
-                            >
-                                {getIcon(modeMain)}
-                            </button>
+                                title={TITLES[modeMain]}
+                                aria-label={TITLES[modeMain]}
+                                use:lucideIcon={getIcon(modeMain)}
+                            ></button>
                             <span class="name">MAIN</span>
                         </div>
                         <div class="body">
@@ -462,9 +462,10 @@
                             <button
                                 class="status"
                                 on:click={(evt) => askMode(evt, `${PREFIX_PLUGIN_DATA}/${name}`, bindKeyData)}
-                            >
-                                {getIcon(modeData)}
-                            </button>
+                                title={TITLES[modeData]}
+                                aria-label={TITLES[modeData]}
+                                use:lucideIcon={getIcon(modeData)}
+                            ></button>
                             <span class="name">DATA</span>
                         </div>
                         <div class="body">
@@ -486,9 +487,10 @@
                                 <button
                                     class="status"
                                     on:click={(evt) => askMode(evt, `${PREFIX_PLUGIN_ETC}/${name}`, bindKeyETC)}
-                                >
-                                    {getIcon(modeEtc)}
-                                </button>
+                                    title={TITLES[modeEtc]}
+                                    aria-label={TITLES[modeEtc]}
+                                    use:lucideIcon={getIcon(modeEtc)}
+                                ></button>
                                 <span class="name">{translateMessage("Other files")}</span>
                             </div>
                             <div class="body">
@@ -527,12 +529,13 @@
                 </select>
                 <button
                     class="status"
+                    title={translateMessage("Delete")}
+                    aria-label={translateMessage("Delete")}
+                    use:lucideIcon={"trash-2"}
                     on:click={(evt) => {
                         deleteAllItems(deleteTerm);
                     }}
-                >
-                    🗑️
-                </button>
+                ></button>
             </div>
         </div>
     </div>

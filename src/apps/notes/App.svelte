@@ -7,9 +7,17 @@
     import { sendToKindle, type KindleItem } from "./kindle";
     import { resolveLinkpath } from "@/features/tabularium/linkpath";
     import Tree, { type TreeNode } from "./Tree.svelte";
+    import { LANGUAGES, catalogues, formatDate, language, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
 
     type Phase = "loading" | "login" | "vaults" | "unlock" | "opening" | "open";
     let phase = $state<Phase>("loading");
+    let lang = $state<Language>(language());
+    document.title = t("notes.title");
+    function changeLanguage(next: Language) {
+        setLanguage(next);
+        lang = next;
+        document.title = t("notes.title");
+    }
     let user = $state<User>();
     let vaults = $state<Vault[]>([]);
     let vault = $state<Vault>();
@@ -39,8 +47,8 @@
 
     function browserName() {
         const ua = navigator.userAgent;
-        const name = /Edg\//.test(ua) ? "Edge" : /Firefox\//.test(ua) ? "Firefox" : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : "浏览器";
-        return `网页 · ${name} · ${new Date().toLocaleDateString("zh-CN")}`;
+        const name = /Edg\//.test(ua) ? "Edge" : /Firefox\//.test(ua) ? "Firefox" : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : t("notes.browser");
+        return t("notes.deviceName", { browser: name, date: new Date().toISOString().slice(0, 10) });
     }
 
     async function start() {
@@ -63,7 +71,7 @@
             password = "";
             await showVaults();
         } catch (e) {
-            error = e instanceof ApiError && e.status === 401 ? "用户名或密码错误。" : message(e);
+            error = e instanceof ApiError && e.status === 401 ? t("notes.wrongCredentials") : message(e);
         }
     }
 
@@ -88,7 +96,7 @@
         if (!user || !vault) return;
         error = "";
         phase = "opening";
-        status = "正在连接…";
+        status = t("notes.connecting");
         try {
             await open(user, vault, passphrase, true);
         } catch (e) {
@@ -107,9 +115,9 @@
         }
         runtime = new NotesRuntime(
             { userId: owner.id, vaultId: target.id, username: record.username, password: record.password, passphrase: secret },
-            { changed: scheduleRefresh, restartRequested: () => void lock("同步需要重新启动，请重新解锁。") }
+            { changed: scheduleRefresh, restartRequested: () => void lock(t("notes.restart")) }
         );
-        status = record.fetched ? "正在同步…" : "首次打开，正在获取全部笔记…";
+        status = record.fetched ? t("notes.syncing") : t("notes.firstFetch");
         try {
             await runtime.start(record.fetched);
         } catch (e) {
@@ -121,7 +129,7 @@
                 await deleteRecord(key);
                 return open(owner, target, secret, false);
             }
-            throw e instanceof WrongPassphraseError ? e : new Error(`打开笔记库失败：${message(e)}`);
+            throw e instanceof WrongPassphraseError ? e : new Error(t("notes.openFailed", { error: message(e) }));
         }
         passphrase = "";
         // Records written before renewal existed have no expiry and are renewed too.
@@ -132,7 +140,7 @@
             await writeRecord({ ...record });
         }
         files = await runtime.files();
-        status = "已同步";
+        status = t("notes.synced");
         phase = "open";
     }
 
@@ -143,7 +151,7 @@
     async function refresh() {
         if (!runtime) return;
         files = await runtime.files();
-        status = `已同步 ${new Date().toLocaleTimeString("zh-CN")}`;
+        status = t("notes.syncedAt", { time: formatDate(Date.now()) });
         if (current && files.some((f) => f.path === current)) await show(current, false);
     }
 
@@ -197,7 +205,7 @@
 
     async function clearLocal() {
         if (!user || !vault) return;
-        if (!confirm(`删除本浏览器中「${vault.name}」的全部本地数据，并撤销本浏览器的设备？`)) return;
+        if (!confirm(t("notes.confirmClear", { vault: vault.name }))) return;
         await lock();
         const key = recordKey(user.id, vault.id);
         const saved = await readRecord(key);
@@ -206,7 +214,7 @@
         });
         await clearLocalVault(user.id, vault.id);
         await deleteRecord(key);
-        notice = "本地数据已清除，设备已撤销。";
+        notice = t("notes.cleared");
         phase = "vaults";
     }
 
@@ -229,12 +237,12 @@
         error = "";
         const authorization = basicAuth(record.username, record.password);
         try {
-            const sent = await sendToKindle(runtime, items, vault.name, authorization, (title) => (notice = `正在推送《${title}》…`));
-            notice = `已推送至 Kindle：${sent.map((t) => `《${t}》`).join("、")}`;
+            const sent = await sendToKindle(runtime, items, vault.name, authorization, (title) => (notice = t("notes.sending", { title: titles([title]) })));
+            notice = t("notes.sent", { titles: titles(sent) });
             selecting = false;
             selected = [];
         } catch (e) {
-            error = `推送失败：${message(e)}`;
+            error = t("notes.sendFailed", { error: message(e) });
         } finally {
             sending = false;
         }
@@ -269,43 +277,53 @@
     onDestroy(() => void lock());
 </script>
 
+{#snippet languages()}
+    <select class="language-select" aria-label={t("language.label")} value={lang} onchange={(event) => changeLanguage(event.currentTarget.value as Language)}>
+        {#each LANGUAGES as code (code)}<option value={code}>{catalogues[code][`language.${code}`]}</option>{/each}
+    </select>
+{/snippet}
+
+{#key lang}
 {#if phase === "loading"}
-    <main class="center"><p>正在加载…</p></main>
+    <main class="center"><p>{t("common.loading")}</p></main>
 {:else if phase === "login"}
     <main class="center">
         <form class="card" onsubmit={submitLogin}>
-            <h1>云笔记</h1>
-            <label>用户名 <input name="username" autocomplete="username" bind:value={username} required /></label>
-            <label>密码 <input name="password" type="password" autocomplete="current-password" bind:value={password} required /></label>
+            <h1>{t("notes.heading")}</h1>
+            <label>{t("common.username")} <input name="username" autocomplete="username" bind:value={username} required /></label>
+            <label>{t("common.password")} <input name="password" type="password" autocomplete="current-password" bind:value={password} required /></label>
             {#if error}<p class="error">{error}</p>{/if}
-            <button type="submit">登录</button>
-            <p class="hint">与管理控制台使用同一个账户。</p>
+            <button type="submit">{t("common.signIn")}</button>
+            <p class="hint">{t("notes.sameAccount")}</p>
+            {@render languages()}
         </form>
     </main>
 {:else if phase === "vaults"}
     <main class="center">
         <section class="card">
-            <h1>选择笔记库</h1>
+            <h1>{t("notes.chooseVault")}</h1>
             {#if notice}<p class="notice">{notice}</p>{/if}
             {#if error}<p class="error">{error}</p>{/if}
             {#each vaults as item (item.id)}
                 <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
             {:else}
-                <p>还没有笔记库。在 Obsidian 插件或管理控制台中创建。</p>
+                <p>{t("notes.noVaults")}</p>
             {/each}
-            <p class="links"><a href="/admin/">管理控制台</a> · <button class="link" onclick={signOut}>退出登录</button></p>
+            <p class="links"><a href="/admin/">{t("notes.console")}</a> · <button class="link" onclick={signOut}>{t("common.signOut")}</button></p>
+            {@render languages()}
         </section>
     </main>
 {:else if phase === "unlock" || phase === "opening"}
     <main class="center">
         <form class="card" onsubmit={unlock}>
-            <h1>解锁「{vault?.name}」</h1>
-            <label>口令 <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
+            <h1>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</h1>
+            <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
             {#if error}<p class="error">{error}</p>{/if}
             {#if phase === "opening"}<p class="notice">{status}</p>{/if}
-            <button type="submit" disabled={phase === "opening"}>解锁</button>
-            <p class="hint">口令只在本页面内存中使用，不会保存，也不会发送给服务器。笔记会在本浏览器中保存一份明文副本，在他人或公共电脑上用完后请「清除本地数据」。</p>
-            <p class="links"><button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>换一个笔记库</button></p>
+            <button type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
+            <p class="hint">{t("notes.unlockHint")}</p>
+            <p class="links"><button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button></p>
+            {@render languages()}
         </form>
     </main>
 {:else}
@@ -313,12 +331,12 @@
         <aside>
             <header>
                 <strong>{vault?.name}</strong>
-                <input class="filter" placeholder="按文件名查找" bind:value={filter} />
+                <input class="filter" placeholder={t("notes.filter")} bind:value={filter} />
             </header>
             {#if selecting}
                 <div class="selection">
-                    <button disabled={!selected.length || sending} onclick={() => kindle(selected)}>推送 {selected.length} 项至 Kindle</button>
-                    <button class="link" onclick={() => ((selecting = false), (selected = []))}>取消</button>
+                    <button disabled={!selected.length || sending} onclick={() => kindle(selected)}>{t("notes.sendSelected", { count: selected.length })}</button>
+                    <button class="link" onclick={() => ((selecting = false), (selected = []))}>{t("notes.cancel")}</button>
                 </div>
             {/if}
             <nav>
@@ -328,10 +346,11 @@
         <section class="main">
             <div class="toolbar">
                 <span class="status">{status}</span>
-                <span class="plain-note" title="本浏览器中保存了笔记的明文副本">本地明文副本</span>
-                <button class="link" onclick={() => lock()}>锁定</button>
-                <button class="link" onclick={clearLocal}>清除本地数据</button>
-                <button class="link" onclick={signOut}>退出登录</button>
+                <span class="plain-note" title={t("notes.plainCopyTitle")}>{t("notes.plainCopy")}</span>
+                {@render languages()}
+                <button class="link" onclick={() => lock()}>{t("notes.lock")}</button>
+                <button class="link" onclick={clearLocal}>{t("notes.clear")}</button>
+                <button class="link" onclick={signOut}>{t("common.signOut")}</button>
             </div>
             {#if notice}<p class="notice">{notice}</p>{/if}
             {#if error}<p class="error">{error}</p>{/if}
@@ -339,11 +358,12 @@
             <article bind:this={previewEl} onclick={previewClick}>
                 {#if current}
                     <h1 class="title">{current.slice(current.lastIndexOf("/") + 1).replace(/\.md$/i, "")}</h1>
-                    {#if html}{@html html}{:else}<p class="hint">此文件不是笔记，无法预览。</p>{/if}
+                    {#if html}{@html html}{:else}<p class="hint">{t("notes.notNote")}</p>{/if}
                 {:else}
-                    <p class="hint">在左侧选择一篇笔记。「锁定」停止同步并清空页面，但不删除本地副本；「清除本地数据」才会删除。</p>
+                    <p class="hint">{t("notes.pickNote")}</p>
                 {/if}
             </article>
         </section>
     </div>
 {/if}
+{/key}

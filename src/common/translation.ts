@@ -8,32 +8,25 @@ import {
 } from "@vrtmrz/livesync-commonlib/context";
 import { LOG_KIND_WARNING, notice } from "octagonal-wheels/common/logger";
 import type { TaggedType } from "octagonal-wheels/common/types";
-import type { AllMessageKeys, I18N_LANGS, LiveSyncCatalogueMessageKey } from "./rosetta";
+import { SUPPORTED_I18N_LANGS, type AllMessageKeys, type I18N_LANGS, type LiveSyncCatalogueMessageKey } from "./rosetta";
 import { allMessages } from "./messages/combinedMessages.prod.ts";
 import {
     liveSyncProvisionalEnglishMessages,
     type LiveSyncProvisionalMessageKey,
 } from "./messages/LiveSyncProvisionalMessages.ts";
 
-const obsidianLangMap: Record<string, I18N_LANGS> = {
-    de: "de",
-    es: "es",
-    ja: "ja",
-    ko: "ko",
-    ru: "ru",
-    zh: "zh",
-    "zh-cn": "zh",
-    "zh-hans": "zh",
-    "zh-tw": "zh-tw",
-    "zh-hk": "zh-tw",
-    "zh-mo": "zh-tw",
-    "zh-hant": "zh-tw",
-};
+/** Obsidian's interface languages mapped to ours; Latin is not offered by Obsidian and is chosen in the settings. */
+export function languageForObsidian(obsidianLanguage: string): I18N_LANGS {
+    return obsidianLanguage.toLowerCase().startsWith("zh") ? "zh" : "def";
+}
+
+export function isSupportedLanguage(lang: string): lang is I18N_LANGS {
+    return lang === "" || SUPPORTED_I18N_LANGS.includes(lang);
+}
 
 function resolveLanguage(lang: I18N_LANGS): I18N_LANGS {
     if (lang !== "") return lang;
-    const obsidianLanguage = getLanguage().toLowerCase();
-    return obsidianLangMap[obsidianLanguage] ?? "def";
+    return languageForObsidian(getLanguage());
 }
 
 export let currentLang: I18N_LANGS = resolveLanguage("");
@@ -57,8 +50,9 @@ export function __onMissingTranslation(callback: (key: string) => void) {
     __onMissingTranslations = callback;
 }
 
-export function setLang(lang: I18N_LANGS) {
-    const resolvedLang = resolveLanguage(lang);
+/** Accepts any saved setting value: a language that is not shipped falls back to automatic selection. */
+export function setLang(lang: string) {
+    const resolvedLang = resolveLanguage(isSupportedLanguage(lang) ? lang : "");
     if (resolvedLang === currentLang) return;
     currentLang = resolvedLang;
     msgCache.clear();
@@ -79,7 +73,8 @@ function _getMessage(key: string, lang: I18N_LANGS) {
             __onMissingTranslations(key);
             missingTranslations.push(key);
         }
-        msg = msgs?.def;
+        // Commonlib and provisional texts keep their English outside the catalogue.
+        msg = msgs?.def ?? (isCommonlibMessageKey(key) ? englishMessageTranslator(key) : provisionalEnglish);
     }
     return msg ?? key;
 }

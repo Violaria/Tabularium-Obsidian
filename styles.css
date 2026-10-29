@@ -300,11 +300,11 @@ body {
 }
 
 .sls-item-dirty::before {
-    content: "✏";
+    content: "•";
 }
 
 .sls-item-dirty-help::after {
-    content: " ❓";
+    content: " ?";
 }
 
 .sls-setting .setting-item-control input.sls-item-invalid-value,

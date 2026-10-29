@@ -141,7 +141,7 @@ function collectPages(items: readonly SettingDefinitionItem[]): SettingDefinitio
 }
 
 function findPage(tab: ObsidianLiveSyncSettingTab, name: string): SettingDefinitionPage {
-    const page = collectPages(tab.getSettingDefinitions()).find((candidate) => candidate.name.endsWith(` ${name}`));
+    const page = collectPages(tab.getSettingDefinitions()).find((candidate) => candidate.name === name);
     if (!page) throw new Error(`${name} custom page is unavailable`);
     return page;
 }
@@ -212,7 +212,7 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         tab.editingSettings.isConfigured = false;
         const definitions = tab.getSettingDefinitions().filter(isGroup);
 
-        expect(definitions[0]?.heading).toBe("🧙‍♂️ Quick Setup");
+        expect(definitions[0]?.heading).toBe("Quick Setup");
     });
 
     it("keeps Quick Setup first while LiveSync is not configured and separates synchronisation pages from it", () => {
@@ -221,9 +221,9 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const definitions = tab.getSettingDefinitions().filter(isGroup);
 
         expect(definitions.slice(0, 3).map(itemLabel)).toEqual([
-            "🧙‍♂️ Quick Setup",
-            "🔄 Synchronisation",
-            "⚙️ General Settings",
+            "Quick Setup",
+            "Synchronisation",
+            "General Settings",
         ]);
     });
 
@@ -233,10 +233,10 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const definitions = tab.getSettingDefinitions().filter(isGroup);
 
         expect(definitions.slice(0, 4).map(itemLabel)).toEqual([
-            "🔄 Synchronisation",
-            "⚙️ General Settings",
-            "📲 Set up other devices",
-            "🧙‍♂️ Quick Setup",
+            "Synchronisation",
+            "General Settings",
+            "Set up other devices",
+            "Quick Setup",
         ]);
     });
 
@@ -254,18 +254,18 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const tab = createSettingsTab();
         const definitions = tab.getSettingDefinitions();
         const synchronisation = definitions.find(
-            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "🔄 Synchronisation"
+            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "Synchronisation"
         );
 
         expect(synchronisation?.items?.filter(isPage).map(({ name }) => name)).toEqual([
-            "🛰️ Remote Configuration",
-            "🔄 Sync Settings",
+            "Remote Configuration",
+            "Sync Settings",
         ]);
         expect(
             definitions
                 .filter(isPage)
                 .map(({ name }) => name)
-                .filter((name) => name.endsWith(" Remote Configuration") || name.endsWith(" Sync Settings"))
+                .filter((name) => name === "Remote Configuration" || name === "Sync Settings")
         ).toEqual([]);
     });
 
@@ -275,41 +275,41 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const groups = definitions.filter(isGroup);
 
         expect(groups.map(({ heading }) => heading)).toEqual([
-            "🧙‍♂️ Quick Setup",
-            "🔄 Synchronisation",
-            "⚙️ General Settings",
-            "📲 Set up other devices",
-            "🛠️ Maintenance and recovery",
-            "🧩 Extra features",
-            "🔧 Advanced settings",
-            "ℹ️ Help and information",
+            "Quick Setup",
+            "Synchronisation",
+            "General Settings",
+            "Set up other devices",
+            "Maintenance and recovery",
+            "Extra features",
+            "Advanced settings",
+            "Help and information",
         ]);
         expect(
             groups
-                .find(({ heading }) => heading === "🛠️ Maintenance and recovery")
+                .find(({ heading }) => heading === "Maintenance and recovery")
                 ?.items?.filter(isPage)
                 .map(({ name }) => name)
-        ).toEqual(["🎛️ Maintenance", "🧰 Hatch"]);
+        ).toEqual(["Maintenance", "Hatch"]);
         expect(
             groups
-                .find(({ heading }) => heading === "🧩 Extra features")
+                .find(({ heading }) => heading === "Extra features")
                 ?.items?.filter(isPage)
                 .map(({ name }) => name)
-        ).toEqual(["🚦 Selector", "🔌 Customisation sync"]);
+        ).toEqual(["Selector", "Customisation sync"]);
         expect(
             groups
-                .find(({ heading }) => heading === "🔧 Advanced settings")
+                .find(({ heading }) => heading === "Advanced settings")
                 ?.items?.filter(isPage)
                 .map(({ name }) => name)
-        ).toEqual(["🔧 Advanced", "💪 Power users", "🩹 Patches"]);
+        ).toEqual(["Advanced", "Power users", "Patches"]);
         expect(
             groups
-                .find(({ heading }) => heading === "ℹ️ Help and information")
+                .find(({ heading }) => heading === "Help and information")
                 ?.items?.filter(isPage)
                 .map(({ name }) => name)
-        ).toEqual(["❓ Help and troubleshooting", "💬 Change Log"]);
+        ).toEqual(["Help and troubleshooting", "Change Log"]);
         expect(
-            groups.find(({ heading }) => heading === "📲 Set up other devices")?.items?.map(({ name }) => name)
+            groups.find(({ heading }) => heading === "Set up other devices")?.items?.map(({ name }) => name)
         ).toEqual(["Copy the current settings to a Setup URI", "Show QR code"]);
     });
 
@@ -317,16 +317,16 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const tab = createSettingsTab();
         const definitions = tab.getSettingDefinitions();
         const general = definitions.find(
-            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "⚙️ General Settings"
+            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "General Settings"
         );
         const generalPages = general?.items?.filter(isPage);
-        const appearance = generalPages?.find(({ name }) => name === "🎨 Appearance");
-        const logging = generalPages?.find(({ name }) => name === "📝 Logging");
+        const appearance = generalPages?.find(({ name }) => name === "Appearance");
+        const logging = generalPages?.find(({ name }) => name === "Logging");
         const extraMenus = general?.items?.find(
-            (item): item is SettingDefinitionPage => isPage(item) && item.name === "🎚️ Extra menus"
+            (item): item is SettingDefinitionPage => isPage(item) && item.name === "Extra menus"
         );
 
-        expect(generalPages?.map(({ name }) => name)).toEqual(["🎨 Appearance", "📝 Logging", "🎚️ Extra menus"]);
+        expect(generalPages?.map(({ name }) => name)).toEqual(["Appearance", "Logging", "Extra menus"]);
         expect(
             appearance?.items?.flatMap((item) => ("control" in item && item.control ? [item.control.key] : []))
         ).toEqual([
@@ -354,12 +354,12 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
             expect.arrayContaining(
                 createSettingsPageCatalogue()
                     .filter(({ id }) => id !== "general" && id !== "quick-setup")
-                    .map((entry) => `${entry.icon} ${entry.name()}`)
+                    .map((entry) => entry.name())
             )
         );
-        expect(pages.some(({ name }) => name.endsWith(" General Settings"))).toBe(false);
-        expect(pages.some(({ name }) => name.endsWith(" Setup"))).toBe(false);
-        const advanced = pages.find(({ name }) => name.endsWith(" Advanced"));
+        expect(pages.some(({ name }) => name === "General Settings")).toBe(false);
+        expect(pages.some(({ name }) => name === "Setup")).toBe(false);
+        const advanced = pages.find(({ name }) => name === "Advanced");
         expect(advanced?.items?.filter((item) => "type" in item && item.type === "group")).toHaveLength(4);
         expect(advanced?.items?.filter((item) => "action" in item && typeof item.action === "function")).toHaveLength(
             1
@@ -372,7 +372,7 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         const tab = createSettingsTab();
         const definitions = tab.getSettingDefinitions();
         const quickSetup = definitions.find(
-            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "🧙‍♂️ Quick Setup"
+            (item): item is SettingDefinitionGroup => isGroup(item) && item.heading === "Quick Setup"
         );
 
         expect(quickSetup?.items?.map(({ name }) => name)).toEqual([
@@ -380,7 +380,7 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
             "Rerun Onboarding Wizard",
             "Enable LiveSync",
         ]);
-        expect(collectPages(definitions).some(({ name }) => name.endsWith(" Setup"))).toBe(false);
+        expect(collectPages(definitions).some(({ name }) => name === "Setup")).toBe(false);
     });
 
     it("constructs custom page state only when opened and disposes each rendered scope", () => {

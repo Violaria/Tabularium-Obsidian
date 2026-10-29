@@ -13,6 +13,7 @@ import { decrypt as decryptHKDF } from "octagonal-wheels/encryption/hkdf";
 import { createLiveSyncBrowserServiceHub } from "@/apps/browser/createLiveSyncBrowserServiceHub";
 import { initialiseServiceModulesFSAPI, type FSAPIServiceModules } from "@/apps/webapp/serviceModules/FSAPIServiceModules";
 import { basicAuth } from "./api";
+import { t } from "../../../../server/ui/i18n";
 
 export interface NotesFile {
     path: string;
@@ -29,7 +30,7 @@ export interface NotesConnection {
 
 export class WrongPassphraseError extends Error {
     constructor() {
-        super("口令错误。");
+        super(t("notes.wrongPassphrase"));
     }
 }
 export class CredentialsRejectedError extends Error {}
@@ -130,7 +131,7 @@ export class NotesRuntime {
             (core) => useRemoteConfiguration(core)
         );
         const { services, serviceModules } = this.core;
-        if (!(await services.control.onLoad())) throw new Error("同步核心初始化失败。");
+        if (!(await services.control.onLoad())) throw new Error(t("notes.coreFailed"));
         await services.control.onReady();
         await this.verifyPassphrase();
         const preferred = await this.withReplicator((replicator, settings) => replicator.getRemotePreferredTweakValues(settings));
@@ -147,7 +148,7 @@ export class NotesRuntime {
     private async withReplicator<T>(task: (replicator: LiveSyncAbstractReplicator, settings: ObsidianLiveSyncSettings) => Promise<T>) {
         const { services } = this.core;
         const result = await services.replicator.runWithActiveReplicatorContext((context) => task(context.replicator as LiveSyncAbstractReplicator, services.setting.currentSettings()));
-        if (result === undefined) throw new Error("同步核心没有可用的连接。");
+        if (result === undefined) throw new Error(t("notes.noConnection"));
         return result;
     }
 
@@ -157,8 +158,8 @@ export class NotesRuntime {
         const response = await fetch(`/sync/${this.connection.vaultId}/_all_docs?include_docs=true&limit=1&${range}`, {
             headers: { authorization: this.auth },
         });
-        if (response.status === 401 || response.status === 403) throw new CredentialsRejectedError("本浏览器的设备凭据已失效。");
-        if (!response.ok) throw new Error(`读取笔记库失败（HTTP ${response.status}）。`);
+        if (response.status === 401 || response.status === 403) throw new CredentialsRejectedError(t("notes.credentialsRejected"));
+        if (!response.ok) throw new Error(t("notes.readFailed", { status: response.status }));
         const { rows } = (await response.json()) as { rows: { doc: { path: string } }[] };
         const path = rows[0]?.doc.path;
         if (!path?.startsWith(ENCRYPTED_META_PREFIX)) return;
@@ -182,7 +183,7 @@ export class NotesRuntime {
 
     private async body(path: string) {
         const entry = await this.core.serviceModules.databaseFileAccess.fetch(path as never, undefined, true);
-        if (!entry || entry.deleted) throw new Error(`找不到文件：${path}`);
+        if (!entry || entry.deleted) throw new Error(t("notes.fileMissing", { path }));
         return entry.body;
     }
     async read(path: string) {

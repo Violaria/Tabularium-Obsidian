@@ -50,6 +50,7 @@ import {
 } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
 import { isP2PMainRemote } from "@/common/remoteConfiguration.ts";
 import type { P2PConnectionProbeAdmission } from "@vrtmrz/livesync-commonlib/p2p";
+import { $msg } from "@/common/translation";
 
 function copySettingsForRemoteProfileUpdate(settings: ObsidianLiveSyncSettings): ObsidianLiveSyncSettings {
     return {
@@ -177,7 +178,7 @@ export class SetupManager extends AbstractModule {
         } else if (isUserNewOrExisting === "existing-user") {
             await this.onOnboard(UserMode.ExistingUser);
         } else if (isUserNewOrExisting === "cancelled") {
-            this._log("Onboarding cancelled by user.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.onboardingCancelled"), LOG_LEVEL_NOTICE);
             return false;
         }
         return false;
@@ -198,7 +199,7 @@ export class SetupManager extends AbstractModule {
             } else if (method === "configure-manually") {
                 await this.onConfigureManually(originalSetting, userMode);
             } else if (method === "cancelled") {
-                this._log("Onboarding cancelled by user.", LOG_LEVEL_NOTICE);
+                this._log($msg("Setup.Manager.onboardingCancelled"), LOG_LEVEL_NOTICE);
                 return false;
             }
         } else if (userMode === UserMode.ExistingUser) {
@@ -210,7 +211,7 @@ export class SetupManager extends AbstractModule {
             } else if (method === "scan-qr-code") {
                 await this.onPromptQRCodeInstruction();
             } else if (method === "cancelled") {
-                this._log("Onboarding cancelled by user.", LOG_LEVEL_NOTICE);
+                this._log($msg("Setup.Manager.onboardingCancelled"), LOG_LEVEL_NOTICE);
                 return false;
             }
         }
@@ -229,7 +230,7 @@ export class SetupManager extends AbstractModule {
             setupURI
         );
         if (newSetting === "cancelled") {
-            this._log("Setup URI dialog cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup URI dialog cancelled."), LOG_LEVEL_NOTICE);
             return false;
         }
         this._log("Setup URI dialog closed.", LOG_LEVEL_VERBOSE);
@@ -261,7 +262,7 @@ export class SetupManager extends AbstractModule {
                       : "settings",
         });
         if (couchConf === "cancelled") {
-            this._log("Manual configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.manualConfigurationCancelled"), LOG_LEVEL_NOTICE);
             return await this.onOnboard(userMode);
         }
         const newSetting = {
@@ -292,7 +293,7 @@ export class SetupManager extends AbstractModule {
             BucketSyncSetting
         >(SetupRemoteBucket, currentSetting);
         if (bucketConf === "cancelled") {
-            this._log("Manual configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.manualConfigurationCancelled"), LOG_LEVEL_NOTICE);
             return await this.onOnboard(userMode);
         }
         const newSetting = {
@@ -320,7 +321,7 @@ export class SetupManager extends AbstractModule {
     ): Promise<boolean> {
         const p2pConf = await this.openP2PSetup(currentSetting);
         if (p2pConf === "cancelled") {
-            this._log("Manual configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.manualConfigurationCancelled"), LOG_LEVEL_NOTICE);
             return await this.onOnboard(userMode);
         }
         const newSetting = {
@@ -345,12 +346,9 @@ export class SetupManager extends AbstractModule {
         const e2eeConf = await this.dialogManager.openWithExplicitCancel<
             SetupRemoteE2EEResultType,
             SetupRemoteE2EEInitialData
-        >(
-            SetupRemoteE2EE,
-            { settings: currentSetting, newVault: userMode === UserMode.NewUser }
-        );
+        >(SetupRemoteE2EE, { settings: currentSetting, newVault: userMode === UserMode.NewUser });
         if (e2eeConf === "cancelled") {
-            this._log("E2EE configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.e2eeConfigurationCancelled"), LOG_LEVEL_NOTICE);
             return false;
         }
         const onlyInternalMetadataPreferenceChanged =
@@ -363,14 +361,12 @@ export class SetupManager extends AbstractModule {
             currentSetting.idDerivationKey === e2eeConf.idDerivationKey;
         if (userMode === UserMode.Update && onlyInternalMetadataPreferenceChanged) {
             if (e2eeConf.encryptInternalMetadata && currentSetting.remoteType === REMOTE_COUCHDB) {
-                const proceed = "Enable without rebuilding — update every other device first";
+                const proceed = $msg("Setup.Manager.EncryptInternalMetadata.Buttons.Proceed");
+                const cancel = $msg("Cancel");
                 const choice = await this.core.confirm.askSelectStringDialogue(
-                    "A manual remote Rebuild is strongly recommended to protect existing file properties. " +
-                        "Before continuing without rebuilding, update every other synchronising device to a version " +
-                        "which supports this option, including devices currently running LiveSync. " +
-                        "Existing properties remain unchanged until they are rewritten or rebuilt.",
-                    [proceed, "Cancel"],
-                    { title: "Encrypt internal file Properties", defaultAction: "Cancel" }
+                    $msg("Setup.Manager.EncryptInternalMetadata.Message"),
+                    [proceed, cancel],
+                    { title: $msg("Setup.Manager.EncryptInternalMetadata.Title"), defaultAction: cancel }
                 );
                 if (choice !== proceed) return false;
             }
@@ -397,12 +393,9 @@ export class SetupManager extends AbstractModule {
         const e2eeConf = await this.dialogManager.openWithExplicitCancel<
             SetupRemoteE2EEResultType,
             SetupRemoteE2EEInitialData
-        >(
-            SetupRemoteE2EE,
-            { settings: originalSetting, newVault: userMode === UserMode.NewUser }
-        );
+        >(SetupRemoteE2EE, { settings: originalSetting, newVault: userMode === UserMode.NewUser });
         if (e2eeConf === "cancelled") {
-            this._log("Manual configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.manualConfigurationCancelled"), LOG_LEVEL_NOTICE);
             return await this.onOnboard(userMode);
         }
         const currentSetting = {
@@ -427,7 +420,7 @@ export class SetupManager extends AbstractModule {
         } else if (method === "p2p") {
             return await this.onP2PManualSetup(userMode, currentSetting, true);
         } else if (method === "cancelled") {
-            this._log("Manual configuration cancelled.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.manualConfigurationCancelled"), LOG_LEVEL_NOTICE);
             if (userMode !== UserMode.Unknown) {
                 return await this.onOnboard(userMode);
             }
@@ -456,7 +449,7 @@ export class SetupManager extends AbstractModule {
         let userMode = _userMode;
         if (userMode === UserMode.Unknown) {
             if (isObjectDifferent(this.settings, newConf, true) === false) {
-                this._log("No changes in settings detected. Skipping applying settings from wizard.", LOG_LEVEL_NOTICE);
+                this._log($msg("Setup.Manager.noChangesDetected"), LOG_LEVEL_NOTICE);
                 return true;
             }
             // const patch = generatePatchObj(this.settings, newConf);
@@ -465,7 +458,7 @@ export class SetupManager extends AbstractModule {
             if (!activate) {
                 extra();
                 const applied = await this.applySettingAndScheduleFetchOnActivation(newConf, UserMode.ExistingUser);
-                if (applied) this._log("Setting Applied", LOG_LEVEL_NOTICE);
+                if (applied) this._log($msg("Setup.Manager.settingApplied"), LOG_LEVEL_NOTICE);
                 return applied;
             }
             // Check virtual changes
@@ -475,7 +468,7 @@ export class SetupManager extends AbstractModule {
             if (isOnlyVirtualChange) {
                 extra();
                 const applied = await this.applySettingAndScheduleFetchOnActivation(newConf, UserMode.ExistingUser);
-                if (applied) this._log("Settings from wizard applied.", LOG_LEVEL_NOTICE);
+                if (applied) this._log($msg("Setup.Manager.wizardSettingsApplied"), LOG_LEVEL_NOTICE);
                 return applied;
             } else {
                 const userModeResult =
@@ -487,10 +480,10 @@ export class SetupManager extends AbstractModule {
                 } else if (userModeResult === "compatible-existing-user") {
                     extra();
                     const applied = await this.applySettingAndScheduleFetchOnActivation(newConf, UserMode.ExistingUser);
-                    if (applied) this._log("Settings from wizard applied.", LOG_LEVEL_NOTICE);
+                    if (applied) this._log($msg("Setup.Manager.wizardSettingsApplied"), LOG_LEVEL_NOTICE);
                     return applied;
                 } else if (userModeResult === "cancelled") {
-                    this._log("User cancelled applying settings from wizard.", LOG_LEVEL_NOTICE);
+                    this._log($msg("Setup.Manager.applyCancelled"), LOG_LEVEL_NOTICE);
                     return false;
                 }
             }
@@ -501,7 +494,7 @@ export class SetupManager extends AbstractModule {
             { isP2P: boolean }
         >(component, { isP2P: isP2PMainRemote(newConf) });
         if (confirm === "cancelled") {
-            this._log("User cancelled applying settings from wizard..", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.applyCancelled"), LOG_LEVEL_NOTICE);
             return false;
         }
         if (confirm) {
@@ -547,7 +540,7 @@ export class SetupManager extends AbstractModule {
         try {
             newSettings = normaliseImportedIdDerivationSettings(decodeSettingsFromQRCodeData(qr));
         } catch {
-            this._log("The QR configuration could not be decoded or contains unsupported settings.", LOG_LEVEL_NOTICE);
+            this._log($msg("Setup.Manager.qrDecodeFailed"), LOG_LEVEL_NOTICE);
             return false;
         }
         return await this.onConfirmApplySettingsFromWizard(newSettings, UserMode.Unknown);

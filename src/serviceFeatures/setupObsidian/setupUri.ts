@@ -11,11 +11,12 @@ import { EVENT_REQUEST_COPY_SETUP_URI } from "@vrtmrz/livesync-commonlib/compat/
 import { fireAndForget } from "@vrtmrz/livesync-commonlib/compat/common/utils";
 import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
 import type { SetupFeatureHost } from "./types";
+import { $msg } from "@/common/translation";
 
 export async function askEncryptingPassphrase(host: SetupFeatureHost): Promise<string | false> {
     return await host.services.UI.confirm.askString(
-        "Encrypt your settings",
-        "The passphrase to encrypt the setup URI",
+        $msg("Setup.CopySetupURI.PassphraseTitle"),
+        $msg("Setup.CopySetupURI.PassphraseLabel"),
         "",
         true
     );
@@ -43,16 +44,16 @@ async function askSetupURIMode(
     } catch {
         // Compatible generation remains available when the device clock is invalid.
     }
-    const timeBound = "Time-bound";
-    const compatible = "Compatible (no time limit)";
-    const cancel = "Cancel";
+    const timeBound = $msg("Setup.CopySetupURI.ModeTimeBound");
+    const compatible = $msg("Setup.CopySetupURI.ModeCompatible");
+    const cancel = $msg("Cancel");
     const buttons = usableUntil === null ? [compatible, cancel] : [timeBound, compatible, cancel];
     const message =
         usableUntil === null
-            ? "Time-bound Setup URIs require a valid device clock. Compatible URIs have no time limit and work with older clients."
-            : `Time-bound Setup URIs can be opened until ${formatWindowEnd(usableUntil)}. This is the end of the current fixed seven-day UTC window, not seven days from now. Compatible URIs have no time limit and work with older clients.`;
+            ? $msg("Setup.CopySetupURI.ModeMessageNoClock")
+            : $msg("Setup.CopySetupURI.ModeMessage", { until: formatWindowEnd(usableUntil) });
     const selected = await host.services.UI.confirm.askSelectStringDialogue(message, buttons, {
-        title: "Setup URI availability",
+        title: $msg("Setup.CopySetupURI.ModeTitle"),
         defaultAction: usableUntil === null ? compatible : timeBound,
     });
     if (selected === timeBound && usableUntil !== null) return { mode: "ephemeral", usableUntil };
@@ -91,8 +92,8 @@ async function generateAndCopySetupURI(
         if (result.usableUntil !== choice.usableUntil || !isTimeBoundSetupURIUsableNow(result.usableUntil)) {
             continue;
         }
-        if (await host.services.UI.promptCopyToClipboard("Setup URI", result.uri)) {
-            log("Setup URI copied to clipboard", LOG_LEVEL_NOTICE);
+        if (await host.services.UI.promptCopyToClipboard($msg("Setup.UseSetupURI.LabelSetupURI"), result.uri)) {
+            log($msg("Setup.CopySetupURI.Copied"), LOG_LEVEL_NOTICE);
         }
         return;
     }
@@ -111,7 +112,7 @@ export function useSetupURIFeature(host: NecessaryServices<"API" | "UI" | "setti
     host.services.appLifecycle.onLoaded.addHandler(() => {
         host.services.API.addCommand({
             id: "livesync-copysetupuri",
-            name: "Copy settings as a new setup URI",
+            name: $msg("Setup.CopySetupURI.CommandCopy"),
             checkCallback: (checking) => {
                 if (!host.services.setting.currentSettings().isConfigured) return false;
                 if (!checking) fireAndForget(copySetupURI(host, log));
@@ -121,7 +122,7 @@ export function useSetupURIFeature(host: NecessaryServices<"API" | "UI" | "setti
 
         host.services.API.addCommand({
             id: "livesync-copysetupuri-short",
-            name: "Copy settings as a new setup URI (With customization sync)",
+            name: $msg("Setup.CopySetupURI.CommandCopyWithCustomizationSync"),
             checkCallback: (checking) => {
                 const settings = host.services.setting.currentSettings();
                 if (!settings.isConfigured || !settings.usePluginSync) return false;
@@ -132,7 +133,7 @@ export function useSetupURIFeature(host: NecessaryServices<"API" | "UI" | "setti
 
         host.services.API.addCommand({
             id: "livesync-copysetupurifull",
-            name: "Copy settings as a new setup URI (Full)",
+            name: $msg("Setup.CopySetupURI.CommandCopyFull"),
             checkCallback: (checking) => {
                 const settings = host.services.setting.currentSettings();
                 if (!settings.isConfigured || !settings.useAdvancedMode) return false;

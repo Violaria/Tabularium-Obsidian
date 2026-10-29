@@ -2,6 +2,7 @@
     import type { CustomRegExpSource } from "@vrtmrz/livesync-commonlib/compat/common/types";
     import { isInvertedRegExp, isValidRegExp } from "@vrtmrz/livesync-commonlib/compat/common/utils";
     import { $msg as translateMessage } from "@/common/translation";
+    import { lucideIcon } from "@/common/obsidianIcon";
 
     export let patterns = [] as CustomRegExpSource[];
     export let originals = [] as CustomRegExpSource[];
@@ -10,9 +11,9 @@
     function revert() {
         patterns = [...originals];
     }
-    const CHECK_OK = "✔";
-    const CHECK_NG = "⚠";
-    const MARK_MODIFIED = "✏ ";
+    const CHECK_OK = "✓";
+    const CHECK_NG = "✗";
+    const MARK_MODIFIED = "• ";
     function checkRegExp(pattern: CustomRegExpSource) {
         return isValidRegExp(pattern) ? CHECK_OK : CHECK_NG;
     }
@@ -33,25 +34,31 @@
         <li>
             <label>{modified[idx]}{statusName[idx]}</label>
             <span class="chip">{isInvertedExp[idx] ? translateMessage("INVERTED") : ""}</span>
-            <input type="text" bind:value={pattern} class={modified[idx]} />
-            <button class="iconbutton" on:click={() => remove(idx)}>🗑</button>
+            <input type="text" bind:value={pattern} class={modified[idx] ? "modified" : ""} />
+            <button
+                class="iconbutton"
+                title={translateMessage("Delete")}
+                aria-label={translateMessage("Delete")}
+                use:lucideIcon={"trash-2"}
+                on:click={() => remove(idx)}
+            ></button>
         </li>
     {/each}
     <li>
         <label>
-            <button on:click={() => add()}>Add</button>
+            <button on:click={() => add()}>{translateMessage("Add")}</button>
         </label>
     </li>
     <li class="buttons">
         <button
             on:click={() => apply(patterns)}
             disabled={statusName.some((e) => e === CHECK_NG) || modified.every((e) => e === "")}
-            >Apply
+            >{translateMessage("obsidianLiveSyncSettingTab.btnApply")}
         </button>
         <button
             on:click={() => revert()}
             disabled={statusName.some((e) => e === CHECK_NG) || modified.every((e) => e === "")}
-            >Revert
+            >{translateMessage("Revert")}
         </button>
     </li>
 </ul>

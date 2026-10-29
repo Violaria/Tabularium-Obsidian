@@ -9,12 +9,12 @@ describe("LiveSync-owned translation catalogue", () => {
     afterEach(() => setLang("def"));
 
     it("selects a translated language without delegating catalogue ownership to Commonlib", () => {
-        setLang("es");
+        setLang("zh");
 
         expect(translateLiveSyncMessage("moduleCheckRemoteSize.optionIncreaseLimit", { newMax: "800" })).toBe(
-            "aumentar a 800MB"
+            "增加到 800MB"
         );
-        expect(SUPPORTED_I18N_LANGS).toContain("es");
+        expect(SUPPORTED_I18N_LANGS).toContain("la");
     });
 
     it("retains typed placeholder substitution", () => {
@@ -38,9 +38,10 @@ describe("LiveSync-owned translation catalogue", () => {
         );
     });
 
-    it("uses Commonlib's canonical English when the application catalogue has no translation", () => {
-        setLang("es");
-
+    it("translates Commonlib texts from the catalogue and keeps Commonlib's English as the English text", () => {
+        setLang("zh");
+        expect(translateLiveSyncMessage("Active Remote Type")).toBe("当前远程类型");
+        setLang("def");
         expect(translateLiveSyncMessage("Active Remote Type")).toBe(englishMessageTranslator("Active Remote Type"));
     });
 

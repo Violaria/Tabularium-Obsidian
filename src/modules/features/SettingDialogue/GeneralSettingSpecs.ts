@@ -22,9 +22,11 @@ export function createGeneralSettingSpecGroups({
                     control: {
                         type: "dropdown",
                         options: () =>
-                            Object.fromEntries(
-                                SUPPORTED_I18N_LANGS.map((language) => [language, $t(`lang-${language}`)])
-                            ),
+                            // Default ("") follows Obsidian; Obsidian offers no Latin, so Latin is only chosen here.
+                            Object.fromEntries([
+                                ["", $t("lang-auto")],
+                                ...SUPPORTED_I18N_LANGS.map((language) => [language, $t(`lang-${language}`)]),
+                            ]),
                     },
                 },
                 { key: "showStatusOnEditor", control: { type: "toggle" } },

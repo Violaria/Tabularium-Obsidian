@@ -4,6 +4,7 @@ import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFu
 
 import type { DisposableReactiveValue } from "./StatusBarDisplay.ts";
 import type { StatusBarPart } from "./StatusBarRenderer.ts";
+import { $msg } from "@/common/translation";
 import {
     formatRemoteActivityStatusLabel,
     REMOTE_OPERATION_ACTIVITY_ICON,
@@ -12,6 +13,18 @@ import {
 } from "./RemoteActivityStatus.ts";
 
 export const FAST_FORWARD_COUNT_LINGER_MS = 3_000;
+
+/** Plain glyphs for the replication state shown after "Sync:". */
+export const REPLICATION_STATUS_ICONS = {
+    stopped: "■",
+    starting: "…",
+    paused: "○",
+    connected: "●",
+    journalSend: "J↑",
+    journalReceive: "J↓",
+    errored: "✗",
+    fastForward: "»",
+} as const;
 
 function readPositiveCheckedChanges(source: ReactiveValue<ReplicationStatics>): number | undefined {
     const count = source.value.couchDB?.pull?.checkedChanges;
@@ -120,27 +133,43 @@ export function projectReplicationStatusLabel(
     let pushRemaining: { text: string; part?: StatusBarPart } = { text: "" };
     let pullRemaining: { text: string; part?: StatusBarPart } = { text: "" };
     let icon: string;
+    let title: string | undefined;
     switch (stats.syncStatus) {
         case "CLOSED":
         case "COMPLETED":
         case "NOT_CONNECTED":
-            icon = "⏹";
+            icon = REPLICATION_STATUS_ICONS.stopped;
+            title = $msg("moduleLog.syncStatusStopped");
             break;
         case "STARTED":
-            icon = "🌀";
+            icon = REPLICATION_STATUS_ICONS.starting;
+            title = $msg("moduleLog.syncStatusStarting");
             break;
         case "PAUSED":
-            icon = "💤";
+            icon = REPLICATION_STATUS_ICONS.paused;
+            title = $msg("moduleLog.syncStatusPaused");
             break;
         case "CONNECTED":
         case "JOURNAL_SEND":
         case "JOURNAL_RECEIVE":
-            icon = stats.syncStatus === "JOURNAL_SEND" ? "📦↑" : stats.syncStatus === "JOURNAL_RECEIVE" ? "📦↓" : "⚡";
+            icon =
+                stats.syncStatus === "JOURNAL_SEND"
+                    ? REPLICATION_STATUS_ICONS.journalSend
+                    : stats.syncStatus === "JOURNAL_RECEIVE"
+                      ? REPLICATION_STATUS_ICONS.journalReceive
+                      : REPLICATION_STATUS_ICONS.connected;
+            title =
+                stats.syncStatus === "JOURNAL_SEND"
+                    ? $msg("moduleLog.syncStatusJournalSend")
+                    : stats.syncStatus === "JOURNAL_RECEIVE"
+                      ? $msg("moduleLog.syncStatusJournalReceive")
+                      : $msg("moduleLog.syncStatusConnected");
             pushRemaining = remainingSequenceLabel("push-remaining", lastSyncPushSeq, maxPushSeq);
             pullRemaining = remainingSequenceLabel("pull-remaining", lastSyncPullSeq, maxPullSeq);
             break;
         case "ERRORED":
-            icon = "⚠";
+            icon = REPLICATION_STATUS_ICONS.errored;
+            title = $msg("moduleLog.syncStatusErrored");
             break;
         default:
             icon = "?";
@@ -152,7 +181,10 @@ export function projectReplicationStatusLabel(
         couchDB !== undefined &&
         couchDB.phase !== "idle" &&
         (couchDB.pull?.checking === true || couchDB.push?.checking === true);
-    if (isFastForwardChecking) icon = "⏩";
+    if (isFastForwardChecking) {
+        icon = REPLICATION_STATUS_ICONS.fastForward;
+        title = $msg("moduleLog.syncStatusFastForward");
+    }
 
     const visibleFastForwardCount =
         couchDB !== undefined &&
@@ -161,7 +193,10 @@ export function projectReplicationStatusLabel(
         fastForwardCount > 0
             ? fastForwardCount
             : undefined;
-    const fastForwardLabel = visibleFastForwardCount === undefined ? "" : " (⏩ " + visibleFastForwardCount + ")";
+    const fastForwardLabel =
+        visibleFastForwardCount === undefined
+            ? ""
+            : ` (${REPLICATION_STATUS_ICONS.fastForward} ${visibleFastForwardCount})`;
 
     const parts: StatusBarPart[] = [];
     if (networkStatus.trackedRequestCount > 0) {
@@ -172,18 +207,20 @@ export function projectReplicationStatusLabel(
                 REMOTE_REQUEST_ACTIVITY_ICON,
             value: networkStatus.trackedRequestCount,
             suffix: " ",
+            title: $msg("moduleLog.statusRemoteRequests"),
         });
     } else if (networkActivity !== "") {
-        parts.push({ key: "network", text: networkActivity });
+        parts.push({ key: "network", text: networkActivity, title: $msg("moduleLog.statusRemoteOperation") });
     }
-    parts.push({ key: "sync", text: "Sync: " + icon });
+    const syncLabel = $msg("moduleLog.statusSyncPrefix") + " " + icon;
+    parts.push(title === undefined ? { key: "sync", text: syncLabel } : { key: "sync", text: syncLabel, title });
     if (visibleFastForwardCount !== undefined) {
         parts.push({
             key: "ff",
-            text: " (⏩ ",
+            text: ` (${REPLICATION_STATUS_ICONS.fastForward} `,
             value: visibleFastForwardCount,
             suffix: ")",
-            title: "Compared CouchDB feed entries",
+            title: $msg("moduleLog.statusFastForwardCompared"),
         });
     }
     parts.push({ key: "sent", text: " ↑ ", value: sent });
@@ -195,8 +232,7 @@ export function projectReplicationStatusLabel(
         icon,
         message:
             networkActivity +
-            "Sync: " +
-            icon +
+            syncLabel +
             fastForwardLabel +
             " ↑ " +
             sent +

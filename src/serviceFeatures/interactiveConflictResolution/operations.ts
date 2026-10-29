@@ -297,7 +297,7 @@ export function createInteractiveConflictResolutionOperations(
             }
             return false;
         }
-        const target = await dependencies.confirm.askSelectString("File to resolve conflict", notesList);
+        const target = await dependencies.confirm.askSelectString($msg("File to resolve conflict"), notesList);
         if (target) {
             const targetItem = notes.find((e) => e.dispPath == target)!;
             await requestConflictResolution(targetItem.path);

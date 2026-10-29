@@ -1,4 +1,4 @@
-import { App, Component, PluginSettingTab, requireApiVersion, SettingPage, Setting as ObsidianSetting } from "@/deps.ts";
+import { App, Component, PluginSettingTab, requireApiVersion, SettingPage, Setting as ObsidianSetting, setIcon } from "@/deps.ts";
 import {
     type ObsidianLiveSyncSettings,
     type RemoteDBSettings,
@@ -856,7 +856,7 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
     private createDeclarativePage(entry: SettingsPageEntry): SettingDefinitionPage {
         const page: SettingDefinitionPage = {
             type: "page",
-            name: `${entry.icon} ${entry.name()}`,
+            name: entry.name(),
             visible: () => this.isPageVisible(entry.level),
         };
         if (entry.content === "native") {
@@ -878,33 +878,33 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
             showVerboseLog: () => this.isConfiguredAs("lessInformationInLog", false),
         });
         const [appearance, logging] = groups;
-        if (!appearance || !logging) {
+        if (!appearance?.heading || !logging?.heading) {
             throw new Error("General settings must define Appearance and Logging groups");
         }
         return this.createRootGroup("general-settings", [
             {
-                name: "Tabularium 服务器",
-                desc: "登录服务器、查看连接状态或断开连接。",
+                name: $msg("tabularium.server.title"),
+                desc: $msg("tabularium.server.settingDesc"),
                 action: () => this.plugin.tabularium?.open(),
             },
             {
-                name: "发送到 Kindle",
-                desc: "Kindle 发送状态。",
+                name: $msg("tabularium.kindle.send"),
+                desc: $msg("tabularium.kindle.status"),
                 action: () => this.plugin.kindle?.open(),
             },
             {
-                name: "Tabularium file sorting",
-                desc: "Arrange notes and folders using sorting rules or bookmarks.",
+                name: $msg("tabularium.sorting.title"),
+                desc: $msg("tabularium.sorting.settingDesc"),
                 action: () => this.plugin.sorting?.openSettings(),
             },
             {
                 type: "page",
-                name: `🎨 ${appearance.heading}`,
+                name: appearance.heading,
                 items: appearance.items,
             },
             {
                 type: "page",
-                name: `📝 ${logging.heading}`,
+                name: logging.heading,
                 items: logging.items,
             },
             this.createExtraMenusPage(),
@@ -914,7 +914,7 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
     private createExtraMenusPage(): SettingDefinitionPage {
         return {
             type: "page",
-            name: `🎚️ ${$msg("obsidianLiveSyncSettingTab.titleExtraMenus")}`,
+            name: $msg("obsidianLiveSyncSettingTab.titleExtraMenus"),
             items: createExtraMenuSettingDefinitions(),
         };
     }
@@ -945,10 +945,10 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
         items: SettingGroupItem[],
         visible?: () => boolean
     ): SettingDefinitionGroup {
-        const { icon, name } = getSettingsRootGroupEntry(id);
+        const { name } = getSettingsRootGroupEntry(id);
         return {
             type: "group",
-            heading: `${icon} ${name()}`,
+            heading: name(),
             items,
             ...(visible ? { visible } : {}),
         };
@@ -1253,18 +1253,18 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
 
         containerEl.empty();
         new ObsidianSetting(containerEl)
-            .setName("Tabularium 服务器")
-            .setDesc(this.plugin.tabularium?.connection ? `已连接：${this.plugin.tabularium.connection.vaultName}` : "登录服务器以开始同步。")
-            .addButton(button => button.setButtonText("打开").onClick(() => this.plugin.tabularium?.open()));
+            .setName($msg("tabularium.server.title"))
+            .setDesc(this.plugin.tabularium?.connection ? $msg("tabularium.server.connectedTo", { vault: this.plugin.tabularium.connection.vaultName }) : $msg("tabularium.server.notConnected"))
+            .addButton(button => button.setButtonText($msg("tabularium.server.open")).onClick(() => this.plugin.tabularium?.open()));
         new ObsidianSetting(containerEl)
-            .setName("发送到 Kindle")
-            .setDesc("查看 Kindle 发送状态；在文件列表中右键笔记或文件夹（可多选）发送。")
-            .addButton(button => button.setButtonText("打开").onClick(() => this.plugin.kindle?.open()));
+            .setName($msg("tabularium.kindle.send"))
+            .setDesc($msg("tabularium.kindle.settingDesc"))
+            .addButton(button => button.setButtonText($msg("tabularium.server.open")).onClick(() => this.plugin.kindle?.open()));
         if (this.plugin.sorting) {
             new ObsidianSetting(containerEl)
-                .setName("Tabularium file sorting")
-                .setDesc("Arrange notes and folders using sorting rules or bookmarks.")
-                .addButton(button => button.setButtonText("Open").onClick(() => this.plugin.sorting?.openSettings()));
+                .setName($msg("tabularium.sorting.title"))
+                .setDesc($msg("tabularium.sorting.settingDesc"))
+                .addButton(button => button.setButtonText($msg("tabularium.server.open")).onClick(() => this.plugin.sorting?.openSettings()));
         }
 
         containerEl.addClass("sls-setting");
@@ -1301,11 +1301,11 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
                         value: `${order}`,
                         cls: "sls-setting-tab",
                     } as DomElementInfo);
-                    el.createDiv({
+                    const button = el.createDiv({
                         cls: "sls-setting-menu-btn",
-                        text: icon,
                         title: title,
                     });
+                    setIcon(button, icon);
                     inputEl.addEventListener("change", (evt) => this.selectPane(evt));
                     inputEl.addEventListener("click", (evt) => this.selectPane(evt));
                 });

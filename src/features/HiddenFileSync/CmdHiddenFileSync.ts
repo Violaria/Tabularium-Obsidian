@@ -570,14 +570,14 @@ export class HiddenFileSync extends LiveSyncCommands {
         includeDeleted = true
     ) {
         const logLevel = getLogLevel(showNotice);
-        const p = this._progress(`[⚙ Storage -> DB ]\n`, logLevel);
+        const p = this._progress($msg("cmdHiddenFileSync.progressStorageToDB") + "\n", logLevel);
         const notifyProgress = onlyInNTimes(100, (progress) => p.log(`${progress}/${processFiles.length}`));
         const processes = processFiles.map(async (file, i) => {
             try {
                 await this.trackStorageFileModification(file, onlyNew, forceWriteAll, includeDeleted);
                 notifyProgress();
             } catch (ex) {
-                p.once(`Failed to process storage change file:${file}`);
+                p.once($msg("cmdHiddenFileSync.failedStorageChange", { file }));
                 this._log(ex, LOG_LEVEL_VERBOSE);
             }
         });
@@ -592,8 +592,8 @@ export class HiddenFileSync extends LiveSyncCommands {
     ) {
         return await skipIfDuplicated("scanAllStorageChanges", async () => {
             const logLevel = getLogLevel(showNotice);
-            const p = this._progress(`[⚙ Scanning Storage -> DB ]\n`, logLevel);
-            p.log(`Scanning storage files...`);
+            const p = this._progress($msg("cmdHiddenFileSync.progressScanningStorageToDB") + "\n", logLevel);
+            p.log($msg("cmdHiddenFileSync.scanningStorageFiles"));
             const knownNames = [...this._fileInfoLastProcessed.keys()] as FilePath[];
             const existNames = await this.scanInternalFileNames();
             const files = new Set([...knownNames, ...existNames]);
@@ -615,11 +615,12 @@ export class HiddenFileSync extends LiveSyncCommands {
                 })
                 .map(([path, stat]) => path);
 
-            const staticsMessage = `[Storage hidden file statics]
-Known files: ${knownNames.length}
-Actual files: ${existNames.length}
-All files: ${files.size}
-Offline Changed files: ${processFiles.length}`;
+            const staticsMessage = $msg("cmdHiddenFileSync.storageStatics", {
+                known: `${knownNames.length}`,
+                actual: `${existNames.length}`,
+                all: `${files.size}`,
+                changed: `${processFiles.length}`,
+            });
             // this._log(staticsMessage, logLevel, "scan-changes");
             p.once(staticsMessage);
             await this.trackScannedStorageChanges(processFiles, showNotice, onlyNew, forceWriteAll, includeDeleted);
@@ -1116,12 +1117,12 @@ Offline Changed files: ${processFiles.length}`;
             this.isTargetFileInPatterns(path) &&
             this.isNotIgnoredByCustomisationSync(path) &&
             this.isHiddenFileSyncHandlingPath(path);
-        // console.warn(`Assertion: isTargetFile(${path}) : ${result ? "✔️" : "❌"}`);
+        // console.warn(`Assertion: isTargetFile(${path}) : ${result ? "yes" : "no"}`);
         if (!result) {
             return false;
         }
         const resultByFile = await this.services.vault.isIgnoredByIgnoreFile(path);
-        // console.warn(`${path}  -> isIgnoredByIgnoreFile: ${resultByFile ? "❌" : "✔️"}`);
+        // console.warn(`${path}  -> isIgnoredByIgnoreFile: ${resultByFile ? "yes" : "no"}`);
         return !resultByFile;
     }
 
@@ -1133,7 +1134,7 @@ Offline Changed files: ${processFiles.length}`;
         includeDeletion = true
     ) {
         const logLevel = getLogLevel(showNotice);
-        const p = this._progress(`[⚙ DB -> Storage ]\n`, logLevel);
+        const p = this._progress($msg("cmdHiddenFileSync.progressDBToStorage") + "\n", logLevel);
         const notifyProgress = onlyInNTimes(100, (progress) => p.log(`${progress}/${processFiles.length}`));
         const processes = processFiles.map(async (file) => {
             try {
@@ -1166,11 +1167,11 @@ Offline Changed files: ${processFiles.length}`;
     async applyOfflineChanges(showNotice: boolean) {
         const logLevel = getLogLevel(showNotice);
         return await serialized("applyOfflineChanges", async () => {
-            const p = this._progress("[⚙ Apply untracked changes ]\n", logLevel);
-            this._log(`Track changes.`, logLevel);
-            p.log("Enumerating local files...");
+            const p = this._progress($msg("cmdHiddenFileSync.progressApplyUntracked") + "\n", logLevel);
+            this._log($msg("cmdHiddenFileSync.trackChanges"), logLevel);
+            p.log($msg("cmdHiddenFileSync.enumeratingLocalFiles"));
             const currentStorageFiles = await this.scanInternalFileNames();
-            p.log("Enumerating database files...");
+            p.log($msg("cmdHiddenFileSync.enumeratingDatabaseFiles"));
             const currentDatabaseFiles = await this.getAllDatabaseFiles();
             const allDatabaseMap = Object.fromEntries(
                 currentDatabaseFiles.map((e) => [stripAllPrefixes(this.getPath(e)), e])
@@ -1179,13 +1180,14 @@ Offline Changed files: ${processFiles.length}`;
             const untrackedLocal = currentStorageFiles.filter((e) => !this._fileInfoLastProcessed.has(e));
             const untrackedDatabase = currentDatabaseFileNames.filter((e) => !this._databaseInfoLastProcessed.has(e));
             const bothUntracked = untrackedLocal.filter((e) => untrackedDatabase.indexOf(e) !== -1);
-            p.log("Applying untracked changes...");
-            const stat = `Tracking statics:
-Local files: ${currentStorageFiles.length}
-Database files: ${currentDatabaseFileNames.length}
-Untracked local files: ${untrackedLocal.length}
-Untracked database files: ${untrackedDatabase.length}
-Common untracked files: ${bothUntracked.length}`;
+            p.log($msg("cmdHiddenFileSync.applyingUntrackedChanges"));
+            const stat = $msg("cmdHiddenFileSync.trackingStatics", {
+                local: `${currentStorageFiles.length}`,
+                database: `${currentDatabaseFileNames.length}`,
+                untrackedLocal: `${untrackedLocal.length}`,
+                untrackedDatabase: `${untrackedDatabase.length}`,
+                common: `${bothUntracked.length}`,
+            });
             p.once(stat);
             const semaphores = Semaphore(10);
             const notifyProgress = onlyInNTimes(25, (progress) => p.log(`${progress}/${bothUntracked.length}`));
@@ -1258,8 +1260,8 @@ Offline Changed files: ${files.length}`;
 
     async useDatabaseFiles(files: MetaEntry[], showNotice = false, onlyNew = false) {
         const logLevel = getLogLevel(showNotice);
-        const p = this._progress(`[⚙ Scanning DB -> Storage ]\n`, logLevel);
-        p.log("Scanning database files...");
+        const p = this._progress($msg("cmdHiddenFileSync.progressScanningDBToStorage") + "\n", logLevel);
+        p.log($msg("cmdHiddenFileSync.scanningDatabaseFiles"));
         const notifyProgress = onlyInNTimes(25, (progress) => p.log(`${progress}/${files.length}`));
         const processFiles = files.map(async (file) => {
             try {
@@ -1414,14 +1416,14 @@ Offline Changed files: ${files.length}`;
 
     async rebuildMerging(showNotice: boolean, targetFiles: FilePath[] | false = false) {
         const logLevel = getLogLevel(showNotice);
-        const p = this._progress("[⚙ Rebuild by Merge ]\n", logLevel);
-        this._log(`Rebuilding hidden files from the storage and the local database.`, logLevel);
-        p.log("Enumerating local files...");
+        const p = this._progress($msg("cmdHiddenFileSync.progressRebuildByMerge") + "\n", logLevel);
+        this._log($msg("cmdHiddenFileSync.rebuildingByMerge"), logLevel);
+        p.log($msg("cmdHiddenFileSync.enumeratingLocalFiles"));
         const currentStorageFilesAll = await this.scanInternalFileNames();
         const currentStorageFiles = targetFiles
             ? currentStorageFilesAll.filter((e) => targetFiles.some((f) => f == e))
             : currentStorageFilesAll;
-        p.log("Enumerating database files...");
+        p.log($msg("cmdHiddenFileSync.enumeratingDatabaseFiles"));
         const allDatabaseFiles = await this.getAllDatabaseFiles();
         const allDatabaseMap = new Map(allDatabaseFiles.map((e) => [stripAllPrefixes(this.getPath(e)), e]));
         const currentDatabaseFiles = targetFiles
@@ -1435,7 +1437,11 @@ Offline Changed files: ${files.length}`;
         const storageToDatabase = [] as FilePath[];
         const databaseToStorage = [] as MetaEntry[];
 
-        const eachProgress = onlyInNTimes(100, (progress) => p.log(`Checking ${progress}/${allFileNames.size}`));
+        const eachProgress = onlyInNTimes(100, (progress) =>
+            p.log(
+                $msg("cmdHiddenFileSync.checkingProgress", { progress: `${progress}`, total: `${allFileNames.size}` })
+            )
+        );
         for (const file of allFileNames) {
             eachProgress();
             const storageMTime = await this.core.storageAccess.statHidden(file);
@@ -1453,7 +1459,10 @@ Offline Changed files: ${files.length}`;
             }
         }
         p.once(
-            `Storage to Database: ${storageToDatabase.length} files\n Database to Storage: ${databaseToStorage.length} files`
+            $msg("cmdHiddenFileSync.mergeSummary", {
+                toDatabase: `${storageToDatabase.length}`,
+                toStorage: `${databaseToStorage.length}`,
+            })
         );
         this.resetLastProcessedDatabase(targetFiles);
         this.resetLastProcessedFile(targetFiles);
@@ -1461,7 +1470,7 @@ Offline Changed files: ${files.length}`;
             this.useStorageFiles(storageToDatabase, showNotice, false),
             this.useDatabaseFiles(databaseToStorage, showNotice, false),
         ];
-        p.log("Start processing...");
+        p.log($msg("cmdHiddenFileSync.startProcessing"));
         await Promise.all(processes);
         p.done();
         return [...allFileNames];
@@ -1471,15 +1480,15 @@ Offline Changed files: ${files.length}`;
         // reset processed file markers
         const logLevel = getLogLevel(showNotice);
         this._verbose(`Rebuilding hidden files from the storage.`);
-        this._log(`Rebuilding hidden files from the storage.`, logLevel);
-        const p = this._progress("[⚙ Rebuild by Storage ]\n", logLevel);
-        p.log("Enumerating local files...");
+        this._log($msg("cmdHiddenFileSync.rebuildingFromStorage"), logLevel);
+        const p = this._progress($msg("cmdHiddenFileSync.progressRebuildByStorage") + "\n", logLevel);
+        p.log($msg("cmdHiddenFileSync.enumeratingLocalFiles"));
         const currentFilesAll = await this.scanInternalFileNames();
         const currentFiles = targetFiles
             ? currentFilesAll.filter((e) => targetFiles.some((f) => f == e))
             : currentFilesAll;
-        p.once(`Storage to Database: ${currentFiles.length} files.`);
-        p.log("Start processing...");
+        p.once($msg("cmdHiddenFileSync.storageToDatabaseCount", { count: `${currentFiles.length}` }));
+        p.log($msg("cmdHiddenFileSync.startProcessing"));
         this.resetLastProcessedFile(targetFiles);
         await this.useStorageFiles(currentFiles, showNotice, onlyNew);
         p.done();
@@ -1504,8 +1513,8 @@ Offline Changed files: ${files.length}`;
     async rebuildFromDatabase(showNotice: boolean, targetFiles: FilePath[] | false = false, onlyNew = false) {
         const logLevel = getLogLevel(showNotice);
         this._verbose(`Rebuilding hidden files from the local database.`);
-        const p = this._progress("[⚙ Rebuild by Database ]\n", logLevel);
-        p.log("Enumerating database files...");
+        const p = this._progress($msg("cmdHiddenFileSync.progressRebuildByDatabase") + "\n", logLevel);
+        p.log($msg("cmdHiddenFileSync.enumeratingDatabaseFiles"));
         const allFiles = await this.getAllDatabaseFiles();
 
         // THINKING: Should we exclude conflicted or deleted files?
@@ -1516,9 +1525,9 @@ Offline Changed files: ${files.length}`;
             ? allFiles.filter((e) => targetFiles.some((f) => f == stripAllPrefixes(this.getPath(e))))
             : allFiles;
 
-        p.once(`Database to Storage: ${currentFiles.length} files.`);
+        p.once($msg("cmdHiddenFileSync.databaseToStorageCount", { count: `${currentFiles.length}` }));
         this.resetLastProcessedDatabase(targetFiles);
-        p.log("Start processing...");
+        p.log($msg("cmdHiddenFileSync.startProcessing"));
         await this.useDatabaseFiles(currentFiles, showNotice, onlyNew);
         p.done();
         return currentFiles;
@@ -1537,10 +1546,11 @@ Offline Changed files: ${files.length}`;
             initialisationProgress?.done($msg("Hidden File Sync initialisation was not started."));
             return false;
         }
-        const p = initialisationProgress ?? this._progress("[⚙ Initialise]\n", logLevel);
+        const p =
+            initialisationProgress ?? this._progress($msg("cmdHiddenFileSync.progressInitialise") + "\n", logLevel);
         // p.log("Resolving conflicts before starting...");
         // await this.resolveConflictOnInternalFiles();
-        p.log("Initialising hidden files sync...");
+        p.log($msg("cmdHiddenFileSync.initialising"));
         // The initialisation progress owns the user-visible Notice. Its child
         // rebuild and scan operations still write ordinary log entries, but
         // must not each create another keep-alive Notice.
@@ -1552,37 +1562,37 @@ Offline Changed files: ${files.length}`;
             : false;
         if (direction == "pushForce" || direction == "push") {
             const onlyNew = direction == "push";
-            p.log(`Started: Storage --> Database ${onlyNew ? "(Only New)" : ""}`);
+            p.log($msg(onlyNew ? "cmdHiddenFileSync.startedPushOnlyNew" : "cmdHiddenFileSync.startedPush"));
             const updatedFiles = await this.rebuildFromStorage(showChildNotices, targetFiles, onlyNew);
             // making doubly sure, No more losing files.
             // I did so many times during the development.
             await this.adoptCurrentStorageFilesAsProcessed(updatedFiles);
             await this.adoptCurrentDatabaseFilesAsProcessed(updatedFiles);
             // And, scan other changes on the database (i.e. files which are on only other devices)
-            p.log("Checking for remaining storage and database changes...");
+            p.log($msg("cmdHiddenFileSync.checkingRemainingStorageFirst"));
             await this.scanAllStorageChanges(showChildNotices, true, false);
             await this.scanAllDatabaseChanges(showChildNotices, true, false);
         }
         if (direction == "pullForce" || direction == "pull") {
             const onlyNew = direction == "pull";
-            p.log(`Started: Database --> Storage ${onlyNew ? "(Only New)" : ""}`);
+            p.log($msg(onlyNew ? "cmdHiddenFileSync.startedPullOnlyNew" : "cmdHiddenFileSync.startedPull"));
             const updatedEntries = await this.rebuildFromDatabase(showChildNotices, targetFiles, onlyNew);
             const updatedFiles = updatedEntries.map((e) => stripAllPrefixes(this.getPath(e)));
             // making doubly sure, No more losing files.
             await this.adoptCurrentStorageFilesAsProcessed(updatedFiles);
             await this.adoptCurrentDatabaseFilesAsProcessed(updatedFiles);
             // And, scan other changes on the database (i.e. files which are on only other devices)
-            p.log("Checking for remaining database and storage changes...");
+            p.log($msg("cmdHiddenFileSync.checkingRemainingDatabaseFirst"));
             await this.scanAllDatabaseChanges(showChildNotices, true, false);
             await this.scanAllStorageChanges(showChildNotices, true, false);
         }
         if (direction == "safe") {
-            p.log(`Started: Database <--> Storage (by modified date)`);
+            p.log($msg("cmdHiddenFileSync.startedMerge"));
             const updatedFiles = await this.rebuildMerging(showChildNotices, targetFiles);
             await this.adoptCurrentStorageFilesAsProcessed(updatedFiles);
             await this.adoptCurrentDatabaseFilesAsProcessed(updatedFiles);
             // And, scan other changes on the database (i.e. files which are on only other devices)
-            p.log("Checking for remaining storage and database changes...");
+            p.log($msg("cmdHiddenFileSync.checkingRemainingStorageFirst"));
             await this.scanAllStorageChanges(showChildNotices, true, false);
             await this.scanAllDatabaseChanges(showChildNotices, true, false);
         }
@@ -2087,8 +2097,11 @@ Offline Changed files: ${files.length}`;
                     // Open the one user-visible progress Notice before saving
                     // the setting. Large Vaults can otherwise appear idle
                     // before the initial file enumeration begins.
-                    initialisationProgress = this._progress("[⚙ Initialise]\n", LOG_LEVEL_NOTICE);
-                    initialisationProgress.log("Preparing Hidden File Sync...");
+                    initialisationProgress = this._progress(
+                        $msg("cmdHiddenFileSync.progressInitialise") + "\n",
+                        LOG_LEVEL_NOTICE
+                    );
+                    initialisationProgress.log($msg("cmdHiddenFileSync.preparing"));
                     await this.core.services.setting.applyPartial(
                         {
                             useAdvancedMode: true,

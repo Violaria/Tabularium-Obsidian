@@ -1,18 +1,16 @@
 import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { $msg } from "@/common/translation";
 
-type MaintenancePrerequisiteSettings = Pick<
-    ObsidianLiveSyncSettings,
-    "readChunksOnline"
->;
+type MaintenancePrerequisiteSettings = Pick<ObsidianLiveSyncSettings, "readChunksOnline">;
 
 type MaintenancePrerequisiteOptions = {
     operationName: string;
     settings: MaintenancePrerequisiteSettings;
     askSelectStringDialogue: (
         message: string,
-        buttons: readonly ["Apply and continue", "Cancel"],
-        options: { title: string; defaultAction: "Cancel" }
-    ) => Promise<"Apply and continue" | "Cancel" | false | undefined>;
+        buttons: readonly string[],
+        options: { title: string; defaultAction: string }
+    ) => Promise<string | false | undefined>;
     applyPartial: (settings: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean) => Promise<void>;
 };
 
@@ -26,19 +24,17 @@ export async function ensureLocalDatabaseMaintenancePrerequisites({
         readChunksOnline: false,
     } satisfies MaintenancePrerequisiteSettings;
 
-    const missing = settings.readChunksOnline ? ["- Fetch chunks on demand: Off (currently On)"] : [];
+    const missing = settings.readChunksOnline ? [$msg("maintenancePrerequisites.fetchChunksOff")] : [];
 
     if (missing.length == 0) return true;
 
-    const APPLY = "Apply and continue";
-    const CANCEL = "Cancel";
+    const APPLY = $msg("maintenancePrerequisites.apply");
+    const CANCEL = $msg("Cancel");
     const result = await askSelectStringDialogue(
-        `${operationName} requires the following settings:\n\n${missing.join(
-            "\n"
-        )}\n\nApply these settings and continue?`,
+        $msg("maintenancePrerequisites.message", { operation: operationName, settings: missing.join("\n") }),
         [APPLY, CANCEL],
         {
-            title: `${operationName} prerequisites`,
+            title: $msg("maintenancePrerequisites.title", { operation: operationName }),
             defaultAction: CANCEL,
         }
     );

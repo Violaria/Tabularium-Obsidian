@@ -1,4 +1,5 @@
 import { Menu, WorkspaceLeaf } from "@/deps.ts";
+import { $msg } from "@/common/translation";
 import ReplicatorPaneComponent from "./P2PReplicatorPane.svelte";
 import { mount } from "svelte";
 import { SvelteItemView } from "@/common/SvelteItemView.ts";
@@ -46,32 +47,28 @@ export class P2PReplicatorPaneView extends SvelteItemView {
         await this._p2p.targetedTransfer.requestPushToPeer(peer.peerId);
     }
     async getRemoteConfig(peer: PeerStatus) {
-        Logger(
-            `Requesting remote config for ${peer.name}. Please input the passphrase on the remote device`,
-            LOG_LEVEL_NOTICE
-        );
+        Logger($msg("P2P.ApplyRemoteConfig.Requesting", { name: peer.name }), LOG_LEVEL_NOTICE);
         const remoteConfig = await this._p2p.configurationExchange.getRemoteConfiguration(peer.peerId);
         if (remoteConfig) {
-            Logger(`Remote config for ${peer.name} is retrieved successfully`);
-            const DROP = "Yes, and drop local database";
-            const KEEP = "Yes, but keep local database";
-            const CANCEL = "No, cancel";
+            Logger($msg("P2P.ApplyRemoteConfig.Retrieved", { name: peer.name }));
+            const DROP = $msg("P2P.ApplyRemoteConfig.Buttons.Drop");
+            const KEEP = $msg("P2P.ApplyRemoteConfig.Buttons.Keep");
+            const CANCEL = $msg("P2P.ApplyRemoteConfig.Buttons.Cancel");
             const yn = await this.core.confirm.askSelectStringDialogue(
-                `Do you really want to apply the remote config? This will overwrite your current config immediately and restart.
-And you can also drop the local database to rebuild from the remote device.`,
+                $msg("P2P.ApplyRemoteConfig.Message"),
                 [DROP, KEEP, CANCEL] as const,
                 {
                     defaultAction: CANCEL,
-                    title: "Apply Remote Config ",
+                    title: $msg("P2P.ApplyRemoteConfig.Title"),
                 }
             );
             if (yn === DROP || yn === KEEP) {
                 if (yn === DROP) {
                     if (remoteConfig.remoteType !== REMOTE_P2P) {
                         const yn2 = await this.core.confirm.askYesNoDialog(
-                            `Do you want to set the remote type to "P2P Sync" to rebuild by "P2P replication"?`,
+                            $msg("P2P.ApplyRemoteConfig.AskRebuildByP2P"),
                             {
-                                title: "Rebuild from remote device",
+                                title: $msg("P2P.ApplyRemoteConfig.RebuildTitle"),
                             }
                         );
                         if (yn2 === "yes") {
@@ -90,10 +87,10 @@ And you can also drop the local database to rebuild from the remote device.`,
                     this.core.services.appLifecycle.scheduleRestart();
                 }
             } else {
-                Logger(`Cancelled\nRemote config for ${peer.name} is not applied`, LOG_LEVEL_NOTICE);
+                Logger($msg("P2P.ApplyRemoteConfig.Cancelled", { name: peer.name }), LOG_LEVEL_NOTICE);
             }
         } else {
-            Logger(`Cannot retrieve remote config for ${peer.peerId}`);
+            Logger($msg("P2P.ApplyRemoteConfig.RetrieveFailed", { peerId: peer.peerId }));
         }
     }
 
@@ -128,18 +125,30 @@ And you can also drop the local database to rebuild from the remote device.`,
     private showPeerMenu(peer: PeerStatus, event: MouseEvent): void {
         this.m?.hide();
         this.m = new Menu()
-            .addItem((item) => item.setTitle("📥 Only Fetch").onClick(() => this.replicateFrom(peer)))
-            .addItem((item) => item.setTitle("📤 Only Send").onClick(() => this.replicateTo(peer)))
+            .addItem((item) =>
+                item
+                    .setTitle($msg("Only Fetch"))
+                    .setIcon("download")
+                    .onClick(() => this.replicateFrom(peer))
+            )
+            .addItem((item) =>
+                item
+                    .setTitle($msg("Only Send"))
+                    .setIcon("upload")
+                    .onClick(() => this.replicateTo(peer))
+            )
             .addSeparator()
             .addItem((item) => {
-                item.setTitle("🔧 Get Configuration").onClick(async () => {
-                    await this.getRemoteConfig(peer);
-                });
+                item.setTitle($msg("Get Configuration"))
+                    .setIcon("wrench")
+                    .onClick(async () => {
+                        await this.getRemoteConfig(peer);
+                    });
             })
             .addSeparator()
             .addItem((item) => {
                 const mark = peer.syncOnConnect ? "checkmark" : null;
-                item.setTitle("Toggle Sync on connect")
+                item.setTitle($msg("Toggle Sync on connect"))
                     .onClick(async () => {
                         await this.toggleProp(peer, "syncOnConnect");
                     })
@@ -147,7 +156,7 @@ And you can also drop the local database to rebuild from the remote device.`,
             })
             .addItem((item) => {
                 const mark = peer.watchOnConnect ? "checkmark" : null;
-                item.setTitle("Toggle Watch on connect")
+                item.setTitle($msg("Toggle Watch on connect"))
                     .onClick(async () => {
                         await this.toggleProp(peer, "watchOnConnect");
                     })
@@ -155,7 +164,7 @@ And you can also drop the local database to rebuild from the remote device.`,
             })
             .addItem((item) => {
                 const mark = peer.syncOnReplicationCommand ? "checkmark" : null;
-                item.setTitle("Toggle Sync on `Replicate now` command")
+                item.setTitle($msg("Toggle Sync on `Replicate now` command"))
                     .onClick(async () => {
                         await this.toggleProp(peer, "syncOnReplicationCommand");
                     })
@@ -169,7 +178,7 @@ And you can also drop the local database to rebuild from the remote device.`,
     }
 
     getDisplayText() {
-        return "Peer-to-Peer Replicator";
+        return $msg("P2P.ReplicatorViewTitle");
     }
 
     override async onClose(): Promise<void> {

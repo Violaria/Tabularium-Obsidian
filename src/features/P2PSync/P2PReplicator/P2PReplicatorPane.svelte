@@ -470,7 +470,7 @@
                         </td>
                     </tr>
                     <!-- <tr>
-                <th> Auto Accepting </th>
+                <th> {_msg("Auto Accepting")} </th>
                 <td>
                     <label class={{ "is-dirty": isAutoAcceptModified }}>
                         <input type="checkbox" bind:checked={eAutoAccept} />

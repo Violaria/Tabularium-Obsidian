@@ -95,27 +95,23 @@ export function panePatches(this: ObsidianLiveSyncSettingTab, paneEl: HTMLElemen
                 .setName($msg("Database Adapter"))
                 .setDesc($msg("Select the database adapter to use."));
             const el = setting.controlEl.createDiv({});
-            el.setText(`Current adapter: ${useIndexedDBAdapter ? "IndexedDB" : "IDB"}`);
+            el.setText(
+                $msg("Ui.Settings.Patches.CurrentAdapter", { adapter: useIndexedDBAdapter ? "IndexedDB" : "IDB" })
+            );
             if (!useIndexedDBAdapter) {
                 setting.addButton((button) => {
-                    button.setButtonText("Switch to IndexedDB").onClick(async () => {
-                        Logger("Migrating all data to IndexedDB...", LOG_LEVEL_NOTICE);
+                    button.setButtonText($msg("Switch to IndexedDB")).onClick(async () => {
+                        Logger($msg("Ui.Settings.Patches.MigratingToIndexedDb"), LOG_LEVEL_NOTICE);
                         await migrateAllToIndexedDB();
-                        Logger(
-                            "Migration to IndexedDB completed. Please switch the adapter and restart Obsidian.",
-                            LOG_LEVEL_NOTICE
-                        );
+                        Logger($msg("Ui.Settings.Patches.MigrationIndexedDbCompletedFollowUp"), LOG_LEVEL_NOTICE);
                     });
                 });
             } else {
                 setting.addButton((button) => {
-                    button.setButtonText("Switch to IDB").onClick(async () => {
-                        Logger("Migrating all data to IDB...", LOG_LEVEL_NOTICE);
+                    button.setButtonText($msg("Switch to IDB")).onClick(async () => {
+                        Logger($msg("Ui.Settings.Patches.MigratingToIdb"), LOG_LEVEL_NOTICE);
                         await migrateAllToIDB();
-                        Logger(
-                            "Migration to IDB completed. Please switch the adapter and restart Obsidian.",
-                            LOG_LEVEL_NOTICE
-                        );
+                        Logger($msg("Ui.Settings.Patches.MigrationIdbCompletedFollowUp"), LOG_LEVEL_NOTICE);
                     });
                 });
             }
@@ -228,17 +224,20 @@ export function panePatches(this: ObsidianLiveSyncSettingTab, paneEl: HTMLElemen
         }
 
         this.addOnSaved("maxMTimeForReflectEvents", async (key) => {
-            const buttons = ["Restart Now", "Later"] as const;
+            const restartNow = $msg("Restart Now");
+            const later = $msg("Later");
             const reboot = await this.core.confirm.askSelectStringDialogue(
-                "Restarting Obsidian is strongly recommended. Until restart, some changes may not take effect, and display may be inconsistent. Are you sure to restart now?",
-                buttons,
+                $msg(
+                    "Restarting Obsidian is strongly recommended. Until restart, some changes may not take effect, and display may be inconsistent. Are you sure to restart now?"
+                ),
+                [restartNow, later],
                 {
-                    title: "Remediation Setting Changed",
-                    defaultAction: "Restart Now",
+                    title: $msg("Remediation Setting Changed"),
+                    defaultAction: restartNow,
                 }
             );
-            if (reboot !== "Later") {
-                Logger("Remediation setting changed. Restarting Obsidian...", LOG_LEVEL_NOTICE);
+            if (reboot !== later) {
+                Logger($msg("Ui.Settings.Patches.RemediationRestarting"), LOG_LEVEL_NOTICE);
                 this.services.appLifecycle.performRestart();
             }
         });

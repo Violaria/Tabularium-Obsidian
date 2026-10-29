@@ -37,7 +37,7 @@ afterEach(() => setLang("def"));
 describe("Fast Setup translated choices", () => {
     it("uses the current language after the module has loaded and saves stable choice values", async () => {
         const { host, confirmWithMessage, smallConfig } = createHost();
-        setLang("es");
+        setLang("zh");
         confirmWithMessage.mockImplementation(async (_title, _message, buttons) => buttons[1]);
 
         await expect(askSimpleFetchMode(host)).resolves.toEqual({
@@ -129,7 +129,7 @@ describe("Fast Setup translated choices", () => {
     it("restores choices saved by the previous English implementation while displaying Spanish", async () => {
         const savedChoice = JSON.stringify({ stage1: REMOTE_WINS, stage2: KEEP_LOCAL });
         const { host, confirmWithMessage, smallConfig } = createHost(savedChoice);
-        setLang("es");
+        setLang("zh");
 
         await expect(askSimpleFetchMode(host)).resolves.toEqual({
             mode: "remote-only",
@@ -145,7 +145,7 @@ describe("Fast Setup translated choices", () => {
         setLang("def");
         confirmWithMessage
             .mockImplementationOnce(async (_title, _message, buttons) => {
-                setLang("es");
+                setLang("zh");
                 return buttons[1];
             })
             .mockImplementationOnce(async (_title, _message, buttons) => buttons[1]);
@@ -162,7 +162,7 @@ describe("Fast Setup translated choices", () => {
 
     it("recognises the translated cancellation choice", async () => {
         const { host, confirmWithMessage, smallConfig } = createHost();
-        setLang("es");
+        setLang("zh");
         confirmWithMessage.mockImplementationOnce(async (_title, _message, buttons) => buttons[3]);
 
         await expect(askSimpleFetchMode(host)).resolves.toBe("cancelled");
@@ -174,7 +174,7 @@ describe("Fast Setup translated choices", () => {
     it("saves English-compatible values when the module initially loads in Spanish", async () => {
         vi.resetModules();
         const translation = await import("@/common/translation");
-        translation.setLang("es");
+        translation.setLang("zh");
         const { askSimpleFetchMode: askAfterSpanishStartup } = await import("./redFlag.simpleFetch");
         const { host, confirmWithMessage, smallConfig } = createHost();
         confirmWithMessage.mockImplementation(async (_title, _message, buttons) => buttons[1]);

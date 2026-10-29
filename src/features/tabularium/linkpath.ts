@@ -25,5 +25,8 @@ export function resolveLinkpath(target: string, from: string, files: readonly st
     }
     const suffix = `/${normalise(link).toLowerCase()}`;
     const matches = files.filter((file) => `/${file.toLowerCase()}`.endsWith(suffix));
-    return matches.find((file) => folderOf(file) === folder) ?? matches.sort((a, b) => a.length - b.length || a.localeCompare(b))[0];
+    return (
+        matches.find((file) => folderOf(file) === folder) ??
+        matches.sort((a, b) => a.length - b.length || a.localeCompare(b))[0]
+    );
 }

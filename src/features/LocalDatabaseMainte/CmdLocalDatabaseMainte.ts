@@ -20,6 +20,7 @@ import type { ReplicatorInstance } from "@vrtmrz/livesync-commonlib/replication"
 import { delay } from "@vrtmrz/livesync-commonlib/compat/common/utils";
 import { isNotFoundError } from "@vrtmrz/livesync-commonlib/compat/common/utils.doc";
 import { ensureLocalDatabaseMaintenancePrerequisites } from "./maintenancePrerequisites";
+import { $msg } from "@/common/translation";
 // import { _requestToCouchDB } from "@/common/utils";
 const DB_KEY_SEQ = "gc-seq";
 const DB_KEY_CHUNK_SET = "chunk-set";
@@ -62,7 +63,7 @@ export class LocalDatabaseMaintenance extends LiveSyncCommands {
         // NO OP.
         this.services.API.addCommand({
             id: "gc-v3",
-            name: "Garbage Collection V3 (advanced, beta)",
+            name: $msg("cmdLocalDatabaseMainte.commandGCV3"),
             icon: "trash-2",
             checkCallback: (checking) => {
                 const isApplicableRemote = this.settings.remoteType === REMOTE_COUCHDB;
@@ -79,7 +80,7 @@ export class LocalDatabaseMaintenance extends LiveSyncCommands {
     }
     async allChunks(includeDeleted: boolean = false) {
         const p = this._progress("", LOG_LEVEL_NOTICE);
-        p.log("Retrieving chunks informations..");
+        p.log($msg("cmdLocalDatabaseMainte.retrievingChunks"));
         try {
             const ret = await this.localDatabase.allChunks(includeDeleted);
             return ret;
@@ -94,7 +95,12 @@ export class LocalDatabaseMaintenance extends LiveSyncCommands {
         this.localDatabase.clearCaches();
     }
 
-    async confirm(title: string, message: string, affirmative = "Yes", negative = "No") {
+    async confirm(
+        title: string,
+        message: string,
+        affirmative: string = $msg("moduleInputUIObsidian.optionYes"),
+        negative: string = $msg("moduleInputUIObsidian.optionNo")
+    ) {
         return (
             (await this.core.confirm.askSelectStringDialogue(message, [affirmative, negative], {
                 title,
@@ -117,7 +123,7 @@ export class LocalDatabaseMaintenance extends LiveSyncCommands {
      * Resurrect deleted chunks that are still used in the database.
      */
     async resurrectChunks() {
-        if (!(await this.ensureAvailable("Resurrect Chunks"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.resurrectChunks")))) return;
         const { used, existing } = await this.allChunks(true);
         const excessiveDeletions = [...existing]
             .filter(([key, e]) => e._deleted)
@@ -158,22 +164,32 @@ export class LocalDatabaseMaintenance extends LiveSyncCommands {
         const resurrectChunks = excessiveDeletions.filter((e) => e.data !== "").map((e) => ({ ...e, _deleted: false }));
 
         if (resurrectChunks.length == 0) {
-            this._notice("No chunks are found to be resurrected.");
+            this._notice($msg("cmdLocalDatabaseMainte.resurrect.none"));
             return;
         }
-        const message = `We have following chunks that are deleted but still used in the database.
-
-- Completely lost chunks: ${completelyLostChunks.length}
-- Resurrectable chunks: ${resurrectChunks.length}
-
-Do you want to resurrect these chunks?`;
-        if (await this.confirm("Resurrect Chunks", message, "Resurrect", "Cancel")) {
+        const message = $msg("cmdLocalDatabaseMainte.resurrect.message", {
+            lost: `${completelyLostChunks.length}`,
+            resurrectable: `${resurrectChunks.length}`,
+        });
+        if (
+            await this.confirm(
+                $msg("cmdLocalDatabaseMainte.operation.resurrectChunks"),
+                message,
+                $msg("cmdLocalDatabaseMainte.buttonResurrect"),
+                $msg("Cancel")
+            )
+        ) {
             const result = await this.database.bulkDocs(resurrectChunks);
             this.clearHash();
             const resurrectedChunks = result.filter((e) => "ok" in e).map((e) => e.id);
-            this._notice(`Resurrected chunks: ${resurrectedChunks.length} / ${resurrectChunks.length}`);
+            this._notice(
+                $msg("cmdLocalDatabaseMainte.resurrect.result", {
+                    resurrected: `${resurrectedChunks.length}`,
+                    total: `${resurrectChunks.length}`,
+                })
+            );
         } else {
-            this._notice("Resurrect operation is cancelled.");
+            this._notice($msg("cmdLocalDatabaseMainte.resurrect.cancelled"));
         }
     }
     /**
@@ -182,39 +198,41 @@ Do you want to resurrect these chunks?`;
      * After this, chunks that are used in the deleted files become ready for compaction.
      */
     async commitFileDeletion() {
-        if (!(await this.ensureAvailable("Delete Files"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.deleteFiles")))) return;
         const p = this._progress("", LOG_LEVEL_NOTICE);
-        p.log("Searching for deleted files..");
+        p.log($msg("cmdLocalDatabaseMainte.deleteFiles.searching"));
         const docs = await this.database.allDocs<MetaEntry>({ include_docs: true });
         const deletedDocs = docs.rows.filter(
             (e) => (e.doc?.type == "newnote" || e.doc?.type == "plain") && e.doc?.deleted
         );
         if (deletedDocs.length == 0) {
-            p.done("No deleted files found.");
+            p.done($msg("cmdLocalDatabaseMainte.deleteFiles.none"));
             return;
         }
-        p.log(`Found ${deletedDocs.length} deleted files.`);
+        p.log($msg("cmdLocalDatabaseMainte.deleteFiles.found", { count: `${deletedDocs.length}` }));
 
-        const message = `We have following files that are marked as deleted.
-
-- Deleted files: ${deletedDocs.length}
-
-Are you sure to delete these files permanently?
-
-Note: **Make sure to synchronise all devices before deletion.**
-
-> [!Note]
-> This operation affects the database permanently. Deleted files will not be recovered after this operation.
-> And, the chunks that are used in the deleted files will be ready for compaction.`;
+        const message = $msg("cmdLocalDatabaseMainte.deleteFiles.message", { count: `${deletedDocs.length}` });
 
         const deletingDocs = deletedDocs.map((e) => ({ ...e.doc, _deleted: true }) as MetaEntry);
 
-        if (await this.confirm("Delete Files", message, "Delete", "Cancel")) {
+        if (
+            await this.confirm(
+                $msg("cmdLocalDatabaseMainte.operation.deleteFiles"),
+                message,
+                $msg("Delete"),
+                $msg("Cancel")
+            )
+        ) {
             const result = await this.database.bulkDocs(deletingDocs);
             this.clearHash();
-            p.done(`Deleted ${result.filter((e) => "ok" in e).length} / ${deletedDocs.length} files.`);
+            p.done(
+                $msg("cmdLocalDatabaseMainte.deleteFiles.result", {
+                    deleted: `${result.filter((e) => "ok" in e).length}`,
+                    total: `${deletedDocs.length}`,
+                })
+            );
         } else {
-            p.done("Deletion operation is cancelled.");
+            p.done($msg("cmdLocalDatabaseMainte.deletionCancelled"));
         }
     }
     /**
@@ -224,35 +242,39 @@ Note: **Make sure to synchronise all devices before deletion.**
      * It is recommended to compact the database after this operation (History should be kept once before compaction).
      */
     async commitChunkDeletion() {
-        if (!(await this.ensureAvailable("Delete Chunks"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.deleteChunks")))) return;
         const { existing } = await this.allChunks(true);
         const deletedChunks = [...existing].filter(([key, e]) => e._deleted && e.data !== "").map(([key, e]) => e);
         const deletedNotVacantChunks = deletedChunks.map((e) => ({ ...e, data: "", _deleted: true }));
         const size = deletedChunks.reduce((acc, e) => acc + e.data.length, 0);
         const humanSize = sizeToHumanReadable(size);
-        const message = `We have following chunks that are marked as deleted.
-
-- Deleted chunks: ${deletedNotVacantChunks.length} (${humanSize})
-
-Are you sure to delete these chunks permanently?
-
-Note: **Make sure to synchronise all devices before deletion.**
-
-> [!Note]
-> This operation finally reduces the capacity of the remote.`;
+        const message = $msg("cmdLocalDatabaseMainte.deleteChunks.message", {
+            count: `${deletedNotVacantChunks.length}`,
+            size: humanSize,
+        });
 
         if (deletedNotVacantChunks.length == 0) {
-            this._notice("No deleted chunks found.");
+            this._notice($msg("cmdLocalDatabaseMainte.deleteChunks.none"));
             return;
         }
-        if (await this.confirm("Delete Chunks", message, "Delete", "Cancel")) {
+        if (
+            await this.confirm(
+                $msg("cmdLocalDatabaseMainte.operation.deleteChunks"),
+                message,
+                $msg("Delete"),
+                $msg("Cancel")
+            )
+        ) {
             const result = await this.database.bulkDocs(deletedNotVacantChunks);
             this.clearHash();
             this._notice(
-                `Deleted chunks: ${result.filter((e) => "ok" in e).length} / ${deletedNotVacantChunks.length}`
+                $msg("cmdLocalDatabaseMainte.deleteChunks.result", {
+                    deleted: `${result.filter((e) => "ok" in e).length}`,
+                    total: `${deletedNotVacantChunks.length}`,
+                })
             );
         } else {
-            this._notice("Deletion operation is cancelled.");
+            this._notice($msg("cmdLocalDatabaseMainte.deletionCancelled"));
         }
     }
     /**
@@ -261,7 +283,7 @@ Note: **Make sure to synchronise all devices before deletion.**
      * Make sure all devices are synchronized before running this method.
      */
     async markUnusedChunks() {
-        if (!(await this.ensureAvailable("Mark unused chunks"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.markUnusedChunks")))) return;
         const { used, existing } = await this.allChunks();
         const existChunks = [...existing];
         const unusedChunks = existChunks.filter(([key, e]) => !used.has(e._id)).map(([key, e]) => e);
@@ -272,29 +294,35 @@ Note: **Make sure to synchronise all devices before deletion.**
         const size = deleteChunks.reduce((acc, e) => acc + e.data.length, 0);
         const humanSize = sizeToHumanReadable(size);
         if (deleteChunks.length == 0) {
-            this._notice("No unused chunks found.");
+            this._notice($msg("cmdLocalDatabaseMainte.unusedChunks.none"));
             return;
         }
-        const message = `We have following chunks that are not used from any files.
+        const message = $msg("cmdLocalDatabaseMainte.unusedChunks.markMessage", {
+            count: `${deleteChunks.length}`,
+            size: humanSize,
+        });
 
-- Chunks: ${deleteChunks.length} (${humanSize})
-
-Are you sure to mark these chunks to be deleted?
-
-Note: **Make sure to synchronise all devices before deletion.**
-
-> [!Note]
-> This operation will not reduces the capacity of the remote until permanent deletion.`;
-
-        if (await this.confirm("Mark unused chunks", message, "Mark", "Cancel")) {
+        if (
+            await this.confirm(
+                $msg("cmdLocalDatabaseMainte.operation.markUnusedChunks"),
+                message,
+                $msg("cmdLocalDatabaseMainte.buttonMark"),
+                $msg("Cancel")
+            )
+        ) {
             const result = await this.database.bulkDocs(deleteChunks);
             this.clearHash();
-            this._notice(`Marked chunks: ${result.filter((e) => "ok" in e).length} / ${deleteChunks.length}`);
+            this._notice(
+                $msg("cmdLocalDatabaseMainte.unusedChunks.markResult", {
+                    marked: `${result.filter((e) => "ok" in e).length}`,
+                    total: `${deleteChunks.length}`,
+                })
+            );
         }
     }
 
     async removeUnusedChunks() {
-        if (!(await this.ensureAvailable("Delete unused chunks"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.deleteUnusedChunks")))) return;
         const { used, existing } = await this.allChunks();
         const existChunks = [...existing];
         const unusedChunks = existChunks.filter(([key, e]) => !used.has(e._id)).map(([key, e]) => e);
@@ -306,23 +334,29 @@ Note: **Make sure to synchronise all devices before deletion.**
         const size = unusedChunks.reduce((acc, e) => acc + e.data.length, 0);
         const humanSize = sizeToHumanReadable(size);
         if (deleteChunks.length == 0) {
-            this._notice("No unused chunks found.");
+            this._notice($msg("cmdLocalDatabaseMainte.unusedChunks.none"));
             return;
         }
-        const message = `We have following chunks that are not used from any files.
+        const message = $msg("cmdLocalDatabaseMainte.unusedChunks.deleteMessage", {
+            count: `${deleteChunks.length}`,
+            size: humanSize,
+        });
 
-- Chunks: ${deleteChunks.length} (${humanSize})
-
-Are you sure to delete these chunks?
-
-Note: **Make sure to synchronise all devices before deletion.**
-
-> [!Note]
-> Chunks referenced from deleted files are not deleted. Please run "Commit File Deletion" before this operation.`;
-
-        if (await this.confirm("Mark unused chunks", message, "Mark", "Cancel")) {
+        if (
+            await this.confirm(
+                $msg("cmdLocalDatabaseMainte.operation.markUnusedChunks"),
+                message,
+                $msg("cmdLocalDatabaseMainte.buttonMark"),
+                $msg("Cancel")
+            )
+        ) {
             const result = await this.database.bulkDocs(deleteChunks);
-            this._notice(`Deleted chunks: ${result.filter((e) => "ok" in e).length} / ${deleteChunks.length}`);
+            this._notice(
+                $msg("cmdLocalDatabaseMainte.deleteChunks.result", {
+                    deleted: `${result.filter((e) => "ok" in e).length}`,
+                    total: `${deleteChunks.length}`,
+                })
+            );
             this.clearHash();
         }
     }
@@ -352,7 +386,7 @@ Note: **Make sure to synchronise all devices before deletion.**
      * Note that this only able to perform without Fetch chunks on demand.
      */
     async trackChanges(fromStart: boolean = false, showNotice: boolean = false) {
-        if (!(await this.ensureAvailable("Track chunk usage"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.trackChunkUsage")))) return;
         const logLevel = showNotice ? LOG_LEVEL_NOTICE : LOG_LEVEL_INFO;
         const kvDB = this.core.kvDB;
 
@@ -409,7 +443,13 @@ Note: **Make sure to synchronise all devices before deletion.**
                     .filter((e) => e.status == "available" && e.rev != doc._rev)
                     .filter((info) => !chunkUsageMap.get(doc._id)?.has(info.rev));
                 const infoLength = info.length;
-                this._log(`Found ${allRevs} old revisions for ${doc._id} . ${infoLength} items to check `);
+                this._log(
+                    $msg("cmdLocalDatabaseMainte.oldRevisionsFound", {
+                        count: `${allRevs}`,
+                        id: doc._id,
+                        toCheck: `${infoLength}`,
+                    })
+                );
                 if (info.length > 0) {
                     const oldDocs = await Promise.all(
                         info
@@ -424,7 +464,7 @@ Note: **Make sure to synchronise all devices before deletion.**
                 if (isNotFoundError(ex)) {
                     this._log(`No revisions found for ${doc._id}`, LOG_LEVEL_VERBOSE);
                 } else {
-                    this._log(`Error finding revisions for ${doc._id}`);
+                    this._log($msg("cmdLocalDatabaseMainte.revisionLookupFailed", { id: doc._id }));
                     this._verbose(ex);
                 }
             }
@@ -464,24 +504,22 @@ Note: **Make sure to synchronise all devices before deletion.**
 
         const result = await this.scanUnusedChunks();
 
-        const message = `Total chunks: ${result.chunkSet.size}\nUnused chunks: ${result.unusedSet.size}`;
+        const message = $msg("cmdLocalDatabaseMainte.trackSummary", {
+            total: `${result.chunkSet.size}`,
+            unused: `${result.unusedSet.size}`,
+        });
         this._log(message, logLevel);
     }
     async performGC(showingNotice = false) {
-        if (!(await this.ensureAvailable("Garbage Collection"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.garbageCollection")))) return;
         await this.trackChanges(false, showingNotice);
-        const title = "Are all devices synchronised?";
-        const confirmMessage = `This function deletes unused chunks from the device. If there are differences between devices, some chunks may be missing when resolving conflicts.
-Be sure to synchronise before executing.
-
-If chunks used by current Vault files are deleted, Hatch -> Recreate chunks for current Vault files can recreate them only from files currently present in the Vault. It cannot recover unreadable historical or conflict content.
-
-Are you ready to delete unused chunks?`;
+        const title = $msg("cmdLocalDatabaseMainte.gc.title");
+        const confirmMessage = $msg("cmdLocalDatabaseMainte.gc.message");
 
         const logLevel = showingNotice ? LOG_LEVEL_NOTICE : LOG_LEVEL_INFO;
 
-        const BUTTON_OK = `Yes, delete chunks`;
-        const BUTTON_CANCEL = "Cancel";
+        const BUTTON_OK = $msg("cmdLocalDatabaseMainte.gc.buttonDelete");
+        const BUTTON_CANCEL = $msg("Cancel");
 
         const result = await this.core.confirm.askSelectStringDialogue(
             confirmMessage,
@@ -492,7 +530,7 @@ Are you ready to delete unused chunks?`;
             }
         );
         if (result !== BUTTON_OK) {
-            this._log("User cancelled chunk deletion", logLevel);
+            this._log($msg("cmdLocalDatabaseMainte.gc.cancelled"), logLevel);
             return;
         }
         const { unusedSet, chunkSet } = await this.scanUnusedChunks();
@@ -512,7 +550,7 @@ Are you ready to delete unused chunks?`;
                 _deleted: true,
             }));
 
-        this._log(`Deleting chunks: ${deleteDocs.length}`, logLevel);
+        this._log($msg("cmdLocalDatabaseMainte.gc.deleting", { count: `${deleteDocs.length}` }), logLevel);
         const deleteChunkBatch = arrayToChunkedArray(deleteDocs, 100);
         let successCount = 0;
         let errored = 0;
@@ -527,10 +565,16 @@ Are you ready to delete unused chunks?`;
                     errored++;
                 }
             }
-            this._log(`Deleting chunks: ${successCount} `, logLevel, "gc-preforming");
+            this._log(
+                $msg("cmdLocalDatabaseMainte.gc.deleting", { count: `${successCount}` }),
+                logLevel,
+                "gc-preforming"
+            );
         }
-        const message = `Garbage Collection completed.
-Success: ${successCount}, Errored: ${errored}`;
+        const message = $msg("cmdLocalDatabaseMainte.gc.completed", {
+            success: `${successCount}`,
+            errored: `${errored}`,
+        });
         this._log(message, logLevel);
         const kvDB = this.core.kvDB;
         await kvDB.set(DB_KEY_CHUNK_SET, chunkSet);
@@ -541,11 +585,14 @@ Success: ${successCount}, Errored: ${errored}`;
         if (!canCompactCouchDBRemote(replicator)) return;
         const remote = await replicator.connectRemoteCouchDBWithSetting(this.settings, false, false, true);
         if (!remote) {
-            this._notice("Failed to connect to remote for compaction.", "gc-compact");
+            this._notice($msg("Failed to connect to remote for compaction."), "gc-compact");
             return;
         }
         if (typeof remote == "string") {
-            this._notice(`Failed to connect to remote for compaction. ${remote}`, "gc-compact");
+            this._notice(
+                $msg("Failed to connect to remote for compaction. ${reason}", { reason: remote }),
+                "gc-compact"
+            );
             return;
         }
         try {
@@ -557,11 +604,11 @@ Success: ${successCount}, Errored: ${errored}`;
             for (;;) {
                 const status = await remote.db.info();
                 if ("compact_running" in status && status?.compact_running) {
-                    this._notice("Compaction in progress on remote database...", "gc-compact");
+                    this._notice($msg("Compaction in progress on remote database..."), "gc-compact");
                     await delay(2000);
                     timeout -= 2000;
                     if (timeout <= 0) {
-                        this._notice("Compaction on remote database timed out.", "gc-compact");
+                        this._notice($msg("Compaction on remote database timed out."), "gc-compact");
                         return;
                     }
                 } else {
@@ -569,9 +616,9 @@ Success: ${successCount}, Errored: ${errored}`;
                 }
             }
             if (compactResult && "ok" in compactResult) {
-                this._notice("Compaction on remote database completed successfully.", "gc-compact");
+                this._notice($msg("Compaction on remote database completed successfully."), "gc-compact");
             } else {
-                this._notice("Compaction on remote database failed.", "gc-compact");
+                this._notice($msg("Compaction on remote database failed."), "gc-compact");
             }
         } finally {
             await remote.db.close();
@@ -643,22 +690,22 @@ Success: ${successCount}, Errored: ${errored}`;
     async gcv3() {
         const replicator = this.core.replicator;
         if (this.settings.remoteType !== REMOTE_COUCHDB || !canRunCouchDBGarbageCollection(replicator)) return;
-        if (!(await this.ensureAvailable("Garbage Collection"))) return;
+        if (!(await this.ensureAvailable($msg("cmdLocalDatabaseMainte.operation.garbageCollection")))) return;
         // Start one-shot replication to ensure all changes are synced before GC.
         const r0 = await replicator.openOneShotReplication(this.settings, false, false, "sync");
         if (!r0) {
             this._notice(
-                "Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled."
+                $msg("Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled.")
             );
             return;
         }
 
         // Delete the chunk, but first verify the following:
         // Fetch the list of accepted nodes from the replicator.
-        const OPTION_CANCEL = "Cancel Garbage Collection";
+        const OPTION_CANCEL = $msg("Cancel Garbage Collection");
         const info = await replicator.getConnectedDeviceList();
         if (!info) {
-            this._notice("No connected device information found. Cancelling Garbage Collection.");
+            this._notice($msg("No connected device information found. Cancelling Garbage Collection."));
             return;
         }
         const { accepted_nodes, node_info } = info;
@@ -670,21 +717,23 @@ Success: ${successCount}, Errored: ${errored}`;
             }
         }
         if (infoMissingNodes.length > 0) {
-            const message = `The following accepted nodes are missing its node information:\n- ${infoMissingNodes.join("\n- ")}\n\nThis indicates that they have not been connected for some time or have been left on an older version.
-It is preferable to update all devices if possible. If you have any devices that are no longer in use, you can clear all accepted nodes by locking the remote once.`;
+            const message = $msg(
+                "The following accepted nodes are missing its node information:\n- ${missingNodes}\n\nThis indicates that they have not been connected for some time or have been left on an older version.\nIt is preferable to update all devices if possible. If you have any devices that are no longer in use, you can clear all accepted nodes by locking the remote once.",
+                { missingNodes: infoMissingNodes.join("\n- ") }
+            );
 
-            const OPTION_IGNORE = "Ignore and Proceed";
+            const OPTION_IGNORE = $msg("Ignore and Proceed");
             // const OPTION_DELETE = "Delete them and proceed";
             const buttons = [OPTION_CANCEL, OPTION_IGNORE] as const;
             const result = await this.core.confirm.askSelectStringDialogue(message, buttons, {
-                title: "Node Information Missing",
+                title: $msg("Node Information Missing"),
                 defaultAction: OPTION_CANCEL,
             });
             if (result === OPTION_CANCEL) {
-                this._notice("Garbage Collection cancelled by user.");
+                this._notice($msg("Garbage Collection cancelled by user."));
                 return;
             } else if (result === OPTION_IGNORE) {
-                this._notice("Proceeding with Garbage Collection, ignoring missing nodes.");
+                this._notice($msg("Proceeding with Garbage Collection, ignoring missing nodes."));
             }
         }
 
@@ -694,43 +743,48 @@ It is preferable to update all devices if possible. If you have any devices that
             return /^\d+$/u.test(progress) ? Number(progress) : Number.NaN;
         });
         if (progressValues.length === 0 || progressValues.some((progress) => !Number.isSafeInteger(progress))) {
-            this._notice("No connected device information found. Cancelling Garbage Collection.");
+            this._notice($msg("No connected device information found. Cancelling Garbage Collection."));
             return;
         }
         const maxProgress = Math.max(...progressValues);
         const minProgress = Math.min(...progressValues);
         const progressDifference = maxProgress - minProgress;
-        const OPTION_PROCEED = "Proceed Garbage Collection";
+        const OPTION_PROCEED = $msg("Proceed Garbage Collection");
         //   - If they differ significantly, the node may not have completed synchronisation, potentially causing conflicts. Display a confirmation dialog as a precaution.
         // - If they are not significantly different, display the standard confirmation dialogue message.
 
-        const detail = `> [!INFO]- The connected devices have been detected as follows:
-${Object.entries(node_info)
-    .map(
-        ([nodeId, nodeData]) =>
-            `> - Device: ${nodeData.device_name} (Node ID: ${nodeId})
->   - Obsidian version: ${nodeData.app_version}
->   - Plug-in version: ${nodeData.plugin_version}
->   - Progress: ${nodeData.progress.split("-")[0]}`
-    )
-    .join("\n")}
-`;
+        const devices = Object.entries(node_info)
+            .map(
+                ([nodeId, nodeData]) =>
+                    `> - ${$msg("Device")}: ${nodeData.device_name} (${$msg("Node ID")}: ${nodeId})
+>   - ${$msg("Obsidian version")}: ${nodeData.app_version}
+>   - ${$msg("Plug-in version")}: ${nodeData.plugin_version}
+>   - ${$msg("Progress")}: ${nodeData.progress.split("-")[0]}`
+            )
+            .join("\n");
+        const detail =
+            $msg("> [!INFO]- The connected devices have been detected as follows:\n${devices}", { devices }) + "\n";
         const message =
             progressDifference != 0
-                ? `Some devices have differing progress values (max: ${maxProgress}, min: ${minProgress}).
-This may indicate that some devices have not completed synchronisation, which could lead to conflicts. Strongly recommend confirming that all devices are synchronised before proceeding.`
-                : `All devices have the same progress value (${maxProgress}). Your devices seem to be synchronised. And be able to proceed with Garbage Collection.`;
+                ? $msg(
+                      "Some devices have differing progress values (max: ${maxProgress}, min: ${minProgress}).\nThis may indicate that some devices have not completed synchronisation, which could lead to conflicts. Strongly recommend confirming that all devices are synchronised before proceeding.",
+                      { maxProgress: `${maxProgress}`, minProgress: `${minProgress}` }
+                  )
+                : $msg(
+                      "All devices have the same progress value (${progress}). Your devices seem to be synchronised. And be able to proceed with Garbage Collection.",
+                      { progress: `${maxProgress}` }
+                  );
         const buttons = [OPTION_PROCEED, OPTION_CANCEL] as const;
         const defaultAction = progressDifference != 0 ? OPTION_CANCEL : OPTION_PROCEED;
         const result = await this.core.confirm.askSelectStringDialogue(message + "\n\n" + detail, buttons, {
-            title: "Garbage Collection Confirmation",
+            title: $msg("Garbage Collection Confirmation"),
             defaultAction,
         });
         if (result !== OPTION_PROCEED) {
-            this._notice("Garbage Collection cancelled by user.");
+            this._notice($msg("Garbage Collection cancelled by user."));
             return;
         }
-        this._notice("Proceeding with Garbage Collection.");
+        this._notice($msg("Proceeding with Garbage Collection."));
         //-  3. Once OK is confirmed in the dialogue, execute the chunk deletion. This is performed on the local database and immediately reflected on the remote. After reflecting on the remote, perform compaction.
         const gcStartTime = Date.now();
         // Perform Garbage Collection (new implementation).
@@ -739,12 +793,20 @@ This may indicate that some devices have not completed synchronisation, which co
         // would make chunks used exclusively by live conflict branches look unused.
         const { used: usedChunks, existing: allChunks } = await this.localDatabase.allChunks();
         this._notice(
-            `Garbage Collection: Scanning completed. Total chunks: ${allChunks.size}, Used chunks: ${usedChunks.size}`,
+            $msg("Garbage Collection: Scanning completed. Total chunks: ${totalChunks}, Used chunks: ${usedChunks}", {
+                totalChunks: `${allChunks.size}`,
+                usedChunks: `${usedChunks.size}`,
+            }),
             "gc-scanning"
         );
 
         const unusedChunks = [...allChunks.entries()].filter(([chunkId]) => !usedChunks.has(chunkId));
-        this._notice(`Garbage Collection: Found ${unusedChunks.length} unused chunks to delete.`, "gc-scanning");
+        this._notice(
+            $msg("Garbage Collection: Found ${unusedChunks} unused chunks to delete.", {
+                unusedChunks: `${unusedChunks.length}`,
+            }),
+            "gc-scanning"
+        );
         const deleteChunkDocs = unusedChunks.map(
             ([chunkId, chunk]) =>
                 ({
@@ -757,13 +819,20 @@ This may indicate that some devices have not completed synchronisation, which co
         const deletedCount = response.filter((e) => "ok" in e).length;
         const gcEndTime = Date.now();
         this._notice(
-            `Garbage Collection completed. Deleted chunks: ${deletedCount} / ${unusedChunks.length}. Time taken: ${(gcEndTime - gcStartTime) / 1000} seconds.`
+            $msg(
+                "Garbage Collection completed. Deleted chunks: ${deletedChunks} / ${totalChunks}. Time taken: ${seconds} seconds.",
+                {
+                    deletedChunks: `${deletedCount}`,
+                    totalChunks: `${unusedChunks.length}`,
+                    seconds: `${(gcEndTime - gcStartTime) / 1000}`,
+                }
+            )
         );
         // Send changes to remote
         const r = await replicator.openOneShotReplication(this.settings, false, false, "pushOnly");
         // Wait for replication to complete
         if (!r) {
-            this._notice("Failed to start replication after Garbage Collection.");
+            this._notice($msg("Failed to start replication after Garbage Collection."));
             return;
         }
         // Perform compaction

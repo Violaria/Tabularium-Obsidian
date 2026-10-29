@@ -10,6 +10,7 @@
 <script lang="ts">
     import Self from "./Tree.svelte";
     import type { KindleItem } from "./kindle";
+    import { t } from "../../../../server/ui/i18n";
 
     interface Props {
         node: TreeNode;
@@ -36,7 +37,7 @@
         <li>
             <div class="row" class:current={child.path === current}>
                 {#if selecting && sendable(child)}
-                    <input type="checkbox" aria-label="选择 {child.name}" checked={selected.some((s) => s.path === child.path)} onchange={() => toggle(item(child))} />
+                    <input type="checkbox" aria-label={t("notes.selectItem", { name: child.name })} checked={selected.some((s) => s.path === child.path)} onchange={() => toggle(item(child))} />
                 {/if}
                 {#if child.folder}
                     <button class="name folder" aria-expanded={expandAll || !!expanded[child.path]} onclick={() => (expanded[child.path] = !expanded[child.path])}>
@@ -46,13 +47,13 @@
                     <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}>{label(child)}</button>
                 {/if}
                 {#if sendable(child) && !selecting}
-                    <button class="more" aria-label="更多操作" title="更多操作" onclick={() => (menu = menu === child.path ? undefined : child.path)}>⋯</button>
+                    <button class="more" aria-label={t("notes.more")} title={t("notes.more")} onclick={() => (menu = menu === child.path ? undefined : child.path)}>⋯</button>
                 {/if}
             </div>
             {#if menu === child.path}
                 <div class="menu" role="menu">
-                    <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>推送至 Kindle</button>
-                    <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>多选…</button>
+                    <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>{t("notes.send")}</button>
+                    <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>{t("notes.select")}</button>
                 </div>
             {/if}
             {#if child.folder && (expandAll || expanded[child.path])}

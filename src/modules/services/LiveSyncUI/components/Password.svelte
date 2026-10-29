@@ -41,7 +41,7 @@
     {disabled}
     onclick={() => (showPassword = !showPassword)}
 >
-    👁️
+    {translate(showPassword ? "Hide" : "Show")}
 </button>
 
 <style>

@@ -87,13 +87,13 @@
     const peerAttrLabels = $derived.by(() => {
         const attrs = [];
         if (peer.syncOnConnect) {
-            attrs.push(translateMessage("✔ SYNC"));
+            attrs.push(`✓ ${translateMessage("SYNC")}`);
         }
         if (peer.watchOnConnect) {
-            attrs.push(translateMessage("✔ WATCH"));
+            attrs.push(`✓ ${translateMessage("WATCH")}`);
         }
         if (peer.syncOnReplicationCommand) {
-            attrs.push(translateMessage("✔ SELECT"));
+            attrs.push(`✓ ${translateMessage("SELECT")}`);
         }
         return attrs;
     });
@@ -175,13 +175,15 @@
         {#if isAccepted}
             <div class="buttons">
                 <div class="row">
-                    <button class="button" onclick={sync} disabled={peer.isSending || peer.isFetching}>🔄</button>
-                    <!-- <button class="button" onclick={replicateFrom} disabled={peer.isFetching}>📥</button>
-                    <button class="button" onclick={replicateTo} disabled={peer.isSending}>📤</button> -->
+                    <button class="button" onclick={sync} disabled={peer.isSending || peer.isFetching}
+                        >{translateMessage("Sync")}</button
+                    >
                     {#if peer.isWatching}
-                        <button class="button" onclick={stopWatching}>{translateMessage("Stop ⚡")}</button>
+                        <button class="button" onclick={stopWatching}>{translateMessage("Stop live")}</button>
                     {:else}
-                        <button class="button" onclick={startWatching} title={translateMessage("live")}>⚡</button>
+                        <button class="button" onclick={startWatching} title={translateMessage("live")}
+                            >{translateMessage("Start live")}</button
+                        >
                     {/if}
                     {#if showPeerMenu}
                         <button class="button" onclick={moreMenu}>...</button>

@@ -32,6 +32,7 @@ import { $msg } from "@/common/translation";
 import { P2PLogCollector } from "@vrtmrz/livesync-commonlib/compat/replication/trystero/P2PLogCollector";
 import { REMOTE_REQUEST_ACTIVITY_MINIMUM_VISIBLE_MS, getTrackedRequestCount } from "./RemoteActivityStatus.ts";
 import {
+    CHUNK_FETCH_MARKS,
     createChunkFetchCounterLabel,
     createMinimumVisibleActivityCount,
     createPaddedCounterLabel,
@@ -112,6 +113,18 @@ function redactLog(log: string) {
 
 const showDebugLog = false;
 export const MARK_DONE = "\u{2009}\u{2009}";
+/** Plain glyphs for the status counters; each counter carries a translated tooltip. */
+const STATUS_MARKS = {
+    processing: "▸",
+    pending: "…",
+    batched: "□",
+    replication: "R",
+    database: "D",
+    storage: "S",
+    pluginScan: "P",
+    hiddenFiles: "H",
+    conflicts: "≠",
+} as const;
 export class ModuleLog extends AbstractObsidianModule {
     statusBar?: HTMLElement;
 
@@ -140,21 +153,21 @@ export class ModuleLog extends AbstractObsidianModule {
             return display;
         };
         const labelReplication = registerDisplay(
-            createPaddedCounterLabel(this.services.replication.replicationResultCount, `📥`)
+            createPaddedCounterLabel(this.services.replication.replicationResultCount, STATUS_MARKS.replication)
         );
         const labelDBCount = registerDisplay(
-            createPaddedCounterLabel(this.services.replication.databaseQueueCount, `📄`)
+            createPaddedCounterLabel(this.services.replication.databaseQueueCount, STATUS_MARKS.database)
         );
         const labelStorageCount = registerDisplay(
-            createPaddedCounterLabel(this.services.replication.storageApplyingCount, `💾`)
+            createPaddedCounterLabel(this.services.replication.storageApplyingCount, STATUS_MARKS.storage)
         );
         const labelChunkCount = registerDisplay(createChunkFetchCounterLabel(chunkFetchCounts));
-        const labelPluginScanCount = registerDisplay(createPaddedCounterLabel(pluginScanningCount, `🔌`));
+        const labelPluginScanCount = registerDisplay(createPaddedCounterLabel(pluginScanningCount, STATUS_MARKS.pluginScan));
         const labelConflictProcessCount = registerDisplay(
-            createPaddedCounterLabel(this.services.conflict.conflictProcessQueueCount, `🔩`)
+            createPaddedCounterLabel(this.services.conflict.conflictProcessQueueCount, STATUS_MARKS.conflicts)
         );
         const hiddenFilesCount = reactive(() => hiddenFilesEventCount.value - hiddenFilesProcessingCount.value);
-        const labelHiddenFilesCount = registerDisplay(createPaddedCounterLabel(hiddenFilesCount, `⚙️`));
+        const labelHiddenFilesCount = registerDisplay(createPaddedCounterLabel(hiddenFilesCount, STATUS_MARKS.hiddenFiles));
         const queueCountLabelX = reactive(() => {
             return `${labelReplication.value}${labelDBCount.value}${labelStorageCount.value}${labelChunkCount.value}${labelPluginScanCount.value}${labelHiddenFilesCount.value}${labelConflictProcessCount.value}`;
         });
@@ -184,14 +197,18 @@ export class ModuleLog extends AbstractObsidianModule {
                 fastForwardCount.value
             )
         );
-        const labelProc = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.processing, `⏳`));
-        const labelPend = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.totalQueued, `🛫`));
-        const labelInBatchDelay = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.batched, `📬`));
+        const labelProc = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.processing, STATUS_MARKS.processing));
+        const labelPend = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.totalQueued, STATUS_MARKS.pending));
+        const labelInBatchDelay = registerDisplay(createPaddedCounterLabel(this.services.fileProcessing.batched, STATUS_MARKS.batched));
         const waitingLabel = computed(() => {
             return `${labelProc.value}${labelPend.value}${labelInBatchDelay.value}`;
         });
-        const counterPart = (key: string, mark: string, value: number | undefined): StatusBarPart[] =>
-            value === undefined ? [] : [{ key, text: " " + mark, value }];
+        const counterPart = (
+            key: string,
+            mark: string,
+            value: number | undefined,
+            title: string
+        ): StatusBarPart[] => (value === undefined ? [] : [{ key, text: " " + mark, value, title }]);
         const statusLineLabel = computed(() => {
             const replication = replicationStatLabel();
             const queued = queueCountLabel();
@@ -199,17 +216,17 @@ export class ModuleLog extends AbstractObsidianModule {
             const p2p = this.p2pLogCollector.p2pReplicationLine.value;
             const firstLineParts = [
                 ...replication.parts,
-                ...counterPart("file-processing", "⏳", labelProc.count.value),
-                ...counterPart("file-pending", "🛫", labelPend.count.value),
-                ...counterPart("file-batched", "📬", labelInBatchDelay.count.value),
-                ...counterPart("queue-replication", "📥", labelReplication.count.value),
-                ...counterPart("queue-database", "📄", labelDBCount.count.value),
-                ...counterPart("queue-storage", "💾", labelStorageCount.count.value),
-                ...counterPart("queue-chunk-initial", "🛄", labelChunkCount.initialCount.value),
-                ...counterPart("queue-chunk-retrying", "🔁", labelChunkCount.retryingCount.value),
-                ...counterPart("queue-plugin-scan", "🔌", labelPluginScanCount.count.value),
-                ...counterPart("queue-hidden-files", "⚙️", labelHiddenFilesCount.count.value),
-                ...counterPart("queue-conflicts", "🔩", labelConflictProcessCount.count.value),
+                ...counterPart("file-processing", STATUS_MARKS.processing, labelProc.count.value, $msg("moduleLog.statusFileProcessing")),
+                ...counterPart("file-pending", STATUS_MARKS.pending, labelPend.count.value, $msg("moduleLog.statusFilePending")),
+                ...counterPart("file-batched", STATUS_MARKS.batched, labelInBatchDelay.count.value, $msg("moduleLog.statusFileBatched")),
+                ...counterPart("queue-replication", STATUS_MARKS.replication, labelReplication.count.value, $msg("moduleLog.statusQueueReplication")),
+                ...counterPart("queue-database", STATUS_MARKS.database, labelDBCount.count.value, $msg("moduleLog.statusQueueDatabase")),
+                ...counterPart("queue-storage", STATUS_MARKS.storage, labelStorageCount.count.value, $msg("moduleLog.statusQueueStorage")),
+                ...counterPart("queue-chunk-initial", CHUNK_FETCH_MARKS.initial, labelChunkCount.initialCount.value, $msg("moduleLog.statusQueueChunkInitial")),
+                ...counterPart("queue-chunk-retrying", CHUNK_FETCH_MARKS.retrying, labelChunkCount.retryingCount.value, $msg("moduleLog.statusQueueChunkRetrying")),
+                ...counterPart("queue-plugin-scan", STATUS_MARKS.pluginScan, labelPluginScanCount.count.value, $msg("moduleLog.statusQueuePluginScan")),
+                ...counterPart("queue-hidden-files", STATUS_MARKS.hiddenFiles, labelHiddenFilesCount.count.value, $msg("moduleLog.statusQueueHiddenFiles")),
+                ...counterPart("queue-conflicts", STATUS_MARKS.conflicts, labelConflictProcessCount.count.value, $msg("moduleLog.statusQueueConflicts")),
             ];
             return {
                 message: replication.message + waiting + queued + (p2p === "" ? "" : "\n" + p2p),
@@ -221,12 +238,12 @@ export class ModuleLog extends AbstractObsidianModule {
 
         const statusBarLabels = reactive(() => {
             const scheduleMessage = this.services.appLifecycle.isReloadingScheduled()
-                ? `WARNING! RESTARTING OBSIDIAN IS SCHEDULED!\n`
+                ? `${$msg("moduleLog.restartScheduled")}\n`
                 : "";
             const { message, parts, statusBarParts, hasP2P } = statusLineLabel();
             const fileStatus = this.activeFileStatus.value;
             const status = scheduleMessage + this.statusLog.value;
-            const fileStatusIcon = `${fileStatus && this.settings.hideFileWarningNotice ? " ⛔ SKIP" : ""}`;
+            const fileStatusIcon = `${fileStatus && this.settings.hideFileWarningNotice ? " ✗ SKIP" : ""}`;
             const skipPart = fileStatusIcon === "" ? [] : [{ key: "file-skip", text: fileStatusIcon }];
             return {
                 message: `${message}${fileStatusIcon}`,
@@ -269,18 +286,18 @@ export class ModuleLog extends AbstractObsidianModule {
         if (!thisFile) return "";
         const validPath = isValidPath(thisFile.path);
         if (!validPath) {
-            reason.push("This file has an invalid path under the current settings");
+            reason.push($msg("moduleLog.fileInvalidPath"));
         } else {
             // The most narrow check: Filename validity on Windows
             const validOnWindows = isValidFilenameInWidows(thisFile.name);
             const validOnDarwin = isValidFilenameInDarwin(thisFile.name);
             const validOnAndroid = isValidFilenameInAndroid(thisFile.name);
             const labels = [];
-            if (!validOnWindows) labels.push("🪟");
-            if (!validOnDarwin) labels.push("🍎");
-            if (!validOnAndroid) labels.push("🤖");
+            if (!validOnWindows) labels.push("Windows");
+            if (!validOnDarwin) labels.push("macOS");
+            if (!validOnAndroid) labels.push("Android");
             if (labels.length > 0) {
-                reasonWarn.push("Some platforms may be unable to process this file correctly: " + labels.join(" "));
+                reasonWarn.push($msg("moduleLog.filePlatformIncompatible", { platforms: labels.join(", ") }));
             }
         }
         const oversizedPathComponents = findPathComponentsExceedingUtf8Limit(thisFile.path);
@@ -297,17 +314,18 @@ export class ModuleLog extends AbstractObsidianModule {
                 .map((e) => e.path)
                 .filter((e) => e.toLowerCase() == thisFile.path.toLowerCase());
             if (f.length > 1) {
-                reason.push("There are multiple files with the same name (case-insensitive match)");
+                reason.push($msg("moduleLog.fileCaseConflict"));
             }
         }
         if (!(await this.services.vault.isTargetFile(thisFile.path))) {
-            reason.push("This file is ignored by the ignore rules");
+            reason.push($msg("moduleLog.fileIgnored"));
         }
         if (this.services.vault.isFileSizeTooLarge(thisFile.stat.size)) {
-            reason.push("This file size exceeds the configured limit");
+            reason.push($msg("moduleLog.fileTooLarge"));
         }
-        const result = reason.length > 0 ? "Not synchronised: " + reason.join(", ") : "";
-        const warnResult = reasonWarn.length > 0 ? "Warning: " + reasonWarn.join(", ") : "";
+        const result = reason.length > 0 ? $msg("moduleLog.fileNotSynchronised", { reasons: reason.join(", ") }) : "";
+        const warnResult =
+            reasonWarn.length > 0 ? $msg("moduleLog.fileWarning", { reasons: reasonWarn.join(", ") }) : "";
         return [result, warnResult].filter((e) => e).join("\n");
     }
     async setFileStatus() {
@@ -343,9 +361,9 @@ export class ModuleLog extends AbstractObsidianModule {
         ) {
             messageLines.push(...networkMessages);
         } else if (this.settings.networkWarningStyle === NetworkWarningStyles.ICON) {
-            if (networkMessages.length > 0) messageLines.push("🔗❌");
+            if (networkMessages.length > 0) messageLines.push($msg("moduleLog.networkErrorIcon"));
         }
-        this.messageArea.innerText = messageLines.map((e) => `⚠️ ${e}`).join("\n");
+        this.messageArea.innerText = messageLines.map((e) => `! ${e}`).join("\n");
     }
 
     onActiveLeafChange() {
@@ -449,10 +467,8 @@ export class ModuleLog extends AbstractObsidianModule {
 # ---- Debug Info Dump ----
 ${stringifyYaml(info)}
 \`\`\`\``;
-                if (await this.services.UI.promptCopyToClipboard("Debug info", yaml)) {
-                    new Notice(
-                        "Debug info copied to clipboard. You can paste it in the issue. Be careful as it may contain sensitive information, review it before sharing."
-                    );
+                if (await this.services.UI.promptCopyToClipboard($msg("moduleLog.debugInfoTitle"), yaml)) {
+                    new Notice($msg("moduleLog.debugInfoCopied"));
                 }
             },
         });

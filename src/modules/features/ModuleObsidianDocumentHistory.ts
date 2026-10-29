@@ -1,4 +1,5 @@
 import { type TFile } from "@/deps.ts";
+import { $msg } from "@/common/translation";
 import { eventHub } from "@/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";
 import type { FilePathWithPrefix, LoadedEntry, DocumentID } from "@vrtmrz/livesync-commonlib/compat/common/types";
@@ -44,7 +45,7 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
         }
         notes.sort((a, b) => b.mtime - a.mtime);
         const notesList = notes.map((e) => e.dispPath);
-        const target = await this.core.confirm.askSelectString("File to view History", notesList);
+        const target = await this.core.confirm.askSelectString($msg("File to view History"), notesList);
         if (target) {
             const targetId = notes.find((e) => e.dispPath == target)!;
             this.showHistory(targetId.path, targetId.id);

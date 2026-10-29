@@ -41,7 +41,7 @@ export function paneQuickSetup(
 
     void addPanel(
         paneEl,
-        `📲 ${$msg("obsidianLiveSyncSettingTab.titleSetupOtherDevices")}`,
+        $msg("obsidianLiveSyncSettingTab.titleSetupOtherDevices"),
         undefined,
         visibleOnly(() => this.isConfiguredAs("isConfigured", true))
     ).then((panelEl) => {

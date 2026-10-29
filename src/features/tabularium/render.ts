@@ -25,14 +25,20 @@ function rewriteObsidian(markdown: string) {
     return outsideCode(markdown, (part) =>
         part
             .replace(/%%[\s\S]*?%%/g, "")
-            .replace(/!\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]*))?\]\]/g, (_, target: string, alias = "") =>
-                `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`)
-            .replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias?: string) =>
-                alias ?? target.replace(/#.*$/, "").split("/").pop()!)
+            .replace(
+                /!\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]*))?\]\]/g,
+                (_, target: string, alias = "") =>
+                    `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`
+            )
+            .replace(
+                /\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g,
+                (_, target: string, alias?: string) => alias ?? target.replace(/#.*$/, "").split("/").pop()!
+            )
     );
 }
 
-export function renderNote(markdown: string, resolveImage: ImageResolver) {
+/** `missingImage` gives the placeholder text, in the interface language, for an image that cannot be packed. */
+export function renderNote(markdown: string, resolveImage: ImageResolver, missingImage: (name: string) => string) {
     const headings: { id: string; title: string }[] = [];
     const md = new MarkdownIt({ html: false, xhtmlOut: true, breaks: true, linkify: false });
     md.renderer.rules.image = (tokens, index) => {
@@ -42,11 +48,15 @@ export function renderNote(markdown: string, resolveImage: ImageResolver) {
         let target = src;
         if (src.startsWith("embed:")) target = decodeURIComponent(src.slice(6));
         else {
-            try { target = decodeURI(src); } catch { /* keep the raw source */ }
+            try {
+                target = decodeURI(src);
+            } catch {
+                /* keep the raw source */
+            }
         }
         const href = /^[a-z]+:/i.test(target) ? undefined : resolveImage(target);
         if (href) return `<img src="${escapeXml(href)}" alt="${escapeXml(alt)}"/>`;
-        return `<span class="missing">[图片：${escapeXml(alt || target.split("/").pop()!)}]</span>`;
+        return `<span class="missing">${escapeXml(missingImage(alt || target.split("/").pop()!))}</span>`;
     };
     // Only web links survive; links to notes and attachments have no target inside the book.
     const external = (href: string | null) => !!href && /^(https?|mailto):/i.test(href);
