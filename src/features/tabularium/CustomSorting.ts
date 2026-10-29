@@ -81,7 +81,7 @@ export function installCustomSorting(plugin: Plugin): TabulariumCustomSorting | 
     }
     const sorting = plugin.addChild(new TabulariumCustomSorting(plugin.app, plugin.manifest));
     plugin.addCommand({
-        id: "tabularium-file-sorting-settings",
+        id: "file-sorting-settings",
         name: "Open file sorting settings",
         callback: () => sorting.openSettings(),
     });

@@ -883,6 +883,11 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
         }
         return this.createRootGroup("general-settings", [
             {
+                name: "Tabularium 服务器",
+                desc: "登录服务器、查看连接状态或断开连接。",
+                action: () => this.plugin.tabularium?.open(),
+            },
+            {
                 name: "Tabularium file sorting",
                 desc: "Arrange notes and folders using sorting rules or bookmarks.",
                 action: () => this.plugin.sorting?.openSettings(),
@@ -1242,6 +1247,10 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
         this.isShown = true;
 
         containerEl.empty();
+        new ObsidianSetting(containerEl)
+            .setName("Tabularium 服务器")
+            .setDesc(this.plugin.tabularium?.connection ? `已连接：${this.plugin.tabularium.connection.vaultName}` : "登录服务器以开始同步。")
+            .addButton(button => button.setButtonText("打开").onClick(() => this.plugin.tabularium?.open()));
         if (this.plugin.sorting) {
             new ObsidianSetting(containerEl)
                 .setName("Tabularium file sorting")

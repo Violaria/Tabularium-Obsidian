@@ -54,11 +54,13 @@ import { useObsidianReplicationRibbonFeature } from "./serviceFeatures/obsidianR
 import { useStartupLifecycleFeature } from "./serviceFeatures/startupLifecycle";
 import { useJoinedDevicesFeature } from "./serviceFeatures/useJoinedDevices";
 import { useDatabaseDiagnosticsFeature } from "./serviceFeatures/useDatabaseDiagnostics";
+import { installTabulariumServer, type TabulariumServer } from "./features/tabularium/ServerLogin.ts";
 import { installCustomSorting, type TabulariumCustomSorting } from "./features/tabularium/CustomSorting.ts";
 export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
 export default class ObsidianLiveSyncPlugin extends Plugin {
     core: LiveSyncCore;
     sorting?: TabulariumCustomSorting;
+    tabularium?: TabulariumServer;
 
     /**
      * Initialise service modules.
@@ -197,6 +199,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     }
                 );
                 setupManager.registerP2PSetupConnectionProbe(replicator.connectionProbe);
+                this.tabularium = installTabulariumServer(this, core, setupManager);
                 useP2PReplicatorCommands(core, replicator);
                 useP2PReplicatorUI(core, core, replicator, createInteractiveP2PReplication(replicator));
                 useObsidianReplicationRibbonFeature(core);
