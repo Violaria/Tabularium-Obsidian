@@ -5,7 +5,7 @@ import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore.ts";
 import type { P2PServiceViews } from "@vrtmrz/livesync-commonlib/p2p";
 import P2PServerStatusPane from "./P2PServerStatusPane.svelte";
 
-export const VIEW_TYPE_P2P_SERVER_STATUS = "p2p-server-status";
+export const VIEW_TYPE_P2P_SERVER_STATUS = "tabularium-p2p-server-status";
 
 export class P2PServerStatusPaneView extends SvelteItemView {
     core: LiveSyncBaseCore;

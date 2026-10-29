@@ -62,7 +62,7 @@ async function createNoteAndWaitForLocalDb(cliBinary: string, env: NodeJS.Proces
             "(async()=>{",
             `const path=${JSON.stringify(notePath)};`,
             `const content=${JSON.stringify(noteContent)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "if(!(await app.vault.adapter.exists('E2E'))) await app.vault.createFolder('E2E');",
             "const existing=app.vault.getAbstractFileByPath(path);",
             "if(existing) await app.vault.delete(existing);",

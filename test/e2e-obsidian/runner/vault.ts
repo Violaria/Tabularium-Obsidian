@@ -8,7 +8,7 @@ export type { TemporaryVault };
 export async function createTemporaryVault(prefix = "obsidian-livesync-e2e-"): Promise<TemporaryVault> {
     return await createGenericTemporaryVault({
         prefix,
-        pluginIds: ["obsidian-livesync"],
+        pluginIds: ["tabularium"],
         idPrefix: "livesync-e2e",
     });
 }

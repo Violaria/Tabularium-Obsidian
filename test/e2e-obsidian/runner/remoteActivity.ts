@@ -100,7 +100,7 @@ async function readRemoteActivitySnapshotFromPage(page: Page): Promise<RemoteAct
         },
         {
             operationIcon: REMOTE_OPERATION_ACTIVITY_ICON,
-            pluginId: "obsidian-livesync",
+            pluginId: "tabularium",
             requestIcon: REMOTE_REQUEST_ACTIVITY_ICON,
             stateKey: REMOTE_ACTIVITY_E2E_STATE_KEY,
         }
@@ -197,7 +197,7 @@ export async function waitForRemoteActivityState(
                     expectedStates: REMOTE_ACTIVITY_EXPECTED_STATE,
                     gateKinds: REMOTE_ACTIVITY_GATE_KIND,
                     operationIcon: REMOTE_OPERATION_ACTIVITY_ICON,
-                    pluginId: "obsidian-livesync",
+                    pluginId: "tabularium",
                     requestIcon: REMOTE_REQUEST_ACTIVITY_ICON,
                     stateKey: REMOTE_ACTIVITY_E2E_STATE_KEY,
                 },

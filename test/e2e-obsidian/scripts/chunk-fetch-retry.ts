@@ -64,7 +64,7 @@ type Snapshot = {
 async function snapshot(page: Page): Promise<Snapshot> {
     return await page.evaluate(`(async()=>{
         const state=${observationSource};
-        const core=app.plugins.plugins['obsidian-livesync'].core;
+        const core=app.plugins.plugins['tabularium'].core;
         const db=core.localDatabase;
         const rows=await db.allDocsRaw({keys:[state.metadataId,state.chunkId],include_docs:true});
         const present=(id)=>rows.rows.some((row)=>row.id===id&&row.doc&&!row.value?.deleted);
@@ -138,7 +138,7 @@ async function runScenario(
     const chunkId = `h:e2e-chunk-fetch-${label}`;
     const content = `# Chunk fetch retry\n${label}\n`;
     const metadataId = await page.evaluate<string>(
-        `app.plugins.plugins['obsidian-livesync'].core.services.path.path2id(${JSON.stringify(path)})`
+        `app.plugins.plugins['tabularium'].core.services.path.path2id(${JSON.stringify(path)})`
     );
     const now = Date.now();
     // Only Metadata is initially present. The Chunk is a separate real CouchDB document.
@@ -155,7 +155,7 @@ async function runScenario(
 
     await page.evaluate(`(()=>{
         if(${observationSource}) throw new Error('A Chunk fetch observer is already installed.');
-        const core=app.plugins.plugins['obsidian-livesync'].core;
+        const core=app.plugins.plugins['tabularium'].core;
         const settings=core.services.setting.currentSettings();
         if(!settings.readChunksOnline||settings.useOnlyLocalChunk||settings.liveSync||settings.periodicReplication) {
             throw new Error('The fixture requires one-shot replication with on-demand Chunk reads.');

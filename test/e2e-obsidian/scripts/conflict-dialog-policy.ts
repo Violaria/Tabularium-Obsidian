@@ -84,7 +84,7 @@ async function createManualConflict(
             `const path=${JSON.stringify(targetPath)};`,
             `const baseRev=${JSON.stringify(baseRev)};`,
             `const contents=${JSON.stringify(contents)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const id=await core.services.path.path2id(path);",
             "for(const [index,content] of contents.entries()){",
             "  const blob=new Blob([content],{type:'text/plain'});",
@@ -117,7 +117,7 @@ async function readConflictFixture(
         [
             "(async()=>{",
             `const path=${JSON.stringify(targetPath)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const meta=await core.localDatabase.getDBEntryMeta(path,{conflicts:true,revs:true},true);",
             "if(!meta?._rev){",
             "  throw new Error(`Could not read the conflict fixture: ${path}`);",
@@ -165,7 +165,7 @@ async function requestConflictCheck(
             "(async()=>{",
             `const path=${JSON.stringify(targetPath)};`,
             `const waitForCompletion=${JSON.stringify(waitForCompletion)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await core.services.conflict.queueCheckFor(path);",
             "if(waitForCompletion){",
             "  await core.services.conflict.ensureAllProcessed();",
@@ -182,7 +182,7 @@ async function waitForConflictChecks(cliBinary: string, env: NodeJS.ProcessEnv):
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await core.services.conflict.ensureAllProcessed();",
             "return JSON.stringify({ok:true});",
             "})()",
@@ -205,7 +205,7 @@ async function applyReplicatedConflictResolution(
             `const path=${JSON.stringify(targetPath)};`,
             `const revisionToDelete=${JSON.stringify(revisionToDelete)};`,
             `const expectedConflictCount=${JSON.stringify(expectedConflictCount)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "if(!(await core.fileHandler.deleteRevisionFromDB(path,revisionToDelete))){",
             "  throw new Error(`Could not apply the replicated conflict resolution: ${path} ${revisionToDelete}`);",
             "}",
@@ -259,7 +259,7 @@ async function setShowMergeDialogOnlyOnActive(
         [
             "(()=>{",
             `const enabled=${JSON.stringify(enabled)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "core.settings.showMergeDialogOnlyOnActive=enabled;",
             "return JSON.stringify({ok:true});",
             "})()",
@@ -280,7 +280,7 @@ async function requestRepeatedConflictChecks(
             "(async()=>{",
             `const path=${JSON.stringify(targetPath)};`,
             `const count=${JSON.stringify(count)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await Promise.all(Array.from({length:count},()=>core.services.conflict.queueCheckFor(path)));",
             "return JSON.stringify({ok:true});",
             "})()",
@@ -304,7 +304,7 @@ async function requestInteractiveConflictResolution(
             `const currentRev=${JSON.stringify(fixture.currentRev)};`,
             `const conflictRev=${JSON.stringify(fixture.conflicts[0])};`,
             `const trackCompletion=${JSON.stringify(trackCompletion)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "if(trackCompletion) globalThis.__livesyncWaitingConflictCompleted=false;",
             "const pending=core.services.conflict.resolveByUserInteraction(path,{",
             "left:{rev:currentRev,data:'Current branch',ctime:1,mtime:2},",
@@ -323,7 +323,7 @@ async function disableLiveSyncAndWaitForConflictChecks(port: number): Promise<vo
     await withObsidianPage(port, async (page) => {
         await page.evaluate(() => {
             const host = globalThis as ObsidianTestGlobal;
-            const conflict = host.app?.plugins?.plugins?.["obsidian-livesync"]?.core?.services?.conflict;
+            const conflict = host.app?.plugins?.plugins?.["tabularium"]?.core?.services?.conflict;
             if (conflict === undefined) throw new Error("LiveSync conflict service is unavailable before unload");
             host.__livesyncConflictChecksCompleted = false;
             void conflict.ensureAllProcessed().then(() => {
@@ -333,7 +333,7 @@ async function disableLiveSyncAndWaitForConflictChecks(port: number): Promise<vo
         await page.evaluate(async () => {
             const plugins = (globalThis as ObsidianTestGlobal).app?.plugins;
             if (plugins === undefined) throw new Error("Obsidian plug-in manager is unavailable");
-            await plugins.disablePlugin("obsidian-livesync");
+            await plugins.disablePlugin("tabularium");
         });
         await conflictDialogue(page).waitFor({ state: "hidden", timeout: uiTimeoutMs });
         await page.waitForFunction(
@@ -354,7 +354,7 @@ async function enableLiveSync(port: number): Promise<void> {
         await page.evaluate(async () => {
             const plugins = (globalThis as ObsidianTestGlobal).app?.plugins;
             if (plugins === undefined) throw new Error("Obsidian plug-in manager is unavailable");
-            await plugins.enablePlugin("obsidian-livesync");
+            await plugins.enablePlugin("tabularium");
         });
     });
 }
@@ -573,7 +573,7 @@ async function main(): Promise<void> {
         const laterCommandExecuted = await withObsidianPage(session.remoteDebuggingPort, async (page) => {
             return await page.evaluate(
                 (commandId) => (globalThis as ObsidianTestGlobal).app?.commands?.executeCommandById(commandId) === true,
-                "obsidian-livesync:livesync-checkdoc-conflicted"
+                "tabularium:livesync-checkdoc-conflicted"
             );
         });
         if (!laterCommandExecuted) {
@@ -730,7 +730,7 @@ async function main(): Promise<void> {
                     throw new Error("A conflict dialogue remained visible after LiveSync was unloaded");
                 }
                 const pluginStillLoaded = await page.evaluate(
-                    () => (globalThis as ObsidianTestGlobal).app?.plugins?.plugins?.["obsidian-livesync"] !== undefined
+                    () => (globalThis as ObsidianTestGlobal).app?.plugins?.plugins?.["tabularium"] !== undefined
                 );
                 if (pluginStillLoaded) throw new Error("LiveSync remained loaded after disablePlugin completed");
             }

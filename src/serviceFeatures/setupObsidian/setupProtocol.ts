@@ -16,9 +16,12 @@ async function handleSetupProtocol(setupManager: SetupManager, conf: Record<stri
 
 export function registerSetupProtocolHandler(host: SetupFeatureHost, log: LogFunction, setupManager: SetupManager) {
     try {
-        host.services.API.registerProtocolHandler("setuplivesync", async (conf) => {
-            await handleSetupProtocol(setupManager, conf);
-        });
+        // Tabularium replaces Self-hosted LiveSync, so it also answers the Setup URIs that Commonlib generates.
+        for (const action of ["tabularium", "setuplivesync"]) {
+            host.services.API.registerProtocolHandler(action, async (conf) => {
+                await handleSetupProtocol(setupManager, conf);
+            });
+        }
     } catch (e) {
         log("Failed to register protocol handler. This feature may not work in some environments.", LOG_LEVEL_NOTICE);
         log(e, LOG_LEVEL_VERBOSE);

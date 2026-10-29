@@ -4,7 +4,7 @@ import type ObsidianLiveSyncPlugin from "@/main.ts";
 import { SvelteItemView } from "@/common/SvelteItemView.ts";
 import { $msg } from "@/common/translation";
 import { mount } from "svelte";
-export const VIEW_TYPE_LOG = "log-log";
+export const VIEW_TYPE_LOG = "tabularium-log";
 //Log view
 export class LogPaneView extends SvelteItemView {
     instantiateComponent(target: HTMLElement) {

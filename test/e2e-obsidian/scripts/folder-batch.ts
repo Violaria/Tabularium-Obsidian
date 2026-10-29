@@ -54,7 +54,7 @@ async function main(): Promise<void> {
         const result = await evalObsidianJson<{ descendants: number; renamed: number; deleted: number; missingRejected: boolean }>(
             cliBinary,
             `(async()=>{
-                const core=app.plugins.plugins['obsidian-livesync'].core;
+                const core=app.plugins.plugins['tabularium'].core;
                 const provenance=core.services.keyValueDB.openSimpleStore('file-reflection-provenance-v1');
                 const notes=${JSON.stringify(notes)};
                 const originalRoot=${JSON.stringify(originalRoot)};

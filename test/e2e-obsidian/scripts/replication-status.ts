@@ -78,7 +78,7 @@ type TestCore = {
 };
 type TestApp = {
     plugins?: {
-        plugins?: { "obsidian-livesync"?: { core?: TestCore } };
+        plugins?: { "tabularium"?: { core?: TestCore } };
     };
     vault?: {
         getAbstractFileByPath?: (path: string) => unknown | null;
@@ -154,7 +154,7 @@ async function injectReplicationStats(
 ): Promise<void> {
     const result = await page.evaluate(
         ({ stats, requestCount, responseCount }) => {
-            const core = (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core;
+            const core = (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core;
             const replicator = core?.services?.replicator;
             const api = core?.services?.API;
             if (!replicator?.replicationStatics || !api?.requestCount || !api.responseCount) {
@@ -173,7 +173,7 @@ async function injectReplicationStats(
 
 async function appendLiveSyncLog(page: Page, message: string): Promise<void> {
     const result = await page.evaluate((message) => {
-        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core;
+        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core;
         const modules = core?.modules ?? [];
         const moduleLog = modules.find((entry): entry is TestLogModule => {
             if (typeof entry !== "object" || entry === null) return false;
@@ -242,7 +242,7 @@ async function waitForOverlayOnActiveLeaf(page: Page): Promise<void> {
 async function getStatusDiagnostics(page: Page): Promise<Record<string, unknown>> {
     return await page.evaluate(() => {
         const app = (globalThis as TestWindow).app;
-        const core = app?.plugins?.plugins?.["obsidian-livesync"]?.core;
+        const core = app?.plugins?.plugins?.["tabularium"]?.core;
         const moduleLog = core?.modules?.find((entry): entry is TestLogModule => {
             if (typeof entry !== "object" || entry === null) return false;
             const candidate = entry as TestLogModule;
@@ -385,7 +385,7 @@ async function createSplitLeaf(page: Page): Promise<void> {
 
 async function observeRepeatedRendering(page: Page): Promise<{ mutationCount: number; elapsedMs: number }> {
     return await page.evaluate(async () => {
-        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core;
+        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core;
         const modules = core?.modules ?? [];
         const moduleLog = modules.find((entry): entry is TestLogModule => {
             if (typeof entry !== "object" || entry === null) return false;
@@ -464,7 +464,7 @@ async function assertNumericWidths(
 
 async function assertEditorItemSpacing(page: Page, mobile: boolean): Promise<void> {
     const spacing = await page.evaluate(() => {
-        const modules = (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core?.modules ?? [];
+        const modules = (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core?.modules ?? [];
         const moduleLog = modules.find((entry): entry is TestLogModule => {
             if (typeof entry !== "object" || entry === null) return false;
             return typeof (entry as TestLogModule).statusLineRenderer?.render === "function";
@@ -726,7 +726,7 @@ async function hideMainWindow(page: Page): Promise<MainWindowControl> {
 
 async function assertLegacyStatusPaths(page: Page): Promise<void> {
     await page.evaluate(async (timeout) => {
-        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core;
+        const core = (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core;
         const moduleLog = core?.modules?.find((entry): entry is TestLogModule => {
             if (typeof entry !== "object" || entry === null) return false;
             return (entry as TestLogModule).statusBarLabels !== undefined;
@@ -1052,7 +1052,7 @@ async function main(): Promise<void> {
                 },
             });
             failUnless(
-                session.readiness.pluginId === "obsidian-livesync",
+                session.readiness.pluginId === "tabularium",
                 "The LiveSync plug-in did not become ready."
             );
             if (!mobile) await runStatusScenario(session);
@@ -1061,7 +1061,7 @@ async function main(): Promise<void> {
                 if (mobile) {
                     await page.evaluate(() => {
                         const modules =
-                            (globalThis as TestWindow).app?.plugins?.plugins?.["obsidian-livesync"]?.core?.modules ??
+                            (globalThis as TestWindow).app?.plugins?.plugins?.["tabularium"]?.core?.modules ??
                             [];
                         const moduleLog = modules.find((entry): entry is TestLogModule => {
                             if (typeof entry !== "object" || entry === null) return false;

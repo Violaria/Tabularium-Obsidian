@@ -1,10 +1,10 @@
 {
-    "id": "obsidian-livesync",
-    "name": "Self-hosted LiveSync",
+    "id": "tabularium",
+    "name": "Tabularium",
     "version": "1.0.40",
     "minAppVersion": "1.7.2",
-    "description": "Community implementation of self-hosted livesync. Reflect your vault changes to some other devices immediately. Please make sure to disable other synchronize solutions to avoid content corruption or duplication.",
-    "author": "vorotamoroz",
-    "authorUrl": "https://github.com/vrtmrz",
+    "description": "Encrypted note synchronisation with a self-hosted Tabularium server. Based on Self-hosted LiveSync (MIT). Disable Self-hosted LiveSync and other synchronisation plugins before enabling this one.",
+    "author": "Nanako (based on Self-hosted LiveSync by vorotamoroz)",
+    "authorUrl": "https://github.com/vrtmrz/obsidian-livesync",
     "isDesktopOnly": false
 }

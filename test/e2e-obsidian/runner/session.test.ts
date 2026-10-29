@@ -11,7 +11,7 @@ vi.mock("@vrtmrz/obsidian-test-session", () => ({
         cliEnv: {},
         install: {},
         readiness: {},
-        pluginId: "obsidian-livesync",
+        pluginId: "tabularium",
         remoteDebuggingPort: 28052,
     })),
 }));
@@ -47,7 +47,7 @@ describe("LiveSync real-Obsidian session", () => {
         expect(startObsidianPluginSession).toHaveBeenCalledWith(
             expect.objectContaining({
                 artifactRoot: options.artifactRoot,
-                pluginId: "obsidian-livesync",
+                pluginId: "tabularium",
                 vault,
             })
         );

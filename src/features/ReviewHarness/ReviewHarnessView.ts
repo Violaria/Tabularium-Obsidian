@@ -7,7 +7,7 @@ import {
 } from "./reviewHarnessContract";
 import type { ReviewHarnessController } from "./reviewHarnessController";
 
-export const VIEW_TYPE_REVIEW_HARNESS = "self-hosted-livesync-review-harness";
+export const VIEW_TYPE_REVIEW_HARNESS = "tabularium-review-harness";
 
 const STATUS_LABELS: Record<ReviewHarnessScenarioStatus, string> = {
     idle: "Not run",

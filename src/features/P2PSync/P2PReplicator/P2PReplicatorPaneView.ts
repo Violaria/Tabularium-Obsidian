@@ -9,7 +9,7 @@ import { Logger } from "@vrtmrz/livesync-commonlib/compat/common/logger";
 import type { PeerStatus } from "@vrtmrz/livesync-commonlib/compat/replication/trystero/P2PReplicatorPaneCommon";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore.ts";
 import type { P2PServiceViews } from "@vrtmrz/livesync-commonlib/p2p";
-export const VIEW_TYPE_P2P = "p2p-replicator";
+export const VIEW_TYPE_P2P = "tabularium-p2p-replicator";
 
 function addToList(item: string, list: string) {
     return unique(

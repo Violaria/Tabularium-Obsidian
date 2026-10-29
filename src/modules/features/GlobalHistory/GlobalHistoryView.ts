@@ -4,7 +4,7 @@ import type ObsidianLiveSyncPlugin from "@/main.ts";
 import { SvelteItemView } from "@/common/SvelteItemView.ts";
 import { mount } from "svelte";
 
-export const VIEW_TYPE_GLOBAL_HISTORY = "global-history";
+export const VIEW_TYPE_GLOBAL_HISTORY = "tabularium-global-history";
 export class GlobalHistoryView extends SvelteItemView {
     instantiateComponent(target: HTMLElement) {
         return mount(GlobalHistoryComponent, {

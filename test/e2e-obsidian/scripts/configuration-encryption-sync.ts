@@ -24,7 +24,7 @@ import { startObsidianLiveSyncSession, type ObsidianLiveSyncSession } from "../r
 import { openLiveSyncSettings, waitForVisibleObsidianDialogue, withObsidianPage } from "../runner/ui.ts";
 import { createTemporaryVault } from "../runner/vault.ts";
 
-const coreExpression = "app.plugins.plugins['obsidian-livesync'].core";
+const coreExpression = "app.plugins.plugins['tabularium'].core";
 const firstKey = "synthetic-sync-configuration-key-a";
 const secondKey = "synthetic-sync-configuration-key-b";
 const dataPassphrase = "synthetic-note-encryption-passphrase";
@@ -179,7 +179,7 @@ async function main(): Promise<void> {
         stage = "source-key-rotation";
         await applyKey(session, firstKey, true);
         await applyKey(session, secondKey, false);
-        const dataPath = join(sourceVault.path, ".obsidian/plugins/obsidian-livesync/data.json");
+        const dataPath = join(sourceVault.path, ".obsidian/plugins/tabularium/data.json");
         const encryptedData = await readFile(dataPath, "utf8");
         assert.equal(encryptedData.includes(dataPassphrase), false);
         assert.equal(encryptedData.includes(idKey), false);
@@ -212,7 +212,7 @@ async function main(): Promise<void> {
 
         stage = "receiver-key-recovery";
         receiverVault = await createTemporaryVault("obsidian-configuration-sync-receiver-");
-        const receiverDataPath = join(receiverVault.path, ".obsidian/plugins/obsidian-livesync/data.json");
+        const receiverDataPath = join(receiverVault.path, ".obsidian/plugins/tabularium/data.json");
         session = await startObsidianLiveSyncSession({
             binary,
             cliBinary,
@@ -241,8 +241,8 @@ async function main(): Promise<void> {
                         await evalObsidianJson(
                             cliBinary,
                             `(async()=>{
-                        await app.plugins.disablePlugin('obsidian-livesync');
-                        await app.plugins.enablePlugin('obsidian-livesync');
+                        await app.plugins.disablePlugin('tabularium');
+                        await app.plugins.enablePlugin('tabularium');
                         return JSON.stringify(true);
                     })()`,
                             cliEnv

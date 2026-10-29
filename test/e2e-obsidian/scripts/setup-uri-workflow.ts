@@ -445,7 +445,7 @@ async function readSetupState(cliBinary: string, environment: NodeJS.ProcessEnv)
         cliBinary,
         [
             "(()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const settings=core.services.setting.currentSettings();",
             "return JSON.stringify({",
             "configured:settings.isConfigured===true,",
@@ -495,7 +495,7 @@ async function enableHiddenFileSync(cliBinary: string, environment: NodeJS.Proce
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await core.services.setting.applyPartial({",
             "syncInternalFiles:true,",
             "syncInternalFilesBeforeReplication:true,",
@@ -522,7 +522,7 @@ async function captureHiddenFileGuideSettings(
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await core.services.setting.applyPartial({",
             "useAdvancedMode:true,",
             "syncInternalFilesTargetPatterns:'^\\\\.obsidian(?:$|/snippets(?:/|$))',",
@@ -588,7 +588,7 @@ async function scanHiddenStorage(cliBinary: string, environment: NodeJS.ProcessE
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const addOn=core.getAddOn('HiddenFileSync');",
             "await addOn.scanAllStorageChanges(true);",
             "return JSON.stringify({ok:true});",
@@ -604,7 +604,7 @@ async function scanHiddenDatabase(cliBinary: string, environment: NodeJS.Process
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const addOn=core.getAddOn('HiddenFileSync');",
             "await addOn.scanAllDatabaseChanges(true);",
             "return JSON.stringify({ok:true});",

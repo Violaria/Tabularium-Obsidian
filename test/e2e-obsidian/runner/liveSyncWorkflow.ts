@@ -112,7 +112,7 @@ export async function readE2eCompatibilityMarker(
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const setting=core.services.setting;",
             "const settings=setting.currentSettings();",
             "const vaultName=core.services.API.getSystemVaultName();",
@@ -214,7 +214,7 @@ export async function configureCouchDb(
         cliBinary,
         [
             "(async()=>{",
-            "const plugin=app.plugins.plugins['obsidian-livesync'];",
+            "const plugin=app.plugins.plugins['tabularium'];",
             "const core=plugin.core;",
             `const nextSettings=${JSON.stringify(nextSettings)};`,
             "await core.services.setting.applyExternalSettings(nextSettings,true);",
@@ -246,7 +246,7 @@ export async function configureObjectStorage(
         cliBinary,
         [
             "(async()=>{",
-            "const plugin=app.plugins.plugins['obsidian-livesync'];",
+            "const plugin=app.plugins.plugins['tabularium'];",
             "const core=plugin.core;",
             `const nextSettings=${JSON.stringify(nextSettings)};`,
             "await core.services.setting.applyExternalSettings(nextSettings,true);",
@@ -303,7 +303,7 @@ export async function waitForLiveSyncCoreReady(
                 cliBinary,
                 [
                     "(async()=>{",
-                    "const core=app.plugins.plugins['obsidian-livesync']?.core;",
+                    "const core=app.plugins.plugins['tabularium']?.core;",
                     "if(!core) return JSON.stringify({databaseReady:false,appReady:false});",
                     "const settings=core.services.setting.currentSettings();",
                     "return JSON.stringify({",
@@ -356,7 +356,7 @@ export async function inspectObsidianServiceContextContract(
         cliBinary,
         [
             "(async()=>{",
-            "const plugin=app.plugins.plugins['obsidian-livesync'];",
+            "const plugin=app.plugins.plugins['tabularium'];",
             "const services=plugin.core.services;",
             "const context=services.context;",
             `const serviceNames=${JSON.stringify(SERVICE_CONTEXT_MEMBERS)};`,
@@ -410,7 +410,7 @@ export async function prepareRemote(cliBinary: string, env: NodeJS.ProcessEnv): 
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const settings=core.services.setting.currentSettings();",
             "const replicator=core.services.replicator.getActiveReplicator();",
             "await replicator.tryCreateRemoteDatabase(settings);",
@@ -436,7 +436,7 @@ export async function pushLocalChanges(cliBinary: string, env: NodeJS.ProcessEnv
         cliBinary,
         [
             "(async()=>{",
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "await core.services.fileProcessing.commitPendingFileEvents();",
             "const result=await core.services.replication.replicate(true);",
             "const settings=core.services.setting.currentSettings();",
@@ -473,7 +473,7 @@ export async function waitForLocalDatabaseEntry(
             `const path=${JSON.stringify(path)};`,
             `const hidden=${JSON.stringify(options.hidden === true)};`,
             `const timeoutMs=${JSON.stringify(timeoutMs)};`,
-            "const core=app.plugins.plugins['obsidian-livesync'].core;",
+            "const core=app.plugins.plugins['tabularium'].core;",
             "const deadline=Date.now()+timeoutMs;",
             "const sleep=(ms)=>new Promise((resolve)=>setTimeout(resolve,ms));",
             "let entry=false;",

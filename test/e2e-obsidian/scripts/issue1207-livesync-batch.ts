@@ -78,7 +78,7 @@ async function availablePort(): Promise<number> {
 
 async function evaluate<T>(page: Page, code: string): Promise<T> {
     return await page.evaluate(`(async()=>{
-        const core=app.plugins.plugins['obsidian-livesync'].core;
+        const core=app.plugins.plugins['tabularium'].core;
         const manager=core.serviceModules.storageAccess.vaultManager;
         ${code}
     })()`);
@@ -402,7 +402,7 @@ async function main(): Promise<void> {
                         `let appVersion=null;
                     try {appVersion=JSON.parse(require('fs').readFileSync(require('path').join(process.resourcesPath,'app.asar','package.json'),'utf8')).version;} catch {}
                     return {appVersion,electronVersion:process.versions.electron,
-                    pluginVersion:app.plugins.plugins['obsidian-livesync'].manifest.version};`
+                    pluginVersion:app.plugins.plugins['tabularium'].manifest.version};`
                     )
                 );
                 await options(page, "normal");
@@ -787,7 +787,7 @@ async function main(): Promise<void> {
             });
             await stop(slots[0]);
             const persistedSettings = JSON.parse(
-                await readFile(join(slots[0].vault.path, ".obsidian/plugins/obsidian-livesync/data.json"), "utf8")
+                await readFile(join(slots[0].vault.path, ".obsidian/plugins/tabularium/data.json"), "utf8")
             );
             observations.push({
                 phase: "restart-on-disk-settings",
