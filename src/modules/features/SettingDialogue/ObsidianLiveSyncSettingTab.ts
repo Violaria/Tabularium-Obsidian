@@ -888,6 +888,11 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
                 action: () => this.plugin.tabularium?.open(),
             },
             {
+                name: "发送到 Kindle",
+                desc: "Kindle 发送状态。",
+                action: () => this.plugin.kindle?.open(),
+            },
+            {
                 name: "Tabularium file sorting",
                 desc: "Arrange notes and folders using sorting rules or bookmarks.",
                 action: () => this.plugin.sorting?.openSettings(),
@@ -1251,6 +1256,10 @@ export class ObsidianLiveSyncSettingTab extends PluginSettingTab {
             .setName("Tabularium 服务器")
             .setDesc(this.plugin.tabularium?.connection ? `已连接：${this.plugin.tabularium.connection.vaultName}` : "登录服务器以开始同步。")
             .addButton(button => button.setButtonText("打开").onClick(() => this.plugin.tabularium?.open()));
+        new ObsidianSetting(containerEl)
+            .setName("发送到 Kindle")
+            .setDesc("查看 Kindle 发送状态；在文件列表中右键笔记或文件夹（可多选）发送。")
+            .addButton(button => button.setButtonText("打开").onClick(() => this.plugin.kindle?.open()));
         if (this.plugin.sorting) {
             new ObsidianSetting(containerEl)
                 .setName("Tabularium file sorting")

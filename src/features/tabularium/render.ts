@@ -60,6 +60,7 @@ export function renderNote(markdown: string, resolveImage: ImageResolver) {
     const source = markdown
         .replace(/^---\r?\n[\s\S]*?\r?\n---(\r?\n|$)/, "")
         // Characters that XML does not allow.
-        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f￾￿]/g, "");
+        // eslint-disable-next-line no-control-regex -- matching control characters is the purpose here
+        .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\ufffe\uffff]/g, "");
     return { body: md.render(rewriteObsidian(source)), headings };
 }
