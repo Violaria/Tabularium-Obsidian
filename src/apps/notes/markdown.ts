@@ -70,6 +70,8 @@ export function enhance(md: MarkdownIt, texts: MarkdownTexts) {
     md.renderer.rules.fence = (tokens, index) => {
         const token = tokens[index];
         const lang = token.info.trim().split(/\s+/)[0].toLowerCase();
+        // Diagrams are drawn after the page shows them (renderDiagrams); until then, and where they cannot be, the source shows.
+        if (lang === "mermaid") return `<figure class="mermaid-diagram" data-source="${escapeXml(token.content)}"><pre><code>${escapeXml(token.content)}</code></pre></figure>`;
         const known = lang && hljs.getLanguage(lang);
         const body = known ? hljs.highlight(token.content, { language: lang, ignoreIllegals: true }).value : escapeXml(token.content);
         const kind = TERMINAL.has(lang) ? "terminal" : CONFIG.has(lang) ? "config" : "code";

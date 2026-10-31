@@ -2457,7 +2457,7 @@ tabularium.serverError.Invalid current password: Tessera praesens non recta est.
 tabularium.serverError.Invalid password: Tessera nova saltem 12 characteres requirit.
 tabularium.serverError.Invalid username or password: Nomen usoris vel tessera non rectum est.
 tabularium.serverError.Kindle address not set: Primum inscriptionem Kindle tuam in pagina Kindle consolae ministratoris inscribe.
-tabularium.serverError.Mail delivery is not configured: Ministrator nullam traditionem epistularum configuratam habet.
+tabularium.serverError.Mail delivery is not configured: Missio ad Kindle in ministratore nondum parata est.
 tabularium.serverError.Request body too large: Liber 50 MB excedit. Eum per partes mitte.
 tabularium.serverError.Too many requests: Nimis multi conatus. Postea iterum conare.
 tabularium.serverError.Vault is not ready: Tabularium nondum paratum est. Praeparationem in consola ministratoris iterum conare.
@@ -3320,3 +3320,4 @@ tabularium.history.diffOnly: Differentiae tantum
 tabularium.history.previous: Prior
 tabularium.history.next: Sequens
 tabularium.release.0.19.0: "In menu plicae supra «Ordo» nunc est «Synchronizatio»: synchroniza nunc et historia versionum commentarii; textus optionum et fenestra historiae adhuc Anglice scripti conversi sunt. Ministrator copias tutas statutis horis facit, et aliquot vitia securitatis emendata sunt."
+tabularius.release.0.20.0: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, tabularium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur."

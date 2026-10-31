@@ -6,6 +6,9 @@ import "./notes.css";
 import { deleteRecord, recordsOf } from "./store";
 import { clearLocalVault } from "./runtime";
 import { ApiError, revokeDevice } from "./api";
+import { forgetUnlocked } from "./unlocked";
+
+export { forgetUnlocked };
 
 type Notes = { changeLanguage(next: Language): void; close(): Promise<void> };
 let app: Notes | undefined;
@@ -23,6 +26,7 @@ export function changeLanguage(next: Language) {
  * credentials) and revokes those devices on the server. Called when signing out, while the session still exists.
  */
 export async function clearAccount(userId: string) {
+    forgetUnlocked();
     await unmount();
     for (const record of await recordsOf(userId)) {
         const vaultId = record.key.slice(userId.length + 1);

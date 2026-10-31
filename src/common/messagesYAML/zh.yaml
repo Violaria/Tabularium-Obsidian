@@ -1992,7 +1992,7 @@ tabularium:
     Vault is not ready: 笔记库尚未创建完成，请在服务器控制台重试建库。
     Invalid password: 新密码至少需要 12 个字符。
     Kindle address not set: 请先在服务器控制台的 Kindle 页面填写 Kindle 地址。
-    Mail delivery is not configured: 服务器尚未配置发信。
+    Mail delivery is not configured: 服务器尚未配置推送。
     Daily Kindle delivery limit reached: 今天的发送次数已用完。
     Request body too large: 电子书超过 50 MB，请分开发送。
   kindle:
@@ -3282,3 +3282,4 @@ tabularium.history.diffOnly: 只看差异
 tabularium.history.previous: 上一处
 tabularium.history.next: 下一处
 tabularium.release.0.19.0: 文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。
+tabularius.release.0.20.0: 书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。

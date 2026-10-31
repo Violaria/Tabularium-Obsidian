@@ -3309,3 +3309,5 @@ maintenancePrerequisites.title: ${operation} prerequisites
 "tabularium.history.previous": "Previous"
 "tabularium.history.next": "Next"
 "tabularium.release.0.19.0": "\"Sync\" in the file menu above \"Sorting\": sync now, and a note's version history; the setting texts and the history window that were still in English are translated. The server gains scheduled backups and a round of security fixes."
+"tabularius.release.0.20.0": "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours."
+"tabularium.serverError.Mail delivery is not configured": "Kindle delivery is not set up on the server."

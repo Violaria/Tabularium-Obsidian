@@ -5,6 +5,7 @@
     import { CredentialsRejectedError, NetworkError, NotesRuntime, WrongPassphraseError, clearLocalVault, type NotesFile } from "./runtime";
     import { renderPreview } from "./preview";
     import { copyCode } from "./markdown";
+    import { renderDiagrams } from "./diagrams";
     import { escapeXml } from "@/features/tabularium/epub";
     import { sendToKindle, type KindleItem } from "./kindle";
     import { folderOf, freePath, nameOf, normalisePath } from "./paths";
@@ -20,6 +21,7 @@
     import { Sharing } from "@/features/tabularium/share/sharing";
     import type { ShareSource, ShareTreeNode } from "@/features/tabularium/share/package";
     import { sessionShareApi } from "./share";
+    import { forgetUnlocked, keepUnlocked, unlockedVault } from "./unlocked";
 
     type Phase = "loading" | "vaults" | "unlock" | "opening" | "open";
     type Mode = "view" | "edit" | "conflict";
@@ -49,6 +51,8 @@
     let sending = $state(false);
     let passphrase = $state("");
     let previewEl = $state<HTMLElement>();
+    /** The note pane: it scrolls, not the note inside it. */
+    let mainEl = $state<HTMLElement>();
     let mode = $state<Mode>("view");
     let saveState = $state<SaveState>("synced");
     let editorText = $state("");
@@ -179,6 +183,27 @@
         vaults = await listVaults();
         phase = "vaults";
         followLink();
+        // Back in web notes after another module: the vault unlocked earlier in this page opens again, unless a link
+        // asks for another one.
+        const kept = unlockedVault(user!.id);
+        const target = kept && vaults.find((v) => v.id === kept.vaultId);
+        if (kept && target && (phase === "vaults" || vault?.id === target.id)) await reopen(target, kept.passphrase);
+    }
+
+    async function reopen(target: Vault, secret: string) {
+        vault = target;
+        error = "";
+        // No unlock form while the kept passphrase opens the vault: a password field that appears and goes again leaves
+        // password managers' menus behind on the page.
+        phase = "loading";
+        status = t("notes.connecting");
+        try {
+            await open(user!, target, secret, true);
+        } catch (e) {
+            forgetUnlocked();
+            error = message(e);
+            phase = "unlock";
+        }
     }
 
     function chooseVault(chosen: Vault) {
@@ -230,6 +255,7 @@
             throw e instanceof WrongPassphraseError || e instanceof NetworkError ? e : new Error(t("notes.openFailed", { error: message(e) }));
         }
         passphrase = "";
+        keepUnlocked(owner.id, target.id, secret);
         sharing = new Sharing(sessionShareApi, target.id, secret, target.name, shareSource);
         offline = started.offline;
         record = { ...record, fetched: true, vaultName: target.name, verifier: started.verifier, tweaks: started.tweaks };
@@ -315,7 +341,8 @@
         const paths = files.map((f) => f.path);
         html = renderPreview(await runtime.read(path), (target) => resolveLinkpath(target, path, paths));
         await tick();
-        if (scroll) previewEl?.scrollTo(0, 0);
+        if (scroll) mainEl?.scrollTo(0, 0);
+        if (previewEl) void renderDiagrams(previewEl);
         for (const img of previewEl?.querySelectorAll<HTMLImageElement>("img[data-vault-src]") ?? []) {
             const source = img.dataset.vaultSrc!;
             const data = await runtime.readBinary(source);
@@ -568,6 +595,7 @@
 
     /** Locks this vault and returns to the vault list. */
     async function switchVault() {
+        forgetUnlocked();
         await lock();
         vault = undefined;
         phase = "vaults";
@@ -576,6 +604,7 @@
     async function clearLocal() {
         if (!user || !vault) return;
         if (!(await confirmAction({ title: t("notes.clear"), body: t("notes.confirmClear", { vault: vault.name }), action: t("notes.clear"), danger: true }))) return;
+        forgetUnlocked();
         await lock();
         const key = recordKey(user.id, vault.id);
         const saved = await readRecord(key);
@@ -763,7 +792,7 @@
     <div class="page center-page">
         <header class="page-head"><div><h1>{vault?.name ?? ""}</h1></div></header>
         <form class="card stack unlock" onsubmit={unlock}>
-            <label><span>{t("notes.passphrase")}<!-- svelte-ignore a11y_no_noninteractive_tabindex --><span class="tip" tabindex="0" data-tip={t("notes.unlockHint")}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span></span> <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
+            <label><span>{t("notes.passphrase")}<!-- svelte-ignore a11y_no_noninteractive_tabindex --><span class="tip" tabindex="0" data-tip={t("notes.unlockHint")}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span></span> <input name="passphrase" type="password" autocomplete="off" data-bwignore data-1p-ignore data-lpignore="true" bind:value={passphrase} required disabled={phase === "opening"} /></label>
             {#if error}<p class="error">{error}</p>{/if}
             {#if phase === "opening"}<p class="notice">{status}</p>{/if}
             <div class="actions">
@@ -784,7 +813,7 @@
                 {#if sortError}<span class="sort-error">{sortError}</span>{/if}
                 {#if vaultMenu}
                     <div class="menu" role="menu" data-owner="vault">
-                        <button role="menuitem" onclick={() => ((vaultMenu = false), void lock())}>{t("notes.lock")}</button>
+                        <button role="menuitem" onclick={() => ((vaultMenu = false), forgetUnlocked(), void lock())}>{t("notes.lock")}</button>
                         <button role="menuitem" onclick={() => ((vaultMenu = false), void switchVault())}>{t("notes.otherVault")}</button>
                         <button role="menuitem" class="danger" onclick={() => ((vaultMenu = false), void clearLocal())}>{t("notes.clear")}</button>
                         <p class="hint">{t("notes.plainCopyTitle")}</p>
@@ -805,7 +834,7 @@
                 <Tree node={tree} {current} {selecting} {selected} {conflicted} open={(path) => show(path)} {toggle} send={(item) => kindle([item])} select={(item) => ((selecting = true), (selected = [item]))} {rename} {remove} {share} expandAll={filter.trim() !== ""} />
             </nav>
         </aside>
-        <section class="main">
+        <section class="main" bind:this={mainEl}>
             {#if current}
                 <!-- The note's folder and its actions in a bar across the whole pane; the title stays in the reading column. -->
                 <div class="note-bar">
@@ -837,7 +866,7 @@
                 <Conflict {versions} binary={!isNote(current)} {keep} merge={(text) => void settle(text)} />
             {:else}
                 <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -- clicks on note links inside the preview are delegated here -->
-                <article bind:this={previewEl} onclick={previewClick}>
+                <article class="md-body" bind:this={previewEl} onclick={previewClick}>
                     {#if current}
                         {#if html}{@html html}{:else}<p class="hint">{t("notes.notNote")}</p>{/if}
                     {/if}

@@ -7,6 +7,17 @@ import type { Manifest, ManifestNode } from "@/features/tabularium/share/package
 import { escapeXml } from "@/features/tabularium/epub";
 import { formatDate, serverError, t } from "../../../../server/ui/i18n";
 import { copyCode, enhance } from "./markdown";
+import { paintIcon } from "../../../../server/ui/mark";
+
+// The page comes in its owner's colour theme; a custom theme's colours are set here, as the page allows no inline styles.
+{
+    const page = document.documentElement;
+    if (page.dataset.recipeAccent) {
+        page.style.setProperty("--recipe-accent", page.dataset.recipeAccent);
+        page.style.setProperty("--recipe-tint", `${page.dataset.recipeTint}%`);
+    }
+    paintIcon();
+}
 
 const root = document.getElementById("viewer")!;
 /** The address as typed; a malformed escape is kept as it is, and the server answers that it does not exist. */
@@ -197,7 +208,7 @@ async function show(id: string, push: boolean) {
     if (!note) return;
     if (push) history.pushState(null, "", `?note=${encodeURIComponent(id)}${location.hash}`);
     const main = root.querySelector<HTMLElement>(".main")!;
-    setMarkup(main, `<div class="note-head"><h1 class="title">${escapeXml(note.title)}</h1></div><article></article><footer class="share-foot">${escapeXml(t("viewer.generated", { time: formatDate(manifest.generatedAt) }))}</footer>`);
+    setMarkup(main, `<div class="note-head"><h1 class="title">${escapeXml(note.title)}</h1></div><article class="md-body"></article><footer class="share-foot">${escapeXml(t("viewer.generated", { time: formatDate(manifest.generatedAt) }))}</footer>`);
     const article = main.querySelector("article")!;
     setMarkup(article, render(decoder.decode(await bytes(id))));
     // A note that starts with its own title as a heading does not show the title twice.
@@ -211,13 +222,19 @@ async function show(id: string, push: boolean) {
     expandTo(id);
 }
 
+// The same rows as the web notes tree: chevron for folders, an icon for every entry. Nesting is indented by the style
+// sheet (.children), since this page allows no inline styles.
+const FOLDER_ICON = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 12.2V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h6c.4 0 .8.3.8.8v6.8c0 .4-.4.8-.8.8H2.6c-.5 0-.8-.4-.8-.8z" /></svg>';
+const FILE_ICON = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.8h5.2l3 3v9c0 .4-.3.7-.7.7H4c-.4 0-.7-.3-.7-.7V2.5c0-.4.3-.7.7-.7z" /><path d="M9 1.8v3.2h3.2" /></svg>';
+const CHEVRON = '<svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg>';
 function tree(nodes: ManifestNode[]): string {
     return `<ul>${nodes
-        .map((node) =>
-            node.children
-                ? `<li><div class="row"><button class="name folder" aria-expanded="false"><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg>${escapeXml(node.name)}</button></div><div class="children" hidden>${tree(node.children)}</div></li>`
-                : `<li><div class="row" data-note="${escapeXml(node.id?.startsWith("n") ? node.id : "")}"><button class="name${node.id?.startsWith("n") ? "" : " other"}" data-${node.id?.startsWith("n") ? "note" : "file"}="${escapeXml(node.id ?? "")}">${escapeXml(node.name)}</button></div></li>`
-        )
+        .map((node) => {
+            if (node.children)
+                return `<li><div class="row"><button class="name folder" aria-expanded="false">${CHEVRON}${FOLDER_ICON}<span class="label">${escapeXml(node.name)}</span></button></div><div class="children" hidden>${tree(node.children)}</div></li>`;
+            const note = node.id?.startsWith("n");
+            return `<li><div class="row" data-note="${escapeXml(note ? node.id! : "")}"><button class="name${note ? "" : " other"}" data-${note ? "note" : "file"}="${escapeXml(node.id ?? "")}"><span class="chevron-space" aria-hidden="true"></span>${FILE_ICON}<span class="label">${escapeXml(node.name)}</span></button></div></li>`;
+        })
         .join("")}</ul>`;
 }
 function expandTo(id: string) {

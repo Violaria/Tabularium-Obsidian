@@ -8196,9 +8196,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "请先在服务器控制台的 Kindle 页面填写 Kindle 地址。",
     },
     "tabularium.serverError.Mail delivery is not configured": {
-        def: "The server has no mail delivery configured.",
-        la: "Ministrator nullam traditionem epistularum configuratam habet.",
-        zh: "服务器尚未配置发信。",
+        def: "Kindle delivery is not set up on the server.",
+        la: "Missio ad Kindle in ministratore nondum parata est.",
+        zh: "服务器尚未配置推送。",
     },
     "tabularium.serverError.Request body too large": {
         def: "The book exceeds 50 MB. Send it in parts.",
@@ -8989,6 +8989,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sync",
         la: "Synchronizatio",
         zh: "同步",
+    },
+    "tabularius.release.0.20.0": {
+        def: "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours.",
+        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, tabularium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
+        zh: "书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。",
     },
     "Target patterns": {
         def: "Target patterns",

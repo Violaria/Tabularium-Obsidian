@@ -28,11 +28,12 @@ export default defineConfig({
         cssCodeSplit: false,
         rollupOptions: {
             external: ["crypto"],
-            // The notes module for the shell, and the share viewer page (/s/…), which loads nothing else.
-            input: { notes: path.resolve(__dirname, "main.ts"), viewer: path.resolve(__dirname, "viewer.ts") },
+            // The notes module for the shell, the share viewer page (/s/…), which loads nothing else, and the renderer of
+            // Tabularius answers, which loads without the notes module.
+            input: { notes: path.resolve(__dirname, "main.ts"), viewer: path.resolve(__dirname, "viewer.ts"), answer: path.resolve(__dirname, "answer.ts") },
             preserveEntrySignatures: "exports-only",
             output: {
-                entryFileNames: (chunk) => (chunk.name === "viewer" ? "assets/share-viewer.js" : "assets/notes-module.js"),
+                entryFileNames: (chunk) => (chunk.name === "viewer" ? "assets/share-viewer.js" : chunk.name === "answer" ? "assets/answer-markdown.js" : "assets/notes-module.js"),
                 assetFileNames: (asset) => (asset.names?.some((name) => name.endsWith(".css")) ? "assets/notes-module.css" : "assets/[name]-[hash][extname]"),
             },
         },
