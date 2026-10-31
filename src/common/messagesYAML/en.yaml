@@ -2854,6 +2854,8 @@ tabularium:
     contents: Contents
     missingImage: "[Image: ${name}]"
   sorting:
+    parseFailed: "The sorting rules could not be parsed; sorting is paused. ${detail}"
+    viewProblem: The file explorer could not be sorted. Open the developer console for details.
     title: Tabularium file sorting
     settingDesc: Arrange notes and folders using sorting rules or bookmarks.
     apply: Apply sorting rules

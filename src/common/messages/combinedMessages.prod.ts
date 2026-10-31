@@ -7012,6 +7012,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Aperi optiones ordinandi plicas",
         zh: "打开文件排序设置",
     },
+    "tabularium.sorting.parseFailed": {
+        def: "The sorting rules could not be parsed; sorting is paused. ${detail}",
+        la: "Regulae ordinandi interpretari non potuerunt; ordinatio suspensa est. ${detail}",
+        zh: "排序规则解析失败，排序已暂停。${detail}",
+    },
     "tabularium.sorting.pause": {
         def: "Pause",
         la: "Intermitte",
@@ -7031,6 +7036,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Tabularium file sorting",
         la: "Ordinatio plicarum Tabularium",
         zh: "Tabularium 文件排序",
+    },
+    "tabularium.sorting.viewProblem": {
+        def: "The file explorer could not be sorted. Open the developer console for details.",
+        la: "Index plicarum ordinari non potuit. Singula in consola elaboratoris vide.",
+        zh: "无法对文件列表排序，详情见开发者控制台。",
     },
     "tabularium.sync.liveOff": {
         def: "Live sync off.",

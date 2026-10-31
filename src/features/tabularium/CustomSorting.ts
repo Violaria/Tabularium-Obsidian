@@ -22,6 +22,19 @@ export class TabulariumCustomSorting extends CustomSortPlugin {
         this.settingsDialogue?.close();
     }
 
+    /**
+     * The sorting component reports in English. Routine confirmations (rules parsed, applied, paused) are not shown;
+     * problems are shown in the interface language.
+     */
+    override showNotice(message: string, timeout?: number) {
+        if (message.startsWith("Parsing custom sorting specification FAILED")) {
+            const detail = message.slice(message.indexOf("\n") + 1);
+            super.showNotice($msg("tabularium.sorting.parseFailed", { detail }), timeout);
+        } else if (message.startsWith("Custom sort File Explorer view problem")) {
+            super.showNotice($msg("tabularium.sorting.viewProblem"), timeout);
+        }
+    }
+
     override isThePluginStillInstalledAndEnabled(): boolean {
         return this.running;
     }

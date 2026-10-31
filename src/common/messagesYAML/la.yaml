@@ -2466,6 +2466,8 @@ tabularium.serverError.Mail delivery is not configured: Ministrator nullam tradi
 tabularium.serverError.Request body too large: Liber 50 MB excedit. Eum per partes mitte.
 tabularium.serverError.Too many requests: Nimis multi conatus. Postea iterum conare.
 tabularium.serverError.Vault is not ready: Tabularium nondum paratum est. Praeparationem in consola ministratoris iterum conare.
+tabularium.sorting.parseFailed: "Regulae ordinandi interpretari non potuerunt; ordinatio suspensa est. ${detail}"
+tabularium.sorting.viewProblem: Index plicarum ordinari non potuit. Singula in consola elaboratoris vide.
 tabularium.sorting.apply: Adhibe regulas ordinandi
 tabularium.sorting.applyButton: Adhibe
 tabularium.sorting.applyDesc: Lege sorting-spec ex commentariis tuis et indicem plicarum renova.

@@ -32,7 +32,6 @@ import { SetupManager } from "./modules/features/SetupManager.ts";
 import { enableI18nFeature } from "./serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
 import { useRemoteConfiguration } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/remoteConfig";
-import { useCheckRemoteSize } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/checkRemoteSize";
 import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
 import { useSetupProtocolFeature } from "./serviceFeatures/setupObsidian/setupProtocol.ts";
 import { useSetupQRCodeFeature } from "@/serviceFeatures/setupObsidian/qrCode";
@@ -50,6 +49,7 @@ import { ConflictResolveModal } from "./modules/features/InteractiveConflictReso
 import { useObsidianReplicationRibbonFeature } from "./serviceFeatures/obsidianReplicationRibbon.ts";
 import { useStartupLifecycleFeature } from "./serviceFeatures/startupLifecycle";
 import { useJoinedDevicesFeature } from "./serviceFeatures/useJoinedDevices";
+import type { ObsidianNoticeGroups } from "@/modules/services/ObsidianNoticeGroups";
 import { useDatabaseDiagnosticsFeature } from "./serviceFeatures/useDatabaseDiagnostics";
 import { installTabulariumServer, type TabulariumServer } from "./features/tabularium/ServerLogin.ts";
 import { installKindle, type TabulariumKindle } from "./features/tabularium/Kindle.ts";
@@ -204,7 +204,12 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 useP2PReplicatorUI(core, core, replicator, createInteractiveP2PReplication(replicator));
                 useObsidianReplicationRibbonFeature(core);
                 useDatabaseDiagnosticsFeature(core);
-                useJoinedDevicesFeature(core, serviceHub.context.noticeGroups);
+                // A vault's devices run different software (this plug-in, the server mirror's CLI, Tabularius, web notes), so
+                // comparing their version numbers only produces misleading notices; the device list stays available.
+                const noVersionNotices: ObsidianNoticeGroups = {
+                    setItem: () => {}, finish: () => false, removeItem: () => false, hide: () => false, dispose: () => {},
+                };
+                useJoinedDevicesFeature(core, noVersionNotices);
                 useRemoteConfiguration(core);
 
                 useSetupProtocolFeature(core, setupManager);
@@ -213,7 +218,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 useSetupManagerHandlersFeature(core, setupManager);
                 useOfflineScanner(core);
                 useRedFlagFeatures(core);
-                useCheckRemoteSize(core);
+                // Storage use is watched by the Tabularium server, not by each device.
                 useInteractiveConflictResolutionFeature(core, (filename, conflictCheckResult) => {
                     return new ConflictResolveModal(this.app, filename, conflictCheckResult);
                 });
