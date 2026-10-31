@@ -26,6 +26,14 @@ for (const [lang, catalogue] of Object.entries(shown)) {
     const withEmoji = Object.entries(catalogue).filter(([, text]) => emoji.test(text));
     if (withEmoji.length) problems.push(`${lang}: ${withEmoji.length} texts with emoji\n  ${withEmoji.slice(0, 20).map(([key]) => key).join("\n  ")}`);
 }
+// The product is Tabularium: shown texts must not use the upstream name. Links to upstream documents and the quoted
+// default P2P application ID ('self-hosted-livesync', a technical identifier) are the only exceptions.
+const upstreamName = /livesync/i;
+const exempt = (text: string) => text.replace(/https?:\/\/\S+/g, "").replace(/['"「]self-hosted-livesync['"」]/g, "");
+for (const [lang, catalogue] of Object.entries(shown)) {
+    const named = Object.entries(catalogue).filter(([, text]) => upstreamName.test(exempt(text)));
+    if (named.length) problems.push(`${lang}: ${named.length} texts name LiveSync\n  ${named.slice(0, 20).map(([key]) => key).join("\n  ")}`);
+}
 // Web pages: the types already require every language; check them for emoji too.
 const { catalogues: web } = await import("../../server/ui/messages.ts");
 for (const [lang, catalogue] of Object.entries(web)) {
@@ -36,4 +44,4 @@ if (problems.length) {
     process.stderr.write(`Interface languages are incomplete:\n${problems.join("\n")}\n`);
     process.exit(1);
 }
-process.stdout.write(`${keys.length} plug-in messages and ${Object.keys(web.en).length} web texts in English, Chinese and Latin, no emoji.\n`);
+process.stdout.write(`${keys.length} plug-in messages and ${Object.keys(web.en).length} web texts in English, Chinese and Latin, no emoji, no upstream product name.\n`);

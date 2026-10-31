@@ -2,8 +2,8 @@ import type { CompatibilityPause, CompatibilityPauseReason } from "@/common/data
 
 export function compatibilityReviewSummaryMarkdown(pause: CompatibilityPause): string {
     const action = !pause.resumable
-        ? "This installation cannot safely acknowledge the detected state. Update Self-hosted LiveSync before attempting to synchronise again."
-        : "Before resuming, review the compatibility details and update Self-hosted LiveSync on every device which uses this remote database.";
+        ? "This installation cannot safely acknowledge the detected state. Update Tabularium before attempting to synchronise again."
+        : "Before resuming, review the compatibility details and update Tabularium on every device which uses this remote database.";
     return `Remote synchronisation is paused on this device because its compatibility state requires attention.
 
 ${action}
@@ -33,7 +33,7 @@ function reasonMarkdown(reason: CompatibilityPauseReason): string {
 
 export function compatibilityReviewDetailsMarkdown(pause: CompatibilityPause): string {
     const resolution = !pause.resumable
-        ? "Install a compatible current version of Self-hosted LiveSync. This pause cannot be dismissed by the current installation."
+        ? "Install a compatible current version of Tabularium. This pause cannot be dismissed by the current installation."
         : "After all devices have been updated, return to the compatibility review summary and explicitly resume synchronisation. The current internal version will only then be recorded as acknowledged.";
     return `## Why synchronisation is paused
 

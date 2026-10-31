@@ -42,9 +42,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.":
         {
-            def: "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
-            la: "(e.g. fragmenta online lege) Si haec optio activa est, LiveSync fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.",
-            zh: "(例如,在线读取块)如果启用此选项,LiveSync 将直接在线读取块,而不是在本地复制块。建议增加自定义块大小",
+            def: "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
+            la: "(e.g. fragmenta online lege) Si haec optio activa est, Tabularium fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.",
+            zh: "(例如,在线读取块)如果启用此选项,Tabularium 将直接在线读取块,而不是在本地复制块。建议增加自定义块大小",
         },
     "(MB) If this is set, changes to local and remote files that are larger than this will be skipped. If the file becomes smaller again, a newer one will be used.":
         {
@@ -95,9 +95,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to LiveSync and want to set it up from scratch.":
         {
-            def: "(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to LiveSync and want to set it up from scratch.",
-            la: "(Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si LiveSync novus tibi est et eum ab initio constituere vis.",
-            zh: "（如果你正在将此设备配置为第一台同步设备，请选择此项。）此选项适合初次使用 LiveSync，并希望从头开始配置的用户。",
+            def: "(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to Tabularium and want to set it up from scratch.",
+            la: "(Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si Tabularium novus tibi est et eum ab initio constituere vis.",
+            zh: "（如果你正在将此设备配置为第一台同步设备，请选择此项。）此选项适合初次使用 Tabularium，并希望从头开始配置的用户。",
         },
     "↑: Overwrite Remote": {
         def: "↑: Overwrite Remote",
@@ -1201,9 +1201,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "全部删除",
     },
     "Delete local database to reset or uninstall Self-hosted LiveSync": {
-        def: "Delete local database to reset or uninstall Self-hosted LiveSync",
-        la: "Dele repositorium locale ut Self-hosted LiveSync restituas vel deinstalles",
-        zh: "删除本地数据库以重置或卸载 Self-hosted LiveSync",
+        def: "Delete local database to reset or uninstall Tabularium",
+        la: "Dele repositorium locale ut Tabularium restituas vel deinstalles",
+        zh: "删除本地数据库以重置或卸载 Tabularium",
     },
     "Delete local files if deleted on remote": {
         def: "Delete local files if deleted on remote",
@@ -1347,9 +1347,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "你的${title}已可复制",
     },
     "dialog.yourLanguageAvailable": {
-        def: "Self-hosted LiveSync had translations for your language, so the %{Display language} setting was enabled.\n\nNote: Not all messages are translated. We are waiting for your contributions!\nNote 2: If you create an Issue, **please revert to English** and then take screenshots, messages and logs. This can be done in the setting dialogue.\nMay you find it easy to use!",
-        la: "Self-hosted LiveSync translationes linguae tuae habebat, itaque optio %{Display language} activata est.\n\nNota: Non omnes nuntii translati sunt. Contributiones tuas exspectamus!\nNota 2: Si Quaestionem (Issue) creas, **quaeso ad English revertere** et deinde imagines, nuntios et acta cape. Hoc in dialogo optionum fieri potest.\nUtinam facile uti possis!",
-        zh: "Self-hosted LiveSync已提供您语言的翻译,因此启用了%{Display language}\n\n注意：并非所有消息都已翻译。我们期待您的贡献！\n注意 2：若您创建问题报告， **请切换回English** ，然后截取屏幕截图、消息和日志，此操作可在设置对话框中完成\n愿您使用顺心！",
+        def: "Tabularium had translations for your language, so the %{Display language} setting was enabled.\n\nNote: Not all messages are translated. We are waiting for your contributions!\nNote 2: If you create an Issue, **please revert to English** and then take screenshots, messages and logs. This can be done in the setting dialogue.\nMay you find it easy to use!",
+        la: "Tabularium translationes linguae tuae habebat, itaque optio %{Display language} activata est.\n\nNota: Non omnes nuntii translati sunt. Contributiones tuas exspectamus!\nNota 2: Si Quaestionem (Issue) creas, **quaeso ad English revertere** et deinde imagines, nuntios et acta cape. Hoc in dialogo optionum fieri potest.\nUtinam facile uti possis!",
+        zh: "Tabularium 已提供您语言的翻译,因此启用了%{Display language}\n\n注意：并非所有消息都已翻译。我们期待您的贡献！\n注意 2：若您创建问题报告， **请切换回English** ，然后截取屏幕截图、消息和日志，此操作可在设置对话框中完成\n愿您使用顺心！",
     },
     "dialog.yourLanguageAvailable.btnRevertToDefault": {
         def: "Keep English",
@@ -1467,9 +1467,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "\n## ${name}\n\n| Current | Ideal |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**Recommendation Level:** ${level}\n\n### Why this has been detected?\n\n${reason}\n\n${note}\n\nFix this to the ideal value?",
     },
     "Doctor.Dialogue.Title": {
-        def: "Self-hosted LiveSync Config Doctor",
-        la: "Medicus configurationis Self-hosted LiveSync",
-        zh: "Self-hosted LiveSync 配置诊断",
+        def: "Tabularium Config Doctor",
+        la: "Medicus configurationis Tabularii",
+        zh: "Tabularium 配置诊断",
     },
     "Doctor.Dialogue.TitleAlmostDone": {
         def: "Almost done!",
@@ -2253,9 +2253,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "If you want to use `LiveSync`, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.":
         {
-            def: "If you want to use `LiveSync`, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.",
-            la: "Si `LiveSync` uti vis, mutationes divulgare debes. Omnes pares `watching` qui hoc animadvertunt replicationem ad arcessendum incipient.",
-            zh: "如果要使用 `LiveSync`，你应当广播变更。所有检测到变更的 `watching` 对等方都会启动复制以获取数据。",
+            def: "If you want to use live sync, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.",
+            la: "Si synchronizatione viva uti vis, mutationes divulgare debes. Omnes pares `watching` qui hoc animadvertunt replicationem ad arcessendum incipient.",
+            zh: "如果要使用实时同步，你应当广播变更。所有检测到变更的 `watching` 对等方都会启动复制以获取数据。",
         },
     Ignore: {
         def: "Ignore",
@@ -2300,9 +2300,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.":
         {
-            def: "In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.",
-            la: "Hoc in casu, Self-hosted LiveSync metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.",
-            zh: "在此情形下，Self-hosted LiveSync 会为每个文件重建元数据并有意制造冲突。若文件内容完全相同，这些冲突将被自动解决。",
+            def: "In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.",
+            la: "Hoc in casu, Tabularium metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.",
+            zh: "在此情形下，Tabularium 会为每个文件重建元数据并有意制造冲突。若文件内容完全相同，这些冲突将被自动解决。",
         },
     "Incoming:": {
         def: "Incoming:",
@@ -2493,14 +2493,14 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
         {
-            def: "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
-            la: "LiveSync plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
-            zh: "LiveSync 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置",
+            def: "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
+            la: "Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
+            zh: "Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置",
         },
     "liveSyncReplicator.beforeLiveSync": {
-        def: "Before LiveSync, start OneShot once...",
-        la: "Ante LiveSync, semel OneShot incipe...",
-        zh: "在LiveSync前,先启动OneShot一次...",
+        def: "Before live sync, run a one-shot sync once...",
+        la: "Ante synchronizationem vivam semel synchronizationem singularem incipe...",
+        zh: "实时同步前，先执行一次单次同步...",
     },
     "liveSyncReplicator.cantReplicateLowerValue": {
         def: "We can't replicate more lower value.",
@@ -2538,9 +2538,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "无法标记并解决远程数据库",
     },
     "liveSyncReplicator.liveSyncBegin": {
-        def: "LiveSync begin...",
-        la: "LiveSync incipit...",
-        zh: "LiveSync 开始...",
+        def: "Live sync started...",
+        la: "Synchronizatio viva incipit...",
+        zh: "实时同步开始...",
     },
     "liveSyncReplicator.lockRemoteDb": {
         def: "Lock remote database to prevent data corruption",
@@ -2563,9 +2563,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "OneShot同步开始...(${syncMode})",
     },
     "liveSyncReplicator.remoteDbCorrupted": {
-        def: "Remote database is newer or corrupted, make sure to latest version of self-hosted-livesync installed",
-        la: "Repositorium remotum recentius aut corruptum est; cura ut versio novissima self-hosted-livesync installata sit",
-        zh: "远程数据库较新或已损坏,请确保已安装最新版本的self-hosted-livesync",
+        def: "Remote database is newer or corrupted, make sure to latest version of Tabularium installed",
+        la: "Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit",
+        zh: "远程数据库较新或已损坏,请确保已安装最新版本的 Tabularium",
     },
     "liveSyncReplicator.remoteDbCreatedOrConnected": {
         def: "Remote Database Created or Connected",
@@ -2673,9 +2673,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "暂停",
     },
     "logPane.title": {
-        def: "Self-hosted LiveSync Log",
-        la: "Acta Self-hosted LiveSync",
-        zh: "Self-hosted LiveSync 日志",
+        def: "Tabularium Log",
+        la: "Acta Tabularii",
+        zh: "Tabularium 日志",
     },
     "logPane.wrap": {
         def: "Wrap",
@@ -2818,9 +2818,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "这可能需要一些时间。您真的想现在重建所有内容吗？",
     },
     "moduleCheckRemoteSize.msgDatabaseGrowing": {
-        def: "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Self-hosted LiveSync does not delete the actual data even if you delete it to speed up the process. It is roughly [documented](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
-        la: "**Repositorium tuum crescit!** Sed noli sollicitari, rem nunc tractare possumus. Tempus antequam spatium in repositorio remoto deficiat.\n\n| Magnitudo mensa | Magnitudo configurata |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> Si eo per multos annos usus es, fragmenta sine relatione - id est, purgamenta - in repositorio cumulari possunt. Itaque omnia reaedificare suademus. Verisimiliter multo minus fiet.\n>\n> Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Self-hosted LiveSync data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere [documentatum est](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).\n>\n> Si incrementum non curas, limitem notificationis 100MB augere potes. Hoc fit si in ministratore tuo proprio id curris. Attamen melius est omnia interdum reaedificare.\n>\n\n> [!WARNING]\n> Si omnia reaedificas, cura ut omnia instrumenta synchronizata sint. Additamentum tamen quam plurimum conflabit.\n",
-        zh: "**您的数据库正在变大！** 但别担心,我们现在可以解决它。在远程存储空间用完之前还有时间。\n\n| 测量大小 | 配置大小 |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> 如果您已经使用了很多年,数据库中可能会积累未引用的 chunks——也就是垃圾。因此,我们建议重建所有内容。它可能会变得小得多。\n>\n> 如果您的库容量只是在增加,最好在整理文件后重建所有内容。即使您为了加速过程删除了文件,Self-hosted LiveSync 也不会删除实际数据。这大致[有文档记录](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md)。\n>\n> 如果您不介意增加,可以将通知限制增加 100MB。如果您在自己的服务器上运行,就是这种情况。但是,最好还是不时地重建所有内容。\n>\n\n> [!WARNING]\n> 如果您执行重建所有内容,请确保所有设备都已同步。尽管如此,插件会尽可能地合并\n",
+        def: "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Tabularium does not delete the actual data even if you delete it to speed up the process. It is roughly [documented](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
+        la: "**Repositorium tuum crescit!** Sed noli sollicitari, rem nunc tractare possumus. Tempus antequam spatium in repositorio remoto deficiat.\n\n| Magnitudo mensa | Magnitudo configurata |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> Si eo per multos annos usus es, fragmenta sine relatione - id est, purgamenta - in repositorio cumulari possunt. Itaque omnia reaedificare suademus. Verisimiliter multo minus fiet.\n>\n> Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere [documentatum est](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).\n>\n> Si incrementum non curas, limitem notificationis 100MB augere potes. Hoc fit si in ministratore tuo proprio id curris. Attamen melius est omnia interdum reaedificare.\n>\n\n> [!WARNING]\n> Si omnia reaedificas, cura ut omnia instrumenta synchronizata sint. Additamentum tamen quam plurimum conflabit.\n",
+        zh: "**您的数据库正在变大！** 但别担心,我们现在可以解决它。在远程存储空间用完之前还有时间。\n\n| 测量大小 | 配置大小 |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> 如果您已经使用了很多年,数据库中可能会积累未引用的 chunks——也就是垃圾。因此,我们建议重建所有内容。它可能会变得小得多。\n>\n> 如果您的库容量只是在增加,最好在整理文件后重建所有内容。即使您为了加速过程删除了文件,Tabularium 也不会删除实际数据。这大致[有文档记录](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md)。\n>\n> 如果您不介意增加,可以将通知限制增加 100MB。如果您在自己的服务器上运行,就是这种情况。但是,最好还是不时地重建所有内容。\n>\n\n> [!WARNING]\n> 如果您执行重建所有内容,请确保所有设备都已同步。尽管如此,插件会尽可能地合并\n",
     },
     "moduleCheckRemoteSize.msgSetDBCapacity": {
         def: "We can set a maximum database capacity warning, **to take action before running out of space on the remote storage**.\nDo you want to enable this?\n\n> [!MORE]-\n> - 0: Do not warn about storage size.\n>   This is recommended if you have enough space on the remote storage especially you have self-hosted. And you can check the storage size and rebuild manually.\n> - 800: Warn if the remote storage size exceeds 800MB.\n>   This is recommended if you are using fly.io with 1GB limit or IBM Cloudant.\n> - 2000: Warn if the remote storage size exceeds 2GB.\n\nIf we have reached the limit, we will be asked to enlarge the limit step by step.\n",
@@ -2923,14 +2923,14 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "插件初始化被某个模块取消",
     },
     "moduleLiveSyncMain.logPluginVersion": {
-        def: "Self-hosted LiveSync v${manifestVersion} ${packageVersion}",
-        la: "Self-hosted LiveSync v${manifestVersion} ${packageVersion}",
-        zh: "Self-hosted LiveSync v${manifestVersion} ${packageVersion}",
+        def: "Tabularium v${manifestVersion} ${packageVersion}",
+        la: "Tabularium v${manifestVersion} ${packageVersion}",
+        zh: "Tabularium v${manifestVersion} ${packageVersion}",
     },
     "moduleLiveSyncMain.logReadChangelog": {
-        def: "LiveSync has updated, please read the changelog!",
-        la: "LiveSync renovatum est, quaeso indicem mutationum lege!",
-        zh: "LiveSync 已更新,请阅读更新日志！",
+        def: "Tabularium has updated, please read the changelog!",
+        la: "Tabularium renovatum est, quaeso indicem mutationum lege!",
+        zh: "Tabularium 已更新,请阅读更新日志！",
     },
     "moduleLiveSyncMain.logSafetyScanCompleted": {
         def: "Additional safety scan completed",
@@ -2948,19 +2948,19 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "正在卸载插件...",
     },
     "moduleLiveSyncMain.logVersionUpdate": {
-        def: "LiveSync has been updated, In case of breaking updates, all automatic synchronization has been temporarily disabled. Ensure that all devices are up to date before enabling.",
-        la: "LiveSync renovatum est. Propter renovationes fortasse incompatibiles, omnis synchronizatio automatica ad tempus deactivata est. Cura ut omnia instrumenta renovata sint antequam activas.",
-        zh: "LiveSync 已更新,如果存在破坏性更新,所有自动同步已暂时禁用。请确保所有设备都更新到最新版本后再启用",
+        def: "Tabularium has been updated, In case of breaking updates, all automatic synchronization has been temporarily disabled. Ensure that all devices are up to date before enabling.",
+        la: "Tabularium renovatum est. Propter renovationes fortasse incompatibiles, omnis synchronizatio automatica ad tempus deactivata est. Cura ut omnia instrumenta renovata sint antequam activas.",
+        zh: "Tabularium 已更新,如果存在破坏性更新,所有自动同步已暂时禁用。请确保所有设备都更新到最新版本后再启用",
     },
     "moduleLiveSyncMain.msgScramEnabled": {
-        def: "Self-hosted LiveSync has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
-        la: "Self-hosted LiveSync configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.\n",
-        zh: "Self-hosted LiveSync 已被配置为忽略某些事件。这样对吗？\n\n| 类型 | 状态 | 说明 |\n|:---:|:---:|---|\n| 存储事件 | ${fileWatchingStatus} | 所有修改都将被忽略 |\n| 数据库事件 | ${parseReplicationStatus} | 所有同步的更改都将被推迟 |\n\n您想恢复它们并重启 Obsidian 吗？\n\n> [!DETAILS]-\n> 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。\n> 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。\n",
+        def: "Tabularium has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
+        la: "Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.\n",
+        zh: "Tabularium 已被配置为忽略某些事件。这样对吗？\n\n| 类型 | 状态 | 说明 |\n|:---:|:---:|---|\n| 存储事件 | ${fileWatchingStatus} | 所有修改都将被忽略 |\n| 数据库事件 | ${parseReplicationStatus} | 所有同步的更改都将被推迟 |\n\n您想恢复它们并重启 Obsidian 吗？\n\n> [!DETAILS]-\n> 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。\n> 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。\n",
     },
     "moduleLiveSyncMain.optionKeepLiveSyncDisabled": {
-        def: "Keep LiveSync disabled",
-        la: "Retine LiveSync deactivatum",
-        zh: "保持 LiveSync 禁用",
+        def: "Keep live sync disabled",
+        la: "Retine synchronizationem vivam deactivatam",
+        zh: "保持实时同步关闭",
     },
     "moduleLiveSyncMain.optionResumeAndRestart": {
         def: "Resume and restart Obsidian",
@@ -3208,9 +3208,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "我们强烈建议尽快处理此问题！",
     },
     "moduleMigration.insecureChunkExist.message": {
-        def: "Some chunks are not securely stored and are not encrypted in databases.\n**Please rebuild the database to fix this issue**.\n\nIf your Remote Database is not configured with SSL, or using less-secure credentials, **you are at risk of exposing sensitive data**.\n\nNote: Please upgrade your Self-hosted LiveSync v0.25.6 or higher on all your devices, and back your vault up surely.\nNote2: Rebuild Everything and Fetch consumes a bit of time and traffic, please do it in off-peak hours and ensure a stable network connection.\n",
-        la: "Aliqua fragmenta non tuto servata nec in repositoriis cryptata sunt.\n**Quaeso repositorium reaedifica ut hanc rem corrigas**.\n\nSi repositorium remotum tuum sine SSL configuratum est, vel testimoniis minus tutis utitur, **periculum est ne data sensibilia patefiant**.\n\nNota: Quaeso Self-hosted LiveSync ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et tabularium tuum certe serva.\nNota 2: “Omnia reaedifica” et “Arcesse” aliquantum temporis et commeatus consumunt; quaeso fac horis minus frequentatis et cura conexionem retis stabilem.\n",
-        zh: "一些块未安全存储，并且在数据库中未加密\n**请重建数据库以修复此问题**.\n\n如果你的远程数据库未配置 SSL，或者使用了不安全的凭据 **你可能面临暴露敏感数据的风险**.\n\n注意：请在所有设备上将 Self-hosted LiveSync 升级到 v0.25.6 或更高版本，并确保备份你的保险库\n\n注意2：重建所有内容和获取操作会消耗一些时间和流量，请在非高峰时段进行，并确保网络连接稳定\n",
+        def: "Some chunks are not securely stored and are not encrypted in databases.\n**Please rebuild the database to fix this issue**.\n\nIf your Remote Database is not configured with SSL, or using less-secure credentials, **you are at risk of exposing sensitive data**.\n\nNote: Please upgrade your Tabularium v0.25.6 or higher on all your devices, and back your vault up surely.\nNote2: Rebuild Everything and Fetch consumes a bit of time and traffic, please do it in off-peak hours and ensure a stable network connection.\n",
+        la: "Aliqua fragmenta non tuto servata nec in repositoriis cryptata sunt.\n**Quaeso repositorium reaedifica ut hanc rem corrigas**.\n\nSi repositorium remotum tuum sine SSL configuratum est, vel testimoniis minus tutis utitur, **periculum est ne data sensibilia patefiant**.\n\nNota: Quaeso Tabularium ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et tabularium tuum certe serva.\nNota 2: “Omnia reaedifica” et “Arcesse” aliquantum temporis et commeatus consumunt; quaeso fac horis minus frequentatis et cura conexionem retis stabilem.\n",
+        zh: "一些块未安全存储，并且在数据库中未加密\n**请重建数据库以修复此问题**.\n\n如果你的远程数据库未配置 SSL，或者使用了不安全的凭据 **你可能面临暴露敏感数据的风险**.\n\n注意：请在所有设备上将 Tabularium 升级到 v0.25.6 或更高版本，并确保备份你的保险库\n\n注意2：重建所有内容和获取操作会消耗一些时间和流量，请在非高峰时段进行，并确保网络连接稳定\n",
     },
     "moduleMigration.insecureChunkExist.title": {
         def: "Insecure chunks found!",
@@ -3253,19 +3253,19 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "无法获取远程调整值",
     },
     "moduleMigration.logSetupCancelled": {
-        def: "The setup has been cancelled, Self-hosted LiveSync waiting for your setup!",
-        la: "Constitutio abrogata est; Self-hosted LiveSync constitutionem tuam exspectat!",
-        zh: "设置已取消,Self-hosted LiveSync 正在等待您的设置！",
+        def: "The setup has been cancelled, Tabularium waiting for your setup!",
+        la: "Constitutio abrogata est; Tabularium constitutionem tuam exspectat!",
+        zh: "设置已取消,Tabularium 正在等待您的设置！",
     },
     "moduleMigration.msgFetchRemoteAgain": {
-        def: "As you may already know, the self-hosted LiveSync has changed its default behaviour and database structure.\n\nAnd thankfully, with your time and efforts, the remote database appears to have already been migrated. Congratulations!\n\nHowever, we need a bit more. The configuration of this device is not compatible with the remote database. We will need to fetch the remote database again. Should we fetch from the remote again now?\n\n___Note: We cannot synchronise until the configuration has been changed and the database has been fetched again.___\n___Note2: The chunks are completely immutable, we can fetch only the metadata and difference.___",
-        la: "Ut fortasse iam scis, Self-hosted LiveSync modum praedefinitum et structuram repositorii mutavit.\n\nEt feliciter, tempore et labore tuo, repositorium remotum iam migratum esse videtur. Gratulamur!\n\nAttamen paulo plus opus est. Configuratio huius instrumenti cum repositorio remoto non congruit. Repositorium remotum iterum arcessere necesse erit. Arcessamusne nunc iterum ex remoto?\n\n___Nota: Synchronizare non possumus donec configuratio mutata et repositorium iterum arcessitum sit.___\n___Nota 2: Fragmenta omnino immutabilia sunt; tantum metadata et differentiam arcessere possumus.___",
-        zh: "您可能已经知道,Self-hosted LiveSync 更改了其默认行为和数据库结构。\n\n值得庆幸的是,在您的时间和努力下,远程数据库似乎已经迁移完成。恭喜！\n\n但是,我们还需要一点点操作。此设备的配置与远程数据库不兼容。我们需要再次从远程数据库获取。我们现在应该再次从远程获取吗？\n\n___注意:在更改配置并再次获取数据库之前,我们无法进行同步。___\n___注意2:chunks 是完全不可变的,我们只能获取元数据和差异",
+        def: "As you may already know, the Tabularium has changed its default behaviour and database structure.\n\nAnd thankfully, with your time and efforts, the remote database appears to have already been migrated. Congratulations!\n\nHowever, we need a bit more. The configuration of this device is not compatible with the remote database. We will need to fetch the remote database again. Should we fetch from the remote again now?\n\n___Note: We cannot synchronise until the configuration has been changed and the database has been fetched again.___\n___Note2: The chunks are completely immutable, we can fetch only the metadata and difference.___",
+        la: "Ut fortasse iam scis, Tabularium modum praedefinitum et structuram repositorii mutavit.\n\nEt feliciter, tempore et labore tuo, repositorium remotum iam migratum esse videtur. Gratulamur!\n\nAttamen paulo plus opus est. Configuratio huius instrumenti cum repositorio remoto non congruit. Repositorium remotum iterum arcessere necesse erit. Arcessamusne nunc iterum ex remoto?\n\n___Nota: Synchronizare non possumus donec configuratio mutata et repositorium iterum arcessitum sit.___\n___Nota 2: Fragmenta omnino immutabilia sunt; tantum metadata et differentiam arcessere possumus.___",
+        zh: "您可能已经知道,Tabularium 更改了其默认行为和数据库结构。\n\n值得庆幸的是,在您的时间和努力下,远程数据库似乎已经迁移完成。恭喜！\n\n但是,我们还需要一点点操作。此设备的配置与远程数据库不兼容。我们需要再次从远程数据库获取。我们现在应该再次从远程获取吗？\n\n___注意:在更改配置并再次获取数据库之前,我们无法进行同步。___\n___注意2:chunks 是完全不可变的,我们只能获取元数据和差异",
     },
     "moduleMigration.msgSinceV02321": {
-        def: "Since v0.23.21, the self-hosted LiveSync has changed the default behaviour and database structure. The following changes have been made:\n\n1. **Case sensitivity of filenames**\n   The handling of filenames is now case-insensitive. This is a beneficial change for most platforms, other than Linux and iOS, which do not manage filename case sensitivity effectively.\n   (On These, a warning will be displayed for files with the same name but different cases).\n\n2. **Revision handling of the chunks**\n   Chunks are immutable, which allows their revisions to be fixed. This change will enhance the performance of file saving.\n\n___However, to enable either of these changes, both remote and local databases need to be rebuilt. This process takes a few minutes, and we recommend doing it when you have ample time.___\n\n- If you wish to maintain the previous behaviour, you can skip this process by using `${KEEP}`.\n- If you do not have enough time, please choose `${DISMISS}`. You will be prompted again later.\n- If you have rebuilt the database on another device, please select `${DISMISS}` and try synchronizing again. Since a difference has been detected, you will be prompted again.",
-        la: "Ab v0.23.21, Self-hosted LiveSync modum praedefinitum et structuram repositorii mutavit. Hae mutationes factae sunt:\n\n1. **Discrimen litterarum maiuscularum in nominibus plicarum**\n   Tractatio nominum plicarum nunc litteras maiusculas et minusculas non discernit. Haec mutatio plerisque suggestibus utilis est, praeter Linux et iOS, quae discrimen litterarum in nominibus plicarum non bene administrant.\n   (In his, monitum monstrabitur pro plicis eodem nomine sed diversis litteris).\n\n2. **Tractatio recensionum fragmentorum**\n   Fragmenta immutabilia sunt, quod sinit recensiones eorum figi. Haec mutatio celeritatem servandi plicas augebit.\n\n___Attamen, ut utramvis harum mutationum actives, repositoria et remotum et locale reaedificanda sunt. Hic processus paucas minutas postulat, et suademus ut id facias cum satis temporis habes.___\n\n- Si modum priorem retinere vis, hunc processum per `${KEEP}` omittere potes.\n- Si satis temporis non habes, quaeso elige `${DISMISS}`. Postea iterum rogaberis.\n- Si repositorium in alio instrumento reaedificavisti, quaeso elige `${DISMISS}` et iterum synchronizare conare. Quia differentia detecta est, iterum rogaberis.",
-        zh: "自 v0.23.21 起,Self-hosted LiveSync 更改了默认行为和数据库结构。进行了以下更改：\n\n1. **文件名的区分大小写**\n现在处理文件名时不区分大小写。这对于大多数平台来说是一个有益的更改,除了 Linux 和 iOS,它们不能有效地管理文件名的大小写敏感性。\n(在这些平台上,对于名称相同但大小写不同的文件将显示警告)。\n\n2. **chunks 的版本处理**\nchunks 是不可变的,这使得它们的版本可以固定。此更改将提高文件保存的性能。\n\n___然而,要启用这些更改中的任何一个,都需要重建远程和本地数据库。这个过程需要几分钟,我们建议您在有充足时间时进行。___\n\n- 如果您希望保持以前的行为,可以使用 `${KEEP}` 跳过此过程。\n- 如果您没有足够的时间,请选择 `${DISMISS}`。稍后会再次提示您。\n- 如果您已在另一台设备上重建了数据库,请选择 `${DISMISS}` 并尝试再次同步。由于检测到差异,系统会再次提示您",
+        def: "Since v0.23.21, the Tabularium has changed the default behaviour and database structure. The following changes have been made:\n\n1. **Case sensitivity of filenames**\n   The handling of filenames is now case-insensitive. This is a beneficial change for most platforms, other than Linux and iOS, which do not manage filename case sensitivity effectively.\n   (On These, a warning will be displayed for files with the same name but different cases).\n\n2. **Revision handling of the chunks**\n   Chunks are immutable, which allows their revisions to be fixed. This change will enhance the performance of file saving.\n\n___However, to enable either of these changes, both remote and local databases need to be rebuilt. This process takes a few minutes, and we recommend doing it when you have ample time.___\n\n- If you wish to maintain the previous behaviour, you can skip this process by using `${KEEP}`.\n- If you do not have enough time, please choose `${DISMISS}`. You will be prompted again later.\n- If you have rebuilt the database on another device, please select `${DISMISS}` and try synchronizing again. Since a difference has been detected, you will be prompted again.",
+        la: "Ab v0.23.21, Tabularium modum praedefinitum et structuram repositorii mutavit. Hae mutationes factae sunt:\n\n1. **Discrimen litterarum maiuscularum in nominibus plicarum**\n   Tractatio nominum plicarum nunc litteras maiusculas et minusculas non discernit. Haec mutatio plerisque suggestibus utilis est, praeter Linux et iOS, quae discrimen litterarum in nominibus plicarum non bene administrant.\n   (In his, monitum monstrabitur pro plicis eodem nomine sed diversis litteris).\n\n2. **Tractatio recensionum fragmentorum**\n   Fragmenta immutabilia sunt, quod sinit recensiones eorum figi. Haec mutatio celeritatem servandi plicas augebit.\n\n___Attamen, ut utramvis harum mutationum actives, repositoria et remotum et locale reaedificanda sunt. Hic processus paucas minutas postulat, et suademus ut id facias cum satis temporis habes.___\n\n- Si modum priorem retinere vis, hunc processum per `${KEEP}` omittere potes.\n- Si satis temporis non habes, quaeso elige `${DISMISS}`. Postea iterum rogaberis.\n- Si repositorium in alio instrumento reaedificavisti, quaeso elige `${DISMISS}` et iterum synchronizare conare. Quia differentia detecta est, iterum rogaberis.",
+        zh: "自 v0.23.21 起,Tabularium 更改了默认行为和数据库结构。进行了以下更改：\n\n1. **文件名的区分大小写**\n现在处理文件名时不区分大小写。这对于大多数平台来说是一个有益的更改,除了 Linux 和 iOS,它们不能有效地管理文件名的大小写敏感性。\n(在这些平台上,对于名称相同但大小写不同的文件将显示警告)。\n\n2. **chunks 的版本处理**\nchunks 是不可变的,这使得它们的版本可以固定。此更改将提高文件保存的性能。\n\n___然而,要启用这些更改中的任何一个,都需要重建远程和本地数据库。这个过程需要几分钟,我们建议您在有充足时间时进行。___\n\n- 如果您希望保持以前的行为,可以使用 `${KEEP}` 跳过此过程。\n- 如果您没有足够的时间,请选择 `${DISMISS}`。稍后会再次提示您。\n- 如果您已在另一台设备上重建了数据库,请选择 `${DISMISS}` 并尝试再次同步。由于检测到差异,系统会再次提示您",
     },
     "moduleMigration.optionAdjustRemote": {
         def: "Adjust to remote",
@@ -3566,9 +3566,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "默认语言",
     },
     "obsidianLiveSyncSettingTab.descConnectSetupURI": {
-        def: "This is the recommended method to set up Self-hosted LiveSync with a Setup URI.",
-        la: "Haec est ratio commendata Self-hosted LiveSync per Setup URI constituendi.",
-        zh: "这是使用设置 URI 设置 Self-hosted LiveSync 的推荐方法",
+        def: "This is the recommended method to set up Self-hosted Tabularium with a Setup URI.",
+        la: "Haec est ratio commendata Tabularium per Setup URI constituendi.",
+        zh: "这是使用设置 URI 设置 Tabularium 的推荐方法",
     },
     "obsidianLiveSyncSettingTab.descCopySetupURI": {
         def: "Perfect for setting up a new device!",
@@ -3736,9 +3736,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "已配置的同步模式：已禁用",
     },
     "obsidianLiveSyncSettingTab.logConfiguredLiveSync": {
-        def: "Configured synchronization mode: LiveSync",
-        la: "Modus synchronizationis configuratus: LiveSync",
-        zh: "已配置的同步模式：LiveSync",
+        def: "Configured synchronization mode: live sync",
+        la: "Modus synchronizationis configuratus: synchronizatio viva",
+        zh: "已配置的同步模式：实时同步",
     },
     "obsidianLiveSyncSettingTab.logConfiguredPeriodic": {
         def: "Configured synchronization mode: Periodic",
@@ -3806,8 +3806,8 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "请选择任一预设。",
     },
     "obsidianLiveSyncSettingTab.logServerConfigurationCheck": {
-        def: "obsidianLiveSyncSettingTab.logServerConfigurationCheck",
-        la: "obsidianLiveSyncSettingTab.logServerConfigurationCheck",
+        def: "Server configuration check",
+        la: "Inspectio configurationis ministratoris",
         zh: "服务器配置检查",
     },
     "obsidianLiveSyncSettingTab.msgAreYouSureProceed": {
@@ -3996,9 +3996,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "启用隐藏文件同步",
     },
     "obsidianLiveSyncSettingTab.nameEnableLiveSync": {
-        def: "Enable LiveSync",
-        la: "Activa LiveSync",
-        zh: "启用 LiveSync",
+        def: "Enable live sync",
+        la: "Activa synchronizationem vivam",
+        zh: "启用实时同步",
     },
     "obsidianLiveSyncSettingTab.nameHiddenFileSynchronization": {
         def: "Hidden file synchronization",
@@ -4116,9 +4116,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "这里",
     },
     "obsidianLiveSyncSettingTab.optionLiveSync": {
-        def: "LiveSync",
-        la: "LiveSync",
-        zh: "LiveSync 同步",
+        def: "Live sync",
+        la: "Synchronizatio viva",
+        zh: "实时同步",
     },
     "obsidianLiveSyncSettingTab.optionMinioS3R2": {
         def: "Minio,S3,R2",
@@ -5465,9 +5465,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "重新运行引导向导",
     },
     "Rerun the onboarding wizard to set up Self-hosted LiveSync again.": {
-        def: "Rerun the onboarding wizard to set up Self-hosted LiveSync again.",
-        la: "Iterum curre ducem initialem ut Self-hosted LiveSync denuo constituas.",
-        zh: "重新运行引导向导以再次设置 Self-hosted LiveSync。",
+        def: "Rerun the onboarding wizard to set up Tabularium again.",
+        la: "Iterum curre ducem initialem ut Tabularium denuo constituas.",
+        zh: "重新运行引导向导以再次设置 Tabularium。",
     },
     "Rerun Wizard": {
         def: "Rerun Wizard",
@@ -5861,9 +5861,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "选择性",
     },
     "Self-hosted LiveSync has paused remote synchronisation for compatibility review.": {
-        def: "Self-hosted LiveSync has paused remote synchronisation for compatibility review.",
-        la: "Self-hosted LiveSync synchronizationem remotam ad compatibilitatem recognoscendam intermisit.",
-        zh: "Self-hosted LiveSync 已暂停远程同步，以进行兼容性检查。",
+        def: "Tabularium has paused remote synchronisation for compatibility review.",
+        la: "Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.",
+        zh: "Tabularium 已暂停远程同步，以进行兼容性检查。",
     },
     Send: {
         def: "Send",
@@ -6056,9 +6056,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "Yes, please consult the doctor",
     },
     "Setup.Doctor.Message": {
-        def: "Self-hosted LiveSync has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
-        la: "Self-hosted LiveSync paulatim longiorem historiam habet, et quaedam optiones commendatae mutatae sunt.\n\nNunc, in constitutione, tempus optimum est ad hoc faciendum.\n\nVisne medicum currere ut inspicias num optiones importatae, cum statu novissimo comparatae, optimae sint?",
-        zh: "Self-hosted LiveSync has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
+        def: "Tabularium has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
+        la: "Tabularium paulatim longiorem historiam habet, et quaedam optiones commendatae mutatae sunt.\n\nNunc, in constitutione, tempus optimum est ad hoc faciendum.\n\nVisne medicum currere ut inspicias num optiones importatae, cum statu novissimo comparatae, optimae sint?",
+        zh: "Tabularium has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
     },
     "Setup.Doctor.Title": {
         def: "Do you want to consult the doctor?",
@@ -6101,9 +6101,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "不重建直接启用——请先更新其他所有设备",
     },
     "Setup.Manager.EncryptInternalMetadata.Message": {
-        def: "A manual remote Rebuild is strongly recommended to protect existing file properties. Before continuing without rebuilding, update every other synchronising device to a version which supports this option, including devices currently running LiveSync. Existing properties remain unchanged until they are rewritten or rebuilt.",
-        la: "Reaedificatio remoti manualis vehementer commendatur ut proprietates plicarum exstantes protegantur. Antequam sine reaedificatione pergas, omnia alia instrumenta synchronizantia ad versionem quae hanc optionem sustinet renova, etiam instrumenta quae nunc LiveSync exsequuntur. Proprietates exstantes immutatae manent donec rescribantur vel reaedificentur.",
-        zh: "强烈建议手动重建远程，以保护已有的文件属性。如果不重建就继续，请先将其他所有正在同步的设备更新到支持此选项的版本，包括当前运行 LiveSync 的设备。已有属性在被重写或重建之前保持不变。",
+        def: "A manual remote Rebuild is strongly recommended to protect existing file properties. Before continuing without rebuilding, update every other synchronising device to a version which supports this option, including devices currently running Tabularium. Existing properties remain unchanged until they are rewritten or rebuilt.",
+        la: "Reaedificatio remoti manualis vehementer commendatur ut proprietates plicarum exstantes protegantur. Antequam sine reaedificatione pergas, omnia alia instrumenta synchronizantia ad versionem quae hanc optionem sustinet renova, etiam instrumenta quae nunc Tabularium exsequuntur. Proprietates exstantes immutatae manent donec rescribantur vel reaedificentur.",
+        zh: "强烈建议手动重建远程，以保护已有的文件属性。如果不重建就继续，请先将其他所有正在同步的设备更新到支持此选项的版本，包括当前运行 Tabularium 的设备。已有属性在被重写或重建之前保持不变。",
     },
     "Setup.Manager.EncryptInternalMetadata.Title": {
         def: "Encrypt internal file Properties",
@@ -6832,10 +6832,20 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "In ministratorem inire ut synchronizare incipias.",
         zh: "登录服务器以开始同步。",
     },
+    "tabularium.server.notConnectedNotice": {
+        def: "Tabularium is not connected to a server.",
+        la: "Tabularium cum nullo ministratore conexum est.",
+        zh: "Tabularium 未连接服务器。",
+    },
     "tabularium.server.open": {
         def: "Open",
         la: "Aperi",
         zh: "打开",
+    },
+    "tabularium.server.openConnection": {
+        def: "Open server connection",
+        la: "Aperi conexionem ministratoris",
+        zh: "打开服务器连接",
     },
     "tabularium.server.passphrase": {
         def: "E2EE passphrase",
@@ -7022,6 +7032,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Ordinatio plicarum Tabularium",
         zh: "Tabularium 文件排序",
     },
+    "tabularium.sync.liveOff": {
+        def: "Live sync off.",
+        la: "Synchronizatio viva deactivata est.",
+        zh: "实时同步已关闭。",
+    },
+    "tabularium.sync.liveOn": {
+        def: "Live sync on.",
+        la: "Synchronizatio viva activata est.",
+        zh: "实时同步已开启。",
+    },
+    "tabularium.sync.resumed": {
+        def: "Synchronisation resumed.",
+        la: "Synchronizatio resumpta est.",
+        zh: "同步已恢复。",
+    },
+    "tabularium.sync.suspended": {
+        def: "All synchronisation suspended.",
+        la: "Omnis synchronizatio suspensa est.",
+        zh: "已暂停全部同步。",
+    },
     "Target patterns": {
         def: "Target patterns",
         la: "Exemplaria quaerenda",
@@ -7083,9 +7113,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use IDB adapter instead.":
         {
-            def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use IDB adapter instead.",
-            la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum modo LiveSync adhibetur, memoriam perdere. Cum modo LiveSync uteris, adaptatorem IDB potius adhibe.",
-            zh: "IndexedDB 适配器在某些场景下性能更好，但已发现与 LiveSync 模式同用时会造成内存泄漏。使用 LiveSync 模式时，请改用 IDB 适配器。",
+            def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with Tabularium mode. When using Tabularium mode, please use IDB adapter instead.",
+            la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.",
+            zh: "IndexedDB 适配器在某些场景下性能更好，但已发现与实时同步模式同用时会造成内存泄漏。使用实时同步模式时，请改用 IDB 适配器。",
         },
     "the latest synchronisation data will be downloaded from the server to this device.": {
         def: "the latest synchronisation data will be downloaded from the server to this device.",
@@ -7286,9 +7316,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "开关全部同步",
     },
     "Toggle LiveSync": {
-        def: "Toggle LiveSync",
-        la: "Commuta LiveSync",
-        zh: "开关 LiveSync",
+        def: "Toggle live sync",
+        la: "Commuta synchronizationem vivam",
+        zh: "开关实时同步",
     },
     "Toggle Sync on `Replicate now` command": {
         def: "Toggle Sync on `Replicate now` command",
@@ -7457,9 +7487,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "Use Remote Configuration",
     },
     "Ui.Common.LocalDatabaseInitialisationFailed": {
-        def: "Self-hosted LiveSync cannot synchronise. Generate a report to review the detailed log.",
-        la: "Self-hosted LiveSync synchronizare non potest. Relationem genera ut acta accurata recenseas.",
-        zh: "Self-hosted LiveSync 无法同步。请生成报告以查看详细日志。",
+        def: "Tabularium cannot synchronise. Generate a report to review the detailed log.",
+        la: "Tabularium synchronizare non potest. Relationem genera ut acta accurata recenseas.",
+        zh: "Tabularium 无法同步。请生成报告以查看详细日志。",
     },
     "Ui.Common.Signal.Caution": {
         def: "CAUTION",
@@ -7777,9 +7807,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "丢弃所有非最新修订版本，以减少存储空间占用。此操作要求远程服务器和本地客户端都具备同等大小的可用空间。",
     },
     "Ui.Settings.Maintenance.DeleteLocalDatabase": {
-        def: "Delete local database to reset or uninstall Self-hosted LiveSync",
-        la: "Dele repositorium locale ut Self-hosted LiveSync restituas aut deinstalles",
-        zh: "删除本地数据库以重置或卸载 Self-hosted LiveSync",
+        def: "Delete local database to reset or uninstall Tabularium",
+        la: "Dele repositorium locale ut Tabularium restituas aut deinstalles",
+        zh: "删除本地数据库以重置或卸载 Tabularium",
     },
     "Ui.Settings.Maintenance.EmergencyRestart": {
         def: "Emergency restart",
@@ -8017,9 +8047,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "边界情况处理（处理流程）",
     },
     "Ui.Settings.Patches.IndexedDbWarning": {
-        def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use the IDB adapter instead.",
-        la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum modo LiveSync adhibetur, memoriam perdere. Cum modo LiveSync uteris, adaptatorem IDB potius adhibe.",
-        zh: "IndexedDB 适配器在某些场景下通常具有更好的性能，但在 LiveSync 模式下已发现可能导致内存泄漏。使用 LiveSync 模式时，请改用 IDB 适配器。",
+        def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with live sync. When using live sync, please use the IDB adapter instead.",
+        la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.",
+        zh: "IndexedDB 适配器在某些场景下通常具有更好的性能，但在实时同步模式下已发现可能导致内存泄漏。使用实时同步模式时，请改用 IDB 适配器。",
     },
     "Ui.Settings.Patches.MigratingToIdb": {
         def: "Migrating all data to IDB...",
@@ -8382,9 +8412,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "重新运行向导",
     },
     "Ui.Settings.Setup.RerunWizardDesc": {
-        def: "Rerun the onboarding wizard to set up Self-hosted LiveSync again.",
-        la: "Ductorem initialem iterum exsequere ut Self-hosted LiveSync denuo instituas.",
-        zh: "重新运行引导向导，再次设置 Self-hosted LiveSync。",
+        def: "Rerun the onboarding wizard to set up Tabularium again.",
+        la: "Ductorem initialem iterum exsequere ut Tabularium denuo instituas.",
+        zh: "重新运行引导向导，再次设置 Tabularium。",
     },
     "Ui.Settings.Setup.RerunWizardName": {
         def: "Rerun Onboarding Wizard",
@@ -8442,9 +8472,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "重启后，用当前的远端同步数据重建本设备的本地数据库。库中的文件随后会与该数据核对合并。",
     },
     "Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionP2PDesc": {
-        def: "After restarting, select an online source device. This device's local LiveSync database will be rebuilt from that source.",
-        la: "Post reinitium instrumentum fontem conexum selige. Repositorium locale LiveSync huius instrumenti ex illo fonte reaedificabitur.",
-        zh: "重启后选择一台在线的源设备。本设备的本地 LiveSync 数据库将从该源设备重建。",
+        def: "After restarting, select an online source device. This device's local database will be rebuilt from that source.",
+        la: "Post reinitium instrumentum fontem conexum selige. Repositorium locale huius instrumenti ex illo fonte reaedificabitur.",
+        zh: "重启后选择一台在线的源设备。本设备的本地数据库将从该源设备重建。",
     },
     "Ui.SetupWizard.ApplySettingsInitialisation.Guidance": {
         def: "These setting changes alter how synchronisation data is interpreted. Apply them together with an initialisation operation after restart.",
@@ -8497,9 +8527,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "用本库的文件准备本设备",
     },
     "Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2PDesc": {
-        def: "Rebuild this device's local LiveSync database from the files currently in this Vault. This does not overwrite another device.",
-        la: "Repositorium locale LiveSync huius instrumenti ex plicis quae nunc in hoc tabulario sunt reaedifica. Hoc aliud instrumentum non superscribit.",
-        zh: "用本库中当前的文件重建本设备的本地 LiveSync 数据库。这不会覆盖其他设备。",
+        def: "Rebuild this device's local database from the files currently in this Vault. This does not overwrite another device.",
+        la: "Repositorium locale huius instrumenti ex plicis quae nunc in hoc tabulario sunt reaedifica. Hoc aliud instrumentum non superscribit.",
+        zh: "用本库中当前的文件重建本设备的本地数据库。这不会覆盖其他设备。",
     },
     "Ui.SetupWizard.ApplySettingsInitialisation.RemoteVerificationGuidance": {
         def: "The configured remote could not be verified with the current credentials and encryption settings. Continuing may make the Fetch fail after restart.",
@@ -8572,9 +8602,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "首先，请选择最符合你当前情况的选项。",
     },
     "Ui.SetupWizard.Intro.Title": {
-        def: "Welcome to Self-hosted LiveSync",
-        la: "Salve in Self-hosted LiveSync",
-        zh: "欢迎使用 Self-hosted LiveSync",
+        def: "Welcome to Tabularium",
+        la: "Salve in Tabularium",
+        zh: "欢迎使用 Tabularium",
     },
     "Ui.SetupWizard.Invitation.Start": {
         def: "Start setup",
@@ -8642,9 +8672,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "P2P 没有中心服务器副本可供覆盖。此步骤只准备本设备；当其他设备获取初始数据时，请保持本设备在线。",
     },
     "Ui.SetupWizard.OutroNewP2PUser.GuidancePrimary": {
-        def: "The peer-to-peer connection has been configured successfully. Next, the local LiveSync database will be built from the current files in this Vault.",
-        la: "Conexio inter pares feliciter constituta est. Deinde repositorium locale LiveSync ex plicis praesentibus in hoc tabulario aedificabitur.",
-        zh: "点对点连接已配置成功。接下来，将用本库中当前的文件构建本地 LiveSync 数据库。",
+        def: "The peer-to-peer connection has been configured successfully. Next, the local database will be built from the current files in this Vault.",
+        la: "Conexio inter pares feliciter constituta est. Deinde repositorium locale ex plicis praesentibus in hoc tabulario aedificabitur.",
+        zh: "点对点连接已配置成功。接下来，将用本库中当前的文件构建本地数据库。",
     },
     "Ui.SetupWizard.OutroNewP2PUser.Important": {
         def: "PLEASE NOTE",
@@ -8712,9 +8742,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "请确认以下内容",
     },
     "Ui.SetupWizard.RebuildEverythingP2P.Guidance": {
-        def: "This procedure will discard the local LiveSync database on this device and rebuild it from the current files in this Vault. It does not delete or overwrite data on another device.",
-        la: "Haec ratio repositorium locale LiveSync in hoc instrumento abiciet et ex plicis praesentibus in hoc tabulario reaedificabit. Data in alio instrumento neque delet neque superscribit.",
-        zh: "此操作会丢弃本设备的本地 LiveSync 数据库，并用本库中当前的文件重建。它不会删除或覆盖其他设备上的数据。",
+        def: "This procedure will discard the local database on this device and rebuild it from the current files in this Vault. It does not delete or overwrite data on another device.",
+        la: "Haec ratio repositorium locale in hoc instrumento abiciet et ex plicis praesentibus in hoc tabulario reaedificabit. Data in alio instrumento neque delet neque superscribit.",
+        zh: "此操作会丢弃本设备的本地数据库，并用本库中当前的文件重建。它不会删除或覆盖其他设备上的数据。",
     },
     "Ui.SetupWizard.RebuildEverythingP2P.Note": {
         def: "Keep this device online after initialisation so that another device can fetch the Vault from it.",
@@ -9060,9 +9090,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.":
         {
-            def: "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.",
-            la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Self-hosted LiveSync iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Self-hosted LiveSync primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
-            zh: "即将获取远程数据。\n\n首先，应如何处理从此远程来源获取的数据？\n\n- **${NEWER_WINS}**：比较文件的修改时间，采用较新的版本。\n  如果你一直在使用 Self-hosted LiveSync，并在多台设备上做过修改，此选项可能适合你，因为它会尝试根据修改时间合并变更。\n- **${REMOTE_WINS}**：以远程数据为准。\n  如果你刚开始使用 Self-hosted LiveSync，此选项可能最容易理解和上手。\n  它会用远程数据覆盖所有本地文件，因此如果笔记库中有重要数据，请确保已做好备份。\n- **${DETAILED}**：打开详细设置向导。\n  如果你希望更好地控制同步过程，或想在应用前查看变更，可以选择此选项使用详细流程。",
+            def: "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.",
+            la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
+            zh: "即将获取远程数据。\n\n首先，应如何处理从此远程来源获取的数据？\n\n- **${NEWER_WINS}**：比较文件的修改时间，采用较新的版本。\n  如果你一直在使用 Tabularium，并在多台设备上做过修改，此选项可能适合你，因为它会尝试根据修改时间合并变更。\n- **${REMOTE_WINS}**：以远程数据为准。\n  如果你刚开始使用 Tabularium，此选项可能最容易理解和上手。\n  它会用远程数据覆盖所有本地文件，因此如果笔记库中有重要数据，请确保已做好备份。\n- **${DETAILED}**：打开详细设置向导。\n  如果你希望更好地控制同步过程，或想在应用前查看变更，可以选择此选项使用详细流程。",
         },
     'We can not use "/" to the device name': {
         def: 'We can not use "/" to the device name',
@@ -9107,9 +9137,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "接下来将继续进行服务器配置。",
     },
     "Welcome to Self-hosted LiveSync": {
-        def: "Welcome to Self-hosted LiveSync",
-        la: "Salve in Self-hosted LiveSync",
-        zh: "欢迎使用 Self-hosted LiveSync",
+        def: "Welcome to Tabularium",
+        la: "Salve in Tabularium",
+        zh: "欢迎使用 Tabularium",
     },
     "When you save a file in the editor, start a sync automatically": {
         def: "When you save a file in the editor, start a sync automatically",
@@ -9200,8 +9230,8 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
         {
-            la: "Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium LiveSync locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.",
-            zh: "重启后，请选择一台在线的源设备进行首次获取。本设备上的本地 LiveSync 数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。",
+            la: "Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.",
+            zh: "重启后，请选择一台在线的源设备进行首次获取。本设备上的本地数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。",
         },
     "All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.":
         {
@@ -9935,8 +9965,8 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "此报告中的名称",
     },
     "Newer Self-hosted LiveSync versions detected: ${versions}.": {
-        la: "Versiones recentiores Self-hosted LiveSync detectae: ${versions}.",
-        zh: "检测到较新的 Self-hosted LiveSync 版本：${versions}。",
+        la: "Versiones recentiores Tabularii detectae: ${versions}.",
+        zh: "检测到较新的 Tabularium 版本：${versions}。",
     },
     "No central data-storage server is required, but a signalling relay is required for peer discovery. Both devices must be online at the same time. Vault data travels through the encrypted P2P connection, not through the signalling relay. Some features may be limited.":
         {
@@ -9978,8 +10008,8 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             zh: "现在可以选择块的分割方式；V3 效率最高。如果遇到问题，请改为 Default 或 Legacy。",
         },
     "Older Self-hosted LiveSync versions detected: ${versions}.": {
-        la: "Versiones vetustiores Self-hosted LiveSync detectae: ${versions}.",
-        zh: "检测到较旧的 Self-hosted LiveSync 版本：${versions}。",
+        la: "Versiones vetustiores Tabularii detectae: ${versions}.",
+        zh: "检测到较旧的 Tabularium 版本：${versions}。",
     },
     "One-step repair is unavailable because this entry is ambiguous, no longer current, or unsafe to change.": {
         la: "Reparatio uno gradu non praesto est, quia haec inscriptio ambigua est, non iam currens, vel ad mutandum non tuta.",
@@ -10159,8 +10189,8 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "查看设备",
     },
     "Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.": {
-        la: "Versiones Self-hosted LiveSync per instrumenta recognoscere et congruentes reddere commendatur.",
-        zh: "建议检查并统一各设备上的 Self-hosted LiveSync 版本。",
+        la: "Versiones Tabularii per instrumenta recognoscere et congruentes reddere commendatur.",
+        zh: "建议检查并统一各设备上的 Tabularium 版本。",
     },
     "Revision metadata is unavailable on this device": {
         la: "Metadata recensionis in hoc instrumento non praesto sunt",

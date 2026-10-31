@@ -121,7 +121,7 @@ describe("useBasicCommandsFeature", () => {
         ]);
         expect(fixture.getCommand("livesync-replicate").name).toBe("Sync now");
         expect(fixture.getCommand("livesync-dump").name).toBe("Copy database information for the active file");
-        expect(fixture.getCommand("livesync-toggle").name).toBe("Toggle LiveSync");
+        expect(fixture.getCommand("livesync-toggle").name).toBe("Toggle live sync");
         expect(fixture.getCommand("livesync-suspendall").name).toBe("Toggle All Sync.");
         expect(fixture.getCommand("livesync-scan-files").name).toBe("Scan storage and database again");
         expect(fixture.getCommand("livesync-runbatch").name).toBe("Apply pending changes now");
@@ -148,7 +148,7 @@ describe("useBasicCommandsFeature", () => {
         await fixture.getCommand("livesync-toggle").callback?.();
 
         expect(fixture.settings.liveSync).toBe(true);
-        expect(fixture.api.addLog).toHaveBeenCalledWith("LiveSync Enabled.", expect.anything(), "");
+        expect(fixture.api.addLog).toHaveBeenCalledWith("Live sync on.", expect.anything(), "");
         expect(fixture.services.control.applySettings).toHaveBeenCalledOnce();
         expect(fixture.services.setting.saveSettingData).toHaveBeenCalledOnce();
         expect(fixture.services.control.applySettings.mock.invocationCallOrder[0]).toBeLessThan(
@@ -158,7 +158,7 @@ describe("useBasicCommandsFeature", () => {
         await fixture.getCommand("livesync-toggle").callback?.();
 
         expect(fixture.settings.liveSync).toBe(false);
-        expect(fixture.api.addLog).toHaveBeenCalledWith("LiveSync Disabled.", expect.anything(), "");
+        expect(fixture.api.addLog).toHaveBeenCalledWith("Live sync off.", expect.anything(), "");
     });
 
     it("toggles all synchronisation through the app lifecycle and persists it", async () => {
@@ -168,7 +168,7 @@ describe("useBasicCommandsFeature", () => {
         await fixture.getCommand("livesync-suspendall").callback?.();
 
         expect(fixture.services.appLifecycle.setSuspended).toHaveBeenCalledWith(true);
-        expect(fixture.api.addLog).toHaveBeenCalledWith("Self-hosted LiveSync suspended", expect.anything(), "");
+        expect(fixture.api.addLog).toHaveBeenCalledWith("All synchronisation suspended.", expect.anything(), "");
         expect(fixture.services.control.applySettings).toHaveBeenCalledOnce();
         expect(fixture.services.setting.saveSettingData).toHaveBeenCalledOnce();
         expect(fixture.services.control.applySettings.mock.invocationCallOrder[0]).toBeLessThan(
@@ -179,7 +179,7 @@ describe("useBasicCommandsFeature", () => {
         await fixture.getCommand("livesync-suspendall").callback?.();
 
         expect(fixture.services.appLifecycle.setSuspended).toHaveBeenLastCalledWith(false);
-        expect(fixture.api.addLog).toHaveBeenCalledWith("Self-hosted LiveSync resumed", expect.anything(), "");
+        expect(fixture.api.addLog).toHaveBeenCalledWith("Synchronisation resumed.", expect.anything(), "");
     });
 
     it("keeps advanced maintenance checks gated and invokes their exact actions", async () => {

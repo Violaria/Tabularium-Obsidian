@@ -86,10 +86,10 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
                 const settings = services.setting.currentSettings();
                 if (settings.liveSync) {
                     settings.liveSync = false;
-                    log("LiveSync Disabled.", LOG_LEVEL_NOTICE);
+                    log($msg("tabularium.sync.liveOff"), LOG_LEVEL_NOTICE);
                 } else {
                     settings.liveSync = true;
-                    log("LiveSync Enabled.", LOG_LEVEL_NOTICE);
+                    log($msg("tabularium.sync.liveOn"), LOG_LEVEL_NOTICE);
                 }
                 await services.control.applySettings();
                 await services.setting.saveSettingData();
@@ -102,10 +102,10 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
             callback: async () => {
                 if (services.appLifecycle.isSuspended()) {
                     services.appLifecycle.setSuspended(false);
-                    log("Self-hosted LiveSync resumed", LOG_LEVEL_NOTICE);
+                    log($msg("tabularium.sync.resumed"), LOG_LEVEL_NOTICE);
                 } else {
                     services.appLifecycle.setSuspended(true);
-                    log("Self-hosted LiveSync suspended", LOG_LEVEL_NOTICE);
+                    log($msg("tabularium.sync.suspended"), LOG_LEVEL_NOTICE);
                 }
                 await services.control.applySettings();
                 await services.setting.saveSettingData();

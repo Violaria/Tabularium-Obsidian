@@ -233,6 +233,23 @@ export class TabulariumServer {
     open() {
         new ServerModal(this).open();
     }
+
+    /** Shown while this vault is not connected, in place of the upstream onboarding invitation. */
+    invite() {
+        this.core.services.UI.confirm.askInPopup(
+            "tabularium-not-connected",
+            `${$msg("tabularium.server.notConnectedNotice")} {HERE}`,
+            (anchor) => {
+                anchor.href = "#";
+                anchor.textContent = $msg("tabularium.server.openConnection");
+                anchor.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    this.open();
+                });
+            },
+            60_000
+        );
+    }
 }
 
 /** An explanation behind an icon after the setting name: shown on hover, and as a notice when tapped on mobile. */

@@ -37,10 +37,7 @@ import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
 import { useSetupProtocolFeature } from "./serviceFeatures/setupObsidian/setupProtocol.ts";
 import { useSetupQRCodeFeature } from "@/serviceFeatures/setupObsidian/qrCode";
 import { useSetupURIFeature } from "@/serviceFeatures/setupObsidian/setupUri";
-import {
-    showOnboardingInvitation,
-    useSetupManagerHandlersFeature,
-} from "./serviceFeatures/setupObsidian/setupManagerHandlers.ts";
+import { useSetupManagerHandlersFeature } from "./serviceFeatures/setupObsidian/setupManagerHandlers.ts";
 import { useP2PReplicatorCommands, useP2PReplicatorFeature } from "@vrtmrz/livesync-commonlib/p2p";
 import { useP2PReplicatorUI } from "./serviceFeatures/useP2PReplicatorUI.ts";
 import { useReviewHarness } from "./serviceFeatures/useReviewHarness.ts";
@@ -225,7 +222,8 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     createObsidianCompatibilityReviewUi(core.confirm)
                 );
                 useStartupLifecycleFeature(core, {
-                    inviteToOnboarding: () => showOnboardingInvitation(core, setupManager),
+                    // Not connected: point to the Tabularium login instead of the upstream onboarding wizard.
+                    inviteToOnboarding: () => this.tabularium!.invite(),
                     waitForCompatibilityReview: () => compatibilityReview.openReview(),
                 });
                 useReviewHarness(core, this, compatibilityReview);
@@ -245,7 +243,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
     override onunload(): void {
         void this.core.services.control.onUnload().catch((error) => {
             this.core.services.API.addLog(
-                "Failed to unload Self-hosted LiveSync: " + String(error),
+                "Failed to unload Tabularium: " + String(error),
                 LOG_LEVEL_URGENT,
                 "shutdown"
             );

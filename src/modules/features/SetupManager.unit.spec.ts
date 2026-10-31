@@ -809,7 +809,7 @@ describe("internal Metadata configuration", () => {
             const apply = vi.spyOn(setting, "applyPartial").mockResolvedValue(undefined);
             await expect(manager.onlyE2EEConfiguration(UserMode.Update, current)).resolves.toBe(accept);
             expect(ask.mock.calls[0][1][0]).toContain("update every other device first");
-            expect(ask.mock.calls[0][0]).toContain("currently running LiveSync");
+            expect(ask.mock.calls[0][0]).toContain("currently running Tabularium");
             expect(apply).toHaveBeenCalledTimes(accept ? 1 : 0);
             expect(core.rebuilder.scheduleRebuild).not.toHaveBeenCalled();
             expect(core.rebuilder.scheduleFetch).not.toHaveBeenCalled();

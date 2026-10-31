@@ -19,11 +19,11 @@ ${count} issue(s) detected!: ${count} quaestiones detectae!
 (RegExp) Limit normal files to matching paths. Leave empty to allow all normal file paths. Hidden File Sync uses its own target patterns.: (RegExp) Plicas ordinarias ad vias congruentes limita. Vacuum relinque ut omnes viae plicarum ordinariarum permittantur. Synchronizatio plicarum occultarum suis exemplaribus propriis utitur.
 (RegExp) Skip changes to matching normal and hidden files, locally and remotely.: (RegExp) Mutationes plicarum ordinariarum et occultarum congruentium, localiter et remote, praetermitte.
 (Select this if you already have another synchronising device.) This option adds this device to the same synchronisation.: (Hoc elige si iam aliud instrumentum synchronizans habes.) Haec optio hoc instrumentum eidem synchronizationi addit.
-(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to LiveSync and want to set it up from scratch.: (Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si LiveSync novus tibi est et eum ab initio constituere vis.
+(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to LiveSync and want to set it up from scratch.: (Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si Tabularium novus tibi est et eum ab initio constituere vis.
 (e.g., after editing many files whilst offline): (e.g., postquam multas plicas sine conexione emendavisti)
 (e.g., immediately after restoring on another computer, or having recovered from a backup): (e.g., statim post restitutionem in alio computatro, vel post recuperationem ex exemplari tutelari)
 (e.g., setting up for the first time on a new smartphone, starting from a clean slate): (e.g., primum in novo telephono callido constituens, a tabula rasa incipiens)
-(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (e.g. fragmenta online lege) Si haec optio activa est, LiveSync fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.
+(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (e.g. fragmenta online lege) Si haec optio activa est, Tabularium fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.
 +1 week: +1 hebdomas
 ', please select the option that best describes the current state of your Vault. The application will then check your files in the most appropriate way based on your selection.': ', quaeso optionem elige quae statum praesentem tabularii tui optime describit. Applicatio deinde plicas tuas modo aptissimo secundum electionem tuam inspiciet.'
 "> [!INFO]- The connected devices have been detected as follows:\n${devices}": '> [!INFO]- Instrumenta conexa sic detecta sunt:
@@ -47,7 +47,7 @@ AddOn Module (ConfigSync) has not been loaded. This is very unexpected situation
 AddOn Module (HiddenFileSync) has not been loaded. This is very unexpected situation. Please report this issue.: Modulus additicius (HiddenFileSync) non est oneratus. Haec res maxime inopinata est. Quaeso hanc quaestionem nuntia.
 Advanced: Provecta
 Advanced Settings: Optiones provectae
-After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium LiveSync locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.
+After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.
 After restarting, the data on this device will be uploaded to the server as the 'master copy'. Please be aware that any unintended data currently on the server will be completely overwritten.: Post iteratum initium, data in hoc instrumento ad ministratorem ut “exemplar principale” sursum mittentur. Scito omnia data non intenta quae nunc in ministratore sunt omnino superscriptum iri.
 After restarting, the database on this device will be rebuilt using data from the server. If there are any unsynchronised files in this vault, conflicts may occur with the server data.: Post iteratum initium, repositorium in hoc instrumento ex datis ministratoris reaedificabitur. Si quae plicae non synchronizatae in hoc tabulario sunt, discrepantiae cum datis ministratoris oriri possunt.
 After that, synchronise to a brand new vault on each other device with the new remote one by one.: Deinde, in quoque alio instrumento singillatim cum novo remoto in tabularium omnino novum synchroniza.
@@ -227,7 +227,7 @@ Delete All of: Dele omnia ex
 Delete Remote Configuration: Dele configurationem remotam
 Delete all customization sync data: Dele omnia data synchronizationis optionum propriarum
 Delete all data on the remote server.: Dele omnia data in ministratore remoto.
-Delete local database to reset or uninstall Self-hosted LiveSync: Dele repositorium locale ut Self-hosted LiveSync restituas vel deinstalles
+Delete local database to reset or uninstall Self-hosted LiveSync: Dele repositorium locale ut Tabularium restituas vel deinstalles
 Delete local files if deleted on remote: Dele plicas locales si in remoto deletae sunt
 Delete local files if not on remote: Dele plicas locales si in remoto non sunt
 Delete old metadata of deleted files on start-up: Dele metadata vetera plicarum deletarum in initio
@@ -312,7 +312,7 @@ Doctor.Dialogue.MainFix: '
 
 
   Corrigerene ad valorem idealem?'
-Doctor.Dialogue.Title: Medicus configurationis Self-hosted LiveSync
+Doctor.Dialogue.Title: Medicus configurationis Tabularii
 Doctor.Dialogue.TitleAlmostDone: Paene perfectum!
 Doctor.Dialogue.TitleFix: Corrige quaestionem ${current}/${total}
 Doctor.Level.Must: Oportet
@@ -516,7 +516,7 @@ If you have unsynchronised changes in your Vault on this device, they will likel
 If you reached the payload size limit when using IBM Cloudant, please decrease batch size and batch limit to a lower value.: Si ad limitem magnitudinis oneris IBM Cloudant utens pervenisti, quaeso magnitudinem acervi et limitem acervi ad valorem minorem minue.
 If you understand the risks and still wish to proceed, select so.: Si pericula intellegis et tamen pergere vis, hoc elige.
 If you want to store the data in a specific folder within the bucket, you can specify a folder prefix here. Otherwise, leave it blank to store data at the root of the bucket.: Si data in certa theca intra situlam servare vis, praefixum thecae hic indicare potes. Aliter vacuum relinque ut data in radice situlae serventur.
-If you want to use `LiveSync`, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.: Si `LiveSync` uti vis, mutationes divulgare debes. Omnes pares `watching` qui hoc animadvertunt replicationem ad arcessendum incipient.
+If you want to use `LiveSync`, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.: Si synchronizatione viva uti vis, mutationes divulgare debes. Omnes pares `watching` qui hoc animadvertunt replicationem ad arcessendum incipient.
 Ignore: Ignora
 Ignore and Proceed: Ignora et perge
 Ignore files: Plicae ignorandae
@@ -524,7 +524,7 @@ Ignore patterns: Exemplaria ignoranda
 Import an ID recovery code: Importa codicem recuperationis ID
 Import connection: Importa conexionem
 In most cases, you should stick with the default algorithm (${algorithm}), This setting is only required if you have an existing Vault encrypted in a different format.: Plerumque algorithmo praedefinito (${algorithm}) uti debes. Haec optio solum requiritur si tabularium exstans alia forma cryptatum habes.
-In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: Hoc in casu, Self-hosted LiveSync metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.
+In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: Hoc in casu, Tabularium metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.
 Include in the P2P synchronisation command: Include in mandato synchronizationis P2P
 Include remote database: Include repositorium remotum
 'Incoming:': 'Advenientia:'
@@ -579,7 +579,7 @@ Learn more about signalling and TURN: Plura de significatione et TURN disce
 Leave this input empty to keep the saved ID key.: Hunc campum vacuum relinque ut clavem ID servatam retineas.
 Legacy path identity: Identitas viarum hereditaria
 'Limit: {datetime} ({timestamp})': 'Limes: {datetime} ({timestamp})'
-LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: LiveSync plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.
+LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.
 Loading joined devices…: Instrumenta adiuncta onerantur…
 Local Database Tweak: Accommodatio repositorii localis
 Local file diagnostic report: Relatio diagnostica plicae localis
@@ -634,7 +634,7 @@ Names in this report: Nomina in hac relatione
 Network warning style: Modus monitorum retis
 New Remote: Novum remotum
 Newer (${diff}): Recentior (${diff})
-'Newer Self-hosted LiveSync versions detected: ${versions}.': 'Versiones recentiores Self-hosted LiveSync detectae: ${versions}.'
+'Newer Self-hosted LiveSync versions detected: ${versions}.': 'Versiones recentiores Tabularii detectae: ${versions}.'
 No Connection: Nulla conexio
 No Items.: Nulla elementa.
 No Synchronisation Settings Found: Nullae optiones synchronizationis inventae
@@ -674,7 +674,7 @@ Of course, we can back up the data before proceeding.: Scilicet data antequam pe
 Ok: Bene
 Old Algorithm: Algorithmus vetus
 Older (${diff}): Vetustior (${diff})
-'Older Self-hosted LiveSync versions detected: ${versions}.': 'Versiones vetustiores Self-hosted LiveSync detectae: ${versions}.'
+'Older Self-hosted LiveSync versions detected: ${versions}.': 'Versiones vetustiores Tabularii detectae: ${versions}.'
 Older fallback (Slow, W/O WebAssembly): Subsidium vetustius (lentum, sine WebAssembly)
 'On': Activum
 On the source device, from the command palette, run the 'Show settings as a QR code' command.: In instrumento fontis, ex indice mandatorum, mandatum 'Show settings as a QR code' exsequere.
@@ -950,7 +950,7 @@ Requires restart of Obsidian: Obsidian denuo incipiendum est
 Requires restart of Obsidian.: Obsidian denuo incipiendum est.
 Rerun Onboarding Wizard: Iterum curre ducem initialem
 Rerun Wizard: Iterum curre ducem
-Rerun the onboarding wizard to set up Self-hosted LiveSync again.: Iterum curre ducem initialem ut Self-hosted LiveSync denuo constituas.
+Rerun the onboarding wizard to set up Self-hosted LiveSync again.: Iterum curre ducem initialem ut Tabularium denuo constituas.
 Resend: Iterum mitte
 Resend all chunks to the remote.: Omnia fragmenta ad remotum iterum mitte.
 Reset: Restitue
@@ -984,7 +984,7 @@ Rev: Rec.
 Revert changes: Muta revoca
 Review device records for the active CouchDB or Object Storage connection.: Recognosce notitias instrumentorum conexionis CouchDB vel repositorii obiectorum activae.
 Review devices: Recognosce instrumenta
-Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.: Versiones Self-hosted LiveSync per instrumenta recognoscere et congruentes reddere commendatur.
+Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.: Versiones Tabularii per instrumenta recognoscere et congruentes reddere commendatur.
 Revision metadata is unavailable on this device: Metadata recensionis in hoc instrumento non praesto sunt
 Revoke: Revoca
 Room ID: ID conclavis
@@ -1149,7 +1149,7 @@ Setup.Apply.Title: Applica novam configurationem ex ${method}
 Setup.Apply.WarningRebuildRecommended: 'NOTA: optionibus accommodatis, constitutum est reaedificationem requiri; Just Import non commendatur.'
 Setup.Doctor.Buttons.No: Minime, quaeso optiones in URI ut sunt adhibe
 Setup.Doctor.Buttons.Yes: Ita, quaeso medicum consule
-Setup.Doctor.Message: 'Self-hosted LiveSync paulatim longiorem historiam habet, et quaedam optiones commendatae mutatae sunt.
+Setup.Doctor.Message: 'Tabularium paulatim longiorem historiam habet, et quaedam optiones commendatae mutatae sunt.
 
 
   Nunc, in constitutione, tempus optimum est ad hoc faciendum.
@@ -1321,7 +1321,7 @@ The Group ID and passphrase are used to identify your group of devices. Make sur
 The Hash algorithm for chunk IDs: Algorithmus hash ad identificationes fragmentorum
 The ID key is derived from the current E2EE passphrase and saved separately. Changing that passphrase later does not change the saved ID key. To reduce the risk of guessing that passphrase from known IDs, use a separate, unpredictable ID source instead.: Clavis identificationum ex tessera arcana E2EE praesenti derivatur et seorsum servatur. Si postea illam tesseram arcanam mutaveris, clavis servata non mutabitur. Ut periculum minuatur ne illa tessera arcana ex identificationibus notis divinetur, potius fontem identificationum separatum et incertum adhibe.
 The ID source or recovery code is invalid. Check it and try again.: Fons identificationum aut codex recuperationis invalidus est. Inspice et iterum conare.
-The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use IDB adapter instead.: Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum modo LiveSync adhibetur, memoriam perdere. Cum modo LiveSync uteris, adaptatorem IDB potius adhibe.
+The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use IDB adapter instead.: Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.
 The Nostr relay servers to establish connections for P2P connections. Multiple servers can be separated by commas.: Ministratores Nostr relay quibus conexiones P2P constituuntur. Plures ministratores commatibus separari possunt.
 The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.: Conexio P2P feliciter constituta est. Data synchronizationis initialis nunc ab instrumento fonte conexo arcessenda sunt.
 The Passphrase for P2P connection. This should be same among your devices.: Tessera arcana ad conexionem P2P. Haec in omnibus instrumentis tuis eadem esse debet.
@@ -1524,7 +1524,7 @@ TweakMismatchResolve.Title.AutoAcceptCompatible: Acceptio automatica praesto
 TweakMismatchResolve.Title.TweakResolving: Incongruentia configurationis detecta
 TweakMismatchResolve.Title.UseRemoteConfig: Adhibe configurationem remotam
 URL: URL
-Ui.Common.LocalDatabaseInitialisationFailed: Self-hosted LiveSync synchronizare non potest. Relationem genera ut acta accurata recenseas.
+Ui.Common.LocalDatabaseInitialisationFailed: Tabularium synchronizare non potest. Relationem genera ut acta accurata recenseas.
 Ui.Common.Signal.Caution: CAUTIO
 Ui.Common.Signal.Danger: PERICULUM
 Ui.Common.Signal.Notice: ADMONITIO
@@ -1588,7 +1588,7 @@ Ui.Settings.Hatch.VerifyAndRepairAllFiles: Verifica et repara omnes plicas
 Ui.Settings.Hatch.VerifyAndRepairAllFilesDesc: Contenta plicarum inter repositorium locale et repositorium plicarum compara. Si non congruunt, rogaberis utram servare velis.
 Ui.Settings.Maintenance.Cleanup: Exsequere purgationem
 Ui.Settings.Maintenance.CleanupDesc: Spatium repositorii plicarum minuit omnibus recensionibus non recentissimis abiectis. Hoc idem spatium liberum in ministratore remoto et in cliente locali requirit.
-Ui.Settings.Maintenance.DeleteLocalDatabase: Dele repositorium locale ut Self-hosted LiveSync restituas aut deinstalles
+Ui.Settings.Maintenance.DeleteLocalDatabase: Dele repositorium locale ut Tabularium restituas aut deinstalles
 Ui.Settings.Maintenance.EmergencyRestart: Reinitium subitum
 Ui.Settings.Maintenance.EmergencyRestartDesc: Omnem synchronizationem deactiva et reinitia.
 Ui.Settings.Maintenance.FreshStartWipe: Deletio ad initium novum
@@ -1636,7 +1636,7 @@ Ui.Settings.Patches.DatabaseAdapterDesc: Adaptatorem repositorii adhibendum seli
 Ui.Settings.Patches.EdgeCaseBehaviour: Casus extremi tractati (modus agendi)
 Ui.Settings.Patches.EdgeCaseDatabase: Casus extremi tractati (repositorium)
 Ui.Settings.Patches.EdgeCaseProcessing: Casus extremi tractati (processus)
-Ui.Settings.Patches.IndexedDbWarning: Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum modo LiveSync adhibetur, memoriam perdere. Cum modo LiveSync uteris, adaptatorem IDB potius adhibe.
+Ui.Settings.Patches.IndexedDbWarning: Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.
 Ui.Settings.Patches.MigratingToIdb: Omnia data ad IDB migrant...
 Ui.Settings.Patches.MigratingToIndexedDb: Omnia data ad IndexedDB migrant...
 Ui.Settings.Patches.MigrationIdbCompleted: Migratio ad IDB perfecta est. Obsidian statim cum configuratione nova reinitiabitur.
@@ -1709,7 +1709,7 @@ Ui.Settings.Selector.SynchronisingFilesDesc: (RegExp) Vacuum relinque ut omnes p
 Ui.Settings.Selector.TargetPatterns: Exemplaria quaerenda
 Ui.Settings.Selector.TargetPatternsDesc: Exemplaria quibus plicae synchronizandae congruunt
 Ui.Settings.Setup.RerunWizardButton: Iterum exsequere ductorem
-Ui.Settings.Setup.RerunWizardDesc: Ductorem initialem iterum exsequere ut Self-hosted LiveSync denuo instituas.
+Ui.Settings.Setup.RerunWizardDesc: Ductorem initialem iterum exsequere ut Tabularium denuo instituas.
 Ui.Settings.Setup.RerunWizardName: Iterum exsequere ductorem initialem
 Ui.Settings.SyncSettings.Fetch: Arcesse
 Ui.Settings.SyncSettings.Merge: Confla
@@ -1721,7 +1721,7 @@ Ui.SetupWizard.ApplySettingsInitialisation.BypassTitle: Applicarene optiones sin
 Ui.SetupWizard.ApplySettingsInitialisation.ContinueFetch: Perge cum arcessione
 Ui.SetupWizard.ApplySettingsInitialisation.FetchOption: Restitue synchronizationem in hoc instrumento
 Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionDesc: Post reinitium repositorium locale huius instrumenti ex datis synchronizationis remotis praesentibus reaedifica. Plicae in tabulario deinde cum illis datis concordabuntur.
-Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionP2PDesc: Post reinitium instrumentum fontem conexum selige. Repositorium locale LiveSync huius instrumenti ex illo fonte reaedificabitur.
+Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionP2PDesc: Post reinitium instrumentum fontem conexum selige. Repositorium locale huius instrumenti ex illo fonte reaedificabitur.
 Ui.SetupWizard.ApplySettingsInitialisation.Guidance: Hae mutationes optionum modum quo data synchronizationis interpretantur mutant. Eas una cum operatione initiationis post reinitium applica.
 Ui.SetupWizard.ApplySettingsInitialisation.KeepEditing: Perge emendare
 Ui.SetupWizard.ApplySettingsInitialisation.ProceedFetch: Reinitia et arcesse data synchronizationis
@@ -1732,7 +1732,7 @@ Ui.SetupWizard.ApplySettingsInitialisation.Question: Quae data exstantia post re
 Ui.SetupWizard.ApplySettingsInitialisation.RebuildOption: Superscribe data ministratoris plicis huius instrumenti
 Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionDesc: Repositoria localia et remota ex plicis quae nunc in hoc tabulario sunt reaedifica. Alia instrumenta synchronizantia postea synchronizationem localem suam restituere debent.
 Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2P: Para hoc instrumentum ex hoc tabulario
-Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2PDesc: Repositorium locale LiveSync huius instrumenti ex plicis quae nunc in hoc tabulario sunt reaedifica. Hoc aliud instrumentum non superscribit.
+Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2PDesc: Repositorium locale huius instrumenti ex plicis quae nunc in hoc tabulario sunt reaedifica. Hoc aliud instrumentum non superscribit.
 Ui.SetupWizard.ApplySettingsInitialisation.RemoteVerificationGuidance: Remotum configuratum cum testimoniis et optionibus cryptationis praesentibus verificari non potuit. Si perges, arcessio post reinitium fortasse deficiet.
 Ui.SetupWizard.ApplySettingsInitialisation.RemoteVerificationTitle: Data synchronizationis remota verificari non potuerunt
 Ui.SetupWizard.ApplySettingsInitialisation.Title: Applica optiones et synchronizationem denuo initia
@@ -1747,7 +1747,7 @@ Ui.SetupWizard.Intro.NewOptionDesc: Hoc selige si hoc instrumentum ut primum ins
 Ui.SetupWizard.Intro.ProceedExisting: Ita, hoc instrumentum synchronizationi meae exstanti addere volo
 Ui.SetupWizard.Intro.ProceedNew: Ita, novam synchronizationem instituere volo
 Ui.SetupWizard.Intro.Question: Primum optionem selige quae condicionem tuam praesentem optime describit.
-Ui.SetupWizard.Intro.Title: Salve in Self-hosted LiveSync
+Ui.SetupWizard.Intro.Title: Salve in Tabularium
 Ui.SetupWizard.Invitation.Start: Incipe institutionem
 Ui.SetupWizard.OutroAskUserMode.CompatibleOption: Remotum iam paratum est, et configuratio congruit (aut hac operatione congruens facta est).
 Ui.SetupWizard.OutroAskUserMode.CompatibleOptionDesc: Nisi certus es, haec optio periculosa est. Ponit configurationem ministratoris cum hoc instrumento congruere. Si non ita est, data amitti possunt. Cura ut consequentias intellegas.
@@ -1761,7 +1761,7 @@ Ui.SetupWizard.OutroAskUserMode.ProceedNext: Ad proximum gradum procede.
 Ui.SetupWizard.OutroAskUserMode.Question: Condicionem tuam selige.
 Ui.SetupWizard.OutroAskUserMode.Title: 'Fere perfectum: consilium requiritur'
 Ui.SetupWizard.OutroNewP2PUser.GuidanceNotice: P2P nullum exemplar centrale in ministratore habet quod superscribatur. Hic gradus solum hoc instrumentum parat; id conexum serva dum aliud instrumentum data initialia sua arcessit.
-Ui.SetupWizard.OutroNewP2PUser.GuidancePrimary: Conexio inter pares feliciter constituta est. Deinde repositorium locale LiveSync ex plicis praesentibus in hoc tabulario aedificabitur.
+Ui.SetupWizard.OutroNewP2PUser.GuidancePrimary: Conexio inter pares feliciter constituta est. Deinde repositorium locale ex plicis praesentibus in hoc tabulario aedificabitur.
 Ui.SetupWizard.OutroNewP2PUser.Important: NOTA BENE
 Ui.SetupWizard.OutroNewP2PUser.Proceed: Reinitia et para hoc instrumentum
 Ui.SetupWizard.OutroNewP2PUser.Question: Preme globulum infra ut reinities et ad confirmationem initiationis localis procedas.
@@ -1775,7 +1775,7 @@ Ui.SetupWizard.OutroNewUser.Title: 'Institutio perfecta: ministrator initiandus 
 Ui.SetupWizard.RebuildEverythingP2P.ConfirmLocalReset: Intellego hoc solum repositorium locale synchronizationis huius instrumenti restituere.
 Ui.SetupWizard.RebuildEverythingP2P.ConfirmLocalResetNote: Plicae quae nunc in hoc tabulario sunt ad id reaedificandum adhibentur.
 Ui.SetupWizard.RebuildEverythingP2P.ConfirmTitle: Quaeso sequentia confirma
-Ui.SetupWizard.RebuildEverythingP2P.Guidance: Haec ratio repositorium locale LiveSync in hoc instrumento abiciet et ex plicis praesentibus in hoc tabulario reaedificabit. Data in alio instrumento neque delet neque superscribit.
+Ui.SetupWizard.RebuildEverythingP2P.Guidance: Haec ratio repositorium locale in hoc instrumento abiciet et ex plicis praesentibus in hoc tabulario reaedificabit. Data in alio instrumento neque delet neque superscribit.
 Ui.SetupWizard.RebuildEverythingP2P.Note: Post initiationem hoc instrumentum conexum serva ut aliud instrumentum tabularium ex eo arcessere possit.
 Ui.SetupWizard.RebuildEverythingP2P.Proceed: Intellego, para hoc instrumentum
 Ui.SetupWizard.RebuildEverythingP2P.Title: 'Confirmatio ultima: para hoc instrumentum ad P2P'
@@ -1856,11 +1856,11 @@ Warning! This will have a serious impact on performance. And the logs will not b
 
   - **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.
 
-  \  Si Self-hosted LiveSync iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.
+  \  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.
 
   - **${REMOTE_WINS}**: Data remota fons veritatis sunt.
 
-  \  Si Self-hosted LiveSync primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.
+  \  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.
 
   \  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.
 
@@ -1875,7 +1875,7 @@ We recommend that you copy your Vault folder to a safe location. This will provi
 We will now guide you through a few questions to simplify the synchronisation setup.: Nunc te per paucas quaestiones ducemus ut institutio synchronizationis simplicior fiat.
 We will now proceed with the server configuration.: Nunc ad configurationem ministratoris procedemus.
 WebRTC encrypts data between your devices, including when it passes through TURN. The TURN provider cannot read the transferred data. It can see network addresses and traffic volume.: WebRTC data inter instrumenta tua cryptat, etiam cum per TURN transeunt. Praebitor TURN data translata legere non potest. Inscriptiones retiales et copiam commeatus videre potest.
-Welcome to Self-hosted LiveSync: Salve in Self-hosted LiveSync
+Welcome to Self-hosted LiveSync: Salve in Tabularium
 When enabled, this device notifies connected peers after a local change. The notification contains no Vault data; a peer which follows this device then fetches the change through the encrypted P2P connection.: Si activa est, hoc instrumentum pares conexos post mutationem localem certiores facit. Nuntius nulla data tabularii continet; par qui hoc instrumentum sequitur deinde mutationem per conexionem P2P cryptatam arcessit.
 When you save a file in the editor, start a sync automatically: Cum plicam in editore servas, synchronizationem automatice incipe
 While enabled, it causes very performance impact but debugging replication testing and other features will be enabled. Please disable this if you have not read the source code. Requires restart of Obsidian. Sometimes there is no implementation.: Dum activa est, effectum multum minuit, sed probatio replicationis ad vitia investiganda aliaeque facultates activantur. Deactiva hanc optionem, nisi codicem fontis legisti. Obsidian iterum incipiendum est. Interdum nulla exsecutio adest.
@@ -1894,7 +1894,7 @@ by resetting the remote, you will be informed on other devices.: remoto restitue
 cmdConfigSync.showCustomizationSync: Monstra synchronizationem optionum propriarum
 desktop: instrumentum mensale
 device name: nomen instrumenti
-dialog.yourLanguageAvailable: 'Self-hosted LiveSync translationes linguae tuae habebat, itaque optio %{Display language} activata est.
+dialog.yourLanguageAvailable: 'Tabularium translationes linguae tuae habebat, itaque optio %{Display language} activata est.
 
 
   Nota: Non omnes nuntii translati sunt. Contributiones tuas exspectamus!
@@ -1909,7 +1909,7 @@ lang-la: Latina
 lang-zh: 中文
 lang_def: English
 live: continua
-liveSyncReplicator.beforeLiveSync: Ante LiveSync, semel OneShot incipe...
+liveSyncReplicator.beforeLiveSync: Ante synchronizationem vivam semel synchronizationem singularem incipe...
 liveSyncReplicator.cantReplicateLowerValue: Valorem minorem replicare non possumus.
 liveSyncReplicator.checkingLastSyncPoint: Punctum ultimae synchronizationis quaeritur.
 liveSyncReplicator.couldNotConnectTo: 'Ad ${uri} conecti non potuit : ${name}
@@ -1919,12 +1919,12 @@ liveSyncReplicator.couldNotConnectToRemoteDb: 'Ad repositorium remotum conecti n
 liveSyncReplicator.couldNotConnectToServer: Conexio ad remotum impedita est aut defecit.
 liveSyncReplicator.couldNotConnectToURI: Ad ${uri} conecti non potuit:${dbRet}
 liveSyncReplicator.couldNotMarkResolveRemoteDb: Repositorium remotum ut resolutum notari non potuit.
-liveSyncReplicator.liveSyncBegin: LiveSync incipit...
+liveSyncReplicator.liveSyncBegin: Synchronizatio viva incipit...
 liveSyncReplicator.lockRemoteDb: Obsera repositorium remotum ne data corrumpantur
 liveSyncReplicator.markDeviceResolved: Nota hoc instrumentum ut “resolutum”.
 liveSyncReplicator.mismatchedTweakDetected: Aliquae discrepantiae in configuratione inter instrumenta detectae sunt. Replicatio manualis hanc rem resolvere conabitur.
 liveSyncReplicator.oneShotSyncBegin: Synchronizatio OneShot incipit... (${syncMode})
-liveSyncReplicator.remoteDbCorrupted: Repositorium remotum recentius aut corruptum est; cura ut versio novissima self-hosted-livesync installata sit
+liveSyncReplicator.remoteDbCorrupted: Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit
 liveSyncReplicator.remoteDbCreatedOrConnected: Repositorium remotum creatum vel conexum
 liveSyncReplicator.remoteDbDestroyError: 'Aliquid accidit in deletione repositorii remoti:'
 liveSyncReplicator.remoteDbDestroyed: Repositorium remotum deletum
@@ -1940,7 +1940,7 @@ liveSyncSettings.btnApply: Adhibe
 logPane.autoScroll: Volutatio automatica
 logPane.logWindowOpened: Fenestra actorum aperta
 logPane.pause: Intermitte
-logPane.title: Acta Self-hosted LiveSync
+logPane.title: Acta Tabularii
 logPane.wrap: Involve
 moduleCheckRemoteSize.logCheckingStorageSizes: Magnitudines repositorii inspiciuntur
 moduleCheckRemoteSize.logCurrentStorageSize: 'Magnitudo repositorii remoti: ${measuredSize}'
@@ -1963,7 +1963,7 @@ moduleCheckRemoteSize.msgDatabaseGrowing: '**Repositorium tuum crescit!** Sed no
 
   >
 
-  > Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Self-hosted LiveSync data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere [documentatum est](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).
+  > Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere [documentatum est](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).
 
   >
 
@@ -2017,13 +2017,13 @@ moduleInputUIObsidian.optionYes: Ita
 moduleLiveSyncMain.logAdditionalSafetyScan: Perscrutatio securitatis addita...
 moduleLiveSyncMain.logLoadingPlugin: Additamentum oneratur...
 moduleLiveSyncMain.logPluginInitCancelled: Initium additamenti a modulo abrogatum est
-moduleLiveSyncMain.logPluginVersion: Self-hosted LiveSync v${manifestVersion} ${packageVersion}
-moduleLiveSyncMain.logReadChangelog: LiveSync renovatum est, quaeso indicem mutationum lege!
+moduleLiveSyncMain.logPluginVersion: Tabularium v${manifestVersion} ${packageVersion}
+moduleLiveSyncMain.logReadChangelog: Tabularium renovatum est, quaeso indicem mutationum lege!
 moduleLiveSyncMain.logSafetyScanCompleted: Perscrutatio securitatis addita perfecta
 moduleLiveSyncMain.logSafetyScanFailed: Perscrutatio securitatis addita in modulo defecit
 moduleLiveSyncMain.logUnloadingPlugin: Additamentum exoneratur...
-moduleLiveSyncMain.logVersionUpdate: LiveSync renovatum est. Propter renovationes fortasse incompatibiles, omnis synchronizatio automatica ad tempus deactivata est. Cura ut omnia instrumenta renovata sint antequam activas.
-moduleLiveSyncMain.msgScramEnabled: 'Self-hosted LiveSync configuratum est ut aliquos eventus neglegat. Rectumne est?
+moduleLiveSyncMain.logVersionUpdate: Tabularium renovatum est. Propter renovationes fortasse incompatibiles, omnis synchronizatio automatica ad tempus deactivata est. Cura ut omnia instrumenta renovata sint antequam activas.
+moduleLiveSyncMain.msgScramEnabled: 'Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?
 
 
   | Genus | Status | Nota |
@@ -2045,7 +2045,7 @@ moduleLiveSyncMain.msgScramEnabled: 'Self-hosted LiveSync configuratum est ut al
   > Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.
 
   '
-moduleLiveSyncMain.optionKeepLiveSyncDisabled: Retine LiveSync deactivatum
+moduleLiveSyncMain.optionKeepLiveSyncDisabled: Retine synchronizationem vivam deactivatam
 moduleLiveSyncMain.optionResumeAndRestart: Resume et Obsidian iterum incipe
 moduleLiveSyncMain.titleScramEnabled: Scram activum
 moduleLocalDatabase.logWaitingForReady: Exspectatur dum paratum sit...
@@ -2100,7 +2100,7 @@ moduleMigration.insecureChunkExist.message: 'Aliqua fragmenta non tuto servata n
   Si repositorium remotum tuum sine SSL configuratum est, vel testimoniis minus tutis utitur, **periculum est ne data sensibilia patefiant**.
 
 
-  Nota: Quaeso Self-hosted LiveSync ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et tabularium tuum certe serva.
+  Nota: Quaeso Tabularium ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et tabularium tuum certe serva.
 
   Nota 2: “Omnia reaedifica” et “Arcesse” aliquantum temporis et commeatus consumunt; quaeso fac horis minus frequentatis et cura conexionem retis stabilem.
 
@@ -2113,8 +2113,8 @@ moduleMigration.logMigratedSameBehaviour: Migratum ad db:${current} eodem modo q
 moduleMigration.logMigrationFailed: Migratio ab ${old} ad ${current} defecit vel abrogata est
 moduleMigration.logRedflag2CreationFail: redflag2 creari non potuit
 moduleMigration.logRemoteTweakUnavailable: Valores subtiles remoti obtineri non potuerunt
-moduleMigration.logSetupCancelled: Constitutio abrogata est; Self-hosted LiveSync constitutionem tuam exspectat!
-moduleMigration.msgFetchRemoteAgain: 'Ut fortasse iam scis, Self-hosted LiveSync modum praedefinitum et structuram repositorii mutavit.
+moduleMigration.logSetupCancelled: Constitutio abrogata est; Tabularium constitutionem tuam exspectat!
+moduleMigration.msgFetchRemoteAgain: 'Ut fortasse iam scis, Tabularium modum praedefinitum et structuram repositorii mutavit.
 
 
   Et feliciter, tempore et labore tuo, repositorium remotum iam migratum esse videtur. Gratulamur!
@@ -2126,7 +2126,7 @@ moduleMigration.msgFetchRemoteAgain: 'Ut fortasse iam scis, Self-hosted LiveSync
   ___Nota: Synchronizare non possumus donec configuratio mutata et repositorium iterum arcessitum sit.___
 
   ___Nota 2: Fragmenta omnino immutabilia sunt; tantum metadata et differentiam arcessere possumus.___'
-moduleMigration.msgSinceV02321: "Ab v0.23.21, Self-hosted LiveSync modum praedefinitum et structuram repositorii mutavit. Hae mutationes factae sunt:
+moduleMigration.msgSinceV02321: "Ab v0.23.21, Tabularium modum praedefinitum et structuram repositorii mutavit. Hae mutationes factae sunt:
 
 
   1. **Discrimen litterarum maiuscularum in nominibus plicarum**
@@ -2172,7 +2172,7 @@ obsidianLiveSyncSettingTab.btnTest: Proba
 obsidianLiveSyncSettingTab.btnUse: Utere
 obsidianLiveSyncSettingTab.buttonFetch: Arcesse
 obsidianLiveSyncSettingTab.defaultLanguage: Praedefinitum
-obsidianLiveSyncSettingTab.descConnectSetupURI: Haec est ratio commendata Self-hosted LiveSync per Setup URI constituendi.
+obsidianLiveSyncSettingTab.descConnectSetupURI: Haec est ratio commendata Tabularium per Setup URI constituendi.
 obsidianLiveSyncSettingTab.descCopySetupURI: Aptissimum ad novum instrumentum constituendum!
 obsidianLiveSyncSettingTab.descEnableLiveSync: Hoc tantum activa postquam alterutram ex duabus optionibus supra configuraveris vel omnem configurationem manu perfeceris.
 obsidianLiveSyncSettingTab.descFetchConfigFromRemote: Arcesse optiones necessarias ex ministratore remoto iam configurato.
@@ -2208,7 +2208,7 @@ obsidianLiveSyncSettingTab.logCheckingConfigDone: Inspectio configurationis perf
 obsidianLiveSyncSettingTab.logCheckingConfigFailed: Inspectio configurationis defecit
 obsidianLiveSyncSettingTab.logCheckingDbConfig: Configuratio repositorii inspicitur
 obsidianLiveSyncSettingTab.logConfiguredDisabled: 'Modus synchronizationis configuratus: DEACTIVATUS'
-obsidianLiveSyncSettingTab.logConfiguredLiveSync: 'Modus synchronizationis configuratus: LiveSync'
+obsidianLiveSyncSettingTab.logConfiguredLiveSync: 'Modus synchronizationis configuratus: synchronizatio viva'
 obsidianLiveSyncSettingTab.logConfiguredPeriodic: 'Modus synchronizationis configuratus: Periodicus'
 obsidianLiveSyncSettingTab.logCouchDbConfigFail: 'Configuratio CouchDB: ${title} defecit'
 obsidianLiveSyncSettingTab.logCouchDbConfigSet: 'Configuratio CouchDB: ${title} -> Pone ${key} ad ${value}'
@@ -2222,7 +2222,7 @@ obsidianLiveSyncSettingTab.logPassphraseInvalid: Tessera arcana non valida est; 
 obsidianLiveSyncSettingTab.logPassphraseNotCompatible: 'ERROR: Tessera arcana cum ministratore remoto non congruit! Quaeso eam iterum inspice!'
 obsidianLiveSyncSettingTab.logRebuildNote: Synchronizatio deactivata est; arcesse et, si vis, iterum activa.
 obsidianLiveSyncSettingTab.logSelectAnyPreset: Elige quodlibet praeformatum.
-obsidianLiveSyncSettingTab.logServerConfigurationCheck: obsidianLiveSyncSettingTab.logServerConfigurationCheck
+obsidianLiveSyncSettingTab.logServerConfigurationCheck: Inspectio configurationis ministratoris
 obsidianLiveSyncSettingTab.msgAreYouSureProceed: Certusne es te pergere velle?
 obsidianLiveSyncSettingTab.msgChangesNeedToBeApplied: Mutationes adhibendae sunt!
 obsidianLiveSyncSettingTab.msgConfigCheck: --Inspectio configurationis--
@@ -2315,7 +2315,7 @@ obsidianLiveSyncSettingTab.nameCopySetupURI: Exscribe optiones praesentes in Set
 obsidianLiveSyncSettingTab.nameDisableHiddenFileSync: Deactiva synchronizationem plicarum occultarum
 obsidianLiveSyncSettingTab.nameDiscardSettings: Abice optiones et repositoria exstantia
 obsidianLiveSyncSettingTab.nameEnableHiddenFileSync: Activa synchronizationem plicarum occultarum
-obsidianLiveSyncSettingTab.nameEnableLiveSync: Activa LiveSync
+obsidianLiveSyncSettingTab.nameEnableLiveSync: Activa synchronizationem vivam
 obsidianLiveSyncSettingTab.nameHiddenFileSynchronization: Synchronizatio plicarum occultarum
 obsidianLiveSyncSettingTab.nameManualSetup: Constitutio manualis
 obsidianLiveSyncSettingTab.nameTestConnection: Proba conexionem
@@ -2339,7 +2339,7 @@ obsidianLiveSyncSettingTab.optionCouchDB: CouchDB
 obsidianLiveSyncSettingTab.optionDisableAllAutomatic: Deactiva omnia automatica
 obsidianLiveSyncSettingTab.optionFetchFromRemote: Arcesse ex remoto
 obsidianLiveSyncSettingTab.optionHere: HIC
-obsidianLiveSyncSettingTab.optionLiveSync: LiveSync
+obsidianLiveSyncSettingTab.optionLiveSync: Synchronizatio viva
 obsidianLiveSyncSettingTab.optionMinioS3R2: Minio,S3,R2
 obsidianLiveSyncSettingTab.optionOkReadEverything: Bene, omnia legi.
 obsidianLiveSyncSettingTab.optionOnEvents: Ad eventus
@@ -2429,7 +2429,13 @@ tabularium.server.invalidAddress: Inscriptio ministratoris non valida est.
 tabularium.server.newPassword: Tessera nova
 tabularium.server.newVault: Novum tabularium
 tabularium.server.newVaultName: Nomen novi tabularii
+tabularium.sync.liveOn: Synchronizatio viva activata est.
+tabularium.sync.liveOff: Synchronizatio viva deactivata est.
+tabularium.sync.resumed: Synchronizatio resumpta est.
+tabularium.sync.suspended: Omnis synchronizatio suspensa est.
 tabularium.server.notConnected: In ministratorem inire ut synchronizare incipias.
+tabularium.server.notConnectedNotice: Tabularium cum nullo ministratore conexum est.
+tabularium.server.openConnection: Aperi conexionem ministratoris
 tabularium.server.open: Aperi
 tabularium.server.passphrase: Tessera arcana E2EE
 tabularium.server.passphraseExisting: Inscribe tesseram arcanam qua hoc tabularium in aliis instrumentis tuis utitur.
@@ -2575,7 +2581,7 @@ SELECT: ELIGE
 SYNC: SYNCHRONIZA
 Searching ${current}/${total}...: Quaeritur ${current}/${total}...
 Searching...: Quaeritur...
-Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Self-hosted LiveSync synchronizationem remotam ad compatibilitatem recognoscendam intermisit.
+Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.
 Setup.CopySetupURI.CommandCopy: Exscribe optiones ut novum Setup URI
 Setup.CopySetupURI.CommandCopyFull: Exscribe optiones ut novum Setup URI (plenum)
 Setup.CopySetupURI.CommandCopyWithCustomizationSync: Exscribe optiones ut novum Setup URI (cum synchronizatione optionum propriarum)
@@ -2588,7 +2594,7 @@ Setup.CopySetupURI.ModeTitle: Spatium validitatis Setup URI
 Setup.CopySetupURI.PassphraseLabel: Tessera arcana ad Setup URI cryptandum
 Setup.CopySetupURI.PassphraseTitle: Crypta optiones tuas
 Setup.Manager.EncryptInternalMetadata.Buttons.Proceed: Activa sine reaedificatione — prius omnia alia instrumenta renova
-Setup.Manager.EncryptInternalMetadata.Message: Reaedificatio remoti manualis vehementer commendatur ut proprietates plicarum exstantes protegantur. Antequam sine reaedificatione pergas, omnia alia instrumenta synchronizantia ad versionem quae hanc optionem sustinet renova, etiam instrumenta quae nunc LiveSync exsequuntur. Proprietates exstantes immutatae manent donec rescribantur vel reaedificentur.
+Setup.Manager.EncryptInternalMetadata.Message: Reaedificatio remoti manualis vehementer commendatur ut proprietates plicarum exstantes protegantur. Antequam sine reaedificatione pergas, omnia alia instrumenta synchronizantia ad versionem quae hanc optionem sustinet renova, etiam instrumenta quae nunc Tabularium exsequuntur. Proprietates exstantes immutatae manent donec rescribantur vel reaedificentur.
 Setup.Manager.EncryptInternalMetadata.Title: Crypta proprietates internas plicarum
 Setup.Manager.applyCancelled: Usor applicationem optionum ex ductore abrogavit.
 Setup.Manager.e2eeConfigurationCancelled: Configuratio E2EE abrogata.
@@ -2825,7 +2831,7 @@ obsidianLiveSyncSettingTab.panelSelector: Electio
 "Show vault history": "Monstra historiam tabularii"
 "Create conflict": "Crea discrepantiam"
 "Show customization sync dialog": "Monstra dialogum synchronizationis personalizationis"
-"Toggle LiveSync": "Commuta LiveSync"
+"Toggle LiveSync": "Commuta synchronizationem vivam"
 "Toggle All Sync.": "Commuta omnem synchronizationem"
 "Scan storage and database again": "Perlustra iterum repositorium plicarum et repositorium"
 "Abort synchronization immediately": "Synchronizationem statim abrumpe"

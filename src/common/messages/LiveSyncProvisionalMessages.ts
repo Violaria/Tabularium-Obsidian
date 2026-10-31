@@ -45,12 +45,10 @@ export const liveSyncProvisionalEnglishMessages = {
     Refresh: "Refresh",
     "Plug-in version": "Plug-in version",
     Platform: "Platform",
-    "Older Self-hosted LiveSync versions detected: ${versions}.":
-        "Older Self-hosted LiveSync versions detected: ${versions}.",
-    "Newer Self-hosted LiveSync versions detected: ${versions}.":
-        "Newer Self-hosted LiveSync versions detected: ${versions}.",
+    "Older Self-hosted LiveSync versions detected: ${versions}.": "Older Tabularium versions detected: ${versions}.",
+    "Newer Self-hosted LiveSync versions detected: ${versions}.": "Newer Tabularium versions detected: ${versions}.",
     "Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.":
-        "Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.",
+        "Reviewing and aligning Tabularium versions across devices is recommended.",
     Open: "Open",
     "Not recorded": "Not recorded",
     "Not accepted": "Not accepted",
@@ -139,7 +137,7 @@ export const liveSyncProvisionalEnglishMessages = {
     "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.":
         "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.",
     "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
-        "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.",
+        "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.",
     "Restart this device, then choose the source device when P2P Rebuild opens.":
         "Restart this device, then choose the source device when P2P Rebuild opens.",
     "Restart and Select Source Device": "Restart and Select Source Device",

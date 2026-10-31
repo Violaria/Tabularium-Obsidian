@@ -378,7 +378,7 @@ describe("ObsidianLiveSyncSettingTab native page lifecycle", () => {
         expect(quickSetup?.items?.map(({ name }) => name)).toEqual([
             "Connect with Setup URI",
             "Rerun Onboarding Wizard",
-            "Enable LiveSync",
+            "Enable live sync",
         ]);
         expect(collectPages(definitions).some(({ name }) => name === "Setup")).toBe(false);
     });
