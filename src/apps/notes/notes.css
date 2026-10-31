@@ -143,40 +143,6 @@
     max-width: 860px;
     width: 100%;
 }
-.notes article img {
-    max-width: 100%;
-}
-.notes article pre {
-    background: var(--panel-soft);
-    padding: 10px;
-    border-radius: 6px;
-    overflow: auto;
-}
-.notes article code {
-    background: var(--panel-soft);
-    padding: 1px 4px;
-    border-radius: 4px;
-}
-.notes article pre code {
-    padding: 0;
-}
-.notes article table {
-    border-collapse: collapse;
-}
-.notes article th,
-.notes article td {
-    border: 1px solid var(--line);
-    padding: 4px 8px;
-}
-.notes article blockquote {
-    margin-left: 0;
-    padding-left: 12px;
-    border-left: 3px solid var(--line);
-    color: var(--muted);
-}
-.notes article a {
-    color: var(--accent);
-}
 .notes .missing,
 .notes .unresolved {
     color: var(--muted);
@@ -214,7 +180,10 @@
 .notes .note-head .title {
     margin: 0;
     flex: 1;
-    font-size: 22px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
 }
 .notes .note-head button {
     background: var(--panel);
@@ -504,3 +473,214 @@
         padding: 0 16px 32px;
     }
 }
+
+/* Reading: notes typeset like Obsidian's reading view, in the application's colours. */
+.notes article {
+    font-size: 16px;
+    line-height: 1.78;
+    color: var(--text);
+    word-wrap: break-word;
+}
+.notes article > :first-child { margin-top: 0; }
+.notes article h1, .notes article h2, .notes article h3, .notes article h4, .notes article h5, .notes article h6 {
+    color: var(--text);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    margin: 1.9em 0 0.6em;
+}
+.notes article h1 { font-size: 1.6em; font-weight: 700; margin-top: 1.2em; }
+.notes article h2 { font-size: 1.45em; font-weight: 700; padding-bottom: 0.3em; border-bottom: 1px solid var(--line); }
+.notes article h3 { font-size: 1.2em; font-weight: 650; }
+.notes article h4 { font-size: 1.05em; font-weight: 650; }
+.notes article h5, .notes article h6 { font-size: 0.95em; font-weight: 650; color: var(--muted); }
+.notes article p { margin: 0.7em 0; color: var(--text); }
+.notes article strong { font-weight: 650; }
+.notes article ul, .notes article ol { padding-left: 1.6em; margin: 0.6em 0; }
+.notes article li { margin: 0.25em 0; }
+.notes article li::marker { color: var(--muted); }
+.notes article li > ul, .notes article li > ol { margin: 0.2em 0; }
+.notes article li.task { list-style: none; margin-left: -1.4em; }
+.notes article li.task input { margin: 0 0.45em 0 0; vertical-align: -0.12em; accent-color: var(--accent); }
+.notes article li.task.done { color: var(--muted); }
+.notes article li.task.done > p, .notes article li.task.done { text-decoration: line-through; text-decoration-color: color-mix(in oklab, var(--muted) 60%, transparent); }
+.notes article a { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+.notes article a:hover { text-decoration-color: var(--accent); }
+.notes article img { max-width: 100%; border-radius: 8px; margin: 0.4em 0; }
+.notes article hr { border: 0; height: 1px; background: var(--line); margin: 2.2em 0; }
+
+/* Inline code: a tinted pill in the accent's hue. */
+.notes article :not(pre) > code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    padding: 0.14em 0.42em;
+    border-radius: 5px;
+    background: color-mix(in oklab, var(--accent) 9%, var(--panel));
+    color: color-mix(in oklab, var(--accent) 55%, var(--text));
+    border: 1px solid color-mix(in oklab, var(--accent) 14%, transparent);
+}
+
+/* Quotes: a soft card with a quotation mark, no side rule. */
+.notes article blockquote {
+    position: relative;
+    margin: 1.1em 0;
+    padding: 0.8em 1.1em 0.8em 2.6em;
+    border-radius: 10px;
+    background: var(--panel-soft);
+    color: color-mix(in oklab, var(--text) 80%, var(--muted));
+}
+.notes article blockquote::before {
+    content: "\201C";
+    position: absolute;
+    left: 0.45em;
+    top: 0.05em;
+    font: 700 2.4em/1 Georgia, "Times New Roman", serif;
+    color: color-mix(in oklab, var(--accent) 45%, transparent);
+}
+.notes article blockquote > :first-child { margin-top: 0; }
+.notes article blockquote > :last-child { margin-bottom: 0; }
+
+/* Obsidian callouts, coloured by kind. */
+.notes article .callout {
+    --c: #4f7cdb;
+    margin: 1.1em 0;
+    padding: 0.75em 1em;
+    border-radius: 10px;
+    background: color-mix(in oklab, var(--c) 9%, var(--panel));
+    border: 1px solid color-mix(in oklab, var(--c) 22%, transparent);
+}
+.notes article .callout[data-callout="summary"] { --c: #1f9e9a; }
+.notes article .callout[data-callout="tip"], .notes article .callout[data-callout="success"] { --c: #2f9e5b; }
+.notes article .callout[data-callout="question"] { --c: #c47f12; }
+.notes article .callout[data-callout="warning"] { --c: #d9730d; }
+.notes article .callout[data-callout="danger"] { --c: #d93f3f; }
+.notes article .callout[data-callout="example"] { --c: #8a5cd6; }
+.notes article .callout[data-callout="quote"] { --c: #7d7d86; }
+.notes article .callout-title { font-weight: 650; color: color-mix(in oklab, var(--c) 80%, var(--text)); display: flex; align-items: center; gap: 0.5em; }
+.notes article .callout-title::before { content: ""; width: 0.55em; height: 0.55em; border-radius: 50%; background: var(--c); flex: none; }
+.notes article .callout-body > :first-child { margin-top: 0.35em; }
+.notes article .callout-body > :last-child { margin-bottom: 0; }
+
+/* Tables: a rounded frame, a shaded header, light stripes; wide tables scroll on their own. */
+.notes article table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin: 1.1em 0;
+    font-size: 0.94em;
+    line-height: 1.6;
+}
+.notes article th, .notes article td { padding: 0.55em 0.9em; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; vertical-align: top; }
+.notes article th:last-child, .notes article td:last-child { border-right: 0; }
+.notes article tr:last-child td { border-bottom: 0; }
+.notes article thead th { background: var(--panel-soft); font-weight: 650; }
+.notes article tbody tr:nth-child(even) td { background: color-mix(in oklab, var(--panel-soft) 55%, var(--panel)); }
+
+/* Code blocks: a header with the language and a copy button; terminals dark, configuration and code light. */
+.notes article .code-block {
+    --code-bg: color-mix(in oklab, var(--panel-soft) 70%, var(--panel));
+    --code-head: var(--panel-soft);
+    --code-text: var(--text);
+    --code-muted: var(--muted);
+    --code-line: var(--line);
+    --hl-comment: #8c8a93; --hl-keyword: #a626a4; --hl-string: #3f8d2f; --hl-number: #b76b01; --hl-title: #2f64c8;
+    --hl-attr: #b4513a; --hl-type: #b36b00; --hl-meta: #6a6f7b; --hl-builtin: #0f8a8a; --hl-variable: #c0392b;
+    margin: 1.2em 0;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--code-bg);
+    border: 1px solid var(--code-line);
+}
+.notes article .code-block[data-kind="config"] {
+    --code-bg: color-mix(in oklab, var(--accent) 5%, var(--panel));
+    --code-head: color-mix(in oklab, var(--accent) 9%, var(--panel));
+    --code-line: color-mix(in oklab, var(--accent) 16%, var(--line));
+    --hl-attr: color-mix(in oklab, var(--accent) 80%, #000);
+    --hl-section: color-mix(in oklab, var(--accent) 90%, #000);
+}
+.notes article .code-block[data-kind="terminal"] {
+    --code-bg: #1d1b22; --code-head: #26232d; --code-text: #e7e3ec; --code-muted: #9b96a6; --code-line: #2e2a36;
+    --hl-comment: #8a8496; --hl-keyword: #ff8fc6; --hl-string: #a6e3a1; --hl-number: #fab387; --hl-title: #89b4fa;
+    --hl-attr: #f9e2af; --hl-type: #f9e2af; --hl-meta: #b8b2c4; --hl-builtin: #94e2d5; --hl-variable: #f38ba8;
+}
+.notes article .code-block figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 5px 8px 5px 14px;
+    background: var(--code-head);
+    border-bottom: 1px solid var(--code-line);
+    font: 600 11.5px/1.6 var(--font);
+    letter-spacing: 0.02em;
+    color: var(--code-muted);
+}
+.notes article .code-block[data-kind="terminal"] figcaption::before {
+    content: "";
+    width: 34px; height: 8px; flex: none;
+    background: radial-gradient(circle at 4px 4px, #ff6159 3.6px, transparent 4px), radial-gradient(circle at 17px 4px, #ffbd2e 3.6px, transparent 4px), radial-gradient(circle at 30px 4px, #28c941 3.6px, transparent 4px);
+}
+.notes article .code-block[data-kind="terminal"] .code-lang { margin-right: auto; }
+.notes article .code-copy {
+    padding: 2px 9px;
+    font: 500 11.5px/1.6 var(--font);
+    color: var(--code-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    opacity: 0.7;
+}
+.notes article .code-block:hover .code-copy { opacity: 1; border-color: var(--code-line); }
+.notes article .code-copy:hover { color: var(--code-text); background: color-mix(in oklab, var(--code-text) 8%, transparent); }
+.notes article .code-block pre {
+    margin: 0;
+    padding: 13px 16px 14px;
+    overflow-x: auto;
+    background: transparent;
+    font: 13.5px/1.65 var(--mono);
+    tab-size: 4;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--code-muted) 45%, transparent) transparent;
+}
+.notes article .code-block code { font: inherit; color: var(--code-text); background: none; padding: 0; border: 0; }
+.notes article .hljs-comment, .notes article .hljs-quote { color: var(--hl-comment); font-style: italic; }
+.notes article .hljs-keyword, .notes article .hljs-selector-tag, .notes article .hljs-literal, .notes article .hljs-doctag { color: var(--hl-keyword); }
+.notes article .hljs-string, .notes article .hljs-regexp, .notes article .hljs-addition, .notes article .hljs-template-tag { color: var(--hl-string); }
+.notes article .hljs-number, .notes article .hljs-symbol, .notes article .hljs-bullet { color: var(--hl-number); }
+.notes article .hljs-title, .notes article .hljs-title.function_, .notes article .hljs-section { color: var(--hl-title); }
+.notes article .code-block[data-kind="config"] .hljs-section { color: var(--hl-section); font-weight: 600; }
+.notes article .hljs-attr, .notes article .hljs-attribute, .notes article .hljs-name, .notes article .hljs-selector-class, .notes article .hljs-selector-id { color: var(--hl-attr); }
+.notes article .hljs-type, .notes article .hljs-class, .notes article .hljs-title.class_ { color: var(--hl-type); }
+.notes article .hljs-meta, .notes article .hljs-meta .hljs-keyword { color: var(--hl-meta); }
+.notes article .hljs-built_in, .notes article .hljs-params { color: var(--hl-builtin); }
+.notes article .hljs-variable, .notes article .hljs-template-variable, .notes article .hljs-deletion { color: var(--hl-variable); }
+.notes article .hljs-addition { background: color-mix(in oklab, var(--hl-string) 12%, transparent); }
+.notes article .hljs-deletion { background: color-mix(in oklab, var(--hl-variable) 12%, transparent); }
+.notes article .hljs-emphasis { font-style: italic; }
+.notes article .hljs-strong { font-weight: 700; }
+
+@media (prefers-color-scheme: dark) {
+    .notes article .code-block {
+        --hl-comment: #8c8798; --hl-keyword: #e48bd0; --hl-string: #9ccf8a; --hl-number: #e8a46a; --hl-title: #82aaf5;
+        --hl-attr: #e8a07f; --hl-type: #e5c07b; --hl-meta: #a59fb0; --hl-builtin: #6fd1c8; --hl-variable: #ef8a95;
+    }
+    .notes article .code-block[data-kind="config"] {
+        --hl-attr: color-mix(in oklab, var(--accent) 75%, #fff);
+        --hl-section: color-mix(in oklab, var(--accent) 85%, #fff);
+    }
+    .notes article .code-block[data-kind="terminal"] { --code-bg: #141217; --code-head: #1c1a21; --code-line: #2a2731; }
+}
+.notes .note-head .title.echo {
+    visibility: hidden;
+    height: 0;
+}
+/* Note content does not take the application's form and table styles. */
+.notes article li.task input { width: auto; min-width: 0; padding: 0; border: 0; display: inline-block; vertical-align: -0.1em; }
+.notes article th, .notes article td { font-size: inherit; }
+.notes article thead th { color: var(--text); font-size: 0.95em; }
+.notes article th:first-child, .notes article td:first-child { padding-left: 0.9em; }
+.notes article th:last-child, .notes article td:last-child { padding-right: 0.9em; }

@@ -4,6 +4,8 @@
     import { deleteRecord, readRecord, recordKey, recordsOf, writeRecord, type VaultRecord } from "./store";
     import { CredentialsRejectedError, NetworkError, NotesRuntime, WrongPassphraseError, clearLocalVault, type NotesFile } from "./runtime";
     import { renderPreview } from "./preview";
+    import { copyCode } from "./markdown";
+    import { escapeXml } from "@/features/tabularium/epub";
     import { sendToKindle, type KindleItem } from "./kindle";
     import { folderOf, freePath, nameOf, normalisePath } from "./paths";
     import { resolveLinkpath } from "@/features/tabularium/linkpath";
@@ -324,6 +326,7 @@
     }
 
     function previewClick(event: MouseEvent) {
+        if (copyCode(event, t("notes.codeCopied"))) return;
         const link = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[data-note]");
         if (!link) return;
         event.preventDefault();
@@ -724,6 +727,7 @@
         const list = files;
         if (runtime && list.length) void loadSorting(runtime, list).catch((e) => (sortError = t("notes.sortError", { error: message(e) })));
     });
+    const sameTitle = $derived(Boolean(current) && /^<h1[^>]*>([^<]*)<\/h1>/.exec(html)?.[1].trim() === escapeXml(nameOf(current ?? "").replace(/\.md$/i, "")));
     const stateLabel = $derived(
         ({ unsaved: t("notes.stateUnsaved"), saved: t("notes.stateSaved"), pending: t("notes.statePending"), synced: t("notes.stateSynced"), conflict: t("notes.stateConflict") }) as Record<SaveState, string>
     );
@@ -801,7 +805,8 @@
         <section class="main">
             {#if current}
                 <div class="note-head">
-                    <h1 class="title">{nameOf(current).replace(/\.md$/i, "")}</h1>
+                    <!-- A note that opens with its own title as a heading does not show the title twice. -->
+                    <h1 class="title" class:echo={mode === "view" && sameTitle}>{nameOf(current).replace(/\.md$/i, "")}</h1>
                     {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
                     {#if mode === "view" && isNote(current)}
                         <button onclick={edit}>{t("notes.edit")}</button>

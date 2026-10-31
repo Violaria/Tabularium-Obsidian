@@ -6,6 +6,7 @@ import { contentKey, decrypt, fromBase64Url } from "@/features/tabularium/share/
 import type { Manifest, ManifestNode } from "@/features/tabularium/share/package";
 import { escapeXml } from "@/features/tabularium/epub";
 import { formatDate, serverError, t } from "../../../../server/ui/i18n";
+import { copyCode, enhance } from "./markdown";
 
 const root = document.getElementById("viewer")!;
 const slug = decodeURIComponent(location.pathname.replace(/^\/s\//, ""));
@@ -120,6 +121,7 @@ const placeholder = (kind: string) =>
 
 function render(markdown: string) {
     const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
+    enhance(md, { copy: t("notes.copyCode") });
     const opened = new WeakMap<object, "denied" | "plain" | "link">();
     md.renderer.rules.image = (tokens, index) => {
         const src = tokens[index].attrGet("src") ?? "";
@@ -227,6 +229,7 @@ function layout() {
         ? `<div class="layout"><aside><header><strong class="share-title">${escapeXml(manifest.title)}</strong><small class="hint">${escapeXml(t("viewer.sharedFolder"))}</small></header><nav>${tree(manifest.tree ?? [])}</nav></aside><div class="main"></div></div>`
         : `<div class="main"></div>`);
     root.addEventListener("click", (event) => {
+        if (copyCode(event, t("notes.codeCopied"))) return;
         const target = (event.target as HTMLElement).closest<HTMLElement>("[data-note], [data-file], .folder");
         if (!target || target.classList.contains("row")) return;
         event.preventDefault();
