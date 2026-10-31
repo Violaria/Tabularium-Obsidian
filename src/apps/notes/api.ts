@@ -28,6 +28,8 @@ export class ApiError extends Error {
 }
 
 let csrf = "";
+/** The session's CSRF token, for calls made outside this module (shares). */
+export const csrfToken = () => csrf;
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
     const response = await fetch(`/api/v1${path}`, {

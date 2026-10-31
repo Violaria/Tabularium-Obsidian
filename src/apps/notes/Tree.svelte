@@ -21,8 +21,9 @@
         select(item: KindleItem): void;
         rename(item: KindleItem): void;
         remove(item: KindleItem): void;
+        share(item: KindleItem): void;
     }
-    let { node, current, selecting, selected, conflicted, expandAll, open, toggle, send, select, rename, remove }: Props = $props();
+    let { node, current, selecting, selected, conflicted, expandAll, open, toggle, send, select, rename, remove, share }: Props = $props();
     let expanded = $state<Record<string, boolean>>({});
     let menu = $state<string>();
 
@@ -53,6 +54,7 @@
             {#if menu === child.path}
                 <div class="menu" role="menu">
                     {#if sendable(child)}
+                        <button role="menuitem" onclick={() => ((menu = undefined), share(item(child)))}>{t("share.menu")}</button>
                         <button role="menuitem" onclick={() => ((menu = undefined), send(item(child)))}>{t("notes.send")}</button>
                         <button role="menuitem" onclick={() => ((menu = undefined), select(item(child)))}>{t("notes.select")}</button>
                     {/if}
@@ -61,7 +63,7 @@
                 </div>
             {/if}
             {#if child.folder && (expandAll || expanded[child.path])}
-                <Self node={child} {current} {selecting} {selected} {conflicted} {expandAll} {open} {toggle} {send} {select} {rename} {remove} />
+                <Self node={child} {current} {selecting} {selected} {conflicted} {expandAll} {open} {toggle} {send} {select} {rename} {remove} {share} />
             {/if}
         </li>
     {/each}

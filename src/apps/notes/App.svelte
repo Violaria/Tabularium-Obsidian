@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onDestroy, tick } from "svelte";
+    import { mount, onDestroy, tick, unmount } from "svelte";
     import { basicAuth, issueDevice, listVaults, renewDevice, restoreSession, revokeDevice, ApiError, type User, type Vault } from "./api";
     import { deleteRecord, readRecord, recordKey, recordsOf, writeRecord, type VaultRecord } from "./store";
     import { CredentialsRejectedError, NetworkError, NotesRuntime, WrongPassphraseError, clearLocalVault, type NotesFile } from "./runtime";
@@ -12,8 +12,12 @@
     import type { SortSpecsCollection } from "@tabularium/custom-sort/engine";
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
-    import { formatDate, language, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
-    import { askText, confirmAction } from "../../../../server/ui/core";
+    import { formatDate, language, serverError, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
+    import { askText, confirmAction, message as toast } from "../../../../server/ui/core";
+    import ShareDialog from "@/features/tabularium/share/ShareDialog.svelte";
+    import { Sharing } from "@/features/tabularium/share/sharing";
+    import type { ShareSource, ShareTreeNode } from "@/features/tabularium/share/package";
+    import { sessionShareApi } from "./share";
 
     type Phase = "loading" | "vaults" | "unlock" | "opening" | "open";
     type Mode = "view" | "edit" | "conflict";
@@ -57,6 +61,11 @@
     const ruleTexts = new Map<string, { rev: string; text: string }>();
     let runtime: NotesRuntime | undefined;
     let record: VaultRecord | undefined;
+    // Shares of the open vault; changes saved here update the shares they belong to after a quiet period.
+    let sharing: Sharing | undefined;
+    const SHARE_DELAY_MS = 10_000;
+    let shareTimer: number | undefined;
+    const shareChanges = new Set<string>();
     let objectUrls: string[] = [];
     let refreshTimer: number | undefined;
     let saveTimer: number | undefined;
@@ -219,6 +228,7 @@
             throw e instanceof WrongPassphraseError || e instanceof NetworkError ? e : new Error(t("notes.openFailed", { error: message(e) }));
         }
         passphrase = "";
+        sharing = new Sharing(sessionShareApi, target.id, secret, target.name, shareSource);
         offline = started.offline;
         record = { ...record, fetched: true, vaultName: target.name, verifier: started.verifier, tweaks: started.tweaks };
         // Records written before renewal existed have no expiry and are renewed too.
@@ -347,6 +357,7 @@
             try {
                 const result = await runtime.save(base.path, text, base.rev);
                 base = { ...base, rev: result.rev, text };
+                touched([base.path]);
                 savedSeq = await runtime.localSeq();
                 saveState = result.conflicted ? "conflict" : "saved";
                 if (result.conflicted) notice = t("notes.savedAsConflict");
@@ -389,6 +400,7 @@
         }
         try {
             await runtime.save(path, "");
+            touched([path]);
             files = await runtime.files();
             await show(path);
             await edit();
@@ -416,6 +428,7 @@
                 await runtime.save(to, content);
                 await runtime.remove(from);
             }
+            touched(moves.flat());
             notice = t("notes.renamed", { name: nameOf(target) });
             files = await runtime.files();
             if (current && moves.some(([from]) => from === current)) await show(moves.find(([from]) => from === current)![1]);
@@ -431,6 +444,7 @@
         if (!(await confirmAction({ title: t("notes.delete"), body: item.folder ? t("notes.confirmDeleteFolder", { name: item.path, count: targets.length }) : t("notes.confirmDelete", { name: item.path }), action: t("notes.delete"), danger: true }))) return;
         try {
             for (const path of targets) await runtime.remove(path);
+            touched(targets);
             if (current && targets.includes(current)) {
                 mode = "view";
                 base = undefined;
@@ -461,6 +475,7 @@
             const path = freePath(folder, name, (candidate) => taken.has(candidate));
             try {
                 await runtime.save(path, new Uint8Array(await file.arrayBuffer()));
+                touched([path]);
                 taken.add(path);
                 editor?.insert(`${IMAGE.test(path) ? "!" : ""}[[${nameOf(path)}]]`);
                 notice = t("notes.attached", { name: nameOf(path) });
@@ -529,6 +544,8 @@
 
     async function lock(reason = "") {
         await flush().catch(() => undefined);
+        await updateShares().catch(() => undefined);
+        sharing = undefined;
         const active = runtime;
         runtime = undefined;
         window.clearTimeout(refreshTimer);
@@ -590,6 +607,90 @@
         }
     }
 
+    // Notices go to the shell's toasts; only the unlock form keeps its error next to the field.
+    $effect(() => {
+        if (!notice) return;
+        toast(notice);
+        notice = "";
+    });
+    $effect(() => {
+        if (!error || phase === "unlock" || phase === "opening") return;
+        toast(error, true);
+        error = "";
+    });
+
+    // Sharing
+
+    /** The vault's files as the share builder reads them, with folders in the order of the file tree. */
+    async function shareSource(): Promise<ShareSource> {
+        const active = runtime!;
+        const all = await active.files();
+        const ordered = sortedTree(all, vault?.name ?? "", sortRules, sortMetadata);
+        const find = (node: ShareTreeNode, path: string): ShareTreeNode | undefined =>
+            node.path === path ? node : node.children.map((child) => find(child, path)).find(Boolean);
+        return {
+            files: all.map((f) => f.path),
+            read: (path) => active.read(path),
+            readBinary: (path) => active.readBinary(path),
+            tree: (folder) => find(ordered, folder) ?? { name: folder, path: folder, folder: true, children: [] },
+        };
+    }
+    function touched(paths: string[]) {
+        for (const path of paths) shareChanges.add(path);
+        window.clearTimeout(shareTimer);
+        shareTimer = window.setTimeout(() => void updateShares().catch((e) => (error = t("share.updateFailed", { error: serverError(message(e)) }))), SHARE_DELAY_MS);
+    }
+    async function updateShares() {
+        window.clearTimeout(shareTimer);
+        if (!sharing || !shareChanges.size || offline) return;
+        const paths = [...shareChanges];
+        shareChanges.clear();
+        await sharing.refresh(paths);
+    }
+    async function share(item: KindleItem) {
+        if (!sharing || !runtime) return;
+        error = "";
+        try {
+            await flush();
+            const active = sharing;
+            const { base, shares } = await active.list();
+            const existing = shares.find((s) => s.view.state === "active" && s.record?.target === item.path && s.record.folder === item.folder);
+            const dialog = document.createElement("dialog");
+            dialog.className = "dialog share-dialog";
+            document.body.append(dialog);
+            let component: ReturnType<typeof mount> | undefined;
+            const close = () => {
+                if (component) void unmount(component);
+                dialog.close();
+                dialog.remove();
+            };
+            dialog.addEventListener("cancel", (event) => {
+                event.preventDefault();
+                close();
+            });
+            component = mount(ShareDialog, {
+                target: dialog,
+                props: {
+                    sharing: active,
+                    source: await shareSource(),
+                    target: item.path,
+                    folder: item.folder,
+                    name: item.folder ? nameOf(item.path) : nameOf(item.path).replace(/\.md$/i, ""),
+                    base,
+                    existing,
+                    t: (key: string, params?: Record<string, string | number>) => t(key as Parameters<typeof t>[0], params),
+                    serverError,
+                    formatDate,
+                    confirmRevoke: () => confirmAction({ title: t("share.revokeTitle"), body: t("share.revokeBody"), action: t("share.revoke"), danger: true }),
+                    close,
+                },
+            });
+            dialog.showModal();
+        } catch (e) {
+            error = serverError(message(e));
+        }
+    }
+
     const conflicted = $derived(new Set(files.filter((f) => f.conflicted).map((f) => f.path)));
     const tree = $derived.by(() => {
         const query = filter.trim().toLowerCase();
@@ -642,8 +743,6 @@
     <div class="page">
         <header class="page-head"><div><h1>{t("home.notes")}</h1><p>{t("notes.chooseVault")}</p></div></header>
         {#if offline}<p class="notice-panel">{t("notes.offlineVaults")}</p>{/if}
-        {#if notice}<p class="notice-panel">{notice}</p>{/if}
-        {#if error}<p class="notice-panel error">{error}</p>{/if}
         <section class="card vault-list">
             {#each vaults as item (item.id)}
                 <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
@@ -696,12 +795,10 @@
                 </div>
             {/if}
             <nav>
-                <Tree node={tree} {current} {selecting} {selected} {conflicted} open={(path) => show(path)} {toggle} send={(item) => kindle([item])} select={(item) => ((selecting = true), (selected = [item]))} {rename} {remove} expandAll={filter.trim() !== ""} />
+                <Tree node={tree} {current} {selecting} {selected} {conflicted} open={(path) => show(path)} {toggle} send={(item) => kindle([item])} select={(item) => ((selecting = true), (selected = [item]))} {rename} {remove} {share} expandAll={filter.trim() !== ""} />
             </nav>
         </aside>
         <section class="main">
-            {#if notice}<p class="notice">{notice}</p>{/if}
-            {#if error}<p class="error">{error}</p>{/if}
             {#if current}
                 <div class="note-head">
                     <h1 class="title">{nameOf(current).replace(/\.md$/i, "")}</h1>

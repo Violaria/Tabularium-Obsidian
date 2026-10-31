@@ -913,3 +913,7 @@ body.is-mobile .livesync-compatibility-review-notice {
     width: var(--icon-s);
     height: var(--icon-s);
 }
+
+.tabularium-share-modal {
+    width: min(720px, 94vw);
+}

@@ -28,10 +28,11 @@ export default defineConfig({
         cssCodeSplit: false,
         rollupOptions: {
             external: ["crypto"],
-            input: path.resolve(__dirname, "main.ts"),
+            // The notes module for the shell, and the share viewer page (/s/…), which loads nothing else.
+            input: { notes: path.resolve(__dirname, "main.ts"), viewer: path.resolve(__dirname, "viewer.ts") },
             preserveEntrySignatures: "exports-only",
             output: {
-                entryFileNames: "assets/notes-module.js",
+                entryFileNames: (chunk) => (chunk.name === "viewer" ? "assets/share-viewer.js" : "assets/notes-module.js"),
                 assetFileNames: (asset) => (asset.names?.some((name) => name.endsWith(".css")) ? "assets/notes-module.css" : "assets/[name]-[hash][extname]"),
             },
         },
