@@ -745,7 +745,7 @@
     <div class="page"><p class="hint">{t("common.loading")}</p></div>
 {:else if phase === "vaults"}
     <div class="page">
-        <header class="page-head"><div><h1>{t("home.notes")}</h1><p>{t("notes.chooseVault")}</p></div></header>
+        <header class="page-head"><div><h1>{t("home.notes")}</h1></div></header>
         {#if offline}<p class="notice-panel">{t("notes.offlineVaults")}</p>{/if}
         <section class="card vault-list">
             {#each vaults as item (item.id)}
@@ -757,16 +757,15 @@
     </div>
 {:else if phase === "unlock" || phase === "opening"}
     <div class="page">
-        <header class="page-head"><div><h1>{vault?.name ?? ""}</h1><p>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</p></div></header>
+        <header class="page-head"><div><h1>{vault?.name ?? ""}</h1></div></header>
         <form class="card stack unlock" onsubmit={unlock}>
-            <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
+            <label><span>{t("notes.passphrase")}<!-- svelte-ignore a11y_no_noninteractive_tabindex --><span class="tip" tabindex="0" data-tip={t("notes.unlockHint")}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span></span> <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
             {#if error}<p class="error">{error}</p>{/if}
             {#if phase === "opening"}<p class="notice">{status}</p>{/if}
             <div class="actions">
                 <button class="primary" type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
                 <button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button>
             </div>
-            <p class="hint">{t("notes.unlockHint")}</p>
         </form>
     </div>
 {:else}

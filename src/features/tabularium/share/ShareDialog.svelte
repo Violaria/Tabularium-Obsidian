@@ -135,6 +135,12 @@
     const kind = (node: ReviewNode) => t(node.kind === "note" ? "share.kindNote" : node.kind === "image" ? "share.kindImage" : "share.kindFile");
 </script>
 
+{#snippet tip(text: string)}
+    <!-- Focusable so keyboard users can read the explanation; not a button, which would take the clicks of its label. -->
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+    <span class="tip" tabindex="0" data-tip={text}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span>
+{/snippet}
+
 {#snippet references(list: ReviewNode[])}
     <ul>
         {#each list as node (node.path)}
@@ -160,13 +166,12 @@
         {#if error}<p class="error" role="alert">{error}</p>{/if}
         {#if share}
             <div class="result">
-                <label for="share-link">{t("share.link")}</label>
+                <label for="share-link">{t("share.link")}{@render tip(share.view.mode === "encrypted" ? t("share.linkKeyHint") : t("share.publicWarning"))}</label>
                 <div class="row">
                     <input id="share-link" readonly value={link} onfocus={(event) => event.currentTarget.select()} />
                     <button class="primary mod-cta" onclick={copy}>{copied ? t("share.copied") : t("share.copy")}</button>
                 </div>
                 <small>
-                    {share.view.mode === "encrypted" ? t("share.linkKeyHint") : t("share.publicWarning")}
                     {t("share.views", { count: share.view.views })}{share.view.updatedAt ? ` · ${t("share.updated", { time: formatDate(share.view.updatedAt) })}` : ""}
                 </small>
             </div>
@@ -176,24 +181,22 @@
         {/if}
 
         <fieldset disabled={busy}>
-            <legend>{t("share.mode")}</legend>
+            <legend>{t("share.mode")}{#if share}{@render tip(t("share.modeFixed"))}{/if}</legend>
             <label class="choice">
                 <input type="radio" name="share-mode" value="encrypted" bind:group={mode} disabled={!!share} />
-                <span><strong>{t("share.encrypted")}</strong><small>{t("share.encryptedHint")}</small></span>
+                <span><strong>{t("share.encrypted")}</strong>{@render tip(t("share.encryptedHint"))}</span>
             </label>
             <label class="choice">
                 <input type="radio" name="share-mode" value="public" bind:group={mode} disabled={!!share} />
-                <span><strong>{t("share.public")}</strong><small>{t("share.publicHint")}</small></span>
+                <span><strong>{t("share.public")}</strong>{@render tip(t("share.publicHint"))}</span>
             </label>
-            {#if share}<small>{t("share.modeFixed")}</small>{/if}
         </fieldset>
 
         <div class="grid">
             {#if !share}
                 <label>
-                    <span>{t("share.address")}</span>
+                    <span>{t("share.address")}{@render tip(t("share.addressHint"))}</span>
                     <span class="address"><span class="prefix">/s/</span><input bind:value={slug} placeholder={t("share.addressRandom")} disabled={busy} autocomplete="off" /></span>
-                    <small>{t("share.addressHint")}</small>
                 </label>
             {/if}
             <label>
@@ -208,9 +211,8 @@
                 {#if expiry === "custom"}<input type="date" bind:value={until} min={new Date(Date.now() + DAY).toISOString().slice(0, 10)} disabled={busy} />{/if}
             </label>
             <label>
-                <span>{t("share.password")}</span>
+                <span>{t("share.password")}{@render tip(t("share.passwordHint"))}</span>
                 <input type="text" bind:value={password} autocomplete="off" disabled={busy} />
-                <small>{t("share.passwordHint")}</small>
             </label>
             {#if mode === "public"}
                 <label class="check"><input type="checkbox" bind:checked={indexable} disabled={busy} />{t("share.indexable")}</label>
@@ -218,8 +220,7 @@
         </div>
 
         <section class="references">
-            <h3>{t("share.references")}</h3>
-            <small>{t("share.referencesHint")}</small>
+            <h3>{t("share.references")}{@render tip(t("share.referencesHint"))}</h3>
             {#if loading}
                 <p class="muted">{t("share.loading")}</p>
             {:else if nodes.length}
@@ -304,8 +305,53 @@
         margin-top: 3px;
     }
     .choice span {
-        display: grid;
-        gap: 2px;
+        display: flex;
+        align-items: center;
+    }
+    .tip {
+        position: relative;
+        display: inline-flex;
+        margin-left: 6px;
+        color: var(--s-muted);
+        cursor: help;
+        font-weight: 400;
+    }
+    .tip svg {
+        width: 15px;
+        height: 15px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.4;
+        stroke-linecap: round;
+    }
+    .tip:hover,
+    .tip:focus {
+        color: var(--s-accent);
+        outline: none;
+    }
+    .tip::after {
+        content: attr(data-tip);
+        position: absolute;
+        left: -10px;
+        bottom: calc(100% + 8px);
+        z-index: 40;
+        width: max-content;
+        max-width: min(320px, 70vw);
+        padding: 8px 11px;
+        border-radius: 8px;
+        background: var(--text, var(--text-normal));
+        color: var(--panel, var(--background-primary));
+        font-size: 12.5px;
+        line-height: 1.55;
+        font-weight: 400;
+        white-space: normal;
+        text-align: left;
+        display: none;
+        pointer-events: none;
+    }
+    .tip:hover::after,
+    .tip:focus::after {
+        display: block;
     }
     .grid {
         display: grid;
@@ -318,9 +364,6 @@
         align-content: start;
         font-size: 13px;
         font-weight: 600;
-    }
-    .grid small {
-        font-weight: 400;
     }
     .address {
         display: flex;
