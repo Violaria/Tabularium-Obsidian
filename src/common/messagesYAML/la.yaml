@@ -2054,40 +2054,34 @@ moduleLog.showLog: Monstra acta
 moduleMigration.fix0256.buttons.DismissForever: Correxi, et noli iterum rogare
 moduleMigration.fix0256.buttons.checkItLater: Postea inspice
 moduleMigration.fix0256.buttons.fix: Corrige
-moduleMigration.fix0256.message: 'Propter vitium recens (in v0.25.6), aliquae plicae in repositorio synchronizationis fortasse non recte servatae sunt.
-
-  Plicas nostras perscrutati sumus et aliquas invenimus quae corrigendae sunt.
+moduleMigration.fix0256.message: 'Aliquae notae in datis synchronizationis non integre servatae sunt.
 
 
-  **Plicae corrigendae paratae:**
+  **Ex hoc instrumento corrigi possunt:**
 
 
   ${files}
 
 
-  Hae plicae plicam originalem eiusdem magnitudinis in repositorio habent, et verisimiliter restitui possunt.
-
-  Eis uti possumus ad repositorium corrigendum; quaeso preme puncto “Corrige” infra ut eas corrigas.
+  Hi fasciculi in hoc instrumento magnitudinem exspectatam habent, itaque data synchronizationis reficere possunt. ''Corrige'' elige.
 
 
   ${messageUnrecoverable}
 
 
-  Si iterum currere vis, ex Hatch facere potes.
+  Ut postea iterum inspicias: Optiones, Tabularium, Cura, Fasciculos imperfectos quaerere.
 
   '
-moduleMigration.fix0256.messageUnrecoverable: '**Plicae quae in hoc instrumento corrigi non possunt:**
+moduleMigration.fix0256.messageUnrecoverable: '**Ex hoc instrumento corrigi non possunt:**
 
 
   ${filesNotRecoverable}
 
 
-  Hae plicae metadata inconstantia habent nec in hoc instrumento corrigi possunt (plerumque statuere non possumus quae recta sint).
-
-  Ut eas restituas, quaeso alia instrumenta tua inspice (etiam hac facultate) vel eas manu ex exemplo tutelari restitue.
+  Non liquet quod exemplar horum rectum sit. In aliis instrumentis eadem cura inspice, vel ex exemplo tutelari restitue.
 
   '
-moduleMigration.fix0256.title: Plicae corruptae detectae sunt
+moduleMigration.fix0256.title: Notae imperfectae inventae
 moduleMigration.insecureChunkExist.buttons.fetch: Iam remotum reaedificavi. Arcesse ex remoto
 moduleMigration.insecureChunkExist.buttons.later: Postea id faciam
 moduleMigration.insecureChunkExist.buttons.rebuild: Omnia reaedifica
@@ -2855,3 +2849,446 @@ obsidianLiveSyncSettingTab.panelSelector: Electio
 "Review why synchronisation is paused": "Recognosce cur synchronizatio suspensa sit"
 "Analyse Database Usage (advanced)": "Usum repositorii examina (provectum)"
 "Resolve if conflicted.": "Solve si discrepat"
+"tabularium.confirm.cancel": "Abrogare"
+"tabularium.confirm.typeName": "Nomen tabularii ${name} scribe ut confirmes"
+"tabularium.settings.connection": "Conexio"
+"tabularium.settings.sync": "Synchronizatio"
+"tabularium.settings.sorting": "Ordo fasciculorum"
+"tabularium.settings.kindle": "Ad Kindle mittere"
+"tabularium.settings.appearance": "Species"
+"tabularium.settings.maintenance": "Cura"
+"tabularium.settings.help": "Auxilium"
+"tabularium.settings.notConnectedDesc": "In ministratorem Tabularium intra et tabularium elige quocum hoc synchronizetur."
+"tabularium.settings.status": "Status"
+"tabularium.settings.state.syncing": "Synchronizatur"
+"tabularium.settings.state.live": "Conexum; mutationes statim synchronizantur"
+"tabularium.settings.state.idle": "Synchronizatum"
+"tabularium.settings.state.stopped": "Non synchronizatur"
+"tabularium.settings.state.error": "Synchronizatio defecit; vide acta"
+"tabularium.settings.pending": "${count} mutationes exspectant"
+"tabularium.settings.syncNow": "Nunc synchronizare"
+"tabularium.settings.changeVault": "Iterum intrare vel tabularium mutare"
+"tabularium.settings.disconnectTitle": "Hoc instrumentum disiungere?"
+"tabularium.settings.locked": "Tabularium clausum"
+"tabularium.settings.lockedNotAccepted": "Tabularium in ministratore refectum est. Hoc instrumentum id iterum accipere debet antequam synchronizet; deinde reserari potest."
+"tabularium.settings.lockedAccepted": "Tabularium refectum est et hoc instrumentum id accepit. Resera cum cetera quoque acceperint."
+"tabularium.settings.unlock": "Reserare"
+"tabularium.settings.unlockDesc": "Clausuram quam refectio relinquit finit."
+"tabularium.settings.unlockTitle": "Tabularium reserare?"
+"tabularium.settings.unlockBody": "Omnia instrumenta iterum cum tabulario synchronizare poterunt."
+"tabularium.settings.unlockImpact": "Instrumentum quod post refectionem tabularium non accepit vetera data ad ministratorem remittere potest."
+"tabularium.settings.fetch": "A ministratore iterum accipere"
+"tabularium.settings.fetchDesc": "Datorum basim localem ex ministratore reficit. Post refectionem in ministratore vel si hoc instrumentum discrepat utere."
+"tabularium.settings.fetchAction": "Accipere et iterum incipere"
+"tabularium.settings.fetchTitle": "Omnia a ministratore accipere?"
+"tabularium.settings.fetchBody": "Additamentum iterum incipit, basim localem abicit et tabularium a ministratore accipit. Elige quomodo notae huius instrumenti cum notis ministratoris concilientur."
+"tabularium.settings.fetchImpact": "Cetera instrumenta tantum afficiuntur si notae hic servatae iterum ad ministratorem synchronizantur."
+"tabularium.settings.overwrite": "Ministratorem ex hoc instrumento rescribere"
+"tabularium.settings.overwriteDesc": "Tabularium in ministratore fasciculis huius instrumenti substituit. Dominus prius hoc instrumentum in pagina interretiali permittere debet: Optiones rationis, Tabularia et instrumenta, Tabularium reficere."
+"tabularium.settings.overwriteAction": "Rescribere et iterum incipere"
+"tabularium.settings.overwriteTitle": "Tabularium in ministratore rescribere?"
+"tabularium.settings.overwriteBody": "Additamentum iterum incipit et fasciculos huius instrumenti ut novam basim tabularii mittit. Ministrator priorem basim servat, ad quam dominus redire potest.
+
+
+  Sine permissu domini ministrator recusat neque quicquam mutatur."
+"tabularium.settings.overwriteImpact": "Postea tabularium clauditur: cetera instrumenta id iterum accipere debent, et mutationes non synchronizatae amittuntur."
+"tabularium.settings.suspend": "Synchronizatione suspensa iterum incipere"
+"tabularium.settings.suspendDesc": "Additamentum iterum incipit omni synchronizatione et observatione fasciculorum suspensa. Mandato 'Commuta omnem synchronizationem' resumitur."
+"tabularium.settings.suspendAction": "Suspendere et iterum incipere"
+"tabularium.settings.resetLocal": "Basim localem delere"
+"tabularium.settings.resetLocalDesc": "Exemplar datorum synchronizationis in hoc instrumento delet; notae ipsae manent; postea a ministratore accipe."
+"tabularium.settings.resetLocalAction": "Delere"
+"tabularium.settings.resetLocalTitle": "Basim localem delere?"
+"tabularium.settings.resetLocalBody": "Notae huius tabularii non delentur. Donec a ministratore accipias, hoc instrumentum non synchronizat."
+"tabularium.settings.recovery": "Restitutio"
+"tabularium.settings.diagnosis": "Diagnosis"
+"tabularium.settings.log": "Acta"
+"tabularium.settings.logDesc": "Quae additamentum nuper egit."
+"tabularium.settings.open": "Aperire"
+"tabularium.settings.report": "Relatio diagnostica"
+"tabularium.settings.reportDesc": "Optiones, versiones et acta recentia ad auxilium petendum. Tesserae, sententia arcana et inscriptio ministratoris omittuntur."
+"tabularium.settings.copy": "Exscribere"
+"tabularium.settings.doctor": "Optiones inspicere"
+"tabularium.settings.doctorDesc": "Optiones quae vitia afferre solent quaerit et emendationem offert."
+"tabularium.settings.run": "Agere"
+"tabularium.settings.broken": "Fasciculos imperfectos quaerere"
+"tabularium.settings.brokenDesc": "Notas quarum data non integra advenerunt quaerit et ex hoc instrumento vel ministratore restituit."
+"tabularium.settings.resolveAll": "Omnes conflictus recentiore versione solvere"
+"tabularium.settings.resolveAllDesc": "In omni nota conflictum habente versionem recentissimam servat."
+"tabularium.settings.advanced": "Provecta"
+"tabularium.settings.advancedDesc": "Raro necessaria. Muta tantum si auxilium vel diagnosis ea indicat."
+"tabularium.settings.advancedSync": "Synchronizatio"
+"tabularium.settings.advancedConflicts": "Conflictus"
+"tabularium.settings.advancedTransfer": "Translatio"
+"tabularium.settings.advancedFiles": "Fasciculi"
+"tabularium.settings.advancedLog": "Acta"
+"tabularium.settings.mode": "Modus synchronizationis"
+"tabularium.settings.modeDesc": "Statim: mutationes simul mittuntur et accipiuntur. Per intervalla: quot secundis infra statuitur. Per eventus: cum Obsidian incipit vel fasciculus servatur aut aperitur."
+"tabularium.settings.modeLive": "Statim"
+"tabularium.settings.modePeriodic": "Per intervalla"
+"tabularium.settings.modeEvents": "Per eventus"
+"tabularium.settings.whatSyncs": "Quae synchronizantur"
+"tabularium.settings.conflicts": "Conflictus"
+"tabularium.settings.needsConnection": "Primum cum ministratore Tabularium coniunge."
+"tabularium.settings.language": "Lingua"
+"tabularium.settings.networkWarning": "Sine rete"
+"tabularium.settings.networkBanner": "Vexillum ostendere"
+"tabularium.settings.networkIcon": "Iconem tantum ostendere"
+"tabularium.settings.networkHidden": "Nihil ostendere"
+"tabularium.settings.changelog": "Historia versionum"
+"tabularium.settings.about": "De additamento"
+"tabularium.settings.version": "Tabularium ${version}"
+"tabularium.settings.aboutDesc": "Additamentum ministratoris Tabularium proprii, in \"self-hosted-livesync\" a vorotamoroz fundatum (licentia MIT)."
+"tabularium.help.connect.title": "Coniungere et tabularium mutare"
+"tabularium.help.connect.body": "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et sententiam arcanam tabularii scribe.
+
+
+  Tabularium exstans primum ad hoc instrumentum accipitur; novum ex fasciculis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere conexionem in hoc tantum instrumento obliviscitur.
+
+
+  Tesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur."
+"tabularium.help.status.title": "Quid status synchronizationis significet"
+"tabularium.help.status.body": "Vectigal status conexionem et numeros ostendit. 'Synchronizatum' significat nihil exspectare. 'Mutationes exspectant' numerat fasciculos nondum missos, qui proxima synchronizatione mittuntur.
+
+
+  Sine rete mutationes servantur et postea mittuntur. Causa defectus in actis scribitur (Cura, Acta)."
+"tabularium.help.passphrase.title": "Sententia arcana tabularii"
+"tabularium.help.passphrase.body": "Notae in quoque instrumento sententia arcana tabularii ciphrantur antequam mittantur; ministrator eas legere non potest. Omnia instrumenta eiusdem tabularii eadem sententia utuntur.
+
+
+  Sententia recuperari non potest. Si amittitur, notae in ministratore deciphrari non possunt; instrumenta quae fasciculos habent novum tabularium ex eis creare possunt."
+"tabularium.help.migrate.title": "Ab additamento vetere migrare"
+"tabularium.help.migrate.body": "Antequam Tabularium coniungis, \"self-hosted-livesync\" in hoc tabulario exstingue; ambo simul currere non debent. Deinde tabularium coniunge quod notas tuas in ministratore iam continet, ut hoc instrumentum id accipiat.
+
+
+  Optiones et basis localis additamenti veteris non adhibentur."
+"tabularium.help.rebuild.title": "Reficere et reserare"
+"tabularium.help.rebuild.body": "Refectio tabularium in ministratore fasciculis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.
+
+
+  Postea tabularium clauditur. Cetera instrumenta 'Tabularium clausum' ostendunt et iterum accipere debent. Cum omnia acceperint, hic vel in pagina interretiali resera."
+"tabularium.help.errors.title": "Difficultates frequentes"
+"tabularium.help.errors.body": "Tesserae non iam valent: instrumentum in ministratore remotum est vel tesserae exspiraverunt. Iterum intra.
+
+
+  Optiones ciphrationis recusatae: optiones huius instrumenti a tabulario discrepant. Disiunge et iterum coniunge.
+
+
+  Refectio agitur: exspecta donec dominus eam finiat.
+
+
+  Nota non synchronizatur: modum magnitudinis et fasciculos exclusos in Synchronizatione inspice, et acta lege.
+
+
+  Prima synchronizatio magni tabularii tempus requirit; Obsidian apertum tene donec 'Synchronizatum' ostendatur."
+"tabularium.release.0.18.0": "Nova pagina optionum ex usu disposita: conexio, synchronizatio, ordo fasciculorum, ad Kindle mittere, species, cura, auxilium.
+
+  Auxilium et historia versionum tribus linguis.
+
+  Confirmationes dicunt quid fiat et quid ceteris instrumentis significet.
+
+  Aditus originales qui ad ministratorem Tabularium non pertinent remoti sunt: configuratio remota, URI et codices QR, introductio, synchronizatio fasciculorum occultorum et additamentorum, P2P."
+"tabularium.release.0.17.0": "Tabularius per formulas respondet: exemplar cum parametris et praecepto ab administratore constitutum; colloquia ea aptare possunt."
+"tabularium.release.0.16.0": "Optiones ministratoris, etiam epistulae ad Kindle, in pagina interretiali mutantur."
+"tabularium.release.0.15.0": "Tabularius, scriba artificialis, in pagina interretiali constituitur; notae interretiales ut in Obsidian leguntur."
+"tabularium.release.0.14.0": "Notam vel folder ut nexum ciphratum ex indice fasciculorum communica."
+"tabularium.release.0.13.0": "Una applicatio interretialis: domus, notae interretiales, Tabularius, administratio."
+"tabularium.release.0.12.0": "Nomina Tabularium ubique in additamento; magna tabularia certius synchronizantur; monita versionum fallacia remota."
+"tabularium.release.0.5.0": "Tabularius, scriba artificialis, de tabulario respondet et mutationes proponit (0.5 ad 0.11)."
+"tabularium.release.0.4.0": "Interfacies Anglice, Sinice et Latine; notae interretiales emendari possunt."
+"tabularium.release.0.3.0": "Conexio per rationem Tabularium; ad Kindle mittere; notae interretiales; tesserae sponte renovantur."
+"tabularium.settings.syncIgnoreRegEx": "Fasciculi non synchronizandi"
+"tabularium.settings.syncIgnoreRegExDesc": "Expressiones regulares in via fasciculi, una per lineam; fasciculi congruentes nec mittuntur nec accipiuntur."
+"tabularium.settings.syncOnlyRegEx": "Hos tantum fasciculos synchronizare"
+"tabularium.settings.syncOnlyRegExDesc": "Expressiones regulares in via fasciculi, una per lineam. Si positae, tantum fasciculi congruentes synchronizantur."
+"tabularium.sorting.specFile": "Notae regularum additae"
+"tabularium.sorting.specFileDesc": "Nomina vel viae notarum quarum praefatio regulas ordinandi continet, praeter notas sortspec et notas folderorum. Post mutationem regulas iterum adhibe."
+"tabularium.sorting.indexNote": "Nomen notae folderi"
+"tabularium.sorting.indexNoteDesc": "Si quisque folder se in nota nominis certi (ut index) describit, hoc nomen scribe; regulae et metadata eius quoque leguntur."
+"tabularium.sorting.delay": "Mora initio (secundae)"
+"tabularium.sorting.delayDesc": "Quot secundis post initium Obsidian exspectetur antequam ordinetur, 0 ad 30. Auge si in magnis tabulariis vel telephono ordo non adhibetur."
+"tabularium.sorting.statusBar": "In vectigali status ostendere"
+"tabularium.sorting.statusBarDesc": "Ostendit utrum ordo fasciculorum adhibeatur."
+"tabularium.sorting.contextMenu": "Index ordinandi in indice fasciculorum"
+"tabularium.sorting.contextMenuDesc": "Adhibere et suspendere ordinem in indicem dextri clici addit."
+"tabularium.sorting.bookmarks": "Ordinare per signa libri"
+"tabularium.sorting.bookmarksDesc": "Ordine rerum in grege additamenti 'Signa libri' utitur, ut res illic trahendo disponantur."
+"tabularium.sorting.bookmarksGroup": "Grex signorum"
+"tabularium.sorting.bookmarksGroupDesc": "Grex signorum cuius ordo adhibetur."
+"tabularium.sorting.bookmarksMenus": "Res indicis signorum"
+"tabularium.sorting.bookmarksMenusDesc": "Res in indicem dextri clici addit ut fasciculi et folderi ei gregi addantur."
+"tabularium.sorting.statusOn": "Ordo: adhibetur"
+"tabularium.sorting.statusOff": "Ordo: suspensus"
+"tabularium.settings.fetch.newer-cleanup": "Recentior vincit; quae in ministratore deleta sunt hic quoque delentur"
+"tabularium.settings.fetch.newer-cleanupDesc": "Quaeque nota exemplar novissime mutatum servat. Notae in ministratore deletae hic quoque delentur."
+"tabularium.settings.fetch.newer-keep": "Recentior vincit; omnes fasciculi hic servantur"
+"tabularium.settings.fetch.newer-keepDesc": "Quaeque nota exemplar novissime mutatum servat. Nihil hic deletur, itaque notae in ministratore deletae redeunt et iterum synchronizantur."
+"tabularium.settings.fetch.remote-keep": "Ministrator vincit; fasciculi tantum hic servantur"
+"tabularium.settings.fetch.remote-keepDesc": "Notae ministratoris exemplaria hic substituunt. Fasciculi hic exstantes omnes servantur, quod duplicata relinquere potest."
+"tabularium.settings.fetch.remote-delete": "Ministrator vincit; fasciculi tantum hic delentur"
+"tabularium.settings.fetch.remote-deleteDesc": "Hoc tabularium fit idem atque in ministratore. Fasciculi tantum hic exstantes delentur."
+"tabularium.sorting.ui.toggle": "Ordinem fasciculorum commutare"
+"tabularium.sorting.ui.apply": "Ordinem adhibere"
+"tabularium.sorting.ui.applyFlat": "Ordo: adhibere"
+"tabularium.sorting.ui.suspend": "Ordinem suspendere"
+"tabularium.sorting.ui.suspendFlat": "Ordo: suspendere"
+"tabularium.sorting.ui.bookmark": "Signis ordinandi addere"
+"tabularium.sorting.ui.bookmarkFlat": "Ordo: signis addere"
+"tabularium.sorting.ui.unbookmark": "E signis ordinandi removere"
+"tabularium.sorting.ui.unbookmarkFlat": "Ordo: e signis removere"
+"tabularium.sorting.ui.bookmarkSiblings": "Id et cognata signis ordinandi addere"
+"tabularium.sorting.ui.bookmarkSiblingsFlat": "Ordo: id et cognata signis addere"
+"tabularium.sorting.ui.unbookmarkSiblings": "Id et cognata e signis ordinandi removere"
+"tabularium.sorting.ui.unbookmarkSiblingsFlat": "Ordo: id et cognata e signis removere"
+"tabularium.sorting.ui.bookmarkSelected": "Ordo: delecta signis addere"
+"tabularium.sorting.ui.bookmarkSelectedFlat": "Delecta signis ordinandi addere"
+"tabularium.sorting.ui.unbookmarkSelected": "Ordo: delecta e signis removere"
+"tabularium.sorting.ui.unbookmarkSelectedFlat": "Delecta e signis ordinandi removere"
+"tabularium.sorting.ui.submenu": "Ordo"
+"tabularium.sorting.ui.commandOn": "Ordinem fasciculorum adhibere, regulis iterum lectis"
+"tabularium.sorting.ui.commandOff": "Ordinem fasciculorum suspendere"
+"tabularium.conflict.title": "Mutationes inter se pugnant"
+"tabularium.conflict.base": "Haec versio"
+"tabularium.conflict.conflicted": "Altera versio"
+"tabularium.conflict.pick": "Versionem elige"
+"tabularium.conflict.remote": "Aliud instrumentum"
+"tabularium.conflict.local": "Hoc instrumentum"
+"tabularium.conflict.vaultAndDatabase": "Fasciculus et exemplar synchronizatum"
+"tabularium.conflict.vaultFile": "Fasciculus in tabulario"
+"tabularium.conflict.databaseRevision": "Exemplar synchronizatum"
+"tabularium.conflict.previous": "Differentia prior"
+"tabularium.conflict.next": "Differentia sequens"
+"tabularium.conflict.deleted": "deleta"
+"tabularium.conflict.later": "Postea statuere"
+"tabularium.conflict.tooLarge": "Differentiae nimis magnae sunt ut ostendantur."
+Connected to ${connection.info.db_name} successfully: Conexio cum ${connection.info.db_name} facta est.
+The document ID configurations differ. Import the correct Setup URI, or configure the matching ID key, before synchronising.: Configurationes identificatorum documentorum inter hoc instrumentum et ministratorem differunt. Ante synchronizationem clavem identificatorum congruentem constitue.
+The remote type does not support preferred tweak values.: Hoc genus ministratoris valores accommodationis praelatos non sustinet.
+Failed to get the preferred tweak values from the remote.: Valores accommodationis praelati a ministratore accipi non potuerunt.
+The settings in the remote database are the same as the local database.: Optiones in ministratore eaedem sunt atque in basi datorum huius instrumenti.
+Pending file events remain because their commit did not complete before the window visibility changed.: Eventa fasciculorum pendentia manent, quia consignari non potuerunt antequam visibilitas fenestrae mutaretur.
+Obsidian will be restarted soon! (Within ${stableCheck} seconds): Obsidian intra ${stableCheck} secunda denuo incipiet.
+The selected revision does not have a revision identifier.: Revisio selecta identificatore revisionis caret.
+Restoring the selected revision failed before Vault reflection completed. Review the file with 'Inspect conflicts and file/database differences' before retrying.: Restitutio revisionis selectae defecit antequam in tabularium scriberetur. Fasciculum inspice antequam iterum conaris.
+The selected revision could not be restored because its content is no longer available.: Revisio selecta restitui non potuit, quia eius contentum iam non exstat.
+The current database revision could not be read. The Vault was not changed.: Revisio praesens in basi datorum legi non potuit. Tabularium non mutatum est.
+Only an ordinary valid Vault path can be restored from Document History.: Ex Historia documenti restitui potest sola via ordinaria et valida in tabulario.
+The restored revision could not be created. The file may have changed during the operation, and the Vault was not changed.: Revisio restituta creari non potuit. Fasciculus fortasse dum res agebatur mutatus est. Tabularium non mutatum est.
+The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.: Revisio restituta in basi datorum huius instrumenti servata est, sed in tabularium scribi non potuit.
+The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.: Contentum selectum ut nova revisio restitutum est. Aliae versiones adhuc irresolutae manent; per 'Elige plicam ad discrepantiam solvendam' eas inspice.
+The selected content was restored as a new revision.: Contentum selectum ut nova revisio restitutum est.
+The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' fasciculum inspice.
+The restored file could not be opened in the editor.: Fasciculus restitutus in editore aperiri non potuit.
+Error in Setting Save Event: Error in optionibus servandis.
+${file} is conflicted, merging process has been postponed.: ${file} conflictum habet; coniunctio dilata est.
+${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}: ${title} Revisio conflictus ${displayRev(deleteRevision)} fasciculi ${path} deleri non potuit.
+"Could not write the resolved content to the storage: ${path}": "Contentum resolutum in repositorium scribi non potuit: ${path}"
+Merged content cannot be stored:${path}: "Contentum coniunctum servari non potuit: ${path}"
+could not get current revisions:${path}: "Revisiones praesentes accipi non potuerunt: ${path}"
+could not read conflicted revision ${rightRev}:${path}: "Revisio conflictus ${rightRev} legi non potuit: ${path}"
+"[conflict] ${filename} is conflicted. Merging process has been postponed to the file have got opened.": ${filename} conflictum habet. Coniunctio differtur donec fasciculus aperiatur.
+Resolving conflicts by newer ones: Conflictus recentioribus versionibus solvuntur
+Check and Processing ${i} / ${files.length}: Inspiciuntur et tractantur ${i} / ${files.length}
+Done!: Factum est.
+Concatenated content cannot be stored:${filename}: "Contentum concatenatum servari non potuit: ${filename}"
+"Concatenated saved, but cannot delete conflicted revisions: ${filename}, (${displayRev(delRev)})": "Contentum concatenatum servatum est, sed revisiones conflictus deleri non potuerunt: ${filename} (${displayRev(delRev)})"
+"Merge: Something went wrong: ${filename}, (${toDelete})": "Coniunctio defecit: ${filename} (${toDelete})"
+"Merge: Something went wrong: ${filename}, (${String(toDelete)})": "Coniunctio defecit: ${filename} (${String(toDelete)})"
+There are no conflicted documents: Nulla documenta conflictum habent.
+Error while scanning conflicted files...: Error in fasciculis conflictus perscrutandis.
+Remediation mode is active, so the detailed fetch flow is used instead of Simple Fetch.: Modus remedii activus est; itaque acceptio accurata pro acceptione simplici adhibetur.
+Fetch cancelled by user.: Acceptio abrogata est.
+Fetch exited by user.: Ab acceptione discessum est.
+Fetch initialisation cancelled by user.: Praeparatio acceptionis abrogata est.
+User chose to reboot and re-run the process.: Denuo incipitur ut processus iterum agatur.
+Simple fetch and scan operation completed.: Acceptio et perscrutatio perfectae sunt.
+Processing ${docPath} has been skipped due to file size exceeding the limit: ${docPath} praeteritus est, quia fasciculus modum magnitudinis excedit.
+Error while processing replication result: Error in eventu synchronizationis tractando.
+Failed to gather content of ${docNote}: Contentum ${docNote} colligi non potuit
+"Failed to get existing document for ${path} (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)}) ": Documentum exstans pro ${path} accipi non potuit (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)})
+"Database cleanup cancelled: ${describeRemoteFeatureRejection(assessment)}": "Purgatio basis datorum abrogata est: ${describeRemoteFeatureRejection(assessment)}"
+"Database cleanup cancelled: feature compatibility could not be checked.": "Purgatio basis datorum abrogata est: congruentia facultatum inspici non potuit."
+Failed to count compromised chunks in local database: Frusta corrupta in basi datorum huius instrumenti numerari non potuerunt.
+Failed to count compromised chunks in remote database: Frusta corrupta in ministratore numerari non potuerunt.
+"Found compromised chunks : ${localCompromised} in local, ${remoteCompromised} in remote": "Frusta corrupta inventa: ${localCompromised} in hoc instrumento, ${remoteCompromised} in ministratore."
+Could not find stub file for ${file.path}: Fasciculus vicarius pro ${file.path} inveniri non potuit
+Failed to restore ${file.path} from storage: ${file.path} ex repositorio restitui non potuit
+"PUT: FAILED: ${path}": "Scriptio defecit: ${path}"
+QR Code size exceeded, switching to aggregator mode: Magnitudo codicis QR excessa est; ad modum aggregationis transitur.
+Failed to encode split QR Code (${ex2?.message || String(ex2)}): Codex QR divisus confici non potuit (${ex2?.message || String(ex2)})
+Failed to parse settings from decrypted data: Optiones ex datis decryptatis interpretari non potuerunt.
+Failed to write buffered chunks for ${dispFilename}: Frusta in memoria temporaria pro ${dispFilename} scribi non potuerunt
+Failed to flush buffered chunks for ${dispFilename}: Frusta in memoria temporaria pro ${dispFilename} effundi non potuerunt
+No data to save in ${dispFilename}!! This document may be corrupted in the local database! Please back it up immediately, and report an issue!: In ${dispFilename} nulla data servanda sunt. Hoc documentum in basi datorum huius instrumenti fortasse corruptum est. Statim exemplar tutum fac et rem nuntia.
+Failed to write document ${dispFilename}: Documentum ${dispFilename} scribi non potuit
+Missing document content!, could not read ${dispFilename}(${meta._id.substring(0, 8)}) from database.: Contentum documenti deest; ${dispFilename} (${meta._id.substring(0, 8)}) ex basi datorum legi non potuit.
+"Something went wrong on reading ${dispFilename}(${meta._id.substring(0, 8)}) from database:": "Error in ${dispFilename} (${meta._id.substring(0, 8)}) ex basi datorum legendo:"
+"The storage file has been changed but exceeds the maximum size. Skipping: ${param.file.path}": "Fasciculus in tabulario mutatus est, sed magnitudinem maximam excedit. Praeteritur: ${param.file.path}"
+Storage operation remains pending after a failure: Operatio repositorii post defectum adhuc pendet.
+Database initialisation was rejected by a required module.: Initium basis datorum a modulo necessario reiectum est.
+Some module has prevented the database from being ready. The database is initialised but not ready for use.: Modulus quidam impedivit ne basis datorum parata fieret. Basis datorum initiata est, sed ad usum nondum parata.
+Database reset has been prevented or failed on some modules.: Restitutio basis datorum in quibusdam modulis impedita est aut defecit.
+Local Database could not be reinitialised after reset.: Basis datorum huius instrumenti post restitutionem denuo initiari non potuit.
+Local Database Reset: Basis datorum huius instrumenti restituitur
+'${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} database': '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} basis datorum'
+"Database active-size: ${sizeToHumanReadable(getSize(info, \"active\"))}, external-size:${sizeToHumanReadable(\n        getSize(info, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, \"file\"))}": |-
+  Basis datorum, magnitudo activa: ${sizeToHumanReadable(getSize(info, "active"))}, externa: ${sizeToHumanReadable(
+          getSize(info, "external")
+        )}, fasciculi: ${sizeToHumanReadable(getSize(info, "file"))}
+Collecting unreferenced chunks on ${info.db_name}: Frusta non relata in ${info.db_name} colliguntur
+No unreferenced chunks! ${info.db_name}: Nulla frusta non relata in ${info.db_name}.
+"Number of unreferenced chunks on ${info.db_name}: ${chunks.length}": "Frusta non relata in ${info.db_name}: ${chunks.length}"
+'DryRun of cleaning ${connSetting ? "remote" : "local"} database up: Done': 'Purgatio basis datorum ${connSetting ? "remote" : "local"} experimento acta: facta'
+Cleaning unreferenced chunks on remote: Frusta non relata in ministratore purgantur
+Cleaning unreferenced chunks on local: Frusta non relata in hoc instrumento purgantur
+Cleaning unreferenced chunks done!: Purgatio frustorum non relatorum facta est.
+Compacting database...: Basis datorum compingitur...
+Compacting database done: Compactio basis datorum facta est.
+"Processed database active-size: ${sizeToHumanReadable(\n        getSize(endInfo, \"active\")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(endInfo, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(endInfo, \"file\"))}": |-
+  Basis datorum post tractationem, magnitudo activa: ${sizeToHumanReadable(
+          getSize(endInfo, "active")
+        )}, externa: ${sizeToHumanReadable(
+          getSize(endInfo, "external")
+        )}, fasciculi: ${sizeToHumanReadable(getSize(endInfo, "file"))}
+"Reduced sizes: active-size: ${sizeToHumanReadable(\n        getSize(info, \"active\") - getSize(endInfo, \"active\")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(info, \"external\") - getSize(endInfo, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, \"file\") - getSize(endInfo, \"file\"))}": |-
+  Deminutio, magnitudo activa: ${sizeToHumanReadable(
+          getSize(info, "active") - getSize(endInfo, "active")
+        )}, externa: ${sizeToHumanReadable(
+          getSize(info, "external") - getSize(endInfo, "external")
+        )}, fasciculi: ${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}
+'Cleaning ${connSetting ? "remote" : "local"} database up: Done': 'Purgatio basis datorum ${connSetting ? "remote" : "local"}: facta'
+"${label}: Something went wrong on balancing": "${label}: error in aequando"
+"${label}: ${totalProcessed} / ${total}": "${label}: ${totalProcessed} / ${total}"
+Complement missing chunks between databases: Frusta deficientia inter bases datorum supplentur
+"local -> remote: Done": "Hoc instrumentum → ministrator: factum"
+"remote -> local: Done": "Ministrator → hoc instrumentum: factum"
+Something went wrong on balancing!: Error in aequando.
+Complement completed!: Frusta deficientia suppleta sunt.
+"Purging unused ${docs.length} chunks ": ${docs.length} frusta non adhibita purgantur
+"Local chunk backed up: new:${total.ok} ,exist:${total.exist}, error:${total.error}": "Frusta huius instrumenti servata: nova ${total.ok}, iam exstantia ${total.exist}, errores ${total.error}"
+"Purging unused ${docs.length} chunks... ": ${docs.length} frusta non adhibita purgantur...
+"Purging:  ${totalRemoved} / ${docs.length}": "Purgatio: ${totalRemoved} / ${docs.length}"
+"Purging unused chunks done!: ${totalRemoved} chunks has been deleted.": "Purgatio frustorum non adhibitorum facta est: ${totalRemoved} frusta deleta."
+${ENCRYPTION_HKDF_FAILED} on Eden: ${ENCRYPTION_HKDF_FAILED} (data interna)
+${ENCRYPTION_HKDF_FAILED} on Metadata: ${ENCRYPTION_HKDF_FAILED} (metadata)
+Unknown encryption version. Cannot decrypt.: Versio cryptationis ignota. Decryptari non potest.
+${DECRYPTION_HKDF_FAILED} on Path: ${DECRYPTION_HKDF_FAILED} (via fasciculi)
+${MESSAGE_FALLBACK_DECRYPT_FAILED} on Path: ${MESSAGE_FALLBACK_DECRYPT_FAILED} (via fasciculi)
+${DECRYPTION_FALLBACK_FAILED} on Eden: ${DECRYPTION_FALLBACK_FAILED} (frusta inclusa)
+${DECRYPTION_HKDF_FAILED} on Eden: ${DECRYPTION_HKDF_FAILED} (frusta inclusa)
+Encryption failed.: Cryptatio defecit.
+Decryption failed.: Decryptatio defecit.
+Database updated from ${from} to ${to}: Basis datorum ab ${from} ad ${to} renovata est
+↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}: ↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}
+Replication callback error: Erratum in functione revocationis synchronizationis
+Replication denied: Synchronizatio recusata est
+Replication error: Erratum synchronizationis
+Something went wrong during synchronisation. Please check the log!: Aliquid in synchronizatione erravit. Acta inspice.
+The remote document IDs do not match the configured ID key.: Indices documentorum in ministratore clavi indicum constitutae non congruunt.
+The remote database has no compatibility with the running version. Please upgrade the plugin.: Basis datorum ministratoris cum hac versione non congruit. Additamentum renova.
+The remote database has been rebuilt or corrupted since we have synchronized last time. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.: Basis datorum ministratoris post ultimam synchronizationem refecta aut corrupta est. Necesse est basim refectam accipere, eam expresse reserare, aut frusta purgare.
+The remote database has been cleaned up. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.: Basis datorum ministratoris purgata est. Necesse est basim refectam accipere, eam expresse reserare, aut frusta purgare.
+Connected to ${db.info.db_name} successfully: Conexio cum ${db.info.db_name} facta est
+Could not retrieve remote milestone: Monumentum ministratoris legi non potuit
+Could not connect to the remote database: Ad ministratorem conecti non potuit
+Could not check the remote database version: Versio basis datorum ministratoris inspici non potuit
+"STORAGE -> DB : ${file.path} has been skipped due to file size exceeding the limit": "Fasciculi -> basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit"
+"STORAGE <- DB : Cloud not read ${file.path}, possibly deleted": "Fasciculi <- basis datorum: ${file.path} legi non potuit; fortasse deletus est"
+"STORAGE <- DB : ${file.path} has been skipped due to file size exceeding the limit": "Fasciculi <- basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit"
+"STORAGE ? DB : ${file.path} has been skipped due to file size exceeding the limit": "Fasciculi ? basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit"
+"STORAGE ? DB : Could not reconcile ${file.path}": "Fasciculi ? basis datorum: ${file.path} conciliari non potuit"
+DELETE DATABASE did not delete ${path}; keeping last-seen record to avoid resurrecting the file: ${path} ex basi datorum deleri non potuit; ultimum eius vestigium servatur ne fasciculus revivescat
+Error processing ${path} with action ${action}: "Erratum in ${path} tractando (actio: ${action})"
+Error while synchronising files: Erratum dum fasciculi synchronizantur
+Initializing: Initium paratur
+Initialize done!: Initium paratum est
+"Rebuilding has been refused: remediation mode is active. Clear the modification-time limit to rebuild.": "Refectio recusata est: modus remedii activus est. Finem temporis mutationis remove ut reficias."
+Could not create ${flag}: Fasciculus signi ${flag} creari non potuit
+Could not remove ${flag} after restart preparation failed: Praeparatio iterati initii defecit, et fasciculus signi ${flag} removeri non potuit
+No active replicator found when trying to reset remote database.: Dum basis datorum ministratoris restituitur, nulla conexio synchronizationis activa inventa est.
+"Suspending reflection: Database and storage changes will not be reflected in each other until completely finished the fetching.": "Reflexio suspenditur: mutationes basis datorum et tabularii inter se non applicabuntur donec acceptio perfecta sit."
+Database and storage reflection has been resumed!: Reflexio inter basim datorum et tabularium resumpta est.
+"Remediation mode: the files in storage are not stored in the database before fetching.": "Modus remedii: fasciculi tabularii ante acceptionem in basi datorum non servantur."
+Fast database fetch is available only for CouchDB remote. Falling back to standard fetch.: Acceptio celeris basis datorum tantum cum ministratore CouchDB praesto est. Acceptio ordinaria adhibetur.
+Fast database fetch is unavailable while 'Use Internal API' is enabled. Falling back to Standard Fetch.: Acceptio celeris basis datorum non praesto est dum petitiones per API internum Obsidian mittuntur. Acceptio ordinaria adhibetur.
+"Resuming fast database fetch from sequence: ${checkpoint.sequence}": Acceptio celeris basis datorum a sequentia ${checkpoint.sequence} resumitur
+Fast fetch checkpoint found, but the local database is empty. Starting from the beginning.: Punctum acceptionis celeris inventum est, sed basis datorum huius instrumenti vacua est. Ab initio incipitur.
+"Fast fetch progress: ${progress.totalValidFetched} / ${progress.docsToFetch}\nTotal bytes fetched: ${sizeToHumanReadable(progress.totalBytes)}": |-
+  Progressus acceptionis celeris: ${progress.totalValidFetched} / ${progress.docsToFetch}
+  Summa accepta: ${sizeToHumanReadable(progress.totalBytes)}
+"Fast fetch interrupted. Retrying from sequence: ${since}": Acceptio celeris interrupta est. A sequentia ${since} iterum temptatur
+"Fast database fetch completed. Total documents in local database: ${allDocs.total_rows}": "Acceptio celeris basis datorum perfecta est. Documenta in basi datorum huius instrumenti: ${allDocs.total_rows}"
+Storage kept changing while saving ${path}; a fresh event is required: ${path} dum servatur in tabulario mutari non desiit; novus eventus mutationis requiritur
+Could not store ${file.path} on revision ${baseRevision}; the selected revision is no longer live: ${file.path} in revisione ${baseRevision} servari non potuit; revisio electa iam non viget
+Could not mark ${file.path} as revision ${baseRevision}; the storage content differs: ${file.path} ut revisio ${baseRevision} notari non potuit; contentum in tabulario differt
+Could not preserve the unknown conflict branch for ${file.path}; no current revision is available: Ramus conflictus ignotus fasciculi ${file.path} servari non potuit; nulla revisio currens praesto est
+Could not preserve the unknown conflict branch for ${file.path}: Ramus conflictus ignotus fasciculi ${file.path} servari non potuit
+The deleted storage file ${path} has conflicts, but its displayed revision is unknown; preserving every database branch: Fasciculus deletus ${path} conflictus habet, sed revisio ostensa ignota est; omnes rami in basi datorum servantur
+The deleted storage file ${file.path} has conflicts, but its displayed revision is unknown; preserving every database branch: Fasciculus deletus ${file.path} conflictus habet, sed revisio ostensa ignota est; omnes rami in basi datorum servantur
+Refusing to overwrite the existing database entry while renaming ${oldPath} to ${newPath}: Dum ${oldPath} in ${newPath} renominatur, inscriptio exstans in basi datorum non superscribitur
+"Failed to store rename target; preserving source in the database: ${oldPath}": "Fasciculus renominatus servari non potuit; fons in basi datorum servatur: ${oldPath}"
+Renamed ${oldPath} to ${newPath}, but preserved every conflicted source branch because the displayed source revision is unknown: ${oldPath} in ${newPath} renominatus est, sed omnes rami fontis in conflictu servati sunt, quia revisio fontis ostensa ignota est
+Could not apply ${tryGetFilePath(info)} revision ${rev}; the selected revision is no longer live: Revisio ${rev} fasciculi ${tryGetFilePath(info)} applicari non potuit; revisio electa iam non viget
+Refusing to overwrite ${existDoc.path} while applying the distinct path ${path}: Dum via diversa ${path} applicatur, ${existDoc.path} non superscribitur
+"Refusing to apply a filename case change across differently cased parent directories: ${existDoc.path} -> ${path}": "Mutatio litterarum maiuscularum vel minuscularum in nomine fasciculi non applicatur, quia capsae parentes litteris diversis scriptae sunt: ${existDoc.path} -> ${path}"
+"Could not apply the stored filename case: ${existDoc.path} -> ${path}": "Forma litterarum nominis fasciculi servata applicari non potuit: ${existDoc.path} -> ${path}"
+File ${path} seems to be corrupted! Writing prevented. (${docRead.size} != ${reflectedContent.size}): Fasciculus ${path} corruptus esse videtur; scriptura prohibita est (${docRead.size} != ${reflectedContent.size})
+Prevented overwriting unsynchronised local changes for ${path}: Mutationes fasciculi ${path} in hoc instrumento nondum synchronizatae non superscriptae sunt
+Preserved unsynchronised local changes as a conflict for ${path}: Mutationes fasciculi ${path} in hoc instrumento nondum synchronizatae ut conflictus servatae sunt
+Database kept changing while reflecting ${path}: Dum ${path} in tabularium scribitur, basis datorum mutari non desiit
+"Preserved ${path}: the rename target no longer resolves to ${targetPath}": "${path} servatus est: nomen novum iam ad ${targetPath} non spectat"
+"Preserved ${path}: rename target ${targetPath} is still selected": "${path} servatus est: nomen novum ${targetPath} adhuc electum est"
+"Preserved ${path}: a current storage item contradicts its deletion event": "${path} servatus est: res praesens in tabulario eventui deletionis repugnat"
+Could not validate deletion of ${path}; preserved the database entry: Deletio fasciculi ${path} confirmari non potuit; inscriptio in basi datorum servata est
+Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery: Operatio servata fasciculi ${path} cum statu praesenti tabularii comparari non potuit; ad restitutionem pendet
+Unload preparation failed; pending storage work may require recovery: Praeparatio ad exonerandum defecit; operationes fasciculorum pendentes fortasse restituendae sunt
+Self-hosted LiveSync cannot be initialised, exiting loading.: Additamentum Tabularium initiari non potuit; oneratio desiit.
+Failed to reset KeyValueDB: Basis datorum clavium et valorum restitui non potuit
+Failed to open KeyValueDB: Basis datorum clavium et valorum aperiri non potuit
+"The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": "Petitio fortasse defecit. Responsum ministratoris: ${r.status}: ${r.statusText}"
+The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync: Petitio per API Obsidian successit, sed API fetch nativum defecit. Optiones CORS ministratoris inspice. Donec hoc corrigatur, synchronizatio continua activari non potest.
+"Failed to fetch by API. ${resp2.status}: ${msg}": "Petitio defecit. ${resp2.status}: ${msg}"
+Active replicator not found during directional ${direction}: Nulla conexio synchronizationis activa inventa est ad synchronizationem ${direction}
+The selected local database is not ready for the rebuild upload.: Basis datorum huius instrumenti nondum parata est ut ad refectionem sursum mittatur.
+The selected local database is not ready for the rebuild download.: Basis datorum huius instrumenti nondum parata est ad data refectionis accipienda.
+Active replicator not found during ${usage}: Nulla conexio synchronizationis activa inventa est in actione ${usage}
+Active replicator does not support ${action}: Conexio synchronizationis activa actionem ${action} non sustinet
+Legacy remote configuration has been migrated to the remote configuration list.: Configuratio vetus ministratoris in indicem configurationum ministratoris translata est.
+Failed to retrieve passphrase. data.json contains unencrypted items!: Sententia arcana accipi non potuit. data.json res non cryptatas continet.
+Failed to encrypt remote configuration '${id}'. This entry will be saved in plain text.: Configuratio ministratoris “${id}” cryptari non potuit. Haec inscriptio textu aperto servabitur.
+Remote configuration '${id}' had a plain-text URI marked as encrypted. The flag has been repaired.: Configuratio ministratoris “${id}” URI textus aperti ut cryptatum notatum habebat. Nota correcta est.
+Failed to decrypt remote configuration '${id}'. Verify passphrase and configuration.: Configuratio ministratoris “${id}” decryptari non potuit. Sententiam arcanam et configurationem inspice.
+"Error in update function: ": Erratum in optionibus renovandis
+"Error in applying external settings: ": Erratum in optionibus externis applicandis
+"Error in applying partial settings: ": Erratum in optionibus partialibus applicandis
+Failed to decrypt configuration item: Res configurationis decryptari non potuit
+Failed to obtain passphrase when saving data.json! Please verify the configuration.: Dum data.json servatur, sententia arcana obtineri non potuit. Configurationem inspice.
+No passphrase found for data.json! Verify configuration before syncing.: Nulla sententia arcana pro data.json inventa est. Ante synchronizationem configurationem inspice.
+Encrypted remote configurations found, but passphrase is unavailable. Verify configuration before syncing.: Configurationes ministratoris cryptatae inventae sunt, sed sententia arcana praesto non est. Ante synchronizationem configurationem inspice.
+Failed to decrypt passphrase from data.json! Ensure configuration is correct before syncing with remote.: Sententia arcana ex data.json decryptari non potuit. Ante synchronizationem cum ministratore fac ut configuratio recta sit.
+"Failed to activate the selected remote configuration: ${activeConfigurationId}": "Configuratio ministratoris electa activari non potuit: ${activeConfigurationId}"
+"Failed to activate the selected P2P remote configuration: ${p2pActiveConfigurationId}": "Configuratio inter pares electa activari non potuit: ${p2pActiveConfigurationId}"
+Configuration issues detected and automatically resolved. However, unsynchronized data may exist. Consider rebuilding if necessary.: Vitia configurationis inventa et sponte correcta sunt. Fortasse tamen data nondum synchronizata exstant; si opus est, refice.
+Device name missing. Disabling plug-in sync.: Nomen instrumenti deest. Synchronizatio additamentorum deactivata est.
+The remote database has been cleaned.: Basis datorum ministratoris purgata est.
+The local database has been cleaned up.: Basis datorum huius instrumenti purgata est.
+Replication has been cancelled. Please try it again.: Synchronizatio abrogata est. Iterum conare.
+Replication activated: Synchronizatio incepit
+Replication completed: Synchronizatio perfecta
+Replication stopped for busy.: Synchronizatio suspensa est, quia ministrator occupatus est.
+Replication stopped.: Synchronizatio cessavit.
+Bulk sending chunks to remote database...: Frusta ad ministratorem mittuntur…
+"↑ Uploading chunks\ \n${sendingDocs}/(${sentDocsCount} done)": |-
+  ↑ Frusta mittuntur 
+  ${sendingDocs}/(${sentDocsCount} perfecta)
+Bulk sending failed.: Missio frustorum defecit.
+The remote connectivity check timed out.: Probatio conexionis cum ministratore tempus excessit.
+'${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} '
+Some requested chunks were not found in the remote database.: Quaedam frusta petita in ministratore non inventa sunt.
+"Collecting local files on the DB: ${count}": "Fasciculi huius instrumenti in basi colliguntur: ${count}"
+"Processing: ${processedCount}/${pairs.length}": "Tractantur: ${processedCount}/${pairs.length}"
+"Creating missing chunks: ${processed} of ${total} files": "Frusta deficientia creantur: ${processed} ex ${total} fasciculis"
+"Creating chunks Done: ${processed} of ${total} files": "Frusta creata: ${processed} ex ${total} fasciculis"
+No active replicator found: Nulla synchronizatio constituta est
+Network is offline: Rete abest
+"Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": "Synchronizatio perfecta: ${processedCount} fasciculi tractati (${completedCount} perfecti, ${skippedCount} omissi, ${failedCount} errores)"

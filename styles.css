@@ -917,3 +917,90 @@ body.is-mobile .livesync-compatibility-review-notice {
 .tabularium-share-modal {
     width: min(720px, 94vw);
 }
+
+/* Tabularium settings: a row of section buttons, then one section at a time. */
+.tabularium-settings-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-4-1);
+    padding-bottom: var(--size-4-3);
+    margin-bottom: var(--size-4-2);
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.tabularium-settings-nav button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-4-1);
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-muted);
+}
+
+.tabularium-settings-nav button svg {
+    width: var(--icon-s);
+    height: var(--icon-s);
+}
+
+.tabularium-settings-nav button.is-active {
+    background: var(--interactive-accent);
+    color: var(--text-on-accent);
+}
+
+.tabularium-advanced,
+.tabularium-help {
+    margin-top: var(--size-4-3);
+}
+
+.tabularium-advanced > summary,
+.tabularium-help > summary {
+    cursor: pointer;
+    font-weight: var(--font-semibold);
+    padding: var(--size-4-2) 0;
+}
+
+.tabularium-help > p {
+    margin: 0 0 var(--size-4-2);
+    color: var(--text-normal);
+    line-height: var(--line-height-normal);
+}
+
+/* Confirmations: one light warning block for the effect on other devices, no bar. */
+.tabularium-confirm {
+    width: min(560px, 94vw);
+}
+
+.tabularium-confirm-impact {
+    padding: var(--size-4-2) var(--size-4-3);
+    border-radius: var(--radius-m);
+    background: rgba(var(--color-orange-rgb), 0.12);
+    color: var(--text-normal);
+}
+
+.tabularium-choices {
+    display: grid;
+    gap: var(--size-4-2);
+    margin: var(--size-4-3) 0;
+}
+
+.tabularium-choice {
+    display: flex;
+    gap: var(--size-4-2);
+    align-items: flex-start;
+    padding: var(--size-4-2) var(--size-4-3);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: var(--radius-m);
+    cursor: pointer;
+}
+
+.tabularium-choice:has(input:checked) {
+    border-color: var(--interactive-accent);
+}
+
+.tabularium-choice input {
+    margin-top: 3px;
+}
+
+.tabularium-choice-label {
+    font-weight: var(--font-semibold);
+}

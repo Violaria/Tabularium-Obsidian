@@ -99,10 +99,25 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "(Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si Tabularium novus tibi est et eum ab initio constituere vis.",
             zh: "（如果你正在将此设备配置为第一台同步设备，请选择此项。）此选项适合初次使用 Tabularium，并希望从头开始配置的用户。",
         },
+    "[conflict] ${filename} is conflicted. Merging process has been postponed to the file have got opened.": {
+        def: "${filename} has a conflict. Merging has been postponed until the file is opened.",
+        la: "${filename} conflictum habet. Coniunctio differtur donec fasciculus aperiatur.",
+        zh: "${filename} 存在冲突。合并将推迟到打开该文件时进行。",
+    },
+    "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)": {
+        def: "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)",
+        la: "↑ Frusta mittuntur \n${sendingDocs}/(${sentDocsCount} perfecta)",
+        zh: "↑ 正在上传数据块 \n${sendingDocs}/（已完成 ${sentDocsCount}）",
+    },
     "↑: Overwrite Remote": {
         def: "↑: Overwrite Remote",
         la: "↑: Superscribe remotum",
         zh: "↑：覆盖远端",
+    },
+    "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}": {
+        def: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
+        la: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
+        zh: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
     },
     "↓: Overwrite Local": {
         def: "↓: Overwrite Local",
@@ -128,6 +143,66 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "${count} issue(s) detected!",
         la: "${count} quaestiones detectae!",
         zh: "检测到 ${count} 个问题！",
+    },
+    "${DECRYPTION_FALLBACK_FAILED} on Eden": {
+        def: "${DECRYPTION_FALLBACK_FAILED} (inline chunks)",
+        la: "${DECRYPTION_FALLBACK_FAILED} (frusta inclusa)",
+        zh: "${DECRYPTION_FALLBACK_FAILED}（内联数据块）",
+    },
+    "${DECRYPTION_HKDF_FAILED} on Eden": {
+        def: "${DECRYPTION_HKDF_FAILED} (inline chunks)",
+        la: "${DECRYPTION_HKDF_FAILED} (frusta inclusa)",
+        zh: "${DECRYPTION_HKDF_FAILED}（内联数据块）",
+    },
+    "${DECRYPTION_HKDF_FAILED} on Path": {
+        def: "${DECRYPTION_HKDF_FAILED} (file path)",
+        la: "${DECRYPTION_HKDF_FAILED} (via fasciculi)",
+        zh: "${DECRYPTION_HKDF_FAILED}（文件路径）",
+    },
+    '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} database': {
+        def: '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} database',
+        la: '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} basis datorum',
+        zh: '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} 数据库',
+    },
+    "${ENCRYPTION_HKDF_FAILED} on Eden": {
+        def: "${ENCRYPTION_HKDF_FAILED} (internal data)",
+        la: "${ENCRYPTION_HKDF_FAILED} (data interna)",
+        zh: "${ENCRYPTION_HKDF_FAILED}（内部数据）",
+    },
+    "${ENCRYPTION_HKDF_FAILED} on Metadata": {
+        def: "${ENCRYPTION_HKDF_FAILED} (metadata)",
+        la: "${ENCRYPTION_HKDF_FAILED} (metadata)",
+        zh: "${ENCRYPTION_HKDF_FAILED}（元数据）",
+    },
+    "${file} is conflicted, merging process has been postponed.": {
+        def: "${file} has a conflict; merging has been postponed.",
+        la: "${file} conflictum habet; coniunctio dilata est.",
+        zh: "${file} 存在冲突，已推迟合并。",
+    },
+    "${label}: ${totalProcessed} / ${total}": {
+        def: "${label}: ${totalProcessed} / ${total}",
+        la: "${label}: ${totalProcessed} / ${total}",
+        zh: "${label}：${totalProcessed} / ${total}",
+    },
+    "${label}: Something went wrong on balancing": {
+        def: "${label}: error while balancing",
+        la: "${label}: error in aequando",
+        zh: "${label}：平衡时出错",
+    },
+    "${MESSAGE_FALLBACK_DECRYPT_FAILED} on Path": {
+        def: "${MESSAGE_FALLBACK_DECRYPT_FAILED} (file path)",
+        la: "${MESSAGE_FALLBACK_DECRYPT_FAILED} (via fasciculi)",
+        zh: "${MESSAGE_FALLBACK_DECRYPT_FAILED}（文件路径）",
+    },
+    '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': {
+        def: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
+        la: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
+        zh: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
+    },
+    "${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}": {
+        def: "${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}.",
+        la: "${title} Revisio conflictus ${displayRev(deleteRevision)} fasciculi ${path} deleri non potuit.",
+        zh: "${title} 无法删除 ${path} 的冲突修订 ${displayRev(deleteRevision)}。",
     },
     "A Setup URI is a single string of text containing your server address and authentication details. Using a URI, if one was generated by your server installation script, provides a simple and secure configuration.":
         {
@@ -184,6 +259,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Active Remote Configuration",
         la: "Configuratio remota activa",
         zh: "生效中的远程配置",
+    },
+    "Active replicator does not support ${action}": {
+        def: "The active synchronisation connection does not support ${action}",
+        la: "Conexio synchronizationis activa actionem ${action} non sustinet",
+        zh: "当前的同步连接不支持 ${action}",
+    },
+    "Active replicator not found during ${usage}": {
+        def: "No active synchronisation connection was found during ${usage}",
+        la: "Nulla conexio synchronizationis activa inventa est in actione ${usage}",
+        zh: "执行 ${usage} 时未找到活动的同步连接",
+    },
+    "Active replicator not found during directional ${direction}": {
+        def: "No active synchronisation connection was found for the ${direction} synchronisation",
+        la: "Nulla conexio synchronizationis activa inventa est ad synchronizationem ${direction}",
+        zh: "执行单向同步（${direction}）时未找到活动的同步连接",
     },
     Add: {
         def: "Add",
@@ -406,6 +496,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomen situlae",
         zh: "存储桶名称",
     },
+    "Bulk sending chunks to remote database...": {
+        def: "Sending data chunks to the server…",
+        la: "Frusta ad ministratorem mittuntur…",
+        zh: "正在把数据块发送到服务器…",
+    },
+    "Bulk sending failed.": {
+        def: "Sending data chunks failed.",
+        la: "Missio frustorum defecit.",
+        zh: "数据块发送失败。",
+    },
     "by resetting the remote, you will be informed on other devices.": {
         def: "by resetting the remote, you will be informed on other devices.",
         la: "remoto restituendo, in aliis instrumentis certior fies.",
@@ -448,6 +548,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Inspice et converte plicas viis non obscuratis",
         zh: "检查并转换未进行路径混淆的文件",
     },
+    "Check and Processing ${i} / ${files.length}": {
+        def: "Checking and processing ${i} / ${files.length}",
+        la: "Inspiciuntur et tractantur ${i} / ${files.length}",
+        zh: "正在检查和处理 ${i} / ${files.length}",
+    },
     "Check for documents that have not been converted to path-obfuscated IDs and convert them if necessary.": {
         def: "Check for documents that have not been converted to path-obfuscated IDs and convert them if necessary.",
         la: "Inspice documenta quae in identificatores viis obscuratis non conversa sunt, et ea si opus est converte.",
@@ -467,6 +572,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Chunks",
         la: "Fragmenta",
         zh: "块",
+    },
+    'Cleaning ${connSetting ? "remote" : "local"} database up: Done': {
+        def: 'Cleaning the ${connSetting ? "remote" : "local"} database: done',
+        la: 'Purgatio basis datorum ${connSetting ? "remote" : "local"}: facta',
+        zh: '${connSetting ? "remote" : "local"} 数据库清理：完成',
+    },
+    "Cleaning unreferenced chunks done!": {
+        def: "Cleaning unreferenced chunks done.",
+        la: "Purgatio frustorum non relatorum facta est.",
+        zh: "未被引用的数据块已清理完成。",
+    },
+    "Cleaning unreferenced chunks on local": {
+        def: "Cleaning unreferenced chunks on this device",
+        la: "Frusta non relata in hoc instrumento purgantur",
+        zh: "正在清理此设备上未被引用的数据块",
+    },
+    "Cleaning unreferenced chunks on remote": {
+        def: "Cleaning unreferenced chunks on the server",
+        la: "Frusta non relata in ministratore purgantur",
+        zh: "正在清理服务器上未被引用的数据块",
     },
     Close: {
         def: "Close",
@@ -848,6 +973,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nulla fragmenta non adhibita inventa.",
         zh: "未找到未使用的块。",
     },
+    "Collecting local files on the DB: ${count}": {
+        def: "Collecting this device's files in the database: ${count}",
+        la: "Fasciculi huius instrumenti in basi colliguntur: ${count}",
+        zh: "正在把本机文件收入数据库：${count}",
+    },
+    "Collecting unreferenced chunks on ${info.db_name}": {
+        def: "Collecting unreferenced chunks in ${info.db_name}",
+        la: "Frusta non relata in ${info.db_name} colliguntur",
+        zh: "正在收集 ${info.db_name} 中未被引用的数据块",
+    },
     "Comma separated `.gitignore, .dockerignore`": {
         def: "Comma separated `.gitignore, .dockerignore`",
         la: "Commatibus separata `.gitignore, .dockerignore`",
@@ -862,6 +997,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Communicating",
         la: "Communicatur",
         zh: "通信中",
+    },
+    "Compacting database done": {
+        def: "Compacting database done.",
+        la: "Compactio basis datorum facta est.",
+        zh: "数据库压缩完成。",
+    },
+    "Compacting database...": {
+        def: "Compacting database...",
+        la: "Basis datorum compingitur...",
+        zh: "正在压缩数据库……",
     },
     "Compaction in progress on remote database...": {
         def: "Compaction in progress on remote database...",
@@ -929,6 +1074,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Compatibilitas (difficultates tractatae)",
         zh: "兼容性（问题修复）",
     },
+    "Complement completed!": {
+        def: "Missing chunks filled in.",
+        la: "Frusta deficientia suppleta sunt.",
+        zh: "缺失的数据块已补全。",
+    },
+    "Complement missing chunks between databases": {
+        def: "Filling in missing chunks between databases",
+        la: "Frusta deficientia inter bases datorum supplentur",
+        zh: "正在补全数据库之间缺失的数据块",
+    },
     "Compute revisions for chunks": {
         def: "Compute revisions for chunks",
         la: "Computa recensiones fragmentorum",
@@ -938,6 +1093,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Concat both",
         la: "Coniunge ambo",
         zh: "合并两者",
+    },
+    "Concatenated content cannot be stored:${filename}": {
+        def: "Concatenated content could not be stored: ${filename}",
+        la: "Contentum concatenatum servari non potuit: ${filename}",
+        zh: "无法保存拼接后的内容：${filename}",
+    },
+    "Concatenated saved, but cannot delete conflicted revisions: ${filename}, (${displayRev(delRev)})": {
+        def: "Concatenated content was saved, but the conflicted revisions could not be deleted: ${filename} (${displayRev(delRev)})",
+        la: "Contentum concatenatum servatum est, sed revisiones conflictus deleri non potuerunt: ${filename} (${displayRev(delRev)})",
+        zh: "拼接后的内容已保存，但无法删除冲突修订：${filename}（${displayRev(delRev)}）",
     },
     Configuration: {
         def: "Configuration",
@@ -949,6 +1114,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Cryptatio configurationis",
         zh: "配置加密",
     },
+    "Configuration issues detected and automatically resolved. However, unsynchronized data may exist. Consider rebuilding if necessary.":
+        {
+            def: "Configuration issues were found and fixed automatically. Some data may not have been synchronised; rebuild if necessary.",
+            la: "Vitia configurationis inventa et sponte correcta sunt. Fortasse tamen data nondum synchronizata exstant; si opus est, refice.",
+            zh: "检测到配置问题并已自动修正，但可能仍有未同步的数据，必要时请重建。",
+        },
     Configure: {
         def: "Configure",
         la: "Configura",
@@ -993,6 +1164,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Connected",
         la: "Conexum",
         zh: "已连接",
+    },
+    "Connected to ${connection.info.db_name} successfully": {
+        def: "Connected to ${connection.info.db_name}.",
+        la: "Conexio cum ${connection.info.db_name} facta est.",
+        zh: "已连接到 ${connection.info.db_name}。",
+    },
+    "Connected to ${db.info.db_name} successfully": {
+        def: "Connected to ${db.info.db_name}",
+        la: "Conexio cum ${db.info.db_name} facta est",
+        zh: "已连接到 ${db.info.db_name}",
     },
     "Connected to Signaling Server (as Peer ID: ${peerId})": {
         def: "Connected to Signaling Server (as Peer ID: ${peerId})",
@@ -1085,6 +1266,92 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "CouchDB nomen repositorii cum conectis confirmat. Nomen vacuum esse non debet.",
         zh: "CouchDB 会在连接时校验数据库名称。名称不能为空。",
     },
+    "Could not apply ${tryGetFilePath(info)} revision ${rev}; the selected revision is no longer live": {
+        def: "Could not apply revision ${rev} of ${tryGetFilePath(info)}; the selected revision is no longer current",
+        la: "Revisio ${rev} fasciculi ${tryGetFilePath(info)} applicari non potuit; revisio electa iam non viget",
+        zh: "无法应用 ${tryGetFilePath(info)} 的修订 ${rev}：所选修订已不再有效",
+    },
+    "Could not apply the stored filename case: ${existDoc.path} -> ${path}": {
+        def: "Could not apply the stored filename case: ${existDoc.path} -> ${path}",
+        la: "Forma litterarum nominis fasciculi servata applicari non potuit: ${existDoc.path} -> ${path}",
+        zh: "无法应用数据库中保存的文件名大小写：${existDoc.path} -> ${path}",
+    },
+    "Could not check the remote database version": {
+        def: "Could not check the server's database version",
+        la: "Versio basis datorum ministratoris inspici non potuit",
+        zh: "无法检查服务器数据库的版本",
+    },
+    "Could not connect to the remote database": {
+        def: "Could not connect to the server",
+        la: "Ad ministratorem conecti non potuit",
+        zh: "无法连接服务器",
+    },
+    "Could not create ${flag}": {
+        def: "Could not create the flag file ${flag}",
+        la: "Fasciculus signi ${flag} creari non potuit",
+        zh: "无法创建标记文件 ${flag}",
+    },
+    "Could not find stub file for ${file.path}": {
+        def: "Could not find the stub file for ${file.path}",
+        la: "Fasciculus vicarius pro ${file.path} inveniri non potuit",
+        zh: "找不到 ${file.path} 的占位文件",
+    },
+    "could not get current revisions:${path}": {
+        def: "Could not get the current revisions: ${path}",
+        la: "Revisiones praesentes accipi non potuerunt: ${path}",
+        zh: "无法获取当前修订：${path}",
+    },
+    "Could not mark ${file.path} as revision ${baseRevision}; the storage content differs": {
+        def: "Could not mark ${file.path} as revision ${baseRevision}; the content in the vault differs",
+        la: "${file.path} ut revisio ${baseRevision} notari non potuit; contentum in tabulario differt",
+        zh: "无法将 ${file.path} 标记为修订 ${baseRevision}：库中的内容不同",
+    },
+    "Could not preserve the unknown conflict branch for ${file.path}": {
+        def: "Could not keep the unknown conflict branch of ${file.path}",
+        la: "Ramus conflictus ignotus fasciculi ${file.path} servari non potuit",
+        zh: "无法保留 ${file.path} 未知的冲突分支",
+    },
+    "Could not preserve the unknown conflict branch for ${file.path}; no current revision is available": {
+        def: "Could not keep the unknown conflict branch of ${file.path}; no current revision is available",
+        la: "Ramus conflictus ignotus fasciculi ${file.path} servari non potuit; nulla revisio currens praesto est",
+        zh: "无法保留 ${file.path} 未知的冲突分支：没有可用的当前修订",
+    },
+    "could not read conflicted revision ${rightRev}:${path}": {
+        def: "Could not read conflicted revision ${rightRev}: ${path}",
+        la: "Revisio conflictus ${rightRev} legi non potuit: ${path}",
+        zh: "无法读取冲突修订 ${rightRev}：${path}",
+    },
+    "Could not remove ${flag} after restart preparation failed": {
+        def: "Preparing the restart failed, and the flag file ${flag} could not be removed",
+        la: "Praeparatio iterati initii defecit, et fasciculus signi ${flag} removeri non potuit",
+        zh: "重启准备失败，且无法删除标记文件 ${flag}",
+    },
+    "Could not retrieve remote milestone": {
+        def: "Could not retrieve the server's milestone record",
+        la: "Monumentum ministratoris legi non potuit",
+        zh: "无法读取服务器上的里程碑记录",
+    },
+    "Could not store ${file.path} on revision ${baseRevision}; the selected revision is no longer live": {
+        def: "Could not save ${file.path} on revision ${baseRevision}; the selected revision is no longer current",
+        la: "${file.path} in revisione ${baseRevision} servari non potuit; revisio electa iam non viget",
+        zh: "无法基于修订 ${baseRevision} 保存 ${file.path}：所选修订已不再有效",
+    },
+    "Could not validate deletion of ${path}; preserved the database entry": {
+        def: "Could not confirm the deletion of ${path}; the database entry was kept",
+        la: "Deletio fasciculi ${path} confirmari non potuit; inscriptio in basi datorum servata est",
+        zh: "无法确认 ${path} 的删除，已保留数据库中的条目",
+    },
+    "Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery":
+        {
+            def: "Could not check the saved file operation for ${path} against the vault; it remains pending for recovery",
+            la: "Operatio servata fasciculi ${path} cum statu praesenti tabularii comparari non potuit; ad restitutionem pendet",
+            zh: "无法根据库的当前状态核对 ${path} 已保存的文件操作，该操作仍待恢复",
+        },
+    "Could not write the resolved content to the storage: ${path}": {
+        def: "Could not write the resolved content to storage: ${path}",
+        la: "Contentum resolutum in repositorium scribi non potuit: ${path}",
+        zh: "无法将解决后的内容写入存储：${path}",
+    },
     "Create conflict": {
         def: "Create conflict",
         la: "Crea discrepantiam",
@@ -1099,6 +1366,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Create P2P remote",
         la: "Crea remotum P2P",
         zh: "创建 P2P 远端",
+    },
+    "Creating chunks Done: ${processed} of ${total} files": {
+        def: "Data chunks created: ${processed} of ${total} files",
+        la: "Frusta creata: ${processed} ex ${total} fasciculis",
+        zh: "数据块已建立：${processed}/${total} 个文件",
+    },
+    "Creating missing chunks: ${processed} of ${total} files": {
+        def: "Creating missing data chunks: ${processed} of ${total} files",
+        la: "Frusta deficientia creantur: ${processed} ex ${total} fasciculis",
+        zh: "正在补建数据块：${processed}/${total} 个文件",
     },
     "Cross-platform": {
         def: "Cross-platform",
@@ -1145,25 +1422,71 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium -> Repositorium plicarum",
         zh: "数据库 → 存储",
     },
+    'Database active-size: ${sizeToHumanReadable(getSize(info, "active"))}, external-size:${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, "file"))}':
+        {
+            def: 'Database active size: ${sizeToHumanReadable(getSize(info, "active"))}, external size: ${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, file size: ${sizeToHumanReadable(getSize(info, "file"))}',
+            la: 'Basis datorum, magnitudo activa: ${sizeToHumanReadable(getSize(info, "active"))}, externa: ${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, fasciculi: ${sizeToHumanReadable(getSize(info, "file"))}',
+            zh: '数据库活动大小：${sizeToHumanReadable(getSize(info, "active"))}，外部大小：${sizeToHumanReadable(\n        getSize(info, "external")\n      )}，文件大小：${sizeToHumanReadable(getSize(info, "file"))}',
+        },
     "Database Adapter": {
         def: "Database Adapter",
         la: "Adaptator repositorii",
         zh: "数据库适配器",
+    },
+    "Database and storage reflection has been resumed!": {
+        def: "Changes between the database and the vault are being applied again.",
+        la: "Reflexio inter basim datorum et tabularium resumpta est.",
+        zh: "数据库与库中文件之间的更改已恢复相互应用。",
+    },
+    "Database cleanup cancelled: ${describeRemoteFeatureRejection(assessment)}": {
+        def: "Database cleanup cancelled: ${describeRemoteFeatureRejection(assessment)}",
+        la: "Purgatio basis datorum abrogata est: ${describeRemoteFeatureRejection(assessment)}",
+        zh: "已取消数据库清理：${describeRemoteFeatureRejection(assessment)}",
+    },
+    "Database cleanup cancelled: feature compatibility could not be checked.": {
+        def: "Database cleanup cancelled: feature compatibility could not be checked.",
+        la: "Purgatio basis datorum abrogata est: congruentia facultatum inspici non potuit.",
+        zh: "已取消数据库清理：无法检查功能兼容性。",
+    },
+    "Database initialisation was rejected by a required module.": {
+        def: "Database initialisation was rejected by a required module.",
+        la: "Initium basis datorum a modulo necessario reiectum est.",
+        zh: "数据库初始化被一个必需模块拒绝。",
+    },
+    "Database kept changing while reflecting ${path}": {
+        def: "The database kept changing while ${path} was being written to the vault",
+        la: "Dum ${path} in tabularium scribitur, basis datorum mutari non desiit",
+        zh: "将 ${path} 写入库时，数据库仍在不断变化",
     },
     "Database Name": {
         def: "Database Name",
         la: "Nomen repositorii",
         zh: "数据库名称",
     },
+    "Database reset has been prevented or failed on some modules.": {
+        def: "Database reset was prevented or failed in some modules.",
+        la: "Restitutio basis datorum in quibusdam modulis impedita est aut defecit.",
+        zh: "部分模块阻止了数据库重置，或重置失败。",
+    },
     "Database suffix": {
         def: "Database suffix",
         la: "Suffixum repositorii",
         zh: "数据库后缀",
     },
+    "Database updated from ${from} to ${to}": {
+        def: "Database updated from ${from} to ${to}",
+        la: "Basis datorum ab ${from} ad ${to} renovata est",
+        zh: "数据库已从 ${from} 更新到 ${to}",
+    },
     Date: {
         def: "Date",
         la: "Dies",
         zh: "日期",
+    },
+    "Decryption failed.": {
+        def: "Decryption failed.",
+        la: "Decryptatio defecit.",
+        zh: "解密失败。",
     },
     Default: {
         def: "Default",
@@ -1199,6 +1522,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Delete All of",
         la: "Dele omnia ex",
         zh: "全部删除",
+    },
+    "DELETE DATABASE did not delete ${path}; keeping last-seen record to avoid resurrecting the file": {
+        def: "Could not delete ${path} from the database; keeping its last-seen record so the file is not restored",
+        la: "${path} ex basi datorum deleri non potuit; ultimum eius vestigium servatur ne fasciculus revivescat",
+        zh: "未能从数据库删除 ${path}；保留其最后记录，以免文件被恢复",
     },
     "Delete local database to reset or uninstall Self-hosted LiveSync": {
         def: "Delete local database to reset or uninstall Tabularium",
@@ -1299,6 +1627,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Device name",
         la: "Nomen instrumenti",
         zh: "设备名称",
+    },
+    "Device name missing. Disabling plug-in sync.": {
+        def: "Device name is missing. Plug-in sync has been turned off.",
+        la: "Nomen instrumenti deest. Synchronizatio additamentorum deactivata est.",
+        zh: "缺少设备名称，已关闭插件同步。",
     },
     'Device name to identify the device. Please use shorter one for the stable peer detection, i.e., "iphone-16" or "macbook-2021".':
         {
@@ -1536,6 +1869,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Factum",
         zh: "完成",
     },
+    "Done!": {
+        def: "Done.",
+        la: "Factum est.",
+        zh: "完成。",
+    },
+    'DryRun of cleaning ${connSetting ? "remote" : "local"} database up: Done': {
+        def: 'Dry run of cleaning the ${connSetting ? "remote" : "local"} database: done',
+        la: 'Purgatio basis datorum ${connSetting ? "remote" : "local"} experimento acta: facta',
+        zh: '${connSetting ? "remote" : "local"} 数据库清理试运行：完成',
+    },
     Duplicate: {
         def: "Duplicate",
         la: "Duplica",
@@ -1628,6 +1971,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Contenta in repositorio remoto crypta. Si facultate synchronizationis additamenti uteris, hoc activare commendatur.",
             zh: "加密远程数据库中的内容。如果您使用插件的同步功能,则建议启用此功能 ",
         },
+    "Encrypted remote configurations found, but passphrase is unavailable. Verify configuration before syncing.": {
+        def: "Encrypted server configurations were found, but the passphrase is unavailable. Check the configuration before synchronising.",
+        la: "Configurationes ministratoris cryptatae inventae sunt, sed sententia arcana praesto non est. Ante synchronizationem configurationem inspice.",
+        zh: "发现已加密的服务器配置，但无法获取密码短语。同步前请检查配置。",
+    },
     "Encrypting sensitive configuration items": {
         def: "Encrypting sensitive configuration items",
         la: "Res configurationis sensibiles cryptantur",
@@ -1637,6 +1985,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Encryption Algorithm",
         la: "Algorithmus cryptationis",
         zh: "加密算法",
+    },
+    "Encryption failed.": {
+        def: "Encryption failed.",
+        la: "Cryptatio defecit.",
+        zh: "加密失败。",
     },
     "Encryption phassphrase. If changed, you should overwrite the server's database with the new (encrypted) files.": {
         def: "Encryption phassphrase. If changed, you should overwrite the server's database with the new (encrypted) files.",
@@ -1758,10 +2111,50 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Error in testAndFixSettings: ${reason}",
         zh: "testAndFixSettings 出错：${reason}",
     },
+    "Error in applying external settings: ": {
+        def: "Error while applying external settings",
+        la: "Erratum in optionibus externis applicandis",
+        zh: "应用外部设置时出错",
+    },
+    "Error in applying partial settings: ": {
+        def: "Error while applying partial settings",
+        la: "Erratum in optionibus partialibus applicandis",
+        zh: "应用部分设置时出错",
+    },
+    "Error in Setting Save Event": {
+        def: "Error while saving settings.",
+        la: "Error in optionibus servandis.",
+        zh: "保存设置时出错。",
+    },
+    "Error in update function: ": {
+        def: "Error while updating settings",
+        la: "Erratum in optionibus renovandis",
+        zh: "更新设置时出错",
+    },
+    "Error processing ${path} with action ${action}": {
+        def: "Error processing ${path} (action: ${action})",
+        la: "Erratum in ${path} tractando (actio: ${action})",
+        zh: "处理 ${path}（操作：${action}）时出错",
+    },
     "Error while loading file.": {
         def: "Error while loading file.",
         la: "Error dum plica oneratur.",
         zh: "加载文件时出错。",
+    },
+    "Error while processing replication result": {
+        def: "Error while processing the replication result.",
+        la: "Error in eventu synchronizationis tractando.",
+        zh: "处理同步结果时出错。",
+    },
+    "Error while scanning conflicted files...": {
+        def: "Error while scanning for conflicted files.",
+        la: "Error in fasciculis conflictus perscrutandis.",
+        zh: "扫描冲突文件时出错。",
+    },
+    "Error while synchronising files": {
+        def: "Error while synchronising files",
+        la: "Erratum dum fasciculi synchronizantur",
+        zh: "同步文件时出错",
     },
     "Experimental Settings": {
         def: "Experimental Settings",
@@ -1772,6 +2165,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Export",
         la: "Exporta",
         zh: "导出",
+    },
+    "Failed to activate the selected P2P remote configuration: ${p2pActiveConfigurationId}": {
+        def: "Could not activate the selected peer-to-peer configuration: ${p2pActiveConfigurationId}",
+        la: "Configuratio inter pares electa activari non potuit: ${p2pActiveConfigurationId}",
+        zh: "无法启用所选的点对点配置：${p2pActiveConfigurationId}",
+    },
+    "Failed to activate the selected remote configuration: ${activeConfigurationId}": {
+        def: "Could not activate the selected server configuration: ${activeConfigurationId}",
+        la: "Configuratio ministratoris electa activari non potuit: ${activeConfigurationId}",
+        zh: "无法启用所选的服务器配置：${activeConfigurationId}",
     },
     "Failed to connect to remote for compaction.": {
         def: "Failed to connect to remote for compaction.",
@@ -1798,15 +2201,105 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Conexio ad relatorem significationis defecit: ${reason}",
         zh: "无法连接到信令中继：${reason}",
     },
+    "Failed to count compromised chunks in local database": {
+        def: "Could not count compromised chunks in this device's database.",
+        la: "Frusta corrupta in basi datorum huius instrumenti numerari non potuerunt.",
+        zh: "无法统计此设备数据库中受损的数据块。",
+    },
+    "Failed to count compromised chunks in remote database": {
+        def: "Could not count compromised chunks on the server.",
+        la: "Frusta corrupta in ministratore numerari non potuerunt.",
+        zh: "无法统计服务器上受损的数据块。",
+    },
     "Failed to create replicator instance.": {
         def: "Failed to create replicator instance.",
         la: "Instantia replicatoris creari non potuit.",
         zh: "创建复制器实例失败。",
     },
+    "Failed to decrypt configuration item": {
+        def: "Could not decrypt a configuration item",
+        la: "Res configurationis decryptari non potuit",
+        zh: "无法解密配置项",
+    },
+    "Failed to decrypt passphrase from data.json! Ensure configuration is correct before syncing with remote.": {
+        def: "Could not decrypt the passphrase from data.json. Make sure the configuration is correct before synchronising with the server.",
+        la: "Sententia arcana ex data.json decryptari non potuit. Ante synchronizationem cum ministratore fac ut configuratio recta sit.",
+        zh: "无法解密 data.json 中的密码短语。与服务器同步前，请确认配置正确。",
+    },
+    "Failed to decrypt remote configuration '${id}'. Verify passphrase and configuration.": {
+        def: "Could not decrypt server configuration '${id}'. Check the passphrase and the configuration.",
+        la: "Configuratio ministratoris “${id}” decryptari non potuit. Sententiam arcanam et configurationem inspice.",
+        zh: "无法解密服务器配置“${id}”。请检查密码短语和配置。",
+    },
+    "Failed to encode split QR Code (${ex2?.message || String(ex2)})": {
+        def: "Could not encode the split QR code (${ex2?.message || String(ex2)})",
+        la: "Codex QR divisus confici non potuit (${ex2?.message || String(ex2)})",
+        zh: "无法编码分段二维码（${ex2?.message || String(ex2)}）",
+    },
+    "Failed to encrypt remote configuration '${id}'. This entry will be saved in plain text.": {
+        def: "Could not encrypt server configuration '${id}'. This entry will be saved in plain text.",
+        la: "Configuratio ministratoris “${id}” cryptari non potuit. Haec inscriptio textu aperto servabitur.",
+        zh: "无法加密服务器配置“${id}”，该条目将以明文保存。",
+    },
+    "Failed to fetch by API. ${resp2.status}: ${msg}": {
+        def: "The request failed. ${resp2.status}: ${msg}",
+        la: "Petitio defecit. ${resp2.status}: ${msg}",
+        zh: "请求失败。${resp2.status}: ${msg}",
+    },
+    "Failed to flush buffered chunks for ${dispFilename}": {
+        def: "Could not flush buffered chunks for ${dispFilename}",
+        la: "Frusta in memoria temporaria pro ${dispFilename} effundi non potuerunt",
+        zh: "无法刷新 ${dispFilename} 的缓冲数据块",
+    },
+    "Failed to gather content of ${docNote}": {
+        def: "Could not gather the content of ${docNote}",
+        la: "Contentum ${docNote} colligi non potuit",
+        zh: "无法收集 ${docNote} 的内容",
+    },
+    "Failed to get existing document for ${path} (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)}) ": {
+        def: "Could not get the existing document for ${path} (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)})",
+        la: "Documentum exstans pro ${path} accipi non potuit (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)})",
+        zh: "无法获取 ${path} 的现有文档（${shortenId(dbDoc._id)}，${shortenRev(dbDoc._rev)}）",
+    },
+    "Failed to get the preferred tweak values from the remote.": {
+        def: "Could not get the preferred tweak values from the server.",
+        la: "Valores accommodationis praelati a ministratore accipi non potuerunt.",
+        zh: "无法从服务器获取推荐的调整值。",
+    },
+    "Failed to obtain passphrase when saving data.json! Please verify the configuration.": {
+        def: "Could not obtain the passphrase while saving data.json. Please check the configuration.",
+        la: "Dum data.json servatur, sententia arcana obtineri non potuit. Configurationem inspice.",
+        zh: "保存 data.json 时无法获取密码短语，请检查配置。",
+    },
+    "Failed to open KeyValueDB": {
+        def: "Could not open the key-value database",
+        la: "Basis datorum clavium et valorum aperiri non potuit",
+        zh: "无法打开键值数据库",
+    },
+    "Failed to parse settings from decrypted data": {
+        def: "Could not parse settings from the decrypted data.",
+        la: "Optiones ex datis decryptatis interpretari non potuerunt.",
+        zh: "无法从解密后的数据中解析设置。",
+    },
     "Failed to parse Setup-URI.": {
         def: "Failed to parse Setup-URI.",
         la: "Setup-URI interpretari non potuit.",
         zh: "无法解析设置 URI。",
+    },
+    "Failed to reset KeyValueDB": {
+        def: "Could not reset the key-value database",
+        la: "Basis datorum clavium et valorum restitui non potuit",
+        zh: "无法重置键值数据库",
+    },
+    "Failed to restore ${file.path} from storage": {
+        def: "Could not restore ${file.path} from storage",
+        la: "${file.path} ex repositorio restitui non potuit",
+        zh: "无法从存储中恢复 ${file.path}",
+    },
+    "Failed to retrieve passphrase. data.json contains unencrypted items!": {
+        def: "Could not retrieve the passphrase. data.json contains unencrypted items.",
+        la: "Sententia arcana accipi non potuit. data.json res non cryptatas continet.",
+        zh: "无法获取密码短语。data.json 中包含未加密的项目。",
     },
     "Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled.": {
         def: "Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled.",
@@ -1818,15 +2311,66 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Replicatio post collectionem quisquiliarum incipi non potuit.",
         zh: "垃圾回收后无法启动复制。",
     },
+    "Failed to store rename target; preserving source in the database: ${oldPath}": {
+        def: "Could not save the renamed file; keeping the original in the database: ${oldPath}",
+        la: "Fasciculus renominatus servari non potuit; fons in basi datorum servatur: ${oldPath}",
+        zh: "无法保存重命名后的文件，数据库中保留原文件：${oldPath}",
+    },
+    "Failed to write buffered chunks for ${dispFilename}": {
+        def: "Could not write buffered chunks for ${dispFilename}",
+        la: "Frusta in memoria temporaria pro ${dispFilename} scribi non potuerunt",
+        zh: "无法写入 ${dispFilename} 的缓冲数据块",
+    },
+    "Failed to write document ${dispFilename}": {
+        def: "Could not write document ${dispFilename}",
+        la: "Documentum ${dispFilename} scribi non potuit",
+        zh: "无法写入文档 ${dispFilename}",
+    },
     "Failed:": {
         def: "Failed:",
         la: "Defecerunt:",
         zh: "失败：",
     },
+    "Fast database fetch completed. Total documents in local database: ${allDocs.total_rows}": {
+        def: "Fast database fetch complete. Documents in this device's database: ${allDocs.total_rows}",
+        la: "Acceptio celeris basis datorum perfecta est. Documenta in basi datorum huius instrumenti: ${allDocs.total_rows}",
+        zh: "快速获取数据库完成。这台设备的数据库中共有 ${allDocs.total_rows} 个文档。",
+    },
+    "Fast database fetch is available only for CouchDB remote. Falling back to standard fetch.": {
+        def: "Fast database fetch is only available with a CouchDB server. Using standard fetch instead.",
+        la: "Acceptio celeris basis datorum tantum cum ministratore CouchDB praesto est. Acceptio ordinaria adhibetur.",
+        zh: "快速获取数据库仅适用于 CouchDB 服务器，改用标准获取。",
+    },
+    "Fast database fetch is unavailable while 'Use Internal API' is enabled. Falling back to Standard Fetch.": {
+        def: "Fast database fetch is unavailable while requests go through Obsidian's internal API. Using standard fetch instead.",
+        la: "Acceptio celeris basis datorum non praesto est dum petitiones per API internum Obsidian mittuntur. Acceptio ordinaria adhibetur.",
+        zh: "通过 Obsidian 内部 API 发送请求时无法快速获取数据库，改用标准获取。",
+    },
+    "Fast fetch checkpoint found, but the local database is empty. Starting from the beginning.": {
+        def: "A fast fetch checkpoint was found, but this device's database is empty. Starting from the beginning.",
+        la: "Punctum acceptionis celeris inventum est, sed basis datorum huius instrumenti vacua est. Ab initio incipitur.",
+        zh: "找到了快速获取的检查点，但这台设备的数据库是空的，将从头开始。",
+    },
+    "Fast fetch interrupted. Retrying from sequence: ${since}": {
+        def: "Fast fetch interrupted. Retrying from sequence ${since}",
+        la: "Acceptio celeris interrupta est. A sequentia ${since} iterum temptatur",
+        zh: "快速获取中断，从序号 ${since} 重试",
+    },
+    "Fast fetch progress: ${progress.totalValidFetched} / ${progress.docsToFetch}\nTotal bytes fetched: ${sizeToHumanReadable(progress.totalBytes)}":
+        {
+            def: "Fast fetch progress: ${progress.totalValidFetched} / ${progress.docsToFetch}\nTotal fetched: ${sizeToHumanReadable(progress.totalBytes)}",
+            la: "Progressus acceptionis celeris: ${progress.totalValidFetched} / ${progress.docsToFetch}\nSumma accepta: ${sizeToHumanReadable(progress.totalBytes)}",
+            zh: "快速获取进度：${progress.totalValidFetched} / ${progress.docsToFetch}\n已获取：${sizeToHumanReadable(progress.totalBytes)}",
+        },
     Fetch: {
         def: "Fetch",
         la: "Arcesse",
         zh: "获取",
+    },
+    "Fetch cancelled by user.": {
+        def: "Fetch cancelled.",
+        la: "Acceptio abrogata est.",
+        zh: "已取消获取。",
     },
     "Fetch chunks on demand": {
         def: "Fetch chunks on demand",
@@ -1837,6 +2381,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Fetch database with previous behaviour",
         la: "Arcesse repositorium modo priore",
         zh: "使用以前的行为获取数据库",
+    },
+    "Fetch exited by user.": {
+        def: "Fetch exited.",
+        la: "Ab acceptione discessum est.",
+        zh: "已退出获取。",
+    },
+    "Fetch initialisation cancelled by user.": {
+        def: "Fetch set-up cancelled.",
+        la: "Praeparatio acceptionis abrogata est.",
+        zh: "已取消获取前的准备。",
     },
     "Fetch remote settings": {
         def: "Fetch remote settings",
@@ -1852,6 +2406,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Fetching status...",
         la: "Status arcessitur...",
         zh: "正在获取状态…",
+    },
+    "File ${path} seems to be corrupted! Writing prevented. (${docRead.size} != ${reflectedContent.size})": {
+        def: "${path} seems to be corrupted; it was not written (${docRead.size} != ${reflectedContent.size})",
+        la: "Fasciculus ${path} corruptus esse videtur; scriptura prohibita est (${docRead.size} != ${reflectedContent.size})",
+        zh: "文件 ${path} 似乎已损坏，已阻止写入（${docRead.size} != ${reflectedContent.size}）",
     },
     "File integrity": {
         def: "File integrity",
@@ -1918,6 +2477,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Forces the file to be synced when opened.",
         la: "Plicam synchronizari cogit cum aperitur.",
         zh: "打开文件时强制同步该文件 ",
+    },
+    "Found compromised chunks : ${localCompromised} in local, ${remoteCompromised} in remote": {
+        def: "Compromised chunks found: ${localCompromised} on this device, ${remoteCompromised} on the server.",
+        la: "Frusta corrupta inventa: ${localCompromised} in hoc instrumento, ${remoteCompromised} in ministratore.",
+        zh: "发现受损的数据块：此设备 ${localCompromised} 个，服务器 ${remoteCompromised} 个。",
     },
     "Fresh Start Wipe": {
         def: "Fresh Start Wipe",
@@ -2340,6 +2904,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Historiam missorum diarii initializa. In proxima synchronizatione, omnis res praeter eas quas hoc instrumentum accepit iterum mittetur.",
         zh: "初始化日志的已发送历史。下次同步时，除本设备已接收的项外，其余都会重新发送。",
     },
+    "Initialize done!": {
+        def: "Initialisation complete",
+        la: "Initium paratum est",
+        zh: "初始化完成",
+    },
+    Initializing: {
+        def: "Initialising",
+        la: "Initium paratur",
+        zh: "正在初始化",
+    },
     "Interval (sec)": {
         def: "Interval (sec)",
         la: "Intervallum (sec)",
@@ -2480,6 +3054,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Legacy path identity",
         la: "Identitas viarum hereditaria",
         zh: "旧版路径标识",
+    },
+    "Legacy remote configuration has been migrated to the remote configuration list.": {
+        def: "The old server configuration has been moved to the server configuration list.",
+        la: "Configuratio vetus ministratoris in indicem configurationum ministratoris translata est.",
+        zh: "旧的服务器配置已迁移到服务器配置列表。",
     },
     "Limit: {datetime} ({timestamp})": {
         def: "Limit: {datetime} ({timestamp})",
@@ -2632,6 +3211,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Recensiones veteres onerantur...",
         zh: "正在加载旧版本...",
     },
+    "local -> remote: Done": {
+        def: "This device → server: done",
+        la: "Hoc instrumentum → ministrator: factum",
+        zh: "此设备 → 服务器：完成",
+    },
+    "Local chunk backed up: new:${total.ok} ,exist:${total.exist}, error:${total.error}": {
+        def: "Chunks on this device backed up: new ${total.ok}, existing ${total.exist}, errors ${total.error}",
+        la: "Frusta huius instrumenti servata: nova ${total.ok}, iam exstantia ${total.exist}, errores ${total.error}",
+        zh: "此设备的数据块已备份：新增 ${total.ok}，已存在 ${total.exist}，错误 ${total.error}",
+    },
+    "Local Database could not be reinitialised after reset.": {
+        def: "This device's database could not be initialised again after the reset.",
+        la: "Basis datorum huius instrumenti post restitutionem denuo initiari non potuit.",
+        zh: "重置后无法重新初始化此设备的数据库。",
+    },
+    "Local Database Reset": {
+        def: "Reset this device's database",
+        la: "Basis datorum huius instrumenti restituitur",
+        zh: "重置此设备的数据库",
+    },
     "Local Database Tweak": {
         def: "Local Database Tweak",
         la: "Accommodatio repositorii localis",
@@ -2767,6 +3366,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Confla",
         zh: "合并",
     },
+    "Merge: Something went wrong: ${filename}, (${String(toDelete)})": {
+        def: "Merge failed: ${filename} (${String(toDelete)})",
+        la: "Coniunctio defecit: ${filename} (${String(toDelete)})",
+        zh: "合并失败：${filename}（${String(toDelete)}）",
+    },
+    "Merge: Something went wrong: ${filename}, (${toDelete})": {
+        def: "Merge failed: ${filename} (${toDelete})",
+        la: "Coniunctio defecit: ${filename} (${toDelete})",
+        zh: "合并失败：${filename}（${toDelete}）",
+    },
+    "Merged content cannot be stored:${path}": {
+        def: "Merged content could not be stored: ${path}",
+        la: "Contentum coniunctum servari non potuit: ${path}",
+        zh: "无法保存合并后的内容：${path}",
+    },
     "Minimum delay for batch database updating": {
         def: "Minimum delay for batch database updating",
         la: "Minima mora renovationis repositorii acervatim",
@@ -2776,6 +3390,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Minimum interval for syncing",
         la: "Minimum intervallum synchronizationis",
         zh: "同步最小间隔",
+    },
+    "Missing document content!, could not read ${dispFilename}(${meta._id.substring(0, 8)}) from database.": {
+        def: "Document content is missing; could not read ${dispFilename} (${meta._id.substring(0, 8)}) from the database.",
+        la: "Contentum documenti deest; ${dispFilename} (${meta._id.substring(0, 8)}) ex basi datorum legi non potuit.",
+        zh: "文档内容缺失，无法从数据库读取 ${dispFilename}（${meta._id.substring(0, 8)}）。",
     },
     Mixed: {
         def: "Mixed",
@@ -3173,19 +3792,19 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "修复",
     },
     "moduleMigration.fix0256.message": {
-        def: 'Due to a recent bug (in v0.25.6), some files may not have been saved correctly in the sync database.\nWe have scanned our files and found some that need to be fixed.\n\n**Files ready to be fixed:**\n\n${files}\n\nThese files have size-matched original file on the storage, and are likely to be recoverable.\nWe can use them to fix the database, please click the "Fix" button below to fix them.\n\n${messageUnrecoverable}\n\nIf you want to run it again, you can do so from Hatch.\n',
-        la: "Propter vitium recens (in v0.25.6), aliquae plicae in repositorio synchronizationis fortasse non recte servatae sunt.\nPlicas nostras perscrutati sumus et aliquas invenimus quae corrigendae sunt.\n\n**Plicae corrigendae paratae:**\n\n${files}\n\nHae plicae plicam originalem eiusdem magnitudinis in repositorio habent, et verisimiliter restitui possunt.\nEis uti possumus ad repositorium corrigendum; quaeso preme puncto “Corrige” infra ut eas corrigas.\n\n${messageUnrecoverable}\n\nSi iterum currere vis, ex Hatch facere potes.\n",
-        zh: "由于最近的一个 bug（在 v0.25.6 版本中），某些文件可能未正确保存到同步数据库中\n我们已经扫描了文件，并发现一些需要修复的文件\n\n**准备修复的文件:**\n\n${files}\n\n这些文件在存储中与原文件的大小匹配，可能是可恢复的\n我们可以使用它们修复数据库，请点击下方的“修复”按钮进行修复\n\n${messageUnrecoverable}\n\n\n如果你希望再次执行此操作，可以前往 Hatch 页面进行操作\n",
+        def: 'Some notes were not saved completely in the synchronisation data.\n\n**Can be fixed from this device:**\n\n${files}\n\nThese files on this device have the expected size, so they can be used to repair the synchronisation data. Choose "Fix" to repair them.\n\n${messageUnrecoverable}\n\nTo check again later: Settings, Tabularium, Maintenance, Find incomplete files.\n',
+        la: "Aliquae notae in datis synchronizationis non integre servatae sunt.\n\n**Ex hoc instrumento corrigi possunt:**\n\n${files}\n\nHi fasciculi in hoc instrumento magnitudinem exspectatam habent, itaque data synchronizationis reficere possunt. 'Corrige' elige.\n\n${messageUnrecoverable}\n\nUt postea iterum inspicias: Optiones, Tabularium, Cura, Fasciculos imperfectos quaerere.\n",
+        zh: "部分笔记在同步数据中没有完整保存。\n\n**可以用这台设备修复：**\n\n${files}\n\n这些文件在本机的大小与预期一致，可以用来修复同步数据。点「修复」即可。\n\n${messageUnrecoverable}\n\n以后要再次检查：设置 → Tabularium → 维护 → 查找不完整的文件。\n",
     },
     "moduleMigration.fix0256.messageUnrecoverable": {
-        def: "**Files cannot be fixed on this device:**\n\n${filesNotRecoverable}\n\nThese files have inconsistent metadata, and cannot be fixed on this device (mostly we cannot determine which is correct).\nTo restore them, please check your other devices (also by this feature) or restore them manually from a backup.\n",
-        la: "**Plicae quae in hoc instrumento corrigi non possunt:**\n\n${filesNotRecoverable}\n\nHae plicae metadata inconstantia habent nec in hoc instrumento corrigi possunt (plerumque statuere non possumus quae recta sint).\nUt eas restituas, quaeso alia instrumenta tua inspice (etiam hac facultate) vel eas manu ex exemplo tutelari restitue.\n",
-        zh: "**无法在此设备上修复的文件:**\n\n${filesNotRecoverable}\n\n这些文件的元数据不一致，无法在此设备上修复（大多数情况下我们无法确定哪一个是正确的）\n要恢复它们，请检查你的其他设备（同样使用此功能），或从备份中手动恢复\n",
+        def: "**Cannot be fixed from this device:**\n\n${filesNotRecoverable}\n\nIt is not clear which copy of these is correct. Check them on your other devices with the same maintenance action, or restore them from a backup.\n",
+        la: "**Ex hoc instrumento corrigi non possunt:**\n\n${filesNotRecoverable}\n\nNon liquet quod exemplar horum rectum sit. In aliis instrumentis eadem cura inspice, vel ex exemplo tutelari restitue.\n",
+        zh: "**无法用这台设备修复：**\n\n${filesNotRecoverable}\n\n无法确定这些文件的哪一份是正确的。请在其他设备上用同样的维护操作检查，或从备份恢复。\n",
     },
     "moduleMigration.fix0256.title": {
-        def: "Broken files has been detected",
-        la: "Plicae corruptae detectae sunt",
-        zh: "检测到损坏的文件",
+        def: "Incomplete notes found",
+        la: "Notae imperfectae inventae",
+        zh: "发现不完整的笔记",
     },
     "moduleMigration.insecureChunkExist.buttons.fetch": {
         def: "I already rebuilt the remote. Fetch from the remote",
@@ -3342,6 +3961,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomen",
         zh: "名称",
     },
+    "Network is offline": {
+        def: "The network is offline",
+        la: "Rete abest",
+        zh: "网络已断开",
+    },
     "Network warning style": {
         def: "Network warning style",
         la: "Modus monitorum retis",
@@ -3367,6 +3991,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Sequens",
         zh: "下一步",
     },
+    "No active replicator found": {
+        def: "No synchronisation is set up",
+        la: "Nulla synchronizatio constituta est",
+        zh: "没有设置同步",
+    },
+    "No active replicator found when trying to reset remote database.": {
+        def: "No active synchronisation connection was found while resetting the server's database.",
+        la: "Dum basis datorum ministratoris restituitur, nulla conexio synchronizationis activa inventa est.",
+        zh: "重置服务器数据库时未找到活动的同步连接。",
+    },
     "No checks have been performed yet.": {
         def: "No checks have been performed yet.",
         la: "Nullae probationes adhuc factae sunt.",
@@ -3382,6 +4016,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nulla conexio",
         zh: "未连接",
     },
+    "No data to save in ${dispFilename}!! This document may be corrupted in the local database! Please back it up immediately, and report an issue!":
+        {
+            def: "No data to save in ${dispFilename}. This document may be corrupted in this device's database. Back it up immediately and report the issue.",
+            la: "In ${dispFilename} nulla data servanda sunt. Hoc documentum in basi datorum huius instrumenti fortasse corruptum est. Statim exemplar tutum fac et rem nuntia.",
+            zh: "${dispFilename} 中没有可保存的数据。此文档在此设备的数据库中可能已损坏。请立即备份，并报告此问题。",
+        },
     "No devices available. Waiting for other devices to connect...": {
         def: "No devices available. Waiting for other devices to connect...",
         la: "Nulla instrumenta praesto. Exspectatur dum alia instrumenta conectantur...",
@@ -3397,10 +4037,20 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nullus limes constitutus",
         zh: "未配置限制",
     },
+    "No passphrase found for data.json! Verify configuration before syncing.": {
+        def: "No passphrase found for data.json. Check the configuration before synchronising.",
+        la: "Nulla sententia arcana pro data.json inventa est. Ante synchronizationem configurationem inspice.",
+        zh: "未找到 data.json 的密码短语。同步前请检查配置。",
+    },
     "NO PREVIEW": {
         def: "NO PREVIEW",
         la: "NULLA PRAEVISIO",
         zh: "无预览",
+    },
+    "No unreferenced chunks! ${info.db_name}": {
+        def: "No unreferenced chunks in ${info.db_name}.",
+        la: "Nulla frusta non relata in ${info.db_name}.",
+        zh: "${info.db_name} 中没有未被引用的数据块。",
     },
     "No, please take me back": {
         def: "No, please take me back",
@@ -3484,6 +4134,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Numerus mutationum simul synchronizandarum. Praedefinitum est 50. Minimum est 2.",
         zh: "一次同步的更改数量。默认为 50。最小为 2。",
     },
+    "Number of unreferenced chunks on ${info.db_name}: ${chunks.length}": {
+        def: "Unreferenced chunks in ${info.db_name}: ${chunks.length}",
+        la: "Frusta non relata in ${info.db_name}: ${chunks.length}",
+        zh: "${info.db_name} 中未被引用的数据块：${chunks.length}",
+    },
     "Obfuscate Properties": {
         def: "Obfuscate Properties",
         la: "Obscura proprietates",
@@ -3499,6 +4154,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Obsidian version",
         la: "Versio Obsidian",
         zh: "Obsidian 版本",
+    },
+    "Obsidian will be restarted soon! (Within ${stableCheck} seconds)": {
+        def: "Obsidian will restart within ${stableCheck} seconds.",
+        la: "Obsidian intra ${stableCheck} secunda denuo incipiet.",
+        zh: "Obsidian 将在 ${stableCheck} 秒内重启。",
     },
     "obsidianLiveSyncSettingTab.btnApply": {
         def: "Apply",
@@ -4465,6 +5125,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "In hoc instrumento, ad applicationem camerae transi vel lectore QR codicum utere ut codicem QR monstratum legas.",
         zh: "在本设备上切换到相机应用，或使用二维码扫描器扫描显示的二维码。",
     },
+    "Only an ordinary valid Vault path can be restored from Document History.": {
+        def: "Only a valid, ordinary vault path can be restored from Document History.",
+        la: "Ex Historia documenti restitui potest sola via ordinaria et valida in tabulario.",
+        zh: "只有普通且有效的库路径才能从文档历史记录中恢复。",
+    },
     "Only Fetch": {
         def: "Only Fetch",
         la: "Arcesse tantum",
@@ -4815,6 +5480,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Pares",
         zh: "对等方",
     },
+    "Pending file events remain because their commit did not complete before the window visibility changed.": {
+        def: "Pending file events remain because their commit did not complete before the window visibility changed.",
+        la: "Eventa fasciculorum pendentia manent, quia consignari non potuerunt antequam visibilitas fenestrae mutaretur.",
+        zh: "窗口可见状态改变前，待处理的文件事件未能提交完毕，因此仍在等待处理。",
+    },
     "Per-file-saved customization sync": {
         def: "Per-file-saved customization sync",
         la: "Synchronizatio optionum propriarum per singulas plicas servata",
@@ -4988,6 +5658,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Para 'relationem' ad quaestionem (issue) creandam",
         zh: "准备 '报告' 以创建问题单",
     },
+    "Preserved ${path}: a current storage item contradicts its deletion event": {
+        def: "Kept ${path}: an item now in the vault contradicts its deletion event",
+        la: "${path} servatus est: res praesens in tabulario eventui deletionis repugnat",
+        zh: "已保留 ${path}：库中现有的项目与其删除事件矛盾",
+    },
+    "Preserved ${path}: rename target ${targetPath} is still selected": {
+        def: "Kept ${path}: the rename target ${targetPath} is still selected",
+        la: "${path} servatus est: nomen novum ${targetPath} adhuc electum est",
+        zh: "已保留 ${path}：重命名目标 ${targetPath} 仍处于选中状态",
+    },
+    "Preserved ${path}: the rename target no longer resolves to ${targetPath}": {
+        def: "Kept ${path}: the rename target no longer resolves to ${targetPath}",
+        la: "${path} servatus est: nomen novum iam ad ${targetPath} non spectat",
+        zh: "已保留 ${path}：重命名目标不再指向 ${targetPath}",
+    },
+    "Preserved unsynchronised local changes as a conflict for ${path}": {
+        def: "Kept unsynchronised changes to ${path} on this device as a conflict",
+        la: "Mutationes fasciculi ${path} in hoc instrumento nondum synchronizatae ut conflictus servatae sunt",
+        zh: "已将 ${path} 在这台设备上尚未同步的更改保留为冲突",
+    },
     Presets: {
         def: "Presets",
         la: "Praeconstituta",
@@ -4997,6 +5687,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Prevent fetching configuration from server",
         la: "Prohibe ne configuratio ex ministratore arcessatur",
         zh: "阻止从服务器获取配置",
+    },
+    "Prevented overwriting unsynchronised local changes for ${path}": {
+        def: "Did not overwrite unsynchronised changes to ${path} on this device",
+        la: "Mutationes fasciculi ${path} in hoc instrumento nondum synchronizatae non superscriptae sunt",
+        zh: "已阻止覆盖 ${path} 在这台设备上尚未同步的更改",
     },
     Proceed: {
         def: "Proceed",
@@ -5033,6 +5728,22 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tracta parvas plicas in proscaenio",
         zh: "在前台处理小文件",
     },
+    'Processed database active-size: ${sizeToHumanReadable(\n        getSize(endInfo, "active")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(endInfo, "external")\n      )}, file-size: ${sizeToHumanReadable(getSize(endInfo, "file"))}':
+        {
+            def: 'Database after processing: active size: ${sizeToHumanReadable(\n        getSize(endInfo, "active")\n      )}, external size: ${sizeToHumanReadable(\n        getSize(endInfo, "external")\n      )}, file size: ${sizeToHumanReadable(getSize(endInfo, "file"))}',
+            la: 'Basis datorum post tractationem, magnitudo activa: ${sizeToHumanReadable(\n        getSize(endInfo, "active")\n      )}, externa: ${sizeToHumanReadable(\n        getSize(endInfo, "external")\n      )}, fasciculi: ${sizeToHumanReadable(getSize(endInfo, "file"))}',
+            zh: '处理后的数据库：活动大小：${sizeToHumanReadable(\n        getSize(endInfo, "active")\n      )}，外部大小：${sizeToHumanReadable(\n        getSize(endInfo, "external")\n      )}，文件大小：${sizeToHumanReadable(getSize(endInfo, "file"))}',
+        },
+    "Processing ${docPath} has been skipped due to file size exceeding the limit": {
+        def: "Skipped ${docPath} because the file exceeds the size limit.",
+        la: "${docPath} praeteritus est, quia fasciculus modum magnitudinis excedit.",
+        zh: "已跳过 ${docPath}，因为文件超过大小限制。",
+    },
+    "Processing: ${processedCount}/${pairs.length}": {
+        def: "Processing: ${processedCount}/${pairs.length}",
+        la: "Tractantur: ${processedCount}/${pairs.length}",
+        zh: "正在处理：${processedCount}/${pairs.length}",
+    },
     Progress: {
         def: "Progress",
         la: "Progressus",
@@ -5058,6 +5769,36 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Purga omnes numeratores diarii",
         zh: "清除所有日志计数器",
     },
+    "Purging unused ${docs.length} chunks ": {
+        def: "Purging ${docs.length} unused chunks",
+        la: "${docs.length} frusta non adhibita purgantur",
+        zh: "正在清除 ${docs.length} 个未使用的数据块",
+    },
+    "Purging unused ${docs.length} chunks... ": {
+        def: "Purging ${docs.length} unused chunks...",
+        la: "${docs.length} frusta non adhibita purgantur...",
+        zh: "正在清除 ${docs.length} 个未使用的数据块……",
+    },
+    "Purging unused chunks done!: ${totalRemoved} chunks has been deleted.": {
+        def: "Purging unused chunks done: ${totalRemoved} chunks deleted.",
+        la: "Purgatio frustorum non adhibitorum facta est: ${totalRemoved} frusta deleta.",
+        zh: "未使用的数据块已清除：删除了 ${totalRemoved} 个数据块。",
+    },
+    "Purging:  ${totalRemoved} / ${docs.length}": {
+        def: "Purging: ${totalRemoved} / ${docs.length}",
+        la: "Purgatio: ${totalRemoved} / ${docs.length}",
+        zh: "正在清除：${totalRemoved} / ${docs.length}",
+    },
+    "PUT: FAILED: ${path}": {
+        def: "Write failed: ${path}",
+        la: "Scriptio defecit: ${path}",
+        zh: "写入失败：${path}",
+    },
+    "QR Code size exceeded, switching to aggregator mode": {
+        def: "QR code size exceeded; switching to aggregator mode.",
+        la: "Magnitudo codicis QR excessa est; ad modum aggregationis transitur.",
+        zh: "二维码超出大小限制，改用聚合模式。",
+    },
     "Reboot to re-run the process": {
         def: "Reboot to re-run the process",
         la: "Denuo incipe ut processus iterum curratur",
@@ -5067,6 +5808,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Rebuild local and remote database with local files.",
         la: "Reaedifica repositorium locale et remotum plicis localibus.",
         zh: "使用本地文件重建本地和远端数据库。",
+    },
+    "Rebuilding has been refused: remediation mode is active. Clear the modification-time limit to rebuild.": {
+        def: "Rebuild refused: remediation mode is active. Clear the modification-time limit to rebuild.",
+        la: "Refectio recusata est: modus remedii activus est. Finem temporis mutationis remove ut reficias.",
+        zh: "已拒绝重建：修复模式已开启。请清除修改时间限制后再重建。",
     },
     "Rebuilding Operations (Remote Only)": {
         def: "Rebuilding Operations (Remote Only)",
@@ -5288,6 +6034,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Omnes operationes ex SCRAM suspensae sunt.\nActa in plicam inscribentur. Hoc effectum minuere potest.",
         zh: "根据 SCRAM，所有操作已暂停。\n日志将写入文件，这可能会影响性能。",
     },
+    'Reduced sizes: active-size: ${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}':
+        {
+            def: 'Reduced by: active size: ${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}, external size: ${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}, file size: ${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}',
+            la: 'Deminutio, magnitudo activa: ${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}, externa: ${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}, fasciculi: ${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}',
+            zh: '减少量：活动大小：${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}，外部大小：${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}，文件大小：${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}',
+        },
     "Reduces storage space by discarding all non-latest revisions. This requires the same amount of free space on the remote server and the local client.":
         {
             def: "Reduces storage space by discarding all non-latest revisions. This requires the same amount of free space on the remote server and the local client.",
@@ -5303,6 +6055,22 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Refresh",
         la: "Renova",
         zh: "刷新",
+    },
+    "Refusing to apply a filename case change across differently cased parent directories: ${existDoc.path} -> ${path}":
+        {
+            def: "Refusing to change the filename case because the parent folders differ in case: ${existDoc.path} -> ${path}",
+            la: "Mutatio litterarum maiuscularum vel minuscularum in nomine fasciculi non applicatur, quia capsae parentes litteris diversis scriptae sunt: ${existDoc.path} -> ${path}",
+            zh: "父文件夹的大小写不同，拒绝更改文件名大小写：${existDoc.path} -> ${path}",
+        },
+    "Refusing to overwrite ${existDoc.path} while applying the distinct path ${path}": {
+        def: "Refusing to overwrite ${existDoc.path} while applying the different path ${path}",
+        la: "Dum via diversa ${path} applicatur, ${existDoc.path} non superscribitur",
+        zh: "应用另一路径 ${path} 时，拒绝覆盖 ${existDoc.path}",
+    },
+    "Refusing to overwrite the existing database entry while renaming ${oldPath} to ${newPath}": {
+        def: "Refusing to overwrite the existing database entry while renaming ${oldPath} to ${newPath}",
+        la: "Dum ${oldPath} in ${newPath} renominatur, inscriptio exstans in basi datorum non superscribitur",
+        zh: "将 ${oldPath} 重命名为 ${newPath} 时，拒绝覆盖数据库中已有的条目",
     },
     Region: {
         def: "Region",
@@ -5324,10 +6092,30 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Remedium",
         zh: "修复设置",
     },
+    "Remediation mode is active, so the detailed fetch flow is used instead of Simple Fetch.": {
+        def: "Remediation mode is active, so the detailed fetch is used instead of the simple fetch.",
+        la: "Modus remedii activus est; itaque acceptio accurata pro acceptione simplici adhibetur.",
+        zh: "修正模式已启用，因此改用详细获取，而不是简单获取。",
+    },
+    "Remediation mode: the files in storage are not stored in the database before fetching.": {
+        def: "Remediation mode: files in the vault are not saved to the database before fetching.",
+        la: "Modus remedii: fasciculi tabularii ante acceptionem in basi datorum non servantur.",
+        zh: "修复模式：获取前不会把库中的文件存入数据库。",
+    },
     "Remediation Setting Changed": {
         def: "Remediation Setting Changed",
         la: "Optio remedii mutata",
         zh: "修复设置已更改",
+    },
+    "remote -> local: Done": {
+        def: "Server → this device: done",
+        la: "Ministrator → hoc instrumentum: factum",
+        zh: "服务器 → 此设备：完成",
+    },
+    "Remote configuration '${id}' had a plain-text URI marked as encrypted. The flag has been repaired.": {
+        def: "Server configuration '${id}' had a plain-text URI marked as encrypted. The flag has been repaired.",
+        la: "Configuratio ministratoris “${id}” URI textus aperti ut cryptatum notatum habebat. Nota correcta est.",
+        zh: "服务器配置“${id}”的明文 URI 被错误地标记为已加密，该标记已修正。",
     },
     "Remote Database Tweak (In sunset)": {
         def: "Remote Database Tweak (In sunset)",
@@ -5364,6 +6152,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Renomina",
         zh: "重命名",
     },
+    "Renamed ${oldPath} to ${newPath}, but preserved every conflicted source branch because the displayed source revision is unknown":
+        {
+            def: "Renamed ${oldPath} to ${newPath}, but kept every conflicted branch of the original because the revision it showed is unknown",
+            la: "${oldPath} in ${newPath} renominatus est, sed omnes rami fontis in conflictu servati sunt, quia revisio fontis ostensa ignota est",
+            zh: "已将 ${oldPath} 重命名为 ${newPath}，但由于不知道原文件显示的是哪个修订，保留了原文件所有存在冲突的分支",
+        },
     "Replicate now": {
         def: "Replicate now",
         la: "Replica nunc",
@@ -5388,6 +6182,46 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Replicating...",
         la: "Replicatio fit...",
         zh: "复制中…",
+    },
+    "Replication activated": {
+        def: "Synchronisation started",
+        la: "Synchronizatio incepit",
+        zh: "同步已开始",
+    },
+    "Replication callback error": {
+        def: "Synchronisation callback error",
+        la: "Erratum in functione revocationis synchronizationis",
+        zh: "同步回调出错",
+    },
+    "Replication completed": {
+        def: "Synchronisation completed",
+        la: "Synchronizatio perfecta",
+        zh: "同步完成",
+    },
+    "Replication denied": {
+        def: "Synchronisation was denied",
+        la: "Synchronizatio recusata est",
+        zh: "同步被拒绝",
+    },
+    "Replication error": {
+        def: "Synchronisation error",
+        la: "Erratum synchronizationis",
+        zh: "同步出错",
+    },
+    "Replication has been cancelled. Please try it again.": {
+        def: "Synchronisation was cancelled. Try again.",
+        la: "Synchronizatio abrogata est. Iterum conare.",
+        zh: "同步已取消，请重试。",
+    },
+    "Replication stopped for busy.": {
+        def: "Synchronisation paused because the server is busy.",
+        la: "Synchronizatio suspensa est, quia ministrator occupatus est.",
+        zh: "服务器繁忙，同步已暂停。",
+    },
+    "Replication stopped.": {
+        def: "Synchronisation stopped.",
+        la: "Synchronizatio cessavit.",
+        zh: "同步已停止。",
     },
     "Replicator.Dialogue.Locked.Action.Dismiss": {
         def: "Cancel for reconfirmation",
@@ -5570,6 +6404,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Solve si discrepat",
         zh: "如有冲突则解决",
     },
+    "Resolving conflicts by newer ones": {
+        def: "Resolving conflicts with the newer versions",
+        la: "Conflictus recentioribus versionibus solvuntur",
+        zh: "正在用较新的版本解决冲突",
+    },
     "Restart and Fetch Data": {
         def: "Restart and Fetch Data",
         la: "Denuo incipe et data arcesse",
@@ -5595,6 +6434,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Restore or reconstruct local database from remote.",
         la: "Restitue vel reconstrue repositorium locale ex remoto.",
         zh: "从远端恢复或重建本地数据库。",
+    },
+    "Restoring the selected revision failed before Vault reflection completed. Review the file with 'Inspect conflicts and file/database differences' before retrying.":
+        {
+            def: "Restoring the selected revision failed before it was written to the vault. Check the file before retrying.",
+            la: "Restitutio revisionis selectae defecit antequam in tabularium scriberetur. Fasciculum inspice antequam iterum conaris.",
+            zh: "所选修订在写入库之前恢复失败。请先检查该文件，再重试。",
+        },
+    "Resuming fast database fetch from sequence: ${checkpoint.sequence}": {
+        def: "Resuming fast database fetch from sequence ${checkpoint.sequence}",
+        la: "Acceptio celeris basis datorum a sequentia ${checkpoint.sequence} resumitur",
+        zh: "从序号 ${checkpoint.sequence} 继续快速获取数据库",
     },
     Rev: {
         def: "Rev",
@@ -5859,6 +6709,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Selective",
         la: "Selectivum",
         zh: "选择性",
+    },
+    "Self-hosted LiveSync cannot be initialised, exiting loading.": {
+        def: "Tabularium could not be initialised; loading has stopped.",
+        la: "Additamentum Tabularium initiari non potuit; oneratio desiit.",
+        zh: "Tabularium 无法初始化，已停止加载。",
     },
     "Self-hosted LiveSync has paused remote synchronisation for compatibility review.": {
         def: "Tabularium has paused remote synchronisation for compatibility review.",
@@ -6460,6 +7315,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Status signorum",
         zh: "信令状态",
     },
+    "Simple fetch and scan operation completed.": {
+        def: "Fetch and scan completed.",
+        la: "Acceptio et perscrutatio perfectae sunt.",
+        zh: "获取和扫描已完成。",
+    },
     "Since you have chosen to overwrite all local files with remote data, **how would you like to handle local files that are not present in the remote database?**\n\n- **${DELETE_ALL}**: Local-only files and remote-deleted files will be removed.\n  This option will make your local vault exactly the same as the remote database, but please make sure you have a backup if there is any important data in your vault.\n- **${DELETE_NONE}**: All existing local files will be preserved.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.":
         {
             def: "Since you have chosen to overwrite all local files with remote data, **how would you like to handle local files that are not present in the remote database?**\n\n- **${DELETE_ALL}**: Local-only files and remote-deleted files will be removed.\n  This option will make your local vault exactly the same as the remote database, but please make sure you have a backup if there is any important data in your vault.\n- **${DELETE_NONE}**: All existing local files will be preserved.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.",
@@ -6486,6 +7346,31 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Some files failed to synchronise. What would you like to do?",
         la: "Quaedam plicae synchronizari non potuerunt. Quid facere vis?",
         zh: "部分文件同步失败。你想怎么做？",
+    },
+    "Some module has prevented the database from being ready. The database is initialised but not ready for use.": {
+        def: "A module prevented the database from becoming ready. The database is initialised but not ready for use.",
+        la: "Modulus quidam impedivit ne basis datorum parata fieret. Basis datorum initiata est, sed ad usum nondum parata.",
+        zh: "某个模块阻止了数据库就绪。数据库已初始化，但还不能使用。",
+    },
+    "Some requested chunks were not found in the remote database.": {
+        def: "Some requested data chunks were not found on the server.",
+        la: "Quaedam frusta petita in ministratore non inventa sunt.",
+        zh: "服务器上找不到部分请求的数据块。",
+    },
+    "Something went wrong during synchronisation. Please check the log!": {
+        def: "Something went wrong during synchronisation. Please check the log.",
+        la: "Aliquid in synchronizatione erravit. Acta inspice.",
+        zh: "同步时出错，请查看日志。",
+    },
+    "Something went wrong on balancing!": {
+        def: "Error while balancing.",
+        la: "Error in aequando.",
+        zh: "平衡时出错。",
+    },
+    "Something went wrong on reading ${dispFilename}(${meta._id.substring(0, 8)}) from database:": {
+        def: "Error while reading ${dispFilename} (${meta._id.substring(0, 8)}) from the database:",
+        la: "Error in ${dispFilename} (${meta._id.substring(0, 8)}) ex basi datorum legendo:",
+        zh: "从数据库读取 ${dispFilename}（${meta._id.substring(0, 8)}）时出错：",
     },
     "Start Broadcasting": {
         def: "Start Broadcasting",
@@ -6547,6 +7432,41 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium plicarum -> Repositorium datorum",
         zh: "存储 → 数据库",
     },
+    "STORAGE -> DB : ${file.path} has been skipped due to file size exceeding the limit": {
+        def: "STORAGE -> DB: skipped ${file.path} because it exceeds the size limit",
+        la: "Fasciculi -> basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit",
+        zh: "存储 -> 数据库：${file.path} 超过大小上限，已跳过",
+    },
+    "STORAGE ? DB : ${file.path} has been skipped due to file size exceeding the limit": {
+        def: "STORAGE ? DB: skipped ${file.path} because it exceeds the size limit",
+        la: "Fasciculi ? basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit",
+        zh: "存储 ? 数据库：${file.path} 超过大小上限，已跳过",
+    },
+    "STORAGE ? DB : Could not reconcile ${file.path}": {
+        def: "STORAGE ? DB: could not reconcile ${file.path}",
+        la: "Fasciculi ? basis datorum: ${file.path} conciliari non potuit",
+        zh: "存储 ? 数据库：无法协调 ${file.path}",
+    },
+    "STORAGE <- DB : ${file.path} has been skipped due to file size exceeding the limit": {
+        def: "STORAGE <- DB: skipped ${file.path} because it exceeds the size limit",
+        la: "Fasciculi <- basis datorum: ${file.path} praetermissus est, quia magnitudinem finitam excedit",
+        zh: "存储 <- 数据库：${file.path} 超过大小上限，已跳过",
+    },
+    "STORAGE <- DB : Cloud not read ${file.path}, possibly deleted": {
+        def: "STORAGE <- DB: could not read ${file.path}; it may have been deleted",
+        la: "Fasciculi <- basis datorum: ${file.path} legi non potuit; fortasse deletus est",
+        zh: "存储 <- 数据库：无法读取 ${file.path}，可能已被删除",
+    },
+    "Storage kept changing while saving ${path}; a fresh event is required": {
+        def: "${path} kept changing in the vault while being saved; a new change event is required",
+        la: "${path} dum servatur in tabulario mutari non desiit; novus eventus mutationis requiritur",
+        zh: "保存 ${path} 时文件仍在不断变化，需要新的变更事件",
+    },
+    "Storage operation remains pending after a failure": {
+        def: "A storage operation is still pending after a failure.",
+        la: "Operatio repositorii post defectum adhuc pendet.",
+        zh: "存储操作失败后仍在等待处理。",
+    },
     "Strongly Recommended": {
         def: "Strongly Recommended",
         la: "Valde commendatur",
@@ -6567,6 +7487,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Suspende observationem plicarum",
         zh: "暂停文件监视",
     },
+    "Suspending reflection: Database and storage changes will not be reflected in each other until completely finished the fetching.":
+        {
+            def: "Pausing reflection: changes in the database and in the vault will not be applied to each other until fetching has finished.",
+            la: "Reflexio suspenditur: mutationes basis datorum et tabularii inter se non applicabuntur donec acceptio perfecta sit.",
+            zh: "暂停相互应用：获取完成前，数据库与库中文件的更改不会互相应用。",
+        },
     "Switch to IDB": {
         def: "Switch to IDB",
         la: "Transi ad IDB",
@@ -6627,6 +7553,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchroniza semel",
         zh: "同步一次",
     },
+    "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)":
+        {
+            def: "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)",
+            la: "Synchronizatio perfecta: ${processedCount} fasciculi tractati (${completedCount} perfecti, ${skippedCount} omissi, ${failedCount} errores)",
+            zh: "同步完成：处理了 ${processedCount} 个文件（完成 ${completedCount}，跳过 ${skippedCount}，出错 ${failedCount}）",
+        },
     "Synchronisation Issues Detected": {
         def: "Synchronisation Issues Detected",
         la: "Difficultates synchronizationis detectae",
@@ -6651,6 +7583,146 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Syncing...",
         la: "Synchronizatio fit...",
         zh: "同步中…",
+    },
+    "tabularium.confirm.cancel": {
+        def: "Cancel",
+        la: "Abrogare",
+        zh: "取消",
+    },
+    "tabularium.confirm.typeName": {
+        def: "Type the vault name ${name} to confirm",
+        la: "Nomen tabularii ${name} scribe ut confirmes",
+        zh: "输入笔记库名称 ${name} 以确认",
+    },
+    "tabularium.conflict.base": {
+        def: "This version",
+        la: "Haec versio",
+        zh: "这个版本",
+    },
+    "tabularium.conflict.conflicted": {
+        def: "The other version",
+        la: "Altera versio",
+        zh: "另一个版本",
+    },
+    "tabularium.conflict.databaseRevision": {
+        def: "Synchronised copy",
+        la: "Exemplar synchronizatum",
+        zh: "同步副本",
+    },
+    "tabularium.conflict.deleted": {
+        def: "deleted",
+        la: "deleta",
+        zh: "已删除",
+    },
+    "tabularium.conflict.later": {
+        def: "Decide later",
+        la: "Postea statuere",
+        zh: "稍后处理",
+    },
+    "tabularium.conflict.local": {
+        def: "This device",
+        la: "Hoc instrumentum",
+        zh: "这台设备",
+    },
+    "tabularium.conflict.next": {
+        def: "Next difference",
+        la: "Differentia sequens",
+        zh: "下一处差异",
+    },
+    "tabularium.conflict.pick": {
+        def: "Choose a version",
+        la: "Versionem elige",
+        zh: "选择一个版本",
+    },
+    "tabularium.conflict.previous": {
+        def: "Previous difference",
+        la: "Differentia prior",
+        zh: "上一处差异",
+    },
+    "tabularium.conflict.remote": {
+        def: "Other device",
+        la: "Aliud instrumentum",
+        zh: "其他设备",
+    },
+    "tabularium.conflict.title": {
+        def: "Conflicting changes",
+        la: "Mutationes inter se pugnant",
+        zh: "修改有冲突",
+    },
+    "tabularium.conflict.tooLarge": {
+        def: "The differences are too large to show.",
+        la: "Differentiae nimis magnae sunt ut ostendantur.",
+        zh: "差异太大，无法显示。",
+    },
+    "tabularium.conflict.vaultAndDatabase": {
+        def: "File and synchronised copy",
+        la: "Fasciculus et exemplar synchronizatum",
+        zh: "文件与同步副本",
+    },
+    "tabularium.conflict.vaultFile": {
+        def: "File in the vault",
+        la: "Fasciculus in tabulario",
+        zh: "库中的文件",
+    },
+    "tabularium.help.connect.body": {
+        def: "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, name this device, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect forgets the connection on this device only; the device stays listed on the server until it is removed there.\n\nDevice credentials last 30 days and renew themselves while the device is used.",
+        la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et sententiam arcanam tabularii scribe.\n\nTabularium exstans primum ad hoc instrumentum accipitur; novum ex fasciculis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere conexionem in hoc tantum instrumento obliviscitur.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
+        zh: "打开「连接」，用 Tabularium 服务器上的账户登录。选择已有的笔记库或新建一个，填写设备名和笔记库的密码短语。\n\n已有的笔记库会先下载到这台设备；新建的笔记库由这台设备的文件填充。换用其他笔记库时点「重新登录或换笔记库」。「断开」只让这台设备忘记连接，服务器上的设备记录要在网页上删除。\n\n设备凭据有效期 30 天，设备在使用时会自动续期。",
+    },
+    "tabularium.help.connect.title": {
+        def: "Connecting and changing vaults",
+        la: "Coniungere et tabularium mutare",
+        zh: "连接与更换笔记库",
+    },
+    "tabularium.help.errors.body": {
+        def: "Credentials no longer valid: the device was removed on the server or its credentials expired. Sign in again.\n\nEncryption settings refused: this device's settings differ from the vault's. Disconnect and connect again.\n\nA rebuild is in progress: wait until the owner ends it on the web.\n\nA note does not synchronise: check the size limit and the excluded files under Sync, and look in the log.\n\nThe first synchronisation of a large vault takes a while; keep Obsidian open until the status shows Up to date.",
+        la: "Tesserae non iam valent: instrumentum in ministratore remotum est vel tesserae exspiraverunt. Iterum intra.\n\nOptiones ciphrationis recusatae: optiones huius instrumenti a tabulario discrepant. Disiunge et iterum coniunge.\n\nRefectio agitur: exspecta donec dominus eam finiat.\n\nNota non synchronizatur: modum magnitudinis et fasciculos exclusos in Synchronizatione inspice, et acta lege.\n\nPrima synchronizatio magni tabularii tempus requirit; Obsidian apertum tene donec 'Synchronizatum' ostendatur.",
+        zh: "凭据失效：设备已在服务器上删除，或凭据过期。重新登录即可。\n\n加密设置被拒：这台设备的设置与笔记库不一致。断开后重新连接。\n\n正在重建：等所有者在网页上结束重建。\n\n某篇笔记不同步：检查「同步」中的大小上限和排除的文件，并查看日志。\n\n大的笔记库首次同步需要一段时间，保持 Obsidian 打开，直到状态显示「已同步」。",
+    },
+    "tabularium.help.errors.title": {
+        def: "Common problems",
+        la: "Difficultates frequentes",
+        zh: "常见问题",
+    },
+    "tabularium.help.migrate.body": {
+        def: 'Turn off the plug-in "self-hosted-livesync" in this vault before connecting Tabularium; the two must not run together. Then connect to the vault that already holds your notes on the Tabularium server, so this device fetches it.\n\nThe old plug-in\'s settings and local database are not used.',
+        la: 'Antequam Tabularium coniungis, "self-hosted-livesync" in hoc tabulario exstingue; ambo simul currere non debent. Deinde tabularium coniunge quod notas tuas in ministratore iam continet, ut hoc instrumentum id accipiat.\n\nOptiones et basis localis additamenti veteris non adhibentur.',
+        zh: "连接 Tabularium 之前，先在这个库中关闭插件「self-hosted-livesync」，两者不能同时运行。然后连接 Tabularium 服务器上已经存有你笔记的笔记库，这台设备会从服务器获取。\n\n旧插件的设置和本地数据库不会被使用。",
+    },
+    "tabularium.help.migrate.title": {
+        def: "Moving from the old plug-in",
+        la: "Ab additamento vetere migrare",
+        zh: "从旧插件迁移",
+    },
+    "tabularium.help.passphrase.body": {
+        def: "Notes are encrypted on each device with the vault's passphrase before they are sent; the server cannot read them. Every device of a vault uses the same passphrase.\n\nThe passphrase cannot be recovered. If it is lost, the notes on the server cannot be decrypted; devices that still have the files can create a new vault from them.",
+        la: "Notae in quoque instrumento sententia arcana tabularii ciphrantur antequam mittantur; ministrator eas legere non potest. Omnia instrumenta eiusdem tabularii eadem sententia utuntur.\n\nSententia recuperari non potest. Si amittitur, notae in ministratore deciphrari non possunt; instrumenta quae fasciculos habent novum tabularium ex eis creare possunt.",
+        zh: "笔记在每台设备上用笔记库的密码短语加密后才发送，服务器无法读取。同一个笔记库的所有设备使用同一个密码短语。\n\n密码短语无法找回。丢失后服务器上的笔记无法解密；仍有文件的设备可以用这些文件新建笔记库。",
+    },
+    "tabularium.help.passphrase.title": {
+        def: "The vault passphrase",
+        la: "Sententia arcana tabularii",
+        zh: "笔记库的密码短语",
+    },
+    "tabularium.help.rebuild.body": {
+        def: "A rebuild replaces the vault on the server with one device's files, for example to clean up old data. The owner authorises the device on the web (Account settings, Vaults and devices, Rebuild vault), then runs Overwrite the server with this device in Maintenance on that device.\n\nAfterwards the vault is locked. Each other device shows Vault locked and must fetch from the server. When all of them have fetched, unlock the vault here or on the web.",
+        la: "Refectio tabularium in ministratore fasciculis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.\n\nPostea tabularium clauditur. Cetera instrumenta 'Tabularium clausum' ostendunt et iterum accipere debent. Cum omnia acceperint, hic vel in pagina interretiali resera.",
+        zh: "重建用一台设备的文件替换服务器上的笔记库，例如清理旧数据。所有者先在网页（账户设置 → 笔记库与设备 → 重建笔记库）授权设备，再在那台设备的「维护」中执行「用这台设备覆盖服务器」。\n\n之后笔记库会被锁定。其他设备会显示「笔记库已锁定」，需要从服务器重新获取。都获取后，在这里或网页上解除锁定。",
+    },
+    "tabularium.help.rebuild.title": {
+        def: "Rebuilding and unlocking",
+        la: "Reficere et reserare",
+        zh: "重建与解除锁定",
+    },
+    "tabularium.help.status.body": {
+        def: "The status bar shows the connection and counters. Up to date means nothing is waiting. Changes waiting counts files that have not been sent yet; they are sent with the next synchronisation.\n\nWhen the device is offline, changes are kept and sent once it is back online. A failed synchronisation is explained in the log (Maintenance, Log).",
+        la: "Vectigal status conexionem et numeros ostendit. 'Synchronizatum' significat nihil exspectare. 'Mutationes exspectant' numerat fasciculos nondum missos, qui proxima synchronizatione mittuntur.\n\nSine rete mutationes servantur et postea mittuntur. Causa defectus in actis scribitur (Cura, Acta).",
+        zh: "状态栏显示连接状态和计数。「已同步」表示没有待处理的修改；「待处理」是还没发送的文件数，会在下次同步时发送。\n\n离线时修改会保留，恢复联网后发送。同步失败的原因记录在日志中（维护 → 日志）。",
+    },
+    "tabularium.help.status.title": {
+        def: "What the sync status means",
+        la: "Quid status synchronizationis significet",
+        zh: "同步状态的含义",
     },
     "tabularium.kindle.contents": {
         def: "Contents",
@@ -6726,6 +7798,56 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Reading the status failed (HTTP ${status}).",
         la: "Lectio status defecit (HTTP ${status}).",
         zh: "读取状态失败（HTTP ${status}）。",
+    },
+    "tabularium.release.0.12.0": {
+        def: "Tabularium names throughout the plug-in; large vaults synchronise reliably; misleading version notices removed.",
+        la: "Nomina Tabularium ubique in additamento; magna tabularia certius synchronizantur; monita versionum fallacia remota.",
+        zh: "插件中全部改用 Tabularium 的名称；大笔记库同步更可靠；去掉误导性的版本提示。",
+    },
+    "tabularium.release.0.13.0": {
+        def: "One web application: home, web notes, Tabularius and administration.",
+        la: "Una applicatio interretialis: domus, notae interretiales, Tabularius, administratio.",
+        zh: "统一的网页应用：首页、云笔记、书记员与管理。",
+    },
+    "tabularium.release.0.14.0": {
+        def: "Share a note or folder as an encrypted link from the file menu.",
+        la: "Notam vel folder ut nexum ciphratum ex indice fasciculorum communica.",
+        zh: "在文件菜单中把笔记或文件夹分享为加密链接。",
+    },
+    "tabularium.release.0.15.0": {
+        def: "Tabularius, the AI clerk, is set up on the web; web notes read like Obsidian.",
+        la: "Tabularius, scriba artificialis, in pagina interretiali constituitur; notae interretiales ut in Obsidian leguntur.",
+        zh: "书记员（Tabularius）在网页上设置；云笔记的阅读排版向 Obsidian 看齐。",
+    },
+    "tabularium.release.0.16.0": {
+        def: "The server's settings, including mail for Send to Kindle, are changed on the web.",
+        la: "Optiones ministratoris, etiam epistulae ad Kindle, in pagina interretiali mutantur.",
+        zh: "服务器设置（包括发送到 Kindle 的发信）改在网页上修改。",
+    },
+    "tabularium.release.0.17.0": {
+        def: "Tabularius answers with recipes: a model with its parameters and a prompt, set up by an administrator; conversations can adjust them.",
+        la: "Tabularius per formulas respondet: exemplar cum parametris et praecepto ab administratore constitutum; colloquia ea aptare possunt.",
+        zh: "书记员按配方回答：管理员设定的模型、参数与补充提示词组合，对话中可以微调。",
+    },
+    "tabularium.release.0.18.0": {
+        def: "New settings page arranged by use: connection, sync, file sorting, Send to Kindle, appearance, maintenance and help.\nBuilt-in help and version history in three languages.\nConfirmations say what happens and what it means for other devices.\nUpstream entries that do not apply to a Tabularium server are gone: remote configuration, setup URIs and QR codes, onboarding, hidden-file and customisation sync, P2P.",
+        la: "Nova pagina optionum ex usu disposita: conexio, synchronizatio, ordo fasciculorum, ad Kindle mittere, species, cura, auxilium.\nAuxilium et historia versionum tribus linguis.\nConfirmationes dicunt quid fiat et quid ceteris instrumentis significet.\nAditus originales qui ad ministratorem Tabularium non pertinent remoti sunt: configuratio remota, URI et codices QR, introductio, synchronizatio fasciculorum occultorum et additamentorum, P2P.",
+        zh: "新的设置页按用途分为连接、同步、文件排序、发送到 Kindle、外观、维护和帮助。\n内置三语帮助与版本历史。\n确认对话框写明会发生什么、对其他设备的影响。\n去掉了不适用于 Tabularium 服务器的原版入口：远程配置、Setup URI 与二维码、引导向导、隐藏文件与自定义同步、P2P。",
+    },
+    "tabularium.release.0.3.0": {
+        def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
+        la: "Conexio per rationem Tabularium; ad Kindle mittere; notae interretiales; tesserae sponte renovantur.",
+        zh: "用 Tabularium 账户登录连接；发送到 Kindle；云笔记；凭据自动续期。",
+    },
+    "tabularium.release.0.4.0": {
+        def: "Interface in English, Chinese and Latin; web notes can be edited.",
+        la: "Interfacies Anglice, Sinice et Latine; notae interretiales emendari possunt.",
+        zh: "界面支持英文、中文和拉丁语；云笔记可以编辑。",
+    },
+    "tabularium.release.0.5.0": {
+        def: "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",
+        la: "Tabularius, scriba artificialis, de tabulario respondet et mutationes proponit (0.5 ad 0.11).",
+        zh: "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
     },
     "tabularium.server.address": {
         def: "Server address",
@@ -6992,6 +8114,491 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tabularium nondum paratum est. Praeparationem in consola ministratoris iterum conare.",
         zh: "笔记库尚未创建完成，请在服务器控制台重试建库。",
     },
+    "tabularium.settings.about": {
+        def: "About",
+        la: "De additamento",
+        zh: "关于",
+    },
+    "tabularium.settings.aboutDesc": {
+        def: 'Plug-in for a self-hosted Tabularium server, based on "self-hosted-livesync" by vorotamoroz (MIT licence).',
+        la: 'Additamentum ministratoris Tabularium proprii, in "self-hosted-livesync" a vorotamoroz fundatum (licentia MIT).',
+        zh: "自托管 Tabularium 服务器的插件，基于 vorotamoroz 的「self-hosted-livesync」（MIT 许可）。",
+    },
+    "tabularium.settings.advanced": {
+        def: "Advanced",
+        la: "Provecta",
+        zh: "高级",
+    },
+    "tabularium.settings.advancedConflicts": {
+        def: "Conflicts",
+        la: "Conflictus",
+        zh: "冲突",
+    },
+    "tabularium.settings.advancedDesc": {
+        def: "Rarely needed. Change them only when the help or a diagnosis points to them.",
+        la: "Raro necessaria. Muta tantum si auxilium vel diagnosis ea indicat.",
+        zh: "很少需要。只在帮助或诊断提到时修改。",
+    },
+    "tabularium.settings.advancedFiles": {
+        def: "Files",
+        la: "Fasciculi",
+        zh: "文件",
+    },
+    "tabularium.settings.advancedLog": {
+        def: "Log",
+        la: "Acta",
+        zh: "日志",
+    },
+    "tabularium.settings.advancedSync": {
+        def: "Synchronisation",
+        la: "Synchronizatio",
+        zh: "同步",
+    },
+    "tabularium.settings.advancedTransfer": {
+        def: "Transfer",
+        la: "Translatio",
+        zh: "传输",
+    },
+    "tabularium.settings.appearance": {
+        def: "Appearance",
+        la: "Species",
+        zh: "外观",
+    },
+    "tabularium.settings.broken": {
+        def: "Find incomplete files",
+        la: "Fasciculos imperfectos quaerere",
+        zh: "查找不完整的文件",
+    },
+    "tabularium.settings.brokenDesc": {
+        def: "Looks for notes whose data did not arrive completely and restores them from this device or the server.",
+        la: "Notas quarum data non integra advenerunt quaerit et ex hoc instrumento vel ministratore restituit.",
+        zh: "查找数据没有完整收到的笔记，从本机或服务器恢复。",
+    },
+    "tabularium.settings.changelog": {
+        def: "Version history",
+        la: "Historia versionum",
+        zh: "版本历史",
+    },
+    "tabularium.settings.changeVault": {
+        def: "Sign in again or change vault",
+        la: "Iterum intrare vel tabularium mutare",
+        zh: "重新登录或换笔记库",
+    },
+    "tabularium.settings.conflicts": {
+        def: "Conflicts",
+        la: "Conflictus",
+        zh: "冲突",
+    },
+    "tabularium.settings.connection": {
+        def: "Connection",
+        la: "Conexio",
+        zh: "连接",
+    },
+    "tabularium.settings.copy": {
+        def: "Copy",
+        la: "Exscribere",
+        zh: "复制",
+    },
+    "tabularium.settings.diagnosis": {
+        def: "Diagnosis",
+        la: "Diagnosis",
+        zh: "诊断",
+    },
+    "tabularium.settings.disconnectTitle": {
+        def: "Disconnect this device?",
+        la: "Hoc instrumentum disiungere?",
+        zh: "断开这台设备？",
+    },
+    "tabularium.settings.doctor": {
+        def: "Check settings",
+        la: "Optiones inspicere",
+        zh: "检查设置",
+    },
+    "tabularium.settings.doctorDesc": {
+        def: "Looks for settings known to cause problems and offers to correct them.",
+        la: "Optiones quae vitia afferre solent quaerit et emendationem offert.",
+        zh: "查找已知会导致问题的设置，并提供修正。",
+    },
+    "tabularium.settings.fetch": {
+        def: "Fetch from the server",
+        la: "A ministratore iterum accipere",
+        zh: "从服务器重新获取",
+    },
+    "tabularium.settings.fetch.newer-cleanup": {
+        def: "Newer version wins; remove what was deleted on the server",
+        la: "Recentior vincit; quae in ministratore deleta sunt hic quoque delentur",
+        zh: "较新的版本优先，服务器上删除的本机也删除",
+    },
+    "tabularium.settings.fetch.newer-cleanupDesc": {
+        def: "Each note keeps whichever copy was changed last. Notes deleted on the server are deleted here too.",
+        la: "Quaeque nota exemplar novissime mutatum servat. Notae in ministratore deletae hic quoque delentur.",
+        zh: "每篇笔记保留最后修改的那份。服务器上已删除的笔记在本机也删除。",
+    },
+    "tabularium.settings.fetch.newer-keep": {
+        def: "Newer version wins; keep all files here",
+        la: "Recentior vincit; omnes fasciculi hic servantur",
+        zh: "较新的版本优先，本机文件全部保留",
+    },
+    "tabularium.settings.fetch.newer-keepDesc": {
+        def: "Each note keeps whichever copy was changed last. Nothing on this device is deleted, so notes deleted on the server come back and are synchronised again.",
+        la: "Quaeque nota exemplar novissime mutatum servat. Nihil hic deletur, itaque notae in ministratore deletae redeunt et iterum synchronizantur.",
+        zh: "每篇笔记保留最后修改的那份。本机不删除任何文件，因此服务器上已删除的笔记会重新出现并再次同步。",
+    },
+    "tabularium.settings.fetch.remote-delete": {
+        def: "The server wins; delete files only here",
+        la: "Ministrator vincit; fasciculi tantum hic delentur",
+        zh: "以服务器为准，删除只在本机的文件",
+    },
+    "tabularium.settings.fetch.remote-deleteDesc": {
+        def: "This vault becomes exactly what the server has. Files that exist only on this device are deleted.",
+        la: "Hoc tabularium fit idem atque in ministratore. Fasciculi tantum hic exstantes delentur.",
+        zh: "这个库变得与服务器完全一致。只在本机的文件会被删除。",
+    },
+    "tabularium.settings.fetch.remote-keep": {
+        def: "The server wins; keep files only here",
+        la: "Ministrator vincit; fasciculi tantum hic servantur",
+        zh: "以服务器为准，保留只在本机的文件",
+    },
+    "tabularium.settings.fetch.remote-keepDesc": {
+        def: "Notes on the server replace the copies here. Files already on this device are all kept, which can leave duplicates to tidy up.",
+        la: "Notae ministratoris exemplaria hic substituunt. Fasciculi hic exstantes omnes servantur, quod duplicata relinquere potest.",
+        zh: "服务器上的笔记覆盖本机的副本。本机已有的文件全部保留，可能留下需要整理的重复文件。",
+    },
+    "tabularium.settings.fetchAction": {
+        def: "Fetch and restart",
+        la: "Accipere et iterum incipere",
+        zh: "重新获取并重启",
+    },
+    "tabularium.settings.fetchBody": {
+        def: "The plug-in restarts, discards this device's local database and fetches the vault from the server. Choose how the notes on this device are reconciled with the server's.",
+        la: "Additamentum iterum incipit, basim localem abicit et tabularium a ministratore accipit. Elige quomodo notae huius instrumenti cum notis ministratoris concilientur.",
+        zh: "插件会重启，丢弃这台设备的本地数据库，再从服务器获取笔记库。请选择本机笔记与服务器上的笔记如何对齐。",
+    },
+    "tabularium.settings.fetchDesc": {
+        def: "Rebuilds this device's local database from the server. Use it after a rebuild on the server or when this device is out of step.",
+        la: "Datorum basim localem ex ministratore reficit. Post refectionem in ministratore vel si hoc instrumentum discrepat utere.",
+        zh: "用服务器上的数据重建这台设备的本地数据库。服务器重建后，或这台设备同步异常时使用。",
+    },
+    "tabularium.settings.fetchImpact": {
+        def: "Other devices are affected only when notes kept on this device are synchronised to the server again.",
+        la: "Cetera instrumenta tantum afficiuntur si notae hic servatae iterum ad ministratorem synchronizantur.",
+        zh: "只有本机保留的笔记被再次同步到服务器时，才会影响其他设备。",
+    },
+    "tabularium.settings.fetchTitle": {
+        def: "Fetch everything from the server?",
+        la: "Omnia a ministratore accipere?",
+        zh: "从服务器重新获取全部？",
+    },
+    "tabularium.settings.help": {
+        def: "Help",
+        la: "Auxilium",
+        zh: "帮助",
+    },
+    "tabularium.settings.kindle": {
+        def: "Send to Kindle",
+        la: "Ad Kindle mittere",
+        zh: "发送到 Kindle",
+    },
+    "tabularium.settings.language": {
+        def: "Language",
+        la: "Lingua",
+        zh: "语言",
+    },
+    "tabularium.settings.locked": {
+        def: "Vault locked",
+        la: "Tabularium clausum",
+        zh: "笔记库已锁定",
+    },
+    "tabularium.settings.lockedAccepted": {
+        def: "The vault was rebuilt on the server and this device has fetched it. Unlock it once every other device has fetched it too.",
+        la: "Tabularium refectum est et hoc instrumentum id accepit. Resera cum cetera quoque acceperint.",
+        zh: "服务器上的笔记库已重建，这台设备已重新获取。其他设备也都重新获取后再解除锁定。",
+    },
+    "tabularium.settings.lockedNotAccepted": {
+        def: "The vault was rebuilt on the server. This device must fetch it again before it can synchronise; then the vault can be unlocked.",
+        la: "Tabularium in ministratore refectum est. Hoc instrumentum id iterum accipere debet antequam synchronizet; deinde reserari potest.",
+        zh: "服务器上的笔记库已重建。这台设备需要先从服务器重新获取，之后才能同步；之后可以解除锁定。",
+    },
+    "tabularium.settings.log": {
+        def: "Log",
+        la: "Acta",
+        zh: "日志",
+    },
+    "tabularium.settings.logDesc": {
+        def: "What the plug-in did recently.",
+        la: "Quae additamentum nuper egit.",
+        zh: "插件最近做了什么。",
+    },
+    "tabularium.settings.maintenance": {
+        def: "Maintenance",
+        la: "Cura",
+        zh: "维护",
+    },
+    "tabularium.settings.mode": {
+        def: "Sync mode",
+        la: "Modus synchronizationis",
+        zh: "同步方式",
+    },
+    "tabularium.settings.modeDesc": {
+        def: "Live: changes are sent and received as they happen. Periodic: every few seconds as set below. On events: when Obsidian starts, a file is saved or opened.",
+        la: "Statim: mutationes simul mittuntur et accipiuntur. Per intervalla: quot secundis infra statuitur. Per eventus: cum Obsidian incipit vel fasciculus servatur aut aperitur.",
+        zh: "实时：修改随时收发。定时：按下面设置的间隔。按事件：在 Obsidian 启动、保存或打开文件时。",
+    },
+    "tabularium.settings.modeEvents": {
+        def: "On events",
+        la: "Per eventus",
+        zh: "按事件",
+    },
+    "tabularium.settings.modeLive": {
+        def: "Live",
+        la: "Statim",
+        zh: "实时",
+    },
+    "tabularium.settings.modePeriodic": {
+        def: "Periodic",
+        la: "Per intervalla",
+        zh: "定时",
+    },
+    "tabularium.settings.needsConnection": {
+        def: "Connect to a Tabularium server first.",
+        la: "Primum cum ministratore Tabularium coniunge.",
+        zh: "请先连接 Tabularium 服务器。",
+    },
+    "tabularium.settings.networkBanner": {
+        def: "Show a banner",
+        la: "Vexillum ostendere",
+        zh: "显示横幅",
+    },
+    "tabularium.settings.networkHidden": {
+        def: "Show nothing",
+        la: "Nihil ostendere",
+        zh: "不显示",
+    },
+    "tabularium.settings.networkIcon": {
+        def: "Show an icon",
+        la: "Iconem tantum ostendere",
+        zh: "只显示图标",
+    },
+    "tabularium.settings.networkWarning": {
+        def: "When offline",
+        la: "Sine rete",
+        zh: "离线时",
+    },
+    "tabularium.settings.notConnectedDesc": {
+        def: "Sign in to a Tabularium server and choose a vault to synchronise this one with.",
+        la: "In ministratorem Tabularium intra et tabularium elige quocum hoc synchronizetur.",
+        zh: "登录 Tabularium 服务器并选择要与这个库同步的笔记库。",
+    },
+    "tabularium.settings.open": {
+        def: "Open",
+        la: "Aperire",
+        zh: "打开",
+    },
+    "tabularium.settings.overwrite": {
+        def: "Overwrite the server with this device",
+        la: "Ministratorem ex hoc instrumento rescribere",
+        zh: "用这台设备覆盖服务器",
+    },
+    "tabularium.settings.overwriteAction": {
+        def: "Overwrite and restart",
+        la: "Rescribere et iterum incipere",
+        zh: "覆盖并重启",
+    },
+    "tabularium.settings.overwriteBody": {
+        def: "The plug-in restarts and uploads this device's files as a new database for the vault. The server keeps the previous database, and the owner can switch back to it on the web.\n\nWithout the owner's authorisation for this device the server refuses, and nothing changes.",
+        la: "Additamentum iterum incipit et fasciculos huius instrumenti ut novam basim tabularii mittit. Ministrator priorem basim servat, ad quam dominus redire potest.\n\nSine permissu domini ministrator recusat neque quicquam mutatur.",
+        zh: "插件会重启，把这台设备的文件上传为笔记库的新数据库。服务器保留原来的数据库，所有者可以在网页上切回。\n\n这台设备没有得到所有者授权时，服务器会拒绝，不会有任何改变。",
+    },
+    "tabularium.settings.overwriteDesc": {
+        def: "Replaces the vault on the server with this device's files. The vault's owner must first authorise this device under Account settings, Vaults and devices, Rebuild vault, on the web.",
+        la: "Tabularium in ministratore fasciculis huius instrumenti substituit. Dominus prius hoc instrumentum in pagina interretiali permittere debet: Optiones rationis, Tabularia et instrumenta, Tabularium reficere.",
+        zh: "用这台设备的文件替换服务器上的笔记库。需要笔记库所有者先在网页「账户设置 → 笔记库与设备 → 重建笔记库」中授权这台设备。",
+    },
+    "tabularium.settings.overwriteImpact": {
+        def: "The vault is locked afterwards: every other device must fetch it from the server again, and changes on them that were not synchronised are lost.",
+        la: "Postea tabularium clauditur: cetera instrumenta id iterum accipere debent, et mutationes non synchronizatae amittuntur.",
+        zh: "之后笔记库会被锁定：其他每台设备都要从服务器重新获取，它们上面未同步的修改会丢失。",
+    },
+    "tabularium.settings.overwriteTitle": {
+        def: "Overwrite the vault on the server?",
+        la: "Tabularium in ministratore rescribere?",
+        zh: "覆盖服务器上的笔记库？",
+    },
+    "tabularium.settings.pending": {
+        def: "${count} changes waiting",
+        la: "${count} mutationes exspectant",
+        zh: "${count} 项待处理",
+    },
+    "tabularium.settings.recovery": {
+        def: "Recovery",
+        la: "Restitutio",
+        zh: "恢复",
+    },
+    "tabularium.settings.report": {
+        def: "Diagnostic report",
+        la: "Relatio diagnostica",
+        zh: "诊断报告",
+    },
+    "tabularium.settings.reportDesc": {
+        def: "Settings, versions and the recent log for asking for help. Passwords, the passphrase and the server address are left out.",
+        la: "Optiones, versiones et acta recentia ad auxilium petendum. Tesserae, sententia arcana et inscriptio ministratoris omittuntur.",
+        zh: "用于求助的设置、版本与最近日志。不含密码、密码短语和服务器地址。",
+    },
+    "tabularium.settings.resetLocal": {
+        def: "Delete the local database",
+        la: "Basim localem delere",
+        zh: "删除本地数据库",
+    },
+    "tabularium.settings.resetLocalAction": {
+        def: "Delete",
+        la: "Delere",
+        zh: "删除",
+    },
+    "tabularium.settings.resetLocalBody": {
+        def: "The notes in this vault are not deleted. Until you fetch from the server, this device does not synchronise.",
+        la: "Notae huius tabularii non delentur. Donec a ministratore accipias, hoc instrumentum non synchronizat.",
+        zh: "这个库中的笔记不会被删除。从服务器重新获取之前，这台设备不会同步。",
+    },
+    "tabularium.settings.resetLocalDesc": {
+        def: "Deletes this device's copy of the synchronisation data. The notes themselves stay; fetch from the server afterwards.",
+        la: "Exemplar datorum synchronizationis in hoc instrumento delet; notae ipsae manent; postea a ministratore accipe.",
+        zh: "删除这台设备上的同步数据副本，笔记文件本身保留；之后从服务器重新获取。",
+    },
+    "tabularium.settings.resetLocalTitle": {
+        def: "Delete the local database?",
+        la: "Basim localem delere?",
+        zh: "删除本地数据库？",
+    },
+    "tabularium.settings.resolveAll": {
+        def: "Resolve all conflicts with the newer version",
+        la: "Omnes conflictus recentiore versione solvere",
+        zh: "所有冲突都保留较新的版本",
+    },
+    "tabularium.settings.resolveAllDesc": {
+        def: "For every note with a conflict, keeps the most recently modified version.",
+        la: "In omni nota conflictum habente versionem recentissimam servat.",
+        zh: "对每篇有冲突的笔记，保留最后修改的版本。",
+    },
+    "tabularium.settings.run": {
+        def: "Run",
+        la: "Agere",
+        zh: "运行",
+    },
+    "tabularium.settings.sorting": {
+        def: "File sorting",
+        la: "Ordo fasciculorum",
+        zh: "文件排序",
+    },
+    "tabularium.settings.state.error": {
+        def: "Synchronisation failed; see the log",
+        la: "Synchronizatio defecit; vide acta",
+        zh: "同步出错，请查看日志",
+    },
+    "tabularium.settings.state.idle": {
+        def: "Up to date",
+        la: "Synchronizatum",
+        zh: "已同步",
+    },
+    "tabularium.settings.state.live": {
+        def: "Connected, changes sync as they happen",
+        la: "Conexum; mutationes statim synchronizantur",
+        zh: "已连接，修改即时同步",
+    },
+    "tabularium.settings.state.stopped": {
+        def: "Not synchronising",
+        la: "Non synchronizatur",
+        zh: "未在同步",
+    },
+    "tabularium.settings.state.syncing": {
+        def: "Synchronising",
+        la: "Synchronizatur",
+        zh: "正在同步",
+    },
+    "tabularium.settings.status": {
+        def: "Status",
+        la: "Status",
+        zh: "同步状态",
+    },
+    "tabularium.settings.suspend": {
+        def: "Restart with sync paused",
+        la: "Synchronizatione suspensa iterum incipere",
+        zh: "暂停同步并重启",
+    },
+    "tabularium.settings.suspendAction": {
+        def: "Pause and restart",
+        la: "Suspendere et iterum incipere",
+        zh: "暂停并重启",
+    },
+    "tabularium.settings.suspendDesc": {
+        def: "Restarts the plug-in with all synchronisation and file watching paused, for when something keeps going wrong. Resume with the command Toggle All Sync.",
+        la: "Additamentum iterum incipit omni synchronizatione et observatione fasciculorum suspensa. Mandato 'Commuta omnem synchronizationem' resumitur.",
+        zh: "重启插件，并暂停全部同步与文件监视，用于问题反复出现时。用命令「开关全部同步」恢复。",
+    },
+    "tabularium.settings.sync": {
+        def: "Sync",
+        la: "Synchronizatio",
+        zh: "同步",
+    },
+    "tabularium.settings.syncIgnoreRegEx": {
+        def: "Files not to synchronise",
+        la: "Fasciculi non synchronizandi",
+        zh: "不同步的文件",
+    },
+    "tabularium.settings.syncIgnoreRegExDesc": {
+        def: "Regular expressions on the file path, one per line; matching files are neither sent nor received.",
+        la: "Expressiones regulares in via fasciculi, una per lineam; fasciculi congruentes nec mittuntur nec accipiuntur.",
+        zh: "按文件路径匹配的正则表达式，每行一个；匹配的文件既不发送也不接收。",
+    },
+    "tabularium.settings.syncNow": {
+        def: "Sync now",
+        la: "Nunc synchronizare",
+        zh: "立即同步",
+    },
+    "tabularium.settings.syncOnlyRegEx": {
+        def: "Synchronise only these files",
+        la: "Hos tantum fasciculos synchronizare",
+        zh: "只同步这些文件",
+    },
+    "tabularium.settings.syncOnlyRegExDesc": {
+        def: "Regular expressions on the file path, one per line. When set, only matching files are synchronised.",
+        la: "Expressiones regulares in via fasciculi, una per lineam. Si positae, tantum fasciculi congruentes synchronizantur.",
+        zh: "按文件路径匹配的正则表达式，每行一个。填写后只同步匹配的文件。",
+    },
+    "tabularium.settings.unlock": {
+        def: "Unlock",
+        la: "Reserare",
+        zh: "解除锁定",
+    },
+    "tabularium.settings.unlockBody": {
+        def: "All devices can synchronise with the vault again.",
+        la: "Omnia instrumenta iterum cum tabulario synchronizare poterunt.",
+        zh: "所有设备都可以再与这个笔记库同步。",
+    },
+    "tabularium.settings.unlockDesc": {
+        def: "Ends the lock a rebuild leaves on the vault.",
+        la: "Clausuram quam refectio relinquit finit.",
+        zh: "结束重建后笔记库上的锁定。",
+    },
+    "tabularium.settings.unlockImpact": {
+        def: "A device that has not fetched the vault since the rebuild may then send old data back to the server.",
+        la: "Instrumentum quod post refectionem tabularium non accepit vetera data ad ministratorem remittere potest.",
+        zh: "重建后还没有重新获取的设备，解锁后可能把旧数据发回服务器。",
+    },
+    "tabularium.settings.unlockTitle": {
+        def: "Unlock the vault?",
+        la: "Tabularium reserare?",
+        zh: "解除笔记库锁定？",
+    },
+    "tabularium.settings.version": {
+        def: "Tabularium ${version}",
+        la: "Tabularium ${version}",
+        zh: "Tabularium ${version}",
+    },
+    "tabularium.settings.whatSyncs": {
+        def: "What is synchronised",
+        la: "Quae synchronizantur",
+        zh: "同步范围",
+    },
     "tabularium.sorting.apply": {
         def: "Apply sorting rules",
         la: "Adhibe regulas ordinandi",
@@ -7007,10 +8614,70 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Lege sorting-spec ex commentariis tuis et indicem plicarum renova.",
         zh: "从笔记中读取 sorting-spec 并更新文件列表。",
     },
+    "tabularium.sorting.bookmarks": {
+        def: "Order by bookmarks",
+        la: "Ordinare per signa libri",
+        zh: "按书签排序",
+    },
+    "tabularium.sorting.bookmarksDesc": {
+        def: "Uses the order of items in a group of the core Bookmarks plug-in, so items can be arranged by dragging them there.",
+        la: "Ordine rerum in grege additamenti 'Signa libri' utitur, ut res illic trahendo disponantur.",
+        zh: "使用 Obsidian 核心插件「书签」中某个分组里的顺序，这样可以通过在书签中拖动来排列。",
+    },
+    "tabularium.sorting.bookmarksGroup": {
+        def: "Bookmarks group",
+        la: "Grex signorum",
+        zh: "书签分组",
+    },
+    "tabularium.sorting.bookmarksGroupDesc": {
+        def: "The group in Bookmarks whose order is used.",
+        la: "Grex signorum cuius ordo adhibetur.",
+        zh: "使用其顺序的书签分组。",
+    },
+    "tabularium.sorting.bookmarksMenus": {
+        def: "Bookmark menu items",
+        la: "Res indicis signorum",
+        zh: "书签菜单项",
+    },
+    "tabularium.sorting.bookmarksMenusDesc": {
+        def: "Adds items to the file explorer's right-click menu for adding files and folders to that group.",
+        la: "Res in indicem dextri clici addit ut fasciculi et folderi ei gregi addantur.",
+        zh: "在文件列表的右键菜单中加入把文件和文件夹加入该分组的菜单项。",
+    },
     "tabularium.sorting.command": {
         def: "Open file sorting settings",
         la: "Aperi optiones ordinandi plicas",
         zh: "打开文件排序设置",
+    },
+    "tabularium.sorting.contextMenu": {
+        def: "Sorting menu in the file explorer",
+        la: "Index ordinandi in indice fasciculorum",
+        zh: "文件列表中的排序菜单",
+    },
+    "tabularium.sorting.contextMenuDesc": {
+        def: "Adds applying and pausing sorting to the file explorer's right-click menu.",
+        la: "Adhibere et suspendere ordinem in indicem dextri clici addit.",
+        zh: "在文件列表的右键菜单中加入应用与暂停排序。",
+    },
+    "tabularium.sorting.delay": {
+        def: "Delay at start (seconds)",
+        la: "Mora initio (secundae)",
+        zh: "启动后延迟（秒）",
+    },
+    "tabularium.sorting.delayDesc": {
+        def: "Seconds to wait after Obsidian starts before sorting, 0 to 30. Increase it if sorting is not applied on large vaults or on mobile.",
+        la: "Quot secundis post initium Obsidian exspectetur antequam ordinetur, 0 ad 30. Auge si in magnis tabulariis vel telephono ordo non adhibetur.",
+        zh: "Obsidian 启动后等待多少秒再排序，0 到 30。大笔记库或手机上排序没有生效时调大。",
+    },
+    "tabularium.sorting.indexNote": {
+        def: "Folder note name",
+        la: "Nomen notae folderi",
+        zh: "文件夹笔记名称",
+    },
+    "tabularium.sorting.indexNoteDesc": {
+        def: "If each folder describes itself in a note with a fixed name inside it (such as index), enter that name; its sorting rules and metadata are read too.",
+        la: "Si quisque folder se in nota nominis certi (ut index) describit, hoc nomen scribe; regulae et metadata eius quoque leguntur.",
+        zh: "如果每个文件夹用其中一篇固定名称的笔记（如 index）描述自身，在此填写这个名称，也会读取其中的排序规则和元数据。",
     },
     "tabularium.sorting.parseFailed": {
         def: "The sorting rules could not be parsed; sorting is paused. ${detail}",
@@ -7027,15 +8694,145 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Commentarios et thecas secundum regulas ordinandi vel signacula dispone.",
         zh: "按排序规则或书签排列笔记和文件夹。",
     },
+    "tabularium.sorting.specFile": {
+        def: "Additional rule notes",
+        la: "Notae regularum additae",
+        zh: "额外的规则笔记",
+    },
+    "tabularium.sorting.specFileDesc": {
+        def: "Names or paths of notes whose front matter holds sorting rules, besides sortspec notes and folder notes. Apply the rules again after changing it.",
+        la: "Nomina vel viae notarum quarum praefatio regulas ordinandi continet, praeter notas sortspec et notas folderorum. Post mutationem regulas iterum adhibe.",
+        zh: "除 sortspec 笔记和文件夹笔记外，另外读取排序规则（front matter）的笔记名称或路径。修改后重新应用规则。",
+    },
     "tabularium.sorting.standalone": {
         def: "Disable the standalone Custom Sort plug-in, then reload Tabularium to use its built-in file sorting.",
         la: "Deactiva additamentum separatum Custom Sort, deinde Tabularium iterum onera ut ordinatione plicarum interna utaris.",
         zh: "请先停用独立的 Custom Sort 插件，然后重新加载 Tabularium 以使用内置的文件排序。",
     },
+    "tabularium.sorting.statusBar": {
+        def: "Show in the status bar",
+        la: "In vectigali status ostendere",
+        zh: "在状态栏显示",
+    },
+    "tabularium.sorting.statusBarDesc": {
+        def: "Shows whether file sorting is on.",
+        la: "Ostendit utrum ordo fasciculorum adhibeatur.",
+        zh: "显示文件排序是否开启。",
+    },
+    "tabularium.sorting.statusOff": {
+        def: "Sorting: off",
+        la: "Ordo: suspensus",
+        zh: "排序：关",
+    },
+    "tabularium.sorting.statusOn": {
+        def: "Sorting: on",
+        la: "Ordo: adhibetur",
+        zh: "排序：开",
+    },
     "tabularium.sorting.title": {
         def: "Tabularium file sorting",
         la: "Ordinatio plicarum Tabularium",
         zh: "Tabularium 文件排序",
+    },
+    "tabularium.sorting.ui.apply": {
+        def: "Apply sorting",
+        la: "Ordinem adhibere",
+        zh: "应用排序",
+    },
+    "tabularium.sorting.ui.applyFlat": {
+        def: "Sorting: apply",
+        la: "Ordo: adhibere",
+        zh: "排序：应用",
+    },
+    "tabularium.sorting.ui.bookmark": {
+        def: "Add to the sorting bookmarks",
+        la: "Signis ordinandi addere",
+        zh: "加入排序书签",
+    },
+    "tabularium.sorting.ui.bookmarkFlat": {
+        def: "Sorting: add to the bookmarks",
+        la: "Ordo: signis addere",
+        zh: "排序：加入书签",
+    },
+    "tabularium.sorting.ui.bookmarkSelected": {
+        def: "Sorting: add the selection to the bookmarks",
+        la: "Ordo: delecta signis addere",
+        zh: "排序：把所选项目加入书签",
+    },
+    "tabularium.sorting.ui.bookmarkSelectedFlat": {
+        def: "Add the selection to the sorting bookmarks",
+        la: "Delecta signis ordinandi addere",
+        zh: "把所选项目加入排序书签",
+    },
+    "tabularium.sorting.ui.bookmarkSiblings": {
+        def: "Add it and its siblings to the sorting bookmarks",
+        la: "Id et cognata signis ordinandi addere",
+        zh: "连同同级项目加入排序书签",
+    },
+    "tabularium.sorting.ui.bookmarkSiblingsFlat": {
+        def: "Sorting: add it and its siblings to the bookmarks",
+        la: "Ordo: id et cognata signis addere",
+        zh: "排序：连同同级项目加入书签",
+    },
+    "tabularium.sorting.ui.commandOff": {
+        def: "Pause file sorting",
+        la: "Ordinem fasciculorum suspendere",
+        zh: "暂停文件排序",
+    },
+    "tabularium.sorting.ui.commandOn": {
+        def: "Apply file sorting, reading the sorting rules again",
+        la: "Ordinem fasciculorum adhibere, regulis iterum lectis",
+        zh: "重新读取排序规则并应用文件排序",
+    },
+    "tabularium.sorting.ui.submenu": {
+        def: "Sorting",
+        la: "Ordo",
+        zh: "排序",
+    },
+    "tabularium.sorting.ui.suspend": {
+        def: "Pause sorting",
+        la: "Ordinem suspendere",
+        zh: "暂停排序",
+    },
+    "tabularium.sorting.ui.suspendFlat": {
+        def: "Sorting: pause",
+        la: "Ordo: suspendere",
+        zh: "排序：暂停",
+    },
+    "tabularium.sorting.ui.toggle": {
+        def: "Turn file sorting on or off",
+        la: "Ordinem fasciculorum commutare",
+        zh: "开关文件排序",
+    },
+    "tabularium.sorting.ui.unbookmark": {
+        def: "Remove from the sorting bookmarks",
+        la: "E signis ordinandi removere",
+        zh: "从排序书签中移除",
+    },
+    "tabularium.sorting.ui.unbookmarkFlat": {
+        def: "Sorting: remove from the bookmarks",
+        la: "Ordo: e signis removere",
+        zh: "排序：从书签中移除",
+    },
+    "tabularium.sorting.ui.unbookmarkSelected": {
+        def: "Sorting: remove the selection from the bookmarks",
+        la: "Ordo: delecta e signis removere",
+        zh: "排序：把所选项目从书签中移除",
+    },
+    "tabularium.sorting.ui.unbookmarkSelectedFlat": {
+        def: "Remove the selection from the sorting bookmarks",
+        la: "Delecta e signis ordinandi removere",
+        zh: "把所选项目从排序书签中移除",
+    },
+    "tabularium.sorting.ui.unbookmarkSiblings": {
+        def: "Remove it and its siblings from the sorting bookmarks",
+        la: "Id et cognata e signis ordinandi removere",
+        zh: "连同同级项目从排序书签中移除",
+    },
+    "tabularium.sorting.ui.unbookmarkSiblingsFlat": {
+        def: "Sorting: remove it and its siblings from the bookmarks",
+        la: "Ordo: id et cognata e signis removere",
+        zh: "排序：连同同级项目从书签中移除",
     },
     "tabularium.sorting.viewProblem": {
         def: "The file explorer could not be sorted. Open the developer console for details.",
@@ -7094,11 +8891,34 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Conexio cum ministratore feliciter constituta est. Proximo gradu,",
         zh: "与服务器的连接已配置成功。下一步，",
     },
+    "The current database revision could not be read. The Vault was not changed.": {
+        def: "The current revision in the database could not be read. The vault was not changed.",
+        la: "Revisio praesens in basi datorum legi non potuit. Tabularium non mutatum est.",
+        zh: "无法读取数据库中的当前修订。库未作任何更改。",
+    },
     "The delay for consecutive on-demand fetches": {
         def: "The delay for consecutive on-demand fetches",
         la: "Mora inter arcessiones postulatas continuas",
         zh: "连续按需获取的延迟",
     },
+    "The deleted storage file ${file.path} has conflicts, but its displayed revision is unknown; preserving every database branch":
+        {
+            def: "The deleted file ${file.path} has conflicts, but the revision it showed is unknown; keeping every branch in the database",
+            la: "Fasciculus deletus ${file.path} conflictus habet, sed revisio ostensa ignota est; omnes rami in basi datorum servantur",
+            zh: "已删除的文件 ${file.path} 存在冲突，但不知道它显示的是哪个修订，将保留数据库中的所有分支",
+        },
+    "The deleted storage file ${path} has conflicts, but its displayed revision is unknown; preserving every database branch":
+        {
+            def: "The deleted file ${path} has conflicts, but the revision it showed is unknown; keeping every branch in the database",
+            la: "Fasciculus deletus ${path} conflictus habet, sed revisio ostensa ignota est; omnes rami in basi datorum servantur",
+            zh: "已删除的文件 ${path} 存在冲突，但不知道它显示的是哪个修订，将保留数据库中的所有分支",
+        },
+    "The document ID configurations differ. Import the correct Setup URI, or configure the matching ID key, before synchronising.":
+        {
+            def: "The document ID settings differ between this device and the server. Configure the matching ID key before synchronising.",
+            la: "Configurationes identificatorum documentorum inter hoc instrumentum et ministratorem differunt. Ante synchronizationem clavem identificatorum congruentem constitue.",
+            zh: "此设备与服务器的文档 ID 设置不一致。请先配置一致的 ID 密钥，再进行同步。",
+        },
     "The files in this Vault are almost identical to the server's.": {
         def: "The files in this Vault are almost identical to the server's.",
         la: "Plicae in hoc tabulario fere eaedem sunt atque eae ministratoris.",
@@ -7132,6 +8952,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "data synchronizationis novissima ex ministratore in hoc instrumentum deorsum ferentur.",
         zh: "最新的同步数据将从服务器下载到本设备。",
     },
+    "The local database has been cleaned up.": {
+        def: "This device's database has been cleaned up.",
+        la: "Basis datorum huius instrumenti purgata est.",
+        zh: "这台设备的数据库已清理。",
+    },
     "the local database, that is to say the synchronisation information, must be reconstituted.": {
         def: "the local database, that is to say the synchronisation information, must be reconstituted.",
         la: "repositorium locale, id est notitia synchronizationis, reconstituendum est.",
@@ -7160,16 +8985,122 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Intervallum minimum synchronizationis automaticae ad eventum.",
         zh: "基于事件自动同步的最小间隔。",
     },
+    "The remote connectivity check timed out.": {
+        def: "The connection check to the server timed out.",
+        la: "Probatio conexionis cum ministratore tempus excessit.",
+        zh: "检查与服务器的连接超时。",
+    },
+    "The remote database has been cleaned up. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.": {
+        def: "The server's database has been cleaned up. Fetch the rebuilt database, unlock it explicitly, or clean up chunks.",
+        la: "Basis datorum ministratoris purgata est. Necesse est basim refectam accipere, eam expresse reserare, aut frusta purgare.",
+        zh: "服务器上的数据库已被清理。需要获取重建后的数据库、明确解锁，或清理数据块。",
+    },
+    "The remote database has been cleaned.": {
+        def: "The server's database has been cleaned up.",
+        la: "Basis datorum ministratoris purgata est.",
+        zh: "服务器上的数据库已清理。",
+    },
+    "The remote database has been rebuilt or corrupted since we have synchronized last time. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.":
+        {
+            def: "The server's database has been rebuilt or damaged since the last synchronisation. Fetch the rebuilt database, unlock it explicitly, or clean up chunks.",
+            la: "Basis datorum ministratoris post ultimam synchronizationem refecta aut corrupta est. Necesse est basim refectam accipere, eam expresse reserare, aut frusta purgare.",
+            zh: "自上次同步以来，服务器上的数据库已被重建或损坏。需要获取重建后的数据库、明确解锁，或清理数据块。",
+        },
+    "The remote database has no compatibility with the running version. Please upgrade the plugin.": {
+        def: "The server's database is not compatible with this version. Please update the plug-in.",
+        la: "Basis datorum ministratoris cum hac versione non congruit. Additamentum renova.",
+        zh: "服务器上的数据库与当前版本不兼容，请更新插件。",
+    },
     "The remote database is locked for synchronisation to prevent vault corruption because this device is not marked as 'resolved'. Please back up your vault, reset the local database, and select 'Mark this device as resolved'. This warning will persist until replication confirms the device is resolved.":
         {
             def: "The remote database is locked for synchronisation to prevent vault corruption because this device is not marked as 'resolved'. Please back up your vault, reset the local database, and select 'Mark this device as resolved'. This warning will persist until replication confirms the device is resolved.",
             la: "Repositorium remotum ad synchronizationem obseratum est ne tabularium corrumpatur, quia hoc instrumentum ut 'resolved' notatum non est. Tabularium tuum tuto exscribe, repositorium localem restitue, et 'Mark this device as resolved' selige. Hoc monitum manebit donec replicatio confirmet instrumentum resolutum esse.",
             zh: "为防止数据仓库损坏，由于此设备尚未标记为“已确认”，远程数据库已被锁定，暂停同步。请先备份你的仓库、重置本地数据库，然后选择“将此设备标记为已确认”。在复制过程确认此设备已完成确认之前，此警告会持续显示。",
         },
+    "The remote document IDs do not match the configured ID key.": {
+        def: "The document IDs on the server do not match the configured ID key.",
+        la: "Indices documentorum in ministratore clavi indicum constitutae non congruunt.",
+        zh: "服务器上的文档 ID 与配置的 ID 密钥不匹配。",
+    },
     "The remote is already set up, and the configuration is compatible (or got compatible by this operation).": {
         def: "The remote is already set up, and the configuration is compatible (or got compatible by this operation).",
         la: "Remotum iam paratum est, et configuratio congruit (aut hac operatione congruens facta est).",
         zh: "远端已设置好，且配置兼容（或经此操作后已兼容）。",
+    },
+    "The remote type does not support preferred tweak values.": {
+        def: "This server type does not support preferred tweak values.",
+        la: "Hoc genus ministratoris valores accommodationis praelatos non sustinet.",
+        zh: "此类服务器不支持推荐的调整值。",
+    },
+    "The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": {
+        def: "The request may have failed. Server response: ${r.status}: ${r.statusText}",
+        la: "Petitio fortasse defecit. Responsum ministratoris: ${r.status}: ${r.statusText}",
+        zh: "请求可能失败了。服务器返回：${r.status}: ${r.statusText}",
+    },
+    "The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync":
+        {
+            def: "The request succeeded through the Obsidian API, but the native fetch API failed. Please check the CORS settings on the server. Until this is fixed, live synchronisation cannot be enabled.",
+            la: "Petitio per API Obsidian successit, sed API fetch nativum defecit. Optiones CORS ministratoris inspice. Donec hoc corrigatur, synchronizatio continua activari non potest.",
+            zh: "通过 Obsidian API 的请求成功，但原生 fetch API 失败。请检查服务器的 CORS 设置。在此问题解决前，无法启用实时同步。",
+        },
+    "The restored file could not be opened in the editor.": {
+        def: "The restored file could not be opened in the editor.",
+        la: "Fasciculus restitutus in editore aperiri non potuit.",
+        zh: "无法在编辑器中打开恢复的文件。",
+    },
+    "The restored revision could not be created. The file may have changed during the operation, and the Vault was not changed.":
+        {
+            def: "The restored revision could not be created. The file may have changed during the operation. The vault was not changed.",
+            la: "Revisio restituta creari non potuit. Fasciculus fortasse dum res agebatur mutatus est. Tabularium non mutatum est.",
+            zh: "无法创建恢复的修订。文件可能在操作过程中发生了变化。库未作任何更改。",
+        },
+    "The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.":
+        {
+            def: "The restored revision was saved in this device's database, but it could not be written to the vault.",
+            la: "Revisio restituta in basi datorum huius instrumenti servata est, sed in tabularium scribi non potuit.",
+            zh: "恢复的修订已保存到此设备的数据库，但无法写入库。",
+        },
+    "The selected content was restored as a new revision.": {
+        def: "The selected content was restored as a new revision.",
+        la: "Contentum selectum ut nova revisio restitutum est.",
+        zh: "所选内容已恢复为新的修订。",
+    },
+    "The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.":
+        {
+            def: "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Pick a file to resolve conflict' to review the file.",
+            la: "Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' fasciculum inspice.",
+            zh: "所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。",
+        },
+    "The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.":
+        {
+            def: "The selected content was restored as a new revision. Other versions remain unresolved; use 'Pick a file to resolve conflict' to review them.",
+            la: "Contentum selectum ut nova revisio restitutum est. Aliae versiones adhuc irresolutae manent; per 'Elige plicam ad discrepantiam solvendam' eas inspice.",
+            zh: "所选内容已恢复为新的修订。其他版本仍未解决，请使用「选择要解决冲突的文件」查看。",
+        },
+    "The selected local database is not ready for the rebuild download.": {
+        def: "This device's database is not ready to receive the rebuild download.",
+        la: "Basis datorum huius instrumenti nondum parata est ad data refectionis accipienda.",
+        zh: "这台设备的数据库尚未准备好进行重建下载。",
+    },
+    "The selected local database is not ready for the rebuild upload.": {
+        def: "This device's database is not ready to be uploaded for the rebuild.",
+        la: "Basis datorum huius instrumenti nondum parata est ut ad refectionem sursum mittatur.",
+        zh: "这台设备的数据库尚未准备好进行重建上传。",
+    },
+    "The selected revision could not be restored because its content is no longer available.": {
+        def: "The selected revision could not be restored because its content is no longer available.",
+        la: "Revisio selecta restitui non potuit, quia eius contentum iam non exstat.",
+        zh: "所选修订的内容已不存在，无法恢复。",
+    },
+    "The selected revision does not have a revision identifier.": {
+        def: "The selected revision does not have a revision identifier.",
+        la: "Revisio selecta identificatore revisionis caret.",
+        zh: "所选修订没有修订标识。",
+    },
+    "The settings in the remote database are the same as the local database.": {
+        def: "The settings on the server are the same as in this device's database.",
+        la: "Optiones in ministratore eaedem sunt atque in basi datorum huius instrumenti.",
+        zh: "服务器上的设置与此设备数据库中的设置相同。",
     },
     "The Setup-URI does not appear to be valid. Please check that you have copied it correctly.": {
         def: "The Setup-URI does not appear to be valid. Please check that you have copied it correctly.",
@@ -7186,6 +9117,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "unicum et auctoritativum exemplar principale",
         zh: "唯一的权威主副本",
     },
+    "The storage file has been changed but exceeds the maximum size. Skipping: ${param.file.path}": {
+        def: "A file changed in the vault but exceeds the maximum size. Skipping: ${param.file.path}",
+        la: "Fasciculus in tabulario mutatus est, sed magnitudinem maximam excedit. Praeteritur: ${param.file.path}",
+        zh: "库中有文件发生变化，但超过了最大大小。已跳过：${param.file.path}",
+    },
     "the synchronisation data on the server will be built based on the current data on this device.": {
         def: "the synchronisation data on the server will be built based on the current data on this device.",
         la: "data synchronizationis in ministratore ex datis praesentibus huius instrumenti aedificabuntur.",
@@ -7195,6 +9131,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Themes",
         la: "Themata",
         zh: "主题",
+    },
+    "There are no conflicted documents": {
+        def: "There are no conflicted documents.",
+        la: "Nulla documenta conflictum habent.",
+        zh: "没有存在冲突的文档。",
     },
     "There is a way to resolve this on other devices.": {
         def: "There is a way to resolve this on other devices.",
@@ -8941,12 +10882,22 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomen unicum inter omnia instrumenta synchronizata. Ut hanc optionem emendes, synchronizationem optionum propriarum semel deactiva.",
         zh: "所有同步设备之间的唯一名称。要编辑此设置,请首先禁用自定义同步",
     },
+    "Unknown encryption version. Cannot decrypt.": {
+        def: "Unknown encryption version. Cannot decrypt.",
+        la: "Versio cryptationis ignota. Decryptari non potest.",
+        zh: "未知的加密版本，无法解密。",
+    },
     "Unless you are certain, selecting this options is bit dangerous. It assumes that the server configuration is compatible with this device. If this is not the case, data loss may occur. Please ensure you know what you are doing.":
         {
             def: "Unless you are certain, selecting this options is bit dangerous. It assumes that the server configuration is compatible with this device. If this is not the case, data loss may occur. Please ensure you know what you are doing.",
             la: "Nisi certus es, haec optio aliquantum periculosa est. Ponit configurationem ministratoris cum hoc instrumento congruere. Si non ita est, data amitti possunt. Cura ut scias quid agas.",
             zh: "除非你非常确定，否则选择此选项有些危险。它假定服务器配置与本设备兼容。若不兼容，可能会发生数据丢失。请确保你清楚自己在做什么。",
         },
+    "Unload preparation failed; pending storage work may require recovery": {
+        def: "Preparing to unload failed; pending file operations may need recovery",
+        la: "Praeparatio ad exonerandum defecit; operationes fasciculorum pendentes fortasse restituendae sunt",
+        zh: "卸载前的准备失败，未完成的文件操作可能需要恢复",
+    },
     "Updating list...": {
         def: "Updating list...",
         la: "Index renovatur...",
@@ -9046,6 +10997,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Use vrtmrz's relay",
         la: "Adhibe relay vrtmrz",
         zh: "使用 vrtmrz 的中继",
+    },
+    "User chose to reboot and re-run the process.": {
+        def: "Restarting to run the process again.",
+        la: "Denuo incipitur ut processus iterum agatur.",
+        zh: "将重启并重新运行此过程。",
     },
     username: {
         def: "username",

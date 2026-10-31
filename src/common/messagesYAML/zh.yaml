@@ -567,28 +567,24 @@ moduleMigration:
       DismissForever: 我已经修复了，不再询问
       fix: 修复
     message: |
-      由于最近的一个 bug（在 v0.25.6 版本中），某些文件可能未正确保存到同步数据库中
-      我们已经扫描了文件，并发现一些需要修复的文件
+      部分笔记在同步数据中没有完整保存。
 
-      **准备修复的文件:**
+      **可以用这台设备修复：**
 
       ${files}
 
-      这些文件在存储中与原文件的大小匹配，可能是可恢复的
-      我们可以使用它们修复数据库，请点击下方的“修复”按钮进行修复
+      这些文件在本机的大小与预期一致，可以用来修复同步数据。点「修复」即可。
 
       ${messageUnrecoverable}
 
-
-      如果你希望再次执行此操作，可以前往 Hatch 页面进行操作
+      以后要再次检查：设置 → Tabularium → 维护 → 查找不完整的文件。
     messageUnrecoverable: |
-      **无法在此设备上修复的文件:**
+      **无法用这台设备修复：**
 
       ${filesNotRecoverable}
 
-      这些文件的元数据不一致，无法在此设备上修复（大多数情况下我们无法确定哪一个是正确的）
-      要恢复它们，请检查你的其他设备（同样使用此功能），或从备份中手动恢复
-    title: 检测到损坏的文件
+      无法确定这些文件的哪一份是正确的。请在其他设备上用同样的维护操作检查，或从备份恢复。
+    title: 发现不完整的笔记
   insecureChunkExist:
     buttons:
       fetch: 我已经重建了远程数据库，将从远程获取
@@ -1924,6 +1920,21 @@ You should create a new synchronisation destination and rebuild your data there.
 You should perform this operation only in exceptional circumstances, such as when the server data is completely corrupted, when changes on all other devices are no longer needed, or when the database size has become unusually large in comparison to the Vault size.: 你只应在特殊情况下执行此操作，例如服务器数据完全损坏、其他所有设备上的更改都不再需要，或数据库体积相对于库体积异常庞大时。
 you wanted(Thank you)!: 你要求的操作（谢谢）！
 tabularium:
+  conflict:
+    title: "修改有冲突"
+    base: "这个版本"
+    conflicted: "另一个版本"
+    pick: "选择一个版本"
+    remote: "其他设备"
+    local: "这台设备"
+    vaultAndDatabase: "文件与同步副本"
+    vaultFile: "库中的文件"
+    databaseRevision: "同步副本"
+    previous: "上一处差异"
+    next: "下一处差异"
+    deleted: "已删除"
+    later: "稍后处理"
+    tooLarge: "差异太大，无法显示。"
   sync:
     liveOn: 实时同步已开启。
     liveOff: 实时同步已关闭。
@@ -2001,6 +2012,45 @@ tabularium:
     contents: 目录
     missingImage: "[图片：${name}]"
   sorting:
+    ui:
+      toggle: "开关文件排序"
+      apply: "应用排序"
+      applyFlat: "排序：应用"
+      suspend: "暂停排序"
+      suspendFlat: "排序：暂停"
+      bookmark: "加入排序书签"
+      bookmarkFlat: "排序：加入书签"
+      unbookmark: "从排序书签中移除"
+      unbookmarkFlat: "排序：从书签中移除"
+      bookmarkSiblings: "连同同级项目加入排序书签"
+      bookmarkSiblingsFlat: "排序：连同同级项目加入书签"
+      unbookmarkSiblings: "连同同级项目从排序书签中移除"
+      unbookmarkSiblingsFlat: "排序：连同同级项目从书签中移除"
+      bookmarkSelected: "排序：把所选项目加入书签"
+      bookmarkSelectedFlat: "把所选项目加入排序书签"
+      unbookmarkSelected: "排序：把所选项目从书签中移除"
+      unbookmarkSelectedFlat: "把所选项目从排序书签中移除"
+      submenu: "排序"
+      commandOn: "重新读取排序规则并应用文件排序"
+      commandOff: "暂停文件排序"
+    specFile: "额外的规则笔记"
+    specFileDesc: "除 sortspec 笔记和文件夹笔记外，另外读取排序规则（front matter）的笔记名称或路径。修改后重新应用规则。"
+    indexNote: "文件夹笔记名称"
+    indexNoteDesc: "如果每个文件夹用其中一篇固定名称的笔记（如 index）描述自身，在此填写这个名称，也会读取其中的排序规则和元数据。"
+    delay: "启动后延迟（秒）"
+    delayDesc: "Obsidian 启动后等待多少秒再排序，0 到 30。大笔记库或手机上排序没有生效时调大。"
+    statusBar: "在状态栏显示"
+    statusBarDesc: "显示文件排序是否开启。"
+    contextMenu: "文件列表中的排序菜单"
+    contextMenuDesc: "在文件列表的右键菜单中加入应用与暂停排序。"
+    bookmarks: "按书签排序"
+    bookmarksDesc: "使用 Obsidian 核心插件「书签」中某个分组里的顺序，这样可以通过在书签中拖动来排列。"
+    bookmarksGroup: "书签分组"
+    bookmarksGroupDesc: "使用其顺序的书签分组。"
+    bookmarksMenus: "书签菜单项"
+    bookmarksMenusDesc: "在文件列表的右键菜单中加入把文件和文件夹加入该分组的菜单项。"
+    statusOn: "排序：开"
+    statusOff: "排序：关"
     parseFailed: "排序规则解析失败，排序已暂停。${detail}"
     viewProblem: 无法对文件列表排序，详情见开发者控制台。
     title: Tabularium 文件排序
@@ -2011,6 +2061,178 @@ tabularium:
     pause: 暂停
     standalone: 请先停用独立的 Custom Sort 插件，然后重新加载 Tabularium 以使用内置的文件排序。
     command: 打开文件排序设置
+  confirm:
+    cancel: "取消"
+    typeName: "输入笔记库名称 ${name} 以确认"
+  settings:
+    fetch:
+      _value: "从服务器重新获取"
+      newer-cleanup: "较新的版本优先，服务器上删除的本机也删除"
+      newer-cleanupDesc: "每篇笔记保留最后修改的那份。服务器上已删除的笔记在本机也删除。"
+      newer-keep: "较新的版本优先，本机文件全部保留"
+      newer-keepDesc: "每篇笔记保留最后修改的那份。本机不删除任何文件，因此服务器上已删除的笔记会重新出现并再次同步。"
+      remote-keep: "以服务器为准，保留只在本机的文件"
+      remote-keepDesc: "服务器上的笔记覆盖本机的副本。本机已有的文件全部保留，可能留下需要整理的重复文件。"
+      remote-delete: "以服务器为准，删除只在本机的文件"
+      remote-deleteDesc: "这个库变得与服务器完全一致。只在本机的文件会被删除。"
+    syncIgnoreRegEx: "不同步的文件"
+    syncIgnoreRegExDesc: "按文件路径匹配的正则表达式，每行一个；匹配的文件既不发送也不接收。"
+    syncOnlyRegEx: "只同步这些文件"
+    syncOnlyRegExDesc: "按文件路径匹配的正则表达式，每行一个。填写后只同步匹配的文件。"
+    connection: "连接"
+    sync: "同步"
+    sorting: "文件排序"
+    kindle: "发送到 Kindle"
+    appearance: "外观"
+    maintenance: "维护"
+    help: "帮助"
+    notConnectedDesc: "登录 Tabularium 服务器并选择要与这个库同步的笔记库。"
+    status: "同步状态"
+    state:
+      syncing: "正在同步"
+      live: "已连接，修改即时同步"
+      idle: "已同步"
+      stopped: "未在同步"
+      error: "同步出错，请查看日志"
+    pending: "${count} 项待处理"
+    syncNow: "立即同步"
+    changeVault: "重新登录或换笔记库"
+    disconnectTitle: "断开这台设备？"
+    locked: "笔记库已锁定"
+    lockedNotAccepted: "服务器上的笔记库已重建。这台设备需要先从服务器重新获取，之后才能同步；之后可以解除锁定。"
+    lockedAccepted: "服务器上的笔记库已重建，这台设备已重新获取。其他设备也都重新获取后再解除锁定。"
+    unlock: "解除锁定"
+    unlockDesc: "结束重建后笔记库上的锁定。"
+    unlockTitle: "解除笔记库锁定？"
+    unlockBody: "所有设备都可以再与这个笔记库同步。"
+    unlockImpact: "重建后还没有重新获取的设备，解锁后可能把旧数据发回服务器。"
+    fetchDesc: "用服务器上的数据重建这台设备的本地数据库。服务器重建后，或这台设备同步异常时使用。"
+    fetchAction: "重新获取并重启"
+    fetchTitle: "从服务器重新获取全部？"
+    fetchBody: "插件会重启，丢弃这台设备的本地数据库，再从服务器获取笔记库。请选择本机笔记与服务器上的笔记如何对齐。"
+    fetchImpact: "只有本机保留的笔记被再次同步到服务器时，才会影响其他设备。"
+    overwrite: "用这台设备覆盖服务器"
+    overwriteDesc: "用这台设备的文件替换服务器上的笔记库。需要笔记库所有者先在网页「账户设置 → 笔记库与设备 → 重建笔记库」中授权这台设备。"
+    overwriteAction: "覆盖并重启"
+    overwriteTitle: "覆盖服务器上的笔记库？"
+    overwriteBody: "插件会重启，把这台设备的文件上传为笔记库的新数据库。服务器保留原来的数据库，所有者可以在网页上切回。
+
+
+      这台设备没有得到所有者授权时，服务器会拒绝，不会有任何改变。"
+    overwriteImpact: "之后笔记库会被锁定：其他每台设备都要从服务器重新获取，它们上面未同步的修改会丢失。"
+    suspend: "暂停同步并重启"
+    suspendDesc: "重启插件，并暂停全部同步与文件监视，用于问题反复出现时。用命令「开关全部同步」恢复。"
+    suspendAction: "暂停并重启"
+    resetLocal: "删除本地数据库"
+    resetLocalDesc: "删除这台设备上的同步数据副本，笔记文件本身保留；之后从服务器重新获取。"
+    resetLocalAction: "删除"
+    resetLocalTitle: "删除本地数据库？"
+    resetLocalBody: "这个库中的笔记不会被删除。从服务器重新获取之前，这台设备不会同步。"
+    recovery: "恢复"
+    diagnosis: "诊断"
+    log: "日志"
+    logDesc: "插件最近做了什么。"
+    open: "打开"
+    report: "诊断报告"
+    reportDesc: "用于求助的设置、版本与最近日志。不含密码、密码短语和服务器地址。"
+    copy: "复制"
+    doctor: "检查设置"
+    doctorDesc: "查找已知会导致问题的设置，并提供修正。"
+    run: "运行"
+    broken: "查找不完整的文件"
+    brokenDesc: "查找数据没有完整收到的笔记，从本机或服务器恢复。"
+    resolveAll: "所有冲突都保留较新的版本"
+    resolveAllDesc: "对每篇有冲突的笔记，保留最后修改的版本。"
+    advanced: "高级"
+    advancedDesc: "很少需要。只在帮助或诊断提到时修改。"
+    advancedSync: "同步"
+    advancedConflicts: "冲突"
+    advancedTransfer: "传输"
+    advancedFiles: "文件"
+    advancedLog: "日志"
+    mode: "同步方式"
+    modeDesc: "实时：修改随时收发。定时：按下面设置的间隔。按事件：在 Obsidian 启动、保存或打开文件时。"
+    modeLive: "实时"
+    modePeriodic: "定时"
+    modeEvents: "按事件"
+    whatSyncs: "同步范围"
+    conflicts: "冲突"
+    needsConnection: "请先连接 Tabularium 服务器。"
+    language: "语言"
+    networkWarning: "离线时"
+    networkBanner: "显示横幅"
+    networkIcon: "只显示图标"
+    networkHidden: "不显示"
+    changelog: "版本历史"
+    about: "关于"
+    version: "Tabularium ${version}"
+    aboutDesc: "自托管 Tabularium 服务器的插件，基于 vorotamoroz 的「self-hosted-livesync」（MIT 许可）。"
+  help:
+    connect:
+      title: "连接与更换笔记库"
+      body: "打开「连接」，用 Tabularium 服务器上的账户登录。选择已有的笔记库或新建一个，填写设备名和笔记库的密码短语。
+
+
+        已有的笔记库会先下载到这台设备；新建的笔记库由这台设备的文件填充。换用其他笔记库时点「重新登录或换笔记库」。「断开」只让这台设备忘记连接，服务器上的设备记录要在网页上删除。
+
+
+        设备凭据有效期 30 天，设备在使用时会自动续期。"
+    status:
+      title: "同步状态的含义"
+      body: "状态栏显示连接状态和计数。「已同步」表示没有待处理的修改；「待处理」是还没发送的文件数，会在下次同步时发送。
+
+
+        离线时修改会保留，恢复联网后发送。同步失败的原因记录在日志中（维护 → 日志）。"
+    passphrase:
+      title: "笔记库的密码短语"
+      body: "笔记在每台设备上用笔记库的密码短语加密后才发送，服务器无法读取。同一个笔记库的所有设备使用同一个密码短语。
+
+
+        密码短语无法找回。丢失后服务器上的笔记无法解密；仍有文件的设备可以用这些文件新建笔记库。"
+    migrate:
+      title: "从旧插件迁移"
+      body: "连接 Tabularium 之前，先在这个库中关闭插件「self-hosted-livesync」，两者不能同时运行。然后连接 Tabularium 服务器上已经存有你笔记的笔记库，这台设备会从服务器获取。
+
+
+        旧插件的设置和本地数据库不会被使用。"
+    rebuild:
+      title: "重建与解除锁定"
+      body: "重建用一台设备的文件替换服务器上的笔记库，例如清理旧数据。所有者先在网页（账户设置 → 笔记库与设备 → 重建笔记库）授权设备，再在那台设备的「维护」中执行「用这台设备覆盖服务器」。
+
+
+        之后笔记库会被锁定。其他设备会显示「笔记库已锁定」，需要从服务器重新获取。都获取后，在这里或网页上解除锁定。"
+    errors:
+      title: "常见问题"
+      body: "凭据失效：设备已在服务器上删除，或凭据过期。重新登录即可。
+
+
+        加密设置被拒：这台设备的设置与笔记库不一致。断开后重新连接。
+
+
+        正在重建：等所有者在网页上结束重建。
+
+
+        某篇笔记不同步：检查「同步」中的大小上限和排除的文件，并查看日志。
+
+
+        大的笔记库首次同步需要一段时间，保持 Obsidian 打开，直到状态显示「已同步」。"
+  release:
+    "0.18.0": "新的设置页按用途分为连接、同步、文件排序、发送到 Kindle、外观、维护和帮助。
+
+      内置三语帮助与版本历史。
+
+      确认对话框写明会发生什么、对其他设备的影响。
+
+      去掉了不适用于 Tabularium 服务器的原版入口：远程配置、Setup URI 与二维码、引导向导、隐藏文件与自定义同步、P2P。"
+    "0.17.0": "书记员按配方回答：管理员设定的模型、参数与补充提示词组合，对话中可以微调。"
+    "0.16.0": "服务器设置（包括发送到 Kindle 的发信）改在网页上修改。"
+    "0.15.0": "书记员（Tabularius）在网页上设置；云笔记的阅读排版向 Obsidian 看齐。"
+    "0.14.0": "在文件菜单中把笔记或文件夹分享为加密链接。"
+    "0.13.0": "统一的网页应用：首页、云笔记、书记员与管理。"
+    "0.12.0": "插件中全部改用 Tabularium 的名称；大笔记库同步更可靠；去掉误导性的版本提示。"
+    "0.5.0": "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。"
+    "0.4.0": "界面支持英文、中文和拉丁语；云笔记可以编辑。"
+    "0.3.0": "用 Tabularium 账户登录连接；发送到 Kindle；云笔记；凭据自动续期。"
 '${ROLE}: ${REVISION}': ${ROLE}：${REVISION}
 (RegExp) Limit normal files to matching paths. Leave empty to allow all normal file paths. Hidden File Sync uses its own target patterns.: （正则表达式）只同步路径匹配的普通文件。留空则允许所有普通文件路径。隐藏文件同步使用自己的目标模式。
 (RegExp) Skip changes to matching normal and hidden files, locally and remotely.: （正则表达式）跳过匹配的普通文件和隐藏文件在本地和远程的变更。
@@ -2802,3 +3024,234 @@ obsidianLiveSyncSettingTab.panelSelector: 选择器
 "Review why synchronisation is paused": "查看同步暂停的原因"
 "Analyse Database Usage (advanced)": "分析数据库用量（高级）"
 "Resolve if conflicted.": "如有冲突则解决"
+Connected to ${connection.info.db_name} successfully: 已连接到 ${connection.info.db_name}。
+The document ID configurations differ. Import the correct Setup URI, or configure the matching ID key, before synchronising.: 此设备与服务器的文档 ID 设置不一致。请先配置一致的 ID 密钥，再进行同步。
+The remote type does not support preferred tweak values.: 此类服务器不支持推荐的调整值。
+Failed to get the preferred tweak values from the remote.: 无法从服务器获取推荐的调整值。
+The settings in the remote database are the same as the local database.: 服务器上的设置与此设备数据库中的设置相同。
+Pending file events remain because their commit did not complete before the window visibility changed.: 窗口可见状态改变前，待处理的文件事件未能提交完毕，因此仍在等待处理。
+Obsidian will be restarted soon! (Within ${stableCheck} seconds): Obsidian 将在 ${stableCheck} 秒内重启。
+The selected revision does not have a revision identifier.: 所选修订没有修订标识。
+Restoring the selected revision failed before Vault reflection completed. Review the file with 'Inspect conflicts and file/database differences' before retrying.: 所选修订在写入库之前恢复失败。请先检查该文件，再重试。
+The selected revision could not be restored because its content is no longer available.: 所选修订的内容已不存在，无法恢复。
+The current database revision could not be read. The Vault was not changed.: 无法读取数据库中的当前修订。库未作任何更改。
+Only an ordinary valid Vault path can be restored from Document History.: 只有普通且有效的库路径才能从文档历史记录中恢复。
+The restored revision could not be created. The file may have changed during the operation, and the Vault was not changed.: 无法创建恢复的修订。文件可能在操作过程中发生了变化。库未作任何更改。
+The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.: 恢复的修订已保存到此设备的数据库，但无法写入库。
+The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.: 所选内容已恢复为新的修订。其他版本仍未解决，请使用「选择要解决冲突的文件」查看。
+The selected content was restored as a new revision.: 所选内容已恢复为新的修订。
+The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: 所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。
+The restored file could not be opened in the editor.: 无法在编辑器中打开恢复的文件。
+Error in Setting Save Event: 保存设置时出错。
+${file} is conflicted, merging process has been postponed.: ${file} 存在冲突，已推迟合并。
+${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}: ${title} 无法删除 ${path} 的冲突修订 ${displayRev(deleteRevision)}。
+"Could not write the resolved content to the storage: ${path}": 无法将解决后的内容写入存储：${path}
+Merged content cannot be stored:${path}: 无法保存合并后的内容：${path}
+could not get current revisions:${path}: 无法获取当前修订：${path}
+could not read conflicted revision ${rightRev}:${path}: 无法读取冲突修订 ${rightRev}：${path}
+"[conflict] ${filename} is conflicted. Merging process has been postponed to the file have got opened.": ${filename} 存在冲突。合并将推迟到打开该文件时进行。
+Resolving conflicts by newer ones: 正在用较新的版本解决冲突
+Check and Processing ${i} / ${files.length}: 正在检查和处理 ${i} / ${files.length}
+Done!: 完成。
+Concatenated content cannot be stored:${filename}: 无法保存拼接后的内容：${filename}
+"Concatenated saved, but cannot delete conflicted revisions: ${filename}, (${displayRev(delRev)})": 拼接后的内容已保存，但无法删除冲突修订：${filename}（${displayRev(delRev)}）
+"Merge: Something went wrong: ${filename}, (${toDelete})": 合并失败：${filename}（${toDelete}）
+"Merge: Something went wrong: ${filename}, (${String(toDelete)})": 合并失败：${filename}（${String(toDelete)}）
+There are no conflicted documents: 没有存在冲突的文档。
+Error while scanning conflicted files...: 扫描冲突文件时出错。
+Remediation mode is active, so the detailed fetch flow is used instead of Simple Fetch.: 修正模式已启用，因此改用详细获取，而不是简单获取。
+Fetch cancelled by user.: 已取消获取。
+Fetch exited by user.: 已退出获取。
+Fetch initialisation cancelled by user.: 已取消获取前的准备。
+User chose to reboot and re-run the process.: 将重启并重新运行此过程。
+Simple fetch and scan operation completed.: 获取和扫描已完成。
+Processing ${docPath} has been skipped due to file size exceeding the limit: 已跳过 ${docPath}，因为文件超过大小限制。
+Error while processing replication result: 处理同步结果时出错。
+Failed to gather content of ${docNote}: 无法收集 ${docNote} 的内容
+"Failed to get existing document for ${path} (${shortenId(dbDoc._id)}, ${shortenRev(dbDoc._rev)}) ": 无法获取 ${path} 的现有文档（${shortenId(dbDoc._id)}，${shortenRev(dbDoc._rev)}）
+"Database cleanup cancelled: ${describeRemoteFeatureRejection(assessment)}": 已取消数据库清理：${describeRemoteFeatureRejection(assessment)}
+"Database cleanup cancelled: feature compatibility could not be checked.": 已取消数据库清理：无法检查功能兼容性。
+Failed to count compromised chunks in local database: 无法统计此设备数据库中受损的数据块。
+Failed to count compromised chunks in remote database: 无法统计服务器上受损的数据块。
+"Found compromised chunks : ${localCompromised} in local, ${remoteCompromised} in remote": 发现受损的数据块：此设备 ${localCompromised} 个，服务器 ${remoteCompromised} 个。
+Could not find stub file for ${file.path}: 找不到 ${file.path} 的占位文件
+Failed to restore ${file.path} from storage: 无法从存储中恢复 ${file.path}
+"PUT: FAILED: ${path}": 写入失败：${path}
+QR Code size exceeded, switching to aggregator mode: 二维码超出大小限制，改用聚合模式。
+Failed to encode split QR Code (${ex2?.message || String(ex2)}): 无法编码分段二维码（${ex2?.message || String(ex2)}）
+Failed to parse settings from decrypted data: 无法从解密后的数据中解析设置。
+Failed to write buffered chunks for ${dispFilename}: 无法写入 ${dispFilename} 的缓冲数据块
+Failed to flush buffered chunks for ${dispFilename}: 无法刷新 ${dispFilename} 的缓冲数据块
+No data to save in ${dispFilename}!! This document may be corrupted in the local database! Please back it up immediately, and report an issue!: ${dispFilename} 中没有可保存的数据。此文档在此设备的数据库中可能已损坏。请立即备份，并报告此问题。
+Failed to write document ${dispFilename}: 无法写入文档 ${dispFilename}
+Missing document content!, could not read ${dispFilename}(${meta._id.substring(0, 8)}) from database.: 文档内容缺失，无法从数据库读取 ${dispFilename}（${meta._id.substring(0, 8)}）。
+"Something went wrong on reading ${dispFilename}(${meta._id.substring(0, 8)}) from database:": 从数据库读取 ${dispFilename}（${meta._id.substring(0, 8)}）时出错：
+"The storage file has been changed but exceeds the maximum size. Skipping: ${param.file.path}": 库中有文件发生变化，但超过了最大大小。已跳过：${param.file.path}
+Storage operation remains pending after a failure: 存储操作失败后仍在等待处理。
+Database initialisation was rejected by a required module.: 数据库初始化被一个必需模块拒绝。
+Some module has prevented the database from being ready. The database is initialised but not ready for use.: 某个模块阻止了数据库就绪。数据库已初始化，但还不能使用。
+Database reset has been prevented or failed on some modules.: 部分模块阻止了数据库重置，或重置失败。
+Local Database could not be reinitialised after reset.: 重置后无法重新初始化此设备的数据库。
+Local Database Reset: 重置此设备的数据库
+'${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} database': '${dryRun ? "Counting" : "Cleaning"} ${connSetting ? "remote" : "local"} 数据库'
+"Database active-size: ${sizeToHumanReadable(getSize(info, \"active\"))}, external-size:${sizeToHumanReadable(\n        getSize(info, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, \"file\"))}": |-
+  数据库活动大小：${sizeToHumanReadable(getSize(info, "active"))}，外部大小：${sizeToHumanReadable(
+          getSize(info, "external")
+        )}，文件大小：${sizeToHumanReadable(getSize(info, "file"))}
+Collecting unreferenced chunks on ${info.db_name}: 正在收集 ${info.db_name} 中未被引用的数据块
+No unreferenced chunks! ${info.db_name}: ${info.db_name} 中没有未被引用的数据块。
+"Number of unreferenced chunks on ${info.db_name}: ${chunks.length}": ${info.db_name} 中未被引用的数据块：${chunks.length}
+'DryRun of cleaning ${connSetting ? "remote" : "local"} database up: Done': '${connSetting ? "remote" : "local"} 数据库清理试运行：完成'
+Cleaning unreferenced chunks on remote: 正在清理服务器上未被引用的数据块
+Cleaning unreferenced chunks on local: 正在清理此设备上未被引用的数据块
+Cleaning unreferenced chunks done!: 未被引用的数据块已清理完成。
+Compacting database...: 正在压缩数据库……
+Compacting database done: 数据库压缩完成。
+"Processed database active-size: ${sizeToHumanReadable(\n        getSize(endInfo, \"active\")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(endInfo, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(endInfo, \"file\"))}": |-
+  处理后的数据库：活动大小：${sizeToHumanReadable(
+          getSize(endInfo, "active")
+        )}，外部大小：${sizeToHumanReadable(
+          getSize(endInfo, "external")
+        )}，文件大小：${sizeToHumanReadable(getSize(endInfo, "file"))}
+"Reduced sizes: active-size: ${sizeToHumanReadable(\n        getSize(info, \"active\") - getSize(endInfo, \"active\")\n      )}, external-size:${sizeToHumanReadable(\n        getSize(info, \"external\") - getSize(endInfo, \"external\")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, \"file\") - getSize(endInfo, \"file\"))}": |-
+  减少量：活动大小：${sizeToHumanReadable(
+          getSize(info, "active") - getSize(endInfo, "active")
+        )}，外部大小：${sizeToHumanReadable(
+          getSize(info, "external") - getSize(endInfo, "external")
+        )}，文件大小：${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}
+'Cleaning ${connSetting ? "remote" : "local"} database up: Done': '${connSetting ? "remote" : "local"} 数据库清理：完成'
+"${label}: Something went wrong on balancing": ${label}：平衡时出错
+"${label}: ${totalProcessed} / ${total}": ${label}：${totalProcessed} / ${total}
+Complement missing chunks between databases: 正在补全数据库之间缺失的数据块
+"local -> remote: Done": 此设备 → 服务器：完成
+"remote -> local: Done": 服务器 → 此设备：完成
+Something went wrong on balancing!: 平衡时出错。
+Complement completed!: 缺失的数据块已补全。
+"Purging unused ${docs.length} chunks ": 正在清除 ${docs.length} 个未使用的数据块
+"Local chunk backed up: new:${total.ok} ,exist:${total.exist}, error:${total.error}": 此设备的数据块已备份：新增 ${total.ok}，已存在 ${total.exist}，错误 ${total.error}
+"Purging unused ${docs.length} chunks... ": 正在清除 ${docs.length} 个未使用的数据块……
+"Purging:  ${totalRemoved} / ${docs.length}": 正在清除：${totalRemoved} / ${docs.length}
+"Purging unused chunks done!: ${totalRemoved} chunks has been deleted.": 未使用的数据块已清除：删除了 ${totalRemoved} 个数据块。
+${ENCRYPTION_HKDF_FAILED} on Eden: ${ENCRYPTION_HKDF_FAILED}（内部数据）
+${ENCRYPTION_HKDF_FAILED} on Metadata: ${ENCRYPTION_HKDF_FAILED}（元数据）
+Unknown encryption version. Cannot decrypt.: 未知的加密版本，无法解密。
+${DECRYPTION_HKDF_FAILED} on Path: ${DECRYPTION_HKDF_FAILED}（文件路径）
+${MESSAGE_FALLBACK_DECRYPT_FAILED} on Path: ${MESSAGE_FALLBACK_DECRYPT_FAILED}（文件路径）
+${DECRYPTION_FALLBACK_FAILED} on Eden: ${DECRYPTION_FALLBACK_FAILED}（内联数据块）
+${DECRYPTION_HKDF_FAILED} on Eden: ${DECRYPTION_HKDF_FAILED}（内联数据块）
+Encryption failed.: 加密失败。
+Decryption failed.: 解密失败。
+Database updated from ${from} to ${to}: 数据库已从 ${from} 更新到 ${to}
+↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}: ↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}
+Replication callback error: 同步回调出错
+Replication denied: 同步被拒绝
+Replication error: 同步出错
+Something went wrong during synchronisation. Please check the log!: 同步时出错，请查看日志。
+The remote document IDs do not match the configured ID key.: 服务器上的文档 ID 与配置的 ID 密钥不匹配。
+The remote database has no compatibility with the running version. Please upgrade the plugin.: 服务器上的数据库与当前版本不兼容，请更新插件。
+The remote database has been rebuilt or corrupted since we have synchronized last time. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.: 自上次同步以来，服务器上的数据库已被重建或损坏。需要获取重建后的数据库、明确解锁，或清理数据块。
+The remote database has been cleaned up. Fetch rebuilt DB, explicit unlocking or chunk clean-up is required.: 服务器上的数据库已被清理。需要获取重建后的数据库、明确解锁，或清理数据块。
+Connected to ${db.info.db_name} successfully: 已连接到 ${db.info.db_name}
+Could not retrieve remote milestone: 无法读取服务器上的里程碑记录
+Could not connect to the remote database: 无法连接服务器
+Could not check the remote database version: 无法检查服务器数据库的版本
+"STORAGE -> DB : ${file.path} has been skipped due to file size exceeding the limit": 存储 -> 数据库：${file.path} 超过大小上限，已跳过
+"STORAGE <- DB : Cloud not read ${file.path}, possibly deleted": 存储 <- 数据库：无法读取 ${file.path}，可能已被删除
+"STORAGE <- DB : ${file.path} has been skipped due to file size exceeding the limit": 存储 <- 数据库：${file.path} 超过大小上限，已跳过
+"STORAGE ? DB : ${file.path} has been skipped due to file size exceeding the limit": 存储 ? 数据库：${file.path} 超过大小上限，已跳过
+"STORAGE ? DB : Could not reconcile ${file.path}": 存储 ? 数据库：无法协调 ${file.path}
+DELETE DATABASE did not delete ${path}; keeping last-seen record to avoid resurrecting the file: 未能从数据库删除 ${path}；保留其最后记录，以免文件被恢复
+Error processing ${path} with action ${action}: 处理 ${path}（操作：${action}）时出错
+Error while synchronising files: 同步文件时出错
+Initializing: 正在初始化
+Initialize done!: 初始化完成
+"Rebuilding has been refused: remediation mode is active. Clear the modification-time limit to rebuild.": 已拒绝重建：修复模式已开启。请清除修改时间限制后再重建。
+Could not create ${flag}: 无法创建标记文件 ${flag}
+Could not remove ${flag} after restart preparation failed: 重启准备失败，且无法删除标记文件 ${flag}
+No active replicator found when trying to reset remote database.: 重置服务器数据库时未找到活动的同步连接。
+"Suspending reflection: Database and storage changes will not be reflected in each other until completely finished the fetching.": 暂停相互应用：获取完成前，数据库与库中文件的更改不会互相应用。
+Database and storage reflection has been resumed!: 数据库与库中文件之间的更改已恢复相互应用。
+"Remediation mode: the files in storage are not stored in the database before fetching.": 修复模式：获取前不会把库中的文件存入数据库。
+Fast database fetch is available only for CouchDB remote. Falling back to standard fetch.: 快速获取数据库仅适用于 CouchDB 服务器，改用标准获取。
+Fast database fetch is unavailable while 'Use Internal API' is enabled. Falling back to Standard Fetch.: 通过 Obsidian 内部 API 发送请求时无法快速获取数据库，改用标准获取。
+"Resuming fast database fetch from sequence: ${checkpoint.sequence}": 从序号 ${checkpoint.sequence} 继续快速获取数据库
+Fast fetch checkpoint found, but the local database is empty. Starting from the beginning.: 找到了快速获取的检查点，但这台设备的数据库是空的，将从头开始。
+"Fast fetch progress: ${progress.totalValidFetched} / ${progress.docsToFetch}\nTotal bytes fetched: ${sizeToHumanReadable(progress.totalBytes)}": |-
+  快速获取进度：${progress.totalValidFetched} / ${progress.docsToFetch}
+  已获取：${sizeToHumanReadable(progress.totalBytes)}
+"Fast fetch interrupted. Retrying from sequence: ${since}": 快速获取中断，从序号 ${since} 重试
+"Fast database fetch completed. Total documents in local database: ${allDocs.total_rows}": 快速获取数据库完成。这台设备的数据库中共有 ${allDocs.total_rows} 个文档。
+Storage kept changing while saving ${path}; a fresh event is required: 保存 ${path} 时文件仍在不断变化，需要新的变更事件
+Could not store ${file.path} on revision ${baseRevision}; the selected revision is no longer live: 无法基于修订 ${baseRevision} 保存 ${file.path}：所选修订已不再有效
+Could not mark ${file.path} as revision ${baseRevision}; the storage content differs: 无法将 ${file.path} 标记为修订 ${baseRevision}：库中的内容不同
+Could not preserve the unknown conflict branch for ${file.path}; no current revision is available: 无法保留 ${file.path} 未知的冲突分支：没有可用的当前修订
+Could not preserve the unknown conflict branch for ${file.path}: 无法保留 ${file.path} 未知的冲突分支
+The deleted storage file ${path} has conflicts, but its displayed revision is unknown; preserving every database branch: 已删除的文件 ${path} 存在冲突，但不知道它显示的是哪个修订，将保留数据库中的所有分支
+The deleted storage file ${file.path} has conflicts, but its displayed revision is unknown; preserving every database branch: 已删除的文件 ${file.path} 存在冲突，但不知道它显示的是哪个修订，将保留数据库中的所有分支
+Refusing to overwrite the existing database entry while renaming ${oldPath} to ${newPath}: 将 ${oldPath} 重命名为 ${newPath} 时，拒绝覆盖数据库中已有的条目
+"Failed to store rename target; preserving source in the database: ${oldPath}": 无法保存重命名后的文件，数据库中保留原文件：${oldPath}
+Renamed ${oldPath} to ${newPath}, but preserved every conflicted source branch because the displayed source revision is unknown: 已将 ${oldPath} 重命名为 ${newPath}，但由于不知道原文件显示的是哪个修订，保留了原文件所有存在冲突的分支
+Could not apply ${tryGetFilePath(info)} revision ${rev}; the selected revision is no longer live: 无法应用 ${tryGetFilePath(info)} 的修订 ${rev}：所选修订已不再有效
+Refusing to overwrite ${existDoc.path} while applying the distinct path ${path}: 应用另一路径 ${path} 时，拒绝覆盖 ${existDoc.path}
+"Refusing to apply a filename case change across differently cased parent directories: ${existDoc.path} -> ${path}": 父文件夹的大小写不同，拒绝更改文件名大小写：${existDoc.path} -> ${path}
+"Could not apply the stored filename case: ${existDoc.path} -> ${path}": 无法应用数据库中保存的文件名大小写：${existDoc.path} -> ${path}
+File ${path} seems to be corrupted! Writing prevented. (${docRead.size} != ${reflectedContent.size}): 文件 ${path} 似乎已损坏，已阻止写入（${docRead.size} != ${reflectedContent.size}）
+Prevented overwriting unsynchronised local changes for ${path}: 已阻止覆盖 ${path} 在这台设备上尚未同步的更改
+Preserved unsynchronised local changes as a conflict for ${path}: 已将 ${path} 在这台设备上尚未同步的更改保留为冲突
+Database kept changing while reflecting ${path}: 将 ${path} 写入库时，数据库仍在不断变化
+"Preserved ${path}: the rename target no longer resolves to ${targetPath}": 已保留 ${path}：重命名目标不再指向 ${targetPath}
+"Preserved ${path}: rename target ${targetPath} is still selected": 已保留 ${path}：重命名目标 ${targetPath} 仍处于选中状态
+"Preserved ${path}: a current storage item contradicts its deletion event": 已保留 ${path}：库中现有的项目与其删除事件矛盾
+Could not validate deletion of ${path}; preserved the database entry: 无法确认 ${path} 的删除，已保留数据库中的条目
+Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery: 无法根据库的当前状态核对 ${path} 已保存的文件操作，该操作仍待恢复
+Unload preparation failed; pending storage work may require recovery: 卸载前的准备失败，未完成的文件操作可能需要恢复
+Self-hosted LiveSync cannot be initialised, exiting loading.: Tabularium 无法初始化，已停止加载。
+Failed to reset KeyValueDB: 无法重置键值数据库
+Failed to open KeyValueDB: 无法打开键值数据库
+"The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": "请求可能失败了。服务器返回：${r.status}: ${r.statusText}"
+The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync: 通过 Obsidian API 的请求成功，但原生 fetch API 失败。请检查服务器的 CORS 设置。在此问题解决前，无法启用实时同步。
+"Failed to fetch by API. ${resp2.status}: ${msg}": "请求失败。${resp2.status}: ${msg}"
+Active replicator not found during directional ${direction}: 执行单向同步（${direction}）时未找到活动的同步连接
+The selected local database is not ready for the rebuild upload.: 这台设备的数据库尚未准备好进行重建上传。
+The selected local database is not ready for the rebuild download.: 这台设备的数据库尚未准备好进行重建下载。
+Active replicator not found during ${usage}: 执行 ${usage} 时未找到活动的同步连接
+Active replicator does not support ${action}: 当前的同步连接不支持 ${action}
+Legacy remote configuration has been migrated to the remote configuration list.: 旧的服务器配置已迁移到服务器配置列表。
+Failed to retrieve passphrase. data.json contains unencrypted items!: 无法获取密码短语。data.json 中包含未加密的项目。
+Failed to encrypt remote configuration '${id}'. This entry will be saved in plain text.: 无法加密服务器配置“${id}”，该条目将以明文保存。
+Remote configuration '${id}' had a plain-text URI marked as encrypted. The flag has been repaired.: 服务器配置“${id}”的明文 URI 被错误地标记为已加密，该标记已修正。
+Failed to decrypt remote configuration '${id}'. Verify passphrase and configuration.: 无法解密服务器配置“${id}”。请检查密码短语和配置。
+"Error in update function: ": 更新设置时出错
+"Error in applying external settings: ": 应用外部设置时出错
+"Error in applying partial settings: ": 应用部分设置时出错
+Failed to decrypt configuration item: 无法解密配置项
+Failed to obtain passphrase when saving data.json! Please verify the configuration.: 保存 data.json 时无法获取密码短语，请检查配置。
+No passphrase found for data.json! Verify configuration before syncing.: 未找到 data.json 的密码短语。同步前请检查配置。
+Encrypted remote configurations found, but passphrase is unavailable. Verify configuration before syncing.: 发现已加密的服务器配置，但无法获取密码短语。同步前请检查配置。
+Failed to decrypt passphrase from data.json! Ensure configuration is correct before syncing with remote.: 无法解密 data.json 中的密码短语。与服务器同步前，请确认配置正确。
+"Failed to activate the selected remote configuration: ${activeConfigurationId}": 无法启用所选的服务器配置：${activeConfigurationId}
+"Failed to activate the selected P2P remote configuration: ${p2pActiveConfigurationId}": 无法启用所选的点对点配置：${p2pActiveConfigurationId}
+Configuration issues detected and automatically resolved. However, unsynchronized data may exist. Consider rebuilding if necessary.: 检测到配置问题并已自动修正，但可能仍有未同步的数据，必要时请重建。
+Device name missing. Disabling plug-in sync.: 缺少设备名称，已关闭插件同步。
+The remote database has been cleaned.: 服务器上的数据库已清理。
+The local database has been cleaned up.: 这台设备的数据库已清理。
+Replication has been cancelled. Please try it again.: 同步已取消，请重试。
+Replication activated: 同步已开始
+Replication completed: 同步完成
+Replication stopped for busy.: 服务器繁忙，同步已暂停。
+Replication stopped.: 同步已停止。
+Bulk sending chunks to remote database...: 正在把数据块发送到服务器…
+"↑ Uploading chunks\ \n${sendingDocs}/(${sentDocsCount} done)": |-
+  ↑ 正在上传数据块 
+  ${sendingDocs}/（已完成 ${sentDocsCount}）
+Bulk sending failed.: 数据块发送失败。
+The remote connectivity check timed out.: 检查与服务器的连接超时。
+'${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} '
+Some requested chunks were not found in the remote database.: 服务器上找不到部分请求的数据块。
+"Collecting local files on the DB: ${count}": 正在把本机文件收入数据库：${count}
+"Processing: ${processedCount}/${pairs.length}": 正在处理：${processedCount}/${pairs.length}
+"Creating missing chunks: ${processed} of ${total} files": 正在补建数据块：${processed}/${total} 个文件
+"Creating chunks Done: ${processed} of ${total} files": 数据块已建立：${processed}/${total} 个文件
+No active replicator found: 没有设置同步
+Network is offline: 网络已断开
+"Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": 同步完成：处理了 ${processedCount} 个文件（完成 ${completedCount}，跳过 ${skippedCount}，出错 ${failedCount}）

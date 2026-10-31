@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { englishMessageTranslator } from "@vrtmrz/livesync-commonlib/context";
-import { $msg, setLang, translateLiveSyncMessage } from "@/common/translation";
+import { $msg, setLang, translateLiveSyncMessage, translateNotice } from "@/common/translation";
 import { SUPPORTED_I18N_LANGS } from "@/common/rosetta";
 import { liveSyncProvisionalEnglishMessages } from "@/common/messages/LiveSyncProvisionalMessages";
 
@@ -79,5 +79,24 @@ describe("LiveSync-owned translation catalogue", () => {
             "Restart and Select Source Device": "Restart and Select Source Device",
             "P2P Status pane": "P2P Status pane",
         });
+    });
+});
+
+describe("Notices in the interface language", () => {
+    afterEach(() => setLang(""));
+
+    it("translates a notice written as a literal", () => {
+        setLang("zh");
+        expect(translateNotice("Replication completed")).toBe("同步完成");
+    });
+
+    it("translates a rendered template literal and keeps its values", () => {
+        setLang("zh");
+        expect(translateNotice("Creating missing chunks: 3 of 10 files")).toBe("正在补建数据块：3/10 个文件");
+    });
+
+    it("shows text that is not in the catalogue as it is", () => {
+        setLang("zh");
+        expect(translateNotice("Something nobody wrote down")).toBe("Something nobody wrote down");
     });
 });

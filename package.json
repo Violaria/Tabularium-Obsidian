@@ -1,6 +1,6 @@
 {
     "name": "obsidian-livesync",
-    "version": "0.17.0",
+    "version": "0.18.0",
     "description": "Reflect your vault changes to some other devices immediately. Please make sure to disable other synchronize solutions to avoid content corruption or duplication.",
     "main": "main.js",
     "type": "module",
@@ -29,7 +29,7 @@
         "i18n:bake": "npm run i18n:yaml2json && npm run i18n:bakejson && npm run i18n:format",
         "i18n:bakejson": "tsx _tools/bakei18n.ts",
         "i18n:format": "prettier --config .prettierrc.mjs --write --log-level error 'src/common/messagesJson/*.json' 'src/common/messages/*.ts'",
-        "i18n:check": "tsx _tools/checkTrilingual.ts",
+        "i18n:check": "tsx _tools/checkTrilingual.ts && tsx _tools/checkNotices.ts",
         "i18n:json2yaml": "tsx _tools/json2yaml.ts",
         "i18n:yaml2json": "tsx _tools/yaml2json.ts",
         "test:unit": "vitest run --config vitest.config.unit.ts",

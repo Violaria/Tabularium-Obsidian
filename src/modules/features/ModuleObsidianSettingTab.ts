@@ -1,4 +1,4 @@
-import { ObsidianLiveSyncSettingTab } from "./SettingDialogue/ObsidianLiveSyncSettingTab.ts";
+import { TabulariumSettingTab } from "@/features/tabularium/SettingTab.ts";
 import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 // import { PouchDB } from "../../lib/src/pouchdb/pouchdb-browser";
 import { EVENT_REQUEST_OPEN_SETTINGS, eventHub } from "@/common/events.ts";
@@ -6,15 +6,14 @@ import type { LiveSyncCore } from "@/main.ts";
 import { openObsidianSettings } from "@/common/obsidianSettings.ts";
 
 export class ModuleObsidianSettingDialogue extends AbstractObsidianModule {
-    settingTab!: ObsidianLiveSyncSettingTab;
+    settingTab!: TabulariumSettingTab;
 
-    async _everyOnloadAfterLoadSettings(): Promise<boolean> {
-        this.settingTab = new ObsidianLiveSyncSettingTab(this.app, this.plugin);
-        await this.settingTab.loadSettings();
+    _everyOnloadAfterLoadSettings(): Promise<boolean> {
+        // Tabularium's settings page replaces upstream's; upstream's panes stay in the source but are not registered.
+        this.settingTab = new TabulariumSettingTab(this.plugin);
         this.plugin.addSettingTab(this.settingTab);
         eventHub.onEvent(EVENT_REQUEST_OPEN_SETTINGS, () => this.openSetting());
-
-        return true;
+        return Promise.resolve(true);
     }
 
     openSetting() {

@@ -29,12 +29,12 @@ export class ConflictResolveModal extends Modal {
     consumed = false;
     private readonly resultPromise = promiseWithResolvers<MergeDialogResult>();
 
-    title: string = "Conflicting changes";
+    title: string = $msg("tabularium.conflict.title");
 
     pluginPickMode: boolean = false;
     readOnly: boolean = false;
-    localName: string = "Base";
-    remoteName: string = "Conflicted";
+    localName: string = $msg("tabularium.conflict.base");
+    remoteName: string = $msg("tabularium.conflict.conflicted");
     private eventSubscriptions?: AbortController;
     currentDiffIndex = -1;
     diffView!: HTMLDivElement;
@@ -54,13 +54,13 @@ export class ConflictResolveModal extends Modal {
         this.pluginPickMode = pluginPickMode || false;
         this.readOnly = options?.readOnly ?? false;
         if (this.pluginPickMode) {
-            this.title = "Pick a version";
-            this.remoteName = `${remoteName || "Remote"}`;
-            this.localName = "Local";
+            this.title = $msg("tabularium.conflict.pick");
+            this.remoteName = remoteName || $msg("tabularium.conflict.remote");
+            this.localName = $msg("tabularium.conflict.local");
         } else if (this.readOnly) {
-            this.title = options?.title ?? "Vault and database revision";
-            this.localName = options?.localName ?? "Vault file";
-            this.remoteName = options?.remoteName ?? "Database revision";
+            this.title = options?.title ?? $msg("tabularium.conflict.vaultAndDatabase");
+            this.localName = options?.localName ?? $msg("tabularium.conflict.vaultFile");
+            this.remoteName = options?.remoteName ?? $msg("tabularium.conflict.databaseRevision");
         }
     }
 
@@ -146,11 +146,11 @@ export class ConflictResolveModal extends Modal {
 
         const diffNavContainer = diffOptionsRow.createDiv("");
         diffNavContainer.addClass("diff-nav");
-        diffNavContainer.createEl("button", { text: "\u25B2 Prev" }, (e) => {
+        diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.previous") }, (e) => {
             e.addClass("diff-nav-btn");
             e.addEventListener("click", () => this.navigateDiff("prev"));
         });
-        diffNavContainer.createEl("button", { text: "\u25BC Next" }, (e) => {
+        diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.next") }, (e) => {
             e.addClass("diff-nav-btn");
             e.addEventListener("click", () => this.navigateDiff("next"));
         });
@@ -180,9 +180,9 @@ export class ConflictResolveModal extends Modal {
         const div2 = contentEl.createDiv("");
         div2.addClass("ls-dialog");
         const date1 =
-            new Date(this.result.left.mtime).toLocaleString() + (this.result.left.deleted ? " (Deleted)" : "");
+            new Date(this.result.left.mtime).toLocaleString() + (this.result.left.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
         const date2 =
-            new Date(this.result.right.mtime).toLocaleString() + (this.result.right.deleted ? " (Deleted)" : "");
+            new Date(this.result.right.mtime).toLocaleString() + (this.result.right.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
         this.appendVersionInfo(div2, "deleted", this.localName, date1);
         this.appendVersionInfo(div2, "added", this.remoteName, date2);
         const actionContainer = contentEl.createDiv("conflict-action-container");
@@ -206,14 +206,14 @@ export class ConflictResolveModal extends Modal {
                     e.addEventListener("click", () => this.sendResponse(LEAVE_TO_SUBSEQUENT));
                 });
             }
-            actionContainer.createEl("button", { text: !this.pluginPickMode ? "Not now" : "Cancel" }, (e) => {
+            actionContainer.createEl("button", { text: $msg(this.pluginPickMode ? "tabularium.confirm.cancel" : "tabularium.conflict.later") }, (e) => {
                 e.addClass("conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.pluginPickMode ? CANCELLED : POSTPONED));
             });
         }
         if (diffLength > 100 * 1024) {
             this.diffView.empty();
-            this.diffView.setText("(Too large diff to display)");
+            this.diffView.setText($msg("tabularium.conflict.tooLarge"));
         }
         this.resetDiffNavigation();
         this.navigateDiff("next");

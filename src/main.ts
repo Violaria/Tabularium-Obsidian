@@ -4,8 +4,6 @@ import { getLanguage, Notice, Plugin, type App, type PluginManifest } from "./de
 import { setGetLanguage } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
 setGetLanguage(getLanguage);
 import { LiveSyncCommands } from "./features/LiveSyncCommands.ts";
-import { HiddenFileSync } from "./features/HiddenFileSync/CmdHiddenFileSync.ts";
-import { ConfigSync } from "./features/ConfigSync/CmdConfigSync.ts";
 // import { ModuleDev } from "./modules/extras/ModuleDev.ts";
 
 import { ModuleLog } from "./modules/features/ModuleLog.ts";
@@ -13,7 +11,6 @@ import { ModuleObsidianEvents } from "./modules/essentialObsidian/ModuleObsidian
 import { ModuleObsidianSettingDialogue } from "./modules/features/ModuleObsidianSettingTab.ts";
 import { ModuleObsidianDocumentHistory } from "./modules/features/ModuleObsidianDocumentHistory.ts";
 import { ModuleObsidianGlobalHistory } from "./modules/features/ModuleGlobalHistory.ts";
-import { LocalDatabaseMaintenance } from "./features/LocalDatabaseMainte/CmdLocalDatabaseMainte.ts";
 import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
 import { ObsidianServiceHub } from "./modules/services/ObsidianServiceHub.ts";
 import { ServiceRebuilder } from "@vrtmrz/livesync-commonlib/compat/serviceModules/Rebuilder";
@@ -27,19 +24,11 @@ import type { ServiceModules } from "./types.ts";
 import { setNoticeClass } from "@vrtmrz/livesync-commonlib/compat/mock_and_interop/wrapper";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { LiveSyncBaseCore } from "./LiveSyncBaseCore.ts";
-import { ModuleObsidianSettingsAsMarkdown } from "./modules/features/ModuleObsidianSettingAsMarkdown.ts";
 import { SetupManager } from "./modules/features/SetupManager.ts";
 import { enableI18nFeature } from "./serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
-import { useRemoteConfiguration } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/remoteConfig";
 import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
-import { useSetupProtocolFeature } from "./serviceFeatures/setupObsidian/setupProtocol.ts";
-import { useSetupQRCodeFeature } from "@/serviceFeatures/setupObsidian/qrCode";
-import { useSetupURIFeature } from "@/serviceFeatures/setupObsidian/setupUri";
-import { useSetupManagerHandlersFeature } from "./serviceFeatures/setupObsidian/setupManagerHandlers.ts";
-import { useP2PReplicatorCommands, useP2PReplicatorFeature } from "@vrtmrz/livesync-commonlib/p2p";
-import { useP2PReplicatorUI } from "./serviceFeatures/useP2PReplicatorUI.ts";
-import { useReviewHarness } from "./serviceFeatures/useReviewHarness.ts";
+import { useP2PReplicatorFeature } from "@vrtmrz/livesync-commonlib/p2p";
 import { createOpenReplicationUI, createOpenRebuildUI } from "./features/P2PSync/P2PReplicator/P2PReplicationUI.ts";
 import { useCompatibilityReview } from "./serviceFeatures/compatibilityReview.ts";
 import { createObsidianCompatibilityReviewUi } from "./serviceFeatures/compatibilityReviewObsidian.ts";
@@ -169,7 +158,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 const extraModules = [
                     new ModuleObsidianEvents(this, core),
                     new ModuleObsidianSettingDialogue(this, core),
-                    new ModuleObsidianSettingsAsMarkdown(core),
                     new ModuleLog(this, core),
                     new ModuleObsidianDocumentHistory(this, core),
                     new ModuleObsidianGlobalHistory(this, core),
@@ -179,8 +167,8 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 return extraModules;
             },
             (core) => {
-                const addOns = [new ConfigSync(core), new HiddenFileSync(core), new LocalDatabaseMaintenance(core)];
-                return addOns;
+                // Hidden-file and customisation sync are off on a Tabularium connection, so their add-ons are not loaded.
+                return [];
             },
             (core) => {
                 //TODO Fix: useXXXX
@@ -203,8 +191,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 this.tabularium = installTabulariumServer(this, core, setupManager);
                 this.kindle = installKindle(this, this.tabularium, core);
                 this.share = installShare(this, this.tabularium, core, () => this.sorting);
-                useP2PReplicatorCommands(core, replicator);
-                useP2PReplicatorUI(core, core, replicator, createInteractiveP2PReplication(replicator));
                 useObsidianReplicationRibbonFeature(core);
                 useDatabaseDiagnosticsFeature(core);
                 // A vault's devices run different software (this plug-in, the server mirror's CLI, Tabularius, web notes), so
@@ -213,12 +199,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     setItem: () => {}, finish: () => false, removeItem: () => false, hide: () => false, dispose: () => {},
                 };
                 useJoinedDevicesFeature(core, noVersionNotices);
-                useRemoteConfiguration(core);
-
-                useSetupProtocolFeature(core, setupManager);
-                useSetupQRCodeFeature(core);
-                useSetupURIFeature(core);
-                useSetupManagerHandlersFeature(core, setupManager);
+                // Only the Tabularium login connects: no saved-connection switching, setup URIs, QR codes or onboarding.
                 useOfflineScanner(core);
                 useRedFlagFeatures(core);
                 // Storage use is watched by the Tabularium server, not by each device.
@@ -234,7 +215,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     inviteToOnboarding: () => this.tabularium!.invite(),
                     waitForCompatibilityReview: () => compatibilityReview.openReview(),
                 });
-                useReviewHarness(core, this, compatibilityReview);
             }
         );
     }

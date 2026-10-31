@@ -160,20 +160,11 @@ export class TabulariumKindle {
     open() {
         new KindleModal(this).open();
     }
-}
 
-class KindleModal extends Modal {
-    private readonly kindle: TabulariumKindle;
-    constructor(kindle: TabulariumKindle) {
-        super(kindle.plugin.app);
-        this.kindle = kindle;
-        this.setTitle($msg("tabularium.kindle.status"));
-    }
-    override async onOpen() {
-        const { contentEl } = this;
-        const status = await this.kindle.status().catch((error: Error) => error);
-        contentEl.empty();
-        new Setting(contentEl)
+    /** The server's mail setting and this account's Kindle address with today's remaining sends. */
+    async renderStatus(el: HTMLElement) {
+        const status = await this.status().catch((error: Error) => error);
+        new Setting(el)
             .setName($msg("tabularium.kindle.serverStatus"))
             .setDesc(
                 status instanceof Error
@@ -187,6 +178,20 @@ class KindleModal extends Modal {
                           })
                         : serverError("Kindle address not set")
             );
+        new Setting(el).setDesc($msg("tabularium.kindle.settingDesc"));
+    }
+}
+
+class KindleModal extends Modal {
+    private readonly kindle: TabulariumKindle;
+    constructor(kindle: TabulariumKindle) {
+        super(kindle.plugin.app);
+        this.kindle = kindle;
+        this.setTitle($msg("tabularium.kindle.status"));
+    }
+    override async onOpen() {
+        this.contentEl.empty();
+        await this.kindle.renderStatus(this.contentEl);
     }
     override onClose() {
         this.contentEl.empty();

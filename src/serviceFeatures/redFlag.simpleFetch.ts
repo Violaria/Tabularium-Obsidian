@@ -67,6 +67,19 @@ async function rememberSimpleFetchMode(host: NecessaryServices<"setting", never>
     await host.services.setting.config.setValue(SIMPLE_FETCH_MODE_KEY, JSON.stringify({ stage1, stage2 }));
 }
 
+/** The fetch choices Tabularium's settings page offers before restarting; the scheduled fetch then asks nothing. */
+export const FETCH_CHOICES = {
+    "newer-cleanup": [SIMPLE_FETCH_STAGE1_NEWER_WINS, SIMPLE_FETCH_STAGE2_NEWER_CLEANUP],
+    "newer-keep": [SIMPLE_FETCH_STAGE1_NEWER_WINS, SIMPLE_FETCH_STAGE2_NEWER_SYNC_ALL],
+    "remote-keep": [SIMPLE_FETCH_STAGE1_REMOTE_WINS, SIMPLE_FETCH_STAGE2_REMOTE_DELETE_NONE],
+    "remote-delete": [SIMPLE_FETCH_STAGE1_REMOTE_WINS, SIMPLE_FETCH_STAGE2_REMOTE_DELETE_ALL],
+} as const;
+export type FetchChoice = keyof typeof FETCH_CHOICES;
+export async function rememberFetchChoice(host: NecessaryServices<"setting", never>, choice: FetchChoice) {
+    const [stage1, stage2] = FETCH_CHOICES[choice];
+    await rememberSimpleFetchMode(host, stage1, stage2);
+}
+
 async function getRememberedSimpleFetchMode(host: NecessaryServices<"setting", never>) {
     const saved = await host.services.setting.config.getValue(SIMPLE_FETCH_MODE_KEY, "");
     if (!saved) return undefined;

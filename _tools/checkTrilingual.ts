@@ -28,8 +28,9 @@ for (const [lang, catalogue] of Object.entries(shown)) {
 }
 // The product is Tabularium: shown texts must not use the upstream name. Links to upstream documents and the quoted
 // default P2P application ID ('self-hosted-livesync', a technical identifier) are the only exceptions.
+// Placeholders (`${…}`) are code, not displayed text.
 const upstreamName = /livesync/i;
-const exempt = (text: string) => text.replace(/https?:\/\/\S+/g, "").replace(/['"「]self-hosted-livesync['"」]/g, "");
+const exempt = (text: string) => text.replace(/\$\{[^}]*\}/g, "").replace(/https?:\/\/\S+/g, "").replace(/['"「]self-hosted-livesync['"」]/g, "");
 for (const [lang, catalogue] of Object.entries(shown)) {
     const named = Object.entries(catalogue).filter(([, text]) => upstreamName.test(exempt(text)));
     if (named.length) problems.push(`${lang}: ${named.length} texts name LiveSync\n  ${named.slice(0, 20).map(([key]) => key).join("\n  ")}`);

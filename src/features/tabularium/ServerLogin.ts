@@ -234,6 +234,11 @@ export class TabulariumServer {
         new ServerModal(this).open();
     }
 
+    /** Sign in again, to renew this device or to change to another vault. */
+    openLogin() {
+        new ServerModal(this, true).open();
+    }
+
     /** Shown while this vault is not connected, in place of the upstream onboarding invitation. */
     invite() {
         this.core.services.UI.confirm.askInPopup(
@@ -266,15 +271,18 @@ class ServerModal extends Modal {
     private api?: TabulariumApi;
     private password = "";
 
-    constructor(server: TabulariumServer) {
+    private readonly signIn: boolean;
+
+    constructor(server: TabulariumServer, signIn = false) {
         super(server.app);
         this.server = server;
+        this.signIn = signIn;
         this.modalEl.addClass("tabularium-server-dialog");
         this.setTitle($msg("tabularium.server.title"));
     }
 
     override onOpen() {
-        if (this.server.connection) this.status(this.server.connection);
+        if (this.server.connection && !this.signIn) this.status(this.server.connection);
         else this.login();
     }
 

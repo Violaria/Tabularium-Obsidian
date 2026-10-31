@@ -15,6 +15,7 @@ import {
     adjustSettingToRemote,
     adjustSettingToRemoteIfNeeded,
     processVaultInitialisation,
+    REBUILD_CONFIRMED_KEY,
     verifyAndUnlockSuspension,
     flagHandlerToEventHandler,
 } from "./redFlag";
@@ -41,6 +42,7 @@ import {
     STAGE2_ABORT,
     askAndPerformFastSetupOnScheduledFetchAll,
     askSimpleFetchMode,
+    rememberFetchChoice,
 } from "./redFlag.simpleFetch";
 import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
 //Mock synchroniseAllFilesBetweenDBandStorage
@@ -279,6 +281,28 @@ describe("Red Flag Feature", () => {
     });
 
     describe("Setting adjustment during vault initialisation", () => {
+        it("restores the synchronisation mode once the initialisation completes", async () => {
+            const host = createHostMock();
+            const log = createLoggerMock();
+            Object.assign(host.mocks.setting.settings, { liveSync: true, syncOnStart: false });
+            await processVaultInitialisation(host as any, log, () => {
+                Object.assign(host.mocks.setting.settings, { liveSync: false });
+                return Promise.resolve(true);
+            });
+            expect(host.mocks.setting.currentSettings()).toMatchObject({ liveSync: true, syncOnStart: false, batchSave: true });
+        });
+
+        it("leaves synchronisation suspended when the initialisation fails", async () => {
+            const host = createHostMock();
+            const log = createLoggerMock();
+            Object.assign(host.mocks.setting.settings, { liveSync: true });
+            await processVaultInitialisation(host as any, log, () => {
+                Object.assign(host.mocks.setting.settings, { liveSync: false });
+                return Promise.resolve(false);
+            });
+            expect(host.mocks.setting.currentSettings().liveSync).toBe(false);
+        });
+
         it("should suspend file watching during initialisation", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
@@ -676,6 +700,14 @@ describe("Red Flag Feature", () => {
     });
 
     describe("askSimpleFetchMode", () => {
+        it("takes the choice made on Tabularium's settings page without asking", async () => {
+            const host = createHostMock();
+            await rememberFetchChoice(host as any, "remote-keep");
+            const result = await askSimpleFetchMode(host as any);
+            expect(result).toMatchObject({ mode: "remote-only" });
+            expect(host.mocks.ui.confirm.confirmWithMessage).not.toHaveBeenCalled();
+        });
+
         it("should return cancelled when stage1 is cancelled", async () => {
             const host = createHostMock();
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(false);
@@ -1046,6 +1078,30 @@ describe("Red Flag Feature", () => {
     });
 
     describe("Rebuild All Flag Handler", () => {
+        it("does not ask again after Tabularium's settings page confirmed the rebuild", async () => {
+            const host = createHostMock();
+            const log = createLoggerMock();
+            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            await host.mocks.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now()));
+
+            await createRebuildFlagHandler(host as any, log).handle();
+
+            expect(host.mocks.ui.dialogManager.openWithExplicitCancel).not.toHaveBeenCalled();
+            expect(await host.mocks.setting.config.getValue(REBUILD_CONFIRMED_KEY, "")).toBe("");
+        });
+
+        it("asks again when the confirmation is old", async () => {
+            const host = createHostMock();
+            const log = createLoggerMock();
+            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            await host.mocks.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now() - 3_600_000));
+            host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce("cancelled");
+
+            await createRebuildFlagHandler(host as any, log).handle();
+
+            expect(host.mocks.ui.dialogManager.openWithExplicitCancel).toHaveBeenCalledOnce();
+        });
+
         it("identifies P2P when opening the scheduled rebuild confirmation", async () => {
             const host = createHostMock();
             const log = createLoggerMock();

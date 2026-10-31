@@ -28,7 +28,7 @@ import { addIcon, debounce, normalizePath, Notice, stringifyYaml, type Workspace
 import { LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/logger";
 import { LogPaneView, VIEW_TYPE_LOG } from "./Log/LogPaneView.ts";
 import { serialized } from "octagonal-wheels/concurrency/lock";
-import { $msg } from "@/common/translation";
+import { $msg, translateNotice } from "@/common/translation";
 import { P2PLogCollector } from "@vrtmrz/livesync-commonlib/compat/replication/trystero/P2PLogCollector";
 import { REMOTE_REQUEST_ACTIVITY_MINIMUM_VISIBLE_MS, getTrackedRequestCount } from "./RemoteActivityStatus.ts";
 import {
@@ -598,10 +598,12 @@ ${stringifyYaml(info)}
             }
             const timeout = 5000;
             const shouldExpire = !key.startsWith("keepalive-") || messageContent.indexOf(MARK_DONE) !== -1;
+            // Notices are written in English by the code; they are shown in the interface language.
+            const shown = typeof message == "string" ? translateNotice(messageContent) : messageContent;
             const noticeMessage =
                 key == messageContent && this.notifies[key].count > 0
-                    ? `(${this.notifies[key].count}):${messageContent}`
-                    : messageContent;
+                    ? `(${this.notifies[key].count}):${shown}`
+                    : shown;
             this.services.context.notices.show(`log:${key}`, noticeMessage, {
                 durationMs: shouldExpire ? timeout : false,
             });

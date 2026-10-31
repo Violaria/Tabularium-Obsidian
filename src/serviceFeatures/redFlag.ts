@@ -10,9 +10,10 @@ import RebuildEverything from "@/modules/features/SetupWizard/dialogs/RebuildEve
 import { REMOTE_MINIO, REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
 import { assessTweakCompatibility, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/settings";
 import { RemotePreferredTweakStatuses } from "@vrtmrz/livesync-commonlib/compat/common/models/tweak.definition";
-import type {
-    FetchEverythingResult,
-    RebuildEverythingResult,
+import {
+    TYPE_BACKUP_SKIPPED,
+    type FetchEverythingResult,
+    type RebuildEverythingResult,
 } from "@/modules/features/SetupWizard/dialogs/setupDialogTypes";
 import { askAndPerformFastSetupOnScheduledFetchAll } from "./redFlag.simpleFetch";
 import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
@@ -384,6 +385,18 @@ type InitialisationSuspensionPolicy = "resume" | "keep" | "keep-on-failure";
  * @param suspensionPolicy Final file-reflection state. `keep-on-failure` controls both reflection directions so a partly completed Fast Setup remains isolated.
  * @returns The result of the process, or false if an error occurs.
  */
+/** The synchronisation mode, which initialisation suspends; Tabularium restores it once the initialisation completes. */
+const SYNC_MODE_KEYS = [
+    "liveSync",
+    "periodicReplication",
+    "syncOnSave",
+    "syncOnEditorSave",
+    "syncOnStart",
+    "syncOnFileOpen",
+    "syncAfterMerge",
+    "batchSave",
+] as const;
+
 export async function processVaultInitialisation(
     host: NecessaryServices<"setting", never>,
     log: LogFunction,
@@ -391,6 +404,8 @@ export async function processVaultInitialisation(
     suspensionPolicy: InitialisationSuspensionPolicy = "resume"
 ) {
     let completed = false;
+    const current = host.services.setting.currentSettings();
+    const syncMode = Object.fromEntries(SYNC_MODE_KEYS.map((key) => [key, current[key]])) as Partial<ObsidianLiveSyncSettings>;
     try {
         // Disable batch saving and file watching during initialisation.
         await host.services.setting.applyPartial({ batchSave: false }, false);
@@ -432,8 +447,13 @@ export async function processVaultInitialisation(
                 true
             );
         }
+        if (completed) await host.services.setting.applyPartial(syncMode, true);
     }
 }
+
+/** Set by Tabularium's settings page once the rebuild was confirmed there, so the dialogue is not shown again. */
+export const REBUILD_CONFIRMED_KEY = "tabularium-rebuild-confirmed";
+const REBUILD_CONFIRMATION_MS = 10 * 60_000;
 
 export async function verifyAndUnlockSuspension(
     host: NecessaryServices<"setting" | "appLifecycle" | "UI", never>,
@@ -478,10 +498,15 @@ export function createRebuildFlagHandler(
     // Handle the rebuild everything scheduled operation
     const onScheduled = async () => {
         const settings = host.services.setting.currentSettings();
-        const method = await host.services.UI.dialogManager.openWithExplicitCancel<
-            RebuildEverythingResult,
-            { isP2P: boolean }
-        >(RebuildEverything, { isP2P: isP2PMainRemote(settings) });
+        const confirmedAt = Number(await host.services.setting.config.getValue(REBUILD_CONFIRMED_KEY, "0"));
+        await host.services.setting.config.delete(REBUILD_CONFIRMED_KEY);
+        const method: RebuildEverythingResult | "cancelled" =
+            Date.now() - confirmedAt < REBUILD_CONFIRMATION_MS
+                ? { backup: TYPE_BACKUP_SKIPPED, extra: { preventFetchingConfig: false } }
+                : await host.services.UI.dialogManager.openWithExplicitCancel<RebuildEverythingResult, { isP2P: boolean }>(
+                      RebuildEverything,
+                      { isP2P: isP2PMainRemote(settings) }
+                  );
         if (method === "cancelled") {
             log($msg("RedFlag.Rebuild.Cancelled"), LOG_LEVEL_NOTICE);
             return await cancelScheduledInitialisation(host, cleanupFlag);

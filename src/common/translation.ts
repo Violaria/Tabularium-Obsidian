@@ -100,6 +100,43 @@ export function translateIfAvailable(message: string, lang?: I18N_LANGS) {
     return $t(message, lang);
 }
 
+/** Catalogue keys with `${…}` values (template literals in the source) as patterns over the rendered text. */
+let noticePatterns: { key: string; pattern: RegExp; names: string[] }[] | undefined;
+function patterns() {
+    noticePatterns ??= Object.keys(allMessages)
+        .filter((key) => key.includes("${"))
+        .map((key) => {
+            const names: string[] = [];
+            const pattern = key
+                .split(/(\$\{[^}]*\})/)
+                .map((part) => {
+                    if (!/^\$\{[^}]*\}$/.test(part)) return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                    names.push(part);
+                    return "([\\s\\S]*?)";
+                })
+                .join("");
+            return { key, pattern: new RegExp(`^${pattern}$`), names };
+        });
+    return noticePatterns;
+}
+
+/**
+ * A notice as written in English by the code (often upstream's, as a rendered template literal) in the interface
+ * language: an exact catalogue entry, else an entry whose `${…}` parts match the values, which are put into the
+ * translation. Text not in the catalogue is shown as it is.
+ */
+export function translateNotice(message: string): string {
+    if (isLiveSyncMessageKey(message)) return $t(message);
+    for (const { key, pattern, names } of patterns()) {
+        const match = pattern.exec(message);
+        if (!match) continue;
+        let text = $t(key);
+        names.forEach((name, index) => (text = text.split(name).join(match[index + 1])));
+        return text;
+    }
+    return message;
+}
+
 function isCommonlibMessageKey(key: string): key is CommonlibMessageKey {
     return key in commonlibEnglishMessages;
 }
