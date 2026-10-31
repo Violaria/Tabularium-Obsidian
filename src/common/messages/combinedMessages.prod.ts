@@ -7885,6 +7885,46 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Lectio status defecit (HTTP ${status}).",
         zh: "读取状态失败（HTTP ${status}）。",
     },
+    "tabularium.links.check": {
+        def: "Check broken links",
+        la: "Nexus fractos inspicere",
+        zh: "检查断链",
+    },
+    "tabularium.links.done": {
+        def: "${fixed} links repaired.",
+        la: "${fixed} nexus refecti.",
+        zh: "已修复 ${fixed} 处链接。",
+    },
+    "tabularium.links.doneSkipped": {
+        def: "${fixed} links repaired; ${skipped} skipped because the note changed meanwhile.",
+        la: "${fixed} nexus refecti; ${skipped} praetermissi quia commentarius interea mutatus est.",
+        zh: "已修复 ${fixed} 处链接；${skipped} 处因笔记期间被修改而跳过。",
+    },
+    "tabularium.links.leave": {
+        def: "Leave as it is",
+        la: "Relinquere",
+        zh: "不修改",
+    },
+    "tabularium.links.noCandidate": {
+        def: "No file of this name in the vault; repair it by hand.",
+        la: "Nulla plica huius nominis in tabulario; manu refice.",
+        zh: "笔记库中没有同名文件，请手动修改。",
+    },
+    "tabularium.links.none": {
+        def: "No broken links in this vault.",
+        la: "Nulli nexus fracti in hoc tabulario.",
+        zh: "这个笔记库中没有断链。",
+    },
+    "tabularium.links.repair": {
+        def: "Repair ${count} selected",
+        la: "${count} electos reficere",
+        zh: "修复所选的 ${count} 处",
+    },
+    "tabularium.links.title": {
+        def: "${count} broken links",
+        la: "${count} nexus fracti",
+        zh: "${count} 处断链",
+    },
     "tabularium.release.0.12.0": {
         def: "Tabularium names throughout the plug-in; large vaults synchronise reliably; misleading version notices removed.",
         la: "Nomina Tabularium ubique in additamento; magna tabularia certius synchronizantur; monita versionum fallacia remota.",
@@ -7934,6 +7974,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: '"Sync" in the file menu above "Sorting": sync now, and a note\'s version history; the setting texts and the history window that were still in English are translated. The server gains scheduled backups and a round of security fixes.',
         la: "In menu plicae supra «Ordo» nunc est «Synchronizatio»: synchroniza nunc et historia versionum commentarii; textus optionum et fenestra historiae adhuc Anglice scripti conversi sunt. Ministrator copias tutas statutis horis facit, et aliquot vitia securitatis emendata sunt.",
         zh: "文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。",
+    },
+    "tabularium.release.0.21.0": {
+        def: "Check broken links (Maintenance → Links, or the command palette) lists links that reach no file and repairs them with the files of the same name; automatic repair can be turned on for one device. Renames in web notes take links along. A share is refreshed only by the device that last saved it, follows renames and is withdrawn when its note is deleted.",
+        la: "«Nexus fractos inspicere» (Cura → Nexus, aut index iussorum) nexus enumerat qui ad nullam plicam ducunt et eos plicis eiusdem nominis reficit; refectio sponte in uno instrumento accendi potest. Mutationes nominum in commentariis interretis nexus secum ferunt. Communicatio tantum ab instrumento quod eam ultimum servavit renovatur, nomina mutata sequitur et revocatur cum commentarius deletur.",
+        zh: "「检查断链」（维护 → 链接，或命令面板）列出指向不存在文件的链接，并用同名文件修复；可以在一台设备上打开自动修复。云笔记改名时链接一起更新。分享只由最后保存它的设备更新，跟随改名，笔记删除后自动撤回。",
     },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
@@ -8265,6 +8310,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Species",
         zh: "外观",
     },
+    "tabularium.settings.autoLinks": {
+        def: "Repair broken links automatically",
+        la: "Nexus fractos sponte reficere",
+        zh: "自动修复断链",
+    },
+    "tabularium.settings.autoLinksDesc": {
+        def: "On this device only. About 10 seconds after changes arrive, links with exactly one file of the same name are repaired and logged; the others wait for Check broken links. Turn it on on one device that is usually running: two devices repairing the same notes can conflict.",
+        la: "Tantum in hoc instrumento. Circiter 10 secundis post mutationes nexus cum una sola plica eiusdem nominis reficiuntur et in diario notantur; ceteri «Nexus fractos inspicere» exspectant. In uno instrumento plerumque currente accende: duo instrumenta eosdem commentarios reficientia confligere possunt.",
+        zh: "只对这台设备生效。改动到达约 10 秒后，只有一个同名文件的断链会自动修复并写入日志，其余留给「检查断链」。请只在一台常开的设备上打开：两台设备同时修复同一篇笔记可能产生冲突。",
+    },
     "tabularium.settings.broken": {
         def: "Find incomplete files",
         la: "Plicas imperfectas quaerere",
@@ -8284,6 +8339,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sign in again or change vault",
         la: "Iterum intrare vel tabularium mutare",
         zh: "重新登录或换笔记库",
+    },
+    "tabularium.settings.checkLinks": {
+        def: "Check broken links",
+        la: "Nexus fractos inspicere",
+        zh: "检查断链",
+    },
+    "tabularium.settings.checkLinksDesc": {
+        def: "Lists the links that reach no file, for example after a note was moved in a file manager or on another device, and offers the files of the same name as targets.",
+        la: "Nexus enumerat qui ad nullam plicam ducunt (exempli gratia postquam commentarius in administratore plicarum aut in alio instrumento motus est), et plicas eiusdem nominis ut fines offert.",
+        zh: "列出指向不存在文件的链接（例如笔记在文件管理器或另一台设备上被移动之后），并给出同名文件作为修复目标。",
     },
     "tabularium.settings.conflicts": {
         def: "Conflicts",
@@ -8404,6 +8469,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Language",
         la: "Lingua",
         zh: "语言",
+    },
+    "tabularium.settings.links": {
+        def: "Links",
+        la: "Nexus",
+        zh: "链接",
     },
     "tabularium.settings.locked": {
         def: "Vault locked",

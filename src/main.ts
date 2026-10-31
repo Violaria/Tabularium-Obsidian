@@ -45,6 +45,7 @@ import { installKindle, type TabulariumKindle } from "./features/tabularium/Kind
 import { installCustomSorting, type TabulariumCustomSorting } from "./features/tabularium/CustomSorting.ts";
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
 import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
+import { installLinkRepair, type TabulariumLinkRepair } from "./features/tabularium/LinkRepair.ts";
 export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
 export default class ObsidianLiveSyncPlugin extends Plugin {
     core: LiveSyncCore;
@@ -52,6 +53,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
     tabularium?: TabulariumServer;
     kindle?: TabulariumKindle;
     share?: TabulariumShare;
+    linkRepair?: TabulariumLinkRepair;
 
     /**
      * Initialise service modules.
@@ -192,6 +194,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 this.tabularium = installTabulariumServer(this, core, setupManager);
                 this.kindle = installKindle(this, this.tabularium, core);
                 this.share = installShare(this, this.tabularium, core, () => this.sorting);
+                this.linkRepair = installLinkRepair(this, core);
                 useObsidianReplicationRibbonFeature(core);
                 useDatabaseDiagnosticsFeature(core);
                 // A vault's devices run different software (this plug-in, the server mirror's CLI, Tabularius, web notes), so

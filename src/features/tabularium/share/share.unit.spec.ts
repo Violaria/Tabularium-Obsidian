@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { contentKey, decrypt, encrypt, newShareKey, openRecord, sealRecord, vaultShareKey, type ShareRecord } from "./crypto";
 import { buildShare, encodeBundle, referencesOf, reviewTree, rewriteReferences, sharedByDefault, type ShareSource, type ShareTreeNode } from "./package";
+import { Sharing, type ShareApi, type ShareView } from "./sharing";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -72,6 +73,12 @@ describe("references", () => {
         expect(text).toContain("[[Nowhere]]");
         expect(text).toContain("`[[Code Sample]]`");
     });
+    it("treats files named in raw HTML like links and drops HTML comments", () => {
+        const html = '<img src="chart.png" width="80"> <a href=\'../Secret%20Diary.md\'>x</a> <a href="https://example.com/a">web</a> <!-- see Secret Diary.md --> `<img src="chart.png">`';
+        const text = rewriteReferences(html, "Projects/Plan.md", files, (reference) => (reference.kind === "image" ? "share:n1" : null));
+        expect(text).toBe('<img src="share:n1" width="80"> <a href=\'share:denied:note\'>x</a> <a href="https://example.com/a">web</a>  `<img src="chart.png">`');
+        expect(referencesOf(html, "Projects/Plan.md", files).map((reference) => [reference.path, reference.embed])).toEqual([["Projects/chart.png", true], ["Secret Diary.md", false]]);
+    });
     it("lists references outside the target, opening the allowed notes", async () => {
         const closed = await reviewTree(source, "Projects/Plan.md", false, () => false);
         expect(closed.map((node) => [node.path, node.children.length])).toEqual([
@@ -120,3 +127,54 @@ describe("building a share", () => {
         expect([...bundle]).toEqual([0, 8, ...encoder.encode("manifest"), 0, 0, 0, 2, 7, 8, 0, 2, ...encoder.encode("n1"), 0, 0, 0, 1, 9]);
     });
 });
+
+describe("refreshing shares after changes", () => {
+    /** A server holding share views in memory; records are sealed with the vault's share key as the clients do. */
+    const setup = async (vaultFiles: string[], records: { target: string; folder: boolean; uploader?: string }[]) => {
+        const key = await vaultShareKey("passphrase", "vault-1");
+        const views: ShareView[] = [];
+        for (const [i, item] of records.entries()) {
+            const record: ShareRecord = { v: 1, key: "", password: "", target: item.target, folder: item.folder, authorised: [], reviewed: [], unreviewed: 0, ...(item.uploader ? { uploader: item.uploader } : {}) };
+            views.push({ id: `s${i}`, slug: `s${i}`, vaultId: "vault-1", mode: "public", sealed: await sealRecord(key, record), expiresAt: null, password: false, indexable: false, views: 0, size: 0, createdAt: 0, updatedAt: null, state: "active" });
+        }
+        const uploads: string[] = [];
+        const revoked: string[] = [];
+        const api: ShareApi = {
+            list: async () => ({ base: "", maxBytes: Infinity, shares: views }),
+            create: async () => { throw new Error("unused"); },
+            update: async (id, body) => { const view = views.find((v) => v.id === id)!; Object.assign(view, body); return view; },
+            upload: async (id) => { uploads.push(id); return views.find((v) => v.id === id)!; },
+            revoke: async (id) => { revoked.push(id); views.find((v) => v.id === id)!.state = "revoked"; },
+        };
+        const vaultSource: ShareSource = { files: vaultFiles, read: async () => "text", readBinary: async () => new Uint8Array([1]), tree: (folder) => ({ name: folder, path: folder, folder: true, children: [] }) };
+        const target = async (id: string) => (await openRecord(key, views.find((v) => v.id === id)!.sealed)).target;
+        return { api, uploads, revoked, target, sharing: (device: string) => new Sharing(api, "vault-1", "passphrase", "Vault", async () => vaultSource, device) };
+    };
+    it("is refreshed only by the device that last saved it", async () => {
+        const { uploads, sharing } = await setup(["a.md"], [{ target: "a.md", folder: false, uploader: "desktop" }]);
+        expect((await sharing("phone").refresh({ paths: ["a.md"], renames: [] })).updated).toBe(0);
+        expect((await sharing("desktop").refresh({ paths: ["a.md"], renames: [] })).updated).toBe(1);
+        expect(uploads).toEqual(["s0"]);
+    });
+    it("follows a rename made here, of the note or of its folder", async () => {
+        const { target, sharing } = await setup(["New/b.md", "Moved/c.md"], [{ target: "Old/b.md", folder: false }, { target: "Old", folder: true }]);
+        await sharing("desktop").refresh({ paths: ["Old/b.md", "New/b.md"], renames: [["Old/b.md", "New/b.md"]] });
+        expect(await target("s0")).toBe("New/b.md");
+        const { target: folderTarget, sharing: folderSharing } = await setup(["Moved/c.md"], [{ target: "Old", folder: true }]);
+        await folderSharing("desktop").refresh({ paths: ["Old/c.md", "Moved/c.md"], renames: [["Old", "Moved"], ["Old/c.md", "Moved/c.md"]] });
+        expect(await folderTarget("s0")).toBe("Moved");
+    });
+    it("follows a rename another device made, which arrives as a deletion and a creation", async () => {
+        const { target, revoked, sharing } = await setup(["Archive/b.md"], [{ target: "Notes/b.md", folder: false }]);
+        await sharing("desktop").refresh({ paths: ["Notes/b.md", "Archive/b.md"], renames: [] });
+        expect(await target("s0")).toBe("Archive/b.md");
+        expect(revoked).toEqual([]);
+    });
+    it("is withdrawn when its note is deleted", async () => {
+        const { revoked, sharing } = await setup(["other.md"], [{ target: "gone.md", folder: false }]);
+        const { withdrawn } = await sharing("desktop").refresh({ paths: ["gone.md"], renames: [] });
+        expect(revoked).toEqual(["s0"]);
+        expect(withdrawn.map((share) => share.view.slug)).toEqual(["s0"]);
+    });
+});
+

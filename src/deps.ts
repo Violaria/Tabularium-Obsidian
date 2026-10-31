@@ -4,6 +4,7 @@ export {
     addIcon,
     App,
     debounce,
+    parseLinktext,
     Editor,
     FuzzySuggestModal,
     MarkdownRenderer,

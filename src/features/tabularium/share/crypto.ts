@@ -77,6 +77,12 @@ export interface ShareRecord {
     reviewed: string[];
     /** References found by automatic updates that are not in `reviewed`. */
     unreviewed: number;
+    /**
+     * The device that refreshes the share after changes: the one that last saved its settings, so a device with an
+     * incomplete copy (a phone with a smaller size limit, one still fetching) never replaces it. Older records have none,
+     * and any device refreshes them.
+     */
+    uploader?: string;
 }
 export async function sealRecord(key: CryptoKey, record: ShareRecord) {
     return toBase64Url(await encrypt(key, encoder.encode(JSON.stringify(record))));

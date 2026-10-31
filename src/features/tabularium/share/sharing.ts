@@ -45,6 +45,11 @@ export interface ShareSettings {
     authorised: string[];
     reviewed: string[];
 }
+/** Changes made on this device: paths created, edited or deleted, and renames of files and folders (old path, new path). */
+export interface Changes {
+    paths: string[];
+    renames: (readonly [string, string])[];
+}
 /** Errors the clients translate: the share is over the server's size limit, or the target has no files. */
 export class ShareError extends Error {
     constructor(readonly code: "tooLarge" | "empty", readonly size = 0) {
@@ -60,7 +65,9 @@ export class Sharing {
         private readonly vaultId: string,
         private readonly passphrase: string,
         private readonly vaultName: string,
-        private readonly source: () => Promise<ShareSource>
+        private readonly source: () => Promise<ShareSource>,
+        /** This device, which becomes the uploader of the shares it saves. */
+        private readonly deviceId: string
     ) {}
     private sealKey() {
         return (this.key ??= vaultShareKey(this.passphrase, this.vaultId));
@@ -100,6 +107,7 @@ export class Sharing {
             authorised: settings.authorised,
             reviewed: settings.reviewed,
             unreviewed: 0,
+            uploader: this.deviceId,
         };
         const sealed = await sealRecord(await this.sealKey(), record);
         const password = settings.mode === "public" ? settings.password : Boolean(settings.password);
@@ -140,32 +148,83 @@ export class Sharing {
         return { view, record };
     }
 
-    /** Rebuilds the active shares that `changed` paths belong to; returns how many were updated. */
-    async refresh(changed: string[]) {
+    /**
+     * Rebuilds the active shares this device uploads that the changes touch. A share follows a rename of its note or folder
+     * (renames made here, and renames another device made, which arrive as a deletion and a creation of the same name); a
+     * share whose note or folder is gone is withdrawn, so nothing deleted stays published. Returns the shares updated and
+     * those withdrawn.
+     */
+    async refresh({ paths, renames }: Changes) {
         const { shares } = await this.list();
+        const source = await this.source();
+        const key = await this.sealKey();
+        const withdrawn: OwnShare[] = [];
         let updated = 0;
+        const moved = (path: string) => {
+            for (const [from, to] of renames) {
+                if (path === from) return to;
+                if (from && path.startsWith(`${from}/`)) return to + path.slice(from.length);
+            }
+            return path;
+        };
+        const inside = (record: ShareRecord, path: string) =>
+            path === record.target || (record.folder && (!record.target || path.startsWith(`${record.target}/`))) || record.authorised.includes(path);
         for (const share of shares) {
             const { record } = share;
             if (!record || share.view.state !== "active") continue;
-            const touched = changed.some(
-                (path) =>
-                    path === record.target ||
-                    (record.folder && (!record.target || path.startsWith(`${record.target}/`))) ||
-                    record.authorised.includes(path)
-            );
-            if (!touched) continue;
+            if (record.uploader && record.uploader !== this.deviceId) continue;
+            const next: ShareRecord = { ...record, target: record.target && moved(record.target), authorised: record.authorised.map(moved) };
+            if (![...paths, ...renames.flat()].some((path) => inside(record, path) || inside(next, path))) continue;
+            if (!exists(next, source.files)) {
+                const found = relocated(next, paths, source.files);
+                if (found === undefined) {
+                    await this.api.revoke(share.view.id);
+                    withdrawn.push(share);
+                    continue;
+                }
+                next.target = found;
+            }
+            let view = share.view;
+            if (next.target !== record.target || next.authorised.some((path, i) => path !== record.authorised[i])) {
+                view = await this.api.update(view.id, { sealed: await sealRecord(key, next) });
+            }
             try {
-                await this.upload({ view: share.view, record });
+                await this.upload({ view, record: next });
                 updated++;
             } catch (error) {
-                // A share whose note was deleted or renamed keeps its last content.
                 if (!(error instanceof ShareError && error.code === "empty")) throw error;
             }
         }
-        return updated;
+        return { updated, withdrawn };
     }
 
     revoke(share: OwnShare) {
         return this.api.revoke(share.view.id);
     }
+}
+
+/** Whether a share's note, or a file of its folder, is in the vault. */
+const exists = (record: ShareRecord, files: readonly string[]) =>
+    record.folder ? !record.target || files.some((file) => file.startsWith(`${record.target}/`)) : files.includes(record.target);
+const lastSegment = (path: string) => path.slice(path.lastIndexOf("/") + 1);
+/**
+ * Where a share's missing note or folder went when another device renamed it: the one changed path with the same name
+ * (for a folder, the one folder of that name above the changed paths). Undefined when there is none or more than one.
+ */
+function relocated(record: ShareRecord, paths: string[], files: readonly string[]) {
+    const name = lastSegment(record.target);
+    const present = paths.filter((path) => files.includes(path));
+    const candidates = new Set<string>();
+    for (const path of present) {
+        if (!record.folder) {
+            if (path !== record.target && lastSegment(path) === name) candidates.add(path);
+            continue;
+        }
+        const segments = path.split("/");
+        segments.slice(0, -1).forEach((segment, i) => {
+            const folder = segments.slice(0, i + 1).join("/");
+            if (segment === name && folder !== record.target) candidates.add(folder);
+        });
+    }
+    return candidates.size === 1 ? [...candidates][0] : undefined;
 }

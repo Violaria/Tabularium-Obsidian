@@ -10,6 +10,7 @@
     import { sendToKindle, type KindleItem } from "./kindle";
     import { folderOf, freePath, nameOf, normalisePath } from "./paths";
     import { resolveLinkpath } from "@/features/tabularium/linkpath";
+    import { repairLinks } from "../../../../server/src/tabularius/links";
     import Tree from "./Tree.svelte";
     import { frontMatter, isSpecSource, needsMetadata, parseSpecs, sortedTree } from "./sorting";
     import type { SortSpecsCollection } from "@tabularium/custom-sort/engine";
@@ -72,6 +73,7 @@
     const SHARE_DELAY_MS = 10_000;
     let shareTimer: number | undefined;
     const shareChanges = new Set<string>();
+    const shareRenames: (readonly [string, string])[] = [];
     let objectUrls: string[] = [];
     let refreshTimer: number | undefined;
     let saveTimer: number | undefined;
@@ -256,7 +258,7 @@
         }
         passphrase = "";
         keepUnlocked(owner.id, target.id, secret);
-        sharing = new Sharing(sessionShareApi, target.id, secret, target.name, shareSource);
+        sharing = new Sharing(sessionShareApi, target.id, secret, target.name, shareSource, record.deviceId);
         offline = started.offline;
         record = { ...record, fetched: true, vaultName: target.name, verifier: started.verifier, tweaks: started.tweaks };
         // Records written before renewal existed have no expiry and are renewed too.
@@ -453,19 +455,47 @@
             ? files.filter((f) => f.path.startsWith(`${item.path}/`)).map((f) => [f.path, `${target}${f.path.slice(item.path.length)}`] as const)
             : [[item.path, target] as const];
         try {
+            const before = new Set(files.map((f) => f.path));
             for (const [from, to] of moves) {
                 const content = isNote(from) ? await runtime.read(from) : await runtime.readBinary(from);
                 await runtime.save(to, content);
                 await runtime.remove(from);
             }
-            touched(moves.flat());
+            const relinked = await relink(new Map(moves), before);
+            touched([...moves.flat(), ...relinked], [[item.path, target], ...moves]);
             notice = t("notes.renamed", { name: nameOf(target) });
             files = await runtime.files();
             if (current && moves.some(([from]) => from === current)) await show(moves.find(([from]) => from === current)![1]);
+            else if (current && relinked.includes(current)) await show(current, false);
         } catch (e) {
             error = message(e);
             files = await runtime.files();
         }
+    }
+
+    /**
+     * Links follow a rename, as in Obsidian: every note that links to a moved file, and the moved notes' own relative
+     * links, are rewritten with the rules Tabularius uses for its proposals. Returns the notes it changed.
+     */
+    async function relink(moves: Map<string, string>, before: Set<string>) {
+        const active = runtime!;
+        const after = new Set([...before].filter((path) => !moves.has(path)).concat([...moves.values()]));
+        const back = new Map([...moves].map(([from, to]) => [to, from]));
+        // A note can only link to a moved file by its name (wikilinks) or its path (Markdown links, which contain the name).
+        const names = [...moves.keys()].map((path) => nameOf(path).replace(/\.md$/i, ""));
+        const changed: string[] = [];
+        for (const path of after) {
+            if (!isNote(path)) continue;
+            // Saved on top of the revision it was read at: an edit from another device meanwhile becomes a conflict.
+            const { text, rev } = await active.open(path);
+            const from = back.get(path) ?? path;
+            if (from === path && !names.some((name) => text.includes(name) || text.includes(name.replace(/[%() #]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)))) continue;
+            const repaired = repairLinks(text, from, path, moves, before, after);
+            if (repaired === text) continue;
+            await active.save(path, repaired, rev);
+            changed.push(path);
+        }
+        return changed;
     }
 
     async function remove(item: KindleItem) {
@@ -667,8 +697,9 @@
             tree: (folder) => find(ordered, folder) ?? { name: folder, path: folder, folder: true, children: [] },
         };
     }
-    function touched(paths: string[]) {
+    function touched(paths: string[], renames: (readonly [string, string])[] = []) {
         for (const path of paths) shareChanges.add(path);
+        shareRenames.push(...renames);
         window.clearTimeout(shareTimer);
         shareTimer = window.setTimeout(() => void updateShares().catch((e) => (error = t("share.updateFailed", { error: serverError(message(e)) }))), SHARE_DELAY_MS);
     }
@@ -676,8 +707,10 @@
         window.clearTimeout(shareTimer);
         if (!sharing || !shareChanges.size || offline) return;
         const paths = [...shareChanges];
+        const renames = shareRenames.splice(0);
         shareChanges.clear();
-        await sharing.refresh(paths);
+        const { withdrawn } = await sharing.refresh({ paths, renames });
+        for (const share of withdrawn) toast(t("share.withdrawnDeleted", { address: share.view.slug }));
     }
     async function share(item: KindleItem) {
         if (!sharing || !runtime) return;

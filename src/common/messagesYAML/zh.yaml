@@ -3283,3 +3283,17 @@ tabularium.history.previous: 上一处
 tabularium.history.next: 下一处
 tabularium.release.0.19.0: 文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。
 tabularius.release.0.20.0: 书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。
+tabularium.links.check: 检查断链
+tabularium.links.none: 这个笔记库中没有断链。
+tabularium.links.title: ${count} 处断链
+tabularium.links.repair: 修复所选的 ${count} 处
+tabularium.links.noCandidate: 笔记库中没有同名文件，请手动修改。
+tabularium.links.leave: 不修改
+tabularium.links.done: 已修复 ${fixed} 处链接。
+tabularium.links.doneSkipped: 已修复 ${fixed} 处链接；${skipped} 处因笔记期间被修改而跳过。
+tabularium.settings.links: 链接
+tabularium.settings.checkLinks: 检查断链
+tabularium.settings.checkLinksDesc: 列出指向不存在文件的链接（例如笔记在文件管理器或另一台设备上被移动之后），并给出同名文件作为修复目标。
+tabularium.settings.autoLinks: 自动修复断链
+tabularium.settings.autoLinksDesc: 只对这台设备生效。改动到达约 10 秒后，只有一个同名文件的断链会自动修复并写入日志，其余留给「检查断链」。请只在一台常开的设备上打开：两台设备同时修复同一篇笔记可能产生冲突。
+tabularium.release.0.21.0: 「检查断链」（维护 → 链接，或命令面板）列出指向不存在文件的链接，并用同名文件修复；可以在一台设备上打开自动修复。云笔记改名时链接一起更新。分享只由最后保存它的设备更新，跟随改名，笔记删除后自动撤回。

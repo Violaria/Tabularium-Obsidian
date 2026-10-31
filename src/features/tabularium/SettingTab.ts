@@ -446,6 +446,14 @@ export class TabulariumSettingTab extends PluginSettingTab {
             });
             if (ok) await this.core.services.conflict.resolveAllConflictedFilesByNewerOnes();
         });
+        const links = this.owner.linkRepair;
+        if (links) {
+            this.heading(el, "tabularium.settings.links");
+            action("tabularium.settings.checkLinks", "tabularium.settings.checkLinksDesc", "tabularium.settings.run", () => links.check());
+            hint(new Setting(el).setName($msg("tabularium.settings.autoLinks")), $msg("tabularium.settings.autoLinksDesc")).addToggle((toggle) =>
+                toggle.setValue(links.auto).onChange((on) => (links.auto = on))
+            );
+        }
         const advanced = el.createEl("details", { cls: "tabularium-advanced" });
         // Saving a setting redraws the page: the fold stays as it was.
         advanced.open = this.advancedOpen;

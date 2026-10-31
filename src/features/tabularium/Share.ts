@@ -33,6 +33,9 @@ const shareError = (code: string) => {
 export class TabulariumShare {
     private timer?: number;
     private readonly changed = new Set<string>();
+    private readonly renames: [string, string][] = [];
+    /** One Sharing per connection and passphrase: its record key costs a long PBKDF2, so it is not derived per change. */
+    private cached?: { id: string; sharing: Sharing };
 
     constructor(
         private readonly plugin: Plugin,
@@ -60,13 +63,16 @@ export class TabulariumShare {
             this.plugin.registerEvent(app.vault.on("modify", (file) => touched(file.path)));
             this.plugin.registerEvent(app.vault.on("create", (file) => touched(file.path)));
             this.plugin.registerEvent(app.vault.on("delete", (file) => touched(file.path)));
-            this.plugin.registerEvent(app.vault.on("rename", (file, old) => this.touched([file.path, old])));
+            this.plugin.registerEvent(app.vault.on("rename", (file, old) => this.touched([file.path, old], [old, file.path])));
         });
     }
 
     private sharing() {
         const connection = this.server.connection;
         if (!connection) throw new Error(shareText("share.signInFirst"));
+        const passphrase = this.core.services.setting.currentSettings().passphrase;
+        const id = `${connection.server}|${connection.vaultId}|${connection.deviceId}|${passphrase}`;
+        if (this.cached?.id === id) return this.cached.sharing;
         const authorization = this.server.deviceAuthorization();
         const call = async <T>(path: string, method = "GET", body?: unknown, binary?: Uint8Array): Promise<T> => {
             const response = await requestUrl({
@@ -95,8 +101,9 @@ export class TabulariumShare {
                 await call(`/${id}`, "DELETE");
             },
         };
-        const passphrase = this.core.services.setting.currentSettings().passphrase;
-        return new Sharing(api, connection.vaultId, passphrase, this.plugin.app.vault.getName(), () => Promise.resolve(this.source()));
+        const sharing = new Sharing(api, connection.vaultId, passphrase, this.plugin.app.vault.getName(), () => Promise.resolve(this.source()), connection.deviceId);
+        this.cached = { id, sharing };
+        return sharing;
     }
 
     /** The vault's files, with folders in the order the file explorer shows them (the vault's sortspec.md rules). */
@@ -146,18 +153,21 @@ export class TabulariumShare {
         }).open();
     }
 
-    private touched(paths: string[]) {
+    private touched(paths: string[], rename?: [string, string]) {
         if (!this.server.connection) return;
         for (const path of paths) this.changed.add(path);
+        if (rename) this.renames.push(rename);
         window.clearTimeout(this.timer);
         this.timer = window.setTimeout((): void => void this.update(), UPDATE_DELAY_MS);
     }
     private async update() {
         const paths = [...this.changed];
+        const renames = this.renames.splice(0);
         this.changed.clear();
         if (!paths.length || !this.server.connection) return;
         try {
-            await this.sharing().refresh(paths);
+            const { withdrawn } = await this.sharing().refresh({ paths, renames });
+            for (const share of withdrawn) new Notice(shareText("share.withdrawnDeleted", { address: share.view.slug }));
         } catch (error) {
             // Being offline is not reported: the next change tries again.
             if (error instanceof ShareError) new Notice(shareText("share.updateFailed", { error: error.code === "tooLarge" ? shareText("share.tooLarge", { size: `${Math.ceil(error.size / 1048576)} MB` }) : shareText("share.empty") }));

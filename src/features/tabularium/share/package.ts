@@ -66,9 +66,24 @@ export function rewriteReferences(markdown: string, from: string, files: readonl
             return plain;
         }
     };
+    // Raw HTML shows as text on share pages: its comments go, and the files its src and href name are treated like links,
+    // so a page never shows the path of something that was not shared.
+    const htmlReference = (attribute: string, value: string) => {
+        if (SCHEME.test(value) || value.startsWith("#")) return value;
+        const reference = resolve(decodeHref(value), attribute.toLowerCase() === "src");
+        if (!reference) return value;
+        return decide(reference) ?? denied(reference);
+    };
     return outsideCode(stripFrontMatter(markdown), (part) =>
         part
             .replace(/%%[\s\S]*?%%/g, "")
+            .replace(/<!--[\s\S]*?-->/g, "")
+            .replace(/<[a-zA-Z][^>]*>/g, (tag) =>
+                tag.replace(/\b(src|href)(\s*=\s*)("([^"]*)"|'([^']*)')/gi, (_all, attribute: string, equals: string, quoted: string, double?: string, single?: string) => {
+                    const quote = quoted[0];
+                    return `${attribute}${equals}${quote}${htmlReference(attribute, double ?? single ?? "")}${quote}`;
+                })
+            )
             .replace(/(!?)\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (whole, bang: string, target: string, alias: string | undefined) => {
                 const reference = resolve(target.trim(), bang === "!");
                 if (!reference) return whole;
