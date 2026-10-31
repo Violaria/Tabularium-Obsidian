@@ -1,6 +1,6 @@
 {
     "name": "obsidian-livesync",
-    "version": "0.12.3",
+    "version": "0.13.0",
     "description": "Reflect your vault changes to some other devices immediately. Please make sure to disable other synchronize solutions to avoid content corruption or duplication.",
     "main": "main.js",
     "type": "module",
@@ -8,6 +8,7 @@
         "dev": "node --env-file=.env esbuild.config.mjs",
         "build": "node esbuild.config.mjs production",
         "build:notes": "vite build --config src/apps/notes/vite.config.ts src/apps/notes",
+        "test:notes": "vitest run --config src/apps/notes/vite.config.ts --dir src/apps/notes",
         "buildVite": "npx dotenv-cli -e .env  -- vite build --mode production",
         "buildViteOriginal": "npx dotenv-cli -e .env  -- vite build --mode original",
         "buildDev": "node esbuild.config.mjs dev",

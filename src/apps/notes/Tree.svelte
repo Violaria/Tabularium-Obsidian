@@ -1,15 +1,11 @@
 <script module lang="ts">
-    export interface TreeNode {
-        name: string;
-        path: string;
-        folder: boolean;
-        children: TreeNode[];
-    }
+    export type { SortedNode as TreeNode } from "./sorting";
 </script>
 
 <script lang="ts">
     import Self from "./Tree.svelte";
     import type { KindleItem } from "./kindle";
+    import type { SortedNode as TreeNode } from "./sorting";
     import { t } from "../../../../server/ui/i18n";
 
     interface Props {
@@ -44,7 +40,7 @@
                 {/if}
                 {#if child.folder}
                     <button class="name folder" aria-expanded={expandAll || !!expanded[child.path]} onclick={() => (expanded[child.path] = !expanded[child.path])}>
-                        {expandAll || expanded[child.path] ? "▾" : "▸"} {child.name}
+                        <svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg>{child.name}
                     </button>
                 {:else}
                     <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}>{label(child)}</button>

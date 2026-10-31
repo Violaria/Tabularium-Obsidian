@@ -1,24 +1,28 @@
 <script lang="ts">
     import { onDestroy, tick } from "svelte";
-    import { basicAuth, issueDevice, listVaults, login, logout, renewDevice, restoreSession, revokeDevice, ApiError, type User, type Vault } from "./api";
+    import { basicAuth, issueDevice, listVaults, renewDevice, restoreSession, revokeDevice, ApiError, type User, type Vault } from "./api";
     import { deleteRecord, readRecord, recordKey, recordsOf, writeRecord, type VaultRecord } from "./store";
     import { CredentialsRejectedError, NetworkError, NotesRuntime, WrongPassphraseError, clearLocalVault, type NotesFile } from "./runtime";
     import { renderPreview } from "./preview";
     import { sendToKindle, type KindleItem } from "./kindle";
     import { folderOf, freePath, nameOf, normalisePath } from "./paths";
     import { resolveLinkpath } from "@/features/tabularium/linkpath";
-    import Tree, { type TreeNode } from "./Tree.svelte";
+    import Tree from "./Tree.svelte";
+    import { frontMatter, isSpecSource, needsMetadata, parseSpecs, sortedTree } from "./sorting";
+    import type { SortSpecsCollection } from "@tabularium/custom-sort/engine";
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
-    import { LANGUAGES, catalogues, formatDate, language, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
+    import { formatDate, language, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
+    import { askText, confirmAction } from "../../../../server/ui/core";
 
-    type Phase = "loading" | "login" | "vaults" | "unlock" | "opening" | "open";
+    type Phase = "loading" | "vaults" | "unlock" | "opening" | "open";
     type Mode = "view" | "edit" | "conflict";
     type SaveState = "unsaved" | "saved" | "pending" | "synced" | "conflict";
     let phase = $state<Phase>("loading");
     let lang = $state<Language>(language());
     document.title = t("notes.title");
-    function changeLanguage(next: Language) {
+    /** Called by the shell when the language is chosen in its sidebar. */
+    export function changeLanguage(next: Language) {
         setLanguage(next);
         lang = next;
         document.title = t("notes.title");
@@ -37,8 +41,6 @@
     let selecting = $state(false);
     let selected = $state<KindleItem[]>([]);
     let sending = $state(false);
-    let username = $state("");
-    let password = $state("");
     let passphrase = $state("");
     let previewEl = $state<HTMLElement>();
     let mode = $state<Mode>("view");
@@ -47,6 +49,12 @@
     let editor = $state<Editor>();
     let versions = $state<Version[]>([]);
     let attachmentInput = $state<HTMLInputElement>();
+    let vaultMenu = $state(false);
+    // File tree order from the vault's sortspec.md rules; rule texts are read again only when their revision changes.
+    let sortRules = $state.raw<SortSpecsCollection>();
+    let sortError = $state("");
+    let sortMetadata = $state(new Map<string, Record<string, unknown>>());
+    const ruleTexts = new Map<string, { rev: string; text: string }>();
     let runtime: NotesRuntime | undefined;
     let record: VaultRecord | undefined;
     let objectUrls: string[] = [];
@@ -83,8 +91,10 @@
         }
     }
 
-    /** A link of the form /notes/#<vault>/<path> (from Tabularius citations) opens that vault, then that note. */
+    /** A link to a note: /notes/?vault=<id>&path=<path> from the home page and Tabularius, or the older /notes/#<vault>/<path>. */
     function linked() {
+        const query = new URLSearchParams(location.search);
+        if (query.get("vault")) return { vault: query.get("vault")!, path: query.get("path") ?? "" };
         const [id, ...rest] = location.hash.slice(1).split("/");
         if (!id) return undefined;
         try {
@@ -106,20 +116,24 @@
     async function showLinked() {
         const path = pending?.path;
         pending = undefined;
-        history.replaceState(null, "", location.pathname + location.search);
+        history.replaceState(null, "", location.pathname);
         if (path && files.some((f) => f.path === path)) await show(path);
     }
 
     async function start() {
         try {
             user = await restoreSession();
-            if (!user) phase = "login";
+            if (!user) {
+                // The shell signs in; without a session there is nothing to show here.
+                location.assign("/");
+                return;
+            }
             else await showVaults();
         } catch (e) {
             if (e instanceof TypeError) await showOfflineVaults();
             else {
                 error = message(e);
-                phase = "login";
+                phase = "vaults";
             }
         }
     }
@@ -135,7 +149,7 @@
         }
         if (!last) {
             error = t("notes.offlineNoVaults");
-            phase = "login";
+            phase = "vaults";
             return;
         }
         user = { ...last, role: "user", mustChangePassword: false };
@@ -145,22 +159,9 @@
         followLink();
     }
 
-    async function submitLogin(event: SubmitEvent) {
-        event.preventDefault();
-        error = "";
-        try {
-            user = await login(username, password);
-            password = "";
-            offline = false;
-            await showVaults();
-        } catch (e) {
-            error = e instanceof ApiError && e.status === 401 ? t("notes.wrongCredentials") : message(e);
-        }
-    }
-
     async function showVaults() {
         if (user?.mustChangePassword) {
-            location.href = "/admin/";
+            location.assign("/");
             return;
         }
         rememberUser(user!);
@@ -379,7 +380,7 @@
 
     async function newNote() {
         if (!runtime) return;
-        const typed = prompt(t("notes.newNotePrompt"), current ? `${folderOf(current) ? `${folderOf(current)}/` : ""}` : "");
+        const typed = await askText({ title: t("notes.newNote"), label: t("notes.newNotePrompt"), value: current && folderOf(current) ? `${folderOf(current)}/` : "", action: t("notes.newNote") });
         if (typed === null) return;
         const path = normalisePath(typed, true);
         if (!path) {
@@ -398,7 +399,7 @@
 
     async function rename(item: KindleItem) {
         if (!runtime) return;
-        const typed = prompt(t("notes.renamePrompt"), item.path);
+        const typed = await askText({ title: t("notes.rename"), label: t("notes.renamePrompt"), value: item.path, action: t("notes.renameAction") });
         if (typed === null || typed.trim() === item.path) return;
         const target = normalisePath(typed);
         if (!target) {
@@ -427,7 +428,7 @@
     async function remove(item: KindleItem) {
         if (!runtime) return;
         const targets = item.folder ? files.filter((f) => f.path.startsWith(`${item.path}/`)).map((f) => f.path) : [item.path];
-        if (!confirm(item.folder ? t("notes.confirmDeleteFolder", { name: item.path, count: targets.length }) : t("notes.confirmDelete", { name: item.path }))) return;
+        if (!(await confirmAction({ title: t("notes.delete"), body: item.folder ? t("notes.confirmDeleteFolder", { name: item.path, count: targets.length }) : t("notes.confirmDelete", { name: item.path }), action: t("notes.delete"), danger: true }))) return;
         try {
             for (const path of targets) await runtime.remove(path);
             if (current && targets.includes(current)) {
@@ -521,6 +522,11 @@
 
     // Session
 
+    /** The shell is leaving web notes: stop replication and close the local database before the module goes. */
+    export async function close() {
+        await lock();
+    }
+
     async function lock(reason = "") {
         await flush().catch(() => undefined);
         const active = runtime;
@@ -540,9 +546,16 @@
         phase = vault ? "unlock" : "vaults";
     }
 
+    /** Locks this vault and returns to the vault list. */
+    async function switchVault() {
+        await lock();
+        vault = undefined;
+        phase = "vaults";
+    }
+
     async function clearLocal() {
         if (!user || !vault) return;
-        if (!confirm(t("notes.confirmClear", { vault: vault.name }))) return;
+        if (!(await confirmAction({ title: t("notes.clear"), body: t("notes.confirmClear", { vault: vault.name }), action: t("notes.clear"), danger: true }))) return;
         await lock();
         const key = recordKey(user.id, vault.id);
         const saved = await readRecord(key);
@@ -553,14 +566,6 @@
         await deleteRecord(key);
         notice = t("notes.cleared");
         phase = "vaults";
-    }
-
-    async function signOut() {
-        await lock();
-        if (!offline) await logout();
-        user = undefined;
-        vault = undefined;
-        phase = "login";
     }
 
     function toggle(item: KindleItem) {
@@ -587,29 +592,36 @@
 
     const conflicted = $derived(new Set(files.filter((f) => f.conflicted).map((f) => f.path)));
     const tree = $derived.by(() => {
-        const root: TreeNode = { name: vault?.name ?? "", path: "", folder: true, children: [] };
         const query = filter.trim().toLowerCase();
-        for (const file of files) {
-            if (query && !file.path.toLowerCase().includes(query)) continue;
-            let node = root;
-            const parts = file.path.split("/");
-            parts.forEach((part, index) => {
-                const path = parts.slice(0, index + 1).join("/");
-                const folder = index < parts.length - 1;
-                let child = node.children.find((c) => c.name === part && c.folder === folder);
-                if (!child) {
-                    child = { name: part, path, folder, children: [] };
-                    node.children.push(child);
-                }
-                node = child;
-            });
+        return sortedTree(query ? files.filter((f) => f.path.toLowerCase().includes(query)) : files, vault?.name ?? "", sortRules, sortMetadata);
+    });
+    /** Reads the sorting rules (and, when rules use them, the notes' front matter) after the file list changes. */
+    async function loadSorting(active: NotesRuntime, list: NotesFile[]) {
+        const sources = [];
+        for (const file of list.filter((f) => isSpecSource(f.path))) {
+            let cached = ruleTexts.get(file.path);
+            if (cached?.rev !== file.rev) {
+                cached = { rev: file.rev, text: await active.read(file.path) };
+                ruleTexts.set(file.path, cached);
+            }
+            sources.push({ path: file.path, text: cached.text });
         }
-        const sort = (node: TreeNode) => {
-            node.children.sort((a, b) => Number(b.folder) - Number(a.folder) || a.name.localeCompare(b.name, "zh"));
-            node.children.forEach(sort);
-        };
-        sort(root);
-        return root;
+        if (active !== runtime) return;
+        const parsed = parseSpecs(sources);
+        sortRules = parsed.collection;
+        sortError = parsed.error === undefined ? "" : t("notes.sortError", { error: parsed.error });
+        if (needsMetadata(sources)) {
+            const metadata = new Map<string, Record<string, unknown>>();
+            for (const file of list.filter((f) => isNote(f.path))) {
+                const value = frontMatter(await active.read(file.path));
+                if (value) metadata.set(file.path, value);
+            }
+            if (active === runtime) sortMetadata = metadata;
+        }
+    }
+    $effect(() => {
+        const list = files;
+        if (runtime && list.length) void loadSorting(runtime, list).catch((e) => (sortError = t("notes.sortError", { error: message(e) })));
     });
     const stateLabel = $derived(
         ({ unsaved: t("notes.stateUnsaved"), saved: t("notes.stateSaved"), pending: t("notes.statePending"), synced: t("notes.stateSynced"), conflict: t("notes.stateConflict") }) as Record<SaveState, string>
@@ -622,75 +634,60 @@
     });
 </script>
 
-{#snippet brand()}
-    <div class="brand"><span class="brand-mark">T</span><div><strong>Tabularium</strong><small>{t("brand.subtitle")}</small></div></div>
-{/snippet}
-
-{#snippet languages()}
-    <select class="language-select" aria-label={t("language.label")} value={lang} onchange={(event) => changeLanguage(event.currentTarget.value as Language)}>
-        {#each LANGUAGES as code (code)}<option value={code}>{catalogues[code][`language.${code}`]}</option>{/each}
-    </select>
-{/snippet}
-
+<div class="notes">
 {#key lang}
 {#if phase === "loading"}
-    <main class="center"><p>{t("common.loading")}</p></main>
-{:else if phase === "login"}
-    <main class="center">
-        <div class="gate">
-            {@render brand()}
-            <form class="card" onsubmit={submitLogin}>
-                <h1>{t("notes.heading")}</h1>
-                <label>{t("common.username")} <input name="username" autocomplete="username" bind:value={username} required /></label>
-                <label>{t("common.password")} <input name="password" type="password" autocomplete="current-password" bind:value={password} required /></label>
-                {#if error}<p class="error">{error}</p>{/if}
-                <button type="submit">{t("common.signIn")}</button>
-                <p class="hint">{t("notes.sameAccount")}</p>
-            </form>
-        </div>
-    </main>
+    <div class="page"><p class="hint">{t("common.loading")}</p></div>
 {:else if phase === "vaults"}
-    <main class="center">
-        <div class="gate">
-            {@render brand()}
-            <section class="card">
-                <h1>{t("notes.chooseVault")}</h1>
-                {#if offline}<p class="notice">{t("notes.offlineVaults")}</p>{/if}
-                {#if notice}<p class="notice">{notice}</p>{/if}
-                {#if error}<p class="error">{error}</p>{/if}
-                {#each vaults as item (item.id)}
-                    <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
-                {:else}
-                    <p>{t("notes.noVaults")}</p>
-                {/each}
-                <p class="links"><a href="/admin/">{t("notes.console")}</a> · <button class="link" onclick={signOut}>{t("common.signOut")}</button></p>
-            </section>
-        </div>
-    </main>
+    <div class="page">
+        <header class="page-head"><div><h1>{t("home.notes")}</h1><p>{t("notes.chooseVault")}</p></div></header>
+        {#if offline}<p class="notice-panel">{t("notes.offlineVaults")}</p>{/if}
+        {#if notice}<p class="notice-panel">{notice}</p>{/if}
+        {#if error}<p class="notice-panel error">{error}</p>{/if}
+        <section class="card vault-list">
+            {#each vaults as item (item.id)}
+                <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
+            {:else}
+                <p class="hint">{t("notes.noVaults")}</p>
+            {/each}
+        </section>
+    </div>
 {:else if phase === "unlock" || phase === "opening"}
-    <main class="center">
-        <div class="gate">
-            {@render brand()}
-            <form class="card" onsubmit={unlock}>
-                <h1>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</h1>
-                <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
-                {#if error}<p class="error">{error}</p>{/if}
-                {#if phase === "opening"}<p class="notice">{status}</p>{/if}
-                <button type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
-                <p class="hint">{t("notes.unlockHint")}</p>
-                <p class="links"><button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button></p>
-            </form>
-        </div>
-    </main>
+    <div class="page">
+        <header class="page-head"><div><h1>{vault?.name ?? ""}</h1><p>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</p></div></header>
+        <form class="card stack unlock" onsubmit={unlock}>
+            <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
+            {#if error}<p class="error">{error}</p>{/if}
+            {#if phase === "opening"}<p class="notice">{status}</p>{/if}
+            <div class="actions">
+                <button class="primary" type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
+                <button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button>
+            </div>
+            <p class="hint">{t("notes.unlockHint")}</p>
+        </form>
+    </div>
 {:else}
     <div class="layout">
         <aside>
             <header>
                 <div class="aside-head">
                     <strong>{vault?.name}</strong>
-                    <button class="link" onclick={newNote}>{t("notes.newNote")}</button>
+                    <button class="more vault-more" aria-label={t("notes.more")} aria-expanded={vaultMenu} onclick={() => (vaultMenu = !vaultMenu)}>⋯</button>
                 </div>
-                <input class="filter" placeholder={t("notes.filter")} bind:value={filter} />
+                <span class="status" class:offline title={t("notes.plainCopyTitle")}>{status}</span>
+                {#if sortError}<span class="sort-error">{sortError}</span>{/if}
+                {#if vaultMenu}
+                    <div class="menu" role="menu">
+                        <button role="menuitem" onclick={() => ((vaultMenu = false), void lock())}>{t("notes.lock")}</button>
+                        <button role="menuitem" onclick={() => ((vaultMenu = false), void switchVault())}>{t("notes.otherVault")}</button>
+                        <button role="menuitem" class="danger" onclick={() => ((vaultMenu = false), void clearLocal())}>{t("notes.clear")}</button>
+                        <p class="hint">{t("notes.plainCopyTitle")}</p>
+                    </div>
+                {/if}
+                <div class="aside-tools">
+                    <input class="filter" placeholder={t("notes.filter")} bind:value={filter} />
+                    <button onclick={newNote}>{t("notes.newNote")}</button>
+                </div>
             </header>
             {#if selecting}
                 <div class="selection">
@@ -703,20 +700,12 @@
             </nav>
         </aside>
         <section class="main">
-            <div class="toolbar">
-                <span class="status" class:offline>{status}</span>
-                <span class="plain-note" title={t("notes.plainCopyTitle")}>{t("notes.plainCopy")}</span>
-                {@render languages()}
-                <button class="link" onclick={() => lock()}>{t("notes.lock")}</button>
-                <button class="link" onclick={clearLocal}>{t("notes.clear")}</button>
-                <button class="link" onclick={signOut}>{t("common.signOut")}</button>
-            </div>
             {#if notice}<p class="notice">{notice}</p>{/if}
             {#if error}<p class="error">{error}</p>{/if}
             {#if current}
                 <div class="note-head">
                     <h1 class="title">{nameOf(current).replace(/\.md$/i, "")}</h1>
-                    <span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>
+                    {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
                     {#if mode === "view" && isNote(current)}
                         <button onclick={edit}>{t("notes.edit")}</button>
                     {:else if mode === "edit"}
@@ -749,3 +738,4 @@
     </div>
 {/if}
 {/key}
+</div>

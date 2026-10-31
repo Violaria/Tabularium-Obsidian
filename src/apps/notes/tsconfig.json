@@ -23,7 +23,8 @@
         /* Path mapping */
         // "baseUrl": ".",
         "paths": {
-            "@/*": ["../../*"]
+            "@/*": ["../../*"],
+            "@tabularium/custom-sort/engine": ["./custom-sort-engine.d.ts"]
         }
     },
     "include": ["*.ts", "**/*.ts", "**/*.tsx", "**/*.svelte"],
