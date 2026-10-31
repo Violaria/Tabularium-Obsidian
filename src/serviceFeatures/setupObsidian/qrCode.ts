@@ -64,7 +64,7 @@ export function useSetupQRCodeFeature(host: NecessaryServices<"API" | "UI" | "se
     host.services.appLifecycle.onLoaded.addHandler(() => {
         host.services.API.addCommand({
             id: "livesync-setting-qr",
-            name: "Show settings as a QR code",
+            name: $msg("Show settings as a QR code"),
             checkCallback: (checking) => {
                 if (!host.services.setting.currentSettings().isConfigured) return false;
                 if (!checking) fireAndForget(encodeSetupSettingsAsQR(host));

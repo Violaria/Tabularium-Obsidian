@@ -873,3 +873,43 @@ body.is-mobile .livesync-compatibility-review-notice {
 .livesync-stat-value[hidden] {
     display: none;
 }
+
+/* Tabularium server login: each label sits above its full-width field, and fields have a visible outline. */
+.tabularium-server-dialog .setting-item:has(input, select) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--size-4-2);
+}
+
+.tabularium-server-dialog .setting-item:has(input, select) .setting-item-info {
+    margin-inline-end: 0;
+}
+
+.tabularium-server-dialog .setting-item:has(input, select) .setting-item-control {
+    justify-content: flex-start;
+}
+
+.tabularium-server-dialog .setting-item-control input,
+.tabularium-server-dialog .setting-item-control select {
+    width: 100%;
+    border: 1px solid var(--text-faint);
+    background-color: var(--background-primary);
+}
+
+.tabularium-server-dialog .setting-item-control input:focus,
+.tabularium-server-dialog .setting-item-control select:focus {
+    border-color: var(--interactive-accent);
+}
+
+.tabularium-hint {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-inline-start: var(--size-4-1);
+    color: var(--text-muted);
+    cursor: help;
+}
+
+.tabularium-hint svg {
+    width: var(--icon-s);
+    height: var(--icon-s);
+}

@@ -29,7 +29,9 @@ function resolveLanguage(lang: I18N_LANGS): I18N_LANGS {
     return languageForObsidian(getLanguage());
 }
 
-export let currentLang: I18N_LANGS = resolveLanguage("");
+// "" follows Obsidian, resolved on each lookup: this module loads before the plug-in installs Obsidian's language getter,
+// so resolving here would fix English for every command registered before the layout is ready.
+export let currentLang: I18N_LANGS = "";
 const missingTranslations = [] as string[];
 let __onMissingTranslations = (key: string) => notice(key, LOG_KIND_WARNING);
 const msgCache = new Map<string, string>();

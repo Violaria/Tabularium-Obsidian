@@ -1,5 +1,6 @@
 import { Modal, Notice, Setting, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
 import type { TabulariumServer } from "./ServerLogin";
+import type { LiveSyncCore } from "@/main";
 import { $msg } from "@/common/translation";
 import { MAX_BOOK_BYTES, assembleBook, notesIn, type BookSource } from "./kindleBook";
 import { bookTexts, serverError } from "./texts";
@@ -23,7 +24,7 @@ export class TabulariumKindle {
         this.server = server;
     }
 
-    install() {
+    private addCommands() {
         const { app } = this.plugin;
         this.plugin.addCommand({
             id: "send-note-to-kindle",
@@ -39,6 +40,15 @@ export class TabulariumKindle {
             id: "kindle-status",
             name: $msg("tabularium.kindle.status"),
             callback: () => this.open(),
+        });
+    }
+
+    install(core: LiveSyncCore) {
+        const { app } = this.plugin;
+        // Registered once the display language is known, so the command names follow it.
+        core.services.appLifecycle.onSettingLoaded.addHandler(() => {
+            this.addCommands();
+            return Promise.resolve(true);
         });
         // file-menu covers the file explorer and the "more options" menu of an open note; files-menu a multiple selection.
         this.plugin.registerEvent(
@@ -183,8 +193,8 @@ class KindleModal extends Modal {
     }
 }
 
-export function installKindle(plugin: Plugin, server: TabulariumServer) {
+export function installKindle(plugin: Plugin, server: TabulariumServer, core: LiveSyncCore) {
     const kindle = new TabulariumKindle(plugin, server);
-    kindle.install();
+    kindle.install(core);
     return kindle;
 }

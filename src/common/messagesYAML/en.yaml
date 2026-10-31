@@ -2808,15 +2808,14 @@ tabularium:
     newVault: New vault
     newVaultName: New vault name
     deviceName: Device name
-    passphrase: Encryption passphrase
+    passphrase: E2EE passphrase
     passphraseNew: Notes are encrypted on this device before upload; the server cannot read them. A lost passphrase cannot be recovered.
     passphraseExisting: Enter the passphrase this vault uses on your other devices.
-    confirmPassphrase: Confirm passphrase
-    afterUpload: Obsidian reloads after connecting, then uploads this device's notes to the new vault.
-    afterFetch: Obsidian reloads after connecting and fetches the notes from the server. To replace the server's copy with this device's notes, connect first, then have the owner authorise this device to rebuild in the console.
+    confirmPassphrase: Confirm E2EE passphrase
     connect: Connect
+    resetFailed: The local database could not be reset; nothing was uploaded.
     passphrasesDiffer: The two passphrases do not match.
-    passphraseRequired: An encryption passphrase is required.
+    passphraseRequired: An E2EE passphrase is required.
     invalidAddress: The server address is not valid.
     addressScheme: The server address must start with https:// or http://.
     unreachable: Cannot reach the server. Check the address and the network.
@@ -2896,3 +2895,28 @@ maintenancePrerequisites.message: '${operation} requires the following settings:
 
   Apply these settings and continue?'
 maintenancePrerequisites.title: ${operation} prerequisites
+"Show vault history": "Show vault history"
+"Create conflict": "Create conflict"
+"Show customization sync dialog": "Show customization sync dialog"
+"Toggle LiveSync": "Toggle LiveSync"
+"Toggle All Sync.": "Toggle All Sync."
+"Scan storage and database again": "Scan storage and database again"
+"Abort synchronization immediately": "Abort synchronization immediately"
+"Open review harness": "Open review harness"
+"P2P Sync : Open P2P Status": "P2P Sync : Open P2P Status"
+"Replicate P2P to default peer": "Replicate P2P to default peer"
+"Replicate now by P2P": "Replicate now by P2P"
+"P2P: Sync with targets": "P2P: Sync with targets"
+"Use the copied setup URI (Formerly Open setup URI)": "Use the copied setup URI (Formerly Open setup URI)"
+"Show settings as a QR code": "Show settings as a QR code"
+"Write setting markdown manually": "Write setting markdown manually"
+"Parse setting file": "Parse setting file"
+"Show log": "Show log"
+"Generate full report for opening the issue with debug info": "Generate full report for opening the issue with debug info"
+"(re)initialise hidden files between storage and database": "(re)initialise hidden files between storage and database"
+"Scan hidden file changes on the storage": "Scan hidden file changes on the storage"
+"Scan hidden file changes on the local database": "Scan hidden file changes on the local database"
+"Scan and apply all offline hidden-file changes": "Scan and apply all offline hidden-file changes"
+"Review why synchronisation is paused": "Review why synchronisation is paused"
+"Analyse Database Usage (advanced)": "Analyse Database Usage (advanced)"
+"Resolve if conflicted.": "Resolve if conflicted."

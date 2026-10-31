@@ -168,10 +168,13 @@ export class NotesRuntime {
         let result: StartResult;
         try {
             const verifier = await this.verifyPassphrase();
+            if (await this.remoteLocked()) throw new Error(t("notes.vaultLocked"));
+            // A rebuild gives the vault a new salt; the copy fetched before belongs to the old database.
+            const rebuilt = saved.fetched && verifier && saved.verifier && verifier.salt !== saved.verifier.salt;
             const preferred = await this.withReplicator((replicator, settings) => replicator.getRemotePreferredTweakValues(settings));
             const tweaks = preferred.status === "available" ? (preferred.values as Record<string, unknown>) : saved.tweaks;
             if (tweaks) await services.setting.applyPartial(tweaks, true);
-            if (!saved.fetched) await serviceModules.rebuilder.$fetchLocal(false, true);
+            if (!saved.fetched || rebuilt) await serviceModules.rebuilder.$fetchLocal(false, true);
             result = { offline: false, verifier: verifier ?? saved.verifier, tweaks };
         } catch (error) {
             // Only a network failure on a vault fetched before falls back to the local copy.
@@ -204,6 +207,21 @@ export class NotesRuntime {
         const result = await services.replicator.runWithActiveReplicatorContext((context) => task(context.replicator as LiveSyncAbstractReplicator, services.setting.currentSettings()));
         if (result === undefined) throw new NetworkError(t("notes.noConnection"));
         return result;
+    }
+
+    /** A rebuilt vault stays locked until its owner lifts the lock; fetching it before then fails. */
+    private async remoteLocked() {
+        let response: Response;
+        try {
+            response = await fetch(`/sync/${this.connection.vaultId}/_local/obsydian_livesync_milestone`, {
+                headers: { authorization: this.auth },
+            });
+        } catch {
+            throw new NetworkError(t("notes.offline"));
+        }
+        if (response.status === 404) return false;
+        if (!response.ok) throw new Error(t("notes.readFailed", { status: response.status }));
+        return ((await response.json()) as { locked?: boolean }).locked === true;
     }
 
     /**

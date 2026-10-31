@@ -45,7 +45,7 @@ describe("ModuleLiveSyncMain", () => {
             const openDatabase = vi.fn(async () => undefined);
             const services = {
                 context: { events: {} },
-                setting: { loadSettings },
+                setting: { loadSettings, currentSettings: () => ({ displayLanguage: "" }) },
                 appLifecycle,
                 database: { openDatabase },
                 databaseEvents: {},

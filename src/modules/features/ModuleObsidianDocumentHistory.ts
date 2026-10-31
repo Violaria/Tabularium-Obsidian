@@ -11,7 +11,7 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
     _everyOnloadStart(): Promise<boolean> {
         this.addCommand({
             id: "livesync-history",
-            name: "Show history",
+            name: $msg("Show history"),
             callback: () => {
                 const file = this.services.vault.getActiveFilePath();
                 if (file) this.showHistory(file, undefined);
@@ -20,7 +20,7 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
 
         this.addCommand({
             id: "livesync-filehistory",
-            name: "Pick a file to show history",
+            name: $msg("Pick a file to show history"),
             callback: () => {
                 fireAndForget(async () => await this.fileHistory());
             },

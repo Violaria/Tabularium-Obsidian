@@ -1,5 +1,5 @@
 import { delay } from "octagonal-wheels/promises";
-import { __onMissingTranslation } from "@/common/translation";
+import { $msg, __onMissingTranslation } from "@/common/translation";
 import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 import { LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import { writable } from "svelte/store";
@@ -36,7 +36,7 @@ export class ModuleDev extends AbstractObsidianModule {
         if (!this.settings.enableDebugTools) return Promise.resolve(true);
         this.addCommand({
             id: "test-create-conflict",
-            name: "Create conflict",
+            name: $msg("Create conflict"),
             callback: async () => {
                 const filename = "test-create-conflict.md";
                 const content = `# Test create conflict\n\n`;

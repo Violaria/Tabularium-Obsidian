@@ -202,7 +202,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 );
                 setupManager.registerP2PSetupConnectionProbe(replicator.connectionProbe);
                 this.tabularium = installTabulariumServer(this, core, setupManager);
-                this.kindle = installKindle(this, this.tabularium);
+                this.kindle = installKindle(this, this.tabularium, core);
                 useP2PReplicatorCommands(core, replicator);
                 useP2PReplicatorUI(core, core, replicator, createInteractiveP2PReplication(replicator));
                 useObsidianReplicationRibbonFeature(core);
@@ -239,7 +239,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
         this.app.workspace.onLayoutReady(onReady);
     }
     override onload() {
-        this.sorting = installCustomSorting(this);
+        this.sorting = installCustomSorting(this, this.core);
         void this._startUp();
     }
     override onunload(): void {

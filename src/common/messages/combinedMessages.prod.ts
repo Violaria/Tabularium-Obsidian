@@ -72,6 +72,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "(Obsoletum) Adaptatore vetere ad compatibilitatem utere",
         zh: "(已弃用)为兼容性使用旧适配器",
     },
+    "(re)initialise hidden files between storage and database": {
+        def: "(re)initialise hidden files between storage and database",
+        la: "Plicas occultas inter repositorium plicarum et repositorium (re)initia",
+        zh: "（重新）初始化存储与数据库之间的隐藏文件",
+    },
     "(RegExp) Empty to sync all files. Set filter as a regular expression to limit synchronising files.": {
         def: "(RegExp) Empty to sync all files. Set filter as a regular expression to limit synchronising files.",
         la: "(RegExp) Vacuum relinque ut omnes plicae synchronizentur. Filtrum ut expressionem regularem constitue ad plicas synchronizandas limitandas.",
@@ -130,6 +135,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Setup URI est una series textus quae inscriptionem ministratoris et singula authenticationis continet. URI uti, si a scripto institutionis ministratoris tui generatum est, configurationem simplicem et tutam praebet.",
             zh: "Setup URI 是一段包含服务器地址与认证信息的文本。如果服务器安装脚本已经生成了 URI，使用它可以更简单且更安全地完成配置。",
         },
+    "Abort synchronization immediately": {
+        def: "Abort synchronization immediately",
+        la: "Synchronizationem statim abrumpe",
+        zh: "立即中止同步",
+    },
     Accept: {
         def: "Accept",
         la: "Accipe",
@@ -273,6 +283,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Analyse database usage",
         la: "Analysa usum repositorii",
         zh: "分析数据库使用情况",
+    },
+    "Analyse Database Usage (advanced)": {
+        def: "Analyse Database Usage (advanced)",
+        la: "Usum repositorii examina (provectum)",
+        zh: "分析数据库用量（高级）",
     },
     "Analyse database usage and generate a TSV report for diagnosis yourself. You can paste the generated report with any spreadsheet you like.":
         {
@@ -1069,6 +1084,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "CouchDB validates the database name when you connect. The name must not be empty.",
         la: "CouchDB nomen repositorii cum conectis confirmat. Nomen vacuum esse non debet.",
         zh: "CouchDB 会在连接时校验数据库名称。名称不能为空。",
+    },
+    "Create conflict": {
+        def: "Create conflict",
+        la: "Crea discrepantiam",
+        zh: "制造冲突",
     },
     "Create or connect to database and continue": {
         def: "Create or connect to database and continue",
@@ -1955,6 +1975,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Gathering information...",
         la: "Informationes colliguntur...",
         zh: "正在收集信息…",
+    },
+    "Generate full report for opening the issue with debug info": {
+        def: "Generate full report for opening the issue with debug info",
+        la: "Genera relationem plenam cum indiciis ad quaestionem aperiendam",
+        zh: "生成含调试信息的完整报告（用于提交问题）",
     },
     "Generate Random ID": {
         def: "Generate Random ID",
@@ -4465,6 +4490,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Aperi constitutionem P2P...",
         zh: "打开 P2P 设置…",
     },
+    "Open review harness": {
+        def: "Open review harness",
+        la: "Aperi instrumentum recensionis",
+        zh: "打开审查工具",
+    },
     "Open the dialog": {
         def: "Open the dialog",
         la: "Aperi dialogum",
@@ -4514,6 +4544,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "P2P Status",
         la: "Status P2P",
         zh: "P2P 状态",
+    },
+    "P2P Sync : Open P2P Status": {
+        def: "P2P Sync : Open P2P Status",
+        la: "Synchronizatio P2P: aperi statum P2P",
+        zh: "P2P 同步：打开 P2P 状态",
+    },
+    "P2P: Sync with targets": {
+        def: "P2P: Sync with targets",
+        la: "P2P: synchroniza cum destinationibus",
+        zh: "P2P：与目标同步",
     },
     "P2P.ApplyRemoteConfig.AskRebuildByP2P": {
         def: 'Do you want to set the remote type to "P2P Sync" to rebuild by "P2P replication"?',
@@ -4684,6 +4724,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "paneMaintenance.unlockDatabaseReady",
         la: "paneMaintenance.unlockDatabaseReady",
         zh: "现在可以解锁数据库。",
+    },
+    "Parse setting file": {
+        def: "Parse setting file",
+        la: "Interpretare plicam configurationis",
+        zh: "解析设置文件",
     },
     Passphrase: {
         def: "Passphrase",
@@ -5324,6 +5369,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Replica nunc",
         zh: "立即复制",
     },
+    "Replicate now by P2P": {
+        def: "Replicate now by P2P",
+        la: "Replica nunc per P2P",
+        zh: "立即通过 P2P 同步",
+    },
+    "Replicate P2P to default peer": {
+        def: "Replicate P2P to default peer",
+        la: "Replica per P2P cum socio praedefinito",
+        zh: "通过 P2P 与默认对端同步",
+    },
     Replicating: {
         def: "Replicating",
         la: "Replicatio fit",
@@ -5510,6 +5565,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Solve omnes plicas discrepantes recentiore. Cave: hoc vetustiorem superscribet, nec superscriptam resuscitare poterit.",
             zh: "将所有冲突文件统一保留较新的版本。注意：这会覆盖较旧的版本，且被覆盖的内容无法恢复。",
         },
+    "Resolve if conflicted.": {
+        def: "Resolve if conflicted.",
+        la: "Solve si discrepat",
+        zh: "如有冲突则解决",
+    },
     "Restart and Fetch Data": {
         def: "Restart and Fetch Data",
         la: "Denuo incipe et data arcesse",
@@ -5555,6 +5615,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Review why",
         la: "Inspice causam",
         zh: "查看原因",
+    },
+    "Review why synchronisation is paused": {
+        def: "Review why synchronisation is paused",
+        la: "Recognosce cur synchronizatio suspensa sit",
+        zh: "查看同步暂停的原因",
     },
     Revoke: {
         def: "Revoke",
@@ -5628,6 +5693,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Lege codicem QR (commendatur pro instrumentis mobilibus)",
         zh: "扫描二维码（移动端推荐）",
     },
+    "Scan and apply all offline hidden-file changes": {
+        def: "Scan and apply all offline hidden-file changes",
+        la: "Perlustra et applica omnes mutationes plicarum occultarum extra lineam factas",
+        zh: "扫描并应用所有离线时的隐藏文件变更",
+    },
     "Scan changes": {
         def: "Scan changes",
         la: "Perscrutare mutationes",
@@ -5668,6 +5738,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Quaere plicas occultas ante replicationem",
         zh: "复制前扫描隐藏文件",
     },
+    "Scan hidden file changes on the local database": {
+        def: "Scan hidden file changes on the local database",
+        la: "Perlustra mutationes plicarum occultarum in repositorio locali",
+        zh: "扫描本地数据库中隐藏文件的变更",
+    },
+    "Scan hidden file changes on the storage": {
+        def: "Scan hidden file changes on the storage",
+        la: "Perlustra mutationes plicarum occultarum in repositorio plicarum",
+        zh: "扫描存储中隐藏文件的变更",
+    },
     "Scan hidden files periodically": {
         def: "Scan hidden files periodically",
         la: "Perscrutare plicas occultas periodice",
@@ -5677,6 +5757,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Scan QR Code",
         la: "Lege codicem QR",
         zh: "扫描二维码",
+    },
+    "Scan storage and database again": {
+        def: "Scan storage and database again",
+        la: "Perlustra iterum repositorium plicarum et repositorium",
+        zh: "重新扫描存储与数据库",
     },
     "Scan the QR code displayed on an active device using this device's camera.": {
         def: "Scan the QR code displayed on an active device using this device's camera.",
@@ -6295,6 +6380,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Monstra",
         zh: "显示",
     },
+    "Show customization sync dialog": {
+        def: "Show customization sync dialog",
+        la: "Monstra dialogum synchronizationis personalizationis",
+        zh: "显示自定义同步对话框",
+    },
     "Show full banner": {
         def: "Show full banner",
         la: "Monstra vexillum plenum",
@@ -6310,6 +6400,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Monstra iconem tantum",
         zh: "仅显示图标",
     },
+    "Show log": {
+        def: "Show log",
+        la: "Monstra acta",
+        zh: "显示日志",
+    },
     "Show only notifications": {
         def: "Show only notifications",
         la: "Monstra nuntios tantum",
@@ -6319,6 +6414,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Show password",
         la: "Monstra tesseram",
         zh: "显示密码",
+    },
+    "Show settings as a QR code": {
+        def: "Show settings as a QR code",
+        la: "Monstra configurationem ut codicem QR",
+        zh: "以二维码显示设置",
     },
     "Show status as icons only": {
         def: "Show status as icons only",
@@ -6339,6 +6439,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Show status on the status bar",
         la: "Monstra statum in taenia status",
         zh: "在状态栏上显示状态",
+    },
+    "Show vault history": {
+        def: "Show vault history",
+        la: "Monstra historiam tabularii",
+        zh: "显示库的历史记录",
     },
     "Show verbose log. Please enable if you report an issue.": {
         def: "Show verbose log. Please enable if you report an issue.",
@@ -6632,25 +6737,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Inscriptio ministratoris incipere debet ab https:// vel http://.",
         zh: "服务器地址须以 https:// 或 http:// 开头。",
     },
-    "tabularium.server.afterFetch": {
-        def: "Obsidian reloads after connecting and fetches the notes from the server. To replace the server's copy with this device's notes, connect first, then have the owner authorise this device to rebuild in the console.",
-        la: "Obsidian post conexionem iterum oneratur et commentarios ex ministratore arcessit. Ut exemplar ministratoris commentariis huius instrumenti substituas, primum conecte, deinde fac ut possessor huic instrumento in consola reaedificare permittat.",
-        zh: "连接后 Obsidian 会重新加载并从服务器获取笔记。需要用本机笔记覆盖服务器时，先连接，再由所有者在控制台授权本设备重建。",
-    },
-    "tabularium.server.afterUpload": {
-        def: "Obsidian reloads after connecting, then uploads this device's notes to the new vault.",
-        la: "Obsidian post conexionem iterum oneratur, deinde commentarios huius instrumenti in novum tabularium sursum mittit.",
-        zh: "连接后 Obsidian 会重新加载，本机笔记随后上传到新笔记库。",
-    },
     "tabularium.server.command": {
         def: "Server connection",
         la: "Conexio ministratoris",
         zh: "服务器连接",
     },
     "tabularium.server.confirmPassphrase": {
-        def: "Confirm passphrase",
-        la: "Confirma tesseram arcanam",
-        zh: "确认口令",
+        def: "Confirm E2EE passphrase",
+        la: "Confirma tesseram arcanam E2EE",
+        zh: "确认 E2EE 密码短语",
     },
     "tabularium.server.confirmPassword": {
         def: "Confirm new password",
@@ -6743,29 +6838,29 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "打开",
     },
     "tabularium.server.passphrase": {
-        def: "Encryption passphrase",
-        la: "Tessera arcana cryptationis",
-        zh: "笔记解密口令",
+        def: "E2EE passphrase",
+        la: "Tessera arcana E2EE",
+        zh: "E2EE 密码短语",
     },
     "tabularium.server.passphraseExisting": {
         def: "Enter the passphrase this vault uses on your other devices.",
         la: "Inscribe tesseram arcanam qua hoc tabularium in aliis instrumentis tuis utitur.",
-        zh: "输入这个笔记库在其他设备上使用的口令。",
+        zh: "输入这个笔记库在其他设备上使用的 E2EE 密码短语。",
     },
     "tabularium.server.passphraseNew": {
         def: "Notes are encrypted on this device before upload; the server cannot read them. A lost passphrase cannot be recovered.",
         la: "Commentarii in hoc instrumento ante missionem sursum cryptantur; ministrator eos legere non potest. Tessera arcana amissa recuperari non potest.",
-        zh: "笔记在本机加密后上传，服务器无法读取。口令遗失后无法找回笔记。",
+        zh: "笔记在本机加密后上传，服务器无法读取。密码短语遗失后无法找回笔记。",
     },
     "tabularium.server.passphraseRequired": {
-        def: "An encryption passphrase is required.",
-        la: "Tessera arcana cryptationis requiritur.",
-        zh: "需要设置笔记解密口令。",
+        def: "An E2EE passphrase is required.",
+        la: "Tessera arcana E2EE requiritur.",
+        zh: "需要设置 E2EE 密码短语。",
     },
     "tabularium.server.passphrasesDiffer": {
         def: "The two passphrases do not match.",
         la: "Duae tesserae arcanae non congruunt.",
-        zh: "两次输入的口令不一致。",
+        zh: "两次输入的密码短语不一致。",
     },
     "tabularium.server.password": {
         def: "Password",
@@ -6781,6 +6876,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Renewing Tabularium credentials failed: ${error}",
         la: "Renovatio testimoniorum Tabularium defecit: ${error}",
         zh: "Tabularium 凭据续期失败：${error}",
+    },
+    "tabularium.server.resetFailed": {
+        def: "The local database could not be reset; nothing was uploaded.",
+        la: "Repositorium locale renovari non potuit; nihil sursum missum est.",
+        zh: "无法重置本地数据库，没有上传任何内容。",
     },
     "tabularium.server.saveAndContinue": {
         def: "Save and continue",
@@ -7179,6 +7279,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "To:",
         la: "Ad:",
         zh: "至：",
+    },
+    "Toggle All Sync.": {
+        def: "Toggle All Sync.",
+        la: "Commuta omnem synchronizationem",
+        zh: "开关全部同步",
+    },
+    "Toggle LiveSync": {
+        def: "Toggle LiveSync",
+        la: "Commuta LiveSync",
+        zh: "开关 LiveSync",
     },
     "Toggle Sync on `Replicate now` command": {
         def: "Toggle Sync on `Replicate now` command",
@@ -8872,6 +8982,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Adhibe divisorem fragmentorum limite divisionis coercitum",
         zh: "使用分割限制上限的块分割器",
     },
+    "Use the copied setup URI (Formerly Open setup URI)": {
+        def: "Use the copied setup URI (Formerly Open setup URI)",
+        la: "Adhibe Setup URI exscriptum (olim «Aperi Setup URI»)",
+        zh: "使用已复制的设置 URI（原「打开设置 URI」）",
+    },
     "Use the detailed flow": {
         def: "Use the detailed flow",
         la: "Adhibe processum accuratum",
@@ -9010,6 +9125,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Write logs into the file",
         la: "Inscribe acta in plicam",
         zh: "将日志写入文件",
+    },
+    "Write setting markdown manually": {
+        def: "Write setting markdown manually",
+        la: "Scribe configurationem in Markdown manu",
+        zh: "手动写出设置 Markdown",
     },
     "xxhash32 (Fast but less collision resistance)": {
         def: "xxhash32 (Fast but less collision resistance)",
@@ -9191,7 +9311,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Changing the E2EE passphrase changes IDs generated by the legacy configuration.": {
         la: "Mutatio tesserae arcanae E2EE identificatores a configuratione hereditaria generatos mutat.",
-        zh: "更改 E2EE 口令会改变旧版配置生成的 ID。",
+        zh: "更改 E2EE 密码短语会改变旧版配置生成的 ID。",
     },
     "Checked ${COUNT} local entries.": {
         la: "${COUNT} inscriptiones locales inspectae.",
@@ -9307,7 +9427,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Current configuration: no ID key is saved. With E2EE enabled, keeping it uses legacy IDs tied to the E2EE passphrase.":
         {
             la: "Configuratio praesens: nulla clavis ID servata est. E2EE activo, si sic relinquitur, identificatores hereditarii tesserae arcanae E2EE alligati adhibentur.",
-            zh: "当前配置：未保存 ID 密钥。启用 E2EE 时，保持此配置将使用与 E2EE 口令绑定的旧版 ID。",
+            zh: "当前配置：未保存 ID 密钥。启用 E2EE 时，保持此配置将使用与 E2EE 密码短语绑定的旧版 ID。",
         },
     "Current configuration: the saved ID key is retained while E2EE is off.": {
         la: "Configuratio praesens: clavis ID servata retinetur dum E2EE deactivatum est.",
@@ -9355,7 +9475,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Derive from current E2EE passphrase": {
         la: "Deriva ex tessera arcana E2EE praesenti",
-        zh: "从当前 E2EE 口令派生",
+        zh: "从当前 E2EE 密码短语派生",
     },
     "Desktop only; uses more battery and network.": {
         la: "Solum in computatris mensalibus; plus pilae et retis consumit.",
@@ -9430,7 +9550,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Encryption passphrase. If changed, you should overwrite the server's database with the new (encrypted) files.": {
         la: "Tessera arcana cryptationis. Si mutatur, repositorium ministratoris novis plicis (cryptatis) superscribere debes.",
-        zh: "加密口令。如果更改，应使用新的（加密后的）文件覆盖服务器上的数据库。",
+        zh: "E2EE 密码短语。如果更改，应使用新的（加密后的）文件覆盖服务器上的数据库。",
     },
     "End-to-End Encryption Algorithm": {
         la: "Algorithmus cryptationis ab extremo ad extremum",
@@ -10242,7 +10362,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "The ID key is derived from the current E2EE passphrase and saved separately. Changing that passphrase later does not change the saved ID key. To reduce the risk of guessing that passphrase from known IDs, use a separate, unpredictable ID source instead.":
         {
             la: "Clavis identificationum ex tessera arcana E2EE praesenti derivatur et seorsum servatur. Si postea illam tesseram arcanam mutaveris, clavis servata non mutabitur. Ut periculum minuatur ne illa tessera arcana ex identificationibus notis divinetur, potius fontem identificationum separatum et incertum adhibe.",
-            zh: "ID 密钥由当前的 E2EE 口令派生并单独保存。之后更改该口令不会改变已保存的 ID 密钥。为降低通过已知 ID 猜出该口令的风险，请改用一个独立且无法预测的 ID 来源。",
+            zh: "ID 密钥由当前的 E2EE 密码短语派生并单独保存。之后更改该密码短语不会改变已保存的 ID 密钥。为降低通过已知 ID 猜出该密码短语的风险，请改用一个独立且无法预测的 ID 来源。",
         },
     "The ID source or recovery code is invalid. Check it and try again.": {
         la: "Fons identificationum aut codex recuperationis invalidus est. Inspice et iterum conare.",
@@ -10401,7 +10521,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "This uses a saved key for new Chunk IDs and obfuscated Metadata document IDs, so changing the E2EE passphrase does not derive a new key automatically.":
         {
             la: "Hoc clavem servatam ad novas identificationes fragmentorum et ad identificationes documentorum Metadata obfuscatas adhibet, itaque mutatio tesserae arcanae E2EE clavem novam sponte non derivat.",
-            zh: "新的块 ID 和混淆后的元数据文档 ID 使用已保存的密钥，因此更改 E2EE 口令不会自动派生新密钥。",
+            zh: "新的块 ID 和混淆后的元数据文档 ID 使用已保存的密钥，因此更改 E2EE 密码短语不会自动派生新密钥。",
         },
     "Timestamp comparison unavailable": {
         la: "Comparatio temporum notatorum non praesto est",

@@ -1,5 +1,5 @@
 // Interface texts of Tabularium's plug-in features that need more than a single catalogue lookup.
-import { $msg, currentLang } from "@/common/translation";
+import { $msg, getResolvedLang } from "@/common/translation";
 import type { BookTexts } from "./kindleBook";
 
 const SERVER_ERRORS = [
@@ -23,7 +23,7 @@ export const serverError = (code: string) =>
 
 /** Texts placed inside a Kindle book, and the book's language, follow the interface language. */
 export const bookTexts = (): BookTexts => ({
-    language: currentLang === "def" || currentLang === "" ? "en" : currentLang,
+    language: getResolvedLang() === "def" ? "en" : getResolvedLang(),
     contents: $msg("tabularium.kindle.contents"),
     missingImage: (name) => $msg("tabularium.kindle.missingImage", { name }),
 });

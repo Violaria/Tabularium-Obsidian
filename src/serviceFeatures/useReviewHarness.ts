@@ -19,6 +19,7 @@ import { runReviewHarnessIdBenchmark } from "@/features/ReviewHarness/reviewHarn
 import { createIdBenchmarkOperations } from "@/features/ReviewHarness/reviewHarnessIdBenchmarkRuntime";
 import { runReviewHarnessFileContentHashBenchmark } from "@/features/ReviewHarness/reviewHarnessFileContentHashBenchmark";
 import { createFileContentHashBenchmarkOperations } from "@/features/ReviewHarness/reviewHarnessFileContentHashBenchmarkRuntime";
+import { $msg } from "@/common/translation";
 
 async function runVaultRoundTrip(plugin: ObsidianLiveSyncPlugin): Promise<ReviewHarnessScenarioResult> {
     const vault = plugin.app.vault;
@@ -110,7 +111,7 @@ export function useReviewHarness(
         );
         services.API.addCommand({
             id: "open-review-harness",
-            name: "Open review harness",
+            name: $msg("Open review harness"),
             callback: () => {
                 void services.API.showWindow(VIEW_TYPE_REVIEW_HARNESS);
             },

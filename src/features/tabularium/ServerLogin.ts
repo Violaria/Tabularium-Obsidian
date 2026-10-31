@@ -1,4 +1,4 @@
-import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
+import { Modal, Notice, Setting, normalizePath, setIcon, setTooltip, type Plugin } from "obsidian";
 import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@vrtmrz/livesync-commonlib/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
@@ -64,6 +64,12 @@ export class TabulariumServer {
             }
         );
         this.core.services.appLifecycle.onSettingLoaded.addHandler(async () => {
+            // Registered once the display language is known, so the command name follows it.
+            this.plugin.addCommand({
+                id: "server-connection",
+                name: $msg("tabularium.server.command"),
+                callback: () => this.open(),
+            });
             const adapter = this.plugin.app.vault.adapter;
             if (await adapter.exists(this.file))
                 this.connection = JSON.parse(await adapter.read(this.file)) as TabulariumConnection;
@@ -72,11 +78,6 @@ export class TabulariumServer {
             const overrides = enforcedOverrides(current, current);
             if (Object.keys(overrides).length) await settings.applyPartial(overrides, true);
             return true;
-        });
-        this.plugin.addCommand({
-            id: "server-connection",
-            name: $msg("tabularium.server.command"),
-            callback: () => this.open(),
         });
         this.app.workspace.onLayoutReady(() => {
             void this.renew();
@@ -188,6 +189,14 @@ export class TabulariumServer {
                 next,
                 initialise === "upload" ? UserMode.NewUser : UserMode.ExistingUser
             );
+            // A device that synchronised with LiveSync before keeps that local database, whose documents carry IDs
+            // without path obfuscation; the gateway refuses them. The upload starts from an empty database that the
+            // restart fills from the vault's files.
+            if (initialise === "upload") {
+                const { database, databaseEvents, replicator } = this.core.services;
+                if (!(await database.resetDatabaseForCurrentSettings({ databaseEvents, replicator })))
+                    throw new Error($msg("tabularium.server.resetFailed"));
+            }
             // Encrypt data.json with a key kept on this device instead of the fixed default.
             if (settings.currentSettings().configPassphraseStore !== "LOCALSTORAGE")
                 await settings.changeConfigurationEncryption("LOCALSTORAGE", randomKey());
@@ -226,6 +235,15 @@ export class TabulariumServer {
     }
 }
 
+/** An explanation behind an icon after the setting name: shown on hover, and as a notice when tapped on mobile. */
+function hint(setting: Setting, text: string) {
+    const icon = setting.nameEl.createSpan({ cls: "tabularium-hint" });
+    setIcon(icon, "alert-circle");
+    setTooltip(icon, text);
+    icon.addEventListener("click", () => new Notice(text));
+    return setting;
+}
+
 class ServerModal extends Modal {
     private readonly server: TabulariumServer;
     private api?: TabulariumApi;
@@ -234,6 +252,7 @@ class ServerModal extends Modal {
     constructor(server: TabulariumServer) {
         super(server.app);
         this.server = server;
+        this.modalEl.addClass("tabularium-server-dialog");
         this.setTitle($msg("tabularium.server.title"));
     }
 
@@ -370,23 +389,18 @@ class ServerModal extends Modal {
             new Setting(contentEl)
                 .setName($msg("tabularium.server.deviceName"))
                 .addText((t) => t.setValue(values.device).onChange((v) => (values.device = v)));
-            new Setting(contentEl)
-                .setName($msg("tabularium.server.passphrase"))
-                .setDesc(
-                    creating() ? $msg("tabularium.server.passphraseNew") : $msg("tabularium.server.passphraseExisting")
-                )
-                .addText((t) => {
-                    t.inputEl.type = "password";
-                    t.onChange((v) => (values.passphrase = v));
-                });
+            hint(
+                new Setting(contentEl).setName($msg("tabularium.server.passphrase")),
+                creating() ? $msg("tabularium.server.passphraseNew") : $msg("tabularium.server.passphraseExisting")
+            ).addText((t) => {
+                t.inputEl.type = "password";
+                t.onChange((v) => (values.passphrase = v));
+            });
             if (creating()) {
                 new Setting(contentEl).setName($msg("tabularium.server.confirmPassphrase")).addText((t) => {
                     t.inputEl.type = "password";
                     t.onChange((v) => (values.confirm = v));
                 });
-                contentEl.createEl("p", { text: $msg("tabularium.server.afterUpload") });
-            } else {
-                contentEl.createEl("p", { text: $msg("tabularium.server.afterFetch") });
             }
             new Setting(contentEl).addButton((b) =>
                 b

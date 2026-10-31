@@ -108,6 +108,8 @@ export class ModuleLiveSyncMain extends AbstractModule {
         // this.addUIs();
         this._log($msg("moduleLiveSyncMain.logPluginVersion", { manifestVersion, packageVersion }));
         await this.services.setting.loadSettings();
+        // The chosen display language applies before commands are registered (onSettingLoaded and onLoaded).
+        setLang(this.services.setting.currentSettings().displayLanguage);
         if (!(await this.services.appLifecycle.onSettingLoaded())) {
             this._log($msg("moduleLiveSyncMain.logPluginInitCancelled"), LOG_LEVEL_NOTICE);
             return false;

@@ -2411,10 +2411,8 @@ tabularium.kindle.status: Status traditionis Kindle
 tabularium.kindle.statusFailed: Lectio status defecit (HTTP ${status}).
 tabularium.server.address: Inscriptio ministratoris
 tabularium.server.addressScheme: Inscriptio ministratoris incipere debet ab https:// vel http://.
-tabularium.server.afterFetch: Obsidian post conexionem iterum oneratur et commentarios ex ministratore arcessit. Ut exemplar ministratoris commentariis huius instrumenti substituas, primum conecte, deinde fac ut possessor huic instrumento in consola reaedificare permittat.
-tabularium.server.afterUpload: Obsidian post conexionem iterum oneratur, deinde commentarios huius instrumenti in novum tabularium sursum mittit.
 tabularium.server.command: Conexio ministratoris
-tabularium.server.confirmPassphrase: Confirma tesseram arcanam
+tabularium.server.confirmPassphrase: Confirma tesseram arcanam E2EE
 tabularium.server.confirmPassword: Confirma tesseram novam
 tabularium.server.connect: Conecte
 tabularium.server.connectedTo: Conexum ad ${vault}
@@ -2433,10 +2431,11 @@ tabularium.server.newVault: Novum tabularium
 tabularium.server.newVaultName: Nomen novi tabularii
 tabularium.server.notConnected: In ministratorem inire ut synchronizare incipias.
 tabularium.server.open: Aperi
-tabularium.server.passphrase: Tessera arcana cryptationis
+tabularium.server.passphrase: Tessera arcana E2EE
 tabularium.server.passphraseExisting: Inscribe tesseram arcanam qua hoc tabularium in aliis instrumentis tuis utitur.
 tabularium.server.passphraseNew: Commentarii in hoc instrumento ante missionem sursum cryptantur; ministrator eos legere non potest. Tessera arcana amissa recuperari non potest.
-tabularium.server.passphraseRequired: Tessera arcana cryptationis requiritur.
+tabularium.server.passphraseRequired: Tessera arcana E2EE requiritur.
+tabularium.server.resetFailed: Repositorium locale renovari non potuit; nihil sursum missum est.
 tabularium.server.passphrasesDiffer: Duae tesserae arcanae non congruunt.
 tabularium.server.password: Tessera
 tabularium.server.passwordsDiffer: Duae tesserae non congruunt.
@@ -2823,3 +2822,28 @@ obsidianLiveSyncSettingTab.panelMaintenance: Conservatio
 obsidianLiveSyncSettingTab.panelPatches: Emendationes
 obsidianLiveSyncSettingTab.panelPowerUsers: Usores periti
 obsidianLiveSyncSettingTab.panelSelector: Electio
+"Show vault history": "Monstra historiam tabularii"
+"Create conflict": "Crea discrepantiam"
+"Show customization sync dialog": "Monstra dialogum synchronizationis personalizationis"
+"Toggle LiveSync": "Commuta LiveSync"
+"Toggle All Sync.": "Commuta omnem synchronizationem"
+"Scan storage and database again": "Perlustra iterum repositorium plicarum et repositorium"
+"Abort synchronization immediately": "Synchronizationem statim abrumpe"
+"Open review harness": "Aperi instrumentum recensionis"
+"P2P Sync : Open P2P Status": "Synchronizatio P2P: aperi statum P2P"
+"Replicate P2P to default peer": "Replica per P2P cum socio praedefinito"
+"Replicate now by P2P": "Replica nunc per P2P"
+"P2P: Sync with targets": "P2P: synchroniza cum destinationibus"
+"Use the copied setup URI (Formerly Open setup URI)": "Adhibe Setup URI exscriptum (olim «Aperi Setup URI»)"
+"Show settings as a QR code": "Monstra configurationem ut codicem QR"
+"Write setting markdown manually": "Scribe configurationem in Markdown manu"
+"Parse setting file": "Interpretare plicam configurationis"
+"Show log": "Monstra acta"
+"Generate full report for opening the issue with debug info": "Genera relationem plenam cum indiciis ad quaestionem aperiendam"
+"(re)initialise hidden files between storage and database": "Plicas occultas inter repositorium plicarum et repositorium (re)initia"
+"Scan hidden file changes on the storage": "Perlustra mutationes plicarum occultarum in repositorio plicarum"
+"Scan hidden file changes on the local database": "Perlustra mutationes plicarum occultarum in repositorio locali"
+"Scan and apply all offline hidden-file changes": "Perlustra et applica omnes mutationes plicarum occultarum extra lineam factas"
+"Review why synchronisation is paused": "Recognosce cur synchronizatio suspensa sit"
+"Analyse Database Usage (advanced)": "Usum repositorii examina (provectum)"
+"Resolve if conflicted.": "Solve si discrepat"

@@ -6,6 +6,7 @@ import type { FilePathWithPrefix } from "@vrtmrz/livesync-commonlib/compat/commo
 import { EVENT_CONFLICT_CANCELLED, EVENT_PLUGIN_UNLOADED } from "@/common/events.ts";
 import { createInteractiveConflictResolutionOperations } from "./operations";
 import type { ConflictResolveDialogueFactory } from "./types";
+import { $msg } from "@/common/translation";
 
 export type InteractiveConflictResolutionHost = NecessaryServices<
     "API" | "UI" | "appLifecycle" | "conflict" | "replication" | "vault" | "database" | "setting" | "path",
@@ -36,7 +37,7 @@ export function useInteractiveConflictResolutionFeature(
     services.appLifecycle.onInitialise.addHandler(() => {
         services.API.addCommand({
             id: "livesync-checkdoc-conflicted",
-            name: "Resolve if conflicted.",
+            name: $msg("Resolve if conflicted."),
             editorCallback: (editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
                 const file = view.file;
                 if (!file) return;
@@ -45,14 +46,14 @@ export function useInteractiveConflictResolutionFeature(
         });
         services.API.addCommand({
             id: "livesync-conflictcheck",
-            name: "Pick a file to resolve conflict",
+            name: $msg("Pick a file to resolve conflict"),
             callback: async () => {
                 await operations.pickFileForResolve();
             },
         });
         services.API.addCommand({
             id: "livesync-all-conflictcheck",
-            name: "Resolve all conflicted files",
+            name: $msg("Resolve all conflicted files"),
             callback: async () => {
                 await operations.allConflictCheck();
             },

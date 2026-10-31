@@ -82,7 +82,7 @@ describe("connection settings", () => {
         });
     });
     it("requires a passphrase", () => {
-        expect(() => connectionSettings("https://server.test", "v", device, "")).toThrow("口令");
+        expect(() => connectionSettings("https://server.test", "v", device, "")).toThrow("E2EE 密码短语");
     });
     it("restores weakened values", () => {
         const previous = {

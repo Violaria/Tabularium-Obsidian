@@ -10,6 +10,7 @@ import type { WorkspaceLeaf } from "@/deps";
 import { REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
 import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.type";
 import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
+import { $msg } from "@/common/translation";
 
 export const LEGACY_VIEW_TYPE_P2P = "p2p-replicator";
 
@@ -135,7 +136,7 @@ export function useP2PReplicatorUI(
 
         api.addCommand({
             id: "open-p2p-server-status",
-            name: "P2P Sync : Open P2P Status",
+            name: $msg("P2P Sync : Open P2P Status"),
             checkCallback: (checking) => {
                 if (!hasP2PConfiguration(host.services.setting.currentSettings())) return false;
                 if (!checking) {
@@ -146,7 +147,7 @@ export function useP2PReplicatorUI(
         });
         host.services.API.addCommand({
             id: "replicate-now-by-p2p-default-peer",
-            name: "Replicate P2P to default peer",
+            name: $msg("Replicate P2P to default peer"),
             checkCallback: (isChecking: boolean) => {
                 const settings = host.services.setting.currentSettings();
                 const isAvailable =
@@ -162,7 +163,7 @@ export function useP2PReplicatorUI(
         });
         host.services.API.addCommand({
             id: "replicate-now-by-p2p",
-            name: "Replicate now by P2P",
+            name: $msg("Replicate now by P2P"),
             checkCallback: (isChecking: boolean) => {
                 const settings = host.services.setting.currentSettings();
                 const isAvailable =
@@ -179,7 +180,7 @@ export function useP2PReplicatorUI(
 
         host.services.API.addCommand({
             id: "p2p-sync-targets",
-            name: "P2P: Sync with targets",
+            name: $msg("P2P: Sync with targets"),
             checkCallback: (isChecking: boolean) => {
                 const isAvailable =
                     hasP2PConfiguration(host.services.setting.currentSettings()) &&

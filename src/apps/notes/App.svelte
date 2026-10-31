@@ -622,6 +622,10 @@
     });
 </script>
 
+{#snippet brand()}
+    <div class="brand"><span class="brand-mark">T</span><div><strong>Tabularium</strong><small>{t("brand.subtitle")}</small></div></div>
+{/snippet}
+
 {#snippet languages()}
     <select class="language-select" aria-label={t("language.label")} value={lang} onchange={(event) => changeLanguage(event.currentTarget.value as Language)}>
         {#each LANGUAGES as code (code)}<option value={code}>{catalogues[code][`language.${code}`]}</option>{/each}
@@ -633,44 +637,50 @@
     <main class="center"><p>{t("common.loading")}</p></main>
 {:else if phase === "login"}
     <main class="center">
-        <form class="card" onsubmit={submitLogin}>
-            <h1>{t("notes.heading")}</h1>
-            <label>{t("common.username")} <input name="username" autocomplete="username" bind:value={username} required /></label>
-            <label>{t("common.password")} <input name="password" type="password" autocomplete="current-password" bind:value={password} required /></label>
-            {#if error}<p class="error">{error}</p>{/if}
-            <button type="submit">{t("common.signIn")}</button>
-            <p class="hint">{t("notes.sameAccount")}</p>
-            {@render languages()}
-        </form>
+        <div class="gate">
+            {@render brand()}
+            <form class="card" onsubmit={submitLogin}>
+                <h1>{t("notes.heading")}</h1>
+                <label>{t("common.username")} <input name="username" autocomplete="username" bind:value={username} required /></label>
+                <label>{t("common.password")} <input name="password" type="password" autocomplete="current-password" bind:value={password} required /></label>
+                {#if error}<p class="error">{error}</p>{/if}
+                <button type="submit">{t("common.signIn")}</button>
+                <p class="hint">{t("notes.sameAccount")}</p>
+            </form>
+        </div>
     </main>
 {:else if phase === "vaults"}
     <main class="center">
-        <section class="card">
-            <h1>{t("notes.chooseVault")}</h1>
-            {#if offline}<p class="notice">{t("notes.offlineVaults")}</p>{/if}
-            {#if notice}<p class="notice">{notice}</p>{/if}
-            {#if error}<p class="error">{error}</p>{/if}
-            {#each vaults as item (item.id)}
-                <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
-            {:else}
-                <p>{t("notes.noVaults")}</p>
-            {/each}
-            <p class="links"><a href="/admin/">{t("notes.console")}</a> · <button class="link" onclick={signOut}>{t("common.signOut")}</button></p>
-            {@render languages()}
-        </section>
+        <div class="gate">
+            {@render brand()}
+            <section class="card">
+                <h1>{t("notes.chooseVault")}</h1>
+                {#if offline}<p class="notice">{t("notes.offlineVaults")}</p>{/if}
+                {#if notice}<p class="notice">{notice}</p>{/if}
+                {#if error}<p class="error">{error}</p>{/if}
+                {#each vaults as item (item.id)}
+                    <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
+                {:else}
+                    <p>{t("notes.noVaults")}</p>
+                {/each}
+                <p class="links"><a href="/admin/">{t("notes.console")}</a> · <button class="link" onclick={signOut}>{t("common.signOut")}</button></p>
+            </section>
+        </div>
     </main>
 {:else if phase === "unlock" || phase === "opening"}
     <main class="center">
-        <form class="card" onsubmit={unlock}>
-            <h1>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</h1>
-            <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
-            {#if error}<p class="error">{error}</p>{/if}
-            {#if phase === "opening"}<p class="notice">{status}</p>{/if}
-            <button type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
-            <p class="hint">{t("notes.unlockHint")}</p>
-            <p class="links"><button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button></p>
-            {@render languages()}
-        </form>
+        <div class="gate">
+            {@render brand()}
+            <form class="card" onsubmit={unlock}>
+                <h1>{t("notes.unlockTitle", { vault: vault?.name ?? "" })}</h1>
+                <label>{t("notes.passphrase")} <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
+                {#if error}<p class="error">{error}</p>{/if}
+                {#if phase === "opening"}<p class="notice">{status}</p>{/if}
+                <button type="submit" disabled={phase === "opening"}>{t("notes.unlock")}</button>
+                <p class="hint">{t("notes.unlockHint")}</p>
+                <p class="links"><button type="button" class="link" onclick={() => (phase = "vaults")} disabled={phase === "opening"}>{t("notes.otherVault")}</button></p>
+            </form>
+        </div>
     </main>
 {:else}
     <div class="layout">

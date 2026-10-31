@@ -81,7 +81,7 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
 
         services.API.addCommand({
             id: "livesync-toggle",
-            name: "Toggle LiveSync",
+            name: $msg("Toggle LiveSync"),
             callback: async () => {
                 const settings = services.setting.currentSettings();
                 if (settings.liveSync) {
@@ -98,7 +98,7 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
 
         services.API.addCommand({
             id: "livesync-suspendall",
-            name: "Toggle All Sync.",
+            name: $msg("Toggle All Sync."),
             callback: async () => {
                 if (services.appLifecycle.isSuspended()) {
                     services.appLifecycle.setSuspended(false);
@@ -114,7 +114,7 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
 
         services.API.addCommand({
             id: "livesync-scan-files",
-            name: "Scan storage and database again",
+            name: $msg("Scan storage and database again"),
             checkCallback: (checking) => {
                 if (!services.setting.currentSettings().useAdvancedMode) return false;
                 if (!checking) {
@@ -134,7 +134,7 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
 
         services.API.addCommand({
             id: "livesync-abortsync",
-            name: "Abort synchronization immediately",
+            name: $msg("Abort synchronization immediately"),
             checkCallback: (checking) => {
                 if (!services.setting.currentSettings().useAdvancedMode) return false;
                 if (!checking) {

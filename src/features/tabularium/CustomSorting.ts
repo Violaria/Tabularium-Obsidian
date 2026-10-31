@@ -1,4 +1,5 @@
 import { $msg } from "@/common/translation";
+import type { LiveSyncCore } from "@/main";
 import { Modal, Notice, normalizePath, Plugin, PluginSettingTab, Setting } from "obsidian";
 import { CustomSortPlugin, type CustomSortPluginSettings } from "@tabularium/custom-sort";
 
@@ -82,16 +83,20 @@ export class TabulariumCustomSorting extends CustomSortPlugin {
     }
 }
 
-export function installCustomSorting(plugin: Plugin): TabulariumCustomSorting | undefined {
+export function installCustomSorting(plugin: Plugin, core: LiveSyncCore): TabulariumCustomSorting | undefined {
     if (plugin.app.plugins.enabledPlugins.has("custom-sort")) {
         new Notice($msg("tabularium.sorting.standalone"));
         return undefined;
     }
     const sorting = plugin.addChild(new TabulariumCustomSorting(plugin.app, plugin.manifest));
-    plugin.addCommand({
-        id: "file-sorting-settings",
-        name: $msg("tabularium.sorting.command"),
-        callback: () => sorting.openSettings(),
+    // Registered once the display language is known, so the command name follows it.
+    core.services.appLifecycle.onSettingLoaded.addHandler(() => {
+        plugin.addCommand({
+            id: "file-sorting-settings",
+            name: $msg("tabularium.sorting.command"),
+            callback: () => sorting.openSettings(),
+        });
+        return Promise.resolve(true);
     });
     return sorting;
 }

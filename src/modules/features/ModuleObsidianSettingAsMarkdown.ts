@@ -19,13 +19,14 @@ import { AbstractModule } from "@/modules/AbstractModule.ts";
 import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
 import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
 import type { LiveSyncCore } from "@/main.ts";
+import { $msg } from "@/common/translation";
 const SETTING_HEADER = "````yaml:livesync-setting\n";
 const SETTING_FOOTER = "\n````";
 export class ModuleObsidianSettingsAsMarkdown extends AbstractModule {
     _everyOnloadStart(): Promise<boolean> {
         this.addCommand({
             id: "livesync-export-config",
-            name: "Write setting markdown manually",
+            name: $msg("Write setting markdown manually"),
             checkCallback: (checking) => {
                 if (checking) {
                     return this.settings.settingSyncFile != "";
@@ -37,7 +38,7 @@ export class ModuleObsidianSettingsAsMarkdown extends AbstractModule {
         });
         this.addCommand({
             id: "livesync-import-config",
-            name: "Parse setting file",
+            name: $msg("Parse setting file"),
             editorCheckCallback: (checking: boolean, editor: Editor, ctx: MarkdownView) => {
                 if (checking) {
                     const doc = editor.getValue();

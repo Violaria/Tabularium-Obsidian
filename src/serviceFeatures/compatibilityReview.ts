@@ -8,6 +8,7 @@ import {
     legacyDatabaseCompatibilityVersionKey,
     type CompatibilityPause,
 } from "@/common/databaseCompatibility.ts";
+import { $msg } from "@/common/translation";
 
 export type CompatibilityReviewSummaryAction = "details" | "resume" | "keep-paused" | false;
 export type CompatibilityReviewDetailsAction = "back" | false;
@@ -174,7 +175,7 @@ export function useCompatibilityReview(core: LiveSyncCore, ui: CompatibilityRevi
     });
     core.services.API.addCommand({
         id: "livesync-review-compatibility-pause",
-        name: "Review why synchronisation is paused",
+        name: $msg("Review why synchronisation is paused"),
         checkCallback: (checking) => {
             if (!controller.pendingPause) return false;
             if (!checking) fireAndForget(() => controller.openReview());
