@@ -3293,3 +3293,30 @@ Some requested chunks were not found in the remote database.: Quaedam fragmenta 
 No active replicator found: Nulla synchronizatio constituta est
 Network is offline: Rete abest
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": "Synchronizatio perfecta: ${processedCount} plicae tractatae (${completedCount} perfectae, ${skippedCount} omissae, ${failedCount} errores)"
+tabularium.settings.resolveAllImpact: Versio vetustior cuiusque commentarii discrepantis in omnibus instrumentis abicitur; hic revocari non potest.
+tabularium.sorting.notReady: Ordo fasciculorum adhuc incipit; hanc paginam mox iterum aperi.
+tabularium.release.0.18.1: Unum vocabularium Latinum in additamento et paginis interretialibus.
+tabularium.release.0.18.2: Tabularius novo colloquio formula ante primum nuntium electa respondet.
+Allow sleep during synchronisation: Somnum per synchronizationem permittere
+Allow the operating system to sleep while finite synchronisation operations are in progress.: Systema operativum dormire sinit dum synchronizationes finitae fiunt.
+Allow sleep during synchronisation on the desktop: Somnum per synchronizationem in computatro permittere
+Desktop only. Allow sleep on this device even when the general option is disabled.: Tantum in computatro. Hoc instrumentum dormire sinit etiam si optio generalis non est accensa.
+Batch database updates in LiveSync mode: Renovationes repositorii in modo vivo coniungere
+Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.: In modo vivo, post mutationem plicae breve otium locale (cum fine) exspectat antequam in repositorium scribat. Renovationes intermediae minuuntur, sed alia instrumenta mutationes serius accipiunt.
+Seconds. The quiet period after the latest pending update before local database processing becomes due.: Secundae. Otium post ultimam mutationem antequam repositorium locale scribatur.
+Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: Secundae. Maxima exspectatio a prima mutatione nondum scripta antequam repositorium locale scribatur. Non praestat quando scriptura, transmissio per rete aut adventus in alio instrumento perficiatur.
+tabularium.syncMenu.title: Synchronizatio
+tabularium.syncMenu.now: Synchroniza nunc
+tabularium.syncMenu.history: Historia versionum
+tabularium.syncMenu.flat: "Synchronizatio: ${action}"
+tabularium.history.revisions: ${file} / ${count} versiones
+tabularium.history.revision: Versio ${current}/${total}
+tabularium.history.deleted: (Hac versione plica deleta est)
+tabularium.history.unreadable: Haec versio legi non potuit
+tabularium.history.binary: Plica binaria
+tabularium.history.matches: ${current}/${total} congruentiae
+tabularium.history.search: In centum ultimis versionibus quaerere
+tabularium.history.diffOnly: Differentiae tantum
+tabularium.history.previous: Prior
+tabularium.history.next: Sequens
+tabularium.release.0.19.0: "In menu plicae supra «Ordo» nunc est «Synchronizatio»: synchroniza nunc et historia versionum commentarii; textus optionum et fenestra historiae adhuc Anglice scripti conversi sunt. Ministrator copias tutas statutis horis facit, et aliquot vitia securitatis emendata sunt."

@@ -31,7 +31,7 @@ export class TabulariumKindle {
             name: $msg("tabularium.kindle.sendCurrent"),
             checkCallback: (checking) => {
                 const file = app.workspace.getActiveFile();
-                if (!file || file.extension !== "md") return false;
+                if (!file || file.extension !== "md" || !this.server.connection) return false;
                 if (!checking) void this.run([file]);
                 return true;
             },
@@ -53,7 +53,7 @@ export class TabulariumKindle {
         // file-menu covers the file explorer and the "more options" menu of an open note; files-menu a multiple selection.
         this.plugin.registerEvent(
             app.workspace.on("file-menu", (menu, file) => {
-                if (!sendable(file)) return;
+                if (!sendable(file) || !this.server.connection) return;
                 menu.addItem((item) =>
                     item
                         .setTitle($msg("tabularium.kindle.send"))
@@ -65,7 +65,7 @@ export class TabulariumKindle {
         this.plugin.registerEvent(
             app.workspace.on("files-menu", (menu, files) => {
                 const items = files.filter(sendable);
-                if (!items.length) return;
+                if (!items.length || !this.server.connection) return;
                 menu.addItem((item) =>
                     item
                         .setTitle($msg("tabularium.kindle.sendItems", { count: String(items.length) }))

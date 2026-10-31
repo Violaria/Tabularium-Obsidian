@@ -353,6 +353,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Permitte in perpetuum",
         zh: "永久允许",
     },
+    "Allow sleep during synchronisation": {
+        def: "Allow sleep during synchronisation",
+        la: "Somnum per synchronizationem permittere",
+        zh: "同步时允许休眠",
+    },
+    "Allow sleep during synchronisation on the desktop": {
+        def: "Allow sleep during synchronisation on the desktop",
+        la: "Somnum per synchronizationem in computatro permittere",
+        zh: "桌面端同步时允许休眠",
+    },
+    "Allow the operating system to sleep while finite synchronisation operations are in progress.": {
+        def: "Allow the operating system to sleep while finite synchronisation operations are in progress.",
+        la: "Systema operativum dormire sinit dum synchronizationes finitae fiunt.",
+        zh: "进行有限次的同步操作时，允许操作系统进入休眠。",
+    },
     "Also, please note that if you are using Peer-to-Peer synchronization, this configuration will be used when you switch to other methods and connect to a remote server in the future.":
         {
             def: "Also, please note that if you are using Peer-to-Peer synchronization, this configuration will be used when you switch to other methods and connect to a remote server in the future.",
@@ -464,6 +479,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Batch database update",
         la: "Renovatio repositorii acervatim",
         zh: "批量数据库更新",
+    },
+    "Batch database updates in LiveSync mode": {
+        def: "Batch database updates in live sync",
+        la: "Renovationes repositorii in modo vivo coniungere",
+        zh: "实时同步时批量写入数据库",
     },
     "Batch limit": {
         def: "Batch limit",
@@ -1602,6 +1622,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "desktop",
         la: "instrumentum mensale",
         zh: "桌面设备",
+    },
+    "Desktop only. Allow sleep on this device even when the general option is disabled.": {
+        def: "Desktop only. Allow sleep on this device even when the general option is disabled.",
+        la: "Tantum in computatro. Hoc instrumentum dormire sinit etiam si optio generalis non est accensa.",
+        zh: "仅桌面端。即使上面的通用选项关闭，也允许这台设备休眠。",
     },
     "Detected Peers": {
         def: "Detected Peers",
@@ -6653,6 +6678,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Secunda. Servatio in repositorium locale differetur usque ad hoc spatium postquam scribere vel servare desinimus.",
         zh: "秒。在我们停止输入或保存后,保存到本地数据库将延迟此值 ",
     },
+    "Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.":
+        {
+            def: "Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.",
+            la: "Secundae. Maxima exspectatio a prima mutatione nondum scripta antequam repositorium locale scribatur. Non praestat quando scriptura, transmissio per rete aut adventus in alio instrumento perficiatur.",
+            zh: "秒。从第一次未写入的改动算起，最多等多久就写入本地数据库。这不保证写入数据库、网络传输或其他设备收到改动的完成时间。",
+        },
+    "Seconds. The quiet period after the latest pending update before local database processing becomes due.": {
+        def: "Seconds. The quiet period after the latest pending update before local database processing becomes due.",
+        la: "Secundae. Otium post ultimam mutationem antequam repositorium locale scribatur.",
+        zh: "秒。最后一次改动之后，要停止编辑多久才写入本地数据库。",
+    },
     "Secret Access Key": {
         def: "Secret Access Key",
         la: "Secret Access Key",
@@ -6661,7 +6697,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Secret Key": {
         def: "Secret Key",
         la: "Clavis secreta",
-        zh: "Secret Key",
+        zh: "私有访问密钥",
     },
     SELECT: {
         def: "SELECT",
@@ -7724,6 +7760,56 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Quid status synchronizationis significet",
         zh: "同步状态的含义",
     },
+    "tabularium.history.binary": {
+        def: "Binary file",
+        la: "Plica binaria",
+        zh: "二进制文件",
+    },
+    "tabularium.history.deleted": {
+        def: "(The file was deleted in this version)",
+        la: "(Hac versione plica deleta est)",
+        zh: "（这个版本中文件已被删除）",
+    },
+    "tabularium.history.diffOnly": {
+        def: "Differences only",
+        la: "Differentiae tantum",
+        zh: "只看差异",
+    },
+    "tabularium.history.matches": {
+        def: "${current}/${total} matches",
+        la: "${current}/${total} congruentiae",
+        zh: "第 ${current}/${total} 处匹配",
+    },
+    "tabularium.history.next": {
+        def: "Next",
+        la: "Sequens",
+        zh: "下一处",
+    },
+    "tabularium.history.previous": {
+        def: "Previous",
+        la: "Prior",
+        zh: "上一处",
+    },
+    "tabularium.history.revision": {
+        def: "Version ${current}/${total}",
+        la: "Versio ${current}/${total}",
+        zh: "第 ${current}/${total} 版",
+    },
+    "tabularium.history.revisions": {
+        def: "${file} / ${count} revisions",
+        la: "${file} / ${count} versiones",
+        zh: "${file} / ${count} 个版本",
+    },
+    "tabularium.history.search": {
+        def: "Search the last 100 versions",
+        la: "In centum ultimis versionibus quaerere",
+        zh: "在最近 100 个版本中搜索",
+    },
+    "tabularium.history.unreadable": {
+        def: "This version could not be read",
+        la: "Haec versio legi non potuit",
+        zh: "无法读取这个版本",
+    },
     "tabularium.kindle.contents": {
         def: "Contents",
         la: "Index rerum",
@@ -7833,6 +7919,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "New settings page arranged by use: connection, sync, file sorting, Send to Kindle, appearance, maintenance and help.\nBuilt-in help and version history in three languages.\nConfirmations say what happens and what it means for other devices.\nUpstream entries that do not apply to a Tabularium server are gone: remote configuration, setup URIs and QR codes, onboarding, hidden-file and customisation sync, P2P.",
         la: "Nova pagina optionum ex usu disposita: conexio, synchronizatio, ordo plicarum, ad Kindle mittere, species, cura, auxilium.\nAuxilium et historia versionum tribus linguis.\nConfirmationes dicunt quid fiat et quid ceteris instrumentis significet.\nAditus originales qui ad ministratorem Tabularium non pertinent remoti sunt: configuratio remota, URI et codices QR, introductio, synchronizatio plicarum occultarum et additamentorum, P2P.",
         zh: "新的设置页按用途分为连接、同步、文件排序、发送到 Kindle、外观、维护和帮助。\n内置三语帮助与版本历史。\n确认对话框写明会发生什么、对其他设备的影响。\n去掉了不适用于 Tabularium 服务器的原版入口：远程配置、Setup URI 与二维码、引导向导、隐藏文件与自定义同步、P2P。",
+    },
+    "tabularium.release.0.18.1": {
+        def: "One Latin vocabulary for the plug-in and the web pages.",
+        la: "Unum vocabularium Latinum in additamento et paginis interretialibus.",
+        zh: "插件与网页的拉丁语统一用词。",
+    },
+    "tabularium.release.0.18.2": {
+        def: "Tabularius answers a new conversation with the recipe chosen before its first message.",
+        la: "Tabularius novo colloquio formula ante primum nuntium electa respondet.",
+        zh: "书记员的新对话按开始前选的配方回答。",
+    },
+    "tabularium.release.0.19.0": {
+        def: '"Sync" in the file menu above "Sorting": sync now, and a note\'s version history; the setting texts and the history window that were still in English are translated. The server gains scheduled backups and a round of security fixes.',
+        la: "In menu plicae supra «Ordo» nunc est «Synchronizatio»: synchroniza nunc et historia versionum commentarii; textus optionum et fenestra historiae adhuc Anglice scripti conversi sunt. Ministrator copias tutas statutis horis facit, et aliquot vitia securitatis emendata sunt.",
+        zh: "文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。",
     },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
@@ -8479,6 +8580,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "In omni commentario discrepantiam habente versionem recentissimam servat.",
         zh: "对每篇有冲突的笔记，保留最后修改的版本。",
     },
+    "tabularium.settings.resolveAllImpact": {
+        def: "The older version of every conflicting note is discarded on all devices; this cannot be undone here.",
+        la: "Versio vetustior cuiusque commentarii discrepantis in omnibus instrumentis abicitur; hic revocari non potest.",
+        zh: "每篇冲突笔记的较旧版本都会被丢弃，所有设备都一样，这里无法撤销。",
+    },
     "tabularium.settings.run": {
         def: "Run",
         la: "Agere",
@@ -8679,6 +8785,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Si quaeque capsa se in commentario nominis certi (ut index) describit, hoc nomen scribe; regulae et metadata eius quoque leguntur.",
         zh: "如果每个文件夹用其中一篇固定名称的笔记（如 index）描述自身，在此填写这个名称，也会读取其中的排序规则和元数据。",
     },
+    "tabularium.sorting.notReady": {
+        def: "File sorting is still starting; open this page again in a moment.",
+        la: "Ordo fasciculorum adhuc incipit; hanc paginam mox iterum aperi.",
+        zh: "文件排序仍在启动，稍后再打开这一页。",
+    },
     "tabularium.sorting.parseFailed": {
         def: "The sorting rules could not be parsed; sorting is paused. ${detail}",
         la: "Regulae ordinandi interpretari non potuerunt; ordinatio suspensa est. ${detail}",
@@ -8858,6 +8969,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "All synchronisation suspended.",
         la: "Omnis synchronizatio suspensa est.",
         zh: "已暂停全部同步。",
+    },
+    "tabularium.syncMenu.flat": {
+        def: "Sync: ${action}",
+        la: "Synchronizatio: ${action}",
+        zh: "同步：${action}",
+    },
+    "tabularium.syncMenu.history": {
+        def: "Version history",
+        la: "Historia versionum",
+        zh: "历史版本",
+    },
+    "tabularium.syncMenu.now": {
+        def: "Sync now",
+        la: "Synchroniza nunc",
+        zh: "立即同步",
+    },
+    "tabularium.syncMenu.title": {
+        def: "Sync",
+        la: "Synchronizatio",
+        zh: "同步",
     },
     "Target patterns": {
         def: "Target patterns",
@@ -11038,6 +11169,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Versio",
         zh: "版本",
     },
+    "Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.":
+        {
+            def: "In live sync, wait for a short local pause in editing (with an upper bound) before writing file changes to the database: fewer intermediate versions are written, but other devices receive the changes a little later.",
+            la: "In modo vivo, post mutationem plicae breve otium locale (cum fine) exspectat antequam in repositorium scribat. Renovationes intermediae minuuntur, sed alia instrumenta mutationes serius accipiunt.",
+            zh: "实时同步模式下，文件改动后先等本地停止编辑一小段时间（有上限）再写入数据库。这样可以减少中间版本的写入，但其他设备会晚一些收到改动。",
+        },
     "Warning! This will have a serious impact on performance. And the logs will not be synchronised under the default name. Please be careful with logs; they often contain your confidential information.":
         {
             def: "Warning! This will have a serious impact on performance. And the logs will not be synchronised under the default name. Please be careful with logs; they often contain your confidential information.",

@@ -21,14 +21,6 @@ const extension = (path: string) => path.slice(path.lastIndexOf(".") + 1).toLowe
 const folderOf = (path: string) => path.slice(0, Math.max(0, path.lastIndexOf("/")));
 export const noteTitle = (path: string) => path.slice(path.lastIndexOf("/") + 1).replace(/\.md$/i, "");
 
-/** Server errors the clients translate for the user. */
-export const KINDLE_ERRORS = [
-    "Kindle address not set",
-    "Mail delivery is not configured",
-    "Daily Kindle delivery limit reached",
-    "Request body too large",
-];
-
 /** Interface texts placed inside the book. */
 export interface BookTexts {
     language: string;

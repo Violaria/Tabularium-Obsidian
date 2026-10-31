@@ -38,8 +38,13 @@ const TYPES: Record<string, string> = {
 const typeOf = (path: string) => TYPES[path.slice(path.lastIndexOf(".") + 1).toLowerCase()] ?? "application/octet-stream";
 
 /** Files of a share target: the note itself, or every file below the folder ("" for the whole vault). */
+/** The plug-in's own files at the vault root: its log (which names other notes) and the flags for fetch and rebuild. */
+const OPERATIONAL = /^(livesync_log_.*\.md|redflag[23]?\.md|flag_(fetch|rebuild)\.md)$/i;
+
 export function included(target: string, folder: boolean, files: readonly string[]) {
-    return folder ? files.filter((file) => !target || file.startsWith(`${target}/`)) : files.filter((file) => file === target);
+    return folder
+        ? files.filter((file) => (!target || file.startsWith(`${target}/`)) && !OPERATIONAL.test(file))
+        : files.filter((file) => file === target);
 }
 
 /**

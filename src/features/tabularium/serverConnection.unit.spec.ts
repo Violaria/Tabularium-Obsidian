@@ -91,6 +91,8 @@ describe("connection settings", () => {
             usePathObfuscation: true,
             syncInternalFiles: false,
             usePluginSync: false,
+            P2P_Enabled: false,
+            P2P_AutoStart: false,
             passphrase: "kept",
         } as ObsidianLiveSyncSettings;
         expect(enforcedOverrides(previous, previous)).toEqual({});

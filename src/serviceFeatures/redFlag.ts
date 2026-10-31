@@ -380,12 +380,11 @@ export async function cancelScheduledInitialisation(
 type InitialisationSuspensionPolicy = "resume" | "keep" | "keep-on-failure";
 
 /**
- * Process Vault initialisation with file watching and synchronisation suspended.
- * @param proc Process to execute during initialisation. It returns true only when normal operation may resume.
- * @param suspensionPolicy Final file-reflection state. `keep-on-failure` controls both reflection directions so a partly completed Fast Setup remains isolated.
- * @returns The result of the process, or false if an error occurs.
+ * The synchronisation mode, which initialisation suspends; Tabularium restores it once an initialisation completes. It is
+ * kept in the device's configuration from the first attempt, so a failed attempt (which leaves sync suspended) is not
+ * mistaken for the mode to restore.
  */
-/** The synchronisation mode, which initialisation suspends; Tabularium restores it once the initialisation completes. */
+const SYNC_MODE_KEY = "tabularium-sync-mode";
 const SYNC_MODE_KEYS = [
     "liveSync",
     "periodicReplication",
@@ -397,6 +396,12 @@ const SYNC_MODE_KEYS = [
     "batchSave",
 ] as const;
 
+/**
+ * Process Vault initialisation with file watching and synchronisation suspended.
+ * @param proc Process to execute during initialisation. It returns true only when normal operation may resume.
+ * @param suspensionPolicy Final file-reflection state. `keep-on-failure` controls both reflection directions so a partly completed Fast Setup remains isolated.
+ * @returns The result of the process, or false if an error occurs.
+ */
 export async function processVaultInitialisation(
     host: NecessaryServices<"setting", never>,
     log: LogFunction,
@@ -404,8 +409,12 @@ export async function processVaultInitialisation(
     suspensionPolicy: InitialisationSuspensionPolicy = "resume"
 ) {
     let completed = false;
+    const saved = await host.services.setting.config.getValue(SYNC_MODE_KEY, "");
     const current = host.services.setting.currentSettings();
-    const syncMode = Object.fromEntries(SYNC_MODE_KEYS.map((key) => [key, current[key]])) as Partial<ObsidianLiveSyncSettings>;
+    const syncMode = saved
+        ? (JSON.parse(saved) as Partial<ObsidianLiveSyncSettings>)
+        : (Object.fromEntries(SYNC_MODE_KEYS.map((key) => [key, current[key]])) as Partial<ObsidianLiveSyncSettings>);
+    if (!saved) await host.services.setting.config.setValue(SYNC_MODE_KEY, JSON.stringify(syncMode));
     try {
         // Disable batch saving and file watching during initialisation.
         await host.services.setting.applyPartial({ batchSave: false }, false);
@@ -447,7 +456,10 @@ export async function processVaultInitialisation(
                 true
             );
         }
-        if (completed) await host.services.setting.applyPartial(syncMode, true);
+        if (completed) {
+            await host.services.setting.applyPartial(syncMode, true);
+            await host.services.setting.config.delete(SYNC_MODE_KEY);
+        }
     }
 }
 

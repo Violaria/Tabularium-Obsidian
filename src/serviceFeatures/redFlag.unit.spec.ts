@@ -292,6 +292,18 @@ describe("Red Flag Feature", () => {
             expect(host.mocks.setting.currentSettings()).toMatchObject({ liveSync: true, syncOnStart: false, batchSave: true });
         });
 
+        it("restores the mode from before a failed attempt once a later one completes", async () => {
+            const host = createHostMock();
+            const log = createLoggerMock();
+            Object.assign(host.mocks.setting.settings, { liveSync: true });
+            await processVaultInitialisation(host as any, log, () => {
+                Object.assign(host.mocks.setting.settings, { liveSync: false });
+                return Promise.resolve(false);
+            });
+            await processVaultInitialisation(host as any, log, () => Promise.resolve(true));
+            expect(host.mocks.setting.currentSettings().liveSync).toBe(true);
+        });
+
         it("leaves synchronisation suspended when the initialisation fails", async () => {
             const host = createHostMock();
             const log = createLoggerMock();

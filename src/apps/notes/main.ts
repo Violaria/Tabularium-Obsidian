@@ -3,6 +3,9 @@ import { mount as mountComponent, unmount as unmountComponent } from "svelte";
 import App from "./App.svelte";
 import type { Language } from "../../../../server/ui/i18n";
 import "./notes.css";
+import { deleteRecord, recordsOf } from "./store";
+import { clearLocalVault } from "./runtime";
+import { ApiError, revokeDevice } from "./api";
 
 type Notes = { changeLanguage(next: Language): void; close(): Promise<void> };
 let app: Notes | undefined;
@@ -14,6 +17,22 @@ export function mount(target: HTMLElement) {
 /** The shell changed the language in its sidebar. */
 export function changeLanguage(next: Language) {
     app?.changeLanguage(next);
+}
+/**
+ * Removes every vault this browser keeps for an account (the plain-text copy, the local database and the device
+ * credentials) and revokes those devices on the server. Called when signing out, while the session still exists.
+ */
+export async function clearAccount(userId: string) {
+    await unmount();
+    for (const record of await recordsOf(userId)) {
+        const vaultId = record.key.slice(userId.length + 1);
+        await revokeDevice(vaultId, record.deviceId).catch((error: unknown) => {
+            if (!(error instanceof ApiError && error.status === 404)) throw error;
+        });
+        await clearLocalVault(userId, vaultId);
+        await deleteRecord(record.key);
+    }
+    localStorage.removeItem("tabularium-notes:last-user");
 }
 /** Leaving the module: the component stops replication and closes the local database before it goes. */
 export async function unmount() {

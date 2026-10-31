@@ -168,7 +168,8 @@ export function $msg<T extends AllMessageKeys>(
     let msg = $t(key, lang);
     for (const [placeholder, value] of Object.entries(params)) {
         const regex = new RegExp(`\\\${${placeholder}}`, "g");
-        msg = msg.replace(regex, value);
+        // A function replacement: values such as file names or server errors may contain `$&` or `$'`.
+        msg = msg.replace(regex, () => value);
     }
     return msg as TaggedType<string, T>;
 }

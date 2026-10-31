@@ -27,8 +27,8 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
         });
         eventHub.onEvent(
             EVENT_REQUEST_SHOW_HISTORY,
-            ({ file, fileOnDB }: { file: TFile | FilePathWithPrefix; fileOnDB: LoadedEntry }) => {
-                this.showHistory(file, fileOnDB._id);
+            ({ file, fileOnDB }: { file: TFile | FilePathWithPrefix; fileOnDB?: LoadedEntry }) => {
+                this.showHistory(file, fileOnDB?._id);
             }
         );
         return Promise.resolve(true);

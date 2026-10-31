@@ -1,4 +1,5 @@
-import { Modal, Notice, Setting, normalizePath, setIcon, setTooltip, type Plugin } from "obsidian";
+import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
+import { hint } from "./hint";
 import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@vrtmrz/livesync-commonlib/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
@@ -104,6 +105,8 @@ export class TabulariumServer {
         if (!connection || connection.expiresAt - Date.now() > RENEW_BEFORE_MS) return false;
         try {
             const { expiresAt } = await this.api(connection.server).renewDevice(this.deviceAuthorization());
+            // Disconnected or connected elsewhere while renewing: nothing to write.
+            if (this.connection !== connection) return false;
             this.connection = { ...connection, expiresAt };
             await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(this.connection, null, 2));
             return true;
@@ -167,13 +170,18 @@ export class TabulariumServer {
         initialise: Initialise
     ) {
         const settings = this.core.services.setting;
-        let next = {
-            ...settings.currentSettings(),
-            ...connectionSettings(server, vault.id, device, passphrase),
-            remoteType: REMOTE_COUCHDB,
-        } as ObsidianLiveSyncSettings;
-        upsertRemoteConfigurationInPlace(next, "couchdb", { activate: true, name: "Tabularium" });
-        next = await settings.adjustSettings(next);
+        /** The settings for this connection, from the current ones. */
+        const prepare = async () => {
+            // One remote, always the same entry: signing in again or changing vault replaces it instead of adding another.
+            const next = {
+                ...settings.currentSettings(),
+                ...connectionSettings(server, vault.id, device, passphrase),
+                remoteType: REMOTE_COUCHDB,
+                remoteConfigurations: {},
+            } as ObsidianLiveSyncSettings;
+            upsertRemoteConfigurationInPlace(next, "couchdb", { id: "tabularium", activate: true, name: "Tabularium" });
+            return await settings.adjustSettings(next);
+        };
         const connection: TabulariumConnection = {
             server,
             vaultId: vault.id,
@@ -183,23 +191,30 @@ export class TabulariumServer {
             expiresAt: device.expiresAt,
         };
         const write = async () => {
-            this.connection = connection;
-            await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(connection, null, 2));
-            await this.setupManager.applySetting(
-                next,
-                initialise === "upload" ? UserMode.NewUser : UserMode.ExistingUser
-            );
-            // A device that synchronised with LiveSync before keeps that local database, whose documents carry IDs
-            // without path obfuscation; the gateway refuses them. The upload starts from an empty database that the
-            // restart fills from the vault's files.
-            if (initialise === "upload") {
-                const { database, databaseEvents, replicator } = this.core.services;
-                if (!(await database.resetDatabaseForCurrentSettings({ databaseEvents, replicator })))
-                    throw new Error($msg("tabularium.server.resetFailed"));
+            // Nothing synchronises until the new settings and an empty local database are in place, and data.json is
+            // encrypted with this device's own key before the credentials are written to it.
+            this.core.services.appLifecycle.setSuspended(true);
+            try {
+                if (settings.currentSettings().configPassphraseStore !== "LOCALSTORAGE")
+                    await settings.changeConfigurationEncryption("LOCALSTORAGE", randomKey());
+                await this.setupManager.applySetting(
+                    await prepare(),
+                    initialise === "upload" ? UserMode.NewUser : UserMode.ExistingUser
+                );
+                // A device that synchronised with LiveSync before keeps that local database, whose documents carry IDs
+                // without path obfuscation; the gateway refuses them. The upload starts from an empty database that the
+                // restart fills from the vault's files.
+                if (initialise === "upload") {
+                    const { database, databaseEvents, replicator } = this.core.services;
+                    if (!(await database.resetDatabaseForCurrentSettings({ databaseEvents, replicator })))
+                        throw new Error($msg("tabularium.server.resetFailed"));
+                }
+                // The connection is recorded last, once the settings are in place.
+                this.connection = connection;
+                await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(connection, null, 2));
+            } finally {
+                this.core.services.appLifecycle.setSuspended(false);
             }
-            // Encrypt data.json with a key kept on this device instead of the fixed default.
-            if (settings.currentSettings().configPassphraseStore !== "LOCALSTORAGE")
-                await settings.changeConfigurationEncryption("LOCALSTORAGE", randomKey());
         };
         if (initialise === "fetch")
             return await applySettingsWithScheduledInitialisation(this.core.rebuilder, "fetch", write);
@@ -218,6 +233,7 @@ export class TabulariumServer {
                 couchDB_DBNAME: "",
                 couchDB_USER: "",
                 couchDB_PASSWORD: "",
+                passphrase: "",
                 remoteConfigurations: {},
                 activeConfigurationId: "",
                 isConfigured: false,
@@ -257,15 +273,6 @@ export class TabulariumServer {
     }
 }
 
-/** An explanation behind an icon after the setting name: shown on hover, and as a notice when tapped on mobile. */
-function hint(setting: Setting, text: string) {
-    const icon = setting.nameEl.createSpan({ cls: "tabularium-hint" });
-    setIcon(icon, "alert-circle");
-    setTooltip(icon, text);
-    icon.addEventListener("click", () => new Notice(text));
-    return setting;
-}
-
 class ServerModal extends Modal {
     private readonly server: TabulariumServer;
     private api?: TabulariumApi;
@@ -298,14 +305,12 @@ class ServerModal extends Modal {
         contentEl.empty();
         new Setting(contentEl).setName($msg("tabularium.server.server")).setDesc(connection.server);
         new Setting(contentEl).setName($msg("tabularium.server.vault")).setDesc(connection.vaultName);
-        new Setting(contentEl)
-            .setName($msg("tabularium.server.device"))
-            .setDesc(
-                $msg("tabularium.server.deviceExpiry", {
-                    device: connection.deviceName,
-                    date: new Date(connection.expiresAt).toLocaleString(),
-                })
-            );
+        new Setting(contentEl).setName($msg("tabularium.server.device")).setDesc(
+            $msg("tabularium.server.deviceExpiry", {
+                device: connection.deviceName,
+                date: new Date(connection.expiresAt).toLocaleString(),
+            })
+        );
         new Setting(contentEl)
             .setDesc($msg("tabularium.server.disconnectHint"))
             .addButton((b) => b.setButtonText($msg("tabularium.server.signInAgain")).onClick(() => this.login()))
@@ -346,6 +351,8 @@ class ServerModal extends Modal {
                 .setCta()
                 .onClick(() =>
                     this.run(b.buttonEl, async () => {
+                        // A session left from an earlier sign-in in this dialogue is ended first.
+                        await this.api?.logout();
                         this.api = this.server.api(values.server);
                         const user = await this.api.login(values.username, values.password);
                         this.password = values.password;

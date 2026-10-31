@@ -1753,7 +1753,6 @@ Seconds. Saving to the local database will be delayed until this value after we 
     Seconds. Saving to the local database will be delayed until this value after
     we stop typing or saving.
 Secret Access Key: Secret Access Key
-Secret Key: Secret Key
 Select active P2P remote: Select active P2P remote
 Select All Shiny: Select All Shiny
 Select Flagged Shiny: Select Flagged Shiny
@@ -3282,4 +3281,31 @@ maintenancePrerequisites.title: ${operation} prerequisites
 "No active replicator found": "No synchronisation is set up"
 "Network is offline": "The network is offline"
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)"
-
+"tabularium.settings.resolveAllImpact": "The older version of every conflicting note is discarded on all devices; this cannot be undone here."
+"tabularium.sorting.notReady": "File sorting is still starting; open this page again in a moment."
+"tabularium.release.0.18.1": "One Latin vocabulary for the plug-in and the web pages."
+"tabularium.release.0.18.2": "Tabularius answers a new conversation with the recipe chosen before its first message."
+"Allow sleep during synchronisation": "Allow sleep during synchronisation"
+"Allow the operating system to sleep while finite synchronisation operations are in progress.": "Allow the operating system to sleep while finite synchronisation operations are in progress."
+"Allow sleep during synchronisation on the desktop": "Allow sleep during synchronisation on the desktop"
+"Desktop only. Allow sleep on this device even when the general option is disabled.": "Desktop only. Allow sleep on this device even when the general option is disabled."
+"Batch database updates in LiveSync mode": "Batch database updates in live sync"
+"Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.": "In live sync, wait for a short local pause in editing (with an upper bound) before writing file changes to the database: fewer intermediate versions are written, but other devices receive the changes a little later."
+"Secret Key": "Secret Key"
+"Seconds. The quiet period after the latest pending update before local database processing becomes due.": "Seconds. The quiet period after the latest pending update before local database processing becomes due."
+"Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.": "Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete."
+"tabularium.syncMenu.title": "Sync"
+"tabularium.syncMenu.now": "Sync now"
+"tabularium.syncMenu.history": "Version history"
+"tabularium.syncMenu.flat": "Sync: ${action}"
+"tabularium.history.revisions": "${file} / ${count} revisions"
+"tabularium.history.revision": "Version ${current}/${total}"
+"tabularium.history.deleted": "(The file was deleted in this version)"
+"tabularium.history.unreadable": "This version could not be read"
+"tabularium.history.binary": "Binary file"
+"tabularium.history.matches": "${current}/${total} matches"
+"tabularium.history.search": "Search the last 100 versions"
+"tabularium.history.diffOnly": "Differences only"
+"tabularium.history.previous": "Previous"
+"tabularium.history.next": "Next"
+"tabularium.release.0.19.0": "\"Sync\" in the file menu above \"Sorting\": sync now, and a note's version history; the setting texts and the history window that were still in English are translated. The server gains scheduled backups and a round of security fixes."

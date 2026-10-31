@@ -50,7 +50,6 @@ const ADVANCED: { heading: string; keys: AllSettingItemKey[] }[] = [
             "useIgnoreFiles",
             "ignoreFiles",
             "doNotDeleteFolder",
-            "handleFilenameCaseSensitive",
             "allowSleepDuringSynchronisation",
         ],
     },
@@ -86,11 +85,20 @@ const ADVANCED: { heading: string; keys: AllSettingItemKey[] }[] = [
     },
 ];
 const REGEX_LISTS = new Set<AllSettingItemKey>(["syncIgnoreRegEx", "syncOnlyRegEx"]);
+/** Bounds of number settings, as upstream's pages had them; other numbers must be zero or more. */
+const BOUNDS: Partial<Record<AllSettingItemKey, [number, number]>> = {
+    batch_size: [2, 10_000],
+    batches_limit: [2, 10_000],
+    periodicReplicationInterval: [1, 5000],
+    syncMaxSizeInMB: [0, 10_000],
+    concurrencyOfReadChunksOnline: [1, 1000],
+};
 
 type SyncMode = "live" | "periodic" | "events";
 
 export class TabulariumSettingTab extends PluginSettingTab {
     private section: Section = "connection";
+    private advancedOpen = false;
     private readonly owner: ObsidianLiveSyncPlugin;
 
     constructor(plugin: ObsidianLiveSyncPlugin) {
@@ -179,12 +187,18 @@ export class TabulariumSettingTab extends PluginSettingTab {
         } else if (typeof value === "boolean") {
             setting.addToggle((toggle) => toggle.setValue(value).onChange((next) => void this.save({ [key]: next })));
         } else if (typeof value === "number") {
+            const [min, max] = BOUNDS[key] ?? [0, Number.MAX_SAFE_INTEGER];
             setting.addText((text) => {
                 text.inputEl.type = "number";
+                text.inputEl.min = String(min);
+                if (max !== Number.MAX_SAFE_INTEGER) text.inputEl.max = String(max);
                 text.setValue(String(value));
                 text.inputEl.addEventListener("change", () => {
-                    const next = Number(text.getValue());
-                    if (Number.isFinite(next)) void this.save({ [key]: next });
+                    const raw = text.getValue().trim();
+                    const next = Number(raw);
+                    // An emptied or out-of-range field keeps the saved value.
+                    if (raw === "" || !Number.isFinite(next) || next < min || next > max) text.setValue(String(value));
+                    else void this.save({ [key]: next });
                 });
             });
         } else {
@@ -355,6 +369,10 @@ export class TabulariumSettingTab extends PluginSettingTab {
             new Setting(el).setDesc($msg("tabularium.sorting.standalone"));
             return;
         }
+        if (!sorting.ready) {
+            new Setting(el).setDesc($msg("tabularium.sorting.notReady"));
+            return;
+        }
         sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }));
     }
 
@@ -419,10 +437,19 @@ export class TabulariumSettingTab extends PluginSettingTab {
         action("tabularium.settings.broken", "tabularium.settings.brokenDesc", "tabularium.settings.run", () =>
             eventHub.emitEvent(EVENT_REQUEST_RUN_FIX_INCOMPLETE)
         );
-        action("tabularium.settings.resolveAll", "tabularium.settings.resolveAllDesc", "tabularium.settings.run", () =>
-            this.core.services.conflict.resolveAllConflictedFilesByNewerOnes()
-        );
+        action("tabularium.settings.resolveAll", "tabularium.settings.resolveAllDesc", "tabularium.settings.run", async () => {
+            const ok = await confirmAction(this.app, {
+                title: $msg("tabularium.settings.resolveAll"),
+                body: $msg("tabularium.settings.resolveAllDesc"),
+                impact: $msg("tabularium.settings.resolveAllImpact"),
+                action: $msg("tabularium.settings.run"),
+            });
+            if (ok) await this.core.services.conflict.resolveAllConflictedFilesByNewerOnes();
+        });
         const advanced = el.createEl("details", { cls: "tabularium-advanced" });
+        // Saving a setting redraws the page: the fold stays as it was.
+        advanced.open = this.advancedOpen;
+        advanced.addEventListener("toggle", () => (this.advancedOpen = advanced.open));
         advanced.createEl("summary", { text: $msg("tabularium.settings.advanced") });
         advanced.createEl("p", { cls: "setting-item-description", text: $msg("tabularium.settings.advancedDesc") });
         for (const group of ADVANCED) {
@@ -440,9 +467,9 @@ export class TabulariumSettingTab extends PluginSettingTab {
             typeToConfirm: this.owner.tabularium!.connection!.vaultName,
         });
         if (!ok) return;
+        await this.core.storageAccess.writeFileAuto(FlagFilesHumanReadable.REBUILD_ALL, "");
         // Confirmed here: the scheduled rebuild after the restart does not ask again.
         await this.core.services.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now()));
-        await this.core.storageAccess.writeFileAuto(FlagFilesHumanReadable.REBUILD_ALL, "");
         this.core.services.appLifecycle.performRestart();
     }
 

@@ -75,9 +75,11 @@ export const FETCH_CHOICES = {
     "remote-delete": [SIMPLE_FETCH_STAGE1_REMOTE_WINS, SIMPLE_FETCH_STAGE2_REMOTE_DELETE_ALL],
 } as const;
 export type FetchChoice = keyof typeof FETCH_CHOICES;
+/** A choice made on the settings page applies to the fetch right after it, not to one scheduled much later. */
+const CHOICE_VALID_MS = 10 * 60_000;
 export async function rememberFetchChoice(host: NecessaryServices<"setting", never>, choice: FetchChoice) {
     const [stage1, stage2] = FETCH_CHOICES[choice];
-    await rememberSimpleFetchMode(host, stage1, stage2);
+    await host.services.setting.config.setValue(SIMPLE_FETCH_MODE_KEY, JSON.stringify({ stage1, stage2, at: Date.now() }));
 }
 
 async function getRememberedSimpleFetchMode(host: NecessaryServices<"setting", never>) {
@@ -85,8 +87,8 @@ async function getRememberedSimpleFetchMode(host: NecessaryServices<"setting", n
     if (!saved) return undefined;
     let remembered: ReturnType<typeof buildSimpleFetchResult> = undefined;
     try {
-        const { stage1, stage2 } = JSON.parse(saved) as { stage1?: string; stage2?: string };
-        if (stage1) remembered = buildSimpleFetchResult(stage1, stage2);
+        const { stage1, stage2, at } = JSON.parse(saved) as { stage1?: string; stage2?: string; at?: number };
+        if (stage1 && (at === undefined || Date.now() - at < CHOICE_VALID_MS)) remembered = buildSimpleFetchResult(stage1, stage2);
     } catch {
         // Clear below; the saved choice is optional and can be rebuilt by asking again.
     }

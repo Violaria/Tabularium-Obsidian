@@ -36,6 +36,9 @@ export const ENFORCED_SETTINGS = {
     usePathObfuscation: true,
     syncInternalFiles: false,
     usePluginSync: false,
+    // Peer-to-peer sync would bypass the gateway.
+    P2P_Enabled: false,
+    P2P_AutoStart: false,
 } as const satisfies Partial<ObsidianLiveSyncSettings>;
 
 export class TabulariumApiError extends Error {

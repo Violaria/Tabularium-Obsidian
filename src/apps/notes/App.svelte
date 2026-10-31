@@ -739,12 +739,16 @@
     });
 </script>
 
+<svelte:window
+    onclick={(event) => vaultMenu && (event.target as Element).closest?.("[data-owner]")?.getAttribute("data-owner") !== "vault" && (vaultMenu = false)}
+    onkeydown={(event) => event.key === "Escape" && (vaultMenu = false)}
+/>
 <div class="notes">
 {#key lang}
 {#if phase === "loading"}
-    <div class="page"><p class="hint">{t("common.loading")}</p></div>
+    <div class="page center-page"><p class="hint">{t("common.loading")}</p></div>
 {:else if phase === "vaults"}
-    <div class="page">
+    <div class="page center-page">
         <header class="page-head"><div><h1>{t("home.notes")}</h1></div></header>
         {#if offline}<p class="notice-panel">{t("notes.offlineVaults")}</p>{/if}
         <section class="card vault-list">
@@ -756,7 +760,7 @@
         </section>
     </div>
 {:else if phase === "unlock" || phase === "opening"}
-    <div class="page">
+    <div class="page center-page">
         <header class="page-head"><div><h1>{vault?.name ?? ""}</h1></div></header>
         <form class="card stack unlock" onsubmit={unlock}>
             <label><span>{t("notes.passphrase")}<!-- svelte-ignore a11y_no_noninteractive_tabindex --><span class="tip" tabindex="0" data-tip={t("notes.unlockHint")}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span></span> <input name="passphrase" type="password" autocomplete="off" bind:value={passphrase} required disabled={phase === "opening"} /></label>
@@ -774,12 +778,12 @@
             <header>
                 <div class="aside-head">
                     <strong>{vault?.name}</strong>
-                    <button class="more vault-more" aria-label={t("notes.more")} aria-expanded={vaultMenu} onclick={() => (vaultMenu = !vaultMenu)}>⋯</button>
+                    <button class="more vault-more" data-owner="vault" aria-haspopup="menu" aria-label={t("notes.more")} title={t("notes.more")} aria-expanded={vaultMenu} onclick={() => (vaultMenu = !vaultMenu)}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="8" r="1.1" /><circle cx="8" cy="8" r="1.1" /><circle cx="12.5" cy="8" r="1.1" /></svg></button>
                 </div>
                 <span class="status" class:offline title={t("notes.plainCopyTitle")}>{status}</span>
                 {#if sortError}<span class="sort-error">{sortError}</span>{/if}
                 {#if vaultMenu}
-                    <div class="menu" role="menu">
+                    <div class="menu" role="menu" data-owner="vault">
                         <button role="menuitem" onclick={() => ((vaultMenu = false), void lock())}>{t("notes.lock")}</button>
                         <button role="menuitem" onclick={() => ((vaultMenu = false), void switchVault())}>{t("notes.otherVault")}</button>
                         <button role="menuitem" class="danger" onclick={() => ((vaultMenu = false), void clearLocal())}>{t("notes.clear")}</button>
@@ -803,21 +807,27 @@
         </aside>
         <section class="main">
             {#if current}
+                <!-- The note's folder and its actions in a bar across the whole pane; the title stays in the reading column. -->
+                <div class="note-bar">
+                    <span class="crumbs" title={current}>{current.split("/").slice(0, -1).join(" / ")}</span>
+                    {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
+                    <span class="bar-actions">
+                        {#if mode === "view" && isNote(current)}
+                            <button onclick={edit}>{t("notes.edit")}</button>
+                        {:else if mode === "edit"}
+                            <button onclick={() => attachmentInput?.click()}>{t("notes.attach")}</button>
+                            <input type="file" multiple hidden bind:this={attachmentInput} onchange={(event) => {
+                                const input = event.currentTarget;
+                                void attach([...(input.files ?? [])]).then(() => (input.value = ""));
+                            }} />
+                            <button onclick={() => void save()}>{t("common.save")}</button>
+                            <button class="primary" onclick={done}>{t("notes.done")}</button>
+                        {/if}
+                    </span>
+                </div>
                 <div class="note-head">
                     <!-- A note that opens with its own title as a heading does not show the title twice. -->
                     <h1 class="title" class:echo={mode === "view" && sameTitle}>{nameOf(current).replace(/\.md$/i, "")}</h1>
-                    {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
-                    {#if mode === "view" && isNote(current)}
-                        <button onclick={edit}>{t("notes.edit")}</button>
-                    {:else if mode === "edit"}
-                        <button onclick={() => attachmentInput?.click()}>{t("notes.attach")}</button>
-                        <input type="file" multiple hidden bind:this={attachmentInput} onchange={(event) => {
-                            const input = event.currentTarget;
-                            void attach([...(input.files ?? [])]).then(() => (input.value = ""));
-                        }} />
-                        <button onclick={() => void save()}>{t("common.save")}</button>
-                        <button class="primary" onclick={done}>{t("notes.done")}</button>
-                    {/if}
                 </div>
             {/if}
             {#if mode === "edit" && current}
@@ -830,8 +840,6 @@
                 <article bind:this={previewEl} onclick={previewClick}>
                     {#if current}
                         {#if html}{@html html}{:else}<p class="hint">{t("notes.notNote")}</p>{/if}
-                    {:else}
-                        <p class="hint">{t("notes.pickNote")}</p>
                     {/if}
                 </article>
             {/if}

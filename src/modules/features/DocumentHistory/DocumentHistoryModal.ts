@@ -135,7 +135,7 @@ export class DocumentHistoryModal extends Modal {
             this.revs_info = w._revs_info?.filter((e) => e?.status == "available") ?? [];
             this.range.max = `${Math.max(this.revs_info.length - 1, 0)}`;
             this.range.value = this.range.max;
-            this.fileInfo.setText(`${this.file} / ${this.revs_info.length} revisions`);
+            this.fileInfo.setText($msg("tabularium.history.revisions", { file: String(this.file), count: String(this.revs_info.length) }));
             await this.loadRevs(initialRev);
             this.updateRevisionNavUI();
         } catch (ex) {
@@ -188,7 +188,7 @@ export class DocumentHistoryModal extends Modal {
         const max = Number(this.range.max) || 0;
         const current = Number(this.range.value) || 0;
 
-        this.revNavIndicator.setText(total > 0 ? `Rev ${current + 1}/${total}` : "\u2014");
+        this.revNavIndicator.setText(total > 0 ? $msg("tabularium.history.revision", { current: String(current + 1), total: String(total) }) : "\u2014");
 
         const disabled = !!this.range.disabled || total <= 1;
         this.revPrevBtn.disabled = disabled || current <= 0;
@@ -272,7 +272,7 @@ export class DocumentHistoryModal extends Modal {
     }
 
     appendDeletedNotice(usePreformatted = true) {
-        const notice = "(At this revision, the file has been deleted)";
+        const notice = $msg("tabularium.history.deleted");
         if (usePreformatted) {
             this.contentView.appendText(`${notice}\n`);
         } else {
@@ -290,7 +290,7 @@ export class DocumentHistoryModal extends Modal {
         if (w === false) {
             this.currentDeleted = true;
             this.info.empty();
-            this.contentView.appendText("Could not read this revision");
+            this.contentView.appendText($msg("tabularium.history.unreadable"));
             this.contentView.createEl("br");
             this.contentView.appendText(`(${rev})`);
         } else {
@@ -349,7 +349,7 @@ export class DocumentHistoryModal extends Modal {
                         if (this.currentDeleted) {
                             this.appendDeletedNotice();
                         }
-                        this.contentView.appendText("Binary file");
+                        this.contentView.appendText($msg("tabularium.history.binary"));
                     }
                 } else {
                     if (this.currentDeleted) {
@@ -509,7 +509,7 @@ export class DocumentHistoryModal extends Modal {
             this.searchResultIndicator.setText(this.searchKeyword ? "No matches found" : "");
         } else {
             const current = this.currentSearchIndex >= 0 ? this.currentSearchIndex + 1 : 0;
-            this.searchResultIndicator.setText(`${current}/${this.searchResults.length} matches`);
+            this.searchResultIndicator.setText($msg("tabularium.history.matches", { current: String(current), total: String(this.searchResults.length) }));
         }
 
         const hasResults = this.searchResults.length > 0;
@@ -554,7 +554,7 @@ export class DocumentHistoryModal extends Modal {
 
         const searchInput = searchRow.createEl("input", {
             type: "text",
-            placeholder: "Search in history (last 100)...",
+            placeholder: $msg("tabularium.history.search"),
         });
         searchInput.addClass("history-search-input");
         searchInput.addEventListener("input", () => {
@@ -639,7 +639,7 @@ export class DocumentHistoryModal extends Modal {
                     void scheduleOnceIfDuplicated("loadRevs", () => this.loadRevs());
                 });
             });
-            label.appendText("Highlight diff");
+            label.appendText($msg("Highlight diff"));
         });
 
         const diffOnlyLabel = diffOptionsRow.createEl("label", {});
@@ -653,7 +653,7 @@ export class DocumentHistoryModal extends Modal {
                 void scheduleOnceIfDuplicated("loadRevs", () => this.loadRevs());
             });
         });
-        diffOnlyLabel.appendText("Diff only");
+        diffOnlyLabel.appendText($msg("tabularium.history.diffOnly"));
         diffOnlyLabel.addClass("diff-only-label");
         diffOnlyLabel.setCssStyles({ display: this.showDiff ? "inline-block" : "none" });
         this.diffOnlyLabel = diffOnlyLabel;
@@ -663,13 +663,13 @@ export class DocumentHistoryModal extends Modal {
         this.diffNavContainer.addClass("diff-nav");
         this.diffNavContainer.setCssStyles({ display: this.showDiff ? "flex" : "none" });
 
-        this.diffNavContainer.createEl("button", { text: "\u25B2 Prev" }, (e) => {
+        this.diffNavContainer.createEl("button", { text: `\u25B2 ${$msg("tabularium.history.previous")}` }, (e) => {
             e.addClass("diff-nav-btn");
             e.addEventListener("click", () => {
                 this.navigateDiff("prev");
             });
         });
-        this.diffNavContainer.createEl("button", { text: "\u25BC Next" }, (e) => {
+        this.diffNavContainer.createEl("button", { text: `\u25BC ${$msg("tabularium.history.next")}` }, (e) => {
             e.addClass("diff-nav-btn");
             e.addEventListener("click", () => {
                 this.navigateDiff("next");

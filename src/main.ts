@@ -44,6 +44,7 @@ import { installTabulariumServer, type TabulariumServer } from "./features/tabul
 import { installKindle, type TabulariumKindle } from "./features/tabularium/Kindle.ts";
 import { installCustomSorting, type TabulariumCustomSorting } from "./features/tabularium/CustomSorting.ts";
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
+import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
 export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
 export default class ObsidianLiveSyncPlugin extends Plugin {
     core: LiveSyncCore;
@@ -202,7 +203,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 // Only the Tabularium login connects: no saved-connection switching, setup URIs, QR codes or onboarding.
                 useOfflineScanner(core);
                 useRedFlagFeatures(core);
-                // Storage use is watched by the Tabularium server, not by each device.
                 useInteractiveConflictResolutionFeature(core, (filename, conflictCheckResult) => {
                     return new ConflictResolveModal(this.app, filename, conflictCheckResult);
                 });
@@ -225,6 +225,8 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
         this.app.workspace.onLayoutReady(onReady);
     }
     override onload() {
+        // Before the sorting component, so "Sync" comes right above its submenu in the file menu.
+        installSyncMenu(this, this.core, () => !!this.tabularium?.connection);
         this.sorting = installCustomSorting(this, this.core);
         void this._startUp();
     }

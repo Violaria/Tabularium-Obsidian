@@ -1193,7 +1193,7 @@ Scram!: 紧急处置
 Seconds, 0 to disable: 秒,0为禁用
 Seconds. Saving to the local database will be delayed until this value after we stop typing or saving.: "秒。在我们停止输入或保存后,保存到本地数据库将延迟此值 "
 Secret Access Key: 私有访问密钥
-Secret Key: Secret Key
+Secret Key: 私有访问密钥
 Select active P2P remote: 选择生效的 P2P 远端
 Select All Shiny: 全选 Shiny
 Select Flagged Shiny: 选择已标记的 Shiny
@@ -3255,3 +3255,30 @@ Some requested chunks were not found in the remote database.: 服务器上找不
 No active replicator found: 没有设置同步
 Network is offline: 网络已断开
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": 同步完成：处理了 ${processedCount} 个文件（完成 ${completedCount}，跳过 ${skippedCount}，出错 ${failedCount}）
+tabularium.settings.resolveAllImpact: 每篇冲突笔记的较旧版本都会被丢弃，所有设备都一样，这里无法撤销。
+tabularium.sorting.notReady: 文件排序仍在启动，稍后再打开这一页。
+tabularium.release.0.18.1: 插件与网页的拉丁语统一用词。
+tabularium.release.0.18.2: 书记员的新对话按开始前选的配方回答。
+Allow sleep during synchronisation: 同步时允许休眠
+Allow the operating system to sleep while finite synchronisation operations are in progress.: 进行有限次的同步操作时，允许操作系统进入休眠。
+Allow sleep during synchronisation on the desktop: 桌面端同步时允许休眠
+Desktop only. Allow sleep on this device even when the general option is disabled.: 仅桌面端。即使上面的通用选项关闭，也允许这台设备休眠。
+Batch database updates in LiveSync mode: 实时同步时批量写入数据库
+Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.: 实时同步模式下，文件改动后先等本地停止编辑一小段时间（有上限）再写入数据库。这样可以减少中间版本的写入，但其他设备会晚一些收到改动。
+Seconds. The quiet period after the latest pending update before local database processing becomes due.: 秒。最后一次改动之后，要停止编辑多久才写入本地数据库。
+Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: 秒。从第一次未写入的改动算起，最多等多久就写入本地数据库。这不保证写入数据库、网络传输或其他设备收到改动的完成时间。
+tabularium.syncMenu.title: 同步
+tabularium.syncMenu.now: 立即同步
+tabularium.syncMenu.history: 历史版本
+tabularium.syncMenu.flat: 同步：${action}
+tabularium.history.revisions: ${file} / ${count} 个版本
+tabularium.history.revision: 第 ${current}/${total} 版
+tabularium.history.deleted: （这个版本中文件已被删除）
+tabularium.history.unreadable: 无法读取这个版本
+tabularium.history.binary: 二进制文件
+tabularium.history.matches: 第 ${current}/${total} 处匹配
+tabularium.history.search: 在最近 100 个版本中搜索
+tabularium.history.diffOnly: 只看差异
+tabularium.history.previous: 上一处
+tabularium.history.next: 下一处
+tabularium.release.0.19.0: 文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。

@@ -9,7 +9,15 @@ import { formatDate, serverError, t } from "../../../../server/ui/i18n";
 import { copyCode, enhance } from "./markdown";
 
 const root = document.getElementById("viewer")!;
-const slug = decodeURIComponent(location.pathname.replace(/^\/s\//, ""));
+/** The address as typed; a malformed escape is kept as it is, and the server answers that it does not exist. */
+const slug = (() => {
+    const written = location.pathname.replace(/^\/s\//, "");
+    try {
+        return decodeURIComponent(written);
+    } catch {
+        return written;
+    }
+})();
 const fragment = location.hash.slice(1);
 const api = `/api/v1/public/shares/${encodeURIComponent(slug)}`;
 const decoder = new TextDecoder();
