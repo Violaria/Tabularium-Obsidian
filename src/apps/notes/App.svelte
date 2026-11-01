@@ -17,7 +17,7 @@
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
     import { formatDate, language, serverError, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
-    import { askText, confirmAction, message as toast } from "../../../../server/ui/core";
+    import { askText, confirmAction, icon, message as toast } from "../../../../server/ui/core";
     import ShareDialog from "@/features/tabularium/share/ShareDialog.svelte";
     import { Sharing } from "@/features/tabularium/share/sharing";
     import type { ShareSource, ShareTreeNode } from "@/features/tabularium/share/package";
@@ -61,6 +61,15 @@
     let versions = $state<Version[]>([]);
     let attachmentInput = $state<HTMLInputElement>();
     let vaultMenu = $state(false);
+    /** The file tree folded away, remembered in this browser. */
+    const TREE_KEY = "tabularium-notes:tree-collapsed";
+    let collapsed = $state((() => { try { return localStorage.getItem(TREE_KEY) === "1"; } catch { return false; } })());
+    function toggleTree() {
+        collapsed = !collapsed;
+        try { localStorage.setItem(TREE_KEY, collapsed ? "1" : ""); } catch { /* storage unavailable: lasts for this page */ }
+    }
+    /** The replica's state for the symbol beside the vault name: in sync, working, or offline. */
+    const syncKind = $derived(offline ? "off" : phase === "open" ? "ok" : "busy");
     // File tree order from the vault's sortspec.md rules; rule texts are read again only when their revision changes.
     let sortRules = $state.raw<SortSpecsCollection>();
     let sortError = $state("");
@@ -811,11 +820,10 @@
     <div class="page center-page"><p class="hint">{t("common.loading")}</p></div>
 {:else if phase === "vaults"}
     <div class="page center-page">
-        <header class="page-head"><div><h1>{t("home.notes")}</h1></div></header>
         {#if offline}<p class="notice-panel">{t("notes.offlineVaults")}</p>{/if}
         <section class="card vault-list">
             {#each vaults as item (item.id)}
-                <button class="vault" onclick={() => chooseVault(item)}>{item.name}</button>
+                <button class="vault" onclick={() => chooseVault(item)}>{@html icon("database")}<span>{item.name}</span>{@html icon("chevron")}</button>
             {:else}
                 <p class="hint">{t("notes.noVaults")}</p>
             {/each}
@@ -835,14 +843,15 @@
         </form>
     </div>
 {:else}
-    <div class="layout">
+    <div class="layout" class:collapsed>
         <aside>
             <header>
                 <div class="aside-head">
-                    <strong>{vault?.name}</strong>
-                    <button class="more vault-more" data-owner="vault" aria-haspopup="menu" aria-label={t("notes.more")} title={t("notes.more")} aria-expanded={vaultMenu} onclick={() => (vaultMenu = !vaultMenu)}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="8" r="1.1" /><circle cx="8" cy="8" r="1.1" /><circle cx="12.5" cy="8" r="1.1" /></svg></button>
+                    <strong class="vault-name" title={vault?.name}>{vault?.name}</strong>
+                    <span class="sync-mark" data-kind={syncKind} role="status" aria-label={status} title={status}><span class="dot" class:busy={syncKind === "busy"} class:off={syncKind === "off"}></span></span>
+                    <button class="icon-button small vault-more" data-owner="vault" aria-haspopup="menu" aria-label={t("notes.more")} title={t("notes.more")} aria-expanded={vaultMenu} onclick={() => (vaultMenu = !vaultMenu)}>{@html icon("more")}</button>
+                    <button class="icon-button small tree-toggle" aria-label={t("notes.hideTree")} title={t("notes.hideTree")} onclick={toggleTree}>{@html icon("sidebar")}</button>
                 </div>
-                <span class="status" class:offline title={t("notes.plainCopyTitle")}>{status}</span>
                 {#if sortError}<span class="sort-error">{sortError}</span>{/if}
                 {#if vaultMenu}
                     <div class="menu" role="menu" data-owner="vault">
@@ -853,8 +862,8 @@
                     </div>
                 {/if}
                 <div class="aside-tools">
-                    <input class="filter" placeholder={t("notes.filter")} bind:value={filter} />
-                    <button onclick={newNote}>{t("notes.newNote")}</button>
+                    <label class="search">{@html icon("search")}<input class="filter" placeholder={t("notes.filter")} aria-label={t("notes.filter")} bind:value={filter} /></label>
+                    <button class="icon-button raised new-note" aria-label={t("notes.newNote")} title={t("notes.newNote")} onclick={newNote}>{@html icon("plus")}</button>
                 </div>
             </header>
             {#if selecting}
@@ -868,14 +877,16 @@
             </nav>
         </aside>
         <section class="main" bind:this={mainEl}>
+            {#if collapsed && !current}<div class="note-bar empty-bar"><button class="icon-button small tree-toggle" aria-label={t("notes.showTree")} title={t("notes.showTree")} onclick={toggleTree}>{@html icon("sidebar")}</button></div>{/if}
             {#if current}
                 <!-- The note's folder and its actions in a bar across the whole pane; the title stays in the reading column. -->
                 <div class="note-bar">
+                    {#if collapsed}<button class="icon-button small tree-toggle" aria-label={t("notes.showTree")} title={t("notes.showTree")} onclick={toggleTree}>{@html icon("sidebar")}</button>{/if}
                     <span class="crumbs" title={current}>{current.split("/").slice(0, -1).join(" / ")}</span>
                     {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
                     <span class="bar-actions">
                         {#if mode === "view" && isNote(current)}
-                            <button onclick={edit}>{t("notes.edit")}</button>
+                            <button class="icon-button" aria-label={t("notes.edit")} title={t("notes.edit")} onclick={edit}>{@html icon("pencil")}</button>
                         {:else if mode === "edit"}
                             <button onclick={() => attachmentInput?.click()}>{t("notes.attach")}</button>
                             <input type="file" multiple hidden bind:this={attachmentInput} onchange={(event) => {

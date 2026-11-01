@@ -7,6 +7,7 @@ import type { Manifest, ManifestNode } from "@/features/tabularium/share/package
 import { escapeXml } from "@/features/tabularium/epub";
 import { formatDate, serverError, t } from "../../../../server/ui/i18n";
 import { copyCode, enhance } from "./markdown";
+import { renderDiagrams } from "./diagrams";
 import { paintIcon } from "../../../../server/ui/mark";
 
 // The page comes in its owner's colour theme; a custom theme's colours are set here, as the page allows no inline styles.
@@ -136,7 +137,7 @@ async function openPublicWithPassword() {
 }
 
 const placeholder = (kind: string) =>
-    `<span class="no-access" title="${escapeXml(t("viewer.noAccessTitle"))}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2l12 12M6.6 6.7a2 2 0 0 0 2.8 2.8M4.3 4.4C2.9 5.3 2 6.6 1.5 8c1.2 3 3.8 5 6.5 5 1.3 0 2.5-.4 3.6-1.2M7 3.1c.3 0 .7-.1 1-.1 2.7 0 5.3 2 6.5 5-.4 1-1 1.9-1.7 2.6"/></svg>${escapeXml(t("viewer.noAccess"))}<span class="sr-only"> (${escapeXml(kind)})</span></span>`;
+    `<span class="no-access" title="${escapeXml(t("viewer.noAccessTitle"))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.7 5.1A10 10 0 0 1 12 5c4.6 0 8.4 3.2 9.6 7a10.6 10.6 0 0 1-2.4 3.8M6.6 6.6A10.7 10.7 0 0 0 2.4 12c1.2 3.8 5 7 9.6 7a9.8 9.8 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg>${escapeXml(t("viewer.noAccess"))}<span class="sr-only"> (${escapeXml(kind)})</span></span>`;
 
 function render(markdown: string) {
     const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
@@ -215,6 +216,8 @@ async function show(id: string, push: boolean) {
     const first = article.firstElementChild;
     if (first?.tagName === "H1" && first.textContent?.trim() === note.title) main.querySelector(".note-head")?.remove();
     for (const image of article.querySelectorAll<HTMLImageElement>("img[data-file]")) void blobUrl(image.dataset.file!).then((url) => (image.src = url));
+    // Diagrams are drawn as in web notes, by the same code.
+    void renderDiagrams(article);
     main.scrollTop = 0;
     window.scrollTo(0, 0);
     document.title = `${note.title} · ${manifest.title}`;

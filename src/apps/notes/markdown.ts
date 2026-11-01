@@ -3,38 +3,67 @@
 // settings panel), Obsidian callouts (> [!note] Title), and task lists. Raw HTML stays disabled; highlight.js returns
 // escaped text with its own spans only.
 import type MarkdownIt from "markdown-it";
-import hljs from "highlight.js/lib/core";
-import bash from "highlight.js/lib/languages/bash";
-import shell from "highlight.js/lib/languages/shell";
+// The common set of highlight.js (about forty languages, from C++ to Swift) and the rest that notes of operations,
+// systems and science tend to hold.
+import hljs from "highlight.js/lib/common";
 import powershell from "highlight.js/lib/languages/powershell";
 import dos from "highlight.js/lib/languages/dos";
-import yaml from "highlight.js/lib/languages/yaml";
-import json from "highlight.js/lib/languages/json";
-import ini from "highlight.js/lib/languages/ini";
-import xml from "highlight.js/lib/languages/xml";
-import css from "highlight.js/lib/languages/css";
-import javascript from "highlight.js/lib/languages/javascript";
-import typescript from "highlight.js/lib/languages/typescript";
-import python from "highlight.js/lib/languages/python";
-import cpp from "highlight.js/lib/languages/cpp";
-import c from "highlight.js/lib/languages/c";
-import csharp from "highlight.js/lib/languages/csharp";
-import java from "highlight.js/lib/languages/java";
-import go from "highlight.js/lib/languages/go";
-import rust from "highlight.js/lib/languages/rust";
-import sql from "highlight.js/lib/languages/sql";
 import dockerfile from "highlight.js/lib/languages/dockerfile";
 import nginx from "highlight.js/lib/languages/nginx";
-import diff from "highlight.js/lib/languages/diff";
-import markdown from "highlight.js/lib/languages/markdown";
-import php from "highlight.js/lib/languages/php";
-import lua from "highlight.js/lib/languages/lua";
-import makefile from "highlight.js/lib/languages/makefile";
 import latex from "highlight.js/lib/languages/latex";
-import plaintext from "highlight.js/lib/languages/plaintext";
+import apache from "highlight.js/lib/languages/apache";
+import http from "highlight.js/lib/languages/http";
+import properties from "highlight.js/lib/languages/properties";
+import cmake from "highlight.js/lib/languages/cmake";
+import groovy from "highlight.js/lib/languages/groovy";
+import gradle from "highlight.js/lib/languages/gradle";
+import scala from "highlight.js/lib/languages/scala";
+import haskell from "highlight.js/lib/languages/haskell";
+import elixir from "highlight.js/lib/languages/elixir";
+import erlang from "highlight.js/lib/languages/erlang";
+import clojure from "highlight.js/lib/languages/clojure";
+import fsharp from "highlight.js/lib/languages/fsharp";
+import ocaml from "highlight.js/lib/languages/ocaml";
+import julia from "highlight.js/lib/languages/julia";
+import matlab from "highlight.js/lib/languages/matlab";
+import dart from "highlight.js/lib/languages/dart";
+import protobuf from "highlight.js/lib/languages/protobuf";
+import nix from "highlight.js/lib/languages/nix";
+import verilog from "highlight.js/lib/languages/verilog";
+import vhdl from "highlight.js/lib/languages/vhdl";
+import x86asm from "highlight.js/lib/languages/x86asm";
+import armasm from "highlight.js/lib/languages/armasm";
+import llvm from "highlight.js/lib/languages/llvm";
+import awk from "highlight.js/lib/languages/awk";
+import vim from "highlight.js/lib/languages/vim";
+import tcl from "highlight.js/lib/languages/tcl";
+import prolog from "highlight.js/lib/languages/prolog";
+import lisp from "highlight.js/lib/languages/lisp";
+import scheme from "highlight.js/lib/languages/scheme";
+import fortran from "highlight.js/lib/languages/fortran";
+import delphi from "highlight.js/lib/languages/delphi";
+import coffeescript from "highlight.js/lib/languages/coffeescript";
+import handlebars from "highlight.js/lib/languages/handlebars";
+import pgsql from "highlight.js/lib/languages/pgsql";
+import nsis from "highlight.js/lib/languages/nsis";
+import autohotkey from "highlight.js/lib/languages/autohotkey";
+import applescript from "highlight.js/lib/languages/applescript";
+import vbscript from "highlight.js/lib/languages/vbscript";
+import dns from "highlight.js/lib/languages/dns";
+import routeros from "highlight.js/lib/languages/routeros";
+import glsl from "highlight.js/lib/languages/glsl";
+import arduino from "highlight.js/lib/languages/arduino";
+import qml from "highlight.js/lib/languages/qml";
+import crystal from "highlight.js/lib/languages/crystal";
+import dlang from "highlight.js/lib/languages/d";
+import nim from "highlight.js/lib/languages/nim";
+import elm from "highlight.js/lib/languages/elm";
+import haxe from "highlight.js/lib/languages/haxe";
+import ada from "highlight.js/lib/languages/ada";
+import cspLang from "highlight.js/lib/languages/csp";
 import { escapeXml } from "@/features/tabularium/epub";
 
-for (const [name, language] of Object.entries({ bash, shell, powershell, dos, yaml, json, ini, xml, css, javascript, typescript, python, cpp, c, csharp, java, go, rust, sql, dockerfile, nginx, diff, markdown, php, lua, makefile, latex, plaintext }))
+for (const [name, language] of Object.entries({ powershell, dos, dockerfile, nginx, latex, apache, http, properties, cmake, groovy, gradle, scala, haskell, elixir, erlang, clojure, fsharp, ocaml, julia, matlab, dart, protobuf, nix, verilog, vhdl, x86asm, armasm, llvm, awk, vim, tcl, prolog, lisp, scheme, fortran, delphi, coffeescript, handlebars, pgsql, nsis, autohotkey, applescript, vbscript, dns, routeros, glsl, arduino, qml, crystal, d: dlang, nim, elm, haxe, ada, csp: cspLang }))
     hljs.registerLanguage(name, language);
 hljs.registerAliases(["sh", "zsh", "fish"], { languageName: "bash" });
 hljs.registerAliases(["console", "terminal"], { languageName: "shell" });
@@ -42,6 +71,8 @@ hljs.registerAliases(["toml", "conf", "cfg", "env", "properties", "systemd", "se
 hljs.registerAliases(["html", "svg", "xaml"], { languageName: "xml" });
 hljs.registerAliases(["cmd", "bat"], { languageName: "dos" });
 hljs.registerAliases(["jsonc", "json5"], { languageName: "json" });
+hljs.registerAliases(["cu", "cuda", "hpp", "cc", "cxx", "h++"], { languageName: "cpp" });
+hljs.registerAliases(["caddyfile"], { languageName: "nginx" });
 
 /** Shell sessions read as a terminal, configuration as a settings panel, the rest as code. */
 const TERMINAL = new Set(["bash", "sh", "zsh", "fish", "shell", "console", "terminal", "powershell", "ps1", "pwsh", "ps", "cmd", "bat", "dos"]);
@@ -75,7 +106,7 @@ export function enhance(md: MarkdownIt, texts: MarkdownTexts) {
         const known = lang && hljs.getLanguage(lang);
         const body = known ? hljs.highlight(token.content, { language: lang, ignoreIllegals: true }).value : escapeXml(token.content);
         const kind = TERMINAL.has(lang) ? "terminal" : CONFIG.has(lang) ? "config" : "code";
-        const name = NAMES[lang] ?? (lang ? lang : "");
+        const name = NAMES[lang] ?? (known ? known.name ?? lang : lang);
         return `<figure class="code-block" data-kind="${kind}"><figcaption><span class="code-lang">${escapeXml(name)}</span><button type="button" class="code-copy">${escapeXml(texts.copy)}</button></figcaption><pre><code class="hljs">${body}</code></pre></figure>`;
     };
     // Callouts: a quote whose first line is [!type] with an optional title (and +/- for folding, shown open here).

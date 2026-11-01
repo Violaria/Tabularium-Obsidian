@@ -26,23 +26,35 @@
     margin: 0;
     font-size: 14px;
 }
+.notes {
+    height: 100%;
+}
 .notes .layout {
     display: grid;
-    grid-template-columns: minmax(220px, 300px) 1fr;
-    height: 100vh;
+    grid-template-columns: minmax(220px, 296px) 1fr;
+    height: 100%;
+    transition: grid-template-columns 0.2s var(--ease);
+}
+/* The tree folded away: the note takes the whole sheet. */
+.notes .layout.collapsed {
+    grid-template-columns: 0 1fr;
+}
+.notes .layout.collapsed > aside {
+    visibility: hidden;
 }
 .notes aside {
-    border-right: 1px solid var(--line);
-    background: var(--panel);
+    background: var(--recess);
+    box-shadow: inset -1px 0 0 var(--line);
     display: flex;
     flex-direction: column;
     min-height: 0;
+    min-width: 0;
+    overflow: hidden;
 }
 .notes aside header {
-    padding: 12px;
+    padding: 14px 12px 10px;
     display: grid;
-    gap: 8px;
-    border-bottom: 1px solid var(--line);
+    gap: 10px;
 }
 .notes .selection {
     display: flex;
@@ -73,15 +85,21 @@
     border-radius: 6px;
     color: var(--text);
 }
+.notes .row {
+    transition: background-color 0.12s;
+}
 .notes .row:hover,
 .notes .row.menu-open {
-    background: var(--panel-soft);
+    background: var(--hover);
 }
 .notes .row.current {
-    background: var(--accent-soft);
-    color: var(--accent);
+    background: var(--raised);
+    box-shadow: var(--shadow-1);
+    color: var(--text);
 }
 .notes .row .name {
+    box-shadow: none;
+    border-radius: 0;
     flex: 1;
     min-width: 0;
     display: flex;
@@ -128,6 +146,7 @@
     margin: 0 2px 0 0;
 }
 .notes .more {
+    box-shadow: none;
     flex: none;
     display: inline-flex;
     align-items: center;
@@ -147,7 +166,7 @@
     fill: currentColor;
 }
 .notes .more:hover {
-    background: var(--line);
+    background: var(--hover);
     color: var(--text);
 }
 .notes .row:hover .more,
@@ -168,24 +187,29 @@
     right: 4px;
     top: 28px;
     z-index: 20;
-    min-width: 168px;
-    padding: 4px;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    box-shadow: 0 8px 24px #00000024;
+    min-width: 180px;
+    padding: 5px;
+    background: var(--overlay);
+    border-radius: 12px;
+    box-shadow: var(--shadow-3);
+    animation: pop-in 0.14s var(--ease);
 }
 .notes .menu button {
     background: none;
     border: 0;
-    border-radius: 5px;
+    box-shadow: none;
+    border-radius: 8px;
     color: inherit;
     text-align: left;
-    font-weight: 400;
-    padding: 6px 10px;
+    font-weight: 450;
+    font-size: 13.5px;
+    padding: 7px 10px;
 }
 .notes .menu button:hover {
-    background: var(--accent-soft);
+    background: var(--hover);
+}
+.notes .menu button.danger:hover {
+    background: var(--danger-soft);
 }
 .notes .main {
     display: flex;
@@ -239,10 +263,8 @@
 .notes .note-head .title {
     margin: 0;
     flex: 1;
-    font-size: 30px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
+    font: 500 34px/1.25 var(--serif);
+    letter-spacing: -0.01em;
 }
 .notes .conflict button.primary {
     background: var(--accent);
@@ -252,9 +274,9 @@
 .notes .save-state {
     font-size: 12px;
     color: var(--muted);
-    border: 1px solid var(--line);
+    background: var(--recess);
     border-radius: 10px;
-    padding: 0 8px;
+    padding: 1px 9px;
 }
 .notes .save-state[data-state="unsaved"],
 .notes .save-state[data-state="pending"] {
@@ -279,9 +301,9 @@
     min-height: 0;
     overflow: auto;
     margin: 12px 40px 0;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: var(--panel);
+    border-radius: 12px;
+    background: var(--raised);
+    box-shadow: var(--shadow-1);
 }
 .notes .editor .cm-editor {
     height: 100%;
@@ -362,31 +384,64 @@
 .notes .name.folder[aria-expanded="true"] .chevron {
     transform: rotate(90deg);
 }
-.notes aside header .status {
-    font-size: 12px;
-    color: var(--muted);
+.notes .aside-head .vault-name {
+    flex: 1;
+    min-width: 0;
+    font: 600 16px/1.3 var(--serif);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 4px;
 }
-.notes aside header .status.offline {
-    color: var(--warn);
+/* The replica's state beside the vault name: a quiet dot when in sync, amber while working, grey offline. */
+.notes .sync-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    margin-right: auto;
+    cursor: default;
+}
+.notes .sync-mark[data-kind="ok"] .dot {
+    width: 6px;
+    height: 6px;
+    box-shadow: none;
+    opacity: 0.7;
 }
 .notes .aside-tools {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
+}
+.notes .aside-tools .search {
+    flex: 1;
+    position: relative;
+    display: block;
+}
+.notes .aside-tools .search .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    transform: translateY(-50%);
+    color: var(--faint);
+    pointer-events: none;
 }
 .notes .aside-tools .filter {
-    flex: 1;
-    padding: 7px 10px;
+    padding: 7px 10px 7px 32px;
+    font-size: 13.5px;
+    font-weight: 400;
 }
-.notes .aside-tools button {
-    white-space: nowrap;
-    padding: 7px 10px;
-    font-size: 13px;
+.notes .aside-tools .new-note {
+    width: 34px;
+    height: 34px;
 }
 .notes aside header {
     position: relative;
 }
 .notes aside header .menu {
-    top: 40px;
+    top: 44px;
     right: 12px;
     width: 260px;
 }
@@ -403,7 +458,7 @@
 .notes .main {
     position: relative;
     overflow-y: auto;
-    height: 100vh;
+    height: 100%;
 }
 .notes .note-head {
     padding: 20px 40px 0;
@@ -416,10 +471,18 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    min-height: 48px;
-    padding: 8px 24px 8px 40px;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    min-height: 52px;
+    padding: 8px 20px 8px 40px;
+    background: color-mix(in oklab, var(--sheet) 82%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 0 var(--line);
+}
+.notes .layout.collapsed .note-bar {
+    padding-left: 12px;
+}
+.notes .note-bar.empty-bar {
+    box-shadow: none;
+    background: none;
 }
 .notes .note-bar .crumbs {
     flex: 1;
@@ -434,18 +497,9 @@
     display: flex;
     gap: 8px;
 }
-.notes .note-bar button {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 5px 12px;
+.notes .note-bar button:not(.icon-button) {
+    padding: 5px 13px;
     font-size: 13px;
-}
-.notes .note-bar button.primary {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
 }
 .notes article {
     overflow: visible;
@@ -461,11 +515,32 @@
 }
 .notes .vault-list .vault {
     text-align: left;
-    padding: 12px 14px;
+    padding: 12px 16px;
+    font: 500 16px/1.3 var(--serif);
+    box-shadow: none;
+    border-radius: 10px;
+    background: transparent;
+}
+.notes .vault-list .vault:hover {
+    background: var(--hover);
+}
+.notes .vault-list .vault {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.notes .vault-list .vault span {
+    flex: 1;
+}
+.notes .vault-list .vault .icon {
+    color: var(--faint);
+}
+.notes .vault-list {
+    padding: 8px;
 }
 /* Loading, choosing a vault and unlocking it hold one small card: it sits in the middle of the content area. */
 .notes .center-page {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -495,6 +570,9 @@
 @media (max-width: 720px) {
     .notes .main {
         height: auto;
+    }
+    .notes .layout.collapsed {
+        grid-template-rows: 0 1fr;
     }
     .notes .note-head {
         padding: 14px 16px 0;
@@ -549,25 +627,27 @@
 .share-gate h1 {
     font-size: 20px;
 }
+/* A reference the owner did not share: an eye struck through and the words, inline in the text (as Notion shows it). */
 .notes .no-access {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 1px 8px;
-    border-radius: 12px;
-    background: var(--panel-soft);
     color: var(--muted);
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 0.95em;
     white-space: nowrap;
+    vertical-align: baseline;
+    cursor: help;
 }
 .notes .no-access svg {
-    width: 14px;
-    height: 14px;
+    width: 1.1em;
+    height: 1.1em;
+    flex: none;
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.4;
+    stroke-width: 1.8;
     stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.85;
 }
 .notes .sr-only {
     position: absolute;

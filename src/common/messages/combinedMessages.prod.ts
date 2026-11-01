@@ -7980,6 +7980,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "«Nexus fractos inspicere» (Cura → Nexus, aut index iussorum) nexus enumerat qui ad nullam plicam ducunt et eos plicis eiusdem nominis reficit; refectio sponte in uno instrumento accendi potest. Mutationes nominum in commentariis interretis nexus secum ferunt. Communicatio tantum ab instrumento quod eam ultimum servavit renovatur, nomina mutata sequitur et revocatur cum commentarius deletur.",
         zh: "「检查断链」（维护 → 链接，或命令面板）列出指向不存在文件的链接，并用同名文件修复；可以在一台设备上打开自动修复。云笔记改名时链接一起更新。分享只由最后保存它的设备更新，跟随改名，笔记删除后自动撤回。",
     },
+    "tabularium.release.0.22.0": {
+        def: "A quieter web interface with depth: the content floats as a sheet beside the sidebar, states are dots, actions are icons with their names in tooltips, large headings are set in a serif. Clerk conversations can be renamed, grouped into projects and archived from each conversation's menu. Web notes show the sync state beside the vault name and can fold the file tree away. Share pages draw Mermaid diagrams; code blocks are highlighted in about sixty languages.",
+        la: "Facies interretialis quietior et profundior: contentum ut charta iuxta latus fluitat, status punctis, actiones iconibus cum nominibus in titulis, tituli magni litteris serifatis. Colloquia Tabularii renominari, in incepta disponi et in archivum reponi possunt ex indice cuiusque colloquii. Commentarii interretis statum synchronizationis iuxta nomen arcae ostendunt et indicem plicarum condere possunt. Paginae communicatae diagrammata Mermaid pingunt; codicis segmenta circiter sexaginta linguis colorantur.",
+        zh: "网页界面更安静、有层次：内容区像一张纸浮在侧栏旁，状态用圆点，操作用图标、名称在悬浮提示里，大标题用衬线字体。书记员的对话可以在每个对话的菜单里重命名、归入项目、归档。云笔记的同步状态显示在笔记库名旁，文件树可以收起。分享页画出 Mermaid 图；代码块支持约六十种语言的着色。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
