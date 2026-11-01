@@ -8205,6 +8205,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomen in pagina ingressus legi potest cum ratione lateris obscuri.",
         zh: "使用深色侧栏的配色时，登录页上的名称不再看不清。",
     },
+    "tabularium.release.0.24.2": {
+        def: "Passphrases and keys typed on the web pages are shown as dots again (0.24.0 and 0.24.1 showed them as text). Restoring a scheduled backup works with the deployment's own Compose files.",
+        la: "Sententiae arcanae et claves in paginis interretis rursus ut puncta apparent (0.24.0 et 0.24.1 eas ut textum ostendebant). Restitutio exemplorum statutorum cum ipsis Compose deploymentis plicis nunc operatur.",
+        zh: "网页上输入的密码短语与密钥重新显示为圆点（0.24.0 和 0.24.1 显示为明文）。用部署本身的 Compose 文件恢复定时备份现在可以正常工作。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
