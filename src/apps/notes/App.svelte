@@ -17,7 +17,7 @@
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
     import { formatDate, language, serverError, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
-    import { askText, confirmAction, icon, popMenu, message as toast } from "../../../../server/ui/core";
+    import { askText, confirmAction, icon, markShapes, popMenu, message as toast } from "../../../../server/ui/core";
     import { INSERT_ACTIONS } from "@/features/tabularium/editorActions";
     import ShareDialog from "@/features/tabularium/share/ShareDialog.svelte";
     import { Sharing } from "@/features/tabularium/share/sharing";
@@ -74,6 +74,17 @@
         if (next.read) readView = next.read;
         try { localStorage.setItem(VIEW_KEY, JSON.stringify({ edit: editView, read: readView })); } catch { /* storage unavailable: lasts for this page */ }
     }
+    /** The welcome when no note is open: a greeting by the time of day, and the notes changed last. */
+    const greeting = $derived.by(() => {
+        const hour = new Date().getHours();
+        return t(hour < 5 || hour >= 18 ? "home.evening" : hour < 12 ? "home.morning" : "home.afternoon", { name: user?.username ?? "" });
+    });
+    const recentNotes = $derived(files.filter((file) => isNote(file.path)).sort((a, b) => b.mtime - a.mtime).slice(0, 6));
+    const ago = (time: number) => {
+        const minutes = Math.max(0, Math.round((Date.now() - time) / 60_000));
+        return minutes < 1 ? t("time.now") : minutes < 60 ? t("time.minutes", { n: minutes }) : minutes < 1440 ? t("time.hours", { n: Math.floor(minutes / 60) })
+            : minutes < 7 * 1440 ? t("time.days", { n: Math.floor(minutes / 1440) }) : formatDate(time);
+    };
     /** The open note's text, for the source reading view. */
     let noteText = $state("");
     /** The split view's preview of the draft. */
@@ -933,6 +944,24 @@
         </aside>
         <section class="main" bind:this={mainEl}>
             {#if collapsed && !current}<div class="note-bar empty-bar"><button class="icon-button small tree-toggle" aria-label={t("notes.showTree")} title={t("notes.showTree")} onclick={toggleTree}>{@html icon("sidebar")}</button></div>{/if}
+            {#if !current && mode === "view"}
+                <div class="welcome">
+                    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64">{@html markShapes()}</svg></span>
+                    <h1>{greeting}</h1>
+                    <p class="welcome-vault">{vault?.name} · {t("home.noteCount", { n: files.filter((file) => isNote(file.path)).length })}</p>
+                    {#if recentNotes.length}
+                        <section class="welcome-recent">
+                            <h2>{t("home.recent")}</h2>
+                            <ul>
+                                {#each recentNotes as file (file.path)}
+                                    <li><button onclick={() => show(file.path)} title={file.path}>{@html icon("file")}<span class="name">{nameOf(file.path).replace(/\.md$/i, "")}</span><span class="folder">{folderOf(file.path)}</span><span class="when">{ago(file.mtime)}</span></button></li>
+                                {/each}
+                            </ul>
+                        </section>
+                    {/if}
+                    <button class="primary welcome-new" onclick={newNote}>{@html icon("plus")}{t("notes.newNote")}</button>
+                </div>
+            {/if}
             {#if current}
                 <!-- The note's folder and its actions in a bar across the whole pane; the title stays in the reading column. -->
                 <div class="note-bar">

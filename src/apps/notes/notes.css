@@ -1057,3 +1057,102 @@
     text-decoration: line-through;
     color: var(--muted);
 }
+
+/* The welcome when no note is open. */
+.notes .welcome {
+    width: min(560px, calc(100% - 48px));
+    margin: 12vh auto 48px;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    text-align: center;
+}
+.notes .welcome .brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+.notes .welcome .brand-mark svg {
+    width: 30px;
+    height: 30px;
+}
+.notes .welcome h1 {
+    font: 400 34px/1.25 var(--serif);
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+.notes .welcome-vault {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: 14px;
+}
+.notes .welcome-recent {
+    width: 100%;
+    text-align: left;
+    background: var(--raised);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1), 0 4px 14px -8px rgb(var(--shadow-tint) / 0.08);
+    padding: 14px 8px 8px;
+}
+.notes .welcome-recent h2 {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--faint);
+    margin: 0 10px 6px;
+}
+.notes .welcome-recent ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.notes .welcome-recent button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 9px;
+    background: none;
+    box-shadow: none;
+    font-weight: 450;
+    text-align: left;
+}
+.notes .welcome-recent button:hover {
+    background: var(--hover);
+}
+.notes .welcome-recent .icon {
+    width: 16px;
+    height: 16px;
+    color: var(--faint);
+}
+.notes .welcome-recent .name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.notes .welcome-recent .folder {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--faint);
+    font-size: 12.5px;
+}
+.notes .welcome-recent .when {
+    color: var(--faint);
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+.notes .welcome-new {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.notes .welcome-new .icon {
+    width: 16px;
+    height: 16px;
+}

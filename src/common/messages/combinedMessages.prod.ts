@@ -8195,6 +8195,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Custodes tesserarum (ut Bitwarden) iam non in campis communibus paginarum interretis (capsa nuntii Tabularii, quaestiones, optiones) bullam suam implendi ponunt; campi ingressus et tesserae ut antea cum eis operantur.",
         zh: "密码管理器（如 Bitwarden）不再在网页的普通输入框（书记员输入框、查找框、各项设置）上出现自动填充按钮；登录与修改密码的输入框照常可以自动填充。",
     },
+    "tabularium.release.0.24.0": {
+        def: "Tabularius can use Gemini, DeepSeek and a local Ollama as model providers. Each account can keep several colour schemes of its own; the page tint now shades every layer evenly. Web notes greet with the notes changed last when none is open; proposals from the clerk show under its answer; password managers leave passphrases and keys alone.",
+        la: "Tabularius Gemini, DeepSeek et Ollama localem ut praebitores exemplarium adhibere potest. Quisque usus plures rationes colorum suas servare potest; tinctura paginae omnes gradus aequaliter colorat. Commentarii interretis, nullo aperto, salutant et commentarios nuper mutatos ostendunt; propositiones scribae sub responso apparent; custodes tesserarum sententias arcanas et claves relinquunt.",
+        zh: "Tabularius 可以使用 Gemini、DeepSeek 和本机的 Ollama 作为模型提供商。每个账户可以保存多套自己的配色方案；页面浓淡均匀地作用于各层。云笔记没有打开笔记时显示欢迎页和最近修改的笔记；书记员的提案显示在回答下方；密码管理器不再干扰密码短语和密钥输入框。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
