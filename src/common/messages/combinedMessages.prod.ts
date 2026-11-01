@@ -8190,6 +8190,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Textu in commentario selecto instrumenta formae apparent, et dextro clic submenu «Insere» praebet (tabulas, segmenta codicis, diagrammata Mermaid fluxus, seriei, mappas mentis, Gantt, formulas, monita, lineas divisorias); singula etiam iussa sunt. Commentarii interretis eisdem actionibus utuntur, et nunc in fonte, redditione viva aut conspectu diviso scribuntur, redditi aut ut fons leguntur, et $formulas$ pingunt. Virgae volvendi in paginis interretis tenues sunt.",
         zh: "在笔记中选中文字时浮出格式工具条，右键菜单有「插入」子菜单（表格、代码块、Mermaid 流程图、时序图、思维导图、甘特图、公式、提示块、分隔线），每一项也是命令。云笔记用同样的操作，并且可以用源码、即时渲染或分屏编辑，用渲染或源码阅读，显示 $公式$。网页里的滚动条都改为细条。",
     },
+    "tabularium.release.0.23.1": {
+        def: "Password managers no longer put their autofill button on the web pages' ordinary fields (the clerk's message box, searches, settings); sign-in and password fields work with them as before.",
+        la: "Custodes tesserarum (ut Bitwarden) iam non in campis communibus paginarum interretis (capsa nuntii Tabularii, quaestiones, optiones) bullam suam implendi ponunt; campi ingressus et tesserae ut antea cum eis operantur.",
+        zh: "密码管理器（如 Bitwarden）不再在网页的普通输入框（书记员输入框、查找框、各项设置）上出现自动填充按钮；登录与修改密码的输入框照常可以自动填充。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",

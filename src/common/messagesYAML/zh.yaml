@@ -3342,3 +3342,4 @@ tabularium.settings.editor: 编辑器
 tabularium.settings.formatToolbar: 格式工具条
 tabularium.settings.formatToolbarDesc: 在这台设备上，选中文字时显示与云笔记相同的格式按钮。右键的「插入」子菜单和命令面板中的命令不受影响。
 tabularium.release.0.23.0: 在笔记中选中文字时浮出格式工具条，右键菜单有「插入」子菜单（表格、代码块、Mermaid 流程图、时序图、思维导图、甘特图、公式、提示块、分隔线），每一项也是命令。云笔记用同样的操作，并且可以用源码、即时渲染或分屏编辑，用渲染或源码阅读，显示 $公式$。网页里的滚动条都改为细条。
+tabularium.release.0.23.1: 密码管理器（如 Bitwarden）不再在网页的普通输入框（书记员输入框、查找框、各项设置）上出现自动填充按钮；登录与修改密码的输入框照常可以自动填充。

@@ -3370,3 +3370,4 @@ maintenancePrerequisites.title: ${operation} prerequisites
 "tabularium.settings.formatToolbar": "Format toolbar"
 "tabularium.settings.formatToolbarDesc": "Shows the format buttons of web notes over selected text on this device. The Insert submenu (right-click) and the commands stay available."
 "tabularium.release.0.23.0": "Selecting text in a note shows a format toolbar, and right-click offers an Insert submenu (tables, code blocks, Mermaid flowcharts, sequence diagrams, mind maps, Gantt charts, formulas, callouts, dividers); each is also a command. Web notes use the same actions and now edit in source, live render or split view, read rendered or as source, and draw $formulas$. Scroll bars are thin throughout the web pages."
+"tabularium.release.0.23.1": "Password managers no longer put their autofill button on the web pages' ordinary fields (the clerk's message box, searches, settings); sign-in and password fields work with them as before."
