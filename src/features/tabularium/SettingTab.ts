@@ -454,6 +454,13 @@ export class TabulariumSettingTab extends PluginSettingTab {
                 toggle.setValue(links.auto).onChange((on) => (links.auto = on))
             );
         }
+        const menus = this.owner.editorMenus;
+        if (menus) {
+            this.heading(el, "tabularium.settings.editor");
+            hint(new Setting(el).setName($msg("tabularium.settings.formatToolbar")), $msg("tabularium.settings.formatToolbarDesc")).addToggle((toggle) =>
+                toggle.setValue(menus.toolbar).onChange((on) => (menus.toolbar = on))
+            );
+        }
         const advanced = el.createEl("details", { cls: "tabularium-advanced" });
         // Saving a setting redraws the page: the fold stays as it was.
         advanced.open = this.advancedOpen;

@@ -26,6 +26,8 @@ export default defineConfig({
         emptyOutDir: true,
         chunkSizeWarningLimit: 4096,
         cssCodeSplit: false,
+        // Files stay files: the pages allow fonts and images only from the server itself, not data: URLs.
+        assetsInlineLimit: 0,
         rollupOptions: {
             external: ["crypto"],
             // The notes module for the shell, the share viewer page (/s/…), which loads nothing else, and the renderer of

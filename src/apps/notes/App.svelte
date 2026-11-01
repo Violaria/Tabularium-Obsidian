@@ -17,7 +17,8 @@
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
     import { formatDate, language, serverError, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
-    import { askText, confirmAction, icon, message as toast } from "../../../../server/ui/core";
+    import { askText, confirmAction, icon, popMenu, message as toast } from "../../../../server/ui/core";
+    import { INSERT_ACTIONS } from "@/features/tabularium/editorActions";
     import ShareDialog from "@/features/tabularium/share/ShareDialog.svelte";
     import { Sharing } from "@/features/tabularium/share/sharing";
     import type { ShareSource, ShareTreeNode } from "@/features/tabularium/share/package";
@@ -61,6 +62,28 @@
     let versions = $state<Version[]>([]);
     let attachmentInput = $state<HTMLInputElement>();
     let vaultMenu = $state(false);
+    /** How notes are edited (source, live render, or source beside the preview) and read (rendered or source), per browser. */
+    type EditView = "source" | "live" | "split";
+    type ReadView = "rendered" | "source";
+    const VIEW_KEY = "tabularium-notes:views";
+    const storedViews = (() => { try { return JSON.parse(localStorage.getItem(VIEW_KEY) ?? "{}") as { edit?: EditView; read?: ReadView }; } catch { return {}; } })();
+    let editView = $state<EditView>(storedViews.edit ?? "live");
+    let readView = $state<ReadView>(storedViews.read ?? "rendered");
+    function chooseView(next: { edit?: EditView; read?: ReadView }) {
+        if (next.edit) editView = next.edit;
+        if (next.read) readView = next.read;
+        try { localStorage.setItem(VIEW_KEY, JSON.stringify({ edit: editView, read: readView })); } catch { /* storage unavailable: lasts for this page */ }
+    }
+    /** The open note's text, for the source reading view. */
+    let noteText = $state("");
+    /** The split view's preview of the draft. */
+    let splitHtml = $state("");
+    let splitEl = $state<HTMLElement>();
+    let splitTimer = 0;
+    // Back from the source view, the rendered note's diagrams and images are drawn again.
+    $effect(() => {
+        if (readView === "rendered" && previewEl && html) void tick().then(() => previewEl && drawExtras(previewEl));
+    });
     /** The file tree folded away, remembered in this browser. */
     const TREE_KEY = "tabularium-notes:tree-collapsed";
     let collapsed = $state((() => { try { return localStorage.getItem(TREE_KEY) === "1"; } catch { return false; } })());
@@ -325,6 +348,7 @@
     function releaseImages() {
         objectUrls.forEach((url) => URL.revokeObjectURL(url));
         objectUrls = [];
+        imageUrls.clear();
     }
 
     async function leave() {
@@ -350,17 +374,46 @@
             return;
         }
         const paths = files.map((f) => f.path);
-        html = renderPreview(await runtime.read(path), (target) => resolveLinkpath(target, path, paths));
+        noteText = await runtime.read(path);
+        html = renderPreview(noteText, (target) => resolveLinkpath(target, path, paths));
         await tick();
         if (scroll) mainEl?.scrollTo(0, 0);
-        if (previewEl) void renderDiagrams(previewEl);
-        for (const img of previewEl?.querySelectorAll<HTMLImageElement>("img[data-vault-src]") ?? []) {
-            const source = img.dataset.vaultSrc!;
-            const data = await runtime.readBinary(source);
-            const url = URL.createObjectURL(new Blob([data as BlobPart], { type: MIME[source.slice(source.lastIndexOf(".") + 1).toLowerCase()] }));
+        if (previewEl) await drawExtras(previewEl);
+    }
+    /** Object URLs of vault images, kept while the note is open. */
+    const imageUrls = new Map<string, string>();
+    async function imageUrl(path: string) {
+        let url = imageUrls.get(path);
+        if (!url && runtime) {
+            const data = await runtime.readBinary(path);
+            url = URL.createObjectURL(new Blob([data as BlobPart], { type: MIME[path.slice(path.lastIndexOf(".") + 1).toLowerCase()] }));
             objectUrls.push(url);
-            img.src = url;
+            imageUrls.set(path, url);
         }
+        return url;
+    }
+    /** Diagrams, formulas and vault images of rendered note text. */
+    async function drawExtras(root: HTMLElement) {
+        void renderDiagrams(root);
+        for (const img of root.querySelectorAll<HTMLImageElement>("img[data-vault-src]")) img.src = (await imageUrl(img.dataset.vaultSrc!)) ?? "";
+    }
+    /** What the editor's live render needs: the vault's images, and the reading view's renderer for tables. */
+    const liveOptions = {
+        image: async (target: string) => {
+            const path = current ? resolveLinkpath(target, current, files.map((f) => f.path)) : undefined;
+            return path && /\.(png|jpe?g|gif|svg|webp|bmp|avif)$/i.test(path) ? imageUrl(path) : undefined;
+        },
+        render: (markdown: string) => renderPreview(markdown, (target) => (current ? resolveLinkpath(target, current, files.map((f) => f.path)) : undefined)),
+    };
+    /** The split view's preview follows the draft a moment after typing stops. */
+    function drawSplit() {
+        window.clearTimeout(splitTimer);
+        splitTimer = window.setTimeout(async () => {
+            if (!current) return;
+            splitHtml = liveOptions.render(draft);
+            await tick();
+            if (splitEl) await drawExtras(splitEl);
+        }, 200);
     }
 
     function previewClick(event: MouseEvent) {
@@ -380,10 +433,12 @@
         draft = editorText = loaded.text;
         saveState = "synced";
         mode = "edit";
+        drawSplit();
     }
 
     function changed(text: string) {
         draft = text;
+        if (editView === "split") drawSplit();
         saveState = "unsaved";
         window.clearTimeout(saveTimer);
         saveTimer = window.setTimeout(() => void save(), SAVE_DELAY_MS);
@@ -886,14 +941,25 @@
                     {#if mode !== "view" || saveState !== "synced"}<span class="save-state" data-state={saveState}>{stateLabel[saveState]}</span>{/if}
                     <span class="bar-actions">
                         {#if mode === "view" && isNote(current)}
+                            <span class="segmented" role="radiogroup" aria-label={t("notes.readView")}>
+                                {#each [["rendered", "eye"], ["source", "code"]] as [value, glyph] (value)}
+                                    <button class="icon-button small" role="radio" aria-checked={readView === value} aria-label={t(`notes.read.${value}` as "notes.read.rendered")} title={t(`notes.read.${value}` as "notes.read.rendered")} onclick={() => chooseView({ read: value as ReadView })}>{@html icon(glyph)}</button>
+                                {/each}
+                            </span>
                             <button class="icon-button" aria-label={t("notes.edit")} title={t("notes.edit")} onclick={edit}>{@html icon("pencil")}</button>
                         {:else if mode === "edit"}
-                            <button onclick={() => attachmentInput?.click()}>{t("notes.attach")}</button>
+                            <span class="segmented" role="radiogroup" aria-label={t("notes.editView")}>
+                                {#each [["source", "code"], ["live", "live"], ["split", "columns"]] as [value, glyph] (value)}
+                                    <button class="icon-button small" role="radio" aria-checked={editView === value} aria-label={t(`notes.edit.${value}` as "notes.edit.live")} title={t(`notes.edit.${value}` as "notes.edit.live")} onclick={() => { chooseView({ edit: value as EditView }); if (value === "split") drawSplit(); }}>{@html icon(glyph)}</button>
+                                {/each}
+                            </span>
+                            <button class="icon-button" aria-haspopup="menu" aria-label={t("editor.insert")} title={t("editor.insert")} onclick={(event) => popMenu(event.currentTarget, [...INSERT_ACTIONS.map((item) => item === "-" ? ("-" as const) : { label: t(`editor.insert.${item.id}` as "editor.insert.table"), svg: item.icon, action: () => editor?.template(item.id) }), "-", { label: t("notes.attach"), icon: "paperclip", action: () => attachmentInput?.click() }])}>{@html icon("plus")}</button>
+                            <span class="tip" tabindex="0" role="note" data-tip={t("notes.editHint")}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" /><path d="M8 7.2v4M8 4.9v.1" /></svg></span>
                             <input type="file" multiple hidden bind:this={attachmentInput} onchange={(event) => {
                                 const input = event.currentTarget;
                                 void attach([...(input.files ?? [])]).then(() => (input.value = ""));
                             }} />
-                            <button onclick={() => void save()}>{t("common.save")}</button>
+                            <button class="icon-button" aria-label={t("common.save")} title={t("common.save")} onclick={() => void save()}>{@html icon("save")}</button>
                             <button class="primary" onclick={done}>{t("notes.done")}</button>
                         {/if}
                     </span>
@@ -904,8 +970,16 @@
                 </div>
             {/if}
             {#if mode === "edit" && current}
-                <Editor bind:this={editor} text={editorText} {changed} save={() => void save()} dropped={(list) => void attach(list)} />
-                <p class="hint">{t("notes.editHint")}</p>
+                <div class="edit-area" class:split={editView === "split"}>
+                    <Editor bind:this={editor} text={editorText} mode={editView === "live" ? "live" : "source"} live={liveOptions} {changed} save={() => void save()} dropped={(list) => void attach(list)}
+                        scrolled={(ratio) => { if (splitEl) splitEl.scrollTop = ratio * (splitEl.scrollHeight - splitEl.clientHeight); }} />
+                    {#if editView === "split"}
+                        <!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -- copy buttons in the preview -->
+                        <article class="md-body split-preview" bind:this={splitEl} onclick={(event) => copyCode(event, t("notes.codeCopied"))}>{@html splitHtml}</article>
+                    {/if}
+                </div>
+            {:else if mode === "view" && current && isNote(current) && readView === "source"}
+                {#key noteText}<Editor text={noteText} mode="source" live={liveOptions} readonly />{/key}
             {:else if mode === "conflict" && current}
                 <Conflict {versions} binary={!isNote(current)} {keep} merge={(text) => void settle(text)} />
             {:else}

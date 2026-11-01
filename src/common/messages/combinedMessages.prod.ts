@@ -7700,6 +7700,206 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Plica in tabulario",
         zh: "库中的文件",
     },
+    "tabularium.editor.bold": {
+        def: "Bold",
+        la: "Crassum",
+        zh: "粗体",
+    },
+    "tabularium.editor.bullet": {
+        def: "Bulleted list",
+        la: "Index punctatus",
+        zh: "无序列表",
+    },
+    "tabularium.editor.clear": {
+        def: "Clear formatting",
+        la: "Formam remove",
+        zh: "清除格式",
+    },
+    "tabularium.editor.code": {
+        def: "Inline code",
+        la: "Codex in linea",
+        zh: "行内代码",
+    },
+    "tabularium.editor.format": {
+        def: "Format",
+        la: "Forma",
+        zh: "格式",
+    },
+    "tabularium.editor.h1": {
+        def: "Heading 1",
+        la: "Titulus I",
+        zh: "一级标题",
+    },
+    "tabularium.editor.h2": {
+        def: "Heading 2",
+        la: "Titulus II",
+        zh: "二级标题",
+    },
+    "tabularium.editor.h3": {
+        def: "Heading 3",
+        la: "Titulus III",
+        zh: "三级标题",
+    },
+    "tabularium.editor.h4": {
+        def: "Heading 4",
+        la: "Titulus IV",
+        zh: "四级标题",
+    },
+    "tabularium.editor.h5": {
+        def: "Heading 5",
+        la: "Titulus V",
+        zh: "五级标题",
+    },
+    "tabularium.editor.h6": {
+        def: "Heading 6",
+        la: "Titulus VI",
+        zh: "六级标题",
+    },
+    "tabularium.editor.heading": {
+        def: "Heading",
+        la: "Titulus",
+        zh: "标题",
+    },
+    "tabularium.editor.highlight": {
+        def: "Highlight",
+        la: "Illustratio",
+        zh: "高亮",
+    },
+    "tabularium.editor.insert": {
+        def: "Insert",
+        la: "Insere",
+        zh: "插入",
+    },
+    "tabularium.editor.insert.callout": {
+        def: "Callout",
+        la: "Monitum",
+        zh: "提示块",
+    },
+    "tabularium.editor.insert.code": {
+        def: "Code block",
+        la: "Segmentum codicis",
+        zh: "代码块",
+    },
+    "tabularium.editor.insert.divider": {
+        def: "Divider",
+        la: "Linea divisoria",
+        zh: "分隔线",
+    },
+    "tabularium.editor.insert.flowchart": {
+        def: "Flowchart",
+        la: "Diagramma fluxus",
+        zh: "流程图",
+    },
+    "tabularium.editor.insert.gantt": {
+        def: "Gantt chart",
+        la: "Diagramma Gantt",
+        zh: "甘特图",
+    },
+    "tabularium.editor.insert.mathBlock": {
+        def: "Formula block",
+        la: "Formula separata",
+        zh: "公式块",
+    },
+    "tabularium.editor.insert.mathInline": {
+        def: "Inline formula",
+        la: "Formula in linea",
+        zh: "行内公式",
+    },
+    "tabularium.editor.insert.mindmap": {
+        def: "Mind map",
+        la: "Mappa mentis",
+        zh: "思维导图",
+    },
+    "tabularium.editor.insert.sequence": {
+        def: "Sequence diagram",
+        la: "Diagramma seriei",
+        zh: "时序图",
+    },
+    "tabularium.editor.insert.table": {
+        def: "Table",
+        la: "Tabula",
+        zh: "表格",
+    },
+    "tabularium.editor.italic": {
+        def: "Italic",
+        la: "Obliquum",
+        zh: "斜体",
+    },
+    "tabularium.editor.link": {
+        def: "Link",
+        la: "Nexus",
+        zh: "链接",
+    },
+    "tabularium.editor.linkText": {
+        def: "link",
+        la: "nexus",
+        zh: "链接",
+    },
+    "tabularium.editor.numbered": {
+        def: "Numbered list",
+        la: "Index numeratus",
+        zh: "有序列表",
+    },
+    "tabularium.editor.quote": {
+        def: "Quote",
+        la: "Citatio",
+        zh: "引用",
+    },
+    "tabularium.editor.strike": {
+        def: "Strikethrough",
+        la: "Linea transversa",
+        zh: "删除线",
+    },
+    "tabularium.editor.task": {
+        def: "Task list",
+        la: "Index operum",
+        zh: "任务列表",
+    },
+    "tabularium.editor.word.callout": {
+        def: "Note",
+        la: "Nota",
+        zh: "提示",
+    },
+    "tabularium.editor.word.cell": {
+        def: "Cell",
+        la: "Cella",
+        zh: "内容",
+    },
+    "tabularium.editor.word.end": {
+        def: "End",
+        la: "Finis",
+        zh: "结束",
+    },
+    "tabularium.editor.word.heading": {
+        def: "Heading",
+        la: "Titulus",
+        zh: "标题",
+    },
+    "tabularium.editor.word.idea": {
+        def: "Idea",
+        la: "Notio",
+        zh: "想法",
+    },
+    "tabularium.editor.word.start": {
+        def: "Start",
+        la: "Initium",
+        zh: "开始",
+    },
+    "tabularium.editor.word.step": {
+        def: "Step",
+        la: "Gradus",
+        zh: "步骤",
+    },
+    "tabularium.editor.word.task": {
+        def: "Task",
+        la: "Opus",
+        zh: "任务",
+    },
+    "tabularium.editor.word.topic": {
+        def: "Topic",
+        la: "Argumentum",
+        zh: "主题",
+    },
     "tabularium.help.connect.body": {
         def: "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, name this device, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect forgets the connection on this device only; the device stays listed on the server until it is removed there.\n\nDevice credentials last 30 days and renew themselves while the device is used.",
         la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et tesseram arcanam tabularii scribe.\n\nTabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere conexionem in hoc tantum instrumento obliviscitur.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
@@ -7984,6 +8184,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "A quieter web interface with depth: the content floats as a sheet beside the sidebar, states are dots, actions are icons with their names in tooltips, large headings are set in a serif. Clerk conversations can be renamed, grouped into projects and archived from each conversation's menu. Web notes show the sync state beside the vault name and can fold the file tree away. Share pages draw Mermaid diagrams; code blocks are highlighted in about sixty languages.",
         la: "Facies interretialis quietior et profundior: contentum ut charta iuxta latus fluitat, status punctis, actiones iconibus cum nominibus in titulis, tituli magni litteris serifatis. Colloquia Tabularii renominari, in incepta disponi et in archivum reponi possunt ex indice cuiusque colloquii. Commentarii interretis statum synchronizationis iuxta nomen arcae ostendunt et indicem plicarum condere possunt. Paginae communicatae diagrammata Mermaid pingunt; codicis segmenta circiter sexaginta linguis colorantur.",
         zh: "网页界面更安静、有层次：内容区像一张纸浮在侧栏旁，状态用圆点，操作用图标、名称在悬浮提示里，大标题用衬线字体。书记员的对话可以在每个对话的菜单里重命名、归入项目、归档。云笔记的同步状态显示在笔记库名旁，文件树可以收起。分享页画出 Mermaid 图；代码块支持约六十种语言的着色。",
+    },
+    "tabularium.release.0.23.0": {
+        def: "Selecting text in a note shows a format toolbar, and right-click offers an Insert submenu (tables, code blocks, Mermaid flowcharts, sequence diagrams, mind maps, Gantt charts, formulas, callouts, dividers); each is also a command. Web notes use the same actions and now edit in source, live render or split view, read rendered or as source, and draw $formulas$. Scroll bars are thin throughout the web pages.",
+        la: "Textu in commentario selecto instrumenta formae apparent, et dextro clic submenu «Insere» praebet (tabulas, segmenta codicis, diagrammata Mermaid fluxus, seriei, mappas mentis, Gantt, formulas, monita, lineas divisorias); singula etiam iussa sunt. Commentarii interretis eisdem actionibus utuntur, et nunc in fonte, redditione viva aut conspectu diviso scribuntur, redditi aut ut fons leguntur, et $formulas$ pingunt. Virgae volvendi in paginis interretis tenues sunt.",
+        zh: "在笔记中选中文字时浮出格式工具条，右键菜单有「插入」子菜单（表格、代码块、Mermaid 流程图、时序图、思维导图、甘特图、公式、提示块、分隔线），每一项也是命令。云笔记用同样的操作，并且可以用源码、即时渲染或分屏编辑，用渲染或源码阅读，显示 $公式$。网页里的滚动条都改为细条。",
     },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
@@ -8390,6 +8595,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Optiones quae vitia afferre solent quaerit et emendationem offert.",
         zh: "查找已知会导致问题的设置，并提供修正。",
     },
+    "tabularium.settings.editor": {
+        def: "Editor",
+        la: "Scriptor",
+        zh: "编辑器",
+    },
     "tabularium.settings.fetch": {
         def: "Fetch from the server",
         la: "A ministratore iterum arcessere",
@@ -8459,6 +8669,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Fetch everything from the server?",
         la: "Omnia a ministratore arcessere?",
         zh: "从服务器重新获取全部？",
+    },
+    "tabularium.settings.formatToolbar": {
+        def: "Format toolbar",
+        la: "Instrumenta formae",
+        zh: "格式工具条",
+    },
+    "tabularium.settings.formatToolbarDesc": {
+        def: "Shows the format buttons of web notes over selected text on this device. The Insert submenu (right-click) and the commands stay available.",
+        la: "In hoc instrumento, textu selecto, eadem instrumenta formae ac in commentariis interretis ostendit. Submenu «Insere» (dextro clic) et iussa manent.",
+        zh: "在这台设备上，选中文字时显示与云笔记相同的格式按钮。右键的「插入」子菜单和命令面板中的命令不受影响。",
     },
     "tabularium.settings.help": {
         def: "Help",

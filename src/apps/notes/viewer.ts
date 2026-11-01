@@ -225,18 +225,18 @@ async function show(id: string, push: boolean) {
     expandTo(id);
 }
 
-// The same rows as the web notes tree: chevron for folders, an icon for every entry. Nesting is indented by the style
+// The same rows as the web notes tree: an open or closed folder, or a file, for every entry. Nesting is indented by the style
 // sheet (.children), since this page allows no inline styles.
-const FOLDER_ICON = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 12.2V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h6c.4 0 .8.3.8.8v6.8c0 .4-.4.8-.8.8H2.6c-.5 0-.8-.4-.8-.8z" /></svg>';
+// Closed and open folder; the style sheet shows the one that matches the row's aria-expanded.
+const FOLDER_ICON = '<svg class="icon closed" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 12.2V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h6c.4 0 .8.3.8.8v6.8c0 .4-.4.8-.8.8H2.6c-.5 0-.8-.4-.8-.8z" /></svg><svg class="icon opened" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 12.5V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h5.4c.4 0 .8.3.8.8v1.4M1.8 12.5l1.7-5.1c.1-.3.4-.5.7-.5h9.6c.5 0 .8.5.7 1l-1.5 4.1c-.1.3-.4.5-.7.5z" /></svg>';
 const FILE_ICON = '<svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.8h5.2l3 3v9c0 .4-.3.7-.7.7H4c-.4 0-.7-.3-.7-.7V2.5c0-.4.3-.7.7-.7z" /><path d="M9 1.8v3.2h3.2" /></svg>';
-const CHEVRON = '<svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg>';
 function tree(nodes: ManifestNode[]): string {
     return `<ul>${nodes
         .map((node) => {
             if (node.children)
-                return `<li><div class="row"><button class="name folder" aria-expanded="false">${CHEVRON}${FOLDER_ICON}<span class="label">${escapeXml(node.name)}</span></button></div><div class="children" hidden>${tree(node.children)}</div></li>`;
+                return `<li><div class="row"><button class="name folder" aria-expanded="false">${FOLDER_ICON}<span class="label">${escapeXml(node.name)}</span></button></div><div class="children" hidden>${tree(node.children)}</div></li>`;
             const note = node.id?.startsWith("n");
-            return `<li><div class="row" data-note="${escapeXml(note ? node.id! : "")}"><button class="name${note ? "" : " other"}" data-${note ? "note" : "file"}="${escapeXml(node.id ?? "")}"><span class="chevron-space" aria-hidden="true"></span>${FILE_ICON}<span class="label">${escapeXml(node.name)}</span></button></div></li>`;
+            return `<li><div class="row" data-note="${escapeXml(note ? node.id! : "")}"><button class="name${note ? "" : " other"}" data-${note ? "note" : "file"}="${escapeXml(node.id ?? "")}">${FILE_ICON}<span class="label">${escapeXml(node.name)}</span></button></div></li>`;
         })
         .join("")}</ul>`;
 }

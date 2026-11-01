@@ -62,6 +62,7 @@ import haxe from "highlight.js/lib/languages/haxe";
 import ada from "highlight.js/lib/languages/ada";
 import cspLang from "highlight.js/lib/languages/csp";
 import { escapeXml } from "@/features/tabularium/epub";
+import { math } from "./math";
 
 for (const [name, language] of Object.entries({ powershell, dos, dockerfile, nginx, latex, apache, http, properties, cmake, groovy, gradle, scala, haskell, elixir, erlang, clojure, fsharp, ocaml, julia, matlab, dart, protobuf, nix, verilog, vhdl, x86asm, armasm, llvm, awk, vim, tcl, prolog, lisp, scheme, fortran, delphi, coffeescript, handlebars, pgsql, nsis, autohotkey, applescript, vbscript, dns, routeros, glsl, arduino, qml, crystal, d: dlang, nim, elm, haxe, ada, csp: cspLang }))
     hljs.registerLanguage(name, language);
@@ -98,6 +99,26 @@ export interface MarkdownTexts {
 
 /** Adds code blocks, callouts and task lists to a markdown-it instance. */
 export function enhance(md: MarkdownIt, texts: MarkdownTexts) {
+    math(md);
+    // ==highlight==, as in Obsidian: no space just inside the marks, within one paragraph.
+    md.inline.ruler.before("emphasis", "highlight", (state, silent) => {
+        const src = state.src;
+        const start = state.pos;
+        if (src.charCodeAt(start) !== 0x3d || src.charCodeAt(start + 1) !== 0x3d || /\s|=/.test(src[start + 2] ?? " ")) return false;
+        const close = src.indexOf("==", start + 2);
+        if (close < 0 || /\s/.test(src[close - 1]) || src.slice(start + 2, close).includes("\n\n")) return false;
+        if (!silent) {
+            state.push("mark_open", "mark", 1);
+            const end = state.posMax;
+            state.pos = start + 2;
+            state.posMax = close;
+            state.md.inline.tokenize(state);
+            state.posMax = end;
+            state.push("mark_close", "mark", -1);
+        }
+        state.pos = close + 2;
+        return true;
+    });
     md.renderer.rules.fence = (tokens, index) => {
         const token = tokens[index];
         const lang = token.info.trim().split(/\s+/)[0].toLowerCase();

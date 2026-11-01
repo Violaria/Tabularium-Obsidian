@@ -1004,3 +1004,57 @@ body.is-mobile .livesync-compatibility-review-notice {
 .tabularium-choice-label {
     font-weight: var(--font-semibold);
 }
+
+/* Format toolbar over selected text (the same buttons as web notes). */
+.tabularium-format-menu {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 4px;
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-s);
+}
+.cm-tooltip:has(> .tabularium-format-menu) {
+    border: 0;
+    background: transparent;
+}
+.tabularium-format-menu button {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-normal);
+    border-radius: var(--radius-s);
+}
+.tabularium-format-menu button:hover {
+    background: var(--background-modifier-hover);
+}
+.tabularium-format-menu svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.tabularium-format-menu .letter {
+    font: 600 14px/1 var(--font-text);
+}
+.tabularium-format-menu .letter.italic {
+    font-style: italic;
+}
+.tabularium-format-menu .letter.struck {
+    text-decoration: line-through;
+}
+.tabularium-format-menu .sep {
+    width: 1px;
+    height: 16px;
+    margin: 0 3px;
+    background: var(--background-modifier-border);
+}

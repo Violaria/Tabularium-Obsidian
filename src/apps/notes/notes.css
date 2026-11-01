@@ -63,7 +63,7 @@
     padding: 8px 12px;
     border-bottom: 1px solid var(--line);
 }
-/* The file tree: one row height, indentation by depth, a chevron column for folders and an icon for every entry. */
+/* The file tree: one row height, indentation by depth, an open or closed folder or a file icon for every entry; no chevrons. */
 .notes nav {
     overflow: auto;
     padding: 8px 8px 16px;
@@ -76,7 +76,7 @@
     padding: 0;
 }
 .notes .row {
-    --indent: calc(var(--depth, 0) * 16px);
+    --indent: calc(var(--depth, 0) * 18px);
     display: flex;
     align-items: center;
     gap: 2px;
@@ -297,25 +297,176 @@
     color: var(--danger);
 }
 .notes .editor {
-    flex: 1;
-    min-height: 0;
-    overflow: auto;
-    margin: 12px 40px 0;
-    border-radius: 12px;
-    background: var(--raised);
-    box-shadow: var(--shadow-1);
+    position: relative;
+    margin: 4px 0 0;
+    padding: 0 40px 64px;
 }
 .notes .editor .cm-editor {
-    height: 100%;
-    min-height: 60vh;
-    font-size: 15px;
+    font: 16px/1.75 var(--font);
+    color: var(--text);
+    background: transparent;
 }
 .notes .editor .cm-editor.cm-focused {
     outline: none;
 }
+.notes .editor .cm-scroller {
+    font-family: inherit;
+    line-height: inherit;
+}
 .notes .editor .cm-content {
-    padding: 12px;
-    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    padding: 8px 0 40vh;
+    caret-color: var(--accent);
+}
+.notes .editor .cm-line {
+    padding: 0;
+}
+.notes .editor .cm-activeLine {
+    background: transparent;
+}
+.notes .editor.source-mode .cm-editor {
+    font: 14px/1.7 var(--mono);
+}
+.notes .editor.source-mode .cm-activeLine {
+    background: color-mix(in oklab, var(--accent) 5%, transparent);
+}
+.notes .editor.readonly .cm-content {
+    padding-bottom: 24px;
+}
+.notes .editor .cm-selectionBackground,
+.notes .editor .cm-focused .cm-selectionBackground {
+    background: color-mix(in oklab, var(--accent) 22%, transparent) !important;
+}
+/* Live render: the note reads as it will print, the cursor's line shows its Markdown. */
+.notes .cm-live .cm-h { font-family: var(--serif); font-weight: 600; line-height: 1.35; }
+.notes .cm-live .cm-h1 { font-size: 1.9em; padding-top: 0.4em; }
+.notes .cm-live .cm-h2 { font-size: 1.5em; padding-top: 0.5em; }
+.notes .cm-live .cm-h3 { font-size: 1.25em; padding-top: 0.4em; }
+.notes .cm-live .cm-h4, .notes .cm-live .cm-h5, .notes .cm-live .cm-h6 { font-size: 1.08em; }
+.notes .cm-live .cm-strong { font-weight: 650; }
+.notes .cm-live .cm-em { font-style: italic; }
+.notes .cm-live .cm-strike, .notes .cm-live .cm-done { text-decoration: line-through; color: var(--muted); }
+.notes .cm-live .cm-inline-code { font: 0.88em var(--mono); background: var(--recess); border-radius: 5px; padding: 1px 5px; }
+.notes .cm-live .cm-link { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+.notes .cm-live .cm-highlight { background: color-mix(in oklab, #f5d33d 45%, transparent); border-radius: 3px; }
+.notes .cm-live .cm-comment, .notes .cm-live .cm-math-source { color: var(--faint); }
+.notes .cm-live .cm-math-source { font-family: var(--mono); font-size: 0.9em; }
+.notes .cm-live .cm-quote { color: var(--muted); padding-left: 1em !important; background: linear-gradient(var(--recess), var(--recess)); }
+.notes .cm-live .cm-callout-title { font-weight: 600; color: var(--accent); }
+.notes .cm-live .cm-bullet { display: inline-block; width: 1em; color: var(--accent); font-weight: 700; }
+.notes .cm-live .cm-task { width: 15px; height: 15px; margin: 0 6px 0 0; vertical-align: -2px; cursor: pointer; }
+.notes .cm-live .cm-rule { display: inline-block; width: 100%; height: 1px; background: var(--line-strong); vertical-align: middle; }
+.notes .cm-live .cm-fence { font: 12.5px/1.6 var(--mono); color: var(--faint); background: var(--recess); }
+.notes .cm-live .cm-codeblock { font: 13.5px/1.65 var(--mono); background: var(--recess); padding-left: 14px !important; }
+.notes .cm-live .cm-frontmatter { font: 13px/1.6 var(--mono); color: var(--muted); background: var(--recess); }
+.notes .cm-live .cm-embed img { max-width: 100%; border-radius: 8px; vertical-align: middle; }
+.notes .cm-live .cm-embed { color: var(--muted); }
+.notes .cm-live .cm-block { white-space: normal; cursor: text; margin: 6px 0; border-radius: 10px; transition: box-shadow 0.15s; }
+.notes .cm-live .cm-block:hover { box-shadow: 0 0 0 1px var(--line-strong); }
+.notes .cm-live .cm-block .mermaid-diagram { margin: 0; }
+.notes .cm-live .cm-block-math { padding: 6px 0; text-align: center; }
+.notes .cm-live .cm-block table { margin: 0; }
+/* The format menu over a selection: symbols only, names in tooltips. */
+.notes .format-menu {
+    position: absolute;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 4px;
+    background: var(--overlay);
+    border-radius: 11px;
+    box-shadow: var(--shadow-3);
+    animation: pop-in 0.12s var(--ease);
+}
+.notes .format-menu button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 7px;
+    background: none;
+    box-shadow: none;
+    color: var(--text);
+}
+.notes .format-menu button:hover {
+    background: var(--hover);
+}
+.notes .format-menu svg,
+.notes .note-bar .icon-button svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.notes .format-menu .letter {
+    font: 600 15px/1 var(--serif);
+}
+.notes .format-menu .letter.italic {
+    font-style: italic;
+}
+.notes .format-menu .letter.struck {
+    text-decoration: line-through;
+}
+.notes .format-menu .sep {
+    width: 1px;
+    height: 18px;
+    margin: 0 4px;
+    background: var(--line-strong);
+}
+/* Edit and reading views: a small segmented switch in the note bar. */
+.notes .segmented {
+    display: inline-flex;
+    gap: 1px;
+    padding: 2px;
+    border-radius: 9px;
+    background: var(--recess);
+    box-shadow: var(--sink), 0 0 0 1px var(--line);
+}
+.notes .segmented .icon-button[aria-checked="true"] {
+    background: var(--raised);
+    color: var(--text);
+    box-shadow: var(--shadow-1);
+}
+.notes .note-bar .bar-actions {
+    align-items: center;
+}
+.notes .note-bar .tip {
+    margin: 0 2px;
+}
+/* Split: source and preview side by side, each scrolling, under the note bar. */
+.notes .edit-area.split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    height: calc(100% - 53px);
+}
+.notes .edit-area.split .editor {
+    overflow: auto;
+    padding: 0 24px 0 40px;
+    box-shadow: inset -1px 0 0 var(--line);
+}
+.notes .edit-area.split .split-preview {
+    overflow: auto;
+    padding: 12px 40px 64px 24px;
+}
+.notes .main:has(.edit-area.split) {
+    overflow: hidden;
+}
+.notes .main:has(.edit-area.split) .note-head {
+    display: none;
+}
+@media (max-width: 720px) {
+    .notes .editor {
+        padding: 0 16px 40px;
+    }
+    .notes .edit-area.split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        height: 80vh;
+    }
 }
 .notes .main > .hint {
     padding: 6px 40px;
@@ -367,22 +518,12 @@
 .notes .conflict .editor .cm-editor {
     min-height: 30vh;
 }
-.notes .chevron,
-.notes .chevron-space {
-    width: 14px;
-    height: 14px;
-    flex: none;
+.share-viewer .name.folder .icon.opened,
+.share-viewer .name.folder[aria-expanded="true"] .icon.closed {
+    display: none;
 }
-.notes .chevron {
-    fill: none;
-    stroke: var(--muted);
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: transform 0.12s;
-}
-.notes .name.folder[aria-expanded="true"] .chevron {
-    transform: rotate(90deg);
+.share-viewer .name.folder[aria-expanded="true"] .icon.opened {
+    display: inline;
 }
 .notes .aside-head .vault-name {
     flex: 1;
@@ -903,4 +1044,16 @@
 /* The share viewer's tree nests its entries in .children blocks (it cannot set the depth on each row). */
 .share-viewer nav .children {
     padding-left: 16px;
+}
+/* ==Highlights== and ~~strikethrough~~, as in Obsidian. */
+.md-body mark {
+    background: color-mix(in oklab, #f5d33d 45%, transparent);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+.md-body s,
+.md-body del {
+    text-decoration: line-through;
+    color: var(--muted);
 }

@@ -48,9 +48,9 @@
                 {/if}
                 {#if child.folder}
                     {@const shown = expandAll || !!expanded[child.path]}
-                    <button class="name folder" aria-expanded={shown} onclick={() => (expanded[child.path] = !expanded[child.path])}><svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" /></svg><svg class="icon" viewBox="0 0 16 16" aria-hidden="true">{#if shown}<path d="M1.8 12.5V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h5.4c.4 0 .8.3.8.8v1.4M1.8 12.5l1.7-5.1c.1-.3.4-.5.7-.5h9.6c.5 0 .8.5.7 1l-1.5 4.1c-.1.3-.4.5-.7.5z" />{:else}<path d="M1.8 12.2V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h6c.4 0 .8.3.8.8v6.8c0 .4-.4.8-.8.8H2.6c-.5 0-.8-.4-.8-.8z" />{/if}</svg><span class="label">{child.name}</span></button>
+                    <button class="name folder" aria-expanded={shown} onclick={() => (expanded[child.path] = !expanded[child.path])}><svg class="icon" viewBox="0 0 16 16" aria-hidden="true">{#if shown}<path d="M1.8 12.5V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h5.4c.4 0 .8.3.8.8v1.4M1.8 12.5l1.7-5.1c.1-.3.4-.5.7-.5h9.6c.5 0 .8.5.7 1l-1.5 4.1c-.1.3-.4.5-.7.5z" />{:else}<path d="M1.8 12.2V3.8c0-.4.3-.8.8-.8h3.3l1.5 1.6h6c.4 0 .8.3.8.8v6.8c0 .4-.4.8-.8.8H2.6c-.5 0-.8-.4-.8-.8z" />{/if}</svg><span class="label">{child.name}</span></button>
                 {:else}
-                    <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}><span class="chevron-space" aria-hidden="true"></span><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.8h5.2l3 3v9c0 .4-.3.7-.7.7H4c-.4 0-.7-.3-.7-.7V2.5c0-.4.3-.7.7-.7z" /><path d="M9 1.8v3.2h3.2" /></svg><span class="label">{label(child)}</span></button>
+                    <button class="name" class:other={!/\.md$/i.test(child.name)} onclick={() => open(child.path)}><svg class="icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.8h5.2l3 3v9c0 .4-.3.7-.7.7H4c-.4 0-.7-.3-.7-.7V2.5c0-.4.3-.7.7-.7z" /><path d="M9 1.8v3.2h3.2" /></svg><span class="label">{label(child)}</span></button>
                     {#if conflicted.has(child.path)}<span class="conflict-mark" title={t("notes.stateConflict")}>{t("notes.conflictMark")}</span>{/if}
                 {/if}
                 {#if !selecting}
