@@ -1,147 +1,41 @@
-# Self-hosted LiveSync
-[Japanese docs](./README_ja.md) - [Chinese docs](./README_cn.md).
+# Tabularium for Obsidian
 
+An Obsidian plug-in that synchronises a vault, end-to-end encrypted, with a self-hosted [Tabularium](https://github.com/Violaria/Tabularium) server. It is a fork of [Self-hosted LiveSync](https://github.com/vrtmrz/obsidian-livesync) 1.0.40 and includes the File Explorer sorting of [Custom File Explorer sorting](https://github.com/SebastianMC/obsidian-custom-sort) 3.2.0, so it replaces both plug-ins. Disable Self-hosted LiveSync and any other synchronisation plug-in in a vault before enabling this one.
 
-Self-hosted LiveSync is a community-developed synchronisation plug-in available on all Obsidian-compatible platforms. It leverages robust server solutions such as CouchDB or object storage systems (e.g., MinIO, S3, R2, etc.) to ensure reliable data synchronisation.
+## Requirements and network use
 
-Additionally, it supports peer-to-peer synchronisation using WebRTC, enabling devices to exchange notes without a central data-storage server. A signalling relay is still required for peer discovery. See [How peer-to-peer synchronisation works](./docs/p2p.md).
+You need an account on a Tabularium server; the plug-in does nothing without one. Every network request goes to the server address you enter: signing in, issuing and renewing this device's credentials, synchronisation, Send to Kindle and sharing. The plug-in sends no telemetry, and its help pages are bundled with it.
 
-![obsidian_live_sync_demo](https://user-images.githubusercontent.com/45774780/137355323-f57a8b09-abf2-4501-836c-8cb7d2ff24a3.gif)
-
->[!IMPORTANT]
-> This plug-in is not compatible with the official "Obsidian Sync" and cannot synchronise with it.
+Notes are encrypted on the device with the vault's passphrase (LiveSync E2EE V2, with path obfuscation) before they leave it. The passphrase is stored only on the device, and the server rejects unencrypted documents. Two features send readable content, and only when you use them: Send to Kindle mails an EPUB through the server, and a shared note is published at a link that anyone with the link can open.
 
 ## Features
-- Synchronise vaults efficiently with minimal traffic.
-- Handle conflicting modifications effectively.
-  - Automatically merge simple conflicts.
-- Use open-source solutions for the server.
-  - Compatible solutions are supported.
-- Support end-to-end encryption.
-- Synchronise settings, snippets, themes, and plug-ins via [Customisation Sync (Beta)](docs/settings.md#6-customisation-sync-advanced) or [Hidden File Sync](docs/tips/hidden-file-sync.md).
-- Enable supported, opt-in WebRTC peer-to-peer synchronisation.
-  - No central data-storage server is required, but a signalling relay is still required for peer discovery.
-  - At least one device containing the required data must be online while another device synchronises.
-  - Follow the [Peer-to-Peer Setup](docs/setup_p2p.md) after reviewing the [P2P communication model](docs/p2p.md).
-  - If you would like to see how P2P setup and connectivity behave on your devices, try the guided connection check in the experimental [WebPeer browser utility](https://vrtmrz.github.io/obsidian-livesync/webpeer/). It uses an empty Vault and does not test note synchronisation. See the [WebPeer documentation](src/apps/webpeer/README.md) for its scope and limitations.
 
-This plug-in may be particularly useful for researchers, engineers, and developers who need to keep their notes fully self-hosted for security reasons. It is also suitable for anyone seeking the peace of mind that comes with knowing their notes remain entirely private.
+- Sign in with the server address, user name and password, then choose an existing vault or create one, name the device and enter the passphrase. The plug-in gets credentials of its own for this device and renews them while it is in use.
+- Live, periodic or event-triggered synchronisation, conflict handling and per-note history from LiveSync. Encryption and path obfuscation are always on while connected; hidden-file sync, customisation sync and the manual CouchDB, object storage and peer-to-peer setups of the original plug-in are removed.
+- Maintenance from the settings page: fetch everything from the server, overwrite the server from this device (after the vault owner allows it on the web), unlock, diagnostics.
+- File Explorer sorting with `sortspec.md` files, as in Custom File Explorer sorting.
+- Send a note, a folder or a selection to a Kindle address configured on the server.
+- Share a note or folder as a web page; the page updates when the shared files change.
+- A formatting toolbar on text selection, and a tool to find and repair broken internal links.
+- Interface in English, Chinese and Latin.
 
->[!IMPORTANT]
-> - Before installing or upgrading this plug-in, please back up your vault.
-> - Do not enable this plug-in alongside another synchronisation solution (including iCloud and Obsidian Sync).
-> - For backups, we also provide a plug-in called [Differential ZIP Backup](https://github.com/vrtmrz/diffzip).
+## Installation
 
-## How to Use
+Until the plug-in is listed in Obsidian's community directory, copy `main.js`, `manifest.json` and `styles.css` from a release into `.obsidian/plugins/tabularium/` in the vault, then enable Tabularium under Community plug-ins. Run the command "Tabularium: Server connection" to sign in.
 
-### 3-minute setup - CouchDB on fly.io
+## Building
 
-**Recommended for beginners**
+This repository is a submodule of [Tabularium](https://github.com/Violaria/Tabularium); it depends on the sorting package there. Clone the parent with `--recurse-submodules` and, with Node.js 24.10.0:
 
-[![LiveSync Setup onto Fly.io SpeedRun 2024 using Google Colab](https://img.youtube.com/vi/7sa_I1832Xc/0.jpg)](https://www.youtube.com/watch?v=7sa_I1832Xc)
-
-1. [Set up CouchDB on fly.io](docs/setup_flyio.md)
-2. Configure plug-in in [Quick Setup](docs/quick_setup.md)
-
-### Setup workflows
-
-Choose a synchronisation method, prepare its server where required, then follow the corresponding client setup:
-
-1. CouchDB
-   1. Prepare the server:
-      - [Set up your own CouchDB server](docs/setup_own_server.md).
-      - [Set up CouchDB on fly.io](docs/setup_flyio.md).
-   2. Configure the clients by following [CouchDB Quick Setup](docs/quick_setup.md).
-2. Object Storage
-   1. Prepare the server. A maintained MinIO server installation guide is not currently available here, so set up an S3-compatible service or server of your choice.
-   2. Configure the clients by following [Object Storage Setup](docs/setup_object_storage.md).
-3. Peer-to-Peer
-   1. No central data-storage server is required. The project's public signalling relay requires no server provisioning; controlled deployments can provide another compatible relay.
-   2. Configure the clients by following [Peer-to-Peer Setup](docs/setup_p2p.md).
-
-Each workflow establishes ordinary note synchronisation on the first device, generates a Setup URI for each additional device from that working device, and verifies synchronisation in both directions.
-
-> [!TIP]
-> Fly.io is no longer free. Fortunately, we can still use IBM Cloudant despite some limitations. Refer to [Set up IBM Cloudant](docs/setup_cloudant.md).
-> We can also use peer-to-peer synchronisation without a central data-storage server; a signalling relay is still used for peer discovery. Alternatively, cheap object storage like Cloudflare R2 can be used for free.
-> However, most importantly, we can use a server that we trust. Therefore, please set up your own server.
-> CouchDB can also be run on a Raspberry Pi (please be mindful of your server's security).
-
-
-### Third-party managed CouchDB hosting
-
-> [!NOTE]
-> The following is a third-party hosting option proposed by Zenith Hosting. It is not an official Self-hosted LiveSync service, and it is neither endorsed nor recommended by this project.
-
-If you would rather not set up and maintain a server yourself, Zenith Hosting offers a managed CouchDB server which this plug-in can be configured to connect to: [Zenith Hosting](https://zenith.hosting/host/obsidian-livesync). As with any hosted service, your data will reside on a server operated by a third party, so please consider whether that is acceptable for your vault before using it.
-
-## Information in the Status Bar
-
-Synchronisation status is shown in the status bar with the following icons.
-
--   Activity Indicator
-    -   📲 A finite remote operation is in progress
-    -   🌐N Approximate remote requests currently in progress
--   Status
-    -   ⏹️ Stopped
-    -   ⏩ Comparing CouchDB change history, including entries already held locally
-    -   💤 LiveSync enabled. Waiting for changes
-    -   ⚡️ Synchronisation in progress
-    -   ⚠ An error occurred
--   Statistical Indicators
-     -   ↑ Uploaded chunks and metadata
-     -   ↓ Downloaded chunks and metadata
--   Progress Indicators
-     -   📥 Unprocessed transferred items
-     -   📄 Working database operation
-     -   💾 Working write storage processes
-     -   ⏳ Working read storage processes
-     -   🛫 Pending read storage processes
-     -   📬 Batched read storage processes
-     -   ⚙️ Working or pending storage processes for hidden files
-     -   🛄 Pending initial on-demand chunk requests
-     -   🔁 Pending chunk retries, including retry delays
-     -   🔌 Working customisation items (configuration, snippets, and plug-ins)
-
-To prevent file and database corruption, please avoid closing Obsidian until all progress indicators have disappeared as much as possible (although the plug-in will attempt to resume if interrupted). This is especially important if you have deleted or renamed files.
-
-When CouchDB change history is being compared, `(⏩ 1200) ↑ 0 ↓ 0` can appear before any new documents arrive. The count is the number of candidate changes-feed entries compared during the current replication attempt, including repeated entries on retries. It is separate from downloaded Chunks and Metadata, and is neither a Vault file count nor a count of entries already present locally. It appears before the upload count, disappears after three seconds without a change, and reappears when the count changes. The ⏩ status icon follows comparison activity independently of that timer.
-
-### Customising status items with CSS snippets
-
-The status bar and editor overlay use individual spans with the common `livesync-stat-` class prefix. CSS snippets can hide or style the items we need. For example, this hides the comparison count and P2P summary:
-
-```css
-.livesync-stat-ff,
-.livesync-stat-p2p {
-    display: none;
-}
+```bash
+npm run bootstrap
+npm run build --prefix apps/obsidian      # main.js
+npm run check --prefix apps/obsidian      # type checks, lint, Svelte checks
+npm run test:unit --prefix apps/obsidian
 ```
 
-The item classes include `livesync-stat-network`, `livesync-stat-sync`, `livesync-stat-sent`, `livesync-stat-push-remaining`, `livesync-stat-arrived`, `livesync-stat-pull-remaining`, `livesync-stat-ff`, and `livesync-stat-p2p`. File-processing items use `livesync-stat-file-processing`, `livesync-stat-file-pending`, and `livesync-stat-file-batched`; queue items use `livesync-stat-queue-` followed by `replication`, `database`, `storage`, `chunk-initial`, `chunk-retrying`, `plugin-scan`, `hidden-files`, or `conflicts`. The skipped-file indicator uses `livesync-stat-file-skip`.
+The same source also produces the browser client (`src/apps/notes/`) and the LiveSync CLI (`src/apps/cli/`) that the Tabularium server uses.
 
-All items also have `livesync-stat-item`. Numeric children use `livesync-stat-value`, tabular digits, and right alignment. Each numeric item retains its widest displayed digit count during an active period, reducing movement as counts decrease. The editor overlay uses wider gaps between items, while remaining counts stay beside their transfer totals.
+## Licence
 
-Inactive items receive `livesync-stat-inactive` instead of the HTML `hidden` attribute. The default CSS hides them immediately. They retain their last text, numeric width, and position amongst the other items so that CSS snippets can customise how they disappear. The numeric width starts afresh when an item becomes active again.
-
-## Tips and Troubleshooting
-- If you want a faster and simpler initial replication when setting up subsequent devices, see the [Fast Setup Guide](docs/tips/fast-setup.md).
-- Configure [Hidden File Sync](docs/tips/hidden-file-sync.md) only after ordinary note synchronisation works.
-- If Obsidian or LiveSync cannot start normally, use [Recovery and flag files](docs/recovery.md) before changing or resetting a remote database.
-- Self-hosted LiveSync 1.0 requires Obsidian 1.7.2 or later. If you need to use 1.0 on an earlier Obsidian version, please [open an issue](https://github.com/vrtmrz/obsidian-livesync/issues/new?template=issue-report.md) with your version, platform, and reason for remaining on it so that we can assess whether extending support is practical. The standard Community Plugins installer otherwise selects an older compatible plug-in release.
-- If you are having problems getting the plug-in working, see [Tips and Troubleshooting](docs/troubleshooting.md).
-
-## Acknowledgements
-The project has been in continual progress and harmony thanks to the following:  
-- Many [Contributors](https://github.com/vrtmrz/obsidian-livesync/graphs/contributors).  
-- Many [GitHub Sponsors](https://github.com/sponsors/vrtmrz#sponsors).  
-- JetBrains Community Programs / Support for Open-Source Projects. <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrains logo" height="24">  
-
-May those who have contributed be honoured and remembered for their kindness and generosity.
-
-## Development Guide
-Please refer to the [Development Guide](devs.md) for development setup, testing infrastructure, code conventions, and more.
-
-## License
-
-Licensed under the MIT License.
+MIT, as Self-hosted LiveSync, whose copyright notice is kept in `LICENSE`. Custom File Explorer sorting is by SebastianMC.
