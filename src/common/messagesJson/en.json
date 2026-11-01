@@ -1627,6 +1627,7 @@
     "tabularium.release.0.24.0": "Tabularius can use Gemini, DeepSeek and a local Ollama as model providers. Each account can keep several colour schemes of its own; the page tint now shades every layer evenly. Web notes greet with the notes changed last when none is open; proposals from the clerk show under its answer; password managers leave passphrases and keys alone.",
     "tabularium.release.0.24.1": "The name on the sign-in page is readable with a dark sidebar scheme.",
     "tabularium.release.0.24.2": "Passphrases and keys typed on the web pages are shown as dots again (0.24.0 and 0.24.1 showed them as text). Restoring a scheduled backup works with the deployment's own Compose files.",
+    "tabularium.release.0.24.3": "Tabularius never fetches a web page from a host registered as forbidden among the SSH hosts, in any permission mode, including after a redirect.",
     "tabularium.release.0.3.0": "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
     "tabularium.release.0.4.0": "Interface in English, Chinese and Latin; web notes can be edited.",
     "tabularium.release.0.5.0": "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",

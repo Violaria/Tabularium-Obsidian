@@ -8210,6 +8210,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Sententiae arcanae et claves in paginis interretis rursus ut puncta apparent (0.24.0 et 0.24.1 eas ut textum ostendebant). Restitutio exemplorum statutorum cum ipsis Compose deploymentis plicis nunc operatur.",
         zh: "网页上输入的密码短语与密钥重新显示为圆点（0.24.0 和 0.24.1 显示为明文）。用部署本身的 Compose 文件恢复定时备份现在可以正常工作。",
     },
+    "tabularium.release.0.24.3": {
+        def: "Tabularius never fetches a web page from a host registered as forbidden among the SSH hosts, in any permission mode, including after a redirect.",
+        la: "Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.",
+        zh: "SSH 主机中登记为禁止的主机，Tabularius 在任何档位都不会抓取指向它的网页（跳转之后也一样）。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
