@@ -3,7 +3,6 @@ import { hint } from "./hint";
 import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@vrtmrz/livesync-commonlib/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
-import { type SetupManager, UserMode } from "@/modules/features/SetupManager";
 import type { LiveSyncCore } from "@/main";
 import { $msg } from "@/common/translation";
 import {
@@ -41,13 +40,11 @@ export class TabulariumServer {
     readonly app: Plugin["app"];
     private readonly plugin: Plugin;
     private readonly core: LiveSyncCore;
-    private readonly setupManager: SetupManager;
 
-    constructor(plugin: Plugin, core: LiveSyncCore, setupManager: SetupManager) {
+    constructor(plugin: Plugin, core: LiveSyncCore) {
         this.plugin = plugin;
         this.app = plugin.app;
         this.core = core;
-        this.setupManager = setupManager;
     }
 
     private get file() {
@@ -197,10 +194,9 @@ export class TabulariumServer {
             try {
                 if (settings.currentSettings().configPassphraseStore !== "LOCALSTORAGE")
                     await settings.changeConfigurationEncryption("LOCALSTORAGE", randomKey());
-                await this.setupManager.applySetting(
-                    await prepare(),
-                    initialise === "upload" ? UserMode.NewUser : UserMode.ExistingUser
-                );
+                const newSettings = await prepare();
+                settings.clearUsedPassphrase();
+                await settings.applyExternalSettings(newSettings, true);
                 // A device that synchronised with LiveSync before keeps that local database, whose documents carry IDs
                 // without path obfuscation; the gateway refuses them. The upload starts from an empty database that the
                 // restart fills from the vault's files.
@@ -470,8 +466,8 @@ class ServerModal extends Modal {
     }
 }
 
-export function installTabulariumServer(plugin: Plugin, core: LiveSyncCore, setupManager: SetupManager) {
-    const server = new TabulariumServer(plugin, core, setupManager);
+export function installTabulariumServer(plugin: Plugin, core: LiveSyncCore) {
+    const server = new TabulariumServer(plugin, core);
     server.install();
     return server;
 }

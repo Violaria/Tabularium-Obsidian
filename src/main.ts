@@ -23,7 +23,6 @@ import type { ServiceModules } from "./types.ts";
 import { setNoticeClass } from "@vrtmrz/livesync-commonlib/compat/mock_and_interop/wrapper";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { LiveSyncBaseCore } from "./LiveSyncBaseCore.ts";
-import { SetupManager } from "./modules/features/SetupManager.ts";
 import { enableI18nFeature } from "./serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
 import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
@@ -164,7 +163,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     new ModuleObsidianDocumentHistory(this, core),
                     new ModuleObsidianGlobalHistory(this, core),
                     // new ModuleDev(this, core),
-                    new SetupManager(core), // this should be moved to core?
                 ];
                 return extraModules;
             },
@@ -177,8 +175,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 const featuresInitialiser = enableI18nFeature;
                 const curriedFeature = () => featuresInitialiser(core);
                 core.services.appLifecycle.onLayoutReady.addHandler(curriedFeature);
-                const setupManager = core.getModule(SetupManager);
-                this.tabularium = installTabulariumServer(this, core, setupManager);
+                this.tabularium = installTabulariumServer(this, core);
                 this.kindle = installKindle(this, this.tabularium, core);
                 this.share = installShare(this, this.tabularium, core, () => this.sorting);
                 this.linkRepair = installLinkRepair(this, core);

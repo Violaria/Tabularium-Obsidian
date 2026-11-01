@@ -132,7 +132,6 @@ export class LiveSyncBaseCore<
 
     /**
      * Get a module by its class. Throws an error if not found.
-     * Mostly used for getting SetupManager.
      * @param constructor
      * @returns
      */
