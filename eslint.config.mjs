@@ -13,8 +13,6 @@ const lintProjects = [
     "./src/apps/cli/tsconfig.json",
     "./src/apps/webapp/tsconfig.json",
     "./src/apps/notes/tsconfig.json",
-    "./src/apps/webpeer/tsconfig.app.json",
-    "./src/apps/webpeer/tsconfig.node.json",
 ];
 export default defineConfig([
     globalIgnores([
@@ -25,7 +23,6 @@ export default defineConfig([
         "**/main.js",
         "main_org.js",
         "pouchdb-browser.js",
-        "version-bump.mjs",
         "package.json",
         "**/*.json",
         "**/.eslintrc.js.bak",

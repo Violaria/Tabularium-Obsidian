@@ -41,8 +41,6 @@ export default defineConfig(
                     "./src/apps/cli/tsconfig.json",
                     "./src/apps/webapp/tsconfig.json",
                     "./src/apps/notes/tsconfig.json",
-                    "./src/apps/webpeer/tsconfig.app.json",
-                    "./src/apps/webpeer/tsconfig.node.json",
                 ],
                 tsconfigRootDir: import.meta.dirname,
             },
