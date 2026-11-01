@@ -1625,6 +1625,7 @@
     "tabularium.release.0.23.0": "Selecting text in a note shows a format toolbar, and right-click offers an Insert submenu (tables, code blocks, Mermaid flowcharts, sequence diagrams, mind maps, Gantt charts, formulas, callouts, dividers); each is also a command. Web notes use the same actions and now edit in source, live render or split view, read rendered or as source, and draw $formulas$. Scroll bars are thin throughout the web pages.",
     "tabularium.release.0.23.1": "Password managers no longer put their autofill button on the web pages' ordinary fields (the clerk's message box, searches, settings); sign-in and password fields work with them as before.",
     "tabularium.release.0.24.0": "Tabularius can use Gemini, DeepSeek and a local Ollama as model providers. Each account can keep several colour schemes of its own; the page tint now shades every layer evenly. Web notes greet with the notes changed last when none is open; proposals from the clerk show under its answer; password managers leave passphrases and keys alone.",
+    "tabularium.release.0.24.1": "The name on the sign-in page is readable with a dark sidebar scheme.",
     "tabularium.release.0.3.0": "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
     "tabularium.release.0.4.0": "Interface in English, Chinese and Latin; web notes can be edited.",
     "tabularium.release.0.5.0": "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",

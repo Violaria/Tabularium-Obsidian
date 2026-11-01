@@ -8200,6 +8200,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tabularius Gemini, DeepSeek et Ollama localem ut praebitores exemplarium adhibere potest. Quisque usus plures rationes colorum suas servare potest; tinctura paginae omnes gradus aequaliter colorat. Commentarii interretis, nullo aperto, salutant et commentarios nuper mutatos ostendunt; propositiones scribae sub responso apparent; custodes tesserarum sententias arcanas et claves relinquunt.",
         zh: "Tabularius 可以使用 Gemini、DeepSeek 和本机的 Ollama 作为模型提供商。每个账户可以保存多套自己的配色方案；页面浓淡均匀地作用于各层。云笔记没有打开笔记时显示欢迎页和最近修改的笔记；书记员的提案显示在回答下方；密码管理器不再干扰密码短语和密钥输入框。",
     },
+    "tabularium.release.0.24.1": {
+        def: "The name on the sign-in page is readable with a dark sidebar scheme.",
+        la: "Nomen in pagina ingressus legi potest cum ratione lateris obscuri.",
+        zh: "使用深色侧栏的配色时，登录页上的名称不再看不清。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
