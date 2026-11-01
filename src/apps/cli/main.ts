@@ -1,4 +1,3 @@
-import { useP2PSettingsPreparation } from "@/serviceFeatures/useP2PSettingsPreparation";
 import { NodeServiceContext, NodeServiceHub } from "./services/NodeServiceHub";
 import { LiveSyncBaseCore, type StartupDatabaseOptions } from "@/LiveSyncBaseCore";
 import { initialiseServiceModulesCLI } from "./serviceModules/CLIServiceModules";
@@ -24,7 +23,6 @@ import { getForceRequirementError } from "./commands/utils";
 import { getPathFromUXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
 import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
 import { IgnoreRules } from "./serviceModules/IgnoreRules";
-import { useP2PReplicatorFeature, type UseP2PReplicatorResult } from "@vrtmrz/livesync-commonlib/p2p";
 import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
 import type { ReplicationSchedulingControl } from "@/serviceFeatures/replicationScheduling";
 import { createNodeStandardIo, fsPromises as fs, path } from "@vrtmrz/livesync-commonlib/node";
@@ -98,16 +96,11 @@ Arguments:
 Commands:
     daemon                  (default) Run mirror scan then continuously sync CouchDB <-> local filesystem
     sync                    Run one replication cycle and exit
-    p2p-peers <timeout>     Show discovered peers as [peer]\t<peer-id>\t<peer-name>
-    p2p-sync <peer> <timeout>
-                            Sync with the specified peer-id or peer-name
-    p2p-host                Start P2P host mode and wait until interrupted
     rebuild                 Rebuild local and remote databases from the selected Vault (requires --force)
     fetch                   Replace the local database with remote state and reflect it to the Vault (requires --force)
     push <src> <dst>        Push local file <src> into local database path <dst>
     pull <src> <dst>        Pull file <src> from local database into local file <dst>
     pull-rev <src> <dst> <rev>   Pull file <src> at specific revision <rev> into local file <dst>
-    setup <setupURI>        Apply setup URI to settings file
     put <dst>               Read UTF-8 content from stdin and write to local database path <dst>
     cat <src>               Read file <src> from local database and write to stdout
     cat-rev <src> <rev>     Read file <src> at specific revision <rev> and write to stdout
@@ -148,13 +141,9 @@ Examples:
     livesync-cli ./my-database                        Run daemon (LiveSync mode)
     livesync-cli ./my-database --interval 30          Run daemon (polling every 30s)
     livesync-cli ./my-database sync
-    livesync-cli ./my-database p2p-peers 5
-    livesync-cli ./my-database p2p-sync my-peer-name 15
-    livesync-cli ./my-database p2p-host
     livesync-cli ./my-database --settings ./custom-settings.json push ./note.md folder/note.md
     livesync-cli ./my-database pull folder/note.md ./exports/note.md
     livesync-cli ./my-database pull-rev folder/note.md ./exports/note.old.md 3-abcdef
-    livesync-cli ./my-database setup "obsidian://setuplivesync?settings=..."
     echo "Hello" | livesync-cli ./my-database put notes/hello.md
     livesync-cli ./my-database cat notes/hello.md
     livesync-cli ./my-database cat-rev notes/hello.md 3-abcdef
@@ -354,7 +343,6 @@ export async function main(
         options.command === "remote-add" ||
         options.command === "remote-ls" ||
         options.command === "remote-export" ||
-        options.command === "p2p-peers" ||
         options.command === "info" ||
         options.command === "rm" ||
         options.command === "resolve" ||
@@ -482,17 +470,12 @@ export async function main(
     const originalSettingsText = await fs.readFile(settingsPath, "utf-8").catch(() => undefined);
     let latestPreparedSettingsText: string | undefined;
     let preparedSettingsRevision = 0;
-    let commandIsRunning = false;
-    let commandPreparedSettingsTexts: string[] = [];
 
     (settingService as InjectableSettingService<NodeServiceContext>).saveData.setHandler(
         async (data: ObsidianLiveSyncSettings) => {
             try {
                 latestPreparedSettingsText = JSON.stringify(data, null, 2);
                 preparedSettingsRevision++;
-                if (commandIsRunning) {
-                    commandPreparedSettingsTexts.push(latestPreparedSettingsText);
-                }
                 if (options.verbose) {
                     writeStderrLine(standardIo, `[Settings] Prepared an update for ${settingsPath}`);
                 }
@@ -523,7 +506,6 @@ export async function main(
     );
 
     // Create LiveSync core
-    let p2pReplicator: UseP2PReplicatorResult | undefined;
     let replicationScheduling: ReplicationSchedulingControl | undefined;
     const core = new LiveSyncBaseCore(
         serviceHubInstance,
@@ -543,10 +525,6 @@ export async function main(
             if (vaultSyncMode && vaultSyncMode.scanOnStartup !== false) {
                 useOfflineScanner(core);
             }
-            // Register P2P replicator feature.
-            p2pReplicator = useP2PReplicatorFeature(core, undefined, undefined, {
-                prepareP2PSettings: useP2PSettingsPreparation(core.services.API.webCompatFetch.bind(core.services.API)),
-            });
             // Add target filter to prevent internal files are handled
             core.services.vault.isTargetFile.addHandler(async (target) => {
                 const targetPath = stripAllPrefixes(getPathFromUXFileInfo(target));
@@ -641,14 +619,6 @@ export async function main(
             syncOnFileOpen: settingsBeforeSuspend.syncOnFileOpen,
             syncAfterMerge: settingsBeforeSuspend.syncAfterMerge,
         };
-        const originalP2PSettings = {
-            P2P_Enabled: settingsBeforeSuspend.P2P_Enabled,
-            P2P_AutoAccepting: settingsBeforeSuspend.P2P_AutoAccepting,
-            P2P_AutoStart: settingsBeforeSuspend.P2P_AutoStart,
-            P2P_AutoBroadcast: settingsBeforeSuspend.P2P_AutoBroadcast,
-            P2P_AutoSyncPeers: settingsBeforeSuspend.P2P_AutoSyncPeers,
-            P2P_AutoWatchPeers: settingsBeforeSuspend.P2P_AutoWatchPeers,
-        };
         await core.services.setting.suspendAllSync();
         const settingsAfterSuspend = cloneSettings(core.services.setting.currentSettings());
         let readyResult = false;
@@ -698,31 +668,17 @@ export async function main(
             infoLog("");
         }
 
-        commandPreparedSettingsTexts = [];
-        let result: boolean;
-        try {
-            commandIsRunning = true;
-            result = await commandRunner(options, {
-                databasePath,
-                vaultPath,
-                core,
-                replicationScheduling,
-                p2pReplicator,
-                settingsPath,
-                originalSyncSettings,
-                originalP2PSettings,
-            });
-        } finally {
-            commandIsRunning = false;
-        }
+        const result = await commandRunner(options, {
+            databasePath,
+            vaultPath,
+            core,
+            replicationScheduling,
+            settingsPath,
+            originalSyncSettings,
+        });
 
         let settingsTextToCommit: string | undefined;
-        if (result && options.command === "setup") {
-            settingsTextToCommit = commandPreparedSettingsTexts[0];
-            if (settingsTextToCommit === undefined) {
-                throw new Error("The setup command completed without preparing its settings update.");
-            }
-        } else if (result && (isSettingsWriteCommand(options.command) || options.writeSettings)) {
+        if (result && (isSettingsWriteCommand(options.command) || options.writeSettings)) {
             const runtimeSettingsAfterCommand = cloneSettings(core.services.setting.currentSettings());
             const durableSettingsAfterCommand = reconcileDurableSettings({
                 durableBase: durableSettingsBeforeCommand,

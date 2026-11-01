@@ -24,7 +24,6 @@ src/apps/cli/testdeno/
     cli.ts
     docker.ts
     env.ts
-    p2p.ts
     settings.ts
     temp.ts
   test-*.ts
@@ -36,7 +35,6 @@ src/apps/cli/testdeno/
 - Use `test-<feature>.ts`.
 - Use names aligned with existing bash tests when porting, for example:
   - `test-sync-locked-remote.ts`
-  - `test-p2p-sync.ts`
 
 ## Core helper usage
 
@@ -60,22 +58,15 @@ await using workDir = await TempDir.create("livesync-cli-my-test");
 - `applyCouchdbSettings(...)`: applies CouchDB fields.
 - `applyRemoteSyncSettings(...)`: applies remote and encryption fields.
 - `applyP2pSettings(...)`: applies P2P fields.
-- `applyP2pTestTweaks(...)`: enables P2P-only test profile.
+- `applyP2pTestTweaks(...)`: enables a P2P-only profile (a remote that is not CouchDB, for the remote-administration exit codes).
 
 ### Docker services
 
 - `startCouchdb(...)`, `stopCouchdb()`
-- `startP2pRelay()`, `stopP2pRelay()`
-
-### P2P discovery
-
-- `discoverPeer(...)`
-- `maybeStartLocalRelay(...)`
-- `stopLocalRelayIfStarted(...)`
 
 ### Background host process
 
-Use `startCliInBackground(...)` for long-running host mode such as `p2p-host`.
+Use `startCliInBackground(...)` for long-running commands such as `daemon`.
 
 ## Recommended test structure
 
@@ -107,7 +98,6 @@ Deno.test("feature: behaviour", async () => {
 - Re-run sync operations where the protocol is eventually consistent.
 - For network-sensitive commands, use `LIVESYNC_CLI_RETRY` during debugging.
 - Keep Docker container reuse disabled by default unless debugging.
-- Use `npm run test:e2e:cli:p2p` for canonical P2P validation. It runs the Deno scenario in Compose because host networking and WebRTC candidate selection are not reproducible across environments. Individual `deno task test:p2p-*` tasks remain available when explicitly invoked for cross-platform diagnostics, but are not selected by the default suite or CI.
 
 ## Environment variables
 
@@ -122,21 +112,11 @@ Common variables:
 - `LIVESYNC_CLI_RETRY`
 - `LIVESYNC_DEBUG_KEEP_DOCKER`
 
-P2P variables:
-
-- `RELAY`
-- `ROOM_ID`
-- `PASSPHRASE`
-- `APP_ID`
-- `PEERS_TIMEOUT`
-- `SYNC_TIMEOUT`
-- `USE_INTERNAL_RELAY`
-
 ## Adding a new test task
 
 1. Add the test file under `src/apps/cli/testdeno/`.
 2. Add a task in `src/apps/cli/testdeno/deno.json`.
-3. Update `src/apps/cli/testdeno/test_dev_deno.md`.
+3. Add it to `ci-tasks.json` if it belongs in the default suite.
 4. Run the new task locally.
 
 ## Validation checklist

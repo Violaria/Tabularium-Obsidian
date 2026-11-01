@@ -72,9 +72,6 @@ function injectBanner(): import("vite").Plugin {
 const buildInputs: Record<string, string> = {
     index: resolve(__dirname, "entrypoint.ts"),
 };
-if (process.env.LIVESYNC_CLI_TEST_SUPPORT === "1") {
-    buildInputs["p2p-lifecycle-test"] = resolve(__dirname, "test-support/p2p-lifecycle-entrypoint.ts");
-}
 
 export default defineConfig({
     plugins: [svelte(), injectBanner()],

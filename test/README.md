@@ -1,56 +1,24 @@
 # Test procedures
 
-Run the commands below from the repository root. Test ownership and source layout are described in the [development guide](../devs.md#testing-infrastructure).
-
-## npm 10 clean-installation check
-
-Run this check after changing `package.json`, a workspace manifest, or `package-lock.json`, including a Commonlib dependency update. A successful installation with the npm version bundled with Node.js does not prove that npm 10 accepts the lockfile.
-
-The following sequence matches the installation steps in [unit-ci](../.github/workflows/unit-ci.yml). Use Node.js 24, as configured in that workflow:
-
-```bash
-npx --yes npm@10.9.4 ci --ignore-scripts --no-audit --no-fund
-npm ci
-```
-
-Both commands must complete successfully without changing the lockfile. The first checks npm 10 lockfile compatibility; the second prepares the normal development installation, including lifecycle scripts, for the source checks and tests below. Keep the pinned npm version and command here aligned with CI. This project-side check does not establish the runtime version used by the external Community Review service or replace its authenticated review result.
-
-If Community Review reports widespread TypeScript `error` types across unrelated external packages, first confirm that dependency installation completed successfully. An installation failure can leave external types unresolved and produce misleading source warnings.
+Run the commands below from `apps/obsidian`, inside the Tabularium parent repository (`npm run bootstrap` there first). The parent repository runs the tests across components: real-client synchronisation through the gateway, Tabularius, backups and release packages.
 
 ## Source and unit checks
-
-Run broad checks sequentially. These examples bound the Node.js heap and Vitest workers for machines with limited memory:
 
 ```bash
 NODE_OPTIONS=--max-old-space-size=3072 npm run check
 NODE_OPTIONS=--max-old-space-size=3072 npm run test:unit -- --maxWorkers=1
+npm run test:notes
 ```
 
-`npm run check` includes TypeScript, ESLint, the Community rules, Svelte checks, a production build, and bundle compatibility checks. Inspect installation and source-check failures before interpreting later test results. Add the relevant service or runtime suite for the boundary changed:
+`npm run check` runs TypeScript for the plug-in and its apps, ESLint with the project rules and with the Obsidian Community rules (`lint:community`, `lint:community:tools`; the tools check allows no warnings), Svelte checks, the bundle compatibility check and the trilingual catalogue checks. `npm run check:unreachable` lists source files and tests that no entry reaches; its output should be empty. `test:notes` runs the web notes tests.
+
+After changing `package.json` or `package-lock.json`, confirm that `npm ci` completes without changing the lockfile.
 
 | Boundary | Procedure |
 | --- | --- |
 | Multiple-device file conflicts and stale-file protection | [CouchDB procedure below](#multiple-device-conflict-regression-tests) |
-| Obsidian startup, file watching, persistence, and UI | [Real Obsidian E2E](e2e-obsidian/README.md) |
-| CLI subprocesses, filesystem workflows, and P2P | [CLI Deno tests](../src/apps/cli/testdeno/test_dev_deno.md) and [test authoring](../src/apps/cli/testdeno/CONTRIBUTING_TESTS.md) |
-| WebApp, WebPeer, and browser interoperability | [Browser application tests](browser-apps/README.md) |
-
-## Community Review checks and CI confirmation
-
-Before requesting review or merging source or dependency changes, run the project-side Community checks after dependency installation:
-
-```bash
-NODE_OPTIONS=--max-old-space-size=3072 npm run lint:community
-NODE_OPTIONS=--max-old-space-size=3072 npm run lint:community:tools
-```
-
-The source check uses the official `eslint-plugin-obsidianmd` rules with the repository's [Community configuration](../eslint.community.config.mjs). Run it without `--quiet` so warnings remain visible. Review new warnings as well as errors, and distinguish existing warnings from those introduced by the change. A successful exit alone does not establish that the source has no warnings. The tooling check requires zero warnings.
-
-The [unit-ci workflow](../.github/workflows/unit-ci.yml), in its `Unit Tests` job, runs the npm 10 installation check and then `npm run check`. That script includes `lint:community` and `lint:community:tools`, so source warnings are visible in the CI log as well as during local checks. Source errors fail the gate; source warnings remain visible for review without failing it. The explicit commands above can run these checks independently of the full source-check sequence.
-
-After pushing, confirm that the `Unit Tests` job passed for the exact commit being reviewed, including its `Verify clean installation with npm 10` and `Run source checks` steps. For service-backed changes, also confirm the integration-test job and the relevant runtime checks. A successful run for an earlier commit does not validate later changes.
-
-The local checks and CI use the project's installed rule versions and configured file scope. Record the authenticated external Community Review result separately when that review is required; the project-side checks do not replace it. When the external review reports additional findings, retain its relevant output and investigate differences in installation, type resolution, scope, or rules.
+| CLI subprocesses and filesystem workflows | [CLI mirror tests below](#cli-mirror-regression-tests) and [test authoring](../src/apps/cli/testdeno/CONTRIBUTING_TESTS.md) |
+| Obsidian start-up, file watching and synchronisation with the gateway | `npm run test:gateway` in the parent repository |
 
 ## CLI mirror regression tests
 
@@ -67,15 +35,6 @@ The expected result is seven passing steps. These cover storage-only and databas
 For an ordinary local edit, first reflect the database content into the Vault, confirm its bytes, and then edit that file. The next `mirror` must store the edit without a conflict. For unknown provenance, use `put` to seed only the database and independently create different local content with a newer modification time. The next `mirror` must preserve two independent non-deleted revisions. Read both with `cat-rev`, submit the same local bytes again to check that no additional revision appears, and use `resolve` to select the local content. Confirm that the conflict is gone and the selected content is reflected into the Vault.
 
 `put` deliberately bypasses file provenance, whereas `push` records it. Substituting one for the other changes the scenario. The tests enable `writeDocumentsIfConflicted` for incoming reflection; this setting does not authorise an ordinary save to replace unrelated database content or resolve the conflict. Do not assume which independent root PouchDB selects as the winner.
-
-The [CLI Docker workflow](../.github/workflows/cli-docker.yml) runs the corresponding Bash suite. From the repository root, build and check that path with:
-
-```bash
-NODE_OPTIONS=--max-old-space-size=3072 npm run build:docker --workspace self-hosted-livesync-cli
-npm run test:e2e:docker:mirror --workspace self-hosted-livesync-cli
-```
-
-The expected result is `PASS=7 FAIL=0`. These mirror suites use temporary local databases and need no CouchDB service. The complete `test:e2e:docker:all` command also runs the other Docker CLI suites and manages a disposable CouchDB fixture; use it to check the full Docker CI gate. Keep the ordinary-edit and unknown-provenance scenarios aligned between the Deno and Bash suites.
 
 ## Multiple-device conflict regression tests
 
@@ -104,7 +63,7 @@ The expected result is seven passing tests. Each case creates a uniquely named r
 npm run test:docker-couchdb:stop
 ```
 
-When using an already running disposable CouchDB service, configure its endpoint and credentials in `.test.env` and run only the test command. The start and stop commands manage the repository's Docker fixture. This suite needs no Object Storage, P2P relay, or Obsidian application. It is also discovered by the existing integration-test CI job.
+When using an already running disposable CouchDB service, configure its endpoint and credentials in `.test.env` and run only the test command. The start and stop commands manage the repository's Docker fixture. This suite needs no Object Storage or Obsidian application.
 
 ### Scenarios and expected results
 
@@ -124,4 +83,4 @@ Each simulated device owns a separate real PouchDB database, `LiveSyncLocalDB` m
 
 This is a service integration test, not a CLI subprocess or Obsidian runtime test. The file and provenance stores are in-memory fixtures; automatic conflict callbacks are observed without running interactive or automatic merge policies. PouchDB revision creation, chunk storage and retrieval, local compaction, CouchDB replication, the CLI command dispatcher, and its resolution operations are real.
 
-Use the CLI and real-Obsidian procedures linked above for argument parsing, persistent host stores, file watchers, and dialogues. In particular, the real-Obsidian `stale-file-restart` scenario exercises persisted pending events and restart. It checks that start-up records an unchanged file whose provenance is missing, then accepts a newer database revision without a conflict, while an unknown historical file remains protected. The `folder-batch` scenario exercises bulk Vault rename and deletion. These scenarios do not simulate a mobile operating system suspending the application.
+Argument parsing, persistent host stores, file watchers and dialogues are covered by the CLI procedure above and by the parent repository's real-client synchronisation regression (`npm run test:gateway`), which drives desktop Obsidian through the harness in `e2e-obsidian/runner/`.

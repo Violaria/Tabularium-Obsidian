@@ -4,7 +4,6 @@ import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-c
 import type { CLICommand } from "./commands/types";
 
 const SETTINGS_WRITE_COMMANDS = new Set<CLICommand>([
-    "setup",
     "remote-add",
     "remote-rm",
     "remote-set",

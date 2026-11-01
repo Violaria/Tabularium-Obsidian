@@ -1,19 +1,14 @@
 import { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import type { NodeServiceContext } from "@/apps/cli/services/NodeServiceContext";
-import type { UseP2PReplicatorResult } from "@vrtmrz/livesync-commonlib/p2p";
 import type { ReplicationSchedulingControl } from "@/serviceFeatures/replicationScheduling";
 
 export type CLICommand =
     | "daemon"
     | "sync"
-    | "p2p-peers"
-    | "p2p-sync"
-    | "p2p-host"
     | "push"
     | "pull"
     | "pull-rev"
-    | "setup"
     | "put"
     | "cat"
     | "cat-rev"
@@ -51,27 +46,13 @@ export interface CLIOptions {
     interval?: number;
 }
 
-export type CLIP2PHostSettings = Pick<
-    ObsidianLiveSyncSettings,
-    | "P2P_Enabled"
-    | "P2P_AutoAccepting"
-    | "P2P_AutoStart"
-    | "P2P_AutoBroadcast"
-    | "P2P_AutoSyncPeers"
-    | "P2P_AutoWatchPeers"
->;
-
 export interface CLICommandContext {
     databasePath: string;
     vaultPath: string;
     core: LiveSyncBaseCore<NodeServiceContext, never>;
     /** Host-composition view used only to coordinate daemon-owned recurring work. */
     replicationScheduling: ReplicationSchedulingControl;
-    /** Current-result contract owned by the P2P service feature. */
-    p2pReplicator?: UseP2PReplicatorResult;
     settingsPath: string;
-    /** Configured P2P policy before temporary CLI startup suspension. */
-    originalP2PSettings: CLIP2PHostSettings;
     originalSyncSettings: Pick<
         ObsidianLiveSyncSettings,
         | "liveSync"
@@ -87,13 +68,9 @@ export interface CLICommandContext {
 export const VALID_COMMANDS = new Set([
     "daemon",
     "sync",
-    "p2p-peers",
-    "p2p-sync",
-    "p2p-host",
     "push",
     "pull",
     "pull-rev",
-    "setup",
     "put",
     "cat",
     "cat-rev",

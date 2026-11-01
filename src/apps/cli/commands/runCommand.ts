@@ -1,11 +1,4 @@
-import { decodeSettingsFromSetupURI } from "@vrtmrz/livesync-commonlib/compat/API/processSetting";
-import { configURIBase } from "@vrtmrz/livesync-commonlib/compat/common/models/shared.const";
-import {
-    DEFAULT_SETTINGS,
-    type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
-    type EntryDoc,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { type FilePathWithPrefix, type EntryDoc } from "@vrtmrz/livesync-commonlib/compat/common/types";
 import { isRemediationModeActive } from "@vrtmrz/livesync-commonlib/compat/common/utils";
 import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
 import {
@@ -15,7 +8,6 @@ import {
 import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
 import type { CLICommandContext, CLIOptions } from "./types";
 import { getForceRequirementError, toArrayBuffer, toDatabaseRelativePath } from "./utils";
-import { collectPeers, openP2PHost, parseTimeoutSeconds, syncWithPeer } from "./p2p";
 import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
 import { fsPromises as fs, getNodeFileCreationTime, path } from "@vrtmrz/livesync-commonlib/node";
 import { writeStderrLine, writeStdoutLine } from "@/apps/cli/cliOutput";
@@ -45,10 +37,7 @@ export async function runCommand(options: CLIOptions, context: CLICommandContext
         writeStderrLine(standardIo, `[Error] ${forceRequirementError}`);
         return false;
     }
-    if (
-        options.command === "fetch" &&
-        isRemediationModeActive(core.services.setting.currentSettings())
-    ) {
+    if (options.command === "fetch" && isRemediationModeActive(core.services.setting.currentSettings())) {
         writeStderrLine(
             standardIo,
             `[Error] The fetch command cannot run while remediation mode is active. Clear the modification-time limit before fetching.`
@@ -56,7 +45,7 @@ export async function runCommand(options: CLIOptions, context: CLICommandContext
         return false;
     }
 
-    const { databasePath, replicationScheduling, settingsPath } = context;
+    const { databasePath, replicationScheduling } = context;
     const vaultPath = context.vaultPath || databasePath;
 
     await core.services.control.activated;
@@ -202,42 +191,6 @@ export async function runCommand(options: CLIOptions, context: CLICommandContext
         return isReplicationCompleted(result);
     }
 
-    if (options.command === "p2p-peers") {
-        if (options.commandArgs.length < 1) {
-            throw new Error("p2p-peers requires one argument: <timeout>");
-        }
-        const timeoutSec = parseTimeoutSeconds(options.commandArgs[0], "p2p-peers");
-        writeStderrLine(standardIo, `[Command] p2p-peers timeout=${timeoutSec}s`);
-        const peers = await collectPeers(core, context.p2pReplicator, timeoutSec);
-        if (peers.length > 0) {
-            standardIo.writeStdout(peers.map((peer) => `[peer]\t${peer.peerId}\t${peer.name}`).join("\n") + "\n");
-        }
-        return true;
-    }
-
-    if (options.command === "p2p-sync") {
-        if (options.commandArgs.length < 2) {
-            throw new Error("p2p-sync requires two arguments: <peer> <timeout>");
-        }
-        const peerToken = options.commandArgs[0].trim();
-        if (!peerToken) {
-            throw new Error("p2p-sync requires a non-empty <peer>");
-        }
-        const timeoutSec = parseTimeoutSeconds(options.commandArgs[1], "p2p-sync");
-        writeStderrLine(standardIo, `[Command] p2p-sync peer=${peerToken} timeout=${timeoutSec}s`);
-        const peer = await syncWithPeer(core, context.p2pReplicator, peerToken, timeoutSec);
-        writeStderrLine(standardIo, `[Done] P2P sync completed with ${peer.name} (${peer.peerId})`);
-        return true;
-    }
-
-    if (options.command === "p2p-host") {
-        writeStderrLine(standardIo, "[Command] p2p-host");
-        await openP2PHost(core, context.p2pReplicator, context.originalP2PSettings);
-        writeStderrLine(standardIo, "[Ready] P2P host is running. Press Ctrl+C to stop.");
-        await new Promise(() => {});
-        return true;
-    }
-
     if (options.command === "push") {
         if (options.commandArgs.length < 2) {
             throw new Error("push requires two arguments: <src> <dst>");
@@ -308,35 +261,6 @@ export async function runCommand(options: CLIOptions, context: CLICommandContext
         } else {
             await fs.writeFile(destinationPath, new Uint8Array(await body.arrayBuffer()));
         }
-        return true;
-    }
-
-    if (options.command === "setup") {
-        if (options.commandArgs.length < 1) {
-            throw new Error("setup requires one argument: <setupURI>");
-        }
-        const setupURI = options.commandArgs[0].trim();
-        if (!setupURI.startsWith(configURIBase)) {
-            throw new Error(`setup URI must start with ${configURIBase}`);
-        }
-        const passphrase = await standardIo.prompt("Enter setup URI passphrase: ");
-        if (!passphrase) {
-            throw new Error("Passphrase is required");
-        }
-        const decoded = await decodeSettingsFromSetupURI(setupURI, passphrase);
-        if (!decoded) {
-            throw new Error("Failed to decode settings from setup URI");
-        }
-        const nextSettings = {
-            ...DEFAULT_SETTINGS,
-            ...decoded,
-            useIndexedDBAdapter: false,
-            isConfigured: true,
-        } as ObsidianLiveSyncSettings;
-
-        writeStdoutLine(standardIo, `[Command] setup -> ${settingsPath}`);
-        await core.services.setting.applyExternalSettings(nextSettings, true);
-        await core.services.control.applySettings();
         return true;
     }
 

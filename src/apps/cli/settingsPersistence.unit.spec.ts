@@ -16,7 +16,6 @@ function settings(overrides: Partial<ObsidianLiveSyncSettings> = {}): ObsidianLi
 
 describe("CLI settings persistence", () => {
     it("identifies commands which change the settings file automatically", () => {
-        expect(isSettingsWriteCommand("setup")).toBe(true);
         expect(isSettingsWriteCommand("remote-add")).toBe(true);
         expect(isSettingsWriteCommand("remote-rm")).toBe(true);
         expect(isSettingsWriteCommand("remote-set")).toBe(true);

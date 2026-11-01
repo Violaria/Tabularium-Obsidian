@@ -371,9 +371,3 @@ display_test_info(){
     echo "Git commit: $(git -C "$SCRIPT_DIR/.." rev-parse --short HEAD 2>/dev/null || echo "N/A")"
     echo "======================"
 }
-
-# Docker-mode hook — source overrides when LIVESYNC_TEST_DOCKER=1.
-if [[ "${LIVESYNC_TEST_DOCKER:-0}" == "1" ]]; then
-    # shellcheck source=/dev/null
-    source "$(dirname "${BASH_SOURCE[0]}")/test-helpers-docker.sh"
-fi
