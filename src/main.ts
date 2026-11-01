@@ -1,4 +1,3 @@
-import { useP2PSettingsPreparation } from "@/serviceFeatures/useP2PSettingsPreparation";
 import { LOG_LEVEL_URGENT } from "octagonal-wheels/common/logger";
 import { getLanguage, Notice, Plugin, type App, type PluginManifest } from "./deps";
 import { setGetLanguage } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
@@ -28,8 +27,6 @@ import { SetupManager } from "./modules/features/SetupManager.ts";
 import { enableI18nFeature } from "./serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
 import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
-import { useP2PReplicatorFeature } from "@vrtmrz/livesync-commonlib/p2p";
-import { createOpenReplicationUI, createOpenRebuildUI } from "./features/P2PSync/P2PReplicator/P2PReplicationUI.ts";
 import { useCompatibilityReview } from "./serviceFeatures/compatibilityReview.ts";
 import { createObsidianCompatibilityReviewUi } from "./serviceFeatures/compatibilityReviewObsidian.ts";
 import { createFileReflectionProvenance } from "./serviceModules/FileReflectionProvenance.ts";
@@ -181,18 +178,6 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 const curriedFeature = () => featuresInitialiser(core);
                 core.services.appLifecycle.onLayoutReady.addHandler(curriedFeature);
                 const setupManager = core.getModule(SetupManager);
-                const createInteractiveP2PReplication = createOpenReplicationUI(this.app);
-                const replicator = useP2PReplicatorFeature(
-                    core,
-                    (_compatibilityReplicator, p2p) => createInteractiveP2PReplication(p2p),
-                    createOpenRebuildUI(this.app),
-                    {
-                        prepareP2PSettings: useP2PSettingsPreparation(
-                            core.services.API.webCompatFetch.bind(core.services.API)
-                        ),
-                    }
-                );
-                setupManager.registerP2PSetupConnectionProbe(replicator.connectionProbe);
                 this.tabularium = installTabulariumServer(this, core, setupManager);
                 this.kindle = installKindle(this, this.tabularium, core);
                 this.share = installShare(this, this.tabularium, core, () => this.sorting);
