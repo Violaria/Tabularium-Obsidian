@@ -9,23 +9,9 @@ const path = process.getBuiltinModule("node:path");
 const root = path.resolve(import.meta.dirname, "..");
 const commonlib = path.join(root, "node_modules/@vrtmrz/livesync-commonlib/dist");
 
-/** Features not loaded by Tabularium (see src/main.ts), the upstream settings panes and set-up wizard it replaced. */
+/** Code whose notices Tabularium never shows: the other apps built from this source, and the parts of Commonlib it does not load. */
 const NOT_LOADED = [
     "src/apps/",
-    "src/features/HiddenFileSync/",
-    "src/features/ConfigSync/",
-    "src/features/P2PSync/",
-    "src/features/ReviewHarness/",
-    "src/features/LocalDatabaseMainte/",
-    "src/modules/features/SettingDialogue/",
-    "src/modules/features/ModuleObsidianSettingAsMarkdown.ts",
-    "src/modules/extras/",
-    "src/serviceFeatures/useP2PReplicatorUI.ts",
-    "src/serviceFeatures/useReviewHarness.ts",
-    "src/serviceFeatures/setupObsidian/setupUri.ts",
-    "src/serviceFeatures/setupObsidian/qrCode.ts",
-    "src/serviceFeatures/setupObsidian/setupManagerHandlers.ts",
-    "src/serviceFeatures/setupObsidian/setupProtocol.ts",
     "dist/replication/trystero/",
     "dist/replication/journal/",
     "dist/serviceFeatures/setupObsidian/",
@@ -54,7 +40,10 @@ const isNoticeLevel = (node: ts.Node) =>
 function textOf(node: ts.Expression, source: ts.SourceFile): string | undefined {
     if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return node.text;
     if (ts.isTemplateExpression(node))
-        return node.head.text + node.templateSpans.map((span) => `\${${span.expression.getText(source)}}` + span.literal.text).join("");
+        return (
+            node.head.text +
+            node.templateSpans.map((span) => `\${${span.expression.getText(source)}}` + span.literal.text).join("")
+        );
     return undefined;
 }
 
@@ -64,24 +53,38 @@ for (const file of scanned) {
     const visit = (node: ts.Node) => {
         let argument: ts.Expression | undefined;
         const level = (arg: ts.Expression) =>
-            isNoticeLevel(arg) || (ts.isConditionalExpression(arg) && (isNoticeLevel(arg.whenTrue) || isNoticeLevel(arg.whenFalse)));
-        if (ts.isCallExpression(node) && node.arguments.length > 1 && node.arguments.slice(1).some(level)) argument = node.arguments[0];
-        if (ts.isNewExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === "Notice") argument = node.arguments?.[0];
+            isNoticeLevel(arg) ||
+            (ts.isConditionalExpression(arg) && (isNoticeLevel(arg.whenTrue) || isNoticeLevel(arg.whenFalse)));
+        if (ts.isCallExpression(node) && node.arguments.length > 1 && node.arguments.slice(1).some(level))
+            argument = node.arguments[0];
+        if (ts.isNewExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === "Notice")
+            argument = node.arguments?.[0];
         const text = argument && textOf(argument, source);
         if (text !== undefined && text.trim() && !found.has(text))
-            found.set(text, `${path.relative(root, file)}:${source.getLineAndCharacterOfPosition(node.getStart()).line + 1}`);
+            found.set(
+                text,
+                `${path.relative(root, file)}:${source.getLineAndCharacterOfPosition(node.getStart()).line + 1}`
+            );
         ts.forEachChild(node, visit);
     };
     visit(source);
 }
 
 const catalogue = Object.fromEntries(
-    ["en", "zh", "la"].map((lang) => [lang, JSON.parse(fs.readFileSync(path.join(root, `src/common/messagesJson/${lang}.json`), "utf8")) as Record<string, string>])
+    ["en", "zh", "la"].map((lang) => [
+        lang,
+        JSON.parse(fs.readFileSync(path.join(root, `src/common/messagesJson/${lang}.json`), "utf8")) as Record<
+            string,
+            string
+        >,
+    ])
 );
 const missing = [...found].filter(([text]) => !catalogue.zh[text] || !catalogue.la[text] || !catalogue.en[text]);
 
 if (process.argv.includes("--list")) {
-    process.stdout.write(JSON.stringify(Object.fromEntries(missing.map(([text, where]) => [text, where])), null, 2) + "\n");
+    process.stdout.write(
+        JSON.stringify(Object.fromEntries(missing.map(([text, where]) => [text, where])), null, 2) + "\n"
+    );
 } else if (missing.length) {
     process.stderr.write(`${missing.length} notices are not in the catalogue in all three languages:\n`);
     for (const [text, where] of missing) process.stderr.write(`  ${where}: ${JSON.stringify(text).slice(0, 120)}\n`);

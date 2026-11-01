@@ -5,11 +5,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: ", quaeso optionem elige quae statum praesentem tabularii tui optime describit. Applicatio deinde plicas tuas modo aptissimo secundum electionem tuam inspiciet.",
             zh: "，请选择最符合你库当前状态的选项。程序会根据你的选择，用最合适的方式检查你的文件。",
         },
-    "(Active)": {
-        def: "(Active)",
-        la: "(Activum)",
-        zh: "（已启用）",
-    },
     "(BETA) Always overwrite with a newer file": {
         def: "(BETA) Always overwrite with a newer file",
         la: "(BETA) Semper plica recentiore superscribe",
@@ -57,11 +52,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "(Milliones characterum)",
         zh: "(百万字符)",
     },
-    "(Missing)": {
-        def: "(Missing)",
-        la: "(Deest)",
-        zh: "（缺失）",
-    },
     "(Not recommended) If set, credentials will be stored in the file.": {
         def: "(Not recommended) If set, credentials will be stored in the file.",
         la: "(Non commendatur) Si constituitur, testimonia in plica servabuntur.",
@@ -72,33 +62,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "(Obsoletum) Adaptatore vetere ad compatibilitatem utere",
         zh: "(已弃用)为兼容性使用旧适配器",
     },
-    "(re)initialise hidden files between storage and database": {
-        def: "(re)initialise hidden files between storage and database",
-        la: "Plicas occultas inter repositorium plicarum et repositorium (re)initia",
-        zh: "（重新）初始化存储与数据库之间的隐藏文件",
-    },
-    "(RegExp) Empty to sync all files. Set filter as a regular expression to limit synchronising files.": {
-        def: "(RegExp) Empty to sync all files. Set filter as a regular expression to limit synchronising files.",
-        la: "(RegExp) Vacuum relinque ut omnes plicae synchronizentur. Filtrum ut expressionem regularem constitue ad plicas synchronizandas limitandas.",
-        zh: "（正则表达式）留空表示同步所有文件。可设置正则表达式来限制需要同步的文件。",
-    },
-    "(RegExp) If this is set, any changes to local and remote files that match this will be skipped.": {
-        def: "(RegExp) If this is set, any changes to local and remote files that match this will be skipped.",
-        la: "(RegExp) Si hoc constituitur, omnes mutationes plicarum localium et remotarum quae huic congruunt praetermittentur.",
-        zh: "（正则表达式）如果已设置，则所有匹配此模式的本地和远端文件变更都会被跳过。",
-    },
-    "(Select this if you already have another synchronising device.) This option adds this device to the same synchronisation.":
-        {
-            def: "(Select this if you already have another synchronising device.) This option adds this device to the same synchronisation.",
-            la: "(Hoc elige si iam aliud instrumentum synchronizans habes.) Haec optio hoc instrumentum eidem synchronizationi addit.",
-            zh: "（如果你已有另一台正在同步的设备，请选择此项。）此选项会把本设备加入同一个同步。",
-        },
-    "(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to LiveSync and want to set it up from scratch.":
-        {
-            def: "(Select this if you are configuring this device as the first synchronisation device.) This option is suitable if you are new to Tabularium and want to set it up from scratch.",
-            la: "(Hoc elige si hoc instrumentum ut primum instrumentum synchronizationis configuras.) Haec optio apta est si Tabularium novus tibi est et eum ab initio constituere vis.",
-            zh: "（如果你正在将此设备配置为第一台同步设备，请选择此项。）此选项适合初次使用 Tabularium，并希望从头开始配置的用户。",
-        },
     "[conflict] ${filename} is conflicted. Merging process has been postponed to the file have got opened.": {
         def: "${filename} has a conflict. Merging has been postponed until the file is opened.",
         la: "${filename} discrepantiam habet. Coniunctio differtur donec plica aperiatur.",
@@ -109,40 +72,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "↑ Fragmenta mittuntur \n${sendingDocs}/(${sentDocsCount} perfecta)",
         zh: "↑ 正在上传数据块 \n${sendingDocs}/（已完成 ${sentDocsCount}）",
     },
-    "↑: Overwrite Remote": {
-        def: "↑: Overwrite Remote",
-        la: "↑: Superscribe remotum",
-        zh: "↑：覆盖远端",
-    },
     "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}": {
         def: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
         la: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
         zh: "↑${this.docSent - docSentOnStart}${pushLast} ↓${this.docArrived - docArrivedOnStart}${pullLast}",
     },
-    "↓: Overwrite Local": {
-        def: "↓: Overwrite Local",
-        la: "↓: Superscribe locale",
-        zh: "↓：覆盖本地",
-    },
-    "⇅: Use newer": {
-        def: "⇅: Use newer",
-        la: "⇅: Utere recentiore",
-        zh: "⇅：使用较新版本",
-    },
     "+1 week": {
         def: "+1 week",
         la: "+1 hebdomas",
         zh: "+1 周",
-    },
-    "> [!INFO]- The connected devices have been detected as follows:\n${devices}": {
-        def: "> [!INFO]- The connected devices have been detected as follows:\n${devices}",
-        la: "> [!INFO]- Instrumenta conexa sic detecta sunt:\n${devices}",
-        zh: "> [!INFO]- 已检测到以下已连接设备：\n${devices}",
-    },
-    "${count} issue(s) detected!": {
-        def: "${count} issue(s) detected!",
-        la: "${count} quaestiones detectae!",
-        zh: "检测到 ${count} 个问题！",
     },
     "${DECRYPTION_FALLBACK_FAILED} on Eden": {
         def: "${DECRYPTION_FALLBACK_FAILED} (inline chunks)",
@@ -204,12 +142,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "${title} Revisio discrepantiae ${displayRev(deleteRevision)} plicae ${path} deleri non potuit.",
         zh: "${title} 无法删除 ${path} 的冲突修订 ${displayRev(deleteRevision)}。",
     },
-    "A Setup URI is a single string of text containing your server address and authentication details. Using a URI, if one was generated by your server installation script, provides a simple and secure configuration.":
-        {
-            def: "A Setup URI is a single string of text containing your server address and authentication details. Using a URI, if one was generated by your server installation script, provides a simple and secure configuration.",
-            la: "Setup URI est una series textus quae inscriptionem ministratoris et singula authenticationis continet. URI uti, si a scripto institutionis ministratoris tui generatum est, configurationem simplicem et tutam praebet.",
-            zh: "Setup URI 是一段包含服务器地址与认证信息的文本。如果服务器安装脚本已经生成了 URI，使用它可以更简单且更安全地完成配置。",
-        },
     "Abort synchronization immediately": {
         def: "Abort synchronization immediately",
         la: "Synchronizationem statim abrumpe",
@@ -220,30 +152,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Accipe",
         zh: "接受",
     },
-    "Accept in session": {
-        def: "Accept in session",
-        la: "Accipe in sessione",
-        zh: "本次会话内接受",
-    },
     ACCEPTED: {
         def: "ACCEPTED",
         la: "ACCEPTUM",
         zh: "已接受",
     },
-    "ACCEPTED (in session)": {
-        def: "ACCEPTED (in session)",
-        la: "ACCEPTUM (in sessione)",
-        zh: "已接受（本次会话）",
-    },
     "Access Key": {
         def: "Access Key",
         la: "Clavis accessus",
         zh: "访问密钥",
-    },
-    "Access Key ID": {
-        def: "Access Key ID",
-        la: "ID clavis accessus",
-        zh: "访问密钥 ID",
     },
     Action: {
         def: "Action",
@@ -254,11 +171,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Activate",
         la: "Activa",
         zh: "启用",
-    },
-    "Active Remote Configuration": {
-        def: "Active Remote Configuration",
-        la: "Configuratio remota activa",
-        zh: "生效中的远程配置",
     },
     "Active replicator does not support ${action}": {
         def: "The active synchronisation connection does not support ${action}",
@@ -280,26 +192,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Adde",
         zh: "添加",
     },
-    "Add default patterns": {
-        def: "Add default patterns",
-        la: "Adde exemplaria praedefinita",
-        zh: "添加默认模式",
-    },
-    "Add new connection": {
-        def: "Add new connection",
-        la: "Adde novam conexionem",
-        zh: "新增连接",
-    },
-    "AddOn Module (ConfigSync) has not been loaded. This is very unexpected situation. Please report this issue.": {
-        def: "AddOn Module (ConfigSync) has not been loaded. This is very unexpected situation. Please report this issue.",
-        la: "Modulus additicius (ConfigSync) non est oneratus. Haec res maxime inopinata est. Quaeso hanc quaestionem nuntia.",
-        zh: "附加模块（ConfigSync）未能加载。这是非常意外的情况。请报告此问题。",
-    },
-    "AddOn Module (HiddenFileSync) has not been loaded. This is very unexpected situation. Please report this issue.": {
-        def: "AddOn Module (HiddenFileSync) has not been loaded. This is very unexpected situation. Please report this issue.",
-        la: "Modulus additicius (HiddenFileSync) non est oneratus. Haec res maxime inopinata est. Quaeso hanc quaestionem nuntia.",
-        zh: "附加模块（HiddenFileSync）未能加载。这是非常意外的情况。请报告此问题。",
-    },
     Advanced: {
         def: "Advanced",
         la: "Provecta",
@@ -310,48 +202,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Optiones provectae",
         zh: "高级设置",
     },
-    "After restarting, the data on this device will be uploaded to the server as the 'master copy'. Please be aware that any unintended data currently on the server will be completely overwritten.":
-        {
-            def: "After restarting, the data on this device will be uploaded to the server as the 'master copy'. Please be aware that any unintended data currently on the server will be completely overwritten.",
-            la: "Post iteratum initium, data in hoc instrumento ad ministratorem ut “exemplar principale” sursum mittentur. Scito omnia data non intenta quae nunc in ministratore sunt omnino superscriptum iri.",
-            zh: "重启后，本设备上的数据将作为「主副本」上传到服务器。请注意，服务器上现有的任何非预期数据都会被完全覆盖。",
-        },
-    "After restarting, the database on this device will be rebuilt using data from the server. If there are any unsynchronised files in this vault, conflicts may occur with the server data.":
-        {
-            def: "After restarting, the database on this device will be rebuilt using data from the server. If there are any unsynchronised files in this vault, conflicts may occur with the server data.",
-            la: "Post iteratum initium, repositorium in hoc instrumento ex datis ministratoris reaedificabitur. Si quae plicae non synchronizatae in hoc tabulario sunt, discrepantiae cum datis ministratoris oriri possunt.",
-            zh: "重启后，将用服务器上的数据重建本设备的数据库。如果本库中有未同步的文件，可能会与服务器数据产生冲突。",
-        },
     "After that, synchronise to a brand new vault on each other device with the new remote one by one.": {
         def: "After that, synchronise to a brand new vault on each other device with the new remote one by one.",
         la: "Deinde, in quoque alio instrumento singillatim cum novo remoto in tabularium omnino novum synchroniza.",
         zh: "之后，在其他设备上逐个用新的远端同步到一个全新的库。",
-    },
-    "All checks passed successfully!": {
-        def: "All checks passed successfully!",
-        la: "Omnes probationes feliciter transiectae sunt!",
-        zh: "所有检查均已通过！",
-    },
-    "All devices have the same progress value (${progress}). Your devices seem to be synchronised. And be able to proceed with Garbage Collection.":
-        {
-            def: "All devices have the same progress value (${progress}). Your devices seem to be synchronised. And be able to proceed with Garbage Collection.",
-            la: "Omnia instrumenta eundem valorem progressus habent (${progress}). Instrumenta tua synchronizata esse videntur et ad collectionem quisquiliarum procedere possunt.",
-            zh: "所有设备的进度值均相同（${progress}）。看起来你的设备已经同步，可以继续执行垃圾回收。",
-        },
-    "All the same or non-existent": {
-        def: "All the same or non-existent",
-        la: "Omnia eadem vel non exstantia",
-        zh: "全部相同或不存在",
-    },
-    "Allow in session": {
-        def: "Allow in session",
-        la: "Permitte in sessione",
-        zh: "本次会话内允许",
-    },
-    "Allow permanently": {
-        def: "Allow permanently",
-        la: "Permitte in perpetuum",
-        zh: "永久允许",
     },
     "Allow sleep during synchronisation": {
         def: "Allow sleep during synchronisation",
@@ -368,12 +222,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Systema operativum dormire sinit dum synchronizationes finitae fiunt.",
         zh: "进行有限次的同步操作时，允许操作系统进入休眠。",
     },
-    "Also, please note that if you are using Peer-to-Peer synchronization, this configuration will be used when you switch to other methods and connect to a remote server in the future.":
-        {
-            def: "Also, please note that if you are using Peer-to-Peer synchronization, this configuration will be used when you switch to other methods and connect to a remote server in the future.",
-            la: "Nota quoque, si synchronizatione inter pares (Peer-to-Peer) uteris, hanc configurationem adhibitum iri cum ad alias methodos transibis et posthac ad ministratorem remotum conectes.",
-            zh: "另外请注意，如果你正在使用点对点同步，当你日后切换到其他方式并连接远端服务器时，将使用此配置。",
-        },
     "Always prompt merge conflicts": {
         def: "Always prompt merge conflicts",
         la: "Semper de discrepantiis conflandis interroga",
@@ -394,21 +242,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Usum repositorii examina (provectum)",
         zh: "分析数据库用量（高级）",
     },
-    "Analyse database usage and generate a TSV report for diagnosis yourself. You can paste the generated report with any spreadsheet you like.":
-        {
-            def: "Analyse database usage and generate a TSV report for diagnosis yourself. You can paste the generated report with any spreadsheet you like.",
-            la: "Analysa usum repositorii et relationem TSV ad diagnosim ipse faciendam genera. Relationem generatam in quamlibet tabulam computatoriam inserere potes.",
-            zh: "分析数据库使用情况并生成 TSV 报告以供您自行诊断。您可以将生成的报告粘贴到您喜欢的任何电子表格中。",
-        },
     Apply: {
         def: "Apply",
         la: "Applica",
         zh: "应用",
-    },
-    "Apply All Selected": {
-        def: "Apply All Selected",
-        la: "Applica omnia electa",
-        zh: "应用所有已选项",
     },
     "Apply Latest Change if Conflicting": {
         def: "Apply Latest Change if Conflicting",
@@ -420,31 +257,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Applica configurationem praeparatam",
         zh: "应用预设配置",
     },
-    "Apply the settings": {
-        def: "Apply the settings",
-        la: "Applica optiones",
-        zh: "应用设置",
-    },
-    "Ask a passphrase at every launch": {
-        def: "Ask a passphrase at every launch",
-        la: "Tesseram arcanam in quoque initio roga",
-        zh: "每次启动时询问密码短语",
-    },
-    "Auto Accepting": {
-        def: "Auto Accepting",
-        la: "Accipiens automatice",
-        zh: "自动接受",
-    },
-    "Auto Connect": {
-        def: "Auto Connect",
-        la: "Conexio automatica",
-        zh: "自动连接",
-    },
-    "Auto Start P2P Connection": {
-        def: "Auto Start P2P Connection",
-        la: "Conexionem P2P automatice incipe",
-        zh: "自动启动 P2P 连接",
-    },
     Automatic: {
         def: "Automatic",
         la: "Automaticum",
@@ -455,20 +267,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Omnes plicas automatice synchroniza cum Obsidian aperitur.",
         zh: "打开 Obsidian 时自动同步所有文件",
     },
-    "Available Peers": {
-        def: "Available Peers",
-        la: "Pares praesto",
-        zh: "可用的对等方",
-    },
     Back: {
         def: "Back",
         la: "Retro",
         zh: "返回",
-    },
-    "Back to non-configured": {
-        def: "Back to non-configured",
-        la: "Retro ad statum non configuratum",
-        zh: "恢复为未配置状态",
     },
     "Back to this revision": {
         def: "Back to this revision",
@@ -506,11 +308,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Ante v0.17.16, adaptatore vetere ad repositorium locale utebamur. Nunc adaptator novus praefertur. Attamen repositorium locale reaedificandum est. Quaeso hoc commutatorium deactiva cum satis temporis habes. Si activum relinquis, etiam dum ex repositorio remoto arcessis, rogaberis ut hoc deactives.",
             zh: "在 v0.17.16 之前,我们使用旧适配器作为本地数据库。现在首选新适配器。但是,它需要重建本地数据库。请在有足够时间时禁用此开关。如果保持启用状态,并且在从远程数据库获取时,系统将要求您禁用此开关。",
         },
-    "Broadcasting?": {
-        def: "Broadcasting?",
-        la: "Divulgaturne?",
-        zh: "正在广播？",
-    },
     "Bucket Name": {
         def: "Bucket Name",
         la: "Nomen situlae",
@@ -541,52 +338,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Abroga omnia et reinitia",
         zh: "全部取消并重启",
     },
-    "Cancel Garbage Collection": {
-        def: "Cancel Garbage Collection",
-        la: "Abroga collectionem quisquiliarum",
-        zh: "取消垃圾回收",
-    },
-    "Changing the encryption algorithm will prevent access to any data previously encrypted with a different algorithm. Ensure that all your devices are configured to use the same algorithm to maintain access to your data.":
-        {
-            def: "Changing the encryption algorithm will prevent access to any data previously encrypted with a different algorithm. Ensure that all your devices are configured to use the same algorithm to maintain access to your data.",
-            la: "Mutatio algorithmi cryptationis accessum ad omnia data antea alio algorithmo cryptata impediet. Cura ut omnia instrumenta tua eodem algorithmo uti configurentur, ut accessum ad data tua serves.",
-            zh: "更改加密算法将导致无法访问此前用其他算法加密的数据。请确保所有设备都配置为使用相同算法，以保持对数据的访问。",
-        },
-    "Changing this setting requires migrating existing data (a bit time may be taken) and restarting Obsidian. Please make sure to back up your data before proceeding.":
-        {
-            def: "Changing this setting requires migrating existing data (a bit time may be taken) and restarting Obsidian. Please make sure to back up your data before proceeding.",
-            la: "Mutatio huius optionis migrationem datorum exstantium (quod aliquantum temporis sumere potest) et iteratum initium Obsidian requirit. Quaeso cura ut exemplar tutelare datorum tuorum facias antequam pergas.",
-            zh: "更改此设置需要迁移现有数据（可能需要一些时间）并重启 Obsidian。请务必在继续之前备份数据。",
-        },
     Check: {
         def: "Check",
         la: "Inspice",
         zh: "立即检查",
     },
-    "Check and convert non-path-obfuscated files": {
-        def: "Check and convert non-path-obfuscated files",
-        la: "Inspice et converte plicas viis non obscuratis",
-        zh: "检查并转换未进行路径混淆的文件",
-    },
     "Check and Processing ${i} / ${files.length}": {
         def: "Checking and processing ${i} / ${files.length}",
         la: "Inspiciuntur et tractantur ${i} / ${files.length}",
         zh: "正在检查和处理 ${i} / ${files.length}",
-    },
-    "Check for documents that have not been converted to path-obfuscated IDs and convert them if necessary.": {
-        def: "Check for documents that have not been converted to path-obfuscated IDs and convert them if necessary.",
-        la: "Inspice documenta quae in identificatores viis obscuratis non conversa sunt, et ea si opus est converte.",
-        zh: "检查尚未转换为路径混淆 ID 的文档，并在需要时将其转换。",
-    },
-    "Check server requirements": {
-        def: "Check server requirements",
-        la: "Inspice requisita ministratoris",
-        zh: "检查服务器要求",
-    },
-    "Checking connection... Please wait.": {
-        def: "Checking connection... Please wait.",
-        la: "Conexio inspicitur... Quaeso exspecta.",
-        zh: "正在检查连接…请稍候。",
     },
     Chunks: {
         def: "Chunks",
@@ -618,11 +378,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Claude",
         zh: "关闭",
     },
-    "Close & Disconnect": {
-        def: "Close & Disconnect",
-        la: "Claude et disiunge",
-        zh: "关闭并断开连接",
-    },
     "Close this dialog": {
         def: "Close this dialog",
         la: "Claude hunc dialogum",
@@ -632,366 +387,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Closed:",
         la: "Clausi:",
         zh: "已关闭：",
-    },
-    "cmdConfigSync.showCustomizationSync": {
-        def: "Show Customization sync",
-        la: "Monstra synchronizationem optionum propriarum",
-        zh: "显示自定义同步",
-    },
-    "cmdHiddenFileSync.applyingUntrackedChanges": {
-        def: "Applying untracked changes...",
-        la: "Mutationes non vestigatae applicantur...",
-        zh: "正在应用未跟踪的变更...",
-    },
-    "cmdHiddenFileSync.checkingProgress": {
-        def: "Checking ${progress}/${total}",
-        la: "Inspicitur ${progress}/${total}",
-        zh: "正在检查 ${progress}/${total}",
-    },
-    "cmdHiddenFileSync.checkingRemainingDatabaseFirst": {
-        def: "Checking for remaining database and storage changes...",
-        la: "Mutationes reliquae repositorii datorum et repositorii plicarum inspiciuntur...",
-        zh: "正在检查剩余的数据库和存储变更...",
-    },
-    "cmdHiddenFileSync.checkingRemainingStorageFirst": {
-        def: "Checking for remaining storage and database changes...",
-        la: "Mutationes reliquae repositorii plicarum et repositorii datorum inspiciuntur...",
-        zh: "正在检查剩余的存储和数据库变更...",
-    },
-    "cmdHiddenFileSync.databaseToStorageCount": {
-        def: "Database to Storage: ${count} files.",
-        la: "Repositorium -> Repositorium plicarum: ${count} plicae.",
-        zh: "数据库到存储：${count} 个文件。",
-    },
-    "cmdHiddenFileSync.enumeratingDatabaseFiles": {
-        def: "Enumerating database files...",
-        la: "Plicae repositorii enumerantur...",
-        zh: "正在枚举数据库文件...",
-    },
-    "cmdHiddenFileSync.enumeratingLocalFiles": {
-        def: "Enumerating local files...",
-        la: "Plicae locales enumerantur...",
-        zh: "正在枚举本地文件...",
-    },
-    "cmdHiddenFileSync.failedStorageChange": {
-        def: "Failed to process storage change file:${file}",
-        la: "Tractatio plicae mutatae in repositorio plicarum defecit:${file}",
-        zh: "处理存储变更文件失败：${file}",
-    },
-    "cmdHiddenFileSync.initialising": {
-        def: "Initialising hidden files sync...",
-        la: "Synchronizatio plicarum occultarum initiatur...",
-        zh: "正在初始化隐藏文件同步...",
-    },
-    "cmdHiddenFileSync.mergeSummary": {
-        def: "Storage to Database: ${toDatabase} files\n Database to Storage: ${toStorage} files",
-        la: "Repositorium plicarum -> Repositorium: ${toDatabase} plicae\n Repositorium -> Repositorium plicarum: ${toStorage} plicae",
-        zh: "存储到数据库：${toDatabase} 个文件\n 数据库到存储：${toStorage} 个文件",
-    },
-    "cmdHiddenFileSync.preparing": {
-        def: "Preparing Hidden File Sync...",
-        la: "Synchronizatio plicarum occultarum paratur...",
-        zh: "正在准备隐藏文件同步...",
-    },
-    "cmdHiddenFileSync.progressApplyUntracked": {
-        def: "[Apply untracked changes ]",
-        la: "[Applica mutationes non vestigatas ]",
-        zh: "[应用未跟踪的变更 ]",
-    },
-    "cmdHiddenFileSync.progressDBToStorage": {
-        def: "[DB -> Storage ]",
-        la: "[Repositorium -> Repositorium plicarum ]",
-        zh: "[数据库 -> 存储 ]",
-    },
-    "cmdHiddenFileSync.progressInitialise": {
-        def: "[Initialise]",
-        la: "[Initia]",
-        zh: "[初始化]",
-    },
-    "cmdHiddenFileSync.progressRebuildByDatabase": {
-        def: "[Rebuild by Database ]",
-        la: "[Reaedifica ex repositorio ]",
-        zh: "[按数据库重建 ]",
-    },
-    "cmdHiddenFileSync.progressRebuildByMerge": {
-        def: "[Rebuild by Merge ]",
-        la: "[Reaedifica conflando ]",
-        zh: "[按合并重建 ]",
-    },
-    "cmdHiddenFileSync.progressRebuildByStorage": {
-        def: "[Rebuild by Storage ]",
-        la: "[Reaedifica ex repositorio plicarum ]",
-        zh: "[按存储重建 ]",
-    },
-    "cmdHiddenFileSync.progressScanningDBToStorage": {
-        def: "[Scanning DB -> Storage ]",
-        la: "[Perscrutatio Repositorium -> Repositorium plicarum ]",
-        zh: "[扫描 数据库 -> 存储 ]",
-    },
-    "cmdHiddenFileSync.progressScanningStorageToDB": {
-        def: "[Scanning Storage -> DB ]",
-        la: "[Perscrutatio Repositorium plicarum -> Repositorium ]",
-        zh: "[扫描 存储 -> 数据库 ]",
-    },
-    "cmdHiddenFileSync.progressStorageToDB": {
-        def: "[Storage -> DB ]",
-        la: "[Repositorium plicarum -> Repositorium ]",
-        zh: "[存储 -> 数据库 ]",
-    },
-    "cmdHiddenFileSync.rebuildingByMerge": {
-        def: "Rebuilding hidden files from the storage and the local database.",
-        la: "Plicae occultae ex repositorio plicarum et repositorio locali reaedificantur.",
-        zh: "正在根据存储和本地数据库重建隐藏文件。",
-    },
-    "cmdHiddenFileSync.rebuildingFromStorage": {
-        def: "Rebuilding hidden files from the storage.",
-        la: "Plicae occultae ex repositorio plicarum reaedificantur.",
-        zh: "正在根据存储重建隐藏文件。",
-    },
-    "cmdHiddenFileSync.scanningDatabaseFiles": {
-        def: "Scanning database files...",
-        la: "Plicae repositorii perscrutantur...",
-        zh: "正在扫描数据库文件...",
-    },
-    "cmdHiddenFileSync.scanningStorageFiles": {
-        def: "Scanning storage files...",
-        la: "Plicae repositorii plicarum perscrutantur...",
-        zh: "正在扫描存储文件...",
-    },
-    "cmdHiddenFileSync.startedMerge": {
-        def: "Started: Database <--> Storage (by modified date)",
-        la: "Incepta: Repositorium <--> Repositorium plicarum (per diem mutationis)",
-        zh: "已开始：数据库 <--> 存储（按修改日期）",
-    },
-    "cmdHiddenFileSync.startedPull": {
-        def: "Started: Database --> Storage",
-        la: "Incepta: Repositorium --> Repositorium plicarum",
-        zh: "已开始：数据库 --> 存储",
-    },
-    "cmdHiddenFileSync.startedPullOnlyNew": {
-        def: "Started: Database --> Storage (Only New)",
-        la: "Incepta: Repositorium --> Repositorium plicarum (nova tantum)",
-        zh: "已开始：数据库 --> 存储（仅新文件）",
-    },
-    "cmdHiddenFileSync.startedPush": {
-        def: "Started: Storage --> Database",
-        la: "Incepta: Repositorium plicarum --> Repositorium",
-        zh: "已开始：存储 --> 数据库",
-    },
-    "cmdHiddenFileSync.startedPushOnlyNew": {
-        def: "Started: Storage --> Database (Only New)",
-        la: "Incepta: Repositorium plicarum --> Repositorium (nova tantum)",
-        zh: "已开始：存储 --> 数据库（仅新文件）",
-    },
-    "cmdHiddenFileSync.startProcessing": {
-        def: "Start processing...",
-        la: "Tractatio incipit...",
-        zh: "开始处理...",
-    },
-    "cmdHiddenFileSync.storageStatics": {
-        def: "[Storage hidden file statics]\nKnown files: ${known}\nActual files: ${actual}\nAll files: ${all}\nOffline Changed files: ${changed}",
-        la: "[Statistica plicarum occultarum in repositorio plicarum]\nPlicae notae: ${known}\nPlicae verae: ${actual}\nOmnes plicae: ${all}\nPlicae extra conexionem mutatae: ${changed}",
-        zh: "[存储隐藏文件统计]\n已知文件：${known}\n实际文件：${actual}\n全部文件：${all}\n离线时变更的文件：${changed}",
-    },
-    "cmdHiddenFileSync.storageToDatabaseCount": {
-        def: "Storage to Database: ${count} files.",
-        la: "Repositorium plicarum -> Repositorium: ${count} plicae.",
-        zh: "存储到数据库：${count} 个文件。",
-    },
-    "cmdHiddenFileSync.trackChanges": {
-        def: "Track changes.",
-        la: "Vestiga mutationes.",
-        zh: "跟踪变更。",
-    },
-    "cmdHiddenFileSync.trackingStatics": {
-        def: "Tracking statics:\nLocal files: ${local}\nDatabase files: ${database}\nUntracked local files: ${untrackedLocal}\nUntracked database files: ${untrackedDatabase}\nCommon untracked files: ${common}",
-        la: "Statistica vestigationis:\nPlicae locales: ${local}\nPlicae repositorii: ${database}\nPlicae locales non vestigatae: ${untrackedLocal}\nPlicae repositorii non vestigatae: ${untrackedDatabase}\nPlicae communes non vestigatae: ${common}",
-        zh: "跟踪统计：\n本地文件：${local}\n数据库文件：${database}\n未跟踪的本地文件：${untrackedLocal}\n未跟踪的数据库文件：${untrackedDatabase}\n共同未跟踪的文件：${common}",
-    },
-    "cmdLocalDatabaseMainte.buttonMark": {
-        def: "Mark",
-        la: "Nota",
-        zh: "标记",
-    },
-    "cmdLocalDatabaseMainte.buttonResurrect": {
-        def: "Resurrect",
-        la: "Resuscita",
-        zh: "恢复",
-    },
-    "cmdLocalDatabaseMainte.commandGCV3": {
-        def: "Garbage Collection V3 (advanced, beta)",
-        la: "Collectio quisquiliarum V3 (provecta, beta)",
-        zh: "垃圾回收 V3（高级，测试版）",
-    },
-    "cmdLocalDatabaseMainte.deleteChunks.message": {
-        def: "We have following chunks that are marked as deleted.\n\n- Deleted chunks: ${count} (${size})\n\nAre you sure to delete these chunks permanently?\n\nNote: **Make sure to synchronise all devices before deletion.**\n\n> [!Note]\n> This operation finally reduces the capacity of the remote.",
-        la: "Haec fragmenta ut deleta notata habemus.\n\n- Fragmenta deleta: ${count} (${size})\n\nCertusne es te haec fragmenta in perpetuum delere velle?\n\nNota: **Cura ut omnia instrumenta ante deletionem synchronizentur.**\n\n> [!Note]\n> Haec operatio tandem capacitatem remoti minuit.",
-        zh: "以下块已被标记为删除。\n\n- 已删除的块：${count}（${size}）\n\n确定要永久删除这些块吗？\n\n注意：**删除前请确保所有设备都已同步。**\n\n> [!Note]\n> 此操作最终会减少远程占用的容量。",
-    },
-    "cmdLocalDatabaseMainte.deleteChunks.none": {
-        def: "No deleted chunks found.",
-        la: "Nulla fragmenta deleta inventa.",
-        zh: "未找到已删除的块。",
-    },
-    "cmdLocalDatabaseMainte.deleteChunks.result": {
-        def: "Deleted chunks: ${deleted} / ${total}",
-        la: "Fragmenta deleta: ${deleted} / ${total}",
-        zh: "已删除的块：${deleted} / ${total}",
-    },
-    "cmdLocalDatabaseMainte.deleteFiles.found": {
-        def: "Found ${count} deleted files.",
-        la: "${count} plicae deletae inventae.",
-        zh: "找到 ${count} 个已删除的文件。",
-    },
-    "cmdLocalDatabaseMainte.deleteFiles.message": {
-        def: "We have following files that are marked as deleted.\n\n- Deleted files: ${count}\n\nAre you sure to delete these files permanently?\n\nNote: **Make sure to synchronise all devices before deletion.**\n\n> [!Note]\n> This operation affects the database permanently. Deleted files will not be recovered after this operation.\n> And, the chunks that are used in the deleted files will be ready for compaction.",
-        la: "Has plicas ut deletas notatas habemus.\n\n- Plicae deletae: ${count}\n\nCertusne es te has plicas in perpetuum delere velle?\n\nNota: **Cura ut omnia instrumenta ante deletionem synchronizentur.**\n\n> [!Note]\n> Haec operatio repositorium in perpetuum afficit. Plicae deletae post hanc operationem non recuperabuntur.\n> Et fragmenta quae in plicis deletis adhibentur ad compactionem parata erunt.",
-        zh: "以下文件已被标记为删除。\n\n- 已删除的文件：${count}\n\n确定要永久删除这些文件吗？\n\n注意：**删除前请确保所有设备都已同步。**\n\n> [!Note]\n> 此操作会永久影响数据库。执行后，已删除的文件将无法恢复。\n> 此外，已删除文件所使用的块将可以被压缩清理。",
-    },
-    "cmdLocalDatabaseMainte.deleteFiles.none": {
-        def: "No deleted files found.",
-        la: "Nullae plicae deletae inventae.",
-        zh: "未找到已删除的文件。",
-    },
-    "cmdLocalDatabaseMainte.deleteFiles.result": {
-        def: "Deleted ${deleted} / ${total} files.",
-        la: "Deletae ${deleted} / ${total} plicae.",
-        zh: "已删除 ${deleted} / ${total} 个文件。",
-    },
-    "cmdLocalDatabaseMainte.deleteFiles.searching": {
-        def: "Searching for deleted files..",
-        la: "Plicae deletae quaeruntur..",
-        zh: "正在搜索已删除的文件..",
-    },
-    "cmdLocalDatabaseMainte.deletionCancelled": {
-        def: "Deletion operation is cancelled.",
-        la: "Operatio deletionis abrogata est.",
-        zh: "删除操作已取消。",
-    },
-    "cmdLocalDatabaseMainte.gc.buttonDelete": {
-        def: "Yes, delete chunks",
-        la: "Ita, dele fragmenta",
-        zh: "是，删除块",
-    },
-    "cmdLocalDatabaseMainte.gc.cancelled": {
-        def: "User cancelled chunk deletion",
-        la: "Usor deletionem fragmentorum abrogavit",
-        zh: "用户已取消删除块",
-    },
-    "cmdLocalDatabaseMainte.gc.completed": {
-        def: "Garbage Collection completed.\nSuccess: ${success}, Errored: ${errored}",
-        la: "Collectio quisquiliarum perfecta.\nSuccessus: ${success}, Errores: ${errored}",
-        zh: "垃圾回收完成。\n成功：${success}，出错：${errored}",
-    },
-    "cmdLocalDatabaseMainte.gc.deleting": {
-        def: "Deleting chunks: ${count}",
-        la: "Fragmenta delentur: ${count}",
-        zh: "正在删除块：${count}",
-    },
-    "cmdLocalDatabaseMainte.gc.message": {
-        def: "This function deletes unused chunks from the device. If there are differences between devices, some chunks may be missing when resolving conflicts.\nBe sure to synchronise before executing.\n\nIf chunks used by current Vault files are deleted, Hatch -> Recreate chunks for current Vault files can recreate them only from files currently present in the Vault. It cannot recover unreadable historical or conflict content.\n\nAre you ready to delete unused chunks?",
-        la: "Haec functio fragmenta non adhibita ex instrumento delet. Si inter instrumenta differentiae sunt, quaedam fragmenta in discrepantiis solvendis deesse possunt.\nCura ut ante exsecutionem synchronizes.\n\nSi fragmenta a plicis tabularii currentibus adhibita delentur, Hatch -> Recrea fragmenta plicarum tabularii currentium ea tantum ex plicis quae nunc in tabulario adsunt recreare potest. Contenta historica vel discrepantiarum illegibilia recuperare non potest.\n\nParatusne es fragmenta non adhibita delere?",
-        zh: "此功能会删除本设备上未使用的块。如果设备之间存在差异，解决冲突时可能会缺少部分块。\n执行前请务必先同步。\n\n如果当前笔记库文件所用的块被删除，Hatch -> 为笔记库中的当前文件重新创建块 只能根据笔记库中当前存在的文件重新创建它们，无法恢复不可读的历史内容或冲突内容。\n\n准备好删除未使用的块了吗？",
-    },
-    "cmdLocalDatabaseMainte.gc.title": {
-        def: "Are all devices synchronised?",
-        la: "Suntne omnia instrumenta synchronizata?",
-        zh: "所有设备都已同步了吗？",
-    },
-    "cmdLocalDatabaseMainte.oldRevisionsFound": {
-        def: "Found ${count} old revisions for ${id} . ${toCheck} items to check",
-        la: "${count} recensiones veteres pro ${id} inventae . ${toCheck} res inspiciendae",
-        zh: "找到 ${id} 的 ${count} 个旧版本。待检查 ${toCheck} 项",
-    },
-    "cmdLocalDatabaseMainte.operation.deleteChunks": {
-        def: "Delete Chunks",
-        la: "Dele fragmenta",
-        zh: "删除块",
-    },
-    "cmdLocalDatabaseMainte.operation.deleteFiles": {
-        def: "Delete Files",
-        la: "Dele plicas",
-        zh: "删除文件",
-    },
-    "cmdLocalDatabaseMainte.operation.deleteUnusedChunks": {
-        def: "Delete unused chunks",
-        la: "Dele fragmenta non adhibita",
-        zh: "删除未使用的块",
-    },
-    "cmdLocalDatabaseMainte.operation.garbageCollection": {
-        def: "Garbage Collection",
-        la: "Collectio quisquiliarum",
-        zh: "垃圾回收",
-    },
-    "cmdLocalDatabaseMainte.operation.markUnusedChunks": {
-        def: "Mark unused chunks",
-        la: "Nota fragmenta non adhibita",
-        zh: "标记未使用的块",
-    },
-    "cmdLocalDatabaseMainte.operation.resurrectChunks": {
-        def: "Resurrect Chunks",
-        la: "Resuscita fragmenta",
-        zh: "恢复块",
-    },
-    "cmdLocalDatabaseMainte.operation.trackChunkUsage": {
-        def: "Track chunk usage",
-        la: "Vestiga usum fragmentorum",
-        zh: "跟踪块使用情况",
-    },
-    "cmdLocalDatabaseMainte.resurrect.cancelled": {
-        def: "Resurrect operation is cancelled.",
-        la: "Operatio resuscitandi abrogata est.",
-        zh: "恢复操作已取消。",
-    },
-    "cmdLocalDatabaseMainte.resurrect.message": {
-        def: "We have following chunks that are deleted but still used in the database.\n\n- Completely lost chunks: ${lost}\n- Resurrectable chunks: ${resurrectable}\n\nDo you want to resurrect these chunks?",
-        la: "Haec fragmenta deleta habemus quae tamen in repositorio adhibentur.\n\n- Fragmenta omnino amissa: ${lost}\n- Fragmenta resuscitabilia: ${resurrectable}\n\nVisne haec fragmenta resuscitare?",
-        zh: "以下块已被删除，但仍在数据库中使用。\n\n- 完全丢失的块：${lost}\n- 可恢复的块：${resurrectable}\n\n是否恢复这些块？",
-    },
-    "cmdLocalDatabaseMainte.resurrect.none": {
-        def: "No chunks are found to be resurrected.",
-        la: "Nulla fragmenta resuscitanda inventa sunt.",
-        zh: "未找到需要恢复的块。",
-    },
-    "cmdLocalDatabaseMainte.resurrect.result": {
-        def: "Resurrected chunks: ${resurrected} / ${total}",
-        la: "Fragmenta resuscitata: ${resurrected} / ${total}",
-        zh: "已恢复的块：${resurrected} / ${total}",
-    },
-    "cmdLocalDatabaseMainte.retrievingChunks": {
-        def: "Retrieving chunks informations..",
-        la: "Informationes fragmentorum arcessuntur..",
-        zh: "正在获取块信息..",
-    },
-    "cmdLocalDatabaseMainte.revisionLookupFailed": {
-        def: "Error finding revisions for ${id}",
-        la: "Error in recensionibus pro ${id} quaerendis",
-        zh: "查找 ${id} 的版本时出错",
-    },
-    "cmdLocalDatabaseMainte.trackSummary": {
-        def: "Total chunks: ${total}\nUnused chunks: ${unused}",
-        la: "Fragmenta omnia: ${total}\nFragmenta non adhibita: ${unused}",
-        zh: "块总数：${total}\n未使用的块：${unused}",
-    },
-    "cmdLocalDatabaseMainte.unusedChunks.deleteMessage": {
-        def: 'We have following chunks that are not used from any files.\n\n- Chunks: ${count} (${size})\n\nAre you sure to delete these chunks?\n\nNote: **Make sure to synchronise all devices before deletion.**\n\n> [!Note]\n> Chunks referenced from deleted files are not deleted. Please run "Commit File Deletion" before this operation.',
-        la: "Haec fragmenta habemus quae a nulla plica adhibentur.\n\n- Fragmenta: ${count} (${size})\n\nCertusne es te haec fragmenta delere velle?\n\nNota: **Cura ut omnia instrumenta ante deletionem synchronizentur.**\n\n> [!Note]\n> Fragmenta ex plicis deletis relata non delentur. Quaeso ante hanc operationem “Commit File Deletion” exsequere.",
-        zh: "以下块未被任何文件使用。\n\n- 块：${count}（${size}）\n\n确定要删除这些块吗？\n\n注意：**删除前请确保所有设备都已同步。**\n\n> [!Note]\n> 已删除文件引用的块不会被删除。请在此操作之前先运行「Commit File Deletion」。",
-    },
-    "cmdLocalDatabaseMainte.unusedChunks.markMessage": {
-        def: "We have following chunks that are not used from any files.\n\n- Chunks: ${count} (${size})\n\nAre you sure to mark these chunks to be deleted?\n\nNote: **Make sure to synchronise all devices before deletion.**\n\n> [!Note]\n> This operation will not reduces the capacity of the remote until permanent deletion.",
-        la: "Haec fragmenta habemus quae a nulla plica adhibentur.\n\n- Fragmenta: ${count} (${size})\n\nCertusne es te haec fragmenta ut delenda notare velle?\n\nNota: **Cura ut omnia instrumenta ante deletionem synchronizentur.**\n\n> [!Note]\n> Haec operatio capacitatem remoti non minuet donec deletio perpetua fiat.",
-        zh: "以下块未被任何文件使用。\n\n- 块：${count}（${size}）\n\n确定要将这些块标记为待删除吗？\n\n注意：**删除前请确保所有设备都已同步。**\n\n> [!Note]\n> 在永久删除之前，此操作不会减少远程占用的容量。",
-    },
-    "cmdLocalDatabaseMainte.unusedChunks.markResult": {
-        def: "Marked chunks: ${marked} / ${total}",
-        la: "Fragmenta notata: ${marked} / ${total}",
-        zh: "已标记的块：${marked} / ${total}",
-    },
-    "cmdLocalDatabaseMainte.unusedChunks.none": {
-        def: "No unused chunks found.",
-        la: "Nulla fragmenta non adhibita inventa.",
-        zh: "未找到未使用的块。",
     },
     "Collecting local files on the DB: ${count}": {
         def: "Collecting this device's files in the database: ${count}",
@@ -1013,11 +408,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Mandatum",
         zh: "命令",
     },
-    Communicating: {
-        def: "Communicating",
-        la: "Communicatur",
-        zh: "通信中",
-    },
     "Compacting database done": {
         def: "Compacting database done.",
         la: "Compactio repositorii facta est.",
@@ -1028,71 +418,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium compingitur...",
         zh: "正在压缩数据库……",
     },
-    "Compaction in progress on remote database...": {
-        def: "Compaction in progress on remote database...",
-        la: "Compactio in repositorio remoto fit...",
-        zh: "正在远程数据库上执行压缩...",
-    },
-    "Compaction on remote database completed successfully.": {
-        def: "Compaction on remote database completed successfully.",
-        la: "Compactio in repositorio remoto feliciter perfecta est.",
-        zh: "远程数据库压缩已成功完成。",
-    },
-    "Compaction on remote database failed.": {
-        def: "Compaction on remote database failed.",
-        la: "Compactio in repositorio remoto defecit.",
-        zh: "远程数据库压缩失败。",
-    },
-    "Compaction on remote database timed out.": {
-        def: "Compaction on remote database timed out.",
-        la: "Compactio in repositorio remoto tempus excessit.",
-        zh: "远程数据库压缩超时。",
-    },
-    "Compare file": {
-        def: "Compare file",
-        la: "Compara plicam",
-        zh: "比较文件",
-    },
-    "Compare the content of files between on local database and storage. If not matched, you will be asked which one you want to keep.":
-        {
-            def: "Compare the content of files between on local database and storage. If not matched, you will be asked which one you want to keep.",
-            la: "Contentum plicarum inter repositorium locale et repositorium plicarum compara. Si non congruunt, rogaberis utram servare velis.",
-            zh: "比较本地数据库与存储中的文件内容；如果不一致，你将被询问要保留哪一份。",
-        },
     "Compare time and take newer": {
         def: "Compare time and take newer",
         la: "Compara tempus et recentiorem sume",
         zh: "比较时间并采用较新的版本",
-    },
-    "Compatibility (Conflict Behaviour)": {
-        def: "Compatibility (Conflict Behaviour)",
-        la: "Compatibilitas (modus discrepantiarum)",
-        zh: "兼容性（冲突行为）",
-    },
-    "Compatibility (Database structure)": {
-        def: "Compatibility (Database structure)",
-        la: "Compatibilitas (structura repositorii)",
-        zh: "兼容性（数据库结构）",
-    },
-    "Compatibility (Internal API Usage)": {
-        def: "Compatibility (Internal API Usage)",
-        la: "Compatibilitas (usus API interni)",
-        zh: "兼容性（内部 API 使用）",
-    },
-    "Compatibility (Metadata)": {
-        def: "Compatibility (Metadata)",
-        la: "Compatibilitas (metadata)",
-        zh: "兼容性（元数据）",
-    },
-    "Compatibility (Remote Database)": {
-        def: "Compatibility (Remote Database)",
-        la: "Compatibilitas (repositorium remotum)",
-        zh: "兼容性（远端数据库）",
-    },
-    "Compatibility (Trouble addressed)": {
-        def: "Compatibility (Trouble addressed)",
-        la: "Compatibilitas (difficultates tractatae)",
-        zh: "兼容性（问题修复）",
     },
     "Complement completed!": {
         def: "Missing chunks filled in.",
@@ -1103,11 +432,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Filling in missing chunks between databases",
         la: "Fragmenta deficientia inter repositoria supplentur",
         zh: "正在补全数据库之间缺失的数据块",
-    },
-    "Compute revisions for chunks": {
-        def: "Compute revisions for chunks",
-        la: "Computa recensiones fragmentorum",
-        zh: "为 chunks 计算修订版本(以前的行为)",
     },
     "Concat both": {
         def: "Concat both",
@@ -1129,11 +453,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Configuratio",
         zh: "配置",
     },
-    "Configuration Encryption": {
-        def: "Configuration Encryption",
-        la: "Cryptatio configurationis",
-        zh: "配置加密",
-    },
     "Configuration issues detected and automatically resolved. However, unsynchronized data may exist. Consider rebuilding if necessary.":
         {
             def: "Configuration issues were found and fixed automatically. Some data may not have been synchronised; rebuild if necessary.",
@@ -1145,26 +464,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Configura",
         zh: "配置",
     },
-    "Configure And Change Remote": {
-        def: "Configure And Change Remote",
-        la: "Configura et muta remotum",
-        zh: "配置并切换远端",
-    },
-    "Configure E2EE": {
-        def: "Configure E2EE",
-        la: "Configura E2EE",
-        zh: "配置 E2EE",
-    },
-    "Configure Remote": {
-        def: "Configure Remote",
-        la: "Configura remotum",
-        zh: "配置远端",
-    },
-    "Configure the same server information as your other devices again, manually, very advanced users only.": {
-        def: "Configure the same server information as your other devices again, manually, very advanced users only.",
-        la: "Easdem informationes ministratoris ac in aliis instrumentis tuis iterum manu configura; solum usoribus valde peritis.",
-        zh: "手动重新输入与你其他设备相同的服务器信息。仅适合高级用户。",
-    },
     "Conflict & Deletion Options": {
         def: "Conflict & Deletion Options",
         la: "Optiones discrepantiarum et deletionis",
@@ -1174,11 +473,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Connect",
         la: "Conecte",
         zh: "连接",
-    },
-    "Connect to existing database and continue": {
-        def: "Connect to existing database and continue",
-        la: "Conecte ad repositorium exstans et perge",
-        zh: "连接到现有数据库并继续",
     },
     Connected: {
         def: "Connected",
@@ -1195,25 +489,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Conexio cum ${db.info.db_name} facta est",
         zh: "已连接到 ${db.info.db_name}",
     },
-    "Connected to Signaling Server (as Peer ID: ${peerId})": {
-        def: "Connected to Signaling Server (as Peer ID: ${peerId})",
-        la: "Conexum ad ministratorem significationis (ut ID paris: ${peerId})",
-        zh: "已连接到信令服务器（对等方 ID：${peerId}）",
-    },
     "Connected:": {
         def: "Connected:",
         la: "Conexi:",
         zh: "已连接：",
-    },
-    "Connection Method": {
-        def: "Connection Method",
-        la: "Methodus conexionis",
-        zh: "连接方式",
-    },
-    "Connection Settings": {
-        def: "Connection Settings",
-        la: "Optiones conexionis",
-        zh: "连接设置",
     },
     "Connection:": {
         def: "Connection:",
@@ -1225,26 +504,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Contentum",
         zh: "内容",
     },
-    "Continue anyway": {
-        def: "Continue anyway",
-        la: "Perge nihilominus",
-        zh: "仍然继续",
-    },
-    "Continue to CouchDB setup": {
-        def: "Continue to CouchDB setup",
-        la: "Perge ad configurationem CouchDB",
-        zh: "继续进行 CouchDB 设置",
-    },
-    "Continue to Peer-to-Peer only setup": {
-        def: "Continue to Peer-to-Peer only setup",
-        la: "Perge ad configurationem solum inter pares (Peer-to-Peer)",
-        zh: "继续进行仅 Peer-to-Peer 设置",
-    },
-    "Continue to S3/MinIO/R2 setup": {
-        def: "Continue to S3/MinIO/R2 setup",
-        la: "Perge ad configurationem S3/MinIO/R2",
-        zh: "继续进行 S3/MinIO/R2 设置",
-    },
     Copied: {
         def: "Copied",
         la: "Exscriptum",
@@ -1255,25 +514,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Exscribe",
         zh: "复制",
     },
-    "Copy Report to clipboard": {
-        def: "Copy Report to clipboard",
-        la: "Exscribe relationem in tabellam",
-        zh: "将报告复制到剪贴板",
-    },
     "Copy to clipboard": {
         def: "Copy to clipboard",
         la: "Exscribe in tabellam",
         zh: "复制到剪贴板",
-    },
-    "CouchDB Configuration": {
-        def: "CouchDB Configuration",
-        la: "Configuratio CouchDB",
-        zh: "CouchDB 配置",
-    },
-    "CouchDB Connection Tweak": {
-        def: "CouchDB Connection Tweak",
-        la: "Accommodatio conexionis CouchDB",
-        zh: "CouchDB 连接调优",
     },
     "CouchDB only. Version 0 preserves legacy path identity; version 1 uses Unicode NFC. Physical file names stay unchanged. Update every device and stop synchronisation, then Rebuild both databases from a complete authoritative Vault and Fetch on the other devices. Resolve colliding file names first. P2P and Object Storage do not support version 1.":
         {
@@ -1281,11 +525,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Solum CouchDB. Versio 0 identitatem viarum hereditariam servat; versio 1 Unicode NFC utitur. Nomina plicarum physica non mutantur. Omnia instrumenta renova et synchronizationem siste, deinde ambo repositoria ex tabulario integro et auctoritativo reaedifica et in aliis instrumentis arcesse. Prius nomina plicarum inter se collidentia resolve. P2P et repositorium obiectorum versionem 1 non sustinent.",
             zh: "仅限 CouchDB。版本 0 保留旧版路径标识；版本 1 使用 Unicode NFC。实际文件名保持不变。请更新所有设备并停止同步，然后用一份完整且权威的笔记库重建两个数据库，再在其他设备上获取。请先解决文件名冲突。P2P 和对象存储不支持版本 1。",
         },
-    "CouchDB validates the database name when you connect. The name must not be empty.": {
-        def: "CouchDB validates the database name when you connect. The name must not be empty.",
-        la: "CouchDB nomen repositorii cum conectis confirmat. Nomen vacuum esse non debet.",
-        zh: "CouchDB 会在连接时校验数据库名称。名称不能为空。",
-    },
     "Could not apply ${tryGetFilePath(info)} revision ${rev}; the selected revision is no longer live": {
         def: "Could not apply revision ${rev} of ${tryGetFilePath(info)}; the selected revision is no longer current",
         la: "Revisio ${rev} plicae ${tryGetFilePath(info)} applicari non potuit; revisio electa iam non viget",
@@ -1377,16 +616,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Crea discrepantiam",
         zh: "制造冲突",
     },
-    "Create or connect to database and continue": {
-        def: "Create or connect to database and continue",
-        la: "Crea vel conecte ad repositorium et perge",
-        zh: "创建或连接到数据库并继续",
-    },
-    "Create P2P remote": {
-        def: "Create P2P remote",
-        la: "Crea remotum P2P",
-        zh: "创建 P2P 远端",
-    },
     "Creating chunks Done: ${processed} of ${total} files": {
         def: "Data chunks created: ${processed} of ${total} files",
         la: "Fragmenta creata: ${processed} ex ${total} plicis",
@@ -1397,30 +626,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Fragmenta deficientia creantur: ${processed} ex ${total} plicis",
         zh: "正在补建数据块：${processed}/${total} 个文件",
     },
-    "Cross-platform": {
-        def: "Cross-platform",
-        la: "Trans systemata",
-        zh: "跨平台",
-    },
-    "Current adapter: {adapter}": {
-        def: "Current adapter: {adapter}",
-        la: "Adaptator praesens: {adapter}",
-        zh: "当前适配器：{adapter}",
-    },
     "Custom Headers": {
         def: "Custom Headers",
         la: "Capita propria",
         zh: "自定义请求头",
-    },
-    "Customization Sync": {
-        def: "Customization Sync",
-        la: "Synchronizatio optionum propriarum",
-        zh: "自定义同步",
-    },
-    "Customization Sync (Beta3)": {
-        def: "Customization Sync (Beta3)",
-        la: "Synchronizatio optionum propriarum (Beta3)",
-        zh: "自定义同步（Beta3）",
     },
     "Data Compression": {
         def: "Data Compression",
@@ -1437,22 +646,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Data exscribenda",
         zh: "要复制的数据",
     },
-    "Database -> Storage": {
-        def: "Database -> Storage",
-        la: "Repositorium -> Repositorium plicarum",
-        zh: "数据库 → 存储",
-    },
     'Database active-size: ${sizeToHumanReadable(getSize(info, "active"))}, external-size:${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, file-size: ${sizeToHumanReadable(getSize(info, "file"))}':
         {
             def: 'Database active size: ${sizeToHumanReadable(getSize(info, "active"))}, external size: ${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, file size: ${sizeToHumanReadable(getSize(info, "file"))}',
             la: 'Repositorium, magnitudo activa: ${sizeToHumanReadable(getSize(info, "active"))}, externa: ${sizeToHumanReadable(\n        getSize(info, "external")\n      )}, plicae: ${sizeToHumanReadable(getSize(info, "file"))}',
             zh: '数据库活动大小：${sizeToHumanReadable(getSize(info, "active"))}，外部大小：${sizeToHumanReadable(\n        getSize(info, "external")\n      )}，文件大小：${sizeToHumanReadable(getSize(info, "file"))}',
         },
-    "Database Adapter": {
-        def: "Database Adapter",
-        la: "Adaptator repositorii",
-        zh: "数据库适配器",
-    },
     "Database and storage reflection has been resumed!": {
         def: "Changes between the database and the vault are being applied again.",
         la: "Reflexio inter repositorium et tabularium resumpta est.",
@@ -1528,30 +727,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Dele",
         zh: "删除",
     },
-    "Delete all customization sync data": {
-        def: "Delete all customization sync data",
-        la: "Dele omnia data synchronizationis optionum propriarum",
-        zh: "删除所有自定义同步数据",
-    },
-    "Delete all data on the remote server.": {
-        def: "Delete all data on the remote server.",
-        la: "Dele omnia data in ministratore remoto.",
-        zh: "删除远端服务器上的所有数据。",
-    },
-    "Delete All of": {
-        def: "Delete All of",
-        la: "Dele omnia ex",
-        zh: "全部删除",
-    },
     "DELETE DATABASE did not delete ${path}; keeping last-seen record to avoid resurrecting the file": {
         def: "Could not delete ${path} from the database; keeping its last-seen record so the file is not restored",
         la: "${path} ex repositorio deleri non potuit; ultimum eius vestigium servatur ne plica revivescat",
         zh: "未能从数据库删除 ${path}；保留其最后记录，以免文件被恢复",
-    },
-    "Delete local database to reset or uninstall Self-hosted LiveSync": {
-        def: "Delete local database to reset or uninstall Tabularium",
-        la: "Dele repositorium locale ut Tabularium restituas vel deinstalles",
-        zh: "删除本地数据库以重置或卸载 Tabularium",
     },
     "Delete local files if deleted on remote": {
         def: "Delete local files if deleted on remote",
@@ -1568,21 +747,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Dele metadata vetera plicarum deletarum in initio",
         zh: "启动时删除已删除文件的旧元数据",
     },
-    "Delete Remote Configuration": {
-        def: "Delete Remote Configuration",
-        la: "Dele configurationem remotam",
-        zh: "删除远端配置",
-    },
-    "Delete remote configuration '{name}'?": {
-        def: "Delete remote configuration '{name}'?",
-        la: "Delerene configurationem remotam “{name}”?",
-        zh: "要删除远端配置“{name}”吗？",
-    },
-    "Delete remote configuration '${name}'?": {
-        def: "Delete remote configuration '${name}'?",
-        la: "Delerene configurationem remotam “${name}”?",
-        zh: "删除远端配置「${name}」？",
-    },
     Deleted: {
         def: "Deleted",
         la: "Deletum",
@@ -1593,30 +757,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "NEGATUM",
         zh: "已拒绝",
     },
-    "DENIED (in session)": {
-        def: "DENIED (in session)",
-        la: "NEGATUM (in sessione)",
-        zh: "已拒绝（本次会话）",
-    },
     Deny: {
         def: "Deny",
         la: "Nega",
         zh: "拒绝",
-    },
-    "Deny in session": {
-        def: "Deny in session",
-        la: "Nega in sessione",
-        zh: "本次会话内拒绝",
-    },
-    "Deny permanently": {
-        def: "Deny permanently",
-        la: "Nega in perpetuum",
-        zh: "永久拒绝",
-    },
-    "Deselect all": {
-        def: "Deselect all",
-        la: "Deselige omnia",
-        zh: "取消全选",
     },
     desktop: {
         def: "desktop",
@@ -1628,11 +772,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tantum in computatro. Hoc instrumentum dormire sinit etiam si optio generalis non est accensa.",
         zh: "仅桌面端。即使上面的通用选项关闭，也允许这台设备休眠。",
     },
-    "Detected Peers": {
-        def: "Detected Peers",
-        la: "Pares detecti",
-        zh: "检测到的对等方",
-    },
     Developer: {
         def: "Developer",
         la: "Programmator",
@@ -1642,11 +781,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Device",
         la: "Instrumentum",
         zh: "设备",
-    },
-    "device name": {
-        def: "device name",
-        la: "nomen instrumenti",
-        zh: "设备名称",
     },
     "Device name": {
         def: "Device name",
@@ -1658,36 +792,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomen instrumenti deest. Synchronizatio additamentorum deactivata est.",
         zh: "缺少设备名称，已关闭插件同步。",
     },
-    'Device name to identify the device. Please use shorter one for the stable peer detection, i.e., "iphone-16" or "macbook-2021".':
-        {
-            def: 'Device name to identify the device. Please use shorter one for the stable peer detection, i.e., "iphone-16" or "macbook-2021".',
-            la: "Nomen ad instrumentum identificandum. Quaeso breviore utere ad stabilem parium detectionem, e.g., “iphone-16” vel “macbook-2021”.",
-            zh: "用于标识设备的名称。为了对等方检测更稳定，请使用较短的名字，例如「iphone-16」或「macbook-2021」。",
-        },
-    "Device Peer ID": {
-        def: "Device Peer ID",
-        la: "ID paris instrumenti",
-        zh: "设备对等方 ID",
-    },
-    "Device Setup Method": {
-        def: "Device Setup Method",
-        la: "Methodus instrumenti constituendi",
-        zh: "设备设置方式",
-    },
-    "Devices:": {
-        def: "Devices:",
-        la: "Instrumenta:",
-        zh: "设备：",
-    },
     Diag: {
         def: "Diag",
         la: "Diagn.",
         zh: "诊断",
-    },
-    "Diagnostic RTCPeerConnection is enabled": {
-        def: "Diagnostic RTCPeerConnection is enabled",
-        la: "RTCPeerConnection diagnostica activa est",
-        zh: "已启用诊断用 RTCPeerConnection",
     },
     "dialog.copy.copied": {
         def: "Your ${title} has been copied to the clipboard.",
@@ -1704,21 +812,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "${title} tua ad exscribendum parata sunt",
         zh: "你的${title}已可复制",
     },
-    "dialog.yourLanguageAvailable": {
-        def: "Tabularium had translations for your language, so the %{Display language} setting was enabled.\n\nNote: Not all messages are translated. We are waiting for your contributions!\nNote 2: If you create an Issue, **please revert to English** and then take screenshots, messages and logs. This can be done in the setting dialogue.\nMay you find it easy to use!",
-        la: "Tabularium translationes linguae tuae habebat, itaque optio %{Display language} activata est.\n\nNota: Non omnes nuntii translati sunt. Contributiones tuas exspectamus!\nNota 2: Si Quaestionem (Issue) creas, **quaeso ad English revertere** et deinde imagines, nuntios et acta cape. Hoc in dialogo optionum fieri potest.\nUtinam facile uti possis!",
-        zh: "Tabularium 已提供您语言的翻译,因此启用了%{Display language}\n\n注意：并非所有消息都已翻译。我们期待您的贡献！\n注意 2：若您创建问题报告， **请切换回English** ，然后截取屏幕截图、消息和日志，此操作可在设置对话框中完成\n愿您使用顺心！",
-    },
-    "dialog.yourLanguageAvailable.btnRevertToDefault": {
-        def: "Keep English",
-        la: "Retine English",
-        zh: "保持English",
-    },
-    "dialog.yourLanguageAvailable.Title": {
-        def: " Translation is available!",
-        la: " Translatio praesto est!",
-        zh: " 翻译可用!",
-    },
     Diff: {
         def: "Diff",
         la: "Differentiae",
@@ -1728,11 +821,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Different",
         la: "Diversum",
         zh: "不同",
-    },
-    "Disables all synchronization and restart.": {
-        def: "Disables all synchronization and restart.",
-        la: "Omnem synchronizationem deactivat et iterum incipit.",
-        zh: "禁用所有同步并重新启动。",
     },
     "Disables logging, only shows notifications. Please disable if you report an issue.": {
         def: "Disables logging, only shows notifications. Please disable if you report an issue.",
@@ -1909,36 +997,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Duplica",
         zh: "复制",
     },
-    "Duplicate remote": {
-        def: "Duplicate remote",
-        la: "Duplica remotum",
-        zh: "复制远端配置",
-    },
-    "E2EE Configuration": {
-        def: "E2EE Configuration",
-        la: "Configuratio E2EE",
-        zh: "E2EE 配置",
-    },
-    "Edge case addressing (Behaviour)": {
-        def: "Edge case addressing (Behaviour)",
-        la: "Tractatio casuum extremorum (modus agendi)",
-        zh: "边缘情况处理（行为）",
-    },
-    "Edge case addressing (Database)": {
-        def: "Edge case addressing (Database)",
-        la: "Tractatio casuum extremorum (repositorium)",
-        zh: "边缘情况处理（数据库）",
-    },
-    "Edge case addressing (Processing)": {
-        def: "Edge case addressing (Processing)",
-        la: "Tractatio casuum extremorum (processus)",
-        zh: "边缘情况处理（处理）",
-    },
-    "Emergency restart": {
-        def: "Emergency restart",
-        la: "Iteratum initium subitum",
-        zh: "紧急重启",
-    },
     "Enable advanced features": {
         def: "Enable advanced features",
         la: "Activa facultates provectas",
@@ -1949,20 +1007,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Activa synchronizationem optionum propriarum",
         zh: "启用自定义同步",
     },
-    "Enable Developers' Debug Tools.": {
-        def: "Enable Developers' Debug Tools.",
-        la: "Activa instrumenta purgandi programmatorum.",
-        zh: "启用开发者调试工具 ",
-    },
     "Enable edge case treatment features": {
         def: "Enable edge case treatment features",
         la: "Activa facultates tractationis casuum extremorum",
         zh: "启用边缘情况处理功能",
-    },
-    "Enable P2P Replicator": {
-        def: "Enable P2P Replicator",
-        la: "Activa replicatorem P2P",
-        zh: "启用 P2P 复制器",
     },
     "Enable poweruser features": {
         def: "Enable poweruser features",
@@ -1984,12 +1032,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Activum",
         zh: "已启用",
     },
-    "Enabling end-to-end encryption ensures that your data is encrypted on your device before being sent to the remote server. This means that even if someone gains access to the server, they won't be able to read your data without the passphrase. Make sure to remember your passphrase, as it will be required to decrypt your data on other devices.":
-        {
-            def: "Enabling end-to-end encryption ensures that your data is encrypted on your device before being sent to the remote server. This means that even if someone gains access to the server, they won't be able to read your data without the passphrase. Make sure to remember your passphrase, as it will be required to decrypt your data on other devices.",
-            la: "Cryptatio ab extremo ad extremum efficit ut data tua in instrumento tuo cryptentur antequam ad ministratorem remotum mittantur. Itaque etiamsi quis accessum ad ministratorem adipiscatur, data tua sine tessera arcana legere non poterit. Cura ut tesseram arcanam memineris, nam ad data tua in aliis instrumentis decryptanda requiretur.",
-            zh: "启用端到端加密可确保数据在发送到远端服务器之前已在本设备上加密。这意味着即使有人获得了服务器的访问权限，没有密码短语也无法读取你的数据。请务必记住你的密码短语，因为在其他设备上解密数据时需要用到它。",
-        },
     "Encrypt contents on the remote database. If you use the plugin's synchronization feature, enabling this is recommended.":
         {
             def: "Encrypt contents on the remote database. If you use the plugin's synchronization feature, enabling this is recommended.",
@@ -2016,11 +1058,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Cryptatio defecit.",
         zh: "加密失败。",
     },
-    "Encryption phassphrase. If changed, you should overwrite the server's database with the new (encrypted) files.": {
-        def: "Encryption phassphrase. If changed, you should overwrite the server's database with the new (encrypted) files.",
-        la: "Tessera arcana cryptationis. Si mutatur, repositorium ministratoris novis plicis (cryptatis) superscribere debes.",
-        zh: "加密密码。如果更改,您应该用新的(加密的)文件覆盖服务器的数据库 ",
-    },
     "End-to-End Encryption": {
         def: "End-to-End Encryption",
         la: "Cryptatio ab extremo ad extremum",
@@ -2035,106 +1072,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Enhance chunk size",
         la: "Auge magnitudinem fragmentorum",
         zh: "增大块大小",
-    },
-    "Enter a complete HTTP or HTTPS URL.": {
-        def: "Enter a complete HTTP or HTTPS URL.",
-        la: "Insere URL integrum HTTP vel HTTPS.",
-        zh: "输入完整的 HTTP 或 HTTPS 地址。",
-    },
-    "Enter a folder prefix (optional)": {
-        def: "Enter a folder prefix (optional)",
-        la: "Insere praefixum thecae (optionale)",
-        zh: "输入文件夹前缀（可选）",
-    },
-    "Enter Server Information": {
-        def: "Enter Server Information",
-        la: "Insere informationes ministratoris",
-        zh: "输入服务器信息",
-    },
-    "Enter Setup URI": {
-        def: "Enter Setup URI",
-        la: "Insere Setup URI",
-        zh: "输入设置 URI",
-    },
-    "Enter the server information manually": {
-        def: "Enter the server information manually",
-        la: "Insere informationes ministratoris manu",
-        zh: "手动输入服务器信息",
-    },
-    "Enter TURN credential": {
-        def: "Enter TURN credential",
-        la: "Insere testimonium TURN",
-        zh: "输入 TURN 凭据",
-    },
-    "Enter TURN username": {
-        def: "Enter TURN username",
-        la: "Insere nomen usoris TURN",
-        zh: "输入 TURN 用户名",
-    },
-    "Enter your Access Key ID": {
-        def: "Enter your Access Key ID",
-        la: "Insere ID clavis accessus tuae",
-        zh: "输入你的访问密钥 ID",
-    },
-    "Enter your Bucket Name": {
-        def: "Enter your Bucket Name",
-        la: "Insere nomen situlae tuae",
-        zh: "输入你的存储桶名称",
-    },
-    "Enter your database name": {
-        def: "Enter your database name",
-        la: "Insere nomen repositorii tui",
-        zh: "输入你的数据库名称",
-    },
-    "Enter your JWT Key ID": {
-        def: "Enter your JWT Key ID",
-        la: "Insere ID clavis JWT tuae",
-        zh: "输入你的 JWT 密钥 ID",
-    },
-    "Enter your JWT secret or private key": {
-        def: "Enter your JWT secret or private key",
-        la: "Insere secretum JWT vel clavem privatam tuam",
-        zh: "输入你的 JWT 密钥或私钥",
-    },
-    "Enter your JWT Subject (CouchDB Username)": {
-        def: "Enter your JWT Subject (CouchDB Username)",
-        la: "Insere subiectum JWT tuum (nomen usoris CouchDB)",
-        zh: "输入你的 JWT 主体（CouchDB 用户名）",
-    },
-    "Enter your passphrase": {
-        def: "Enter your passphrase",
-        la: "Insere tesseram arcanam tuam",
-        zh: "输入你的密码短语",
-    },
-    "Enter your password": {
-        def: "Enter your password",
-        la: "Insere tesseram tuam",
-        zh: "输入你的密码",
-    },
-    "Enter your Region (e.g., us-east-1, auto for R2)": {
-        def: "Enter your Region (e.g., us-east-1, auto for R2)",
-        la: "Insere regionem tuam (e.g., us-east-1, auto pro R2)",
-        zh: "输入你的区域（例如 us-east-1，R2 填 auto）",
-    },
-    "Enter your Secret Access Key": {
-        def: "Enter your Secret Access Key",
-        la: "Insere clavem accessus secretam tuam",
-        zh: "输入你的私有访问密钥",
-    },
-    "Enter your username": {
-        def: "Enter your username",
-        la: "Insere nomen usoris tuum",
-        zh: "输入你的用户名",
-    },
-    "Error during connection test: ${reason}": {
-        def: "Error during connection test: ${reason}",
-        la: "Error in probatione conexionis: ${reason}",
-        zh: "连接测试出错：${reason}",
-    },
-    "Error during testAndFixSettings: ${reason}": {
-        def: "Error during testAndFixSettings: ${reason}",
-        la: "Error in testAndFixSettings: ${reason}",
-        zh: "testAndFixSettings 出错：${reason}",
     },
     "Error in applying external settings: ": {
         def: "Error while applying external settings",
@@ -2181,11 +1118,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Erratum dum plicae synchronizantur",
         zh: "同步文件时出错",
     },
-    "Experimental Settings": {
-        def: "Experimental Settings",
-        la: "Optiones experimentales",
-        zh: "实验性设置",
-    },
     Export: {
         def: "Export",
         la: "Exporta",
@@ -2201,31 +1133,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Configuratio ministratoris electa activari non potuit: ${activeConfigurationId}",
         zh: "无法启用所选的服务器配置：${activeConfigurationId}",
     },
-    "Failed to connect to remote for compaction.": {
-        def: "Failed to connect to remote for compaction.",
-        la: "Conexio ad remotum ad compactionem defecit.",
-        zh: "无法连接到远程数据库以执行压缩。",
-    },
-    "Failed to connect to remote for compaction. ${reason}": {
-        def: "Failed to connect to remote for compaction. ${reason}",
-        la: "Conexio ad remotum ad compactionem defecit. ${reason}",
-        zh: "无法连接到远程数据库以执行压缩。${reason}",
-    },
-    "Failed to connect to the server: ${reason}": {
-        def: "Failed to connect to the server: ${reason}",
-        la: "Conexio ad ministratorem defecit: ${reason}",
-        zh: "无法连接到服务器：${reason}",
-    },
-    "Failed to connect to the server. Please check your settings.": {
-        def: "Failed to connect to the server. Please check your settings.",
-        la: "Conexio ad ministratorem defecit. Quaeso optiones tuas inspice.",
-        zh: "无法连接到服务器。请检查你的设置。",
-    },
-    "Failed to connect to the signalling relay: ${reason}": {
-        def: "Failed to connect to the signalling relay: ${reason}",
-        la: "Conexio ad relatorem significationis defecit: ${reason}",
-        zh: "无法连接到信令中继：${reason}",
-    },
     "Failed to count compromised chunks in local database": {
         def: "Could not count compromised chunks in this device's database.",
         la: "Fragmenta corrupta in repositorio huius instrumenti numerari non potuerunt.",
@@ -2235,11 +1142,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Could not count compromised chunks on the server.",
         la: "Fragmenta corrupta in ministratore numerari non potuerunt.",
         zh: "无法统计服务器上受损的数据块。",
-    },
-    "Failed to create replicator instance.": {
-        def: "Failed to create replicator instance.",
-        la: "Instantia replicatoris creari non potuit.",
-        zh: "创建复制器实例失败。",
     },
     "Failed to decrypt configuration item": {
         def: "Could not decrypt a configuration item",
@@ -2326,16 +1228,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tessera arcana accipi non potuit. data.json res non cryptatas continet.",
         zh: "无法获取密码短语。data.json 中包含未加密的项目。",
     },
-    "Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled.": {
-        def: "Failed to start one-shot replication before Garbage Collection. Garbage Collection Cancelled.",
-        la: "Replicatio singularis ante collectionem quisquiliarum incipi non potuit. Collectio quisquiliarum abrogata.",
-        zh: "无法在垃圾回收前启动一次性复制。垃圾回收已取消。",
-    },
-    "Failed to start replication after Garbage Collection.": {
-        def: "Failed to start replication after Garbage Collection.",
-        la: "Replicatio post collectionem quisquiliarum incipi non potuit.",
-        zh: "垃圾回收后无法启动复制。",
-    },
     "Failed to store rename target; preserving source in the database: ${oldPath}": {
         def: "Could not save the renamed file; keeping the original in the database: ${oldPath}",
         la: "Plica renominata servari non potuit; fons in repositorio servatur: ${oldPath}",
@@ -2417,21 +1309,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Praeparatio arcessitionis abrogata est.",
         zh: "已取消获取前的准备。",
     },
-    "Fetch remote settings": {
-        def: "Fetch remote settings",
-        la: "Arcesse optiones remotas",
-        zh: "获取远端设置",
-    },
-    FETCHING: {
-        def: "FETCHING",
-        la: "ARCESSITUR",
-        zh: "获取中",
-    },
-    "Fetching status...": {
-        def: "Fetching status...",
-        la: "Status arcessitur...",
-        zh: "正在获取状态…",
-    },
     "File ${path} seems to be corrupted! Writing prevented. (${docRead.size} != ${reflectedContent.size})": {
         def: "${path} seems to be corrupted; it was not written (${docRead.size} != ${reflectedContent.size})",
         la: "Plica ${path} corrupta esse videtur; scriptura prohibita est (${docRead.size} != ${reflectedContent.size})",
@@ -2467,37 +1344,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Processum perfice et operationem ordinariam resume",
         zh: "完成流程并恢复正常运行",
     },
-    "First, please select the option that best describes your current situation.": {
-        def: "First, please select the option that best describes your current situation.",
-        la: "Primum, quaeso optionem elige quae condicionem tuam praesentem optime describit.",
-        zh: "首先，请选择最符合你当前情况的选项。",
-    },
     Fix: {
         def: "Fix",
         la: "Corrige",
         zh: "修复",
     },
-    "Flag and restart": {
-        def: "Flag and restart",
-        la: "Nota et iterum incipe",
-        zh: "标记后重启",
-    },
-    "Flagged Selective": {
-        def: "Flagged Selective",
-        la: "Selectiva notata",
-        zh: "已标记为选择性",
-    },
-    "Folder Prefix": {
-        def: "Folder Prefix",
-        la: "Praefixum thecae",
-        zh: "文件夹前缀",
-    },
-    "For HS256/HS512 algorithms, provide the shared secret key. For ES256/ES512 algorithms, provide the pkcs8 PEM-formatted private key.":
-        {
-            def: "For HS256/HS512 algorithms, provide the shared secret key. For ES256/ES512 algorithms, provide the pkcs8 PEM-formatted private key.",
-            la: "Pro algorithmis HS256/HS512, clavem secretam communem praebe. Pro algorithmis ES256/ES512, clavem privatam forma PEM pkcs8 praebe.",
-            zh: "对于 HS256/HS512 算法，请提供共享密钥。对于 ES256/ES512 算法，请提供 pkcs8 PEM 格式的私钥。",
-        },
     "Forces the file to be synced when opened.": {
         def: "Forces the file to be synced when opened.",
         la: "Plicam synchronizari cogit cum aperitur.",
@@ -2507,11 +1358,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Compromised chunks found: ${localCompromised} on this device, ${remoteCompromised} on the server.",
         la: "Fragmenta corrupta inventa: ${localCompromised} in hoc instrumento, ${remoteCompromised} in ministratore.",
         zh: "发现受损的数据块：此设备 ${localCompromised} 个，服务器 ${remoteCompromised} 个。",
-    },
-    "Fresh Start Wipe": {
-        def: "Fresh Start Wipe",
-        la: "Deletio ad novum initium",
-        zh: "全新开始清除",
     },
     "From:": {
         def: "From:",
@@ -2524,42 +1370,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Praeterea, si discrepantiae iam in datis ministratoris adsunt, ad hoc instrumentum ut sunt synchronizabuntur, et eas localiter resolvere debebis.",
             zh: "此外，如果服务器数据中已存在冲突，它们会原样同步到本设备，你需要在本设备上解决。",
         },
-    "Garbage Collection cancelled by user.": {
-        def: "Garbage Collection cancelled by user.",
-        la: "Collectio quisquiliarum ab usore abrogata.",
-        zh: "用户已取消垃圾回收。",
-    },
-    "Garbage Collection completed. Deleted chunks: ${deletedChunks} / ${totalChunks}. Time taken: ${seconds} seconds.":
-        {
-            def: "Garbage Collection completed. Deleted chunks: ${deletedChunks} / ${totalChunks}. Time taken: ${seconds} seconds.",
-            la: "Collectio quisquiliarum perfecta. Fragmenta deleta: ${deletedChunks} / ${totalChunks}. Tempus consumptum: ${seconds} secundae.",
-            zh: "垃圾回收完成。已删除 chunks：${deletedChunks} / ${totalChunks}。耗时：${seconds} 秒。",
-        },
-    "Garbage Collection Confirmation": {
-        def: "Garbage Collection Confirmation",
-        la: "Confirmatio collectionis quisquiliarum",
-        zh: "垃圾回收确认",
-    },
-    "Garbage Collection V3 (Beta)": {
-        def: "Garbage Collection V3 (Beta)",
-        la: "Collectio quisquiliarum V3 (Beta)",
-        zh: "垃圾回收 V3（Beta）",
-    },
-    "Garbage Collection: Found ${unusedChunks} unused chunks to delete.": {
-        def: "Garbage Collection: Found ${unusedChunks} unused chunks to delete.",
-        la: "Collectio quisquiliarum: ${unusedChunks} fragmenta non adhibita delenda inventa.",
-        zh: "垃圾回收：发现 ${unusedChunks} 个未使用的 chunks 待删除。",
-    },
-    "Garbage Collection: Scanned ${scanned} / ~${docCount}": {
-        def: "Garbage Collection: Scanned ${scanned} / ~${docCount}",
-        la: "Collectio quisquiliarum: ${scanned} / ~${docCount} perlustrata",
-        zh: "垃圾回收：已扫描 ${scanned} / ~${docCount}",
-    },
-    "Garbage Collection: Scanning completed. Total chunks: ${totalChunks}, Used chunks: ${usedChunks}": {
-        def: "Garbage Collection: Scanning completed. Total chunks: ${totalChunks}, Used chunks: ${usedChunks}",
-        la: "Collectio quisquiliarum: perlustratio perfecta. Fragmenta omnia: ${totalChunks}, fragmenta adhibita: ${usedChunks}",
-        zh: "垃圾回收：扫描完成。总 chunks：${totalChunks}，已使用 chunks：${usedChunks}",
-    },
     "Gathering information...": {
         def: "Gathering information...",
         la: "Informationes colliguntur...",
@@ -2569,21 +1379,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Generate full report for opening the issue with debug info",
         la: "Genera relationem plenam cum indiciis ad quaestionem aperiendam",
         zh: "生成含调试信息的完整报告（用于提交问题）",
-    },
-    "Generate Random ID": {
-        def: "Generate Random ID",
-        la: "Genera ID fortuitum",
-        zh: "生成随机 ID",
-    },
-    "Get Configuration": {
-        def: "Get Configuration",
-        la: "Arcesse configurationem",
-        zh: "获取配置",
-    },
-    "Group ID": {
-        def: "Group ID",
-        la: "ID gregis",
-        zh: "组 ID",
     },
     "Handle files as Case-Sensitive": {
         def: "Handle files as Case-Sensitive",
@@ -2595,41 +1390,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Creavistine exemplar tutelare antequam pergas?",
         zh: "继续之前，你备份了吗？",
     },
-    "Hidden file synchronization have been temporarily disabled. Please enable them after the fetching, if you need them.":
-        {
-            def: "Hidden file synchronization have been temporarily disabled. Please enable them after the fetching, if you need them.",
-            la: "Synchronizatio plicarum occultarum ad tempus deactivata est. Quaeso eam post arcessionem activa, si ea indiges.",
-            zh: "隐藏文件同步已被临时停用。获取完成后如需使用，请重新启用。",
-        },
-    "Hidden Files": {
-        def: "Hidden Files",
-        la: "Plicae occultae",
-        zh: "隐藏文件",
-    },
     Hide: {
         def: "Hide",
         la: "Cela",
         zh: "隐藏",
-    },
-    "Hide completely": {
-        def: "Hide completely",
-        la: "Omnino cela",
-        zh: "完全隐藏",
-    },
-    "Hide not applicable items": {
-        def: "Hide not applicable items",
-        la: "Cela res non applicabiles",
-        zh: "隐藏不适用项",
-    },
-    "Hide password": {
-        def: "Hide password",
-        la: "Cela tesseram",
-        zh: "隐藏密码",
-    },
-    "Higher (${local} > ${remote})": {
-        def: "Higher (${local} > ${remote})",
-        la: "Superior (${local} > ${remote})",
-        zh: "较高（${local} > ${remote}）",
     },
     "Highlight diff": {
         def: "Highlight diff",
@@ -2652,36 +1416,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Quomodo tractandae sunt plicae locales quae supersunt?",
         zh: "如何处理本地多出的已有文件？",
     },
-    "How would you like to configure the connection to your server?": {
-        def: "How would you like to configure the connection to your server?",
-        la: "Quomodo conexionem ad ministratorem tuum configurare vis?",
-        zh: "你希望如何配置与服务器的连接？",
-    },
-    "However, This should not be enabled if you want to increase your secrecy more.": {
-        def: "However, This should not be enabled if you want to increase your secrecy more.",
-        la: "Attamen hoc activandum non est si secretum tuum magis augere vis.",
-        zh: "不过，如果你希望进一步提高保密性，则不应启用此项。",
-    },
-    "I am adding a device to an existing synchronisation setup": {
-        def: "I am adding a device to an existing synchronisation setup",
-        la: "Instrumentum ad synchronizationem iam constitutam addo",
-        zh: "我要将设备加入现有同步配置",
-    },
-    "I am ready, unlock the database": {
-        def: "I am ready, unlock the database",
-        la: "Paratus sum, repositorium resera",
-        zh: "我已准备好，立即解锁数据库",
-    },
-    "I am setting this up for the first time": {
-        def: "I am setting this up for the first time",
-        la: "Hoc primum constituo",
-        zh: "我是第一次进行设置",
-    },
-    "I am setting up a new server for the first time / I want to reset my existing server.": {
-        def: "I am setting up a new server for the first time / I want to reset my existing server.",
-        la: "Novum ministratorem primum constituo / ministratorem meum exstantem restituere volo.",
-        zh: "我是第一次设置新服务器／我想重置现有服务器。",
-    },
     "I am unable to create a backup of my Vault.": {
         def: "I am unable to create a backup of my Vault.",
         la: "Exemplar tutelare tabularii mei creare non possum.",
@@ -2696,16 +1430,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "I have created a backup of my Vault.",
         la: "Exemplar tutelare tabularii mei creavi.",
         zh: "我已备份我的库。",
-    },
-    "I have made a backup, mark this device as resolved": {
-        def: "I have made a backup, mark this device as resolved",
-        la: "Exemplar tutelare feci; hoc instrumentum ut resolutum nota",
-        zh: "我已完成备份，将此设备标记为“已确认”",
-    },
-    "I know my server details, let me enter them": {
-        def: "I know my server details, let me enter them",
-        la: "Singula ministratoris mei novi; sine me ea inserere",
-        zh: "我知道服务器详情，让我手动输入",
     },
     "I understand that all changes made on other smartphones or computers possibly could be lost.": {
         def: "I understand that all changes made on other smartphones or computers possibly could be lost.",
@@ -2733,12 +1457,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Intellego, superscribe ministratorem",
         zh: "我明白，覆盖服务器",
     },
-    'If "Auto Start P2P Connection" is enabled, the P2P connection will be started automatically when the plug-in launches.':
-        {
-            def: 'If "Auto Start P2P Connection" is enabled, the P2P connection will be started automatically when the plug-in launches.',
-            la: "Si “Conexionem P2P automatice incipe” activum est, conexio P2P automatice incipietur cum additamentum initium capit.",
-            zh: "如果启用了「自动启动 P2P 连接」，插件启动时会自动建立 P2P 连接。",
-        },
     "If disabled(toggled), chunks will be split on the UI thread (Previous behaviour).": {
         def: "If disabled(toggled), chunks will be split on the UI thread (Previous behaviour).",
         la: "Si deactivatum est, fragmenta in filo UI dividentur (modus prior).",
@@ -2777,11 +1495,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Si activum est, notificatio de mutationibus plicarum occultarum supprimetur.",
         zh: "如果启用,将不再通知隐藏文件被更改",
     },
-    "If this enabled, all chunks will be stored with the revision made from its content. (Previous behaviour)": {
-        def: "If this enabled, all chunks will be stored with the revision made from its content. (Previous behaviour)",
-        la: "Si hoc activum est, omnia fragmenta cum recensione ex contento eorum facta servabuntur. (Modus prior)",
-        zh: "如果启用,所有 chunks 将使用根据其内容生成的修订版本存储(以前的行为)",
-    },
     "If this enabled, All files are handled as case-Sensitive (Previous behaviour).": {
         def: "If this enabled, All files are handled as case-Sensitive (Previous behaviour).",
         la: "Si hoc activum est, omnes plicae litterarum magnitudinem discernendo tractantur (modus prior).",
@@ -2805,56 +1518,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Si haec optio activa est, PouchDB conexionem per 60 secundas apertam tenebit et, si nulla mutatio eo tempore advenit, foramen claudet et iterum aperiet, pro eo sine fine aperto tenendo. Utile cum procurator durationem petitionum limitat, sed usum facultatum augere potest.",
             zh: "如果启用此选项,PouchDB 将保持连接打开 60 秒,如果在此时间内没有更改到达,则关闭并重新打开套接字,而不是无限期保持打开。当代理限制请求持续时间时有用,但可能会增加资源使用ß",
         },
-    "If you cannot avoid CORS issues, you might want to try this option. It uses Obsidian's internal API to communicate with the CouchDB server. Not compliant with web standards, but works. Note that this might break in future Obsidian versions.":
-        {
-            def: "If you cannot avoid CORS issues, you might want to try this option. It uses Obsidian's internal API to communicate with the CouchDB server. Not compliant with web standards, but works. Note that this might break in future Obsidian versions.",
-            la: "Si difficultates CORS vitare non potes, hanc optionem temptare fortasse velis. API interno Obsidian utitur ad cum ministratore CouchDB communicandum. Normis interretialibus non congruit, sed operatur. Nota hoc in futuris versionibus Obsidian fortasse frangi posse.",
-            zh: "如果无法避开 CORS 问题，可以试试此选项。它使用 Obsidian 的内部 API 与 CouchDB 服务器通信。不符合 Web 标准，但可用。请注意，未来的 Obsidian 版本可能会使其失效。",
-        },
-    "If you cannot avoid CORS issues, you might want to try this option. It uses Obsidian's internal API to communicate with the S3 server. Not compliant with web standards, but works. Note that this might break in future Obsidian versions.":
-        {
-            def: "If you cannot avoid CORS issues, you might want to try this option. It uses Obsidian's internal API to communicate with the S3 server. Not compliant with web standards, but works. Note that this might break in future Obsidian versions.",
-            la: "Si difficultates CORS vitare non potes, hanc optionem temptare fortasse velis. API interno Obsidian utitur ad cum ministratore S3 communicandum. Normis interretialibus non congruit, sed operatur. Nota hoc in futuris versionibus Obsidian fortasse frangi posse.",
-            zh: "如果无法避开 CORS 问题，可以试试此选项。它使用 Obsidian 的内部 API 与 S3 服务器通信。不符合 Web 标准，但可用。请注意，未来的 Obsidian 版本可能会使其失效。",
-        },
     "If you have unsynchronised changes in your Vault on this device, they will likely diverge from the server's versions after the reset. This may result in a large number of file conflicts.":
         {
             def: "If you have unsynchronised changes in your Vault on this device, they will likely diverge from the server's versions after the reset. This may result in a large number of file conflicts.",
             la: "Si mutationes non synchronizatas in tabulario tuo in hoc instrumento habes, post restitutionem verisimiliter a versionibus ministratoris discedent. Hoc magnum numerum discrepantiarum plicarum efficere potest.",
             zh: "如果本设备的库中有未同步的更改，重置后它们很可能与服务器上的版本产生分歧。这可能导致大量文件冲突。",
         },
-    "If you reached the payload size limit when using IBM Cloudant, please decrease batch size and batch limit to a lower value.":
-        {
-            def: "If you reached the payload size limit when using IBM Cloudant, please decrease batch size and batch limit to a lower value.",
-            la: "Si ad limitem magnitudinis oneris IBM Cloudant utens pervenisti, quaeso magnitudinem acervi et limitem acervi ad valorem minorem minue.",
-            zh: "如果在使用 IBM Cloudant 时达到载荷大小上限，请把批量大小和批量上限调低。",
-        },
     "If you understand the risks and still wish to proceed, select so.": {
         def: "If you understand the risks and still wish to proceed, select so.",
         la: "Si pericula intellegis et tamen pergere vis, hoc elige.",
         zh: "如果你明白风险但仍希望继续，请选择此项。",
     },
-    "If you want to store the data in a specific folder within the bucket, you can specify a folder prefix here. Otherwise, leave it blank to store data at the root of the bucket.":
-        {
-            def: "If you want to store the data in a specific folder within the bucket, you can specify a folder prefix here. Otherwise, leave it blank to store data at the root of the bucket.",
-            la: "Si data in certa theca intra situlam servare vis, praefixum thecae hic indicare potes. Aliter vacuum relinque ut data in radice situlae serventur.",
-            zh: "如果想把数据存放在存储桶内的指定文件夹中，可以在此指定文件夹前缀。否则留空，数据将存放在存储桶根目录。",
-        },
-    "If you want to use `LiveSync`, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.":
-        {
-            def: "If you want to use live sync, you should broadcast changes. All `watching` peers which detects this will start the replication for fetching.",
-            la: "Si synchronizatione viva uti vis, mutationes divulgare debes. Omnes pares `watching` qui hoc animadvertunt replicationem ad arcessendum incipient.",
-            zh: "如果要使用实时同步，你应当广播变更。所有检测到变更的 `watching` 对等方都会启动复制以获取数据。",
-        },
     Ignore: {
         def: "Ignore",
         la: "Ignora",
         zh: "忽略",
-    },
-    "Ignore and Proceed": {
-        def: "Ignore and Proceed",
-        la: "Ignora et perge",
-        zh: "忽略并继续",
     },
     "Ignore files": {
         def: "Ignore files",
@@ -2866,27 +1544,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Exemplaria ignoranda",
         zh: "忽略模式",
     },
-    "Import connection": {
-        def: "Import connection",
-        la: "Importa conexionem",
-        zh: "导入连接",
-    },
-    IMPORTANT: {
-        def: "IMPORTANT",
-        la: "MAGNI MOMENTI",
-        zh: "重要",
-    },
     "Important Notice": {
         def: "Important Notice",
         la: "Nuntius gravis",
         zh: "重要通知",
     },
-    "In most cases, you should stick with the default algorithm (${algorithm}), This setting is only required if you have an existing Vault encrypted in a different format.":
-        {
-            def: "In most cases, you should stick with the default algorithm (${algorithm}), This setting is only required if you have an existing Vault encrypted in a different format.",
-            la: "Plerumque algorithmo praedefinito (${algorithm}) uti debes. Haec optio solum requiritur si tabularium exstans alia forma cryptatum habes.",
-            zh: "大多数情况下，你应当沿用默认算法（${algorithm}）。只有当你有以其他格式加密的现有库时，才需要此项设置。",
-        },
     "In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.":
         {
             def: "In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.",
@@ -2908,27 +1570,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Informatio:",
         zh: "信息：",
     },
-    "Initial Action": {
-        def: "Initial Action",
-        la: "Actio initialis",
-        zh: "初始操作",
-    },
-    "Initialise all journal history, On the next sync, every item will be received and sent.": {
-        def: "Initialise all journal history, On the next sync, every item will be received and sent.",
-        la: "Omnem historiam diarii initializa. In proxima synchronizatione, omnis res accipietur et mittetur.",
-        zh: "初始化所有日志历史。下次同步时，所有项目都会重新接收并发送。",
-    },
-    "Initialise journal received history. On the next sync, every item except this device sent will be downloaded again.":
-        {
-            def: "Initialise journal received history. On the next sync, every item except this device sent will be downloaded again.",
-            la: "Historiam acceptorum diarii initializa. In proxima synchronizatione, omnis res praeter eas quas hoc instrumentum misit iterum deorsum feretur.",
-            zh: "初始化日志的已接收历史。下次同步时，除本设备已发送的项外，其余都会重新下载。",
-        },
-    "Initialise journal sent history. On the next sync, every item except this device received will be sent again.": {
-        def: "Initialise journal sent history. On the next sync, every item except this device received will be sent again.",
-        la: "Historiam missorum diarii initializa. In proxima synchronizatione, omnis res praeter eas quas hoc instrumentum accepit iterum mittetur.",
-        zh: "初始化日志的已发送历史。下次同步时，除本设备已接收的项外，其余都会重新发送。",
-    },
     "Initialize done!": {
         def: "Initialisation complete",
         la: "Initium paratum est",
@@ -2944,56 +1585,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Intervallum (sec)",
         zh: "间隔(秒)",
     },
-    INVERTED: {
-        def: "INVERTED",
-        la: "INVERSUM",
-        zh: "已反转",
-    },
-    "Issue detection log:": {
-        def: "Issue detection log:",
-        la: "Acta detectionis quaestionum:",
-        zh: "问题检测日志：",
-    },
     "It is strongly advised to create a backup before proceeding. Continuing without a backup may lead to data loss.": {
         def: "It is strongly advised to create a backup before proceeding. Continuing without a backup may lead to data loss.",
         la: "Valde suadetur ut exemplar tutelare crees antequam pergas. Sine exemplari tutelari pergere ad datorum amissionem ducere potest.",
         zh: "强烈建议在继续之前先做备份。没有备份继续可能导致数据丢失。",
     },
-    "Just for a minute, please!": {
-        def: "Just for a minute, please!",
-        la: "Unum modo momentum, quaeso!",
-        zh: "请稍等一分钟！",
-    },
-    "JWT (JSON Web Token) authentication allows you to securely authenticate with the CouchDB server using tokens. Ensure that your CouchDB server is configured to accept JWTs and that the provided key and settings match the server's configuration. Incidentally, I have not verified it very thoroughly.":
-        {
-            def: "JWT (JSON Web Token) authentication allows you to securely authenticate with the CouchDB server using tokens. Ensure that your CouchDB server is configured to accept JWTs and that the provided key and settings match the server's configuration. Incidentally, I have not verified it very thoroughly.",
-            la: "Authenticatio JWT (JSON Web Token) tibi permittit ut cum ministratore CouchDB per signa tuto authenticeris. Cura ut ministrator CouchDB tuus ad JWT accipienda configuratus sit et ut clavis et optiones praebitae configurationi ministratoris congruant. Obiter, hoc non admodum diligenter probavi.",
-            zh: "JWT（JSON Web Token）身份验证让你可以用令牌安全地通过 CouchDB 服务器验证身份。请确保你的 CouchDB 服务器已配置为接受 JWT，且所提供的密钥和设置与服务器配置相符。顺带一提，我并没有非常彻底地验证过它。",
-        },
     "JWT Algorithm": {
         def: "JWT Algorithm",
         la: "Algorithmus JWT",
         zh: "JWT 算法",
-    },
-    "JWT Expiration Duration (minutes)": {
-        def: "JWT Expiration Duration (minutes)",
-        la: "Duratio exspirationis JWT (minutae)",
-        zh: "JWT 有效期（分钟）",
-    },
-    "JWT Key": {
-        def: "JWT Key",
-        la: "Clavis JWT",
-        zh: "JWT 密钥",
-    },
-    "JWT Key ID (kid)": {
-        def: "JWT Key ID (kid)",
-        la: "ID clavis JWT (kid)",
-        zh: "JWT 密钥 ID（kid）",
-    },
-    "JWT Subject (sub)": {
-        def: "JWT Subject (sub)",
-        la: "Subiectum JWT (sub)",
-        zh: "JWT 主体（sub）",
     },
     "K.exp": {
         def: "Experimental",
@@ -3045,20 +1645,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Serva plicas locales etiamsi in remoto non sunt",
         zh: "即使远程不存在也保留本地文件",
     },
-    lang_def: {
-        def: "English",
-        la: "English",
-        zh: "English",
-    },
     "lang-auto": {
         def: "Default (follow Obsidian)",
         la: "Praedefinitum (Obsidian sequere)",
         zh: "默认（跟随 Obsidian）",
     },
     "lang-def": {
-        def: "English",
-        la: "English",
-        zh: "English",
+        def: "%{lang_def}",
+        la: "%{lang_def}",
+        zh: "%{lang_def}",
     },
     "lang-la": {
         def: "Latina",
@@ -3075,20 +1670,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Postea",
         zh: "稍后",
     },
-    "Legacy path identity": {
-        def: "Legacy path identity",
-        la: "Identitas viarum hereditaria",
-        zh: "旧版路径标识",
-    },
     "Legacy remote configuration has been migrated to the remote configuration list.": {
         def: "The old server configuration has been moved to the server configuration list.",
         la: "Configuratio vetus ministratoris in indicem configurationum ministratoris translata est.",
         zh: "旧的服务器配置已迁移到服务器配置列表。",
-    },
-    "Limit: {datetime} ({timestamp})": {
-        def: "Limit: {datetime} ({timestamp})",
-        la: "Limes: {datetime} ({timestamp})",
-        zh: "限制：{datetime}（{timestamp}）",
     },
     live: {
         def: "live",
@@ -3211,26 +1796,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Resera repositorium remotum ne data corrumpantur",
         zh: "解锁远程数据库以防止数据损坏",
     },
-    "liveSyncSetting.errorNoSuchSettingItem": {
-        def: "No such setting item: ${key}",
-        la: "Nulla talis optio: ${key}",
-        zh: "没有此设置项：${key}",
-    },
-    "liveSyncSetting.originalValue": {
-        def: "Original: ${value}",
-        la: "Originale: ${value}",
-        zh: "原始值：${value}",
-    },
-    "liveSyncSetting.valueShouldBeInRange": {
-        def: "The value should ${min} < value < ${max}",
-        la: "Valor esse debet ${min} < valor < ${max}",
-        zh: "值应该在 ${min} < value < ${max} 之间",
-    },
-    "liveSyncSettings.btnApply": {
-        def: "Apply",
-        la: "Adhibe",
-        zh: "应用",
-    },
     "Loading old revisions...": {
         def: "Loading old revisions...",
         la: "Recensiones veteres onerantur...",
@@ -3256,30 +1821,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium huius instrumenti restituitur",
         zh: "重置此设备的数据库",
     },
-    "Local Database Tweak": {
-        def: "Local Database Tweak",
-        la: "Accommodatio repositorii localis",
-        zh: "本地数据库微调",
-    },
-    "Local only": {
-        def: "Local only",
-        la: "Solum localiter",
-        zh: "仅本地",
-    },
     Lock: {
         def: "Lock",
         la: "Obsera",
         zh: "锁定",
-    },
-    "Lock Server": {
-        def: "Lock Server",
-        la: "Obsera ministratorem",
-        zh: "锁定服务器",
-    },
-    "Lock the remote server to prevent synchronization with other devices.": {
-        def: "Lock the remote server to prevent synchronization with other devices.",
-        la: "Ministratorem remotum obsera ne synchronizatio cum aliis instrumentis fiat.",
-        zh: "锁定远端服务器，以阻止其他设备继续同步。",
     },
     "logPane.autoScroll": {
         def: "Auto scroll",
@@ -3305,41 +1850,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Wrap",
         la: "Involve",
         zh: "自动换行",
-    },
-    "Lower (${local} < ${remote})": {
-        def: "Lower (${local} < ${remote})",
-        la: "Inferior (${local} < ${remote})",
-        zh: "较低（${local} < ${remote}）",
-    },
-    "Maintenance Commands": {
-        def: "Maintenance Commands",
-        la: "Mandata conservationis",
-        zh: "维护命令",
-    },
-    "Maintenance mode": {
-        def: "Maintenance mode",
-        la: "Modus conservationis",
-        zh: "维护模式",
-    },
-    "maintenancePrerequisites.apply": {
-        def: "Apply and continue",
-        la: "Applica et perge",
-        zh: "应用并继续",
-    },
-    "maintenancePrerequisites.fetchChunksOff": {
-        def: "- Fetch chunks on demand: Off (currently On)",
-        la: "- Arcesse fragmenta ad postulatum: Deactivatum (nunc activum)",
-        zh: "- 按需获取块：关闭（当前为开启）",
-    },
-    "maintenancePrerequisites.message": {
-        def: "${operation} requires the following settings:\n\n${settings}\n\nApply these settings and continue?",
-        la: "${operation} has optiones requirit:\n\n${settings}\n\nApplicarene has optiones et pergere?",
-        zh: "${operation} 需要以下设置：\n\n${settings}\n\n是否应用这些设置并继续？",
-    },
-    "maintenancePrerequisites.title": {
-        def: "${operation} prerequisites",
-        la: "Praerequisita: ${operation}",
-        zh: "${operation} 的前提条件",
     },
     "Maximum delay for batch database updating": {
         def: "Maximum delay for batch database updating",
@@ -3571,11 +2081,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tabularium v${manifestVersion} ${packageVersion}",
         zh: "Tabularium v${manifestVersion} ${packageVersion}",
     },
-    "moduleLiveSyncMain.logReadChangelog": {
-        def: "Tabularium has updated, please read the changelog!",
-        la: "Tabularium renovatum est, quaeso indicem mutationum lege!",
-        zh: "Tabularium 已更新,请阅读更新日志！",
-    },
     "moduleLiveSyncMain.logSafetyScanCompleted": {
         def: "Additional safety scan completed",
         la: "Perscrutatio securitatis addita perfecta",
@@ -3590,11 +2095,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Unloading plugin...",
         la: "Additamentum exoneratur...",
         zh: "正在卸载插件...",
-    },
-    "moduleLiveSyncMain.logVersionUpdate": {
-        def: "Tabularium has been updated, In case of breaking updates, all automatic synchronization has been temporarily disabled. Ensure that all devices are up to date before enabling.",
-        la: "Tabularium renovatum est. Propter renovationes fortasse incompatibiles, omnis synchronizatio automatica ad tempus deactivata est. Cura ut omnia instrumenta renovata sint antequam activas.",
-        zh: "Tabularium 已更新,如果存在破坏性更新,所有自动同步已暂时禁用。请确保所有设备都更新到最新版本后再启用",
     },
     "moduleLiveSyncMain.msgScramEnabled": {
         def: "Tabularium has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
@@ -3866,95 +2366,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Missio fragmentorum cumulata activata erat, sed haec facultas corrupta erat. Ignosce incommodo. Automatice deactivata est.",
         zh: "已启用批量发送 chunks,但此功能已损坏。给您带来不便,我们深表歉意。已自动禁用",
     },
-    "moduleMigration.logFetchRemoteTweakFailed": {
-        def: "Failed to fetch remote tweak values",
-        la: "Valores subtiles remoti arcessiri non potuerunt",
-        zh: "获取远程调整值失败",
-    },
     "moduleMigration.logLocalDatabaseNotReady": {
         def: "Something went wrong! The local database is not ready",
         la: "Aliquid erravit! Repositorium locale non paratum est",
         zh: "出错了！本地数据库尚未准备好",
-    },
-    "moduleMigration.logMigratedSameBehaviour": {
-        def: "Migrated to db:${current} with the same behaviour as before",
-        la: "Migratum ad db:${current} eodem modo quo antea",
-        zh: "已迁移到 db:${current},行为与之前相同",
-    },
-    "moduleMigration.logMigrationFailed": {
-        def: "Migration failed or cancelled from ${old} to ${current}",
-        la: "Migratio ab ${old} ad ${current} defecit vel abrogata est",
-        zh: "从 ${old} 到 ${current} 的迁移失败或已取消",
-    },
-    "moduleMigration.logRedflag2CreationFail": {
-        def: "Failed to create redflag2",
-        la: "redflag2 creari non potuit",
-        zh: "创建 redflag2 失败",
-    },
-    "moduleMigration.logRemoteTweakUnavailable": {
-        def: "Could not get remote tweak values",
-        la: "Valores subtiles remoti obtineri non potuerunt",
-        zh: "无法获取远程调整值",
-    },
-    "moduleMigration.logSetupCancelled": {
-        def: "The setup has been cancelled, Tabularium waiting for your setup!",
-        la: "Constitutio abrogata est; Tabularium constitutionem tuam exspectat!",
-        zh: "设置已取消,Tabularium 正在等待您的设置！",
-    },
-    "moduleMigration.msgFetchRemoteAgain": {
-        def: "As you may already know, the Tabularium has changed its default behaviour and database structure.\n\nAnd thankfully, with your time and efforts, the remote database appears to have already been migrated. Congratulations!\n\nHowever, we need a bit more. The configuration of this device is not compatible with the remote database. We will need to fetch the remote database again. Should we fetch from the remote again now?\n\n___Note: We cannot synchronise until the configuration has been changed and the database has been fetched again.___\n___Note2: The chunks are completely immutable, we can fetch only the metadata and difference.___",
-        la: "Ut fortasse iam scis, Tabularium modum praedefinitum et structuram repositorii mutavit.\n\nEt feliciter, tempore et labore tuo, repositorium remotum iam migratum esse videtur. Gratulamur!\n\nAttamen paulo plus opus est. Configuratio huius instrumenti cum repositorio remoto non congruit. Repositorium remotum iterum arcessere necesse erit. Arcessamusne nunc iterum ex remoto?\n\n___Nota: Synchronizare non possumus donec configuratio mutata et repositorium iterum arcessitum sit.___\n___Nota 2: Fragmenta omnino immutabilia sunt; tantum metadata et differentiam arcessere possumus.___",
-        zh: "您可能已经知道,Tabularium 更改了其默认行为和数据库结构。\n\n值得庆幸的是,在您的时间和努力下,远程数据库似乎已经迁移完成。恭喜！\n\n但是,我们还需要一点点操作。此设备的配置与远程数据库不兼容。我们需要再次从远程数据库获取。我们现在应该再次从远程获取吗？\n\n___注意:在更改配置并再次获取数据库之前,我们无法进行同步。___\n___注意2:chunks 是完全不可变的,我们只能获取元数据和差异",
-    },
-    "moduleMigration.msgSinceV02321": {
-        def: "Since v0.23.21, the Tabularium has changed the default behaviour and database structure. The following changes have been made:\n\n1. **Case sensitivity of filenames**\n   The handling of filenames is now case-insensitive. This is a beneficial change for most platforms, other than Linux and iOS, which do not manage filename case sensitivity effectively.\n   (On These, a warning will be displayed for files with the same name but different cases).\n\n2. **Revision handling of the chunks**\n   Chunks are immutable, which allows their revisions to be fixed. This change will enhance the performance of file saving.\n\n___However, to enable either of these changes, both remote and local databases need to be rebuilt. This process takes a few minutes, and we recommend doing it when you have ample time.___\n\n- If you wish to maintain the previous behaviour, you can skip this process by using `${KEEP}`.\n- If you do not have enough time, please choose `${DISMISS}`. You will be prompted again later.\n- If you have rebuilt the database on another device, please select `${DISMISS}` and try synchronizing again. Since a difference has been detected, you will be prompted again.",
-        la: "Ab v0.23.21, Tabularium modum praedefinitum et structuram repositorii mutavit. Hae mutationes factae sunt:\n\n1. **Discrimen litterarum maiuscularum in nominibus plicarum**\n   Tractatio nominum plicarum nunc litteras maiusculas et minusculas non discernit. Haec mutatio plerisque suggestibus utilis est, praeter Linux et iOS, quae discrimen litterarum in nominibus plicarum non bene administrant.\n   (In his, monitum monstrabitur pro plicis eodem nomine sed diversis litteris).\n\n2. **Tractatio recensionum fragmentorum**\n   Fragmenta immutabilia sunt, quod sinit recensiones eorum figi. Haec mutatio celeritatem servandi plicas augebit.\n\n___Attamen, ut utramvis harum mutationum actives, repositoria et remotum et locale reaedificanda sunt. Hic processus paucas minutas postulat, et suademus ut id facias cum satis temporis habes.___\n\n- Si modum priorem retinere vis, hunc processum per `${KEEP}` omittere potes.\n- Si satis temporis non habes, quaeso elige `${DISMISS}`. Postea iterum rogaberis.\n- Si repositorium in alio instrumento reaedificavisti, quaeso elige `${DISMISS}` et iterum synchronizare conare. Quia differentia detecta est, iterum rogaberis.",
-        zh: "自 v0.23.21 起,Tabularium 更改了默认行为和数据库结构。进行了以下更改：\n\n1. **文件名的区分大小写**\n现在处理文件名时不区分大小写。这对于大多数平台来说是一个有益的更改,除了 Linux 和 iOS,它们不能有效地管理文件名的大小写敏感性。\n(在这些平台上,对于名称相同但大小写不同的文件将显示警告)。\n\n2. **chunks 的版本处理**\nchunks 是不可变的,这使得它们的版本可以固定。此更改将提高文件保存的性能。\n\n___然而,要启用这些更改中的任何一个,都需要重建远程和本地数据库。这个过程需要几分钟,我们建议您在有充足时间时进行。___\n\n- 如果您希望保持以前的行为,可以使用 `${KEEP}` 跳过此过程。\n- 如果您没有足够的时间,请选择 `${DISMISS}`。稍后会再次提示您。\n- 如果您已在另一台设备上重建了数据库,请选择 `${DISMISS}` 并尝试再次同步。由于检测到差异,系统会再次提示您",
-    },
-    "moduleMigration.optionAdjustRemote": {
-        def: "Adjust to remote",
-        la: "Accommoda ad remotum",
-        zh: "调整到远程设置",
-    },
-    "moduleMigration.optionDecideLater": {
-        def: "Decide it later",
-        la: "Postea decerne",
-        zh: "稍后决定",
-    },
-    "moduleMigration.optionEnableBoth": {
-        def: "Enable both",
-        la: "Activa utrumque",
-        zh: "启用两者",
-    },
-    "moduleMigration.optionEnableFilenameCaseInsensitive": {
-        def: "Enable only #1",
-        la: "Activa tantum #1",
-        zh: "仅启用 #1",
-    },
-    "moduleMigration.optionEnableFixedRevisionForChunks": {
-        def: "Enable only #2",
-        la: "Activa tantum #2",
-        zh: "仅启用 #2",
-    },
-    "moduleMigration.optionKeepPreviousBehaviour": {
-        def: "Keep previous behaviour",
-        la: "Retine modum priorem",
-        zh: "保持以前的行为",
-    },
-    "moduleMigration.optionNoAskAgain": {
-        def: "No, please ask again",
-        la: "Minime, quaeso iterum roga",
-        zh: "不,请稍后再次询问",
-    },
-    "moduleMigration.optionYesFetchAgain": {
-        def: "Yes, fetch again",
-        la: "Ita, iterum arcesse",
-        zh: "是的,再次获取",
-    },
-    "moduleMigration.titleCaseSensitivity": {
-        def: "Case Sensitivity",
-        la: "Discrimen litterarum",
-        zh: "大小写敏感性",
     },
     "moduleObsidianMenu.replicate": {
         def: "Replicate",
@@ -3966,20 +2381,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Plures actiones",
         zh: "更多操作",
     },
-    "Mostly Complete: Decision Required": {
-        def: "Mostly Complete: Decision Required",
-        la: "Paene perfectum: decisio requiritur",
-        zh: "基本完成：需要你决定",
-    },
     "Move remotely deleted files to the trash, instead of deleting.": {
         def: "Move remotely deleted files to the trash, instead of deleting.",
         la: "Plicas remote deletas in quisquilias move, pro eis delendis.",
         zh: "将远程删除的文件移至回收站,而不是直接删除",
-    },
-    "My remote server is already set up. I want to join this device.": {
-        def: "My remote server is already set up. I want to join this device.",
-        la: "Ministrator meus remotus iam constitutus est. Hoc instrumentum adiungere volo.",
-        zh: "我的远端服务器已设置好，我想让本设备加入。",
     },
     Name: {
         def: "Name",
@@ -4001,16 +2406,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "NOVUM",
         zh: "新增",
     },
-    "New Remote": {
-        def: "New Remote",
-        la: "Novum remotum",
-        zh: "新建远端",
-    },
-    "Newer (${diff})": {
-        def: "Newer (${diff})",
-        la: "Recentior (${diff})",
-        zh: "较新（${diff}）",
-    },
     Next: {
         def: "Next",
         la: "Sequens",
@@ -4026,81 +2421,26 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Dum repositorium ministratoris restituitur, nulla conexio synchronizationis activa inventa est.",
         zh: "重置服务器数据库时未找到活动的同步连接。",
     },
-    "No checks have been performed yet.": {
-        def: "No checks have been performed yet.",
-        la: "Nullae probationes adhuc factae sunt.",
-        zh: "尚未执行任何检查。",
-    },
-    "No connected device information found. Cancelling Garbage Collection.": {
-        def: "No connected device information found. Cancelling Garbage Collection.",
-        la: "Nullae notitiae de instrumentis conexis inventae. Collectio purgamentorum abrogatur.",
-        zh: "未找到已连接设备的信息。正在取消垃圾回收。",
-    },
-    "No Connection": {
-        def: "No Connection",
-        la: "Nulla conexio",
-        zh: "未连接",
-    },
     "No data to save in ${dispFilename}!! This document may be corrupted in the local database! Please back it up immediately, and report an issue!":
         {
             def: "No data to save in ${dispFilename}. This document may be corrupted in this device's database. Back it up immediately and report the issue.",
             la: "In ${dispFilename} nulla data servanda sunt. Hoc documentum in repositorio huius instrumenti fortasse corruptum est. Statim exemplar tutum fac et rem nuntia.",
             zh: "${dispFilename} 中没有可保存的数据。此文档在此设备的数据库中可能已损坏。请立即备份，并报告此问题。",
         },
-    "No devices available. Waiting for other devices to connect...": {
-        def: "No devices available. Waiting for other devices to connect...",
-        la: "Nulla instrumenta praesto. Exspectatur dum alia instrumenta conectantur...",
-        zh: "没有可用的设备。正在等待其他设备连接…",
-    },
-    "No Items.": {
-        def: "No Items.",
-        la: "Nulla elementa.",
-        zh: "无项目。",
-    },
-    "No limit configured": {
-        def: "No limit configured",
-        la: "Nullus limes constitutus",
-        zh: "未配置限制",
-    },
     "No passphrase found for data.json! Verify configuration before syncing.": {
         def: "No passphrase found for data.json. Check the configuration before synchronising.",
         la: "Nulla tessera arcana pro data.json inventa est. Ante synchronizationem configurationem inspice.",
         zh: "未找到 data.json 的密码短语。同步前请检查配置。",
-    },
-    "NO PREVIEW": {
-        def: "NO PREVIEW",
-        la: "NULLA PRAEVISIO",
-        zh: "无预览",
     },
     "No unreferenced chunks! ${info.db_name}": {
         def: "No unreferenced chunks in ${info.db_name}.",
         la: "Nulla fragmenta non relata in ${info.db_name}.",
         zh: "${info.db_name} 中没有未被引用的数据块。",
     },
-    "No, please take me back": {
-        def: "No, please take me back",
-        la: "Minime, quaeso me reduc",
-        zh: "不，返回上一步",
-    },
     "Node ID": {
         def: "Node ID",
         la: "ID nodi",
         zh: "节点 ID",
-    },
-    "Node Information Missing": {
-        def: "Node Information Missing",
-        la: "Notitiae nodi desunt",
-        zh: "节点信息缺失",
-    },
-    "Non-Synchronising files": {
-        def: "Non-Synchronising files",
-        la: "Plicae non synchronizandae",
-        zh: "不同步的文件",
-    },
-    "Normal Files": {
-        def: "Normal Files",
-        la: "Plicae ordinariae",
-        zh: "普通文件",
     },
     'Not all messages have been translated. And, please revert to "Default" when reporting errors.': {
         def: 'Not all messages have been translated. And, please revert to "Default" when reporting errors.',
@@ -4112,22 +2452,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Non constitutum",
         zh: "未配置",
     },
-    "Not now": {
-        def: "Not now",
-        la: "Non nunc",
-        zh: "暂不",
-    },
-    "Note that the Group ID is not limited to the generated format; you can use any string as the Group ID.": {
-        def: "Note that the Group ID is not limited to the generated format; you can use any string as the Group ID.",
-        la: "Nota ID gregis non ad formam generatam limitari; quamlibet catenam litterarum ut ID gregis adhibere potes.",
-        zh: "请注意，组 ID 不限于生成的格式；你可以使用任意字符串作为组 ID。",
-    },
-    'Note that you can generate a new Setup URI by running the "Copy settings as a new Setup URI" command in the command palette.':
-        {
-            def: 'Note that you can generate a new Setup URI by running the "Copy settings as a new Setup URI" command in the command palette.',
-            la: "Nota te novum Setup URI generare posse mandatum “Copy settings as a new Setup URI” in indice mandatorum exsequendo.",
-            zh: "请注意，你可以在命令面板中运行「Copy settings as a new Setup URI」命令来生成新的设置 URI。",
-        },
     "Notify all setting files": {
         def: "Notify all setting files",
         la: "Nuntia omnes plicas optionum",
@@ -4164,17 +2488,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Fragmenta non relata in ${info.db_name}: ${chunks.length}",
         zh: "${info.db_name} 中未被引用的数据块：${chunks.length}",
     },
-    "Obfuscate Properties": {
-        def: "Obfuscate Properties",
-        la: "Obscura proprietates",
-        zh: "混淆属性",
-    },
-    "Obfuscating properties (e.g., path of file, size, creation and modification dates) adds an additional layer of security by making it harder to identify the structure and names of your files and folders on the remote server. This helps protect your privacy and makes it more difficult for unauthorized users to infer information about your data.":
-        {
-            def: "Obfuscating properties (e.g., path of file, size, creation and modification dates) adds an additional layer of security by making it harder to identify the structure and names of your files and folders on the remote server. This helps protect your privacy and makes it more difficult for unauthorized users to infer information about your data.",
-            la: "Proprietates obscurare (e.g., viam plicae, magnitudinem, dies creationis et mutationis) gradum securitatis addit, quia difficilius fit structuram et nomina plicarum thecarumque tuarum in ministratore remoto agnoscere. Hoc secretum tuum tuetur et usoribus non permissis difficilius reddit aliquid de datis tuis colligere.",
-            zh: "混淆属性（例如文件路径、大小、创建和修改日期）通过让远端服务器上更难识别你文件和文件夹的结构与名称，增加了一层额外的安全保障。这有助于保护你的隐私，也让未授权用户更难推断出关于你数据的信息。",
-        },
     "Obsidian version": {
         def: "Obsidian version",
         la: "Versio Obsidian",
@@ -4184,906 +2497,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Obsidian will restart within ${stableCheck} seconds.",
         la: "Obsidian intra ${stableCheck} secunda denuo incipiet.",
         zh: "Obsidian 将在 ${stableCheck} 秒内重启。",
-    },
-    "obsidianLiveSyncSettingTab.btnApply": {
-        def: "Apply",
-        la: "Adhibe",
-        zh: "应用",
-    },
-    "obsidianLiveSyncSettingTab.btnCheck": {
-        def: "Check",
-        la: "Inspice",
-        zh: "检查",
-    },
-    "obsidianLiveSyncSettingTab.btnCopy": {
-        def: "Copy",
-        la: "Exscribe",
-        zh: "复制",
-    },
-    "obsidianLiveSyncSettingTab.btnDisable": {
-        def: "Disable",
-        la: "Deactiva",
-        zh: "禁用",
-    },
-    "obsidianLiveSyncSettingTab.btnDiscard": {
-        def: "Discard",
-        la: "Abice",
-        zh: "丢弃",
-    },
-    "obsidianLiveSyncSettingTab.btnEnable": {
-        def: "Enable",
-        la: "Activa",
-        zh: "启用",
-    },
-    "obsidianLiveSyncSettingTab.btnFix": {
-        def: "Fix",
-        la: "Corrige",
-        zh: "修复",
-    },
-    "obsidianLiveSyncSettingTab.btnGotItAndUpdated": {
-        def: "I got it and updated.",
-        la: "Intellexi et renovavi.",
-        zh: "我明白了并且已更新",
-    },
-    "obsidianLiveSyncSettingTab.btnStart": {
-        def: "Start",
-        la: "Incipe",
-        zh: "开始",
-    },
-    "obsidianLiveSyncSettingTab.btnTest": {
-        def: "Test",
-        la: "Proba",
-        zh: "测试",
-    },
-    "obsidianLiveSyncSettingTab.btnUse": {
-        def: "Use",
-        la: "Utere",
-        zh: "使用",
-    },
-    "obsidianLiveSyncSettingTab.buttonFetch": {
-        def: "Fetch",
-        la: "Arcesse",
-        zh: "获取",
-    },
-    "obsidianLiveSyncSettingTab.defaultLanguage": {
-        def: "Default",
-        la: "Praedefinitum",
-        zh: "默认语言",
-    },
-    "obsidianLiveSyncSettingTab.descConnectSetupURI": {
-        def: "This is the recommended method to set up Self-hosted Tabularium with a Setup URI.",
-        la: "Haec est ratio commendata Tabularium per Setup URI constituendi.",
-        zh: "这是使用设置 URI 设置 Tabularium 的推荐方法",
-    },
-    "obsidianLiveSyncSettingTab.descCopySetupURI": {
-        def: "Perfect for setting up a new device!",
-        la: "Aptissimum ad novum instrumentum constituendum!",
-        zh: "非常适合设置新设备！",
-    },
-    "obsidianLiveSyncSettingTab.descEnableLiveSync": {
-        def: "Only enable this after configuring either of the above two options or completing all configuration manually.",
-        la: "Hoc tantum activa postquam alterutram ex duabus optionibus supra configuraveris vel omnem configurationem manu perfeceris.",
-        zh: "仅在配置了上述两个选项之一或手动完成所有配置后启用此选项",
-    },
-    "obsidianLiveSyncSettingTab.descFetchConfigFromRemote": {
-        def: "Fetch necessary settings from already configured remote server.",
-        la: "Arcesse optiones necessarias ex ministratore remoto iam configurato.",
-        zh: "从已配置的远程服务器获取必要的设置",
-    },
-    "obsidianLiveSyncSettingTab.descManualSetup": {
-        def: "Not recommended, but useful if you don't have a Setup URI",
-        la: "Non commendatur, sed utile si Setup URI non habes",
-        zh: "不推荐,但如果您没有设置 URI 则很有用",
-    },
-    "obsidianLiveSyncSettingTab.descTestDatabaseConnection": {
-        def: "Open database connection. If the remote database is not found and you have permission to create a database, the database will be created.",
-        la: "Aperi conexionem repositorii. Si repositorium remotum non invenitur et licentiam repositorium creandi habes, repositorium creabitur.",
-        zh: "打开数据库连接。如果未找到远程数据库并且您有创建数据库的权限,则将创建数据库",
-    },
-    "obsidianLiveSyncSettingTab.descValidateDatabaseConfig": {
-        def: "Checks and fixes any potential issues with the database config.",
-        la: "Inspicit et corrigit quaslibet difficultates in configuratione repositorii.",
-        zh: "检查并修复数据库配置中的任何潜在问题",
-    },
-    "obsidianLiveSyncSettingTab.errAccessForbidden": {
-        def: "✗ Access forbidden.",
-        la: "✗ Accessus vetitus.",
-        zh: "✗ 访问被禁止。",
-    },
-    "obsidianLiveSyncSettingTab.errCannotContinueTest": {
-        def: "We could not continue the test.",
-        la: "Probationem continuare non potuimus.",
-        zh: "我们无法继续测试。",
-    },
-    "obsidianLiveSyncSettingTab.errCorsCredentials": {
-        def: "✗ cors.credentials is wrong",
-        la: "✗ cors.credentials falsum est",
-        zh: "✗ cors.credentials 设置有误",
-    },
-    "obsidianLiveSyncSettingTab.errCorsNotAllowingCredentials": {
-        def: "✗ CORS is not allowing credentials",
-        la: "✗ CORS testimonia non permittit",
-        zh: "✗ CORS 不允许凭据",
-    },
-    "obsidianLiveSyncSettingTab.errCorsOrigins": {
-        def: "✗ cors.origins is wrong",
-        la: "✗ cors.origins falsum est",
-        zh: "✗ cors.origins 设置有误",
-    },
-    "obsidianLiveSyncSettingTab.errEnableCors": {
-        def: "✗ httpd.enable_cors is wrong",
-        la: "✗ httpd.enable_cors falsum est",
-        zh: "✗ httpd.enable_cors 设置有误",
-    },
-    "obsidianLiveSyncSettingTab.errEnableCorsChttpd": {
-        def: "✗ chttpd.enable_cors is wrong",
-        la: "✗ chttpd.enable_cors falsum est",
-        zh: "✗ chttpd.enable_cors 设置有误",
-    },
-    "obsidianLiveSyncSettingTab.errMaxDocumentSize": {
-        def: "✗ couchdb.max_document_size is low)",
-        la: "✗ couchdb.max_document_size nimis parvum est)",
-        zh: "✗ couchdb.max_document_size 过低）",
-    },
-    "obsidianLiveSyncSettingTab.errMaxRequestSize": {
-        def: "✗ chttpd.max_http_request_size is low)",
-        la: "✗ chttpd.max_http_request_size nimis parvum est)",
-        zh: "✗ chttpd.max_http_request_size 过低）",
-    },
-    "obsidianLiveSyncSettingTab.errMissingWwwAuth": {
-        def: "✗ httpd.WWW-Authenticate is missing",
-        la: "✗ httpd.WWW-Authenticate deest",
-        zh: "✗ 缺少 httpd.WWW-Authenticate",
-    },
-    "obsidianLiveSyncSettingTab.errRequireValidUser": {
-        def: "✗ chttpd.require_valid_user is wrong.",
-        la: "✗ chttpd.require_valid_user falsum est.",
-        zh: "✗ chttpd.require_valid_user 设置有误。",
-    },
-    "obsidianLiveSyncSettingTab.errRequireValidUserAuth": {
-        def: "✗ chttpd_auth.require_valid_user is wrong.",
-        la: "✗ chttpd_auth.require_valid_user falsum est.",
-        zh: "✗ chttpd_auth.require_valid_user 设置有误。",
-    },
-    "obsidianLiveSyncSettingTab.labelDisabled": {
-        def: "Status: Disabled",
-        la: "Status: Deactivatum",
-        zh: "状态：已停用",
-    },
-    "obsidianLiveSyncSettingTab.labelEnabled": {
-        def: "Status: Enabled",
-        la: "Status: Activum",
-        zh: "状态：已启用",
-    },
-    "obsidianLiveSyncSettingTab.levelAdvanced": {
-        def: " (Advanced)",
-        la: " (Provectum)",
-        zh: "(进阶)",
-    },
-    "obsidianLiveSyncSettingTab.levelEdgeCase": {
-        def: " (Edge Case)",
-        la: " (Casus rarus)",
-        zh: "(边缘情况)",
-    },
-    "obsidianLiveSyncSettingTab.levelPowerUser": {
-        def: " (Power User)",
-        la: " (Usor peritus)",
-        zh: "(高级用户)",
-    },
-    "obsidianLiveSyncSettingTab.linkOpenInBrowser": {
-        def: "Open in browser",
-        la: "Aperi in navigatro",
-        zh: "在浏览器中打开",
-    },
-    "obsidianLiveSyncSettingTab.linkPageTop": {
-        def: "Page Top",
-        la: "Summa pagina",
-        zh: "页面顶部",
-    },
-    "obsidianLiveSyncSettingTab.linkTipsAndTroubleshooting": {
-        def: "Tips and Troubleshooting",
-        la: "Consilia et solutio difficultatum",
-        zh: "提示和故障排除",
-    },
-    "obsidianLiveSyncSettingTab.linkTroubleshooting": {
-        def: "/docs/troubleshooting.md",
-        la: "/docs/troubleshooting.md",
-        zh: "/docs/troubleshooting.md",
-    },
-    "obsidianLiveSyncSettingTab.logCannotUseCloudant": {
-        def: "This feature cannot be used with IBM Cloudant.",
-        la: "Haec facultas cum IBM Cloudant adhiberi non potest.",
-        zh: "此功能不能与 IBM Cloudant 一起使用 ",
-    },
-    "obsidianLiveSyncSettingTab.logCheckingConfigDone": {
-        def: "Checking configuration done",
-        la: "Inspectio configurationis perfecta",
-        zh: "配置检查完成",
-    },
-    "obsidianLiveSyncSettingTab.logCheckingConfigFailed": {
-        def: "Checking configuration failed",
-        la: "Inspectio configurationis defecit",
-        zh: "配置检查失败",
-    },
-    "obsidianLiveSyncSettingTab.logCheckingDbConfig": {
-        def: "Checking database configuration",
-        la: "Configuratio repositorii inspicitur",
-        zh: "正在检查数据库配置",
-    },
-    "obsidianLiveSyncSettingTab.logCheckPassphraseFailed": {
-        def: "ERROR: Failed to check passphrase with the remote server:\n${db}.",
-        la: "ERROR: Tessera arcana cum ministratore remoto inspici non potuit:\n${db}.",
-        zh: "错误：无法使用远程服务器检查密码：\n${db}",
-    },
-    "obsidianLiveSyncSettingTab.logConfiguredDisabled": {
-        def: "Configured synchronization mode: DISABLED",
-        la: "Modus synchronizationis configuratus: DEACTIVATUS",
-        zh: "已配置的同步模式：已禁用",
-    },
-    "obsidianLiveSyncSettingTab.logConfiguredLiveSync": {
-        def: "Configured synchronization mode: live sync",
-        la: "Modus synchronizationis configuratus: synchronizatio viva",
-        zh: "已配置的同步模式：实时同步",
-    },
-    "obsidianLiveSyncSettingTab.logConfiguredPeriodic": {
-        def: "Configured synchronization mode: Periodic",
-        la: "Modus synchronizationis configuratus: Periodicus",
-        zh: "已配置的同步模式：定期同步",
-    },
-    "obsidianLiveSyncSettingTab.logCouchDbConfigFail": {
-        def: "CouchDB Configuration: ${title} failed",
-        la: "Configuratio CouchDB: ${title} defecit",
-        zh: "CouchDB 配置：${title} 失败",
-    },
-    "obsidianLiveSyncSettingTab.logCouchDbConfigSet": {
-        def: "CouchDB Configuration: ${title} -> Set ${key} to ${value}",
-        la: "Configuratio CouchDB: ${title} -> Pone ${key} ad ${value}",
-        zh: "CouchDB 配置：${title} -> 设置 ${key} 为 ${value}",
-    },
-    "obsidianLiveSyncSettingTab.logCouchDbConfigUpdated": {
-        def: "CouchDB Configuration: ${title} successfully updated",
-        la: "Configuratio CouchDB: ${title} feliciter renovata",
-        zh: "CouchDB 配置：${title} 成功更新",
-    },
-    "obsidianLiveSyncSettingTab.logDatabaseConnected": {
-        def: "Database connected",
-        la: "Repositorium conexum",
-        zh: "数据库已连接",
-    },
-    "obsidianLiveSyncSettingTab.logEncryptionNoPassphrase": {
-        def: "You cannot enable encryption without a passphrase",
-        la: "Cryptationem sine tessera arcana activare non potes",
-        zh: "没有密码无法启用加密",
-    },
-    "obsidianLiveSyncSettingTab.logEncryptionNoSupport": {
-        def: "Your device does not support encryption.",
-        la: "Instrumentum tuum cryptationem non sustinet.",
-        zh: "您的设备不支持加密 ",
-    },
-    "obsidianLiveSyncSettingTab.logErrorOccurred": {
-        def: "An error occurred!!",
-        la: "Error accidit!!",
-        zh: "发生错误！！",
-    },
-    "obsidianLiveSyncSettingTab.logEstimatedSize": {
-        def: "Estimated size: ${size}",
-        la: "Magnitudo aestimata: ${size}",
-        zh: "估计大小：${size}",
-    },
-    "obsidianLiveSyncSettingTab.logPassphraseInvalid": {
-        def: "Passphrase is not valid, please fix it.",
-        la: "Tessera arcana non valida est; quaeso eam corrige.",
-        zh: "密码无效,请修正",
-    },
-    "obsidianLiveSyncSettingTab.logPassphraseNotCompatible": {
-        def: "ERROR: Passphrase is not compatible with the remote server! Please check it again!",
-        la: "ERROR: Tessera arcana cum ministratore remoto non congruit! Quaeso eam iterum inspice!",
-        zh: "错误：密码与远程服务器不兼容！请再次检查！",
-    },
-    "obsidianLiveSyncSettingTab.logRebuildNote": {
-        def: "Syncing has been disabled, fetch and re-enabled if desired.",
-        la: "Synchronizatio deactivata est; arcesse et, si vis, iterum activa.",
-        zh: "同步已禁用,如果需要,请获取并重新启用",
-    },
-    "obsidianLiveSyncSettingTab.logSelectAnyPreset": {
-        def: "Select any preset.",
-        la: "Elige quodlibet praeformatum.",
-        zh: "请选择任一预设。",
-    },
-    "obsidianLiveSyncSettingTab.logServerConfigurationCheck": {
-        def: "Server configuration check",
-        la: "Inspectio configurationis ministratoris",
-        zh: "服务器配置检查",
-    },
-    "obsidianLiveSyncSettingTab.msgAreYouSureProceed": {
-        def: "Are you sure to proceed?",
-        la: "Certusne es te pergere velle?",
-        zh: "您确定要继续吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgChangesNeedToBeApplied": {
-        def: "Changes need to be applied!",
-        la: "Mutationes adhibendae sunt!",
-        zh: "需要应用更改！",
-    },
-    "obsidianLiveSyncSettingTab.msgConfigCheck": {
-        def: "--Config check--",
-        la: "--Inspectio configurationis--",
-        zh: "--配置检查--",
-    },
-    "obsidianLiveSyncSettingTab.msgConfigCheckFailed": {
-        def: "The configuration check has failed. Do you want to continue anyway?",
-        la: "Inspectio configurationis defecit. Visne nihilominus pergere?",
-        zh: "配置检查失败。仍要继续吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgConnectionCheck": {
-        def: "--Connection check--",
-        la: "--Inspectio conexionis--",
-        zh: "--连接检查--",
-    },
-    "obsidianLiveSyncSettingTab.msgConnectionProxyNote": {
-        def: "If you're having trouble with the Connection-check (even after checking config), please check your reverse proxy configuration.",
-        la: "Si difficultates cum inspectione conexionis habes (etiam post configurationem inspectam), quaeso configurationem procuratoris inversi (reverse proxy) inspice.",
-        zh: "如果您在连接检查时遇到问题(即使检查了配置后),请检查您的反向代理配置",
-    },
-    "obsidianLiveSyncSettingTab.msgCurrentOrigin": {
-        def: "Current origin: ${origin}",
-        la: "Origo praesens: ${origin}",
-        zh: "当前源: {origin}",
-    },
-    "obsidianLiveSyncSettingTab.msgDiscardConfirmation": {
-        def: "Do you really want to discard existing settings and databases?",
-        la: "Visne vere optiones et repositoria exstantia abicere?",
-        zh: "您真的要丢弃现有的设置和数据库吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgDone": {
-        def: "--Done--",
-        la: "--Factum--",
-        zh: "--完成--",
-    },
-    "obsidianLiveSyncSettingTab.msgEnableCors": {
-        def: "Set httpd.enable_cors",
-        la: "Pone httpd.enable_cors",
-        zh: "设置 httpd.enable_cors",
-    },
-    "obsidianLiveSyncSettingTab.msgEnableCorsChttpd": {
-        def: "Set chttpd.enable_cors",
-        la: "Pone chttpd.enable_cors",
-        zh: "设置 chttpd.enable_cors",
-    },
-    "obsidianLiveSyncSettingTab.msgEnableEncryptionRecommendation": {
-        def: "We recommend enabling End-To-End Encryption, and Path Obfuscation. Are you sure you want to continue without encryption?",
-        la: "Cryptationem ab extremo ad extremum et obscurationem viarum activare suademus. Certusne es te sine cryptatione pergere velle?",
-        zh: "建议启用端到端加密和路径混淆。你确定要在未加密的情况下继续吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgFetchConfigFromRemote": {
-        def: "Do you want to fetch the config from the remote server?",
-        la: "Visne configurationem ex ministratore remoto arcessere?",
-        zh: "要从远端服务器获取配置吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgIfConfigNotPersistent": {
-        def: "If the server configuration is not persistent (e.g., running on docker), the values here may change. Once you are able to connect, please update the settings in the server's local.ini.",
-        la: "Si configuratio ministratoris non perpetua est (e.g., in docker currens), valores hic mutari possunt. Simul ac conecti poteris, quaeso optiones in local.ini ministratoris renova.",
-        zh: "如果服务器配置不是持久的(例如,在 docker 上运行),此处的值可能会更改。一旦能够连接,请更新服务器 local.ini 中的设置",
-    },
-    "obsidianLiveSyncSettingTab.msgInvalidPassphrase": {
-        def: "Your encryption passphrase might be invalid. Are you sure you want to continue?",
-        la: "Tessera arcana cryptationis tua fortasse non valida est. Certusne es te pergere velle?",
-        zh: "你的加密密码短语可能无效。你确定要继续吗？",
-    },
-    "obsidianLiveSyncSettingTab.msgNewVersionNote": {
-        def: "Here due to an upgrade notification? Please review the version history. If you're satisfied, click the button. A new update will prompt this again.",
-        la: "Hic propter notificationem renovationis? Quaeso historiam versionum recense. Si contentus es, preme puncto. Nova renovatio hoc iterum rogabit.",
-        zh: "因为升级通知来到这里？请查看版本历史。如果您满意,请点击按钮。新的更新将再次提示此信息",
-    },
-    "obsidianLiveSyncSettingTab.msgNonHTTPSInfo": {
-        def: "Configured as non-HTTPS URI. Be warned that this may not work on mobile devices.",
-        la: "Ut URI sine HTTPS configuratum. Cave ne hoc in instrumentis mobilibus non funget.",
-        zh: "配置为非 HTTPS URI。请注意,这可能在移动设备上无法工作",
-    },
-    "obsidianLiveSyncSettingTab.msgNonHTTPSWarning": {
-        def: "Cannot connect to non-HTTPS URI. Please update your config and try again.",
-        la: "Ad URI sine HTTPS conecti non potest. Quaeso configurationem tuam renova et iterum conare.",
-        zh: "无法连接到非 HTTPS URI。请更新您的配置并重试",
-    },
-    "obsidianLiveSyncSettingTab.msgNotice": {
-        def: "---Notice---",
-        la: "---Nota---",
-        zh: "---注意---",
-    },
-    "obsidianLiveSyncSettingTab.msgObjectStorageWarning": {
-        def: "WARNING: This feature is a Work In Progress, so please keep in mind the following:\n- Append only architecture. A rebuild is required to shrink the storage.\n- A bit fragile.\n- When first syncing, all history will be transferred from the remote. Be mindful of data caps and slow speeds.\n- Only differences are synced live.\n\nIf you run into any issues, or have ideas about this feature, please create a issue on GitHub.\nI appreciate you for your great dedication.",
-        la: "MONITUM: Haec facultas adhuc in opere est; quaeso haec memento:\n- Architectura tantum addendi. Reaedificatio necessaria est ut repositorium contrahatur.\n- Aliquantum fragilis.\n- Prima synchronizatione, tota historia ex remoto transferetur. Memento limitum datorum et celeritatis tardae.\n- Tantum differentiae continue synchronizantur.\n\nSi in difficultates incidis, aut ideas de hac facultate habes, quaeso quaestionem (issue) in GitHub crea.\nTibi pro magna tua diligentia gratias ago.",
-        zh: "警告：此功能仍在开发中,请注意以下几点：\n- 仅追加架构。需要重建才能缩小存储空间。\n- 有点脆弱。\n- 首次同步时,所有历史记录将从远程传输。注意数据上限和慢速。\n- 只有差异会实时同步。\n\n如果您遇到任何问题,或对此功能有任何想法,请在 GitHub 上创建 issue。\n感谢您的巨大贡献",
-    },
-    "obsidianLiveSyncSettingTab.msgOriginCheck": {
-        def: "Origin check: ${org}",
-        la: "Inspectio originis: ${org}",
-        zh: "源检查: {org}",
-    },
-    "obsidianLiveSyncSettingTab.msgRebuildRequired": {
-        def: "Rebuilding Databases are required to apply the changes.. Please select the method to apply the changes.\n\n<details>\n<summary>Legends</summary>\n\n| Symbol | Meaning |\n|: ------ :| ------- |\n| ⇔ | Up to Date |\n| ⇄ | Synchronise to balance |\n| ⇐,⇒ | Transfer to overwrite |\n| ⇠,⇢ | Transfer to overwrite from other side |\n\n</details>\n\n## ${OPTION_REBUILD_BOTH}\nAt a glance: Files ⇒¹ Local DB ⇒² Remote ⇢ⁿ Local DB ⇄ⁿ⁺¹ Files\nReconstruct both the local and remote databases using existing files from this device.\nThis causes a lockout other devices, and they need to perform fetching.\n## ${OPTION_FETCH}\nAt a glance: Files ⇄² Local DB ⇐¹ Remote ⇔ Local DB ⇔ Files\nInitialise the local database and reconstruct it using data fetched from the remote database.\nThis case includes the case which you have rebuilt the remote database.\n## ${OPTION_ONLY_SETTING}\nStore only the settings. **Caution: This may lead to data corruption**; database reconstruction is generally necessary.",
-        la: "Repositoria reaedificanda sunt ut mutationes applicentur.. Quaeso modum elige quo mutationes applicentur.\n\n<details>\n<summary>Legenda</summary>\n\n| Signum | Significatio |\n|: ------ :| ------- |\n| ⇔ | Recens |\n| ⇄ | Synchroniza ad aequandum |\n| ⇐,⇒ | Transfer ad superscribendum |\n| ⇠,⇢ | Transfer ad superscribendum ex altera parte |\n\n</details>\n\n## ${OPTION_REBUILD_BOTH}\nUno conspectu: Plicae ⇒¹ Repositorium locale ⇒² Remotum ⇢ⁿ Repositorium locale ⇄ⁿ⁺¹ Plicae\nRepositoria et localia et remota ex plicis exstantibus huius instrumenti reconstrue.\nHoc alia instrumenta excludit, quae arcessere debebunt.\n## ${OPTION_FETCH}\nUno conspectu: Plicae ⇄² Repositorium locale ⇐¹ Remotum ⇔ Repositorium locale ⇔ Plicae\nRepositorium locale initia et ex datis a repositorio remoto arcessitis reconstrue.\nHic casus etiam casum includit quo repositorium remotum reaedificavisti.\n## ${OPTION_ONLY_SETTING}\nOptiones tantum serva. **Cautio: Hoc ad data corrupta ducere potest**; reconstructio repositorii plerumque necessaria est.",
-        zh: "需要重建数据库才能应用这些更改。请选择应用更改的方式。\n\n<details>\n<summary>图例</summary>\n\n| 符号 | 含义 |\n|: ------ :| ------- |\n| ⇔ | 已是最新 |\n| ⇄ | 双向同步以达成一致 |\n| ⇐,⇒ | 传输并覆盖 |\n| ⇠,⇢ | 从另一端传输并覆盖 |\n\n</details>\n\n## ${OPTION_REBUILD_BOTH}\n概览：文件 ⇒¹ 本地数据库 ⇒² 远程 ⇢ⁿ 本地数据库 ⇄ⁿ⁺¹ 文件\n使用此设备上的现有文件重建本地和远程数据库。\n这会锁定其他设备，它们需要执行获取。\n## ${OPTION_FETCH}\n概览：文件 ⇄² 本地数据库 ⇐¹ 远程 ⇔ 本地数据库 ⇔ 文件\n初始化本地数据库，并使用从远程数据库获取的数据重建它。\n如果你已经重建了远程数据库，也属于这种情况。\n## ${OPTION_ONLY_SETTING}\n仅保存设置。**注意：这可能导致数据损坏**；通常需要重建数据库。",
-    },
-    "obsidianLiveSyncSettingTab.msgSetCorsCredentials": {
-        def: "Set cors.credentials",
-        la: "Pone cors.credentials",
-        zh: "设置 cors.credentials",
-    },
-    "obsidianLiveSyncSettingTab.msgSetCorsOrigins": {
-        def: "Set cors.origins",
-        la: "Pone cors.origins",
-        zh: "设置 cors.origins",
-    },
-    "obsidianLiveSyncSettingTab.msgSetMaxDocSize": {
-        def: "Set couchdb.max_document_size",
-        la: "Pone couchdb.max_document_size",
-        zh: "设置 couchdb.max_document_size",
-    },
-    "obsidianLiveSyncSettingTab.msgSetMaxRequestSize": {
-        def: "Set chttpd.max_http_request_size",
-        la: "Pone chttpd.max_http_request_size",
-        zh: "设置 chttpd.max_http_request_size",
-    },
-    "obsidianLiveSyncSettingTab.msgSetRequireValidUser": {
-        def: "Set chttpd.require_valid_user = true",
-        la: "Pone chttpd.require_valid_user = true",
-        zh: "设置 chttpd.require_valid_user = true",
-    },
-    "obsidianLiveSyncSettingTab.msgSetRequireValidUserAuth": {
-        def: "Set chttpd_auth.require_valid_user = true",
-        la: "Pone chttpd_auth.require_valid_user = true",
-        zh: "设置 chttpd_auth.require_valid_user = true",
-    },
-    "obsidianLiveSyncSettingTab.msgSettingModified": {
-        def: 'The setting "${setting}" was modified from another device. Click {HERE} to reload settings. Click elsewhere to ignore changes.',
-        la: "Optio “${setting}” ex alio instrumento mutata est. Preme {HERE} ut optiones iterum oneres. Alibi preme ut mutationes neglegas.",
-        zh: '设置 "${setting}" 已从另一台设备修改。点击 {HERE} 重新加载设置。点击其他地方忽略更改',
-    },
-    "obsidianLiveSyncSettingTab.msgSettingsUnchangeableDuringSync": {
-        def: 'These settings are unable to be changed during synchronization. Please disable all syncing in the "Sync Settings" to unlock.',
-        la: "Hae optiones dum synchronizatio fit mutari non possunt. Quaeso omnem synchronizationem in “Optionibus synchronizationis” deactiva ut eas reseres.",
-        zh: "这些设置在同步期间无法更改。请在“同步设置”中禁用所有同步以解锁",
-    },
-    "obsidianLiveSyncSettingTab.msgSetWwwAuth": {
-        def: "Set httpd.WWW-Authenticate",
-        la: "Pone httpd.WWW-Authenticate",
-        zh: "设置 httpd.WWW-Authenticate",
-    },
-    "obsidianLiveSyncSettingTab.nameApplySettings": {
-        def: "Apply Settings",
-        la: "Adhibe optiones",
-        zh: "应用设置",
-    },
-    "obsidianLiveSyncSettingTab.nameConnectSetupURI": {
-        def: "Connect with Setup URI",
-        la: "Conecte per Setup URI",
-        zh: "使用设置 URI 连接",
-    },
-    "obsidianLiveSyncSettingTab.nameCopySetupURI": {
-        def: "Copy the current settings to a Setup URI",
-        la: "Exscribe optiones praesentes in Setup URI",
-        zh: "将当前设置复制为设置 URI",
-    },
-    "obsidianLiveSyncSettingTab.nameDisableHiddenFileSync": {
-        def: "Disable Hidden files sync",
-        la: "Deactiva synchronizationem plicarum occultarum",
-        zh: "禁用隐藏文件同步",
-    },
-    "obsidianLiveSyncSettingTab.nameDiscardSettings": {
-        def: "Discard existing settings and databases",
-        la: "Abice optiones et repositoria exstantia",
-        zh: "丢弃现有设置和数据库",
-    },
-    "obsidianLiveSyncSettingTab.nameEnableHiddenFileSync": {
-        def: "Enable Hidden files sync",
-        la: "Activa synchronizationem plicarum occultarum",
-        zh: "启用隐藏文件同步",
-    },
-    "obsidianLiveSyncSettingTab.nameEnableLiveSync": {
-        def: "Enable live sync",
-        la: "Activa synchronizationem vivam",
-        zh: "启用实时同步",
-    },
-    "obsidianLiveSyncSettingTab.nameHiddenFileSynchronization": {
-        def: "Hidden file synchronization",
-        la: "Synchronizatio plicarum occultarum",
-        zh: "隐藏文件同步",
-    },
-    "obsidianLiveSyncSettingTab.nameManualSetup": {
-        def: "Manual Setup",
-        la: "Constitutio manualis",
-        zh: "手动设置",
-    },
-    "obsidianLiveSyncSettingTab.nameTestConnection": {
-        def: "Test Connection",
-        la: "Proba conexionem",
-        zh: "测试连接",
-    },
-    "obsidianLiveSyncSettingTab.nameTestDatabaseConnection": {
-        def: "Test Database Connection",
-        la: "Proba conexionem repositorii",
-        zh: "测试数据库连接",
-    },
-    "obsidianLiveSyncSettingTab.nameValidateDatabaseConfig": {
-        def: "Validate Database Configuration",
-        la: "Confirma configurationem repositorii",
-        zh: "验证数据库配置",
-    },
-    "obsidianLiveSyncSettingTab.okAdminPrivileges": {
-        def: "✓ You have administrator privileges.",
-        la: "✓ Privilegia administratoris habes.",
-        zh: "✓ 你拥有管理员权限。",
-    },
-    "obsidianLiveSyncSettingTab.okCorsCredentials": {
-        def: "✓ cors.credentials is ok.",
-        la: "✓ cors.credentials rectum est.",
-        zh: "✓ cors.credentials 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okCorsCredentialsForOrigin": {
-        def: "CORS credentials OK",
-        la: "Testimonia CORS recta",
-        zh: "CORS 凭据正常",
-    },
-    "obsidianLiveSyncSettingTab.okCorsOriginMatched": {
-        def: "✓ CORS origin OK",
-        la: "✓ Origo CORS recta",
-        zh: "✓ CORS 来源正常",
-    },
-    "obsidianLiveSyncSettingTab.okCorsOrigins": {
-        def: "✓ cors.origins is ok.",
-        la: "✓ cors.origins rectum est.",
-        zh: "✓ cors.origins 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okEnableCors": {
-        def: "✓ httpd.enable_cors is ok.",
-        la: "✓ httpd.enable_cors rectum est.",
-        zh: "✓ httpd.enable_cors 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okEnableCorsChttpd": {
-        def: "✓ chttpd.enable_cors is ok.",
-        la: "✓ chttpd.enable_cors rectum est.",
-        zh: "✓ chttpd.enable_cors 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okMaxDocumentSize": {
-        def: "✓ couchdb.max_document_size is ok.",
-        la: "✓ couchdb.max_document_size rectum est.",
-        zh: "✓ couchdb.max_document_size 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okMaxRequestSize": {
-        def: "✓ chttpd.max_http_request_size is ok.",
-        la: "✓ chttpd.max_http_request_size rectum est.",
-        zh: "✓ chttpd.max_http_request_size 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okRequireValidUser": {
-        def: "✓ chttpd.require_valid_user is ok.",
-        la: "✓ chttpd.require_valid_user rectum est.",
-        zh: "✓ chttpd.require_valid_user 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okRequireValidUserAuth": {
-        def: "✓ chttpd_auth.require_valid_user is ok.",
-        la: "✓ chttpd_auth.require_valid_user rectum est.",
-        zh: "✓ chttpd_auth.require_valid_user 正常。",
-    },
-    "obsidianLiveSyncSettingTab.okWwwAuth": {
-        def: "✓ httpd.WWW-Authenticate is ok.",
-        la: "✓ httpd.WWW-Authenticate rectum est.",
-        zh: "✓ httpd.WWW-Authenticate 正常。",
-    },
-    "obsidianLiveSyncSettingTab.optionApply": {
-        def: "Apply",
-        la: "Adhibe",
-        zh: "应用",
-    },
-    "obsidianLiveSyncSettingTab.optionCancel": {
-        def: "Cancel",
-        la: "Abroga",
-        zh: "取消",
-    },
-    "obsidianLiveSyncSettingTab.optionCouchDB": {
-        def: "CouchDB",
-        la: "CouchDB",
-        zh: "CouchDB",
-    },
-    "obsidianLiveSyncSettingTab.optionDisableAllAutomatic": {
-        def: "Disable all automatic",
-        la: "Deactiva omnia automatica",
-        zh: "禁用所有自动同步",
-    },
-    "obsidianLiveSyncSettingTab.optionFetchFromRemote": {
-        def: "Fetch from Remote",
-        la: "Arcesse ex remoto",
-        zh: "从远程获取",
-    },
-    "obsidianLiveSyncSettingTab.optionHere": {
-        def: "HERE",
-        la: "HIC",
-        zh: "这里",
-    },
-    "obsidianLiveSyncSettingTab.optionLiveSync": {
-        def: "Live sync",
-        la: "Synchronizatio viva",
-        zh: "实时同步",
-    },
-    "obsidianLiveSyncSettingTab.optionMinioS3R2": {
-        def: "Minio,S3,R2",
-        la: "Minio,S3,R2",
-        zh: "Minio, S3, R2",
-    },
-    "obsidianLiveSyncSettingTab.optionOkReadEverything": {
-        def: "OK, I have read everything.",
-        la: "Bene, omnia legi.",
-        zh: "好的,我已经阅读了所有内容 ",
-    },
-    "obsidianLiveSyncSettingTab.optionOnEvents": {
-        def: "On events",
-        la: "Ad eventus",
-        zh: "事件触发时",
-    },
-    "obsidianLiveSyncSettingTab.optionPeriodicAndEvents": {
-        def: "Periodic and on events",
-        la: "Periodice et ad eventus",
-        zh: "定期与事件触发",
-    },
-    "obsidianLiveSyncSettingTab.optionPeriodicWithBatch": {
-        def: "Periodic w/ batch",
-        la: "Periodice cum acervis",
-        zh: "定期（批处理）",
-    },
-    "obsidianLiveSyncSettingTab.optionRebuildBoth": {
-        def: "Rebuild Both from This Device",
-        la: "Reaedifica utrumque ex hoc instrumento",
-        zh: "从此设备重建两者",
-    },
-    "obsidianLiveSyncSettingTab.optionSaveOnlySettings": {
-        def: "(Danger) Save Only Settings",
-        la: "(Periculum) Serva tantum optiones",
-        zh: "(危险)仅保存设置",
-    },
-    "obsidianLiveSyncSettingTab.panelAdvanced": {
-        def: "Advanced",
-        la: "Provecta",
-        zh: "高级",
-    },
-    "obsidianLiveSyncSettingTab.panelChangeLog": {
-        def: "Change Log",
-        la: "Index mutationum",
-        zh: "更新日志",
-    },
-    "obsidianLiveSyncSettingTab.panelCustomisationSync": {
-        def: "Customisation sync",
-        la: "Synchronizatio optionum propriarum",
-        zh: "自定义同步",
-    },
-    "obsidianLiveSyncSettingTab.panelGeneralSettings": {
-        def: "General Settings",
-        la: "Optiones generales",
-        zh: "常规设置",
-    },
-    "obsidianLiveSyncSettingTab.panelHatch": {
-        def: "Hatch",
-        la: "Hatch",
-        zh: "Hatch",
-    },
-    "obsidianLiveSyncSettingTab.panelMaintenance": {
-        def: "Maintenance",
-        la: "Conservatio",
-        zh: "维护",
-    },
-    "obsidianLiveSyncSettingTab.panelPatches": {
-        def: "Patches",
-        la: "Emendationes",
-        zh: "补丁",
-    },
-    "obsidianLiveSyncSettingTab.panelPowerUsers": {
-        def: "Power users",
-        la: "Usores periti",
-        zh: "专家",
-    },
-    "obsidianLiveSyncSettingTab.panelPrivacyEncryption": {
-        def: "Privacy & Encryption",
-        la: "Secretum et cryptatio",
-        zh: "隐私与加密",
-    },
-    "obsidianLiveSyncSettingTab.panelRemoteConfiguration": {
-        def: "Remote Configuration",
-        la: "Configuratio remoti",
-        zh: "远程配置",
-    },
-    "obsidianLiveSyncSettingTab.panelSelector": {
-        def: "Selector",
-        la: "Electio",
-        zh: "选择器",
-    },
-    "obsidianLiveSyncSettingTab.panelSetup": {
-        def: "Setup",
-        la: "Constitutio",
-        zh: "设置",
-    },
-    "obsidianLiveSyncSettingTab.serverVersion": {
-        def: "Server info: ${info}",
-        la: "Notitia ministratoris: ${info}",
-        zh: "服务器信息: ${info}",
-    },
-    "obsidianLiveSyncSettingTab.titleActiveRemoteServer": {
-        def: "Active Remote Server",
-        la: "Ministrator remotus activus",
-        zh: "活动远程服务器",
-    },
-    "obsidianLiveSyncSettingTab.titleAdvancedSettings": {
-        def: "Advanced settings",
-        la: "Optiones provectae",
-        zh: "高级设置",
-    },
-    "obsidianLiveSyncSettingTab.titleAppearance": {
-        def: "Appearance",
-        la: "Species",
-        zh: "外观",
-    },
-    "obsidianLiveSyncSettingTab.titleConflictResolution": {
-        def: "Conflict resolution",
-        la: "Resolutio discrepantiarum",
-        zh: "冲突处理",
-    },
-    "obsidianLiveSyncSettingTab.titleCouchDB": {
-        def: "CouchDB",
-        la: "CouchDB",
-        zh: "CouchDB 服务器",
-    },
-    "obsidianLiveSyncSettingTab.titleDeletionPropagation": {
-        def: "Deletion Propagation",
-        la: "Propagatio deletionum",
-        zh: "删除传播",
-    },
-    "obsidianLiveSyncSettingTab.titleEncryptionNotEnabled": {
-        def: "Encryption is not enabled",
-        la: "Cryptatio non activa est",
-        zh: "尚未启用加密",
-    },
-    "obsidianLiveSyncSettingTab.titleEncryptionPassphraseInvalid": {
-        def: "Encryption Passphrase Invalid",
-        la: "Tessera arcana cryptationis non valida",
-        zh: "加密密码短语无效",
-    },
-    "obsidianLiveSyncSettingTab.titleExtraFeatures": {
-        def: "Enable extra and advanced features",
-        la: "Activa facultates additas et provectas",
-        zh: "启用额外和高级功能",
-    },
-    "obsidianLiveSyncSettingTab.titleExtraFeaturesGroup": {
-        def: "Extra features",
-        la: "Facultates additae",
-        zh: "扩展功能",
-    },
-    "obsidianLiveSyncSettingTab.titleExtraMenus": {
-        def: "Extra menus",
-        la: "Menus additae",
-        zh: "扩展菜单",
-    },
-    "obsidianLiveSyncSettingTab.titleFetchConfig": {
-        def: "Fetch Config",
-        la: "Arcesse configurationem",
-        zh: "获取配置",
-    },
-    "obsidianLiveSyncSettingTab.titleFetchConfigFromRemote": {
-        def: "Fetch config from remote server",
-        la: "Arcesse configurationem ex ministratore remoto",
-        zh: "从远程服务器获取配置",
-    },
-    "obsidianLiveSyncSettingTab.titleFetchSettings": {
-        def: "Fetch Settings",
-        la: "Arcesse optiones",
-        zh: "获取设置",
-    },
-    "obsidianLiveSyncSettingTab.titleHelpAndInformation": {
-        def: "Help and information",
-        la: "Auxilium et notitia",
-        zh: "帮助与信息",
-    },
-    "obsidianLiveSyncSettingTab.titleHelpAndTroubleshooting": {
-        def: "Help and troubleshooting",
-        la: "Auxilium et solutio difficultatum",
-        zh: "帮助与疑难解答",
-    },
-    "obsidianLiveSyncSettingTab.titleHiddenFiles": {
-        def: "Hidden Files",
-        la: "Plicae occultae",
-        zh: "隐藏文件",
-    },
-    "obsidianLiveSyncSettingTab.titleLogging": {
-        def: "Logging",
-        la: "Acta",
-        zh: "日志",
-    },
-    "obsidianLiveSyncSettingTab.titleMaintenanceAndRecovery": {
-        def: "Maintenance and recovery",
-        la: "Conservatio et restitutio",
-        zh: "维护与恢复",
-    },
-    "obsidianLiveSyncSettingTab.titleMinioS3R2": {
-        def: "Minio,S3,R2",
-        la: "Minio,S3,R2",
-        zh: "MinIO、S3、R2",
-    },
-    "obsidianLiveSyncSettingTab.titleNotification": {
-        def: "Notification",
-        la: "Notificatio",
-        zh: "通知",
-    },
-    "obsidianLiveSyncSettingTab.titleOnlineTips": {
-        def: "Online Tips",
-        la: "Consilia interretialia",
-        zh: "在线提示",
-    },
-    "obsidianLiveSyncSettingTab.titleQuickSetup": {
-        def: "Quick Setup",
-        la: "Constitutio celeris",
-        zh: "快速设置",
-    },
-    "obsidianLiveSyncSettingTab.titleRebuildRequired": {
-        def: "Rebuild Required",
-        la: "Reaedificatio necessaria",
-        zh: "需要重建",
-    },
-    "obsidianLiveSyncSettingTab.titleRemoteConfigCheckFailed": {
-        def: "Remote Configuration Check Failed",
-        la: "Inspectio configurationis remoti defecit",
-        zh: "远端配置检查失败",
-    },
-    "obsidianLiveSyncSettingTab.titleRemoteServer": {
-        def: "Remote Server",
-        la: "Ministrator remotus",
-        zh: "远端服务器",
-    },
-    "obsidianLiveSyncSettingTab.titleReset": {
-        def: "Reset",
-        la: "Restitue",
-        zh: "重置",
-    },
-    "obsidianLiveSyncSettingTab.titleSetupOtherDevices": {
-        def: "Set up other devices",
-        la: "Constitue alia instrumenta",
-        zh: "设置其他设备",
-    },
-    "obsidianLiveSyncSettingTab.titleSynchronisation": {
-        def: "Synchronisation",
-        la: "Synchronizatio",
-        zh: "同步",
-    },
-    "obsidianLiveSyncSettingTab.titleSynchronizationMethod": {
-        def: "Synchronization Method",
-        la: "Ratio synchronizationis",
-        zh: "同步方式",
-    },
-    "obsidianLiveSyncSettingTab.titleSynchronizationPreset": {
-        def: "Synchronization Preset",
-        la: "Praeformatum synchronizationis",
-        zh: "同步预设",
-    },
-    "obsidianLiveSyncSettingTab.titleSyncSettings": {
-        def: "Sync Settings",
-        la: "Optiones synchronizationis",
-        zh: "同步设置",
-    },
-    "obsidianLiveSyncSettingTab.titleSyncSettingsViaMarkdown": {
-        def: "Sync Settings via Markdown",
-        la: "Synchroniza optiones per Markdown",
-        zh: "通过 Markdown 同步设置",
-    },
-    "obsidianLiveSyncSettingTab.titleUpdateThinning": {
-        def: "Update Thinning",
-        la: "Extenuatio renovationum",
-        zh: "更新精简",
-    },
-    "obsidianLiveSyncSettingTab.warnCorsOriginUnmatched": {
-        def: "CORS Origin is unmatched ${from}->${to}",
-        la: "Origo CORS non congruit ${from}->${to}",
-        zh: "CORS 来源不匹配 ${from}->${to}",
-    },
-    "obsidianLiveSyncSettingTab.warnNoAdmin": {
-        def: "You do not have administrator privileges.",
-        la: "Privilegia administratoris non habes.",
-        zh: "你没有管理员权限。",
     },
     "Of course, we can back up the data before proceeding.": {
         def: "Of course, we can back up the data before proceeding.",
@@ -5105,95 +2518,25 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "OK",
         zh: "确定",
     },
-    "Old Algorithm": {
-        def: "Old Algorithm",
-        la: "Algorithmus vetus",
-        zh: "旧算法",
-    },
     "Old content copied to clipboard": {
         def: "Old content copied to clipboard",
         la: "Contentum vetus in tabellam exscriptum",
         zh: "旧内容已复制到剪贴板",
-    },
-    "Older (${diff})": {
-        def: "Older (${diff})",
-        la: "Vetustior (${diff})",
-        zh: "较旧（${diff}）",
-    },
-    "Older fallback (Slow, W/O WebAssembly)": {
-        def: "Older fallback (Slow, W/O WebAssembly)",
-        la: "Subsidium vetustius (lentum, sine WebAssembly)",
-        zh: "旧版回退（较慢，无 WebAssembly）",
     },
     On: {
         def: "On",
         la: "Activum",
         zh: "开启",
     },
-    "On the source device, from the command palette, run the 'Show settings as a QR code' command.": {
-        def: "On the source device, from the command palette, run the 'Show settings as a QR code' command.",
-        la: "In instrumento fontis, ex indice mandatorum, mandatum 'Show settings as a QR code' exsequere.",
-        zh: "在源设备上，从命令面板运行「Show settings as a QR code」命令。",
-    },
-    "On the source device, open Obsidian.": {
-        def: "On the source device, open Obsidian.",
-        la: "In instrumento fontis, Obsidian aperi.",
-        zh: "在源设备上打开 Obsidian。",
-    },
-    "On this device, please keep this Vault open.": {
-        def: "On this device, please keep this Vault open.",
-        la: "In hoc instrumento, quaeso hoc tabularium apertum tene.",
-        zh: "请在本设备上保持此库处于打开状态。",
-    },
-    "On this device, switch to the camera app or use a QR code scanner to scan the displayed QR code.": {
-        def: "On this device, switch to the camera app or use a QR code scanner to scan the displayed QR code.",
-        la: "In hoc instrumento, ad applicationem camerae transi vel lectore QR codicum utere ut codicem QR monstratum legas.",
-        zh: "在本设备上切换到相机应用，或使用二维码扫描器扫描显示的二维码。",
-    },
     "Only an ordinary valid Vault path can be restored from Document History.": {
         def: "Only a valid, ordinary vault path can be restored from Document History.",
         la: "Ex Historia documenti restitui potest sola via ordinaria et valida in tabulario.",
         zh: "只有普通且有效的库路径才能从文档历史记录中恢复。",
     },
-    "Only Fetch": {
-        def: "Only Fetch",
-        la: "Arcesse tantum",
-        zh: "仅获取",
-    },
-    "Only Send": {
-        def: "Only Send",
-        la: "Mitte tantum",
-        zh: "仅发送",
-    },
     Open: {
         def: "Open",
         la: "Aperi",
         zh: "打开",
-    },
-    "Open connection": {
-        def: "Open connection",
-        la: "Aperi conexionem",
-        zh: "打开连接",
-    },
-    "Open P2P Setup...": {
-        def: "Open P2P Setup...",
-        la: "Aperi constitutionem P2P...",
-        zh: "打开 P2P 设置…",
-    },
-    "Open review harness": {
-        def: "Open review harness",
-        la: "Aperi instrumentum recensionis",
-        zh: "打开审查工具",
-    },
-    "Open the dialog": {
-        def: "Open the dialog",
-        la: "Aperi dialogum",
-        zh: "打开对话框",
-    },
-    "Other files": {
-        def: "Other files",
-        la: "Aliae plicae",
-        zh: "其他文件",
     },
     Overwrite: {
         def: "Overwrite",
@@ -5205,100 +2548,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Superscribe omnia plicis remotis",
         zh: "全部用远程文件覆盖",
     },
-    "Overwrite patterns": {
-        def: "Overwrite patterns",
-        la: "Formae superscribendi",
-        zh: "覆盖模式",
-    },
-    "Overwrite remote": {
-        def: "Overwrite remote",
-        la: "Superscribe remotum",
-        zh: "覆盖远端",
-    },
-    "Overwrite remote with local DB and passphrase.": {
-        def: "Overwrite remote with local DB and passphrase.",
-        la: "Superscribe remotum repositorio locali et tessera arcana.",
-        zh: "使用本地数据库和密码短语覆盖远端。",
-    },
     "Overwrite Server Data with This Device's Files": {
         def: "Overwrite Server Data with This Device's Files",
         la: "Superscribe data ministratoris plicis huius instrumenti",
         zh: "用本设备文件覆盖服务器数据",
     },
-    "P2P Configuration": {
-        def: "P2P Configuration",
-        la: "Configuratio P2P",
-        zh: "P2P 配置",
-    },
     "P2P Status": {
         def: "P2P Status",
         la: "Status P2P",
         zh: "P2P 状态",
-    },
-    "P2P Sync : Open P2P Status": {
-        def: "P2P Sync : Open P2P Status",
-        la: "Synchronizatio P2P: aperi statum P2P",
-        zh: "P2P 同步：打开 P2P 状态",
-    },
-    "P2P: Sync with targets": {
-        def: "P2P: Sync with targets",
-        la: "P2P: synchroniza cum destinationibus",
-        zh: "P2P：与目标同步",
-    },
-    "P2P.ApplyRemoteConfig.AskRebuildByP2P": {
-        def: 'Do you want to set the remote type to "P2P Sync" to rebuild by "P2P replication"?',
-        la: "Visne genus remoti ad “P2P Sync” ponere ut per “replicationem P2P” reaedifices?",
-        zh: "是否将远程类型设置为「P2P Sync」，以通过「P2P 复制」进行重建？",
-    },
-    "P2P.ApplyRemoteConfig.Buttons.Cancel": {
-        def: "No, cancel",
-        la: "Minime, abroga",
-        zh: "不，取消",
-    },
-    "P2P.ApplyRemoteConfig.Buttons.Drop": {
-        def: "Yes, and drop local database",
-        la: "Ita, et repositorium locale abice",
-        zh: "是，并丢弃本地数据库",
-    },
-    "P2P.ApplyRemoteConfig.Buttons.Keep": {
-        def: "Yes, but keep local database",
-        la: "Ita, sed repositorium locale retine",
-        zh: "是，但保留本地数据库",
-    },
-    "P2P.ApplyRemoteConfig.Cancelled": {
-        def: "Cancelled\nRemote config for ${name} is not applied",
-        la: "Abrogatum\nConfiguratio remota ${name} non applicata est",
-        zh: "已取消\n未应用 ${name} 的远程配置",
-    },
-    "P2P.ApplyRemoteConfig.Message": {
-        def: "Do you really want to apply the remote config? This will overwrite your current config immediately and restart.\nAnd you can also drop the local database to rebuild from the remote device.",
-        la: "Visne vere configurationem remotam applicare? Haec configurationem tuam praesentem statim superscribet et additamentum iterum incipiet.\nEtiam repositorium locale abicere potes ut ex instrumento remoto reaedifices.",
-        zh: "确定要应用远程配置吗？这将立即覆盖当前配置并重启。\n你也可以丢弃本地数据库，从远程设备重建。",
-    },
-    "P2P.ApplyRemoteConfig.RebuildTitle": {
-        def: "Rebuild from remote device",
-        la: "Reaedifica ex instrumento remoto",
-        zh: "从远程设备重建",
-    },
-    "P2P.ApplyRemoteConfig.Requesting": {
-        def: "Requesting remote config for ${name}. Please input the passphrase on the remote device",
-        la: "Configuratio remota ${name} petitur. Quaeso tesseram arcanam in instrumento remoto insere",
-        zh: "正在请求 ${name} 的远程配置。请在远程设备上输入口令",
-    },
-    "P2P.ApplyRemoteConfig.Retrieved": {
-        def: "Remote config for ${name} is retrieved successfully",
-        la: "Configuratio remota ${name} feliciter arcessita est",
-        zh: "已成功获取 ${name} 的远程配置",
-    },
-    "P2P.ApplyRemoteConfig.RetrieveFailed": {
-        def: "Cannot retrieve remote config for ${peerId}",
-        la: "Configuratio remota ${peerId} arcessi non potest",
-        zh: "无法获取 ${peerId} 的远程配置",
-    },
-    "P2P.ApplyRemoteConfig.Title": {
-        def: "Apply Remote Config",
-        la: "Applica configurationem remotam",
-        zh: "应用远程配置",
     },
     "P2P.AskPassphraseForDecrypt": {
         def: "The remote peer shared the configuration. Please input the passphrase to decrypt the configuration.",
@@ -5315,11 +2573,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchronizatio inter pares deactivatum est. Visne vere id activare?",
         zh: "Peer-to-Peer同步 已禁用。你确定要启用它吗？",
     },
-    "P2P.FailedToOpen": {
-        def: "Failed to open P2P connection to the signalling server.",
-        la: "Conexio P2P ad ministratorem signorum aperiri non potuit.",
-        zh: "无法打开 P2P 连接到信令服务器",
-    },
     "P2P.NoAutoSyncPeers": {
         def: "No auto-sync peers found. Please set peers on the Peer-to-Peer Sync pane.",
         la: "Nulli pares synchronizationis automaticae inventi. Quaeso pares in tabula Synchronizatio inter pares constitue.",
@@ -5330,50 +2583,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nulli pares detecti sunt; exspectantur alii pares advenientes...",
         zh: "未检测到对等方，正在等待其他对等方的连接...",
     },
-    "P2P.Note.description": {
-        def: " This replicator allows us to synchronise our vault with other devices\nusing a peer-to-peer connection. We can use this to synchronise our vault with our other devices without using a cloud service.\nThis replicator is based on Trystero. It also uses a signalling server to establish a connection between devices. The signalling server is used to exchange connection information between devices. It does (or,should) not know or store any of our data.\n\nThe signalling server can be hosted by anyone. This is just a Nostr relay. For the sake of simplicity and checking the behaviour of the replicator, an instance of the signalling server is hosted by vrtmrz. You can use the experimental server provided by vrtmrz, or you can use any other server.\n\nBy the way, even if the signalling server does not store our data, it can see the connection information of some of our devices. Please be aware of this. Also, be cautious when using the server provided by someone else.",
-        la: " Hic replicator nobis permittit tabularium nostrum cum aliis instrumentis synchronizare\nper conexionem inter pares (peer-to-peer). Hoc uti possumus ut tabularium nostrum cum aliis instrumentis nostris sine servitio nubis synchronizemus.\nHic replicator in Trystero fundatur. Etiam ministratore signorum utitur ut conexionem inter instrumenta constituat. Ministrator signorum adhibetur ut notitiae conexionis inter instrumenta commutentur. Nulla data nostra cognoscit neque servat (vel servare non debet).\n\nMinistratorem signorum quilibet hospitari potest. Est merus nuntius (relay) Nostr. Simplicitatis causa et ut agendi ratio replicatoris probetur, exemplar ministratoris signorum a vrtmrz hospitatur. Ministratore experimentali a vrtmrz praebito uti potes, vel quolibet alio ministratore.\n\nCeterum, etsi ministrator signorum data nostra non servat, notitias conexionis quorundam instrumentorum nostrorum videre potest. Quaeso hoc animadverte. Item cave cum ministratore ab alio praebito uteris.",
-        zh: " This replicator allows us to synchronise our vault with other devices\nusing a peer-to-peer connection. We can        use this to synchronise our vault with our other devices without using a cloud service.\nThis replicator is based on Trystero. It also uses a signaling server to establish a connection between devices. The signaling server is used to exchange connection information between devices. It does (or,should) not know or store any of our data.\n\nThe signaling server can be hosted by anyone. This is just a Nostr relay. For the sake of simplicity and checking the behaviour of the replicator, an instance of the signaling server is hosted by vrtmrz. You can use the experimental server provided by vrtmrz, or you can use any other server.\n\nBy the way, even if the signaling server does not store our data, it can see the connection information of some of our devices. Please be aware of this. Also, be cautious when using the server provided by someone else.",
-    },
-    "P2P.Note.important_note": {
-        def: "Peer-to-Peer Replicator.",
-        la: "Replicator inter pares.",
-        zh: "The Experimental Implementation of the Peer-to-Peer Replicator.",
-    },
-    "P2P.Note.important_note_sub": {
-        def: "This feature is still on the bleeding edge. Please be aware that ensure your data is backed up before using this feature. And, we would be so happy if you could contribute to the development of this feature.",
-        la: "Haec facultas adhuc in acie novitatis est. Quaeso cura ut data tua exemplo tutelae servata sint antequam hac facultate uteris. Et gaudebimus valde si ad hanc facultatem excolendam conferre poteris.",
-        zh: "This feature is still in the experimental stage. Please be aware that this feature may not work as expected. Furthermore, it may have some bugs, security issues, and other issues. Please use this feature at your own risk. Please contribute to the development of this feature.",
-    },
-    "P2P.Note.Summary": {
-        def: "What is this feature? (and some important notes, please read once)",
-        la: "Quid est haec facultas? (et quaedam monita gravia, quaeso semel lege)",
-        zh: "What is this  feature? (and some important notes, please read once)",
-    },
     "P2P.NotEnabled": {
         def: "Peer-to-Peer Sync is not enabled. We cannot open a new connection.",
         la: "Synchronizatio inter pares non activum est. Novam conexionem aperire non possumus.",
         zh: "Peer-to-Peer同步 is not enabled. We cannot open a new connection.",
     },
-    "P2P.P2PReplication": {
-        def: "Peer-to-Peer Replication",
-        la: "Replicatio Par ad Par",
-        zh: "Peer-to-Peer Replication",
-    },
-    "P2P.PaneTitle": {
-        def: "Peer-to-Peer Sync",
-        la: "Synchronizatio inter pares",
-        zh: "Peer-to-Peer同步 (实验性)",
-    },
     "P2P.ReplicatorInstanceMissing": {
         def: "P2P Sync replicator is not found, possibly not have been configured or enabled.",
         la: "Replicator synchronizationis P2P non inventus est; fortasse non constitutus vel non activatus est.",
         zh: "P2P Sync replicator is not found, possibly not have been configured or enabled.",
-    },
-    "P2P.ReplicatorViewTitle": {
-        def: "Peer-to-Peer Replicator",
-        la: "Replicator inter pares",
-        zh: "点对点复制器",
     },
     "P2P.SeemsOffline": {
         def: "Peer ${name} seems offline, skipped.",
@@ -5395,40 +2613,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchronizatio P2P cum ${name} incepta est.",
         zh: "P2P Sync with ${name} have been started.",
     },
-    "paneMaintenance.markDeviceResolvedAfterBackup": {
-        def: "paneMaintenance.markDeviceResolvedAfterBackup",
-        la: "paneMaintenance.markDeviceResolvedAfterBackup",
-        zh: "请在完成备份后将此设备标记为已处理。",
-    },
-    "paneMaintenance.remoteLockedAndDeviceNotAccepted": {
-        def: "paneMaintenance.remoteLockedAndDeviceNotAccepted",
-        la: "paneMaintenance.remoteLockedAndDeviceNotAccepted",
-        zh: "远端数据库已锁定，且此设备尚未被接受。",
-    },
-    "paneMaintenance.remoteLockedResolvedDevice": {
-        def: "paneMaintenance.remoteLockedResolvedDevice",
-        la: "paneMaintenance.remoteLockedResolvedDevice",
-        zh: "远端数据库已锁定，但此设备已被接受。",
-    },
-    "paneMaintenance.unlockDatabaseReady": {
-        def: "paneMaintenance.unlockDatabaseReady",
-        la: "paneMaintenance.unlockDatabaseReady",
-        zh: "现在可以解锁数据库。",
-    },
-    "Parse setting file": {
-        def: "Parse setting file",
-        la: "Interpretare plicam configurationis",
-        zh: "解析设置文件",
-    },
     Passphrase: {
         def: "Passphrase",
         la: "Tessera arcana",
         zh: "密码",
-    },
-    "Passphrase is required.": {
-        def: "Passphrase is required.",
-        la: "Tessera arcana requiritur.",
-        zh: "密码短语是必填项。",
     },
     "Passphrase of sensitive configuration items": {
         def: "Passphrase of sensitive configuration items",
@@ -5445,16 +2633,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tessera",
         zh: "密码",
     },
-    "Paste a connection string": {
-        def: "Paste a connection string",
-        la: "Insere catenam conexionis",
-        zh: "粘贴连接字符串",
-    },
-    "Paste the Setup URI generated from one of your active devices.": {
-        def: "Paste the Setup URI generated from one of your active devices.",
-        la: "Insere Setup URI ex uno ex instrumentis tuis activis generatum.",
-        zh: "粘贴从一台已在使用的设备上生成的 Setup URI。",
-    },
     Path: {
         def: "Path",
         la: "Via",
@@ -5464,41 +2642,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Path identity mode",
         la: "Modus identitatis viarum",
         zh: "路径标识模式",
-    },
-    "Path Obfuscation": {
-        def: "Path Obfuscation",
-        la: "Obscuratio viarum",
-        zh: "路径混淆",
-    },
-    "Patterns to match files for overwriting instead of merging": {
-        def: "Patterns to match files for overwriting instead of merging",
-        la: "Formae plicarum superscribendarum potius quam conflandarum",
-        zh: "用于匹配需覆盖而非合并文件的模式",
-    },
-    "Patterns to match files for syncing": {
-        def: "Patterns to match files for syncing",
-        la: "Formae plicarum synchronizandarum",
-        zh: "用于匹配同步文件的模式",
-    },
-    "Peer ID:": {
-        def: "Peer ID:",
-        la: "ID paris:",
-        zh: "对等方 ID：",
-    },
-    "Peer to Peer Replicator": {
-        def: "Peer to Peer Replicator",
-        la: "Replicator inter pares",
-        zh: "点对点复制器",
-    },
-    "Peer-to-Peer only": {
-        def: "Peer-to-Peer only",
-        la: "Inter pares tantum",
-        zh: "仅 Peer-to-Peer",
-    },
-    "Peer-to-Peer Synchronisation": {
-        def: "Peer-to-Peer Synchronisation",
-        la: "Synchronizatio inter pares",
-        zh: "点对点同步",
     },
     Peers: {
         def: "Peers",
@@ -5520,30 +2663,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Exsequere",
         zh: "执行",
     },
-    "Perform cleanup": {
-        def: "Perform cleanup",
-        la: "Exsequere purgationem",
-        zh: "执行清理",
-    },
-    "Perform Garbage Collection": {
-        def: "Perform Garbage Collection",
-        la: "Exsequere collectionem purgamentorum",
-        zh: "执行垃圾回收",
-    },
-    "Perform Garbage Collection to remove unused chunks and reduce database size.": {
-        def: "Perform Garbage Collection to remove unused chunks and reduce database size.",
-        la: "Exsequere collectionem purgamentorum ut fragmenta non adhibita removeantur et magnitudo repositorii minuatur.",
-        zh: "执行垃圾回收以清理未使用的 chunks 并减小数据库体积。",
-    },
     "Periodic Sync interval": {
         def: "Periodic Sync interval",
         la: "Intervallum synchronizationis periodicae",
         zh: "定期同步间隔",
-    },
-    PERMANENT: {
-        def: "PERMANENT",
-        la: "PERPETUUM",
-        zh: "永久",
     },
     "Pick a file to resolve conflict": {
         def: "Pick a file to resolve conflict",
@@ -5555,118 +2678,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Elige plicam ad historiam monstrandam",
         zh: "选择一个文件以显示历史记录",
     },
-    "Please be aware that the End-to-End Encryption passphrase is not validated until the synchronisation process actually commences. This is a security measure designed to protect your data.":
-        {
-            def: "Please be aware that the End-to-End Encryption passphrase is not validated until the synchronisation process actually commences. This is a security measure designed to protect your data.",
-            la: "Quaeso animadverte tesseram arcanam cryptationis ab extremo ad extremum non probari donec processus synchronizationis re vera incipiat. Haec est mensura securitatis ad data tua tuenda destinata.",
-            zh: "请注意，端到端加密密码短语要等到同步过程真正开始后才会被校验。这是为保护你的数据而设计的安全措施。",
-        },
-    "Please configure your end-to-end encryption settings.": {
-        def: "Please configure your end-to-end encryption settings.",
-        la: "Quaeso optiones cryptationis ab extremo ad extremum constitue.",
-        zh: "请配置你的端到端加密设置。",
-    },
     "Please Confirm the Following": {
         def: "Please Confirm the Following",
         la: "Quaeso sequentia confirma",
         zh: "请确认以下内容",
     },
-    "Please disable 'Read chunks online' in settings to use Garbage Collection.": {
-        def: "Please disable 'Read chunks online' in settings to use Garbage Collection.",
-        la: "Quaeso 'Read chunks online' in optionibus deactiva ut collectione purgamentorum utaris.",
-        zh: "要使用垃圾回收，请在设置中禁用“Read chunks online”。",
-    },
-    "Please enable 'Compute revisions for chunks' in settings to use Garbage Collection.": {
-        def: "Please enable 'Compute revisions for chunks' in settings to use Garbage Collection.",
-        la: "Quaeso 'Compute revisions for chunks' in optionibus activa ut collectione purgamentorum utaris.",
-        zh: "要使用垃圾回收，请在设置中启用“Compute revisions for chunks”。",
-    },
-    "Please enter the CouchDB server information below.": {
-        def: "Please enter the CouchDB server information below.",
-        la: "Quaeso notitias ministratoris CouchDB infra insere.",
-        zh: "请在下方填写 CouchDB 服务器信息。",
-    },
-    "Please enter the details required to connect to your S3/MinIO/R2 compatible object storage service.": {
-        def: "Please enter the details required to connect to your S3/MinIO/R2 compatible object storage service.",
-        la: "Quaeso insere singula quae requiruntur ut ad servitium repositorii obiectorum cum S3/MinIO/R2 congruens conectaris.",
-        zh: "请填写连接到你的 S3/MinIO/R2 兼容对象存储服务所需的信息。",
-    },
-    "Please enter the Peer-to-Peer Synchronisation information below.": {
-        def: "Please enter the Peer-to-Peer Synchronisation information below.",
-        la: "Quaeso notitias synchronizationis inter pares infra insere.",
-        zh: "请在下方填写点对点同步信息。",
-    },
-    "Please enter the Setup URI that was generated during server installation or on another device, along with the vault passphrase.":
-        {
-            def: "Please enter the Setup URI that was generated during server installation or on another device, along with the vault passphrase.",
-            la: "Quaeso insere Setup URI quod in ministratore instituendo vel in alio instrumento generatum est, una cum tessera arcana tabularii.",
-            zh: "请输入在服务器安装时或在其他设备上生成的设置 URI，以及库的密码短语。",
-        },
-    "Please follow the steps below to import settings from your existing device.": {
-        def: "Please follow the steps below to import settings from your existing device.",
-        la: "Quaeso gradus infra sequere ut optiones ex instrumento tuo exstante importes.",
-        zh: "请按以下步骤从你现有的设备导入设置。",
-    },
-    "PLEASE NOTE": {
-        def: "PLEASE NOTE",
-        la: "QUAESO NOTA",
-        zh: "请注意",
-    },
     "Please select 'Cancel' explicitly to cancel this operation.": {
         def: "Please select 'Cancel' explicitly to cancel this operation.",
         la: "Quaeso 'Cancel' expresse elige ut hanc operationem abroges.",
         zh: "如需取消此操作，请明确选择“取消”。",
-    },
-    "Please select a method to import the settings from another device.": {
-        def: "Please select a method to import the settings from another device.",
-        la: "Quaeso modum elige quo optiones ex alio instrumento importentur.",
-        zh: "请选择一种从其他设备导入设置的方法。",
-    },
-    "Please select an active P2P remote configuration to change P2P sync targets.": {
-        def: "Please select an active P2P remote configuration to change P2P sync targets.",
-        la: "Quaeso configurationem remotam P2P activam elige ut destinationes synchronizationis P2P mutes.",
-        zh: "请选择一个生效的 P2P 远端配置以更改 P2P 同步目标。",
-    },
-    "Please select an option to proceed": {
-        def: "Please select an option to proceed",
-        la: "Quaeso optionem elige ut pergas",
-        zh: "请选择一个选项以继续",
-    },
-    "Please select the button below to restart and proceed to the data fetching confirmation.": {
-        def: "Please select the button below to restart and proceed to the data fetching confirmation.",
-        la: "Quaeso globulum infra elige ut denuo incipias et ad confirmationem datorum arcessendorum pergas.",
-        zh: "请点击下方按钮重启，然后进入数据获取确认。",
-    },
-    "Please select the button below to restart and proceed to the final confirmation.": {
-        def: "Please select the button below to restart and proceed to the final confirmation.",
-        la: "Quaeso globulum infra elige ut denuo incipias et ad confirmationem ultimam pergas.",
-        zh: "请点击下方按钮重启，然后进入最终确认。",
-    },
-    "Please select the type of server to which you are connecting.": {
-        def: "Please select the type of server to which you are connecting.",
-        la: "Quaeso genus ministratoris elige ad quem conecteris.",
-        zh: "请选择你要连接的服务器类型。",
-    },
-    "Please select your situation.": {
-        def: "Please select your situation.",
-        la: "Quaeso condicionem tuam elige.",
-        zh: "请选择你的情况。",
-    },
-    "Please set device name to identify this device. This name should be unique among your devices. While not configured, we cannot enable this feature.":
-        {
-            def: "Please set device name to identify this device. This name should be unique among your devices. While not configured, we cannot enable this feature.",
-            la: "Quaeso nomen instrumenti constitue ut hoc instrumentum agnoscatur. Hoc nomen inter instrumenta tua unicum esse debet. Dum non constitutum est, hanc facultatem activare non possumus.",
-            zh: "请设置设备名称以标识此设备。该名称在你的所有设备之间应保持唯一；未配置前无法启用此功能。",
-        },
-    "Please set this device name": {
-        def: "Please set this device name",
-        la: "Quaeso nomen huius instrumenti constitue",
-        zh: "请设置此设备名称",
-    },
-    "Please understand that this is intended behaviour.": {
-        def: "Please understand that this is intended behaviour.",
-        la: "Quaeso intellege hoc consulto ita agere.",
-        zh: "请注意这是预期行为。",
     },
     "Plug-in version": {
         def: "Plug-in version",
@@ -5677,11 +2697,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Plugins",
         la: "Additamenta",
         zh: "插件",
-    },
-    "Prepare the 'report' to create an issue": {
-        def: "Prepare the 'report' to create an issue",
-        la: "Para 'relationem' ad quaestionem (issue) creandam",
-        zh: "准备 '报告' 以创建问题单",
     },
     "Preserved ${path}: a current storage item contradicts its deletion event": {
         def: "Kept ${path}: an item now in the vault contradicts its deletion event",
@@ -5708,11 +2723,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Praeconstituta",
         zh: "预设",
     },
-    "Prevent fetching configuration from server": {
-        def: "Prevent fetching configuration from server",
-        la: "Prohibe ne configuratio ex ministratore arcessatur",
-        zh: "阻止从服务器获取配置",
-    },
     "Prevented overwriting unsynchronised local changes for ${path}": {
         def: "Did not overwrite unsynchronised changes to ${path} on this device",
         la: "Mutationes plicae ${path} in hoc instrumento nondum synchronizatae non superscriptae sunt",
@@ -5722,31 +2732,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Proceed",
         la: "Perge",
         zh: "继续",
-    },
-    "Proceed Garbage Collection": {
-        def: "Proceed Garbage Collection",
-        la: "Perge collectione purgamentorum",
-        zh: "继续执行垃圾回收",
-    },
-    "Proceed to the next step.": {
-        def: "Proceed to the next step.",
-        la: "Ad gradum proximum perge.",
-        zh: "继续下一步。",
-    },
-    "Proceed with Setup URI": {
-        def: "Proceed with Setup URI",
-        la: "Perge cum Setup URI",
-        zh: "继续使用 Setup URI",
-    },
-    "Proceeding with Garbage Collection, ignoring missing nodes.": {
-        def: "Proceeding with Garbage Collection, ignoring missing nodes.",
-        la: "Collectio purgamentorum procedit, nodis absentibus neglectis.",
-        zh: "正在继续执行垃圾回收，并忽略缺失节点。",
-    },
-    "Proceeding with Garbage Collection.": {
-        def: "Proceeding with Garbage Collection.",
-        la: "Collectio purgamentorum procedit.",
-        zh: "正在执行垃圾回收。",
     },
     "Process small files in the foreground": {
         def: "Process small files in the foreground",
@@ -5778,21 +2763,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Property Encryption",
         la: "Cryptatio proprietatum",
         zh: "属性加密",
-    },
-    "PureJS fallback  (Fast, W/O WebAssembly)": {
-        def: "PureJS fallback  (Fast, W/O WebAssembly)",
-        la: "Subsidium PureJS  (celere, sine WebAssembly)",
-        zh: "PureJS 回退（快速，无 WebAssembly）",
-    },
-    "Purge all download/upload cache.": {
-        def: "Purge all download/upload cache.",
-        la: "Purga omnem cache deorsum ferendi et sursum mittendi.",
-        zh: "清除所有下载／上传缓存。",
-    },
-    "Purge all journal counter": {
-        def: "Purge all journal counter",
-        la: "Purga omnes numeratores diarii",
-        zh: "清除所有日志计数器",
     },
     "Purging unused ${docs.length} chunks ": {
         def: "Purging ${docs.length} unused chunks",
@@ -5829,35 +2799,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Denuo incipe ut processus iterum curratur",
         zh: "重启以重新运行此流程",
     },
-    "Rebuild local and remote database with local files.": {
-        def: "Rebuild local and remote database with local files.",
-        la: "Reaedifica repositorium locale et remotum plicis localibus.",
-        zh: "使用本地文件重建本地和远端数据库。",
-    },
     "Rebuilding has been refused: remediation mode is active. Clear the modification-time limit to rebuild.": {
         def: "Rebuild refused: remediation mode is active. Clear the modification-time limit to rebuild.",
         la: "Reaedificatio recusata est: modus remedii activus est. Finem temporis mutationis remove ut reaedifices.",
         zh: "已拒绝重建：修复模式已开启。请清除修改时间限制后再重建。",
-    },
-    "Rebuilding Operations (Remote Only)": {
-        def: "Rebuilding Operations (Remote Only)",
-        la: "Operationes reaedificandi (solum remotum)",
-        zh: "重建操作（仅远端）",
-    },
-    "Recovery and Repair": {
-        def: "Recovery and Repair",
-        la: "Restitutio et reparatio",
-        zh: "恢复与修复",
-    },
-    "Recreate all": {
-        def: "Recreate all",
-        la: "Omnia recrea",
-        zh: "全部重建",
-    },
-    "Recreate missing chunks for all files": {
-        def: "Recreate missing chunks for all files",
-        la: "Recrea fragmenta deficientia omnium plicarum",
-        zh: "为所有文件重建缺失的 chunks",
     },
     "RedFlag.CouldNotDeleteFlag": {
         def: "Could not delete ${path}",
@@ -5879,55 +2824,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Initium arcessitionis ab usore abrogatum.",
         zh: "用户已取消获取初始化。",
     },
-    "RedFlag.Fetch.Method.Desc": {
-        def: "How do you want to fetch?\n- Create a local database once before fetching.\n  **Low Traffic**, **High CPU**, **Low Risk**\n  Recommended if ...\n  - Files possibly inconsistent\n  - Files were not so much\n- Create local file chunks before fetching.\n  **Low Traffic**, **Moderate CPU**, **Low to Moderate Risk**\n  Recommended if ...\n  - Files probably consistent\n  - You have a lot of files.\n- Fetch everything from the remote.\n  **High Traffic**, **Low CPU**, **Low to Moderate Risk**\n\n>[!INFO]- Details\n> ## Create a local database once before fetching.\n> **Low Traffic**, **High CPU**, **Low Risk**\n> This option first creates a local database using existing local files before fetching data from the remote source.\n> If matching files exist both locally and remotely, only the differences between them will be transferred.\n> However, files present in both locations will initially be handled as conflicted files. They will be resolved automatically if they are not actually conflicted, but this process may take time.\n> This is generally the safest method, minimizing data loss risk.\n> ## Create local file chunks before fetching.\n> **Low Traffic**, **Moderate CPU**, **Low to Moderate Risk** (depending operation)\n> This option first creates chunks from local files for the database, then fetches data. Consequently, only chunks missing locally are transferred. However, all metadata is taken from the remote source.\n> Local files are then compared against this metadata at launch. The content considered newer will overwrite the older one (by modified time). This outcome is then synchronised back to the remote database.\n> This is generally safe if local files are genuinely the latest timestamp. However, it can cause problems if a file has a newer timestamp but older content (like the initial `welcome.md`).\n> This uses less CPU and faster than \"Create a local database once before fetching\", but it may lead to data loss if not used carefully.\n> ## Fetch everything from the remote.\n> **High Traffic**, **Low CPU**, **Low to Moderate Risk** (depending operation)\n> All things will be fetched from the remote.\n> Similar to the Create local file chunks before fetching, but all chunks are fetched from the remote source.\n> This is the most traditional way to fetch, typically consuming the most network traffic and time. It also carries a similar risk of overwriting remote files to the 'Create local file chunks before fetching' option.\n> However, it is often considered the most stable method because it is the longest-established and most straightforward approach.",
-        la: "Quomodo arcessere vis?\n- Crea repositorium locale semel antequam arcessas.\n  **Commeatus parvus**, **CPU magnus**, **Periculum parvum**\n  Commendatur si ...\n  - Plicae fortasse inconstantes sunt\n  - Plicae non tam multae erant\n- Crea fragmenta plicarum localium antequam arcessas.\n  **Commeatus parvus**, **CPU modicus**, **Periculum parvum vel modicum**\n  Commendatur si ...\n  - Plicae probabiliter constantes sunt\n  - Plurimas plicas habes.\n- Arcesse omnia ex remoto.\n  **Commeatus magnus**, **CPU parvus**, **Periculum parvum vel modicum**\n\n>[!INFO]- Singula\n> ## Crea repositorium locale semel antequam arcessas.\n> **Commeatus parvus**, **CPU magnus**, **Periculum parvum**\n> Haec optio primum repositorium locale ex plicis localibus exstantibus creat antequam data ex fonte remoto arcessit.\n> Si plicae congruentes et localiter et remote exstant, solae differentiae inter eas transferentur.\n> Plicae tamen in utroque loco praesentes primo ut plicae discrepantes tractabuntur. Automatice solventur si re vera non discrepant, sed hic processus tempus requirere potest.\n> Hic plerumque modus tutissimus est, periculum datorum amittendorum minimum reddens.\n> ## Crea fragmenta plicarum localium antequam arcessas.\n> **Commeatus parvus**, **CPU modicus**, **Periculum parvum vel modicum** (pro operatione)\n> Haec optio primum fragmenta ex plicis localibus pro repositorio creat, deinde data arcessit. Itaque sola fragmenta quae localiter desunt transferuntur. Omnia tamen metadata ex fonte remoto sumuntur.\n> Plicae locales deinde in initio cum his metadatis comparantur. Contentum quod recentius habetur vetustius superscribet (secundum tempus mutationis). Hic exitus deinde ad repositorium remotum rursus synchronizatur.\n> Hoc plerumque tutum est si plicae locales re vera notam temporis recentissimam habent. Difficultates tamen afferre potest si plica notam temporis recentiorem sed contentum vetustius habet (ut `welcome.md` initialis).\n> Hoc minus CPU adhibet et celerius est quam “Crea repositorium locale semel antequam arcessas”, sed ad data amittenda ducere potest nisi caute adhibetur.\n> ## Arcesse omnia ex remoto.\n> **Commeatus magnus**, **CPU parvus**, **Periculum parvum vel modicum** (pro operatione)\n> Omnia ex remoto arcessentur.\n> Simile Crea fragmenta plicarum localium antequam arcessas, sed omnia fragmenta ex fonte remoto arcessuntur.\n> Hic est modus arcessendi maxime traditus, qui plerumque plurimum commeatus retis et temporis consumit. Simile quoque periculum plicarum remotarum superscribendarum habet atque optio 'Crea fragmenta plicarum localium antequam arcessas'.\n> Saepe tamen modus stabilissimus habetur, quia diutissime constitutus et simplicissimus est.",
-        zh: "How do you want to fetch?\n- Create a local database once before fetching.\n  **Low Traffic**, **High CPU**, **Low Risk**\n  Recommended if ...\n  - Files possibly inconsistent\n  - Files were not so much\n- Create local file chunks before fetching.\n  **Low Traffic**, **Moderate CPU**, **Low to Moderate Risk**\n  Recommended if ...\n  - Files probably consistent\n  - You have a lot of files.\n- Fetch everything from the remote.\n  **High Traffic**, **Low CPU**, **Low to Moderate Risk**\n\n>[!INFO]- Details\n> ## Create a local database once before fetching.\n> **Low Traffic**, **High CPU**, **Low Risk**\n> This option first creates a local database using existing local files before fetching data from the remote source.\n> If matching files exist both locally and remotely, only the differences between them will be transferred.\n> However, files present in both locations will initially be handled as conflicted files. They will be resolved automatically if they are not actually conflicted, but this process may take time.\n> This is generally the safest method, minimizing data loss risk.\n> ## Create local file chunks before fetching.\n> **Low Traffic**, **Moderate CPU**, **Low to Moderate Risk** (depending operation)\n> This option first creates chunks from local files for the database, then fetches data. Consequently, only chunks missing locally are transferred. However, all metadata is taken from the remote source.\n> Local files are then compared against this metadata at launch. The content considered newer will overwrite the older one (by modified time). This outcome is then synchronised back to the remote database.\n> This is generally safe if local files are genuinely the latest timestamp. However, it can cause problems if a file has a newer timestamp but older content (like the initial `welcome.md`).\n> This uses less CPU and faster than \"Create a local database once before fetching\", but it may lead to data loss if not used carefully.\n> ## Fetch everything from the remote.\n> **High Traffic**, **Low CPU**, **Low to Moderate Risk** (depending operation)\n> All things will be fetched from the remote.\n> Similar to the Create local file chunks before fetching, but all chunks are fetched from the remote source.\n> This is the most traditional way to fetch, typically consuming the most network traffic and time. It also carries a similar risk of overwriting remote files to the 'Create local file chunks before fetching' option.\n> However, it is often considered the most stable method because it is the longest-established and most straightforward approach.",
-    },
-    "RedFlag.Fetch.Method.FetchSafer": {
-        def: "Create a local database once before fetching",
-        la: "Crea repositorium locale semel antequam arcessas",
-        zh: "Create a local database once before fetching",
-    },
-    "RedFlag.Fetch.Method.FetchSmoother": {
-        def: "Create local file chunks before fetching",
-        la: "Crea fragmenta plicarum localium antequam arcessas",
-        zh: "Create local file chunks before fetching",
-    },
-    "RedFlag.Fetch.Method.FetchTraditional": {
-        def: "Fetch everything from the remote",
-        la: "Arcesse omnia ex remoto",
-        zh: "Fetch everything from the remote",
-    },
-    "RedFlag.Fetch.Method.Title": {
-        def: "How do you want to fetch?",
-        la: "Quomodo arcessere vis?",
-        zh: "How do you want to fetch?",
-    },
     "RedFlag.Fetch.Starting": {
         def: "Fetching everything with settings: makeLocalChunkBeforeSync=${makeLocalChunkBeforeSync}, makeLocalFilesBeforeSync=${makeLocalFilesBeforeSync}",
         la: "Omnia arcessuntur his optionibus: makeLocalChunkBeforeSync=${makeLocalChunkBeforeSync}, makeLocalFilesBeforeSync=${makeLocalFilesBeforeSync}",
         zh: "正在使用以下设置获取全部内容：makeLocalChunkBeforeSync=${makeLocalChunkBeforeSync}，makeLocalFilesBeforeSync=${makeLocalFilesBeforeSync}",
-    },
-    "RedFlag.FetchRemoteConfig.Buttons.Cancel": {
-        def: "No, use local settings",
-        la: "Minime, optiones locales adhibe",
-        zh: "No, use local settings",
-    },
-    "RedFlag.FetchRemoteConfig.Buttons.Fetch": {
-        def: "Yes, fetch and apply remote settings",
-        la: "Ita, arcesse et applica optiones remotas",
-        zh: "Yes, fetch and apply remote settings",
-    },
-    "RedFlag.FetchRemoteConfig.Message": {
-        def: "Do you want to fetch and apply remotely stored preference settings to the device?",
-        la: "Visne optiones remote servatas arcessere et huic instrumento applicare?",
-        zh: "Do you want to fetch and apply remotely stored preference settings to the device?",
-    },
-    "RedFlag.FetchRemoteConfig.Title": {
-        def: "Fetch Remote Configuration",
-        la: "Arcesse configurationem remotam",
-        zh: "Fetch Remote Configuration",
     },
     "RedFlag.Initialisation.Error": {
         def: "Error during vault initialisation.",
@@ -6065,12 +2965,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: 'Deminutio, magnitudo activa: ${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}, externa: ${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}, plicae: ${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}',
             zh: '减少量：活动大小：${sizeToHumanReadable(\n        getSize(info, "active") - getSize(endInfo, "active")\n      )}，外部大小：${sizeToHumanReadable(\n        getSize(info, "external") - getSize(endInfo, "external")\n      )}，文件大小：${sizeToHumanReadable(getSize(info, "file") - getSize(endInfo, "file"))}',
         },
-    "Reduces storage space by discarding all non-latest revisions. This requires the same amount of free space on the remote server and the local client.":
-        {
-            def: "Reduces storage space by discarding all non-latest revisions. This requires the same amount of free space on the remote server and the local client.",
-            la: "Spatium repositorii minuit omnes recensiones praeter recentissimas abiciendo. Hoc idem spatium liberum in ministratore remoto et in cliente locali requirit.",
-            zh: "通过丢弃所有非最新版本来减少存储空间。这需要远程服务器和本地客户端具备相同数量的可用空间。",
-        },
     "Reducing the frequency with which on-disk changes are reflected into the DB": {
         def: "Reducing the frequency with which on-disk changes are reflected into the DB",
         la: "Frequentiam minuens qua mutationes in disco in repositorium referuntur",
@@ -6102,11 +2996,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Regio",
         zh: "区域",
     },
-    "Relay settings": {
-        def: "Relay settings",
-        la: "Optiones nuntii (relay)",
-        zh: "中继设置",
-    },
     Reload: {
         def: "Reload",
         la: "Recarga",
@@ -6127,11 +3016,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Modus remedii: plicae tabularii ante arcessitionem in repositorio non servantur.",
         zh: "修复模式：获取前不会把库中的文件存入数据库。",
     },
-    "Remediation Setting Changed": {
-        def: "Remediation Setting Changed",
-        la: "Optio remedii mutata",
-        zh: "修复设置已更改",
-    },
     "remote -> local: Done": {
         def: "Server → this device: done",
         la: "Ministrator → hoc instrumentum: factum",
@@ -6141,26 +3025,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Server configuration '${id}' had a plain-text URI marked as encrypted. The flag has been repaired.",
         la: "Configuratio ministratoris “${id}” URI textus aperti ut cryptatum notatum habebat. Nota correcta est.",
         zh: "服务器配置“${id}”的明文 URI 被错误地标记为已加密，该标记已修正。",
-    },
-    "Remote Database Tweak (In sunset)": {
-        def: "Remote Database Tweak (In sunset)",
-        la: "Accommodatio repositorii remoti (in occasu)",
-        zh: "远端数据库调优（逐步淘汰）",
-    },
-    "Remote Databases": {
-        def: "Remote Databases",
-        la: "Repositoria remota",
-        zh: "远端数据库",
-    },
-    "Remote name": {
-        def: "Remote name",
-        la: "Nomen remoti",
-        zh: "远端名称",
-    },
-    "Remote only": {
-        def: "Remote only",
-        la: "Remotum tantum",
-        zh: "仅远端",
     },
     "Remote server type": {
         def: "Remote server type",
@@ -6183,30 +3047,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "${oldPath} in ${newPath} renominata est, sed omnes rami fontis in discrepantia servati sunt, quia revisio fontis ostensa ignota est",
             zh: "已将 ${oldPath} 重命名为 ${newPath}，但由于不知道原文件显示的是哪个修订，保留了原文件所有存在冲突的分支",
         },
-    "Replicate now": {
-        def: "Replicate now",
-        la: "Replica nunc",
-        zh: "立即复制",
-    },
-    "Replicate now by P2P": {
-        def: "Replicate now by P2P",
-        la: "Replica nunc per P2P",
-        zh: "立即通过 P2P 同步",
-    },
-    "Replicate P2P to default peer": {
-        def: "Replicate P2P to default peer",
-        la: "Replica per P2P cum socio praedefinito",
-        zh: "通过 P2P 与默认对端同步",
-    },
     Replicating: {
         def: "Replicating",
         la: "Replicatio fit",
         zh: "复制中",
-    },
-    "Replicating...": {
-        def: "Replicating...",
-        la: "Replicatio fit...",
-        zh: "复制中…",
     },
     "Replication activated": {
         def: "Synchronisation started",
@@ -6318,112 +3162,31 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Obsidian denuo incipiendum est.",
         zh: "需要重启 Obsidian ",
     },
-    "Rerun Onboarding Wizard": {
-        def: "Rerun Onboarding Wizard",
-        la: "Iterum curre ducem initialem",
-        zh: "重新运行引导向导",
-    },
-    "Rerun the onboarding wizard to set up Self-hosted LiveSync again.": {
-        def: "Rerun the onboarding wizard to set up Tabularium again.",
-        la: "Iterum curre ducem initialem ut Tabularium denuo constituas.",
-        zh: "重新运行引导向导以再次设置 Tabularium。",
-    },
-    "Rerun Wizard": {
-        def: "Rerun Wizard",
-        la: "Iterum curre ducem",
-        zh: "重新运行向导",
-    },
-    Resend: {
-        def: "Resend",
-        la: "Iterum mitte",
-        zh: "重新发送",
-    },
-    "Resend all chunks to the remote.": {
-        def: "Resend all chunks to the remote.",
-        la: "Omnia fragmenta ad remotum iterum mitte.",
-        zh: "将所有 chunks 重新发送到远端。",
-    },
     Reset: {
         def: "Reset",
         la: "Restitue",
         zh: "重置",
-    },
-    "Reset all": {
-        def: "Reset all",
-        la: "Omnia restitue",
-        zh: "全部重置",
-    },
-    "Reset all journal counter": {
-        def: "Reset all journal counter",
-        la: "Restitue omnes numeratores diarii",
-        zh: "重置所有日志计数器",
     },
     "Reset and Resume Synchronisation": {
         def: "Reset and Resume Synchronisation",
         la: "Restitue et resume synchronizationem",
         zh: "重置并恢复同步",
     },
-    "Reset journal received history": {
-        def: "Reset journal received history",
-        la: "Restitue historiam diarii accepti",
-        zh: "重置日志接收历史",
-    },
-    "Reset journal sent history": {
-        def: "Reset journal sent history",
-        la: "Restitue historiam diarii missi",
-        zh: "重置日志发送历史",
-    },
     "Reset notification threshold and check the remote database usage": {
         def: "Reset notification threshold and check the remote database usage",
         la: "Restitue limitem nuntiandi et usum repositorii remoti inspice",
         zh: "重置通知阈值并检查远程数据库使用情况",
-    },
-    "Reset received": {
-        def: "Reset received",
-        la: "Restitue accepta",
-        zh: "重置接收记录",
-    },
-    "Reset sent history": {
-        def: "Reset sent history",
-        la: "Restitue historiam missorum",
-        zh: "重置发送历史",
-    },
-    "Reset Synchronisation information": {
-        def: "Reset Synchronisation information",
-        la: "Restitue notitias synchronizationis",
-        zh: "重置同步信息",
     },
     "Reset Synchronisation on This Device": {
         def: "Reset Synchronisation on This Device",
         la: "Restitue synchronizationem in hoc instrumento",
         zh: "重置此设备上的同步",
     },
-    "Reset the remote storage size threshold and check the remote storage size again.": {
-        def: "Reset the remote storage size threshold and check the remote storage size again.",
-        la: "Restitue limitem magnitudinis repositorii remoti et magnitudinem eius iterum inspice.",
-        zh: "重置远程存储大小阈值并再次检查远程存储大小。",
-    },
-    "Resolve All": {
-        def: "Resolve All",
-        la: "Omnia solve",
-        zh: "全部处理",
-    },
     "Resolve all conflicted files": {
         def: "Resolve all conflicted files",
         la: "Solve omnes plicas discrepantes",
         zh: "解决所有冲突文件",
     },
-    "Resolve All conflicted files by the newer one": {
-        def: "Resolve All conflicted files by the newer one",
-        la: "Solve omnes plicas discrepantes recentiore",
-        zh: "将所有冲突文件解析为较新的版本",
-    },
-    "Resolve all conflicted files by the newer one. Caution: This will overwrite the older one, and cannot resurrect the overwritten one.":
-        {
-            def: "Resolve all conflicted files by the newer one. Caution: This will overwrite the older one, and cannot resurrect the overwritten one.",
-            la: "Solve omnes plicas discrepantes recentiore. Cave: hoc vetustiorem superscribet, nec superscriptam resuscitare poterit.",
-            zh: "将所有冲突文件统一保留较新的版本。注意：这会覆盖较旧的版本，且被覆盖的内容无法恢复。",
-        },
     "Resolve if conflicted.": {
         def: "Resolve if conflicted.",
         la: "Solve si discrepat",
@@ -6433,32 +3196,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Resolving conflicts with the newer versions",
         la: "Discrepantiae recentioribus versionibus solvuntur",
         zh: "正在用较新的版本解决冲突",
-    },
-    "Restart and Fetch Data": {
-        def: "Restart and Fetch Data",
-        la: "Denuo incipe et data arcesse",
-        zh: "重启并获取数据",
-    },
-    "Restart and Initialise Server": {
-        def: "Restart and Initialise Server",
-        la: "Denuo incipe et ministratorem initia",
-        zh: "重启并初始化服务器",
-    },
-    "Restart Now": {
-        def: "Restart Now",
-        la: "Nunc denuo incipe",
-        zh: "立即重启",
-    },
-    "Restarting Obsidian is strongly recommended. Until restart, some changes may not take effect, and display may be inconsistent. Are you sure to restart now?":
-        {
-            def: "Restarting Obsidian is strongly recommended. Until restart, some changes may not take effect, and display may be inconsistent. Are you sure to restart now?",
-            la: "Obsidian denuo incipere valde commendatur. Donec denuo incipiat, quaedam mutationes fortasse effectum non habebunt et ostensio inconstans esse potest. Certusne es te nunc denuo incipere velle?",
-            zh: "强烈建议重启 Obsidian。在重启之前，部分更改可能不会生效，显示也可能不一致。确定现在重启吗？",
-        },
-    "Restore or reconstruct local database from remote.": {
-        def: "Restore or reconstruct local database from remote.",
-        la: "Restitue vel reconstrue repositorium locale ex remoto.",
-        zh: "从远端恢复或重建本地数据库。",
     },
     "Restoring the selected revision failed before Vault reflection completed. Review the file with 'Inspect conflicts and file/database differences' before retrying.":
         {
@@ -6475,16 +3212,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Rev",
         la: "Rec.",
         zh: "修订",
-    },
-    Revert: {
-        def: "Revert",
-        la: "Reverte",
-        zh: "还原",
-    },
-    "Revert changes": {
-        def: "Revert changes",
-        la: "Muta revoca",
-        zh: "还原更改",
     },
     "Review why": {
         def: "Review why",
@@ -6506,40 +3233,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "ID conclavis",
         zh: "房间 ID",
     },
-    "Room ID suffix:": {
-        def: "Room ID suffix:",
-        la: "Suffixum ID conclavis:",
-        zh: "房间 ID 后缀：",
-    },
-    "Run Doctor": {
-        def: "Run Doctor",
-        la: "Curre medicum",
-        zh: "立即诊断",
-    },
-    "S3/MinIO/R2 Configuration": {
-        def: "S3/MinIO/R2 Configuration",
-        la: "Configuratio S3/MinIO/R2",
-        zh: "S3/MinIO/R2 配置",
-    },
-    "S3/MinIO/R2 Object Storage": {
-        def: "S3/MinIO/R2 Object Storage",
-        la: "Repositorium obiectorum S3/MinIO/R2",
-        zh: "S3/MinIO/R2 对象存储",
-    },
     Same: {
         def: "Same",
         la: "Idem",
         zh: "相同",
-    },
-    "Same or local only": {
-        def: "Same or local only",
-        la: "Idem vel localis tantum",
-        zh: "相同或仅本地",
-    },
-    "Save and Apply": {
-        def: "Save and Apply",
-        la: "Serva et applica",
-        zh: "保存并应用",
     },
     "Save settings to a markdown file. You will be notified when new settings arrive. You can set different files by the platform.":
         {
@@ -6547,31 +3244,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Optiones in plicam markdown serva. Certior fies cum novae optiones advenient. Plicas diversas pro suggestu constituere potes.",
             zh: "将设置保存到一个 Markdown 文件中。当新设置到达时,您将收到通知。您可以根据平台设置不同的文件 ",
         },
-    "Save without connecting": {
-        def: "Save without connecting",
-        la: "Serva sine conexione",
-        zh: "不连接直接保存",
-    },
     "Saving will be performed forcefully after this number of seconds.": {
         def: "Saving will be performed forcefully after this number of seconds.",
         la: "Servatio vi perficietur post hunc numerum secundorum.",
         zh: "在此秒数后将强制执行保存 ",
-    },
-    "Saving without a successful connection test keeps this profile, but automatic synchronisation may fail until the connection is corrected.":
-        {
-            def: "Saving without a successful connection test keeps this profile, but automatic synchronisation may fail until the connection is corrected.",
-            la: "Servatio sine probatione conexionis prospera hanc rationem conexionis (profile) servat, sed synchronizatio automatica deficere potest donec conexio corrigatur.",
-            zh: "未通过连接测试就保存会保留此档案，但在连接修正之前，自动同步可能会失败。",
-        },
-    "Scan a QR Code (Recommended for mobile)": {
-        def: "Scan a QR Code (Recommended for mobile)",
-        la: "Lege codicem QR (commendatur pro instrumentis mobilibus)",
-        zh: "扫描二维码（移动端推荐）",
-    },
-    "Scan and apply all offline hidden-file changes": {
-        def: "Scan and apply all offline hidden-file changes",
-        la: "Perlustra et applica omnes mutationes plicarum occultarum extra lineam factas",
-        zh: "扫描并应用所有离线时的隐藏文件变更",
     },
     "Scan changes": {
         def: "Scan changes",
@@ -6603,60 +3279,20 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Perscrutare optiones proprias periodice",
         zh: "定期扫描自定义设置",
     },
-    "Scan for Broken files": {
-        def: "Scan for Broken files",
-        la: "Quaere plicas corruptas",
-        zh: "扫描损坏文件",
-    },
     "Scan for hidden files before replication": {
         def: "Scan for hidden files before replication",
         la: "Quaere plicas occultas ante replicationem",
         zh: "复制前扫描隐藏文件",
-    },
-    "Scan hidden file changes on the local database": {
-        def: "Scan hidden file changes on the local database",
-        la: "Perlustra mutationes plicarum occultarum in repositorio locali",
-        zh: "扫描本地数据库中隐藏文件的变更",
-    },
-    "Scan hidden file changes on the storage": {
-        def: "Scan hidden file changes on the storage",
-        la: "Perlustra mutationes plicarum occultarum in repositorio plicarum",
-        zh: "扫描存储中隐藏文件的变更",
     },
     "Scan hidden files periodically": {
         def: "Scan hidden files periodically",
         la: "Perscrutare plicas occultas periodice",
         zh: "定期扫描隐藏文件",
     },
-    "Scan QR Code": {
-        def: "Scan QR Code",
-        la: "Lege codicem QR",
-        zh: "扫描二维码",
-    },
     "Scan storage and database again": {
         def: "Scan storage and database again",
         la: "Perlustra iterum repositorium plicarum et repositorium",
         zh: "重新扫描存储与数据库",
-    },
-    "Scan the QR code displayed on an active device using this device's camera.": {
-        def: "Scan the QR code displayed on an active device using this device's camera.",
-        la: "Lege codicem QR in instrumento activo monstratum camera huius instrumenti.",
-        zh: "使用当前设备的摄像头扫描另一台已在使用设备上显示的二维码。",
-    },
-    "Schedule and Restart": {
-        def: "Schedule and Restart",
-        la: "Constitue et denuo incipe",
-        zh: "安排并重启",
-    },
-    "Scram Switches": {
-        def: "Scram Switches",
-        la: "Commutatores subitae interruptionis",
-        zh: "紧急开关",
-    },
-    "Scram!": {
-        def: "Scram!",
-        la: "Siste subito!",
-        zh: "紧急处置",
     },
     "Searching ${current}/${total}...": {
         def: "Searching ${current}/${total}...",
@@ -6689,11 +3325,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Secundae. Otium post ultimam mutationem antequam repositorium locale scribatur.",
         zh: "秒。最后一次改动之后，要停止编辑多久才写入本地数据库。",
     },
-    "Secret Access Key": {
-        def: "Secret Access Key",
-        la: "Secret Access Key",
-        zh: "私有访问密钥",
-    },
     "Secret Key": {
         def: "Secret Key",
         la: "Clavis secreta",
@@ -6703,48 +3334,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "SELECT",
         la: "ELIGE",
         zh: "选择",
-    },
-    "Select active P2P remote": {
-        def: "Select active P2P remote",
-        la: "Elige remotum P2P activum",
-        zh: "选择生效的 P2P 远端",
-    },
-    "Select All Shiny": {
-        def: "Select All Shiny",
-        la: "Elige omnia recentissima",
-        zh: "全选 Shiny",
-    },
-    "Select Flagged Shiny": {
-        def: "Select Flagged Shiny",
-        la: "Elige recentissima notata",
-        zh: "选择已标记的 Shiny",
-    },
-    "Select P2P remote...": {
-        def: "Select P2P remote...",
-        la: "Elige remotum P2P...",
-        zh: "选择 P2P 远端…",
-    },
-    "Select the database adapter to use.": {
-        def: "Select the database adapter to use.",
-        la: "Elige adaptatorem repositorii adhibendum.",
-        zh: "选择要使用的数据库适配器。",
-    },
-    "Selecting this option will result in the current data on this device being used to initialise the server. Any existing data on the server will be completely overwritten.":
-        {
-            def: "Selecting this option will result in the current data on this device being used to initialise the server. Any existing data on the server will be completely overwritten.",
-            la: "Hac optione electa, data huius instrumenti currentia ad ministratorem initiandum adhibebuntur. Omnia data in ministratore exstantia penitus superscribentur.",
-            zh: "选择此选项后，将用本设备的当前数据来初始化服务器。服务器上现有的数据将被完全覆盖。",
-        },
-    "Selecting this option will result in this device joining the existing server. You need to fetching the existing synchronisation data from the server to this device.":
-        {
-            def: "Selecting this option will result in this device joining the existing server. You need to fetching the existing synchronisation data from the server to this device.",
-            la: "Hac optione electa, hoc instrumentum ministratori exstanti adiungetur. Data synchronizationis exstantia ex ministratore in hoc instrumentum arcessere debes.",
-            zh: "选择此选项后，本设备将加入现有服务器。你需要把服务器上已有的同步数据获取到本设备。",
-        },
-    Selective: {
-        def: "Selective",
-        la: "Selectivum",
-        zh: "选择性",
     },
     "Self-hosted LiveSync cannot be initialised, exiting loading.": {
         def: "Tabularium could not be initialised; loading has stopped.",
@@ -6761,16 +3350,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Mitte",
         zh: "发送",
     },
-    "Send chunks": {
-        def: "Send chunks",
-        la: "Mitte fragmenta",
-        zh: "发送 chunks",
-    },
-    SENDING: {
-        def: "SENDING",
-        la: "MITTITUR",
-        zh: "发送中",
-    },
     "Server URI": {
         def: "Server URI",
         la: "URI ministratoris",
@@ -6781,470 +3360,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "SESSIO",
         zh: "会话",
     },
-    "Setting.GenerateKeyPair.Desc": {
-        def: 'We have generated a key pair!\n\nNote: This key pair will never be shown again. Please save it in a safe place. If you have lost it, you need to generate a new key pair.\nNote 2: The public key is in spki format, and the Private key is in pkcs8 format. For the sake of convenience, newlines are converted to `\\n` in public key.\nNote 3: The public key should be configured in the remote database, and the private key should be configured in local devices.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-keypair">\n>\n> ### Public Key\n> ```\n${public_key}\n> ```\n>\n> ### Private Key\n> ```\n${private_key}\n> ```\n>\n> </div>\n\n>[!Both for copying]-\n>\n> <div class="sls-keypair">\n>\n> ```\n${public_key}\n${private_key}\n> ```\n>\n> </div>\n\n',
-        la: 'Par clavium generavimus!\n\nNota: hoc par clavium numquam iterum monstrabitur. Quaeso id in loco tuto serva. Si id amiseris, novum par clavium generare debebis.\nNota 2: clavis publica in forma spki est, clavis privata in forma pkcs8. Commoditatis causa, lineae novae in clave publica in `\\n` convertuntur.\nNota 3: clavis publica in repositorio remoto constituenda est, clavis privata in instrumentis localibus.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-keypair">\n>\n> ### Clavis publica\n> ```\n${public_key}\n> ```\n>\n> ### Clavis privata\n> ```\n${private_key}\n> ```\n>\n> </div>\n\n>[!Both for copying]-\n>\n> <div class="sls-keypair">\n>\n> ```\n${public_key}\n${private_key}\n> ```\n>\n> </div>\n\n',
-        zh: '我们已经生成了一组密钥对！\n\n注意：这组密钥对之后将不会再次显示。请务必妥善保管；如果丢失，你需要重新生成新的密钥对。\n注意 2：公钥采用 spki 格式，私钥采用 pkcs8 格式。为方便复制，公钥中的换行会被转换为 `\\n`。\n注意 3：公钥应配置在远端数据库中，私钥应配置在本地设备上。\n\n>[!仅限本人查看]-\n> <div class="sls-keypair">\n>\n> ### 公钥\n> ```\n${public_key}\n> ```\n>\n> ### 私钥\n> ```\n${private_key}\n> ```\n>\n> </div>\n\n>[!整段复制]-\n>\n> <div class="sls-keypair">\n>\n> ```\n${public_key}\n${private_key}\n> ```\n>\n> </div>',
-    },
-    "Setting.GenerateKeyPair.Title": {
-        def: "New key pair has been generated!",
-        la: "Novum par clavium generatum est!",
-        zh: "已生成新的密钥对！",
-    },
-    "Setting.TroubleShooting": {
-        def: "TroubleShooting",
-        la: "Difficultates solvendae",
-        zh: "故障排除",
-    },
-    "Setting.TroubleShooting.Doctor": {
-        def: "Setting Doctor",
-        la: "Medicus optionum",
-        zh: "设置诊断",
-    },
-    "Setting.TroubleShooting.Doctor.Desc": {
-        def: "Detects non optimal settings. (Same as during migration)",
-        la: "Optiones non optimas detegit. (Idem ac in migratione)",
-        zh: "检测系统中不合理的设置。（与迁移期间逻辑相同）",
-    },
-    "Setting.TroubleShooting.ScanBrokenFiles": {
-        def: "Scan for broken files",
-        la: "Quaere plicas corruptas",
-        zh: "扫描损坏或异常的文件",
-    },
-    "Setting.TroubleShooting.ScanBrokenFiles.Desc": {
-        def: "Scans for files that are not stored correctly in the database.",
-        la: "Quaerit plicas quae in repositorio recte non servatae sunt.",
-        zh: "扫描数据库中未正确存储的文件。",
-    },
-    "SettingTab.Message.AskRebuild": {
-        def: "Your changes require fetching from the remote database. Do you want to proceed?",
-        la: "Mutationes tuae arcessendum ex repositorio remoto requirunt. Visne pergere?",
-        zh: "Your changes require fetching from the remote database. Do you want to proceed?",
-    },
-    "Setup Complete: Preparing to Fetch Synchronisation Data": {
-        def: "Setup Complete: Preparing to Fetch Synchronisation Data",
-        la: "Constitutio perfecta: data synchronizationis arcessenda parantur",
-        zh: "设置完成：正在准备获取同步数据",
-    },
-    "Setup Complete: Preparing to Initialise Server": {
-        def: "Setup Complete: Preparing to Initialise Server",
-        la: "Constitutio perfecta: initiatio ministratoris paratur",
-        zh: "设置完成：正在准备初始化服务器",
-    },
-    "Setup URI dialog cancelled.": {
-        def: "Setup URI dialog cancelled.",
-        la: "Dialogus Setup URI abrogatus.",
-        zh: "Setup URI 对话框已取消。",
-    },
-    "Setup-URI": {
-        def: "Setup-URI",
-        la: "Setup-URI",
-        zh: "设置 URI",
-    },
-    "Setup.Apply.Buttons.ApplyAndFetch": {
-        def: "Apply and Fetch",
-        la: "Applica et arcesse",
-        zh: "Apply and Fetch",
-    },
-    "Setup.Apply.Buttons.ApplyAndMerge": {
-        def: "Apply and Merge",
-        la: "Applica et confla",
-        zh: "Apply and Merge",
-    },
-    "Setup.Apply.Buttons.ApplyAndRebuild": {
-        def: "Apply and Rebuild",
-        la: "Applica et reaedifica",
-        zh: "Apply and Rebuild",
-    },
-    "Setup.Apply.Buttons.Cancel": {
-        def: "Discard and Cancel",
-        la: "Abice et abroga",
-        zh: "Discard and Cancel",
-    },
-    "Setup.Apply.Buttons.OnlyApply": {
-        def: "Only Apply",
-        la: "Applica tantum",
-        zh: "Only Apply",
-    },
-    "Setup.Apply.Message": {
-        def: "The new configuration is ready. Let us proceed to apply it.\nThere are several ways to apply this:\n\n- Apply and Fetch\n  Configure this device as a new client. After applying, synchronise from the remote server.\n- Apply and Merge\n  Configure on a device that already has the file. It processes the local files and transfers the differences. Conflicts may arise.\n- Apply and Rebuild\n  Rebuild the remote using local files. This is typically done if the server becomes corrupted or we wish to start from scratch.\n  Other devices will be locked and required to re-fetch.\n- Only Apply\n  Apply only. Conflicts may arise if a rebuild is required.",
-        la: "Nova configuratio parata est. Eam applicemus.\nPluribus modis applicari potest:\n\n- Applica et arcesse\n  Hoc instrumentum ut novum clientem constitue. Post applicationem, ex ministratore remoto synchroniza.\n- Applica et confla\n  Constitue in instrumento quod plicas iam habet. Plicas locales tractat et differentias transfert. Discrepantiae oriri possunt.\n- Applica et reaedifica\n  Remotum plicis localibus reaedifica. Hoc plerumque fit si ministrator corruptus est vel ab initio incipere volumus.\n  Alia instrumenta obserabuntur et denuo arcessere debebunt.\n- Applica tantum\n  Applica tantum. Discrepantiae oriri possunt si reaedificatio requiritur.",
-        zh: "The new configuration is ready. Let us proceed to apply it.\nThere are several ways to apply this:\n\n- Apply and Fetch\n  Configure this device as a new client. After applying, synchronise from the remote server.\n- Apply and Merge\n  Configure on a device that already has the file. It processes the local files and transfers the differences. Conflicts may arise.\n- Apply and Rebuild\n  Rebuild the remote using local files. This is typically done if the server becomes corrupted or we wish to start from scratch.\n  Other devices will be locked and required to re-fetch.\n- Only Apply\n  Apply only. Conflicts may arise if a rebuild is required.",
-    },
-    "Setup.Apply.Title": {
-        def: "Apply new configuration from the ${method}",
-        la: "Applica novam configurationem ex ${method}",
-        zh: "Apply new configuration from the ${method}",
-    },
-    "Setup.Apply.WarningRebuildRecommended": {
-        def: "NOTE: after adjusting the settings, it has been determined that a rebuild is required; Just Import is not recommended.",
-        la: "NOTA: optionibus accommodatis, constitutum est reaedificationem requiri; Just Import non commendatur.",
-        zh: "NOTE: after adjusting the settings, it has been determined that a rebuild is required; Just Import is not recommended.",
-    },
-    "Setup.CopySetupURI.CommandCopy": {
-        def: "Copy settings as a new setup URI",
-        la: "Exscribe optiones ut novum Setup URI",
-        zh: "将设置复制为新的 Setup URI",
-    },
-    "Setup.CopySetupURI.CommandCopyFull": {
-        def: "Copy settings as a new setup URI (Full)",
-        la: "Exscribe optiones ut novum Setup URI (plenum)",
-        zh: "将设置复制为新的 Setup URI（完整）",
-    },
-    "Setup.CopySetupURI.CommandCopyWithCustomizationSync": {
-        def: "Copy settings as a new setup URI (With customization sync)",
-        la: "Exscribe optiones ut novum Setup URI (cum synchronizatione optionum propriarum)",
-        zh: "将设置复制为新的 Setup URI（包含自定义同步）",
-    },
-    "Setup.CopySetupURI.Copied": {
-        def: "Setup URI copied to clipboard",
-        la: "Setup URI in tabellam exscriptum",
-        zh: "Setup URI 已复制到剪贴板",
-    },
-    "Setup.CopySetupURI.ModeCompatible": {
-        def: "Compatible (no time limit)",
-        la: "Compatibile (sine termino temporis)",
-        zh: "兼容（无时间限制）",
-    },
-    "Setup.CopySetupURI.ModeMessage": {
-        def: "Time-bound Setup URIs can be opened until ${until}. This is the end of the current fixed seven-day UTC window, not seven days from now. Compatible URIs have no time limit and work with older clients.",
-        la: "Setup URI temporaria usque ad ${until} aperiri possunt. Hic est finis fenestrae UTC fixae septem dierum currentis, non septem dies ab hoc momento. URI compatibilia terminum temporis non habent et cum clientibus vetustioribus operantur.",
-        zh: "限时 Setup URI 可在 ${until} 之前打开。这是当前固定的七天 UTC 时间窗口的结束时间，而不是从现在起七天。兼容 URI 没有时间限制，并可用于旧版客户端。",
-    },
-    "Setup.CopySetupURI.ModeMessageNoClock": {
-        def: "Time-bound Setup URIs require a valid device clock. Compatible URIs have no time limit and work with older clients.",
-        la: "Setup URI temporaria horologium instrumenti validum requirunt. URI compatibilia terminum temporis non habent et cum clientibus vetustioribus operantur.",
-        zh: "限时 Setup URI 需要设备时钟准确。兼容 URI 没有时间限制，并可用于旧版客户端。",
-    },
-    "Setup.CopySetupURI.ModeTimeBound": {
-        def: "Time-bound",
-        la: "Temporarium",
-        zh: "限时",
-    },
-    "Setup.CopySetupURI.ModeTitle": {
-        def: "Setup URI availability",
-        la: "Spatium validitatis Setup URI",
-        zh: "Setup URI 有效期",
-    },
-    "Setup.CopySetupURI.PassphraseLabel": {
-        def: "The passphrase to encrypt the setup URI",
-        la: "Tessera arcana ad Setup URI cryptandum",
-        zh: "用于加密 Setup URI 的口令",
-    },
-    "Setup.CopySetupURI.PassphraseTitle": {
-        def: "Encrypt your settings",
-        la: "Crypta optiones tuas",
-        zh: "加密你的设置",
-    },
-    "Setup.Doctor.Buttons.No": {
-        def: "No, please use the settings in the URI as is",
-        la: "Minime, quaeso optiones in URI ut sunt adhibe",
-        zh: "No, please use the settings in the URI as is",
-    },
-    "Setup.Doctor.Buttons.Yes": {
-        def: "Yes, please consult the doctor",
-        la: "Ita, quaeso medicum consule",
-        zh: "Yes, please consult the doctor",
-    },
-    "Setup.Doctor.Message": {
-        def: "Tabularium has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
-        la: "Tabularium paulatim longiorem historiam habet, et quaedam optiones commendatae mutatae sunt.\n\nNunc, in constitutione, tempus optimum est ad hoc faciendum.\n\nVisne medicum currere ut inspicias num optiones importatae, cum statu novissimo comparatae, optimae sint?",
-        zh: "Tabularium has gradually become longer in history and some recommended settings have changed.\n\nNow, setup is a very good time to do this.\n\nDo you want to run Doctor to check if the imported settings are optimal compared to the latest state?",
-    },
-    "Setup.Doctor.Title": {
-        def: "Do you want to consult the doctor?",
-        la: "Visne medicum consulere?",
-        zh: "Do you want to consult the doctor?",
-    },
-    "Setup.FetchRemoteConf.Buttons.Fetch": {
-        def: "Yes, please fetch the configuration",
-        la: "Ita, quaeso configurationem arcesse",
-        zh: "Yes, please fetch the configuration",
-    },
-    "Setup.FetchRemoteConf.Buttons.Skip": {
-        def: "No, please use the settings in the URI",
-        la: "Minime, quaeso optiones in URI adhibe",
-        zh: "No, please use the settings in the URI",
-    },
-    "Setup.FetchRemoteConf.Message": {
-        def: "If we have already synchronised once with another device, the remote database stores the suitable configuration values between the synchronised devices. The plug-in would like to retrieve them for robust configuration.\n\nHowever, we have to make sure the one thing. Are we currently in a situation where we can access the network safely and retrieve the settings?\n\nNote: Mostly, you are safe to do this, that your remote database is hosted with a SSL certificate, and your network is not compromised.",
-        la: "Si iam semel cum alio instrumento synchronizavimus, repositorium remotum valores configurationis aptos inter instrumenta synchronizata servat. Additamentum eos recipere velit ad configurationem firmam.\n\nUnum tamen certum habere debemus. Suntne nunc condiciones in quibus rete tuto adire et optiones recipere possumus?\n\nNota: plerumque hoc tuto facere potes, si repositorium tuum remotum cum certificato SSL hospitatur et rete tuum non violatum est.",
-        zh: "If we have already synchronised once with another device, the remote database stores the suitable configuration values between the synchronised devices. The plug-in would like to retrieve them for robust configuration.\n\nHowever, we have to make sure the one thing. Are we currently in a situation where we can access the network safely and retrieve the settings?\n\nNote: Mostly, you are safe to do this, that your remote database is hosted with a SSL certificate, and your network is not compromised.",
-    },
-    "Setup.FetchRemoteConf.Title": {
-        def: "Fetch configuration from remote database?",
-        la: "Visne configurationem ex repositorio remoto arcessere?",
-        zh: "Fetch configuration from remote database?",
-    },
-    "Setup.Manager.applyCancelled": {
-        def: "User cancelled applying settings from wizard.",
-        la: "Usor applicationem optionum ex ductore abrogavit.",
-        zh: "用户已取消应用向导中的设置。",
-    },
-    "Setup.Manager.e2eeConfigurationCancelled": {
-        def: "E2EE configuration cancelled.",
-        la: "Configuratio E2EE abrogata.",
-        zh: "已取消 E2EE 配置。",
-    },
-    "Setup.Manager.EncryptInternalMetadata.Buttons.Proceed": {
-        def: "Enable without rebuilding — update every other device first",
-        la: "Activa sine reaedificatione — prius omnia alia instrumenta renova",
-        zh: "不重建直接启用——请先更新其他所有设备",
-    },
-    "Setup.Manager.EncryptInternalMetadata.Message": {
-        def: "A manual remote Rebuild is strongly recommended to protect existing file properties. Before continuing without rebuilding, update every other synchronising device to a version which supports this option, including devices currently running Tabularium. Existing properties remain unchanged until they are rewritten or rebuilt.",
-        la: "Reaedificatio remoti manualis vehementer commendatur ut proprietates plicarum exstantes protegantur. Antequam sine reaedificatione pergas, omnia alia instrumenta synchronizantia ad versionem quae hanc optionem sustinet renova, etiam instrumenta quae nunc Tabularium exsequuntur. Proprietates exstantes immutatae manent donec rescribantur vel reaedificentur.",
-        zh: "强烈建议手动重建远程，以保护已有的文件属性。如果不重建就继续，请先将其他所有正在同步的设备更新到支持此选项的版本，包括当前运行 Tabularium 的设备。已有属性在被重写或重建之前保持不变。",
-    },
-    "Setup.Manager.EncryptInternalMetadata.Title": {
-        def: "Encrypt internal file Properties",
-        la: "Crypta proprietates internas plicarum",
-        zh: "加密内部文件属性",
-    },
-    "Setup.Manager.manualConfigurationCancelled": {
-        def: "Manual configuration cancelled.",
-        la: "Configuratio manualis abrogata.",
-        zh: "已取消手动配置。",
-    },
-    "Setup.Manager.noChangesDetected": {
-        def: "No changes in settings detected. Skipping applying settings from wizard.",
-        la: "Nullae mutationes optionum inventae. Applicatio optionum ex ductore omittitur.",
-        zh: "未检测到设置变更。跳过应用向导中的设置。",
-    },
-    "Setup.Manager.onboardingCancelled": {
-        def: "Onboarding cancelled by user.",
-        la: "Introductio ab usore abrogata.",
-        zh: "用户已取消初始设置。",
-    },
-    "Setup.Manager.qrDecodeFailed": {
-        def: "The QR configuration could not be decoded or contains unsupported settings.",
-        la: "Configuratio QR decodari non potuit vel optiones non sustentas continet.",
-        zh: "无法解码该二维码配置，或其中包含不受支持的设置。",
-    },
-    "Setup.Manager.settingApplied": {
-        def: "Setting Applied",
-        la: "Optio applicata",
-        zh: "设置已应用",
-    },
-    "Setup.Manager.wizardSettingsApplied": {
-        def: "Settings from wizard applied.",
-        la: "Optiones ex ductore applicatae.",
-        zh: "已应用向导中的设置。",
-    },
     "Setup.QRCode": {
         def: 'We have generated a QR code to transfer the settings. Please scan the QR code with your phone or other device.\nNote: The QR code is not encrypted, so be careful to open this.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
         la: 'Codicem QR ad optiones transferendas generavimus. Quaeso codicem QR telephono tuo vel alio instrumento lege.\nNota: codex QR non cryptatus est, ergo cave cum hoc aperis.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
         zh: 'We have generated a QR code to transfer the settings. Please scan the QR code with your phone or other device.\nNote: The QR code is not encrypted, so be careful to open this.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
-    },
-    "Setup.QRCodeAggregated": {
-        def: "The setting is too large for a single QR code.\nWe are using the aggregator to combine multiple QR codes.\nYour settings will not be sent to any server; they will be processed only on your device.\nPlease scan this QR code with your mobile's camera, and open the page in your browser.\nAfter all parts are collected, the page will navigate you back to Obsidian with the aggregated settings.\n\nProgress: ${current} / ${total}\n${part}",
-        la: "Optio nimis magna est pro uno codice QR.\nAggregatore utimur ut plures codices QR coniungamus.\nOptiones tuae ad nullum ministratorem mittentur; in instrumento tuo tantum tractabuntur.\nQuaeso hunc codicem QR camera instrumenti mobilis tui perlege, et paginam in navigatro tuo aperi.\nPostquam omnes partes collectae sunt, pagina te ad Obsidian cum optionibus aggregatis reducet.\n\nProgressus: ${current} / ${total}\n${part}",
-        zh: "设置内容过大，无法放入单个二维码。\n我们将使用聚合器组合多个二维码。\n你的设置不会发送到任何服务器，只会在你的设备上处理。\n请用手机相机扫描此二维码，并在浏览器中打开页面。\n收集完所有部分后，该页面会带着聚合后的设置跳转回 Obsidian。\n\n进度：${current} / ${total}\n${part}",
-    },
-    "Setup.QRCodeAggregatedTitle": {
-        def: "Settings QR Code (Aggregated)",
-        la: "Codex QR optionum (aggregatus)",
-        zh: "设置二维码（聚合）",
-    },
-    "Setup.QRCodeTitle": {
-        def: "Settings QR Code",
-        la: "Codex QR optionum",
-        zh: "设置二维码",
-    },
-    "Setup.RemoteE2EE.AdvancedTitle": {
-        def: "Advanced",
-        la: "Provecta",
-        zh: "高级",
-    },
-    "Setup.RemoteE2EE.AlgorithmWarning": {
-        def: "Changing the encryption algorithm will prevent access to any data previously encrypted with a different algorithm. Ensure that all your devices are configured to use the same algorithm to maintain access to your data.",
-        la: "Algorithmum cryptationis mutare accessum ad omnia data antea alio algorithmo cryptata impediet. Cura ut omnia instrumenta tua eodem algorithmo utantur, ut accessum ad data tua serves.",
-        zh: "更改加密算法会导致之前使用其他算法加密的数据无法访问。请确保所有设备都配置为使用同一算法，以保持对数据的访问能力。",
-    },
-    "Setup.RemoteE2EE.ButtonCancel": {
-        def: "Cancel",
-        la: "Abroga",
-        zh: "取消",
-    },
-    "Setup.RemoteE2EE.ButtonProceed": {
-        def: "Proceed",
-        la: "Perge",
-        zh: "继续",
-    },
-    "Setup.RemoteE2EE.DefaultAlgorithmDesc": {
-        def: "In most cases, you should stick with the default algorithm (${algorithm}). This setting is only required if you have an existing Vault encrypted in a different format.",
-        la: "Plerumque algorithmum praedefinitum (${algorithm}) retinere debes. Haec optio solum requiritur si tabularium exstans in alia forma cryptatum habes.",
-        zh: "在大多数情况下，你应继续使用默认算法（${algorithm}）。只有当你已有一个采用不同格式加密的 Vault 时，才需要调整此设置。",
-    },
-    "Setup.RemoteE2EE.Guidance": {
-        def: "Please configure your end-to-end encryption settings.",
-        la: "Quaeso optiones cryptationis ab extremo ad extremum constitue.",
-        zh: "请配置你的端到端加密设置。",
-    },
-    "Setup.RemoteE2EE.LabelEncrypt": {
-        def: "End-to-End Encryption",
-        la: "Cryptatio ab extremo ad extremum",
-        zh: "端到端加密",
-    },
-    "Setup.RemoteE2EE.LabelEncryptionAlgorithm": {
-        def: "Encryption Algorithm",
-        la: "Algorithmus cryptationis",
-        zh: "加密算法",
-    },
-    "Setup.RemoteE2EE.LabelObfuscateProperties": {
-        def: "Obfuscate Properties",
-        la: "Obscura proprietates",
-        zh: "混淆属性",
-    },
-    "Setup.RemoteE2EE.MultiDestinationWarning": {
-        def: "This setting must be the same even when connecting to multiple synchronisation destinations.",
-        la: "Haec optio eadem esse debet etiam cum ad plures destinationes synchronizationis conecteris.",
-        zh: "即使连接到多个同步目标，此设置也必须保持一致。",
-    },
-    "Setup.RemoteE2EE.ObfuscatePropertiesDesc": {
-        def: "Obfuscating properties (e.g., path of file, size, creation and modification dates) adds an additional layer of security by making it harder to identify the structure and names of your files and folders on the remote server. This helps protect your privacy and makes it more difficult for unauthorized users to infer information about your data.",
-        la: "Proprietates obscurare (e.g., viam plicae, magnitudinem, dies creationis et mutationis) gradum securitatis addit, quia difficilius fit structuram et nomina plicarum thecarumque tuarum in ministratore remoto agnoscere. Hoc secretum tuum tuetur et usoribus non permissis difficilius reddit aliquid de datis tuis colligere.",
-        zh: "混淆属性（例如文件路径、大小、创建和修改日期）可以增加一层额外保护，使远程服务器上的文件与文件夹结构及名称更难被识别。这有助于保护你的隐私，也让未授权用户更难推断你的数据相关信息。",
-    },
-    "Setup.RemoteE2EE.PassphraseValidationLine1": {
-        def: "Please be aware that the End-to-End Encryption passphrase is not validated until the synchronisation process actually commences. This is a security measure designed to protect your data.",
-        la: "Quaeso animadverte tesseram arcanam cryptationis ab extremo ad extremum non probari donec processus synchronizationis re vera incipiat. Haec est mensura securitatis ad data tua tuenda destinata.",
-        zh: "请注意，在同步过程真正开始之前，端到端加密密码短语不会被校验。这是一项用于保护你数据的安全措施。",
-    },
-    "Setup.RemoteE2EE.PassphraseValidationLine2": {
-        def: "Therefore, we ask that you exercise extreme caution when configuring server information manually. If an incorrect passphrase is entered, the data on the server will become corrupted. Please understand that this is intended behaviour.",
-        la: "Itaque rogamus ut summa cum cautela notitias ministratoris manu constituas. Si tessera arcana falsa inseritur, data in ministratore corrumpentur. Quaeso intellege hoc consulto ita agere.",
-        zh: "因此，在手动配置服务器信息时请务必格外小心。如果输入了错误的密码短语，服务器上的数据将会损坏。请理解这属于预期行为。",
-    },
-    "Setup.RemoteE2EE.PlaceholderPassphrase": {
-        def: "Enter your passphrase",
-        la: "Insere tesseram arcanam tuam",
-        zh: "输入你的密码短语",
-    },
-    "Setup.RemoteE2EE.StronglyRecommendedLine1": {
-        def: "Enabling end-to-end encryption ensures that your data is encrypted on your device before being sent to the remote server. This means that even if someone gains access to the server, they won't be able to read your data without the passphrase. Make sure to remember your passphrase, as it will be required to decrypt your data on other devices.",
-        la: "Cryptatio ab extremo ad extremum activata efficit ut data tua in instrumento tuo cryptentur antequam ad ministratorem remotum mittantur. Hoc significat, etiam si quis accessum ad ministratorem obtineat, eum data tua sine tessera arcana legere non posse. Cura ut tesseram arcanam memineris, nam ad data tua in aliis instrumentis decryptanda requiretur.",
-        zh: "启用端到端加密后，数据会先在你的设备上加密，再发送到远程服务器。这意味着即使有人获得了服务器访问权限，没有密码短语也无法读取你的数据。请务必记住你的密码短语，因为在其他设备上解密数据时也需要它。",
-    },
-    "Setup.RemoteE2EE.StronglyRecommendedLine2": {
-        def: "Also, please note that if you are using Peer-to-Peer synchronization, this configuration will be used when you switch to other methods and connect to a remote server in the future.",
-        la: "Item, quaeso nota, si synchronizatione inter pares uteris, hanc configurationem adhibitum iri cum in futuro ad alios modos transibis et ad ministratorem remotum conecteris.",
-        zh: "另外请注意，如果你正在使用 Peer-to-Peer 同步，当你以后切换到其他同步方式并连接远程服务器时，也会使用这组配置。",
-    },
-    "Setup.RemoteE2EE.StronglyRecommendedTitle": {
-        def: "Strongly Recommended",
-        la: "Valde commendatur",
-        zh: "强烈推荐",
-    },
-    "Setup.RemoteE2EE.Title": {
-        def: "End-to-End Encryption",
-        la: "Cryptatio ab extremo ad extremum",
-        zh: "端到端加密",
-    },
-    "Setup.ScanQRCode.ButtonClose": {
-        def: "Close this dialog",
-        la: "Claude hunc dialogum",
-        zh: "关闭此对话框",
-    },
-    "Setup.ScanQRCode.Guidance": {
-        def: "Please follow the steps below to import settings from your existing device.",
-        la: "Quaeso gradus infra sequere ut optiones ex instrumento tuo exstante importes.",
-        zh: "请按照以下步骤从现有设备导入设置。",
-    },
-    "Setup.ScanQRCode.Step1": {
-        def: "On this device, please keep this Vault open.",
-        la: "In hoc instrumento, quaeso hoc tabularium apertum tene.",
-        zh: "在这台设备上，请保持此 Vault 处于打开状态。",
-    },
-    "Setup.ScanQRCode.Step2": {
-        def: "On the source device, open Obsidian.",
-        la: "In instrumento fontis, Obsidian aperi.",
-        zh: "在源设备上打开 Obsidian。",
-    },
-    "Setup.ScanQRCode.Step3": {
-        def: "On the source device, from the command palette, run the 'Show settings as a QR code' command.",
-        la: "In instrumento fontis, ex indice mandatorum, mandatum 'Show settings as a QR code' exsequere.",
-        zh: "在源设备上，从命令面板运行“将设置显示为二维码”命令。",
-    },
-    "Setup.ScanQRCode.Step4": {
-        def: "On this device, switch to the camera app or use a QR code scanner to scan the displayed QR code.",
-        la: "In hoc instrumento, ad applicationem camerae transi vel lectore QR codicum utere ut codicem QR monstratum legas.",
-        zh: "在这台设备上，切换到相机应用或使用二维码扫描器扫描显示出的二维码。",
-    },
-    "Setup.ScanQRCode.Title": {
-        def: "Scan QR Code",
-        la: "Lege codicem QR",
-        zh: "扫描二维码",
-    },
-    "Setup.ShowQRCode": {
-        def: "Show QR code",
-        la: "Monstra codicem QR",
-        zh: "使用QR码",
-    },
-    "Setup.ShowQRCode.Desc": {
-        def: "Show QR code to transfer the settings.",
-        la: "Monstra codicem QR ad optiones transferendas.",
-        zh: "使用QR码来传递配置",
-    },
-    "Setup.UseSetupURI.ButtonCancel": {
-        def: "Cancel",
-        la: "Abroga",
-        zh: "取消",
-    },
-    "Setup.UseSetupURI.ButtonProceed": {
-        def: "Test Settings and Continue",
-        la: "Proba optiones et perge",
-        zh: "测试设置并继续",
-    },
-    "Setup.UseSetupURI.ErrorFailedToParse": {
-        def: "Failed to parse the Setup URI. Please check the URI and passphrase.",
-        la: "Setup URI resolvi non potuit. Quaeso URI et tesseram arcanam inspice.",
-        zh: "无法解析 Setup URI，请检查 URI 和密码短语。",
-    },
-    "Setup.UseSetupURI.ErrorPassphraseRequired": {
-        def: "Please enter the vault passphrase.",
-        la: "Quaeso tesseram arcanam tabularii insere.",
-        zh: "请输入 Vault 密码短语。",
-    },
-    "Setup.UseSetupURI.GuidanceLine1": {
-        def: "Please enter the Setup URI that was generated during server installation or on another device, along with the vault passphrase.",
-        la: "Quaeso insere Setup URI quod in ministratore instituendo vel in alio instrumento generatum est, una cum tessera arcana tabularii.",
-        zh: "请输入在服务器安装期间或另一台设备上生成的 Setup URI，以及 Vault 密码短语。",
-    },
-    "Setup.UseSetupURI.GuidanceLine2": {
-        def: 'Note that you can generate a new Setup URI by running the "Copy settings as a new Setup URI" command in the command palette.',
-        la: "Nota te novum Setup URI generare posse mandatum “Copy settings as a new Setup URI” in indice mandatorum exsequendo.",
-        zh: "你可以在命令面板中运行“将设置复制为新的 Setup URI”命令来生成新的 Setup URI。",
-    },
-    "Setup.UseSetupURI.InvalidInfo": {
-        def: "The Setup URI is invalid. Please check it and try again.",
-        la: "Setup URI invalidum est. Quaeso id inspice et iterum conare.",
-        zh: "Setup URI 无效，请检查后重试。",
-    },
-    "Setup.UseSetupURI.LabelPassphrase": {
-        def: "Vault passphrase",
-        la: "Tessera arcana tabularii",
-        zh: "Vault 密码短语",
-    },
-    "Setup.UseSetupURI.LabelSetupURI": {
-        def: "Setup URI",
-        la: "Setup URI",
-        zh: "Setup URI",
-    },
-    "Setup.UseSetupURI.PlaceholderPassphrase": {
-        def: "Enter your vault passphrase",
-        la: "Insere tesseram arcanam tabularii tui",
-        zh: "输入 Vault 密码短语",
-    },
-    "Setup.UseSetupURI.Title": {
-        def: "Enter Setup URI",
-        la: "Insere Setup URI",
-        zh: "输入 Setup URI",
-    },
-    "Setup.UseSetupURI.ValidInfo": {
-        def: "The Setup URI is valid and ready to use.",
-        la: "Setup URI validum et ad usum paratum est.",
-        zh: "Setup URI 有效，可以使用。",
     },
     "Should we keep folders that don't have any files inside?": {
         def: "Should we keep folders that don't have any files inside?",
@@ -7271,25 +3390,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Monstra",
         zh: "显示",
     },
-    "Show customization sync dialog": {
-        def: "Show customization sync dialog",
-        la: "Monstra dialogum synchronizationis personalizationis",
-        zh: "显示自定义同步对话框",
-    },
-    "Show full banner": {
-        def: "Show full banner",
-        la: "Monstra vexillum plenum",
-        zh: "显示完整横幅",
-    },
     "Show history": {
         def: "Show history",
         la: "Monstra historiam",
         zh: "显示历史记录",
-    },
-    "Show icon only": {
-        def: "Show icon only",
-        la: "Monstra iconem tantum",
-        zh: "仅显示图标",
     },
     "Show log": {
         def: "Show log",
@@ -7300,11 +3404,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Show only notifications",
         la: "Monstra nuntios tantum",
         zh: "仅显示通知",
-    },
-    "Show password": {
-        def: "Show password",
-        la: "Monstra tesseram",
-        zh: "显示密码",
     },
     "Show settings as a QR code": {
         def: "Show settings as a QR code",
@@ -7341,16 +3440,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Monstra acta prolixa. Quaeso activa si quaestionem refers.",
         zh: "显示详细日志。如果您报告问题,请启用此选项 ",
     },
-    "Signaling Server Connection": {
-        def: "Signaling Server Connection",
-        la: "Conexio ministratoris signorum",
-        zh: "信令服务器连接",
-    },
-    "Signalling Status": {
-        def: "Signalling Status",
-        la: "Status signorum",
-        zh: "信令状态",
-    },
     "Simple fetch and scan operation completed.": {
         def: "Fetch and scan completed.",
         la: "Arcessitio et perscrutatio perfectae sunt.",
@@ -7361,22 +3450,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             def: "Since you have chosen to overwrite all local files with remote data, **how would you like to handle local files that are not present in the remote database?**\n\n- **${DELETE_ALL}**: Local-only files and remote-deleted files will be removed.\n  This option will make your local vault exactly the same as the remote database, but please make sure you have a backup if there is any important data in your vault.\n- **${DELETE_NONE}**: All existing local files will be preserved.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.",
             la: "Quoniam omnes plicas locales datis remotis superscribere elegisti, **quomodo plicas locales tractare vis quae in repositorio remoto non adsunt?**\n\n- **${DELETE_ALL}**: plicae solum locales et plicae remote deletae removebuntur.\n  Haec optio tabularium tuum locale prorsus idem ac repositorium remotum reddet, sed quaeso cura ut exemplar tutelae habeas si qua data gravia in tabulario tuo sunt.\n- **${DELETE_NONE}**: omnes plicae locales exstantes servabuntur.\n  Haec optio omnes plicas tuas locales servabit, sed duplicata efficere potest si plicae localiter sed non remote exstant. Haec duplicata post synchronizationem manu purgare potes.",
             zh: "由于你选择了用远程数据覆盖所有本地文件，**远程数据库中不存在的本地文件应如何处理？**\n\n- **${DELETE_ALL}**：删除仅存在于本地的文件和远程已删除的文件。\n  此选项会让本地笔记库与远程数据库完全一致，但如果笔记库中有重要数据，请确保已做好备份。\n- **${DELETE_NONE}**：保留所有现有的本地文件。\n  此选项会保留所有本地文件，但如果有文件只存在于本地而不在远程，可能会产生重复。同步完成后可以手动清理这些重复文件。",
-        },
-    "Skip and close": {
-        def: "Skip and close",
-        la: "Praetermitte et claude",
-        zh: "跳过并关闭",
-    },
-    Snippets: {
-        def: "Snippets",
-        la: "Excerpta",
-        zh: "代码片段",
-    },
-    "Some devices have differing progress values (max: ${maxProgress}, min: ${minProgress}).\nThis may indicate that some devices have not completed synchronisation, which could lead to conflicts. Strongly recommend confirming that all devices are synchronised before proceeding.":
-        {
-            def: "Some devices have differing progress values (max: ${maxProgress}, min: ${minProgress}).\nThis may indicate that some devices have not completed synchronisation, which could lead to conflicts. Strongly recommend confirming that all devices are synchronised before proceeding.",
-            la: "Quaedam instrumenta valores progressus diversos habent (max: ${maxProgress}, min: ${minProgress}).\nHoc indicare potest quaedam instrumenta synchronizationem non perfecisse, quod ad discrepantias ducere potest. Valde commendatur ut confirmes omnia instrumenta synchronizata esse antequam pergas.",
-            zh: "某些设备的进度值不同（最大：${maxProgress}，最小：${minProgress}）。\n这可能表示某些设备尚未完成同步，从而可能引发冲突。强烈建议在继续之前先确认所有设备都已同步。",
         },
     "Some files failed to synchronise. What would you like to do?": {
         def: "Some files failed to synchronise. What would you like to do?",
@@ -7408,26 +3481,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Error in ${dispFilename} (${meta._id.substring(0, 8)}) ex repositorio legendo:",
         zh: "从数据库读取 ${dispFilename}（${meta._id.substring(0, 8)}）时出错：",
     },
-    "Start Broadcasting": {
-        def: "Start Broadcasting",
-        la: "Incipe emittere",
-        zh: "开始广播",
-    },
-    "Start change-broadcasting on Connect": {
-        def: "Start change-broadcasting on Connect",
-        la: "Incipe mutationes emittere cum conectitur",
-        zh: "连接时开始广播变更",
-    },
-    "Start live": {
-        def: "Start live",
-        la: "Incipe continuam",
-        zh: "开始实时",
-    },
-    "Start Sync & Close": {
-        def: "Start Sync & Close",
-        la: "Incipe synchronizationem et claude",
-        zh: "开始同步并关闭",
-    },
     "Starts synchronisation when a file is saved.": {
         def: "Starts synchronisation when a file is saved.",
         la: "Synchronizationem incipit cum plica servatur.",
@@ -7443,16 +3496,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Statistica",
         zh: "统计",
     },
-    "Stop Broadcasting": {
-        def: "Stop Broadcasting",
-        la: "Desine emittere",
-        zh: "停止广播",
-    },
-    "Stop live": {
-        def: "Stop live",
-        la: "Siste continuam",
-        zh: "停止实时",
-    },
     "Stop reflecting database changes to storage files.": {
         def: "Stop reflecting database changes to storage files.",
         la: "Desine mutationes repositorii in plicas repositorii plicarum referre.",
@@ -7462,11 +3505,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Stop watching for file changes.",
         la: "Desine mutationes plicarum observare.",
         zh: "停止监视文件更改 ",
-    },
-    "Storage -> Database": {
-        def: "Storage -> Database",
-        la: "Repositorium plicarum -> Repositorium datorum",
-        zh: "存储 → 数据库",
     },
     "STORAGE -> DB : ${file.path} has been skipped due to file size exceeding the limit": {
         def: "STORAGE -> DB: skipped ${file.path} because it exceeds the size limit",
@@ -7503,11 +3541,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Operatio repositorii post defectum adhuc pendet.",
         zh: "存储操作失败后仍在等待处理。",
     },
-    "Strongly Recommended": {
-        def: "Strongly Recommended",
-        la: "Valde commendatur",
-        zh: "强烈推荐",
-    },
     "Suppress notification of hidden files change": {
         def: "Suppress notification of hidden files change",
         la: "Supprime nuntios de mutationibus plicarum occultarum",
@@ -7529,16 +3562,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Reflexio suspenditur: mutationes repositorii et tabularii inter se non applicabuntur donec arcessitio perfecta sit.",
             zh: "暂停相互应用：获取完成前，数据库与库中文件的更改不会互相应用。",
         },
-    "Switch to IDB": {
-        def: "Switch to IDB",
-        la: "Transi ad IDB",
-        zh: "切换到 IDB",
-    },
-    "Switch to IndexedDB": {
-        def: "Switch to IndexedDB",
-        la: "Transi ad IndexedDB",
-        zh: "切换到 IndexedDB",
-    },
     Sync: {
         def: "Sync",
         la: "Synchroniza",
@@ -7584,11 +3607,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchroniza in initio",
         zh: "启动时同步",
     },
-    "Sync once": {
-        def: "Sync once",
-        la: "Synchroniza semel",
-        zh: "同步一次",
-    },
     "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)":
         {
             def: "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)",
@@ -7599,26 +3617,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Synchronisation Issues Detected",
         la: "Difficultates synchronizationis detectae",
         zh: "检测到同步问题",
-    },
-    "Synchronisation utilising journal files. You must have set up an S3/MinIO/R2 compatible object storage.": {
-        def: "Synchronisation utilising journal files. You must have set up an S3/MinIO/R2 compatible object storage.",
-        la: "Synchronizatio plicis diarii utens. Repositorium obiectorum cum S3/MinIO/R2 congruens constituisse debes.",
-        zh: "通过日志文件进行同步。你需要事先部署好兼容 S3/MinIO/R2 的对象存储服务。",
-    },
-    "Synchronising files": {
-        def: "Synchronising files",
-        la: "Plicae synchronizantur",
-        zh: "同步文件",
-    },
-    Syncing: {
-        def: "Syncing",
-        la: "Synchronizatio fit",
-        zh: "同步中",
-    },
-    "Syncing...": {
-        def: "Syncing...",
-        la: "Synchronizatio fit...",
-        zh: "同步中…",
     },
     "tabularium.confirm.cancel": {
         def: "Cancel",
@@ -8174,6 +4172,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: '"Sync" in the file menu above "Sorting": sync now, and a note\'s version history; the setting texts and the history window that were still in English are translated. The server gains scheduled backups and a round of security fixes.',
         la: "In menu plicae supra «Ordo» nunc est «Synchronizatio»: synchroniza nunc et historia versionum commentarii; textus optionum et fenestra historiae adhuc Anglice scripti conversi sunt. Ministrator copias tutas statutis horis facit, et aliquot vitia securitatis emendata sunt.",
         zh: "文件右键菜单在「排序」上方新增「同步」：立即同步、笔记的历史版本；补齐了仍是英文的设置说明和历史版本窗口。服务器新增定时备份，并修复了一批安全问题。",
+    },
+    "tabularium.release.0.20.0": {
+        def: "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours.",
+        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, tabularium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
+        zh: "书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。",
     },
     "tabularium.release.0.21.0": {
         def: "Check broken links (Maintenance → Links, or the command palette) lists links that reach no file and repairs them with the files of the same name; automatic repair can be turned on for one device. Renames in web notes take links along. A share is refreshed only by the device that last saved it, follows renames and is withdrawn when its note is deleted.",
@@ -9315,43 +5318,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchronizatio",
         zh: "同步",
     },
-    "tabularius.release.0.20.0": {
-        def: "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours.",
-        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, tabularium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
-        zh: "书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。",
-    },
-    "Target patterns": {
-        def: "Target patterns",
-        la: "Exemplaria quaerenda",
-        zh: "目标模式",
-    },
-    "Test connection and save": {
-        def: "Test connection and save",
-        la: "Proba conexionem et serva",
-        zh: "测试连接并保存",
-    },
-    "Test Settings and Continue": {
-        def: "Test Settings and Continue",
-        la: "Proba optiones et perge",
-        zh: "测试设置并继续",
-    },
     "Testing only - Resolve file conflicts by syncing newer copies of the file, this can overwrite modified files. Be Warned.":
         {
             def: "Testing only - Resolve file conflicts by syncing newer copies of the file, this can overwrite modified files. Be Warned.",
             la: "Probationi tantum - Discrepantias plicarum solve synchronizando recentiora plicarum exemplaria; hoc plicas mutatas superscribere potest. Cave.",
             zh: "仅供测试 - 通过同步文件的较新副本来解决文件冲突,这可能会覆盖修改过的文件。请注意 ",
         },
-    "The connection test cannot add a signalling relay while P2P is active. Use the active relay settings, or disconnect P2P before testing.":
-        {
-            def: "The connection test cannot add a signalling relay while P2P is active. Use the active relay settings, or disconnect P2P before testing.",
-            la: "Probatio conexionis relay signorum addere non potest dum P2P activum est. Optiones relay activi adhibe, aut P2P ante probationem disiunge.",
-            zh: "P2P 处于活动状态时，连接测试无法添加信令中继。请使用当前生效的中继设置，或先断开 P2P 再测试。",
-        },
-    "The connection to the server has been configured successfully. As the next step,": {
-        def: "The connection to the server has been configured successfully. As the next step,",
-        la: "Conexio cum ministratore feliciter constituta est. Proximo gradu,",
-        zh: "与服务器的连接已配置成功。下一步，",
-    },
     "The current database revision could not be read. The Vault was not changed.": {
         def: "The current revision in the database could not be read. The vault was not changed.",
         la: "Revisio praesens in repositorio legi non potuit. Tabularium non mutatum est.",
@@ -9385,43 +5357,15 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Plicae in hoc tabulario fere eaedem sunt atque eae ministratoris.",
         zh: "本库中的文件与服务器上的几乎一致。",
     },
-    "The following accepted nodes are missing its node information:\n- ${missingNodes}\n\nThis indicates that they have not been connected for some time or have been left on an older version.\nIt is preferable to update all devices if possible. If you have any devices that are no longer in use, you can clear all accepted nodes by locking the remote once.":
-        {
-            def: "The following accepted nodes are missing its node information:\n- ${missingNodes}\n\nThis indicates that they have not been connected for some time or have been left on an older version.\nIt is preferable to update all devices if possible. If you have any devices that are no longer in use, you can clear all accepted nodes by locking the remote once.",
-            la: "Nodis acceptis sequentibus notitia nodi deest:\n- ${missingNodes}\n\nHoc significat eos aliquamdiu non conexos esse aut in versione vetustiore relictos.\nPraestat, si fieri potest, omnia instrumenta renovare. Si qua instrumenta iam non adhibes, omnes nodos acceptos purgare potes remotum semel obserando.",
-            zh: "以下已接受节点缺少节点信息：\n- ${missingNodes}\n\n这表示它们已有一段时间未连接，或仍停留在较旧版本。\n如有可能，建议先更新所有设备。如果有已不再使用的设备，可以先锁定一次远程端以清除全部已接受节点。",
-        },
-    "The Group ID and passphrase are used to identify your group of devices. Make sure to use the same Group ID and passphrase on all devices you want to synchronise.":
-        {
-            def: "The Group ID and passphrase are used to identify your group of devices. Make sure to use the same Group ID and passphrase on all devices you want to synchronise.",
-            la: "Identificatio gregis et tessera arcana ad gregem instrumentorum tuorum agnoscendum adhibentur. Cura ut eadem identificatio gregis et eadem tessera arcana in omnibus instrumentis quae synchronizare vis adhibeantur.",
-            zh: "组 ID 和密码短语用于标识你的设备组。请确保所有要同步的设备都使用相同的组 ID 和密码短语。",
-        },
     "The Hash algorithm for chunk IDs": {
         def: "The Hash algorithm for chunk IDs",
         la: "Algorithmus hash ad identificationes fragmentorum",
         zh: "块 ID 的哈希算法(实验性)",
     },
-    "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with LiveSync mode. When using LiveSync mode, please use IDB adapter instead.":
-        {
-            def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with Tabularium mode. When using Tabularium mode, please use IDB adapter instead.",
-            la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.",
-            zh: "IndexedDB 适配器在某些场景下性能更好，但已发现与实时同步模式同用时会造成内存泄漏。使用实时同步模式时，请改用 IDB 适配器。",
-        },
-    "the latest synchronisation data will be downloaded from the server to this device.": {
-        def: "the latest synchronisation data will be downloaded from the server to this device.",
-        la: "data synchronizationis novissima ex ministratore in hoc instrumentum deorsum ferentur.",
-        zh: "最新的同步数据将从服务器下载到本设备。",
-    },
     "The local database has been cleaned up.": {
         def: "This device's database has been cleaned up.",
         la: "Repositorium huius instrumenti purgatum est.",
         zh: "这台设备的数据库已清理。",
-    },
-    "the local database, that is to say the synchronisation information, must be reconstituted.": {
-        def: "the local database, that is to say the synchronisation information, must be reconstituted.",
-        la: "repositorium locale, id est notitia synchronizationis, reconstituendum est.",
-        zh: "本地数据库（即同步信息）必须重建。",
     },
     "The maximum duration for which chunks can be incubated within the document. Chunks exceeding this period will graduate to independent chunks.":
         {
@@ -9472,21 +5416,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium ministratoris cum hac versione non congruit. Additamentum renova.",
         zh: "服务器上的数据库与当前版本不兼容，请更新插件。",
     },
-    "The remote database is locked for synchronisation to prevent vault corruption because this device is not marked as 'resolved'. Please back up your vault, reset the local database, and select 'Mark this device as resolved'. This warning will persist until replication confirms the device is resolved.":
-        {
-            def: "The remote database is locked for synchronisation to prevent vault corruption because this device is not marked as 'resolved'. Please back up your vault, reset the local database, and select 'Mark this device as resolved'. This warning will persist until replication confirms the device is resolved.",
-            la: "Repositorium remotum ad synchronizationem obseratum est ne tabularium corrumpatur, quia hoc instrumentum ut 'resolved' notatum non est. Tabularium tuum tuto exscribe, repositorium localem restitue, et 'Mark this device as resolved' selige. Hoc monitum manebit donec replicatio confirmet instrumentum resolutum esse.",
-            zh: "为防止数据仓库损坏，由于此设备尚未标记为“已确认”，远程数据库已被锁定，暂停同步。请先备份你的仓库、重置本地数据库，然后选择“将此设备标记为已确认”。在复制过程确认此设备已完成确认之前，此警告会持续显示。",
-        },
     "The remote document IDs do not match the configured ID key.": {
         def: "The document IDs on the server do not match the configured ID key.",
         la: "Indices documentorum in ministratore clavi indicum constitutae non congruunt.",
         zh: "服务器上的文档 ID 与配置的 ID 密钥不匹配。",
-    },
-    "The remote is already set up, and the configuration is compatible (or got compatible by this operation).": {
-        def: "The remote is already set up, and the configuration is compatible (or got compatible by this operation).",
-        la: "Remotum iam paratum est, et configuratio congruit (aut hac operatione congruens facta est).",
-        zh: "远端已设置好，且配置兼容（或经此操作后已兼容）。",
     },
     "The remote type does not support preferred tweak values.": {
         def: "This server type does not support preferred tweak values.",
@@ -9563,16 +5496,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Optiones in ministratore eaedem sunt atque in repositorio huius instrumenti.",
         zh: "服务器上的设置与此设备数据库中的设置相同。",
     },
-    "The Setup-URI does not appear to be valid. Please check that you have copied it correctly.": {
-        def: "The Setup-URI does not appear to be valid. Please check that you have copied it correctly.",
-        la: "Setup-URI validum esse non videtur. Inspice num recte id exscripseris.",
-        zh: "设置 URI 似乎无效。请检查是否完整复制。",
-    },
-    "The Setup-URI is valid and ready to use.": {
-        def: "The Setup-URI is valid and ready to use.",
-        la: "Setup-URI validum est et ad usum paratum.",
-        zh: "设置 URI 有效，可以使用。",
-    },
     "the single, authoritative master copy": {
         def: "the single, authoritative master copy",
         la: "unicum et auctoritativum exemplar principale",
@@ -9582,16 +5505,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "A file changed in the vault but exceeds the maximum size. Skipping: ${param.file.path}",
         la: "Plica in tabulario mutata est, sed magnitudinem maximam excedit. Praeteritur: ${param.file.path}",
         zh: "库中有文件发生变化，但超过了最大大小。已跳过：${param.file.path}",
-    },
-    "the synchronisation data on the server will be built based on the current data on this device.": {
-        def: "the synchronisation data on the server will be built based on the current data on this device.",
-        la: "data synchronizationis in ministratore ex datis praesentibus huius instrumenti aedificabuntur.",
-        zh: "服务器上的同步数据将基于本设备的当前数据构建。",
-    },
-    Themes: {
-        def: "Themes",
-        la: "Themata",
-        zh: "主题",
     },
     "There are no conflicted documents": {
         def: "There are no conflicted documents.",
@@ -9608,43 +5521,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Fortasse differentiae sunt inter plicas in hoc tabulario et ministratorem.",
         zh: "本库中的文件与服务器上可能存在差异。",
     },
-    "Therefore, we ask that you exercise extreme caution when configuring server information manually. If an incorrect passphrase is entered, the data on the server will become corrupted.":
-        {
-            def: "Therefore, we ask that you exercise extreme caution when configuring server information manually. If an incorrect passphrase is entered, the data on the server will become corrupted.",
-            la: "Quare rogamus ut summa cautione utaris cum notitiam ministratoris manu configuras. Si tessera arcana falsa inscribitur, data in ministratore corrumpentur.",
-            zh: "因此，我们要求你在手动配置服务器信息时格外小心。如果输入了错误的密码短语，服务器上的数据将会损坏。",
-        },
-    "This can isolate your connections between devices. Use the same Room ID for the same devices.": {
-        def: "This can isolate your connections between devices. Use the same Room ID for the same devices.",
-        la: "Hoc conexiones inter instrumenta segregare potest. Eandem identificationem conclavis in eisdem instrumentis adhibe.",
-        zh: "这可以隔离设备之间的连接。同一组设备请使用相同的房间 ID。",
-    },
     "This device": {
         def: "This device",
         la: "Hoc instrumentum",
         zh: "本设备",
-    },
-    "This device name": {
-        def: "This device name",
-        la: "Nomen huius instrumenti",
-        zh: "本设备名称",
-    },
-    "This feature enables direct synchronisation between devices. No server is required, but both devices must be online at the same time for synchronisation to occur, and some features may be limited. Internet connection is only required to signalling (detecting peers) and not for data transfer.":
-        {
-            def: "This feature enables direct synchronisation between devices. No server is required, but both devices must be online at the same time for synchronisation to occur, and some features may be limited. Internet connection is only required to signalling (detecting peers) and not for data transfer.",
-            la: "Haec facultas synchronizationem directam inter instrumenta permittit. Nullus ministrator requiritur, sed ambo instrumenta simul conexa esse debent ut synchronizatio fiat, et quaedam facultates fortasse limitatae erunt. Conexio interretialis tantum ad signa (pares detegendos) requiritur, non ad data transferenda.",
-            zh: "此功能可在设备之间直接同步，无需服务器；但同步时两台设备必须同时在线，且部分功能可能受限。互联网连接仅用于信令（发现对端），不用于数据传输。",
-        },
-    "This first setup has several short steps because it confirms encryption, the connection method, and which device provides the initial data. Once it is complete, additional devices can reuse a Setup URI.":
-        {
-            def: "This first setup has several short steps because it confirms encryption, the connection method, and which device provides the initial data. Once it is complete, additional devices can reuse a Setup URI.",
-            la: "Haec prima institutio plures gradus breves habet, quia cryptationem, modum conexionis, et quod instrumentum data initialia praebeat confirmat. Ea perfecta, alia instrumenta Setup URI iterum adhibere possunt.",
-            zh: "首次设置分为几个简短步骤，因为它要确认加密方式、连接方式，以及由哪台设备提供初始数据。完成后，其他设备可以复用设置 URI。",
-        },
-    "This is an advanced option for users who do not have a URI or who wish to configure detailed settings.": {
-        def: "This is an advanced option for users who do not have a URI or who wish to configure detailed settings.",
-        la: "Haec est optio provecta usoribus qui URI non habent aut qui optiones accuratas configurare volunt.",
-        zh: "这是面向没有 URI 或希望手动配置详细参数的高级选项。",
     },
     "This is an extremely powerful operation. We strongly recommend that you copy your Vault folder to a safe location.":
         {
@@ -9652,27 +5532,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Haec operatio est vehementissima. Valde suademus ut thecam tabularii tui in locum tutum exscribas.",
             zh: "这是一项影响极大的操作。我们强烈建议先把库文件夹复制到安全位置。",
         },
-    "This is the most suitable synchronisation method for the design. All functions are available. You must have set up a CouchDB instance.":
-        {
-            def: "This is the most suitable synchronisation method for the design. All functions are available. You must have set up a CouchDB instance.",
-            la: "Hic est modus synchronizationis huic designationi aptissimus. Omnes functiones praesto sunt. Instantiam CouchDB paratam habere debes.",
-            zh: "这是最符合当前设计的同步方式，所有功能均可用。你需要事先部署好 CouchDB 实例。",
-        },
-    "This optional check uses Obsidian's internal request API and sends the credentials above to the CouchDB server. Use it only with a server you trust; administrator access may be required.":
-        {
-            def: "This optional check uses Obsidian's internal request API and sends the credentials above to the CouchDB server. Use it only with a server you trust; administrator access may be required.",
-            la: "Haec probatio optionalis interfacie postulationum interna Obsidian utitur et testimonia supra scripta ad ministratorem CouchDB mittit. Ea tantum cum ministratore cui confidis utere; accessus administratoris fortasse requiretur.",
-            zh: "此可选检查使用 Obsidian 的内部请求 API，并把上面的凭据发送到 CouchDB 服务器。请仅对你信任的服务器使用；可能需要管理员权限。",
-        },
     "This passphrase will not be copied to another device. It will be set to `Default` until you configure it again.": {
         def: "This passphrase will not be copied to another device. It will be set to `Default` until you configure it again.",
         la: "Haec tessera arcana in aliud instrumentum non exscribetur. Ad `Default` ponetur donec eam iterum configures.",
         zh: "此密码不会复制到另一台设备。在您再次配置之前,它将设置为 `Default` ",
-    },
-    "This password is used to encrypt the connection. Use something long enough.": {
-        def: "This password is used to encrypt the connection. Use something long enough.",
-        la: "Haec tessera ad conexionem cryptandam adhibetur. Satis longam adhibe.",
-        zh: "此密码用于加密连接。请设置得足够长。",
     },
     "This procedure will first delete all existing synchronisation data from the server. Following this, the server data will be completely rebuilt, using the current state of your Vault on this device (including its local database) as":
         {
@@ -9680,11 +5543,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Haec ratio primum omnia data synchronizationis exstantia ex ministratore delebit. Deinde data ministratoris omnino reaedificabuntur, statu praesenti tabularii tui in hoc instrumento (repositorio locali incluso) adhibito ut",
             zh: "此操作会先删除服务器上所有现有的同步数据。随后，服务器数据将被完全重建，以本设备上你库的当前状态（包括其本地数据库）作为",
         },
-    "This setting must be the same even when connecting to multiple synchronisation destinations.": {
-        def: "This setting must be the same even when connecting to multiple synchronisation destinations.",
-        la: "Haec optio eadem esse debet etiam cum ad plures destinationes synchronizationis conecteris.",
-        zh: "即使连接到多个同步目标，此设置也必须保持一致。",
-    },
     "This Vault is empty, or contains only new files that are not on the server.": {
         def: "This Vault is empty, or contains only new files that are not on the server.",
         la: "Hoc tabularium vacuum est, aut solas plicas novas continet quae in ministratore non sunt.",
@@ -9696,22 +5554,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Hoc repositorium localem in hoc instrumento reaedificabit, recentissimis datis ex ministratore adhibitis. Haec actio ad incongruentias synchronizationis solvendas et ad rectam functionem restituendam destinata est.",
             zh: "这将用服务器上的最新数据重建本设备的本地数据库。此操作旨在解决同步不一致并恢复正常功能。",
         },
-    "This will recreate chunks for all files. If there were missing chunks, this may fix the errors.": {
-        def: "This will recreate chunks for all files. If there were missing chunks, this may fix the errors.",
-        la: "Hoc fragmenta omnium plicarum denuo creabit. Si qua fragmenta deerant, hoc errores corrigere potest.",
-        zh: "这会为所有文件重新生成 chunks。如果之前存在缺失的 chunks，这可能修复相关错误。",
-    },
     "To minimise the creation of new conflicts": {
         def: "To minimise the creation of new conflicts",
         la: "Ut creatio novarum discrepantiarum minuatur",
         zh: "以减少新冲突的产生",
     },
-    "To prevent unwanted vault corruption, the remote database has been locked for synchronisation. (This device is marked as 'resolved'.) When all your devices are marked as 'resolved', unlock the database. This warning will continue to appear until replication confirms the device is resolved.":
-        {
-            def: "To prevent unwanted vault corruption, the remote database has been locked for synchronisation. (This device is marked as 'resolved'.) When all your devices are marked as 'resolved', unlock the database. This warning will continue to appear until replication confirms the device is resolved.",
-            la: "Ne tabularium invite corrumpatur, repositorium remotum ad synchronizationem obseratum est. (Hoc instrumentum ut 'resolved' notatum est.) Cum omnia instrumenta tua ut 'resolved' notata erunt, repositorium resera. Hoc monitum apparere perget donec replicatio confirmet instrumentum resolutum esse.",
-            zh: "为防止意外的数据仓库损坏，远程数据库已被锁定，暂停同步。（此设备已被标记为“已确认”）当你的所有设备都标记为“已确认”后，再解锁数据库。在复制过程确认此设备已完成确认之前，此警告会持续显示。",
-        },
     "To stop the countdown, tap anywhere on the dialogue": {
         def: "To stop the countdown, tap anywhere on the dialogue",
         la: "Ut numerationem retrorsum sistas, ubivis in dialogo tange",
@@ -9732,61 +5579,20 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Commuta synchronizationem vivam",
         zh: "开关实时同步",
     },
-    "Toggle Sync on `Replicate now` command": {
-        def: "Toggle Sync on `Replicate now` command",
-        la: "Commuta synchronizationem in mandato `Replicate now`",
-        zh: "在执行 `Replicate now` 命令时切换同步",
-    },
-    "Toggle Sync on connect": {
-        def: "Toggle Sync on connect",
-        la: "Commuta synchronizationem in conexione",
-        zh: "连接时切换同步",
-    },
-    "Toggle Watch on connect": {
-        def: "Toggle Watch on connect",
-        la: "Commuta observationem in conexione",
-        zh: "连接时切换监视",
-    },
-    "Transfer Tweak": {
-        def: "Transfer Tweak",
-        la: "Accommodatio transmissionis",
-        zh: "传输微调",
-    },
     "TURN Credential": {
         def: "TURN Credential",
         la: "Credentiale TURN",
         zh: "TURN 凭据",
-    },
-    "TURN server settings are only necessary if you are behind a strict NAT or firewall that prevents direct P2P connections. In most cases, you can leave these fields blank.":
-        {
-            def: "TURN server settings are only necessary if you are behind a strict NAT or firewall that prevents direct P2P connections. In most cases, you can leave these fields blank.",
-            la: "Optiones ministratoris TURN solum necessariae sunt si post NAT strictum vel murum ignis es qui conexiones P2P directas impedit. Plerumque hos campos vacuos relinquere potes.",
-            zh: "只有当处于阻止直接 P2P 连接的严格 NAT 或防火墙之后时，才需要 TURN 服务器设置。大多数情况下这些字段可以留空。",
-        },
-    "TURN Server URLs (comma-separated)": {
-        def: "TURN Server URLs (comma-separated)",
-        la: "URL ministratorum TURN (commatibus separata)",
-        zh: "TURN 服务器地址（逗号分隔）",
     },
     "TURN Username": {
         def: "TURN Username",
         la: "Nomen usoris TURN",
         zh: "TURN 用户名",
     },
-    "TweakMismatchResolve.Action.DisableAutoAcceptCompatible": {
-        def: "Disable auto-accept",
-        la: "Deactiva acceptionem automaticam",
-        zh: "停用自动接受",
-    },
     "TweakMismatchResolve.Action.Dismiss": {
         def: "Dismiss",
         la: "Dimitte",
         zh: "Dismiss",
-    },
-    "TweakMismatchResolve.Action.EnableAutoAcceptCompatible": {
-        def: "Enable auto-accept",
-        la: "Activa acceptionem automaticam",
-        zh: "启用自动接受",
     },
     "TweakMismatchResolve.Action.UseConfigured": {
         def: "Use configured settings",
@@ -9822,11 +5628,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Apply settings to this device, and fetch again",
         la: "Applica optiones huic instrumento, et iterum arcesse",
         zh: "Apply settings to this device, and fetch again",
-    },
-    "TweakMismatchResolve.Message.AutoAcceptCompatibleUndefined": {
-        def: "\nIt appears that the settings differ for each device. You can now automatically apply compatible changes to these configurations.\nWould you like to enable this `auto-accept` setting?",
-        la: "\nOptiones in singulis instrumentis differre videntur. Nunc mutationes congruentes his configurationibus automatice applicare potes.\nVisne hanc optionem `auto-accept` activare?",
-        zh: "\n各设备的设置似乎存在差异。你现在可以自动应用兼容的更改到这些配置。\n是否要启用此「自动接受」设置？",
     },
     "TweakMismatchResolve.Message.Main": {
         def: "\nThe settings in the remote database are as follows. These values are configured by other devices, which are synchronised with this device at least once.\n\nIf you want to use these settings, please select Use configured settings.\nIf you want to keep the settings of this device, please select Dismiss.\n\n${table}\n\n>[!TIP]\n> If you want to synchronise all settings, please use `Sync settings via markdown` after applying minimal configuration with this feature.\n\n${additionalMessage}",
@@ -9883,11 +5684,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Incongruentia configurationis detecta",
         zh: "Configuration Mismatch Detected",
     },
-    "TweakMismatchResolve.Title.AutoAcceptCompatible": {
-        def: "Auto-Accept Available",
-        la: "Acceptio automatica praesto",
-        zh: "可自动接受",
-    },
     "TweakMismatchResolve.Title.TweakResolving": {
         def: "Configuration Mismatch Detected",
         la: "Incongruentia configurationis detecta",
@@ -9928,1216 +5724,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Non omnes plicae synchronizari potuerunt. Plicas affectas inspice. Relationem genera ut acta accurata recenseas.",
         zh: "并非所有文件都能同步。请检查受影响的文件。生成报告以查看详细日志。",
     },
-    "Ui.Settings.Advanced.LocalDatabaseTweak": {
-        def: "Local Database Tweak",
-        la: "Accommodatio repositorii localis",
-        zh: "本地数据库调整",
-    },
-    "Ui.Settings.Advanced.MemoryCache": {
-        def: "Memory Cache",
-        la: "Memoria temporaria",
-        zh: "内存缓存",
-    },
-    "Ui.Settings.Advanced.TransferTweak": {
-        def: "Transfer Tweak",
-        la: "Accommodatio transmissionis",
-        zh: "传输调整",
-    },
-    "Ui.Settings.Common.Analyse": {
-        def: "Analyse",
-        la: "Analyza",
-        zh: "分析",
-    },
-    "Ui.Settings.Common.Back": {
-        def: "Back",
-        la: "Redi",
-        zh: "返回",
-    },
-    "Ui.Settings.Common.Check": {
-        def: "Check",
-        la: "Inspice",
-        zh: "检查",
-    },
-    "Ui.Settings.Common.Configure": {
-        def: "Configure",
-        la: "Configura",
-        zh: "配置",
-    },
-    "Ui.Settings.Common.Continue": {
-        def: "Continue",
-        la: "Perge",
-        zh: "继续",
-    },
-    "Ui.Settings.Common.Delete": {
-        def: "Delete",
-        la: "Dele",
-        zh: "删除",
-    },
-    "Ui.Settings.Common.Fetch": {
-        def: "Fetch",
-        la: "Arcesse",
-        zh: "获取",
-    },
-    "Ui.Settings.Common.Lock": {
-        def: "Lock",
-        la: "Obsera",
-        zh: "锁定",
-    },
-    "Ui.Settings.Common.Merge": {
-        def: "Merge",
-        la: "Confla",
-        zh: "合并",
-    },
-    "Ui.Settings.Common.Open": {
-        def: "Open",
-        la: "Aperi",
-        zh: "打开",
-    },
-    "Ui.Settings.Common.Overwrite": {
-        def: "Overwrite",
-        la: "Superscribe",
-        zh: "覆盖",
-    },
-    "Ui.Settings.Common.Perform": {
-        def: "Perform",
-        la: "Exsequere",
-        zh: "执行",
-    },
-    "Ui.Settings.Common.ResetAll": {
-        def: "Reset all",
-        la: "Restitue omnia",
-        zh: "全部重置",
-    },
-    "Ui.Settings.Common.ResolveAll": {
-        def: "Resolve All",
-        la: "Solve omnia",
-        zh: "全部解决",
-    },
-    "Ui.Settings.Common.Scan": {
-        def: "Scan",
-        la: "Perscrutare",
-        zh: "扫描",
-    },
-    "Ui.Settings.Common.Send": {
-        def: "Send",
-        la: "Mitte",
-        zh: "发送",
-    },
-    "Ui.Settings.Common.Use": {
-        def: "Use",
-        la: "Adhibe",
-        zh: "使用",
-    },
-    "Ui.Settings.Common.VerifyAll": {
-        def: "Verify all",
-        la: "Verifica omnia",
-        zh: "全部校验",
-    },
-    "Ui.Settings.CustomizationSync.OpenDesc": {
-        def: "Open the dialog",
-        la: "Aperi dialogum",
-        zh: "打开此对话框",
-    },
-    "Ui.Settings.CustomizationSync.Panel": {
-        def: "Customization Sync",
-        la: "Synchronizatio optionum propriarum",
-        zh: "自定义同步",
-    },
-    "Ui.Settings.CustomizationSync.WarnChangeDeviceName": {
-        def: "We cannot change the device name while this feature is enabled. Please disable this feature to change the device name.",
-        la: "Nomen instrumenti mutare non possumus dum haec facultas activa est. Hanc facultatem deactiva ut nomen instrumenti mutes.",
-        zh: "启用此功能时无法修改设备名称。请先关闭此功能，再修改设备名称。",
-    },
-    "Ui.Settings.CustomizationSync.WarnSetDeviceName": {
-        def: "Please set device name to identify this device. This name should be unique among your devices. While not configured, we cannot enable this feature.",
-        la: "Nomen instrumenti pone quo hoc instrumentum agnoscatur. Hoc nomen inter instrumenta tua unicum esse debet. Dum non configuratum est, hanc facultatem activare non possumus.",
-        zh: "请先设置用于标识此设备的设备名称。该名称应在你的设备之间保持唯一。未设置前无法启用此功能。",
-    },
-    "Ui.Settings.Hatch.AnalyseDatabaseUsage": {
-        def: "Analyse database usage",
-        la: "Analyza usum repositorii",
-        zh: "分析数据库使用情况",
-    },
-    "Ui.Settings.Hatch.AnalyseDatabaseUsageDesc": {
-        def: "Analyse database usage and generate a TSV report for diagnosis yourself. You can paste the generated report with any spreadsheet you like.",
-        la: "Usum repositorii analyza et relationem TSV ad diagnosim tuam genera. Relationem generatam in quamlibet tabulam computativam inserere potes.",
-        zh: "分析数据库使用情况，并生成 TSV 报告供你自行诊断。你可以将生成的报告粘贴到任意电子表格工具中查看。",
-    },
-    "Ui.Settings.Hatch.BackToNonConfigured": {
-        def: "Back to non-configured",
-        la: "Redi ad statum non configuratum",
-        zh: "返回未配置状态",
-    },
-    "Ui.Settings.Hatch.ConvertNonObfuscated": {
-        def: "Check and convert non-path-obfuscated files",
-        la: "Inspice et converte plicas sine obfuscatione viarum",
-        zh: "检查并转换未进行路径混淆的文件",
-    },
-    "Ui.Settings.Hatch.ConvertNonObfuscatedDesc": {
-        def: "Check the local database for files that were stored without path obfuscation and convert them when needed.",
-        la: "Repositorium locale perscrutare pro plicis quae sine obfuscatione viarum servatae sunt, et eas, si opus est, converte.",
-        zh: "检查本地数据库中未按路径混淆方式存储的文件，并在需要时将其转换为正确格式。",
-    },
-    "Ui.Settings.Hatch.CopyIssueReport": {
-        def: "Copy Report to clipboard",
-        la: "Exscribe relationem in tabellam temporariam",
-        zh: "复制报告到剪贴板",
-    },
-    "Ui.Settings.Hatch.DatabaseLabel": {
-        def: "Database: ${details}",
-        la: "Repositorium: ${details}",
-        zh: "数据库：${details}",
-    },
-    "Ui.Settings.Hatch.DatabaseToStorage": {
-        def: "Database -> Storage",
-        la: "Repositorium -> Repositorium plicarum",
-        zh: "数据库 -> 存储",
-    },
-    "Ui.Settings.Hatch.DeleteCustomizationSyncData": {
-        def: "Delete all customization sync data",
-        la: "Dele omnia data synchronizationis optionum propriarum",
-        zh: "删除所有自定义同步数据",
-    },
-    "Ui.Settings.Hatch.GeneratedReport": {
-        def: "Generated report",
-        la: "Relatio generata",
-        zh: "已生成的报告",
-    },
-    "Ui.Settings.Hatch.Missing": {
-        def: "Missing",
-        la: "Deest",
-        zh: "缺失",
-    },
-    "Ui.Settings.Hatch.ModifiedSize": {
-        def: "Modified: ${modified}, Size: ${size}",
-        la: "Mutatum: ${modified}, Magnitudo: ${size}",
-        zh: "修改时间：${modified}，大小：${size}",
-    },
-    "Ui.Settings.Hatch.ModifiedSizeActual": {
-        def: "Modified: ${modified}, Size: ${size} (actual size: ${actualSize})",
-        la: "Mutatum: ${modified}, Magnitudo: ${size} (magnitudo vera: ${actualSize})",
-        zh: "修改时间：${modified}，大小：${size}（实际大小：${actualSize}）",
-    },
-    "Ui.Settings.Hatch.PrepareIssueReport": {
-        def: "Prepare the 'report' to create an issue",
-        la: "Para 'relationem' ad quaestionem creandam",
-        zh: "准备用于提交问题的报告",
-    },
-    "Ui.Settings.Hatch.RecoveryAndRepair": {
-        def: "Recovery and Repair",
-        la: "Recuperatio et reparatio",
-        zh: "恢复与修复",
-    },
-    "Ui.Settings.Hatch.RecreateAll": {
-        def: "Recreate all",
-        la: "Denuo crea omnia",
-        zh: "全部重建",
-    },
-    "Ui.Settings.Hatch.RecreateMissingChunks": {
-        def: "Recreate missing chunks for all files",
-        la: "Denuo crea fragmenta deficientia omnium plicarum",
-        zh: "为所有文件重新创建缺失的数据块",
-    },
-    "Ui.Settings.Hatch.RecreateMissingChunksDesc": {
-        def: "This will recreate chunks for all files. If there were missing chunks, this may fix the errors.",
-        la: "Hoc fragmenta omnium plicarum denuo creabit. Si qua fragmenta deerant, hoc errores corrigere potest.",
-        zh: "此操作会为所有文件重新创建数据块。如果存在缺失的数据块，可能会修复相关错误。",
-    },
-    "Ui.Settings.Hatch.ResetPanel": {
-        def: "Reset",
-        la: "Restitue",
-        zh: "重置",
-    },
-    "Ui.Settings.Hatch.ResetRemoteUsage": {
-        def: "Reset notification threshold and check the remote database usage",
-        la: "Restitue limen notificationis et inspice usum repositorii remoti",
-        zh: "重置通知阈值并检查远程数据库使用情况",
-    },
-    "Ui.Settings.Hatch.ResetRemoteUsageDesc": {
-        def: "Reset the remote storage size threshold and check the remote storage size again.",
-        la: "Limen magnitudinis repositorii plicarum remotae restitue et magnitudinem repositorii plicarum remotae iterum inspice.",
-        zh: "重置远程存储大小阈值，并再次检查远程存储大小。",
-    },
-    "Ui.Settings.Hatch.ResolveAllConflictedFiles": {
-        def: "Resolve all conflicted files by the newer one",
-        la: "Solve omnes plicas discrepantes per recentiorem",
-        zh: "使用较新的版本解决所有冲突文件",
-    },
-    "Ui.Settings.Hatch.ResolveAllConflictedFilesDesc": {
-        def: "Resolve all conflicted files by the newer one. Caution: This will overwrite the older one, and cannot resurrect the overwritten one.",
-        la: "Solve omnes plicas discrepantes per recentiorem. Cautio: Hoc vetustiorem superscribet, neque superscriptam restituere poterit.",
-        zh: "使用较新的版本解决所有冲突文件。注意：此操作会覆盖较旧版本，且无法恢复被覆盖的内容。",
-    },
-    "Ui.Settings.Hatch.RunDoctor": {
-        def: "Run Doctor",
-        la: "Exsequere medicum",
-        zh: "运行诊断",
-    },
-    "Ui.Settings.Hatch.ScanBrokenFiles": {
-        def: "Scan for broken files",
-        la: "Perscrutare plicas fractas",
-        zh: "扫描损坏文件",
-    },
-    "Ui.Settings.Hatch.ScramSwitches": {
-        def: "Scram Switches",
-        la: "Interruptores subitarii",
-        zh: "紧急开关",
-    },
-    "Ui.Settings.Hatch.ShowHistory": {
-        def: "Show history",
-        la: "Ostende historiam",
-        zh: "查看历史",
-    },
-    "Ui.Settings.Hatch.StorageLabel": {
-        def: "Storage: ${details}",
-        la: "Repositorium plicarum: ${details}",
-        zh: "存储：${details}",
-    },
-    "Ui.Settings.Hatch.StorageToDatabase": {
-        def: "Storage -> Database",
-        la: "Repositorium plicarum -> Repositorium",
-        zh: "存储 -> 数据库",
-    },
-    "Ui.Settings.Hatch.VerifyAndRepairAllFiles": {
-        def: "Verify and repair all files",
-        la: "Verifica et repara omnes plicas",
-        zh: "校验并修复所有文件",
-    },
-    "Ui.Settings.Hatch.VerifyAndRepairAllFilesDesc": {
-        def: "Compare the content of files between the local database and storage. If they do not match, you will be asked which one to keep.",
-        la: "Contenta plicarum inter repositorium locale et repositorium plicarum compara. Si non congruunt, rogaberis utram servare velis.",
-        zh: "比较本地数据库与存储中的文件内容。如果内容不一致，系统会询问你保留哪一份。",
-    },
-    "Ui.Settings.Maintenance.Cleanup": {
-        def: "Perform cleanup",
-        la: "Exsequere purgationem",
-        zh: "执行清理",
-    },
-    "Ui.Settings.Maintenance.CleanupDesc": {
-        def: "Reduces storage space by discarding all non-latest revisions. This requires the same amount of free space on the remote server and the local client.",
-        la: "Spatium repositorii plicarum minuit omnibus recensionibus non recentissimis abiectis. Hoc idem spatium liberum in ministratore remoto et in cliente locali requirit.",
-        zh: "丢弃所有非最新修订版本，以减少存储空间占用。此操作要求远程服务器和本地客户端都具备同等大小的可用空间。",
-    },
-    "Ui.Settings.Maintenance.DeleteLocalDatabase": {
-        def: "Delete local database to reset or uninstall Tabularium",
-        la: "Dele repositorium locale ut Tabularium restituas aut deinstalles",
-        zh: "删除本地数据库以重置或卸载 Tabularium",
-    },
-    "Ui.Settings.Maintenance.EmergencyRestart": {
-        def: "Emergency restart",
-        la: "Reinitium subitum",
-        zh: "紧急重启",
-    },
-    "Ui.Settings.Maintenance.EmergencyRestartDesc": {
-        def: "Disable all synchronisation and restart.",
-        la: "Omnem synchronizationem deactiva et reinitia.",
-        zh: "禁用所有同步并重新启动。",
-    },
-    "Ui.Settings.Maintenance.FreshStartWipe": {
-        def: "Fresh Start Wipe",
-        la: "Deletio ad initium novum",
-        zh: "全新开始清空",
-    },
-    "Ui.Settings.Maintenance.FreshStartWipeDesc": {
-        def: "Delete all data on the remote server.",
-        la: "Dele omnia data in ministratore remoto.",
-        zh: "删除远程服务器上的所有数据。",
-    },
-    "Ui.Settings.Maintenance.GarbageCollection": {
-        def: "Garbage Collection V3 (Beta)",
-        la: "Collectio quisquiliarum V3 (Beta)",
-        zh: "垃圾回收 V3（测试版）",
-    },
-    "Ui.Settings.Maintenance.GarbageCollectionAction": {
-        def: "Perform Garbage Collection",
-        la: "Exsequere collectionem quisquiliarum",
-        zh: "执行垃圾回收",
-    },
-    "Ui.Settings.Maintenance.GarbageCollectionDesc": {
-        def: "Perform Garbage Collection to remove unused chunks and reduce database size.",
-        la: "Collectionem quisquiliarum exsequere ut fragmenta non adhibita removeantur et magnitudo repositorii minuatur.",
-        zh: "执行垃圾回收以移除未使用的数据块并减少数据库大小。",
-    },
-    "Ui.Settings.Maintenance.LockServer": {
-        def: "Lock Server",
-        la: "Obsera ministratorem",
-        zh: "锁定服务器",
-    },
-    "Ui.Settings.Maintenance.LockServerDesc": {
-        def: "Lock the remote server to prevent synchronisation with other devices.",
-        la: "Ministratorem remotum obsera ne synchronizatio cum aliis instrumentis fiat.",
-        zh: "锁定远程服务器，防止与其他设备继续同步。",
-    },
-    "Ui.Settings.Maintenance.OverwriteRemote": {
-        def: "Overwrite remote",
-        la: "Superscribe remotum",
-        zh: "覆盖远程端",
-    },
-    "Ui.Settings.Maintenance.OverwriteRemoteDesc": {
-        def: "Overwrite remote with local DB and passphrase.",
-        la: "Remotum repositorio locali et tessera arcana superscribe.",
-        zh: "使用本地数据库和密码短语覆盖远程端数据。",
-    },
-    "Ui.Settings.Maintenance.OverwriteServerData": {
-        def: "Overwrite Server Data with This Device's Files",
-        la: "Superscribe data ministratoris plicis huius instrumenti",
-        zh: "用此设备的文件覆盖服务器数据",
-    },
-    "Ui.Settings.Maintenance.OverwriteServerDataDesc": {
-        def: "Rebuild the local and remote database with files from this device.",
-        la: "Repositorium locale et remotum plicis ex hoc instrumento reaedifica.",
-        zh: "使用此设备上的文件重建本地和远程数据库。",
-    },
-    "Ui.Settings.Maintenance.PurgeAllJournalCounter": {
-        def: "Purge all journal counter",
-        la: "Purga omnes numeratores diarii",
-        zh: "清空全部日志计数器",
-    },
-    "Ui.Settings.Maintenance.PurgeAllJournalCounterDesc": {
-        def: "Purge all download and upload caches.",
-        la: "Purga omnes memorias temporarias deorsum ferendi et sursum mittendi.",
-        zh: "清空所有下载与上传缓存。",
-    },
-    "Ui.Settings.Maintenance.RebuildingOperations": {
-        def: "Rebuilding Operations (Remote Only)",
-        la: "Operationes reaedificandi (remotum tantum)",
-        zh: "重建操作（仅远程端）",
-    },
-    "Ui.Settings.Maintenance.Resend": {
-        def: "Resend",
-        la: "Iterum mitte",
-        zh: "重新发送",
-    },
-    "Ui.Settings.Maintenance.ResendDesc": {
-        def: "Resend all chunks to the remote.",
-        la: "Omnia fragmenta ad remotum iterum mitte.",
-        zh: "将所有数据块重新发送到远程端。",
-    },
-    "Ui.Settings.Maintenance.Reset": {
-        def: "Reset",
-        la: "Restitue",
-        zh: "重置",
-    },
-    "Ui.Settings.Maintenance.ResetAllJournalCounter": {
-        def: "Reset all journal counter",
-        la: "Restitue omnes numeratores diarii",
-        zh: "重置全部日志计数器",
-    },
-    "Ui.Settings.Maintenance.ResetAllJournalCounterDesc": {
-        def: "Initialise all journal history. On the next sync, every item will be received and sent again.",
-        la: "Totam historiam diarii initia. Proxima synchronizatione omnia iterum accipientur et mittentur.",
-        zh: "初始化全部日志历史。下次同步时，所有项目都会重新接收并重新发送。",
-    },
-    "Ui.Settings.Maintenance.ResetJournalReceived": {
-        def: "Reset journal received history",
-        la: "Restitue historiam acceptorum diarii",
-        zh: "重置日志接收历史",
-    },
-    "Ui.Settings.Maintenance.ResetJournalReceivedDesc": {
-        def: "Initialise journal received history. On the next sync, every item except those sent by this device will be downloaded again.",
-        la: "Historiam acceptorum diarii initia. Proxima synchronizatione omnia praeter ea quae ab hoc instrumento missa sunt iterum deorsum ferentur.",
-        zh: "初始化日志接收历史。下次同步时，除当前设备发送的项目外，其余项目都会重新下载。",
-    },
-    "Ui.Settings.Maintenance.ResetJournalSent": {
-        def: "Reset journal sent history",
-        la: "Restitue historiam missorum diarii",
-        zh: "重置日志发送历史",
-    },
-    "Ui.Settings.Maintenance.ResetJournalSentDesc": {
-        def: "Initialise journal sent history. On the next sync, every item except those received by this device will be sent again.",
-        la: "Historiam missorum diarii initia. Proxima synchronizatione omnia praeter ea quae ab hoc instrumento accepta sunt iterum mittentur.",
-        zh: "初始化日志发送历史。下次同步时，除当前设备已接收的项目外，其余项目都会重新发送。",
-    },
-    "Ui.Settings.Maintenance.ResetLocalSyncInfo": {
-        def: "Reset Synchronisation information",
-        la: "Restitue notitiam synchronizationis",
-        zh: "重置同步信息",
-    },
-    "Ui.Settings.Maintenance.ResetLocalSyncInfoDesc": {
-        def: "Restore or reconstruct local database from remote.",
-        la: "Repositorium locale ex remoto restitue aut reconstrue.",
-        zh: "从远程端恢复或重建本地数据库。",
-    },
-    "Ui.Settings.Maintenance.ResetReceived": {
-        def: "Reset received",
-        la: "Restitue accepta",
-        zh: "重置接收记录",
-    },
-    "Ui.Settings.Maintenance.ResetSentHistory": {
-        def: "Reset sent history",
-        la: "Restitue historiam missorum",
-        zh: "重置发送记录",
-    },
-    "Ui.Settings.Maintenance.ResetThisDevice": {
-        def: "Reset Synchronisation on This Device",
-        la: "Restitue synchronizationem in hoc instrumento",
-        zh: "重置此设备上的同步状态",
-    },
-    "Ui.Settings.Maintenance.ScheduleAndRestart": {
-        def: "Schedule and Restart",
-        la: "Constitue et reinitia",
-        zh: "计划执行并重启",
-    },
-    "Ui.Settings.Maintenance.Scram": {
-        def: "Scram!",
-        la: "Siste subito!",
-        zh: "紧急处理",
-    },
-    "Ui.Settings.Maintenance.SendChunks": {
-        def: "Send chunks",
-        la: "Mitte fragmenta",
-        zh: "发送数据块",
-    },
-    "Ui.Settings.Maintenance.Syncing": {
-        def: "Syncing",
-        la: "Synchronizatur",
-        zh: "同步",
-    },
-    "Ui.Settings.Maintenance.WriteRedFlagAndRestart": {
-        def: "Flag and restart",
-        la: "Nota et reinitia",
-        zh: "标记并重启",
-    },
-    "Ui.Settings.Patches.CompatibilityConflict": {
-        def: "Compatibility (Conflict Behaviour)",
-        la: "Congruentia (modus discrepantiarum)",
-        zh: "兼容性（冲突行为）",
-    },
-    "Ui.Settings.Patches.CompatibilityDatabase": {
-        def: "Compatibility (Database structure)",
-        la: "Congruentia (structura repositorii)",
-        zh: "兼容性（数据库结构）",
-    },
-    "Ui.Settings.Patches.CompatibilityInternalApi": {
-        def: "Compatibility (Internal API Usage)",
-        la: "Congruentia (usus API internae)",
-        zh: "兼容性（内部 API 使用）",
-    },
-    "Ui.Settings.Patches.CompatibilityMetadata": {
-        def: "Compatibility (Metadata)",
-        la: "Congruentia (metadata)",
-        zh: "兼容性（元数据）",
-    },
-    "Ui.Settings.Patches.CompatibilityRemote": {
-        def: "Compatibility (Remote Database)",
-        la: "Congruentia (repositorium remotum)",
-        zh: "兼容性（远程数据库）",
-    },
-    "Ui.Settings.Patches.CompatibilityTrouble": {
-        def: "Compatibility (Trouble addressed)",
-        la: "Congruentia (difficultates tractatae)",
-        zh: "兼容性（已处理问题）",
-    },
-    "Ui.Settings.Patches.CurrentAdapter": {
-        def: "Current adapter: ${adapter}",
-        la: "Adaptator praesens: ${adapter}",
-        zh: "当前适配器：${adapter}",
-    },
-    "Ui.Settings.Patches.DatabaseAdapter": {
-        def: "Database Adapter",
-        la: "Adaptator repositorii",
-        zh: "数据库适配器",
-    },
-    "Ui.Settings.Patches.DatabaseAdapterDesc": {
-        def: "Select the database adapter to use.",
-        la: "Adaptatorem repositorii adhibendum selige.",
-        zh: "选择要使用的数据库适配器。",
-    },
-    "Ui.Settings.Patches.EdgeCaseBehaviour": {
-        def: "Edge case addressing (Behaviour)",
-        la: "Casus extremi tractati (modus agendi)",
-        zh: "边界情况处理（行为）",
-    },
-    "Ui.Settings.Patches.EdgeCaseDatabase": {
-        def: "Edge case addressing (Database)",
-        la: "Casus extremi tractati (repositorium)",
-        zh: "边界情况处理（数据库）",
-    },
-    "Ui.Settings.Patches.EdgeCaseProcessing": {
-        def: "Edge case addressing (Processing)",
-        la: "Casus extremi tractati (processus)",
-        zh: "边界情况处理（处理流程）",
-    },
-    "Ui.Settings.Patches.IndexedDbWarning": {
-        def: "The IndexedDB adapter often offers superior performance in certain scenarios, but it has been found to cause memory leaks when used with live sync. When using live sync, please use the IDB adapter instead.",
-        la: "Adaptator IndexedDB in quibusdam condicionibus saepe celerius operatur, sed repertum est eum, cum synchronizatio viva adhibetur, memoriam perdere. Cum synchronizatione viva uteris, adaptatorem IDB potius adhibe.",
-        zh: "IndexedDB 适配器在某些场景下通常具有更好的性能，但在实时同步模式下已发现可能导致内存泄漏。使用实时同步模式时，请改用 IDB 适配器。",
-    },
-    "Ui.Settings.Patches.MigratingToIdb": {
-        def: "Migrating all data to IDB...",
-        la: "Omnia data ad IDB migrant...",
-        zh: "正在将所有数据迁移到 IDB...",
-    },
-    "Ui.Settings.Patches.MigratingToIndexedDb": {
-        def: "Migrating all data to IndexedDB...",
-        la: "Omnia data ad IndexedDB migrant...",
-        zh: "正在将所有数据迁移到 IndexedDB...",
-    },
-    "Ui.Settings.Patches.MigrationIdbCompleted": {
-        def: "Migration to IDB completed. Obsidian will be restarted with the new configuration immediately.",
-        la: "Migratio ad IDB perfecta est. Obsidian statim cum configuratione nova reinitiabitur.",
-        zh: "已完成迁移到 IDB。Obsidian 将立即使用新配置重新启动。",
-    },
-    "Ui.Settings.Patches.MigrationIdbCompletedFollowUp": {
-        def: "Migration to IDB completed. Please switch the adapter and restart Obsidian.",
-        la: "Migratio ad IDB perfecta est. Adaptatorem commuta et Obsidian reinitia.",
-        zh: "已完成迁移到 IDB。请切换适配器并重新启动 Obsidian。",
-    },
-    "Ui.Settings.Patches.MigrationIndexedDbCompleted": {
-        def: "Migration to IndexedDB completed. Obsidian will be restarted with the new configuration immediately.",
-        la: "Migratio ad IndexedDB perfecta est. Obsidian statim cum configuratione nova reinitiabitur.",
-        zh: "已完成迁移到 IndexedDB。Obsidian 将立即使用新配置重新启动。",
-    },
-    "Ui.Settings.Patches.MigrationIndexedDbCompletedFollowUp": {
-        def: "Migration to IndexedDB completed. Please switch the adapter and restart Obsidian.",
-        la: "Migratio ad IndexedDB perfecta est. Adaptatorem commuta et Obsidian reinitia.",
-        zh: "已完成迁移到 IndexedDB。请切换适配器并重新启动 Obsidian。",
-    },
-    "Ui.Settings.Patches.MigrationWarning": {
-        def: "Changing this setting requires migrating existing data, which may take some time, and restarting Obsidian. Please make sure to back up your data before proceeding.",
-        la: "Mutatio huius optionis migrationem datorum exstantium requirit, quae aliquamdiu durare potest, et reinitium Obsidian. Cura ut data tua tuto exscribas antequam pergas.",
-        zh: "修改此设置需要迁移现有数据（可能需要一些时间）并重新启动 Obsidian。请先备份你的数据后再继续。",
-    },
-    "Ui.Settings.Patches.OperationToIdb": {
-        def: "to IDB",
-        la: "ad IDB",
-        zh: "迁移到 IDB",
-    },
-    "Ui.Settings.Patches.OperationToIndexedDb": {
-        def: "to IndexedDB",
-        la: "ad IndexedDB",
-        zh: "迁移到 IndexedDB",
-    },
-    "Ui.Settings.Patches.Remediation": {
-        def: "Remediation",
-        la: "Remedium",
-        zh: "修正",
-    },
-    "Ui.Settings.Patches.RemediationChanged": {
-        def: "Remediation Setting Changed",
-        la: "Optio remedii mutata",
-        zh: "修正设置已更改",
-    },
-    "Ui.Settings.Patches.RemediationNoLimit": {
-        def: "No limit configured",
-        la: "Nullus limes configuratus",
-        zh: "未设置限制",
-    },
-    "Ui.Settings.Patches.RemediationRestarting": {
-        def: "Remediation setting changed. Restarting Obsidian...",
-        la: "Optio remedii mutata est. Obsidian reinitiatur...",
-        zh: "修正设置已更改，正在重新启动 Obsidian...",
-    },
-    "Ui.Settings.Patches.RemediationRestartLater": {
-        def: "Later",
-        la: "Postea",
-        zh: "稍后",
-    },
-    "Ui.Settings.Patches.RemediationRestartMessage": {
-        def: "Restarting Obsidian is strongly recommended. Until restart, some changes may not take effect, and the display may be inconsistent. Are you sure you want to restart now?",
-        la: "Reinitium Obsidian vehementer commendatur. Ante reinitium quaedam mutationes fortasse non valebunt, et ostensio fortasse inconstans erit. Certusne es te nunc reinitiare velle?",
-        zh: "强烈建议重新启动 Obsidian。在重启之前，部分更改可能不会生效，界面显示也可能不一致。确定要现在重启吗？",
-    },
-    "Ui.Settings.Patches.RemediationRestartNow": {
-        def: "Restart Now",
-        la: "Reinitia nunc",
-        zh: "立即重启",
-    },
-    "Ui.Settings.Patches.RemediationSuffixChanged": {
-        def: "Suffix has been changed. Reopening database...",
-        la: "Suffixum mutatum est. Repositorium iterum aperitur...",
-        zh: "后缀已更改，正在重新打开数据库...",
-    },
-    "Ui.Settings.Patches.RemediationWithValue": {
-        def: "Limit: ${date} (${timestamp})",
-        la: "Limes: ${date} (${timestamp})",
-        zh: "限制：${date}（${timestamp}）",
-    },
-    "Ui.Settings.Patches.RemoteDatabaseSunset": {
-        def: "Remote Database Tweak (In sunset)",
-        la: "Accommodatio repositorii remoti (in occasu)",
-        zh: "远程数据库调整（即将弃用）",
-    },
-    "Ui.Settings.Patches.SwitchToIDB": {
-        def: "Switch to IDB",
-        la: "Commuta ad IDB",
-        zh: "切换到 IDB",
-    },
-    "Ui.Settings.Patches.SwitchToIndexedDb": {
-        def: "Switch to IndexedDB",
-        la: "Commuta ad IndexedDB",
-        zh: "切换到 IndexedDB",
-    },
-    "Ui.Settings.PowerUsers.ConfigurationEncryption": {
-        def: "Configuration Encryption",
-        la: "Cryptatio configurationis",
-        zh: "配置加密",
-    },
-    "Ui.Settings.PowerUsers.ConnectionTweak": {
-        def: "CouchDB Connection Tweak",
-        la: "Accommodatio conexionis CouchDB",
-        zh: "CouchDB 连接调整",
-    },
-    "Ui.Settings.PowerUsers.ConnectionTweakDesc": {
-        def: "If you reached the payload size limit when using IBM Cloudant, please decrease batch size and batch limit to a lower value.",
-        la: "Si limitem magnitudinis oneris cum IBM Cloudant attigisti, magnitudinem et limitem acervi minue.",
-        zh: "如果你在使用 IBM Cloudant 时遇到负载大小限制，请将 batch size 和 batch limit 调低。",
-    },
-    "Ui.Settings.PowerUsers.Default": {
-        def: "Default",
-        la: "Praedefinitum",
-        zh: "默认",
-    },
-    "Ui.Settings.PowerUsers.Developer": {
-        def: "Developer",
-        la: "Elaborator",
-        zh: "开发者",
-    },
-    "Ui.Settings.PowerUsers.EncryptSensitiveConfig": {
-        def: "Encrypt sensitive configuration items",
-        la: "Crypta res configurationis sensibiles",
-        zh: "加密敏感配置项",
-    },
-    "Ui.Settings.PowerUsers.PromptPassphraseEveryLaunch": {
-        def: "Ask for a passphrase at every launch",
-        la: "Tesseram arcanam ad quodque initium posce",
-        zh: "每次启动时询问密码短语",
-    },
-    "Ui.Settings.PowerUsers.UseCustomPassphrase": {
-        def: "Use a custom passphrase",
-        la: "Adhibe tesseram arcanam propriam",
-        zh: "使用自定义密码短语",
-    },
-    "Ui.Settings.Remote.Activate": {
-        def: "Activate",
-        la: "Activa",
-        zh: "启用",
-    },
-    "Ui.Settings.Remote.ActiveSuffix": {
-        def: " (Active)",
-        la: " (Activum)",
-        zh: "（当前启用）",
-    },
-    "Ui.Settings.Remote.AddConnection": {
-        def: "Add new connection",
-        la: "Adde conexionem novam",
-        zh: "新增连接",
-    },
-    "Ui.Settings.Remote.AddRemoteDefaultName": {
-        def: "New Remote",
-        la: "Remotum novum",
-        zh: "新远程端",
-    },
-    "Ui.Settings.Remote.ConfigureAndChangeRemote": {
-        def: "Configure and change remote",
-        la: "Configura et muta remotum",
-        zh: "配置并切换远程端",
-    },
-    "Ui.Settings.Remote.ConfigureE2EE": {
-        def: "Configure E2EE",
-        la: "Configura E2EE",
-        zh: "配置端到端加密",
-    },
-    "Ui.Settings.Remote.ConfigureRemote": {
-        def: "Configure Remote",
-        la: "Configura remotum",
-        zh: "配置远程端",
-    },
-    "Ui.Settings.Remote.DeleteRemoteConfirm": {
-        def: "Delete remote configuration '${name}'?",
-        la: "Delerene configurationem remotam '${name}'?",
-        zh: "确定要删除远程配置“${name}”吗？",
-    },
-    "Ui.Settings.Remote.DeleteRemoteTitle": {
-        def: "Delete Remote Configuration",
-        la: "Dele configurationem remotam",
-        zh: "删除远程配置",
-    },
-    "Ui.Settings.Remote.DisplayName": {
-        def: "Display name",
-        la: "Nomen ostendendum",
-        zh: "显示名称",
-    },
-    "Ui.Settings.Remote.DuplicateRemote": {
-        def: "Duplicate remote",
-        la: "Duplica remotum",
-        zh: "复制远程配置",
-    },
-    "Ui.Settings.Remote.DuplicateRemoteSuffix": {
-        def: "${name} (Copy)",
-        la: "${name} (Exemplar)",
-        zh: "${name}（副本）",
-    },
-    "Ui.Settings.Remote.E2EEConfiguration": {
-        def: "E2EE Configuration",
-        la: "Configuratio E2EE",
-        zh: "端到端加密配置",
-    },
-    "Ui.Settings.Remote.Export": {
-        def: "Export",
-        la: "Exporta",
-        zh: "导出",
-    },
-    "Ui.Settings.Remote.FetchRemoteSettings": {
-        def: "Fetch remote settings",
-        la: "Arcesse optiones remotas",
-        zh: "获取远程设置",
-    },
-    "Ui.Settings.Remote.ImportConnection": {
-        def: "Import connection",
-        la: "Importa conexionem",
-        zh: "导入连接",
-    },
-    "Ui.Settings.Remote.ImportConnectionPrompt": {
-        def: "Paste a connection string",
-        la: "Insere seriem conexionis",
-        zh: "粘贴连接字符串",
-    },
-    "Ui.Settings.Remote.ImportedCouchDb": {
-        def: "Imported CouchDB",
-        la: "CouchDB importatum",
-        zh: "已导入的 CouchDB",
-    },
-    "Ui.Settings.Remote.ImportedRemote": {
-        def: "Remote",
-        la: "Remotum",
-        zh: "远程端",
-    },
-    "Ui.Settings.Remote.MoreActions": {
-        def: "More actions",
-        la: "Plures actiones",
-        zh: "更多操作",
-    },
-    "Ui.Settings.Remote.PeerToPeerPanel": {
-        def: "Peer-to-Peer Synchronisation",
-        la: "Synchronizatio inter pares",
-        zh: "点对点同步",
-    },
-    "Ui.Settings.Remote.RemoteConfigurationPrefix": {
-        def: "Remote configuration",
-        la: "Configuratio remota",
-        zh: "远程配置",
-    },
-    "Ui.Settings.Remote.RemoteDatabases": {
-        def: "Remote Databases",
-        la: "Repositoria remota",
-        zh: "远程数据库",
-    },
-    "Ui.Settings.Remote.RemoteName": {
-        def: "Remote name",
-        la: "Nomen remoti",
-        zh: "远程名称",
-    },
-    "Ui.Settings.Remote.RemoteNameCouchDb": {
-        def: "CouchDB ${host}",
-        la: "CouchDB ${host}",
-        zh: "CouchDB ${host}",
-    },
-    "Ui.Settings.Remote.RemoteNameP2P": {
-        def: "P2P ${room}",
-        la: "P2P ${room}",
-        zh: "P2P ${room}",
-    },
-    "Ui.Settings.Remote.RemoteNameS3": {
-        def: "S3 ${bucket}",
-        la: "S3 ${bucket}",
-        zh: "S3 ${bucket}",
-    },
-    "Ui.Settings.Remote.Rename": {
-        def: "Rename",
-        la: "Renomina",
-        zh: "重命名",
-    },
-    "Ui.Settings.Selector.AddDefaultPatterns": {
-        def: "Add default patterns",
-        la: "Adde exemplaria praedefinita",
-        zh: "添加默认模式",
-    },
-    "Ui.Settings.Selector.CrossPlatform": {
-        def: "Cross-platform",
-        la: "Inter suggestus",
-        zh: "跨平台",
-    },
-    "Ui.Settings.Selector.Default": {
-        def: "Default",
-        la: "Praedefinitum",
-        zh: "默认",
-    },
-    "Ui.Settings.Selector.HiddenFiles": {
-        def: "Hidden Files",
-        la: "Plicae occultae",
-        zh: "隐藏文件",
-    },
-    "Ui.Settings.Selector.IgnorePatterns": {
-        def: "Ignore patterns",
-        la: "Exemplaria neglegenda",
-        zh: "忽略模式",
-    },
-    "Ui.Settings.Selector.NonSynchronisingFiles": {
-        def: "Non-Synchronising files",
-        la: "Plicae non synchronizandae",
-        zh: "不同步文件",
-    },
-    "Ui.Settings.Selector.NonSynchronisingFilesDesc": {
-        def: "(RegExp) If this is set, any changes to local and remote files that match this will be skipped.",
-        la: "(RegExp) Si hoc positum est, omnes mutationes plicarum localium et remotarum quae huic congruunt praeteribuntur.",
-        zh: "（RegExp）如果设置了该项，则本地和远程中匹配这些规则的文件变更将被跳过。",
-    },
-    "Ui.Settings.Selector.NormalFiles": {
-        def: "Normal Files",
-        la: "Plicae ordinariae",
-        zh: "普通文件",
-    },
-    "Ui.Settings.Selector.OverwritePatterns": {
-        def: "Overwrite patterns",
-        la: "Exemplaria superscribenda",
-        zh: "覆盖模式",
-    },
-    "Ui.Settings.Selector.OverwritePatternsDesc": {
-        def: "Patterns to match files for overwriting instead of merging",
-        la: "Exemplaria quibus plicae congruentes superscribuntur pro conflatione",
-        zh: "匹配后将执行覆盖而非合并的文件模式",
-    },
-    "Ui.Settings.Selector.SynchronisingFiles": {
-        def: "Synchronising files",
-        la: "Plicae synchronizandae",
-        zh: "同步文件",
-    },
-    "Ui.Settings.Selector.SynchronisingFilesDesc": {
-        def: "(RegExp) Empty to sync all files. Set a regular expression filter to limit synchronised files.",
-        la: "(RegExp) Vacuum relinque ut omnes plicae synchronizentur. Filtrum expressionis regularis pone ut plicae synchronizatae limitentur.",
-        zh: "（RegExp）留空则同步所有文件。可设置正则表达式以限制需要同步的文件。",
-    },
-    "Ui.Settings.Selector.TargetPatterns": {
-        def: "Target patterns",
-        la: "Exemplaria quaerenda",
-        zh: "目标模式",
-    },
-    "Ui.Settings.Selector.TargetPatternsDesc": {
-        def: "Patterns to match files for syncing",
-        la: "Exemplaria quibus plicae synchronizandae congruunt",
-        zh: "用于匹配需要同步文件的模式",
-    },
-    "Ui.Settings.Setup.RerunWizardButton": {
-        def: "Rerun Wizard",
-        la: "Iterum exsequere ductorem",
-        zh: "重新运行向导",
-    },
-    "Ui.Settings.Setup.RerunWizardDesc": {
-        def: "Rerun the onboarding wizard to set up Tabularium again.",
-        la: "Ductorem initialem iterum exsequere ut Tabularium denuo instituas.",
-        zh: "重新运行引导向导，再次设置 Tabularium。",
-    },
-    "Ui.Settings.Setup.RerunWizardName": {
-        def: "Rerun Onboarding Wizard",
-        la: "Iterum exsequere ductorem initialem",
-        zh: "重新运行引导向导",
-    },
-    "Ui.Settings.SyncSettings.Fetch": {
-        def: "Fetch",
-        la: "Arcesse",
-        zh: "获取",
-    },
-    "Ui.Settings.SyncSettings.Merge": {
-        def: "Merge",
-        la: "Confla",
-        zh: "合并",
-    },
-    "Ui.Settings.SyncSettings.Overwrite": {
-        def: "Overwrite",
-        la: "Superscribe",
-        zh: "覆盖",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ApplyWithoutInitialisation": {
-        def: "Apply without Initialisation",
-        la: "Applica sine initiatione",
-        zh: "不初始化直接应用",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.Back": {
-        def: "Review another way to apply these settings",
-        la: "Alium modum has optiones applicandi recense",
-        zh: "查看其他应用这些设置的方式",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.BypassGuidance": {
-        def: "Applying these settings alone can make this device incompatible with its existing synchronisation data. Use this only when you have confirmed that reconstruction is unnecessary.",
-        la: "Solae hae optiones applicatae hoc instrumentum cum datis synchronizationis exstantibus incongruens reddere possunt. Hoc tantum adhibe cum confirmaveris reconstructionem non esse necessariam.",
-        zh: "仅应用这些设置可能使本设备与其现有同步数据不兼容。请仅在确认无需重建时使用。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.BypassTitle": {
-        def: "Apply Settings without Initialisation?",
-        la: "Applicarene optiones sine initiatione?",
-        zh: "不初始化直接应用设置？",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ContinueFetch": {
-        def: "Continue with Fetch",
-        la: "Perge cum arcessione",
-        zh: "继续获取",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.FetchOption": {
-        def: "Reset Synchronisation on This Device",
-        la: "Restitue synchronizationem in hoc instrumento",
-        zh: "重置本设备的同步",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionDesc": {
-        def: "After restarting, rebuild this device's local database from the current remote synchronisation data. Files in the Vault will then be reconciled with that data.",
-        la: "Post reinitium repositorium locale huius instrumenti ex datis synchronizationis remotis praesentibus reaedifica. Plicae in tabulario deinde cum illis datis concordabuntur.",
-        zh: "重启后，用当前的远端同步数据重建本设备的本地数据库。库中的文件随后会与该数据核对合并。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.FetchOptionP2PDesc": {
-        def: "After restarting, select an online source device. This device's local database will be rebuilt from that source.",
-        la: "Post reinitium instrumentum fontem conexum selige. Repositorium locale huius instrumenti ex illo fonte reaedificabitur.",
-        zh: "重启后选择一台在线的源设备。本设备的本地数据库将从该源设备重建。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.Guidance": {
-        def: "These setting changes alter how synchronisation data is interpreted. Apply them together with an initialisation operation after restart.",
-        la: "Hae mutationes optionum modum quo data synchronizationis interpretantur mutant. Eas una cum operatione initiationis post reinitium applica.",
-        zh: "这些设置变更会改变同步数据的解释方式。请在重启后连同初始化操作一起应用。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.KeepEditing": {
-        def: "Keep Editing",
-        la: "Perge emendare",
-        zh: "继续编辑",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ProceedFetch": {
-        def: "Restart and Fetch Synchronisation Data",
-        la: "Reinitia et arcesse data synchronizationis",
-        zh: "重启并获取同步数据",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ProceedFetchP2P": {
-        def: "Restart and Select a Source Device",
-        la: "Reinitia et instrumentum fontem selige",
-        zh: "重启并选择源设备",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ProceedRebuild": {
-        def: "Restart and Overwrite Server Data",
-        la: "Reinitia et superscribe data ministratoris",
-        zh: "重启并覆盖服务器数据",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.ProceedRebuildP2P": {
-        def: "Restart and Prepare This Device",
-        la: "Reinitia et para hoc instrumentum",
-        zh: "重启并准备本设备",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.Question": {
-        def: "Which existing data should be used after restart?",
-        la: "Quae data exstantia post reinitium adhibenda sunt?",
-        zh: "重启后应使用哪份现有数据？",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RebuildOption": {
-        def: "Overwrite Server Data with This Device's Files",
-        la: "Superscribe data ministratoris plicis huius instrumenti",
-        zh: "用本设备的文件覆盖服务器数据",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionDesc": {
-        def: "Rebuild the local and remote databases from the files currently in this Vault. Other synchronising devices must reset their local synchronisation afterwards.",
-        la: "Repositoria localia et remota ex plicis quae nunc in hoc tabulario sunt reaedifica. Alia instrumenta synchronizantia postea synchronizationem localem suam restituere debent.",
-        zh: "用本库中当前的文件重建本地和远端数据库。其他正在同步的设备之后必须重置其本地同步。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2P": {
-        def: "Prepare This Device from This Vault",
-        la: "Para hoc instrumentum ex hoc tabulario",
-        zh: "用本库的文件准备本设备",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RebuildOptionP2PDesc": {
-        def: "Rebuild this device's local database from the files currently in this Vault. This does not overwrite another device.",
-        la: "Repositorium locale huius instrumenti ex plicis quae nunc in hoc tabulario sunt reaedifica. Hoc aliud instrumentum non superscribit.",
-        zh: "用本库中当前的文件重建本设备的本地数据库。这不会覆盖其他设备。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RemoteVerificationGuidance": {
-        def: "The configured remote could not be verified with the current credentials and encryption settings. Continuing may make the Fetch fail after restart.",
-        la: "Remotum configuratum cum testimoniis et optionibus cryptationis praesentibus verificari non potuit. Si perges, arcessio post reinitium fortasse deficiet.",
-        zh: "无法用当前的凭据和加密设置验证所配置的远端。继续可能导致重启后获取失败。",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.RemoteVerificationTitle": {
-        def: "Remote Synchronisation Data Could Not Be Verified",
-        la: "Data synchronizationis remota verificari non potuerunt",
-        zh: "无法验证远端同步数据",
-    },
-    "Ui.SetupWizard.ApplySettingsInitialisation.Title": {
-        def: "Apply Settings and Reinitialise Synchronisation",
-        la: "Applica optiones et synchronizationem denuo initia",
-        zh: "应用设置并重新初始化同步",
-    },
-    "Ui.SetupWizard.Common.Back": {
-        def: "No, please take me back",
-        la: "Minime, me reduc",
-        zh: "不，带我返回",
-    },
-    "Ui.SetupWizard.Common.Cancel": {
-        def: "Cancel",
-        la: "Abroga",
-        zh: "取消",
-    },
-    "Ui.SetupWizard.Common.ProceedSelectOption": {
-        def: "Please select an option to proceed",
-        la: "Optionem selige ut pergas",
-        zh: "请选择一个选项后继续",
-    },
-    "Ui.SetupWizard.Intro.ExistingOption": {
-        def: "I am adding a device to an existing synchronisation setup",
-        la: "Instrumentum ad institutionem synchronizationis exstantem addo",
-        zh: "将此设备加入已有同步配置",
-    },
-    "Ui.SetupWizard.Intro.ExistingOptionDesc": {
-        def: "Select this if you are already using synchronisation on another computer or smartphone. Use this option to connect this device to that existing setup.",
-        la: "Hoc selige si synchronizatione iam in alio computatro aut telephono callido uteris. Hac optione adhibita hoc instrumentum illi institutioni exstanti conecte.",
-        zh: "如果你已经在另一台电脑或手机上使用同步，请选择此项。此选项用于将当前设备连接到既有同步配置。",
-    },
-    "Ui.SetupWizard.Intro.Guidance": {
-        def: "We will now guide you through a few questions to simplify the synchronisation setup.",
-        la: "Nunc te per paucas quaestiones ducemus ut institutio synchronizationis simplicior fiat.",
-        zh: "接下来我们会通过几个问题，帮助你更轻松地完成同步配置。",
-    },
-    "Ui.SetupWizard.Intro.NewOption": {
-        def: "I am setting this up for the first time",
-        la: "Hoc primum instituo",
-        zh: "首次设置同步",
-    },
-    "Ui.SetupWizard.Intro.NewOptionDesc": {
-        def: "Select this if you are configuring this device as the first synchronisation device.",
-        la: "Hoc selige si hoc instrumentum ut primum instrumentum synchronizationis configuras.",
-        zh: "如果你正把这台设备作为第一台同步设备进行配置，请选择此项。",
-    },
-    "Ui.SetupWizard.Intro.ProceedExisting": {
-        def: "Yes, I want to add this device to my existing synchronisation",
-        la: "Ita, hoc instrumentum synchronizationi meae exstanti addere volo",
-        zh: "是的，我要将此设备加入现有同步",
-    },
-    "Ui.SetupWizard.Intro.ProceedNew": {
-        def: "Yes, I want to set up a new synchronisation",
-        la: "Ita, novam synchronizationem instituere volo",
-        zh: "是的，我要开始新的同步配置",
-    },
-    "Ui.SetupWizard.Intro.Question": {
-        def: "First, please select the option that best describes your current situation.",
-        la: "Primum optionem selige quae condicionem tuam praesentem optime describit.",
-        zh: "首先，请选择最符合你当前情况的选项。",
-    },
-    "Ui.SetupWizard.Intro.Title": {
-        def: "Welcome to Tabularium",
-        la: "Salve in Tabularium",
-        zh: "欢迎使用 Tabularium",
-    },
-    "Ui.SetupWizard.Invitation.Start": {
-        def: "Start setup",
-        la: "Incipe institutionem",
-        zh: "开始设置",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.CompatibleOption": {
-        def: "The remote is already set up, and the configuration is compatible (or became compatible through this operation).",
-        la: "Remotum iam paratum est, et configuratio congruit (aut hac operatione congruens facta est).",
-        zh: "远程端已配置完成，且当前配置兼容（或已通过本次操作变为兼容）。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.CompatibleOptionDesc": {
-        def: "Unless you are certain, selecting this option is risky. It assumes the server configuration is compatible with this device. If that is not the case, data loss may occur. Please make sure you understand the consequences.",
-        la: "Nisi certus es, haec optio periculosa est. Ponit configurationem ministratoris cum hoc instrumento congruere. Si non ita est, data amitti possunt. Cura ut consequentias intellegas.",
-        zh: "除非你非常确定，否则选择此项存在风险。它假定服务器配置与当前设备兼容。如果事实并非如此，可能会导致数据丢失。请确认你了解后果。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.ExistingOption": {
-        def: "My remote server is already set up. I want to join this device.",
-        la: "Ministrator meus remotus iam paratus est. Hoc instrumentum adiungere volo.",
-        zh: "远程服务器已经配置完成，我想让此设备加入同步。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.ExistingOptionDesc": {
-        def: "Selecting this option will make this device join the existing server. You need to fetch the existing synchronisation data from the server to this device.",
-        la: "Hac optione selecta hoc instrumentum ministratori exstanti adiungetur. Data synchronizationis exstantia ex ministratore in hoc instrumentum arcessere debes.",
-        zh: "选择此项后，此设备会加入已有服务器。你需要将服务器上的现有同步数据获取到此设备。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.Guidance": {
-        def: "The connection to the server has been configured successfully. As the next step, the local database, in other words the synchronisation information, must be rebuilt.",
-        la: "Conexio cum ministratore feliciter constituta est. Proximo gradu repositorium locale, id est notitia synchronizationis, reaedificandum est.",
-        zh: "服务器连接已成功配置。下一步需要重建本地数据库，也就是同步状态信息。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.NewOption": {
-        def: "I am setting up a new server for the first time / I want to reset my existing server.",
-        la: "Novum ministratorem primum instituo / Ministratorem meum exstantem restituere volo.",
-        zh: "我是第一次配置新服务器 / 我想重置现有服务器。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.NewOptionDesc": {
-        def: "Selecting this option will initialise the server using the current data on this device. Any existing data on the server will be completely overwritten.",
-        la: "Hac optione selecta ministrator datis praesentibus huius instrumenti initiabitur. Omnia data exstantia in ministratore omnino superscribentur.",
-        zh: "选择此项后，服务器会使用当前设备上的数据进行初始化。服务器上的现有数据将被完全覆盖。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.ProceedApplySettings": {
-        def: "Apply the settings",
-        la: "Applica optiones",
-        zh: "应用这些设置",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.ProceedNext": {
-        def: "Proceed to the next step.",
-        la: "Ad proximum gradum procede.",
-        zh: "继续下一步",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.Question": {
-        def: "Please select your situation.",
-        la: "Condicionem tuam selige.",
-        zh: "请选择你的当前情况。",
-    },
-    "Ui.SetupWizard.OutroAskUserMode.Title": {
-        def: "Mostly Complete: Decision Required",
-        la: "Fere perfectum: consilium requiritur",
-        zh: "即将完成：还需要做出选择",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.GuidanceNotice": {
-        def: "P2P has no central server copy to overwrite. This step prepares only this device; keep it online when another device fetches its initial data.",
-        la: "P2P nullum exemplar centrale in ministratore habet quod superscribatur. Hic gradus solum hoc instrumentum parat; id conexum serva dum aliud instrumentum data initialia sua arcessit.",
-        zh: "P2P 没有中心服务器副本可供覆盖。此步骤只准备本设备；当其他设备获取初始数据时，请保持本设备在线。",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.GuidancePrimary": {
-        def: "The peer-to-peer connection has been configured successfully. Next, the local database will be built from the current files in this Vault.",
-        la: "Conexio inter pares feliciter constituta est. Deinde repositorium locale ex plicis praesentibus in hoc tabulario aedificabitur.",
-        zh: "点对点连接已配置成功。接下来，将用本库中当前的文件构建本地数据库。",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.Important": {
-        def: "PLEASE NOTE",
-        la: "NOTA BENE",
-        zh: "请注意",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.Proceed": {
-        def: "Restart and Prepare This Device",
-        la: "Reinitia et para hoc instrumentum",
-        zh: "重启并准备本设备",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.Question": {
-        def: "Please select the button below to restart and proceed to the local initialisation confirmation.",
-        la: "Preme globulum infra ut reinities et ad confirmationem initiationis localis procedas.",
-        zh: "请点击下方按钮重启，然后进入本地初始化确认。",
-    },
-    "Ui.SetupWizard.OutroNewP2PUser.Title": {
-        def: "Setup Complete: Preparing This P2P Device",
-        la: "Institutio perfecta: hoc instrumentum P2P paratur",
-        zh: "设置完成：正在准备本 P2P 设备",
-    },
-    "Ui.SetupWizard.OutroNewUser.GuidancePrimary": {
-        def: "The connection to the server has been configured successfully. As the next step, the synchronisation data on the server will be built from the current data on this device.",
-        la: "Conexio cum ministratore feliciter constituta est. Proximo gradu data synchronizationis in ministratore ex datis praesentibus huius instrumenti aedificabuntur.",
-        zh: "服务器连接已成功配置。下一步将根据当前设备上的数据，在服务器端建立同步数据。",
-    },
-    "Ui.SetupWizard.OutroNewUser.GuidanceWarning": {
-        def: "After restarting, the data on this device will be uploaded to the server as the master copy. Please note that any unintended data currently on the server will be completely overwritten.",
-        la: "Post reinitium data huius instrumenti ad ministratorem ut exemplar principale sursum mittentur. Nota omnia data non intenta quae nunc in ministratore sunt omnino superscriptum iri.",
-        zh: "重启后，当前设备上的数据会作为主副本上传到服务器。请注意，服务器上现有的非预期数据将被完全覆盖。",
-    },
-    "Ui.SetupWizard.OutroNewUser.Important": {
-        def: "IMPORTANT",
-        la: "MAGNI MOMENTI",
-        zh: "重要",
-    },
-    "Ui.SetupWizard.OutroNewUser.Proceed": {
-        def: "Restart and Initialise Server",
-        la: "Reinitia et initia ministratorem",
-        zh: "重启并初始化服务器",
-    },
-    "Ui.SetupWizard.OutroNewUser.Question": {
-        def: "Please select the button below to restart and proceed to the final confirmation.",
-        la: "Preme globulum infra ut reinities et ad confirmationem ultimam procedas.",
-        zh: "请选择下方按钮，重启并进入最终确认步骤。",
-    },
-    "Ui.SetupWizard.OutroNewUser.Title": {
-        def: "Setup Complete: Preparing to Initialise Server",
-        la: "Institutio perfecta: ministrator initiandus paratur",
-        zh: "设置完成：准备初始化服务器",
-    },
     "Ui.SetupWizard.RebuildEverythingP2P.ConfirmLocalReset": {
         def: "I understand that this resets only this device's local synchronisation database.",
         la: "Intellego hoc solum repositorium locale synchronizationis huius instrumenti restituere.",
@@ -11173,170 +5759,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Confirmatio ultima: para hoc instrumentum ad P2P",
         zh: "最终确认：为本设备准备 P2P",
     },
-    "Ui.SetupWizard.SelectExisting.Guidance": {
-        def: "You are adding this device to an existing synchronisation setup.",
-        la: "Hoc instrumentum ad institutionem synchronizationis exstantem addis.",
-        zh: "你正在将此设备加入已有同步配置。",
-    },
-    "Ui.SetupWizard.SelectExisting.ManualOption": {
-        def: "Configure a remote manually",
-        la: "Configura remotum manu",
-        zh: "手动输入服务器信息",
-    },
-    "Ui.SetupWizard.SelectExisting.ManualOptionDesc": {
-        def: "Configure the same remote as your other devices again manually. This is intended only for advanced users.",
-        la: "Idem remotum atque in aliis instrumentis tuis iterum manu configura. Hoc tantum usoribus provectis destinatum est.",
-        zh: "手动重新配置与你其他设备相同的服务器信息。此方式仅适用于高级用户。",
-    },
-    "Ui.SetupWizard.SelectExisting.ProceedManual": {
-        def: "Proceed with manual configuration",
-        la: "Procede cum configuratione manuali",
-        zh: "我知道服务器信息，让我手动输入",
-    },
-    "Ui.SetupWizard.SelectExisting.ProceedQr": {
-        def: "Scan the QR code displayed on an active device using this device's camera.",
-        la: "Codicem QR in instrumento activo ostensum camera huius instrumenti perscrutare.",
-        zh: "使用本设备摄像头扫描活动设备上显示的二维码",
-    },
-    "Ui.SetupWizard.SelectExisting.ProceedSetupUri": {
-        def: "Proceed with Setup URI",
-        la: "Procede cum Setup URI",
-        zh: "使用 Setup URI 继续",
-    },
-    "Ui.SetupWizard.SelectExisting.QrOption": {
-        def: "Scan a QR Code (Recommended for mobile)",
-        la: "Perscrutare codicem QR (instrumentis mobilibus commendatur)",
-        zh: "扫描二维码（移动端推荐）",
-    },
-    "Ui.SetupWizard.SelectExisting.QrOptionDesc": {
-        def: "Scan the QR code displayed on an active device using this device's camera.",
-        la: "Codicem QR in instrumento activo ostensum camera huius instrumenti perscrutare.",
-        zh: "使用本设备摄像头扫描活动设备上显示的二维码。",
-    },
-    "Ui.SetupWizard.SelectExisting.Question": {
-        def: "Please select a method to import the settings from another device.",
-        la: "Modum selige quo optiones ex alio instrumento importentur.",
-        zh: "请选择一种从其他设备导入设置的方法。",
-    },
-    "Ui.SetupWizard.SelectExisting.SetupUriOption": {
-        def: "Use a Setup URI (Recommended)",
-        la: "Adhibe Setup URI (commendatur)",
-        zh: "使用 Setup URI（推荐）",
-    },
-    "Ui.SetupWizard.SelectExisting.SetupUriOptionDesc": {
-        def: "Paste the Setup URI generated from one of your active devices.",
-        la: "Insere Setup URI ex uno instrumentorum tuorum activorum generatum.",
-        zh: "粘贴从某台已启用设备生成的 Setup URI。",
-    },
-    "Ui.SetupWizard.SelectExisting.Title": {
-        def: "Device Setup Method",
-        la: "Modus instituendi instrumentum",
-        zh: "设备设置方式",
-    },
-    "Ui.SetupWizard.SelectNew.Guidance": {
-        def: "We will now configure the synchronisation connection.",
-        la: "Nunc conexionem synchronizationis configurabimus.",
-        zh: "接下来将继续配置服务器连接信息。",
-    },
-    "Ui.SetupWizard.SelectNew.ManualOption": {
-        def: "Configure a remote manually",
-        la: "Configura remotum manu",
-        zh: "手动输入服务器信息",
-    },
-    "Ui.SetupWizard.SelectNew.ManualOptionDesc": {
-        def: "This is an advanced option for users who do not have a Setup URI or who want to configure detailed settings. You can also use it for P2P synchronisation instead of CouchDB or S3-compatible Object Storage.",
-        la: "Haec est optio provecta usoribus qui Setup URI non habent aut qui optiones accuratas configurare volunt. Eam etiam ad synchronizationem P2P adhibere potes pro CouchDB aut repositorio plicarum obiectorum cum S3 congruenti.",
-        zh: "如果你没有 Setup URI，或希望自行配置更详细的参数，可选择此高级选项。",
-    },
-    "Ui.SetupWizard.SelectNew.ProceedManual": {
-        def: "Proceed with manual configuration",
-        la: "Procede cum configuratione manuali",
-        zh: "我知道服务器信息，让我手动输入",
-    },
-    "Ui.SetupWizard.SelectNew.ProceedSetupUri": {
-        def: "Proceed with Setup URI",
-        la: "Procede cum Setup URI",
-        zh: "使用 Setup URI 继续",
-    },
-    "Ui.SetupWizard.SelectNew.Question": {
-        def: "How would you like to configure this synchronisation connection?",
-        la: "Quomodo hanc conexionem synchronizationis configurare vis?",
-        zh: "你希望如何配置服务器连接？",
-    },
-    "Ui.SetupWizard.SelectNew.SetupUriOption": {
-        def: "Use a Setup URI (Recommended)",
-        la: "Adhibe Setup URI (commendatur)",
-        zh: "使用 Setup URI（推荐）",
-    },
-    "Ui.SetupWizard.SelectNew.SetupUriOptionDesc": {
-        def: "A Setup URI is a single string containing connection and authentication details. When one is available from a setup script, it provides a simple and secure configuration method.",
-        la: "Setup URI est series una quae notitiam conexionis et authenticationis continet. Cum ex scripto institutionis praesto est, modum configurandi simplicem et tutum praebet.",
-        zh: "Setup URI 是一段包含服务器地址和认证信息的文本。如果你的服务器安装脚本已经生成了它，这是最简单且安全的配置方式。",
-    },
-    "Ui.SetupWizard.SelectNew.Title": {
-        def: "Connection Method",
-        la: "Modus conexionis",
-        zh: "连接方式",
-    },
-    "Ui.SetupWizard.SetupRemote.BucketOption": {
-        def: "S3-compatible Object Storage",
-        la: "Repositorium plicarum obiectorum cum S3 congruens",
-        zh: "S3/MinIO/R2 对象存储",
-    },
-    "Ui.SetupWizard.SetupRemote.BucketOptionDesc": {
-        def: "Synchronisation using journal files. You must already have an S3-compatible Object Storage service set up, such as Amazon S3, MinIO, or Cloudflare R2.",
-        la: "Synchronizatio per plicas diarii. Ministerium repositorii plicarum obiectorum cum S3 congruens iam paratum habere debes, ut Amazon S3, MinIO, aut Cloudflare R2.",
-        zh: "使用日志文件进行同步。你需要先准备好兼容 S3/MinIO/R2 的对象存储服务。",
-    },
-    "Ui.SetupWizard.SetupRemote.CouchDbOptionDesc": {
-        def: "This is the most suitable synchronisation method for the current design. All features are available. You must already have a CouchDB instance set up.",
-        la: "Hic est modus synchronizationis designationi praesenti aptissimus. Omnes facultates praesto sunt. Instantiam CouchDB iam paratam habere debes.",
-        zh: "这是当前设计下最适合的同步方式，所有功能都可用。你需要先准备好 CouchDB 实例。",
-    },
-    "Ui.SetupWizard.SetupRemote.Guidance": {
-        def: "Select the remote type for this synchronisation setup.",
-        la: "Genus remoti huic institutioni synchronizationis selige.",
-        zh: "请选择你要连接的服务器类型。",
-    },
-    "Ui.SetupWizard.SetupRemote.P2POption": {
-        def: "Peer-to-Peer (P2P)",
-        la: "Inter pares (P2P)",
-        zh: "仅点对点",
-    },
-    "Ui.SetupWizard.SetupRemote.P2POptionDesc": {
-        def: "This enables direct synchronisation between devices. No server is required, but both devices must be online at the same time and some features may be limited. Internet connectivity is required only for signalling, not for data transfer.",
-        la: "Hoc synchronizationem directam inter instrumenta permittit. Nullus ministrator requiritur, sed ambo instrumenta simul conexa esse debent, et quaedam facultates fortasse limitatae erunt. Conexio interretialis tantum ad signa requiritur, non ad data transferenda.",
-        zh: "启用设备之间的直接同步。无需服务器，但两台设备必须同时在线，且部分功能可能受限。互联网连接仅用于信令，不用于传输数据。",
-    },
-    "Ui.SetupWizard.SetupRemote.ProceedBucket": {
-        def: "Continue to Object Storage setup",
-        la: "Perge ad institutionem repositorii plicarum obiectorum",
-        zh: "继续配置 S3/MinIO/R2",
-    },
-    "Ui.SetupWizard.SetupRemote.ProceedCouchDb": {
-        def: "Continue to CouchDB setup",
-        la: "Perge ad institutionem CouchDB",
-        zh: "继续配置 CouchDB",
-    },
-    "Ui.SetupWizard.SetupRemote.ProceedP2P": {
-        def: "Continue to P2P setup",
-        la: "Perge ad institutionem P2P",
-        zh: "继续配置仅点对点模式",
-    },
-    "Ui.SetupWizard.SetupRemote.Title": {
-        def: "Choose a synchronisation remote",
-        la: "Elige remotum synchronizationis",
-        zh: "输入服务器信息",
-    },
     "Unable to display the file in the editor": {
         def: "Unable to display the file in the editor",
         la: "Plica in editore monstrari non potest",
         zh: "无法在编辑器中显示该文件",
-    },
-    "Unicode NFC path identity": {
-        def: "Unicode NFC path identity",
-        la: "Identitas viae Unicode NFC",
-        zh: "Unicode NFC 路径标识",
     },
     "Unique name between all synchronized devices. To edit this setting, please disable customization sync once.": {
         def: "Unique name between all synchronized devices. To edit this setting, please disable customization sync once.",
@@ -11348,21 +5774,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Versio cryptationis ignota. Decryptari non potest.",
         zh: "未知的加密版本，无法解密。",
     },
-    "Unless you are certain, selecting this options is bit dangerous. It assumes that the server configuration is compatible with this device. If this is not the case, data loss may occur. Please ensure you know what you are doing.":
-        {
-            def: "Unless you are certain, selecting this options is bit dangerous. It assumes that the server configuration is compatible with this device. If this is not the case, data loss may occur. Please ensure you know what you are doing.",
-            la: "Nisi certus es, haec optio aliquantum periculosa est. Ponit configurationem ministratoris cum hoc instrumento congruere. Si non ita est, data amitti possunt. Cura ut scias quid agas.",
-            zh: "除非你非常确定，否则选择此选项有些危险。它假定服务器配置与本设备兼容。若不兼容，可能会发生数据丢失。请确保你清楚自己在做什么。",
-        },
     "Unload preparation failed; pending storage work may require recovery": {
         def: "Preparing to unload failed; pending file operations may need recovery",
         la: "Praeparatio ad exonerandum defecit; operationes plicarum pendentes fortasse restituendae sunt",
         zh: "卸载前的准备失败，未完成的文件操作可能需要恢复",
-    },
-    "Updating list...": {
-        def: "Updating list...",
-        la: "Index renovatur...",
-        zh: "正在更新列表…",
     },
     URL: {
         def: "URL",
@@ -11374,55 +5789,20 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Utere ${name}",
         zh: "使用 ${name}",
     },
-    "Use a custom passphrase": {
-        def: "Use a custom passphrase",
-        la: "Adhibe tesseram arcanam propriam",
-        zh: "使用自定义密码短语",
-    },
-    "Use a Setup URI (Recommended)": {
-        def: "Use a Setup URI (Recommended)",
-        la: "Adhibe Setup URI (commendatur)",
-        zh: "使用 Setup URI（推荐）",
-    },
     "Use Custom HTTP Handler": {
         def: "Use Custom HTTP Handler",
         la: "Adhibe tractatorem HTTP proprium",
         zh: "使用自定义 HTTP 处理程序",
-    },
-    "Use Diagnostic RTCPeerConnection for statistics": {
-        def: "Use Diagnostic RTCPeerConnection for statistics",
-        la: "Adhibe RTCPeerConnection diagnosticum ad statisticas",
-        zh: "使用诊断用 RTCPeerConnection 收集统计信息",
     },
     "Use dynamic iteration count": {
         def: "Use dynamic iteration count",
         la: "Adhibe numerum iterationum dynamicum",
         zh: "使用动态迭代次数",
     },
-    "Use internal API": {
-        def: "Use internal API",
-        la: "Adhibe API internam",
-        zh: "使用内部 API",
-    },
     "Use Internal API": {
         def: "Use Internal API",
         la: "Adhibe API internam",
         zh: "使用内部 API",
-    },
-    "Use JWT Authentication": {
-        def: "Use JWT Authentication",
-        la: "Adhibe authenticationem JWT",
-        zh: "使用 JWT 身份验证",
-    },
-    "Use Path-Style Access": {
-        def: "Use Path-Style Access",
-        la: "Adhibe accessum per viam",
-        zh: "使用路径风格访问",
-    },
-    "Use Random Number": {
-        def: "Use Random Number",
-        la: "Adhibe numerum fortuitum",
-        zh: "使用随机数",
     },
     "Use Segmented-splitter": {
         def: "Use Segmented-splitter",
@@ -11433,11 +5813,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Use splitting-limit-capped chunk splitter",
         la: "Adhibe divisorem fragmentorum limite divisionis coercitum",
         zh: "使用分割限制上限的块分割器",
-    },
-    "Use the copied setup URI (Formerly Open setup URI)": {
-        def: "Use the copied setup URI (Formerly Open setup URI)",
-        la: "Adhibe Setup URI exscriptum (olim «Aperi Setup URI»)",
-        zh: "使用已复制的设置 URI（原「打开设置 URI」）",
     },
     "Use the detailed flow": {
         def: "Use the detailed flow",
@@ -11453,11 +5828,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Use timeouts instead of heartbeats",
         la: "Adhibe tempora exspirationis pro pulsibus",
         zh: "使用超时而不是心跳",
-    },
-    "Use vrtmrz's relay": {
-        def: "Use vrtmrz's relay",
-        la: "Adhibe relay vrtmrz",
-        zh: "使用 vrtmrz 的中继",
     },
     "User chose to reboot and re-run the process.": {
         def: "Restarting to run the process again.",
@@ -11484,16 +5854,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Acta prolixa",
         zh: "详细日志",
     },
-    "Verify all": {
-        def: "Verify all",
-        la: "Verifica omnia",
-        zh: "全部校验",
-    },
-    "Verify and repair all files": {
-        def: "Verify and repair all files",
-        la: "Verifica et repara omnes plicas",
-        zh: "校验并修复所有文件",
-    },
     Version: {
         def: "Version",
         la: "Versio",
@@ -11516,42 +5876,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "OBSERVA",
         zh: "监视",
     },
-    WATCHING: {
-        def: "WATCHING",
-        la: "OBSERVANS",
-        zh: "监视中",
-    },
     "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.":
         {
             def: "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.",
             la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
             zh: "即将获取远程数据。\n\n首先，应如何处理从此远程来源获取的数据？\n\n- **${NEWER_WINS}**：比较文件的修改时间，采用较新的版本。\n  如果你一直在使用 Tabularium，并在多台设备上做过修改，此选项可能适合你，因为它会尝试根据修改时间合并变更。\n- **${REMOTE_WINS}**：以远程数据为准。\n  如果你刚开始使用 Tabularium，此选项可能最容易理解和上手。\n  它会用远程数据覆盖所有本地文件，因此如果笔记库中有重要数据，请确保已做好备份。\n- **${DETAILED}**：打开详细设置向导。\n  如果你希望更好地控制同步过程，或想在应用前查看变更，可以选择此选项使用详细流程。",
         },
-    'We can not use "/" to the device name': {
-        def: 'We can not use "/" to the device name',
-        la: 'Signum "/" in nomine instrumenti adhibere non possumus',
-        zh: "设备名称中不能使用「/」",
-    },
-    "We can use only Secure (HTTPS) connections on Obsidian Mobile.": {
-        def: "We can use only Secure (HTTPS) connections on Obsidian Mobile.",
-        la: "In Obsidian Mobile solas conexiones tutas (HTTPS) adhibere possumus.",
-        zh: "Obsidian 移动端只能使用安全（HTTPS）连接。",
-    },
-    "We cannot change the device name while this feature is enabled. Please disable this feature to change the device name.":
-        {
-            def: "We cannot change the device name while this feature is enabled. Please disable this feature to change the device name.",
-            la: "Nomen instrumenti mutare non possumus dum haec facultas activa est. Hanc facultatem deactiva ut nomen instrumenti mutes.",
-            zh: "启用此功能时无法更改设备名称。如需修改设备名称，请先禁用此功能。",
-        },
     "We don't have any history for this note.": {
         def: "We don't have any history for this note.",
         la: "Nulla historia huius commentarii nobis est.",
         zh: "此笔记没有任何历史记录。",
-    },
-    "We have to configure the device name": {
-        def: "We have to configure the device name",
-        la: "Nomen instrumenti configurandum est",
-        zh: "需要先配置设备名称",
     },
     "We recommend that you copy your Vault folder to a safe location. This will provide a safeguard in case a large number of conflicts arise, or if you accidentally synchronise with an incorrect destination.":
         {
@@ -11559,21 +5893,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Suademus ut thecam tabularii tui in locum tutum exscribas. Hoc praesidium praebebit si multae discrepantiae oriuntur, aut si per errorem cum destinatione falsa synchronizas.",
             zh: "我们建议你把库文件夹复制到安全位置。这样在出现大量冲突，或不小心同步到错误目标时，能多一层保障。",
         },
-    "We will now guide you through a few questions to simplify the synchronisation setup.": {
-        def: "We will now guide you through a few questions to simplify the synchronisation setup.",
-        la: "Nunc te per paucas quaestiones ducemus ut institutio synchronizationis simplicior fiat.",
-        zh: "接下来我们会通过几个问题，引导你更轻松地完成同步设置。",
-    },
-    "We will now proceed with the server configuration.": {
-        def: "We will now proceed with the server configuration.",
-        la: "Nunc ad configurationem ministratoris procedemus.",
-        zh: "接下来将继续进行服务器配置。",
-    },
-    "Welcome to Self-hosted LiveSync": {
-        def: "Welcome to Tabularium",
-        la: "Salve in Tabularium",
-        zh: "欢迎使用 Tabularium",
-    },
     "When you save a file in the editor, start a sync automatically": {
         def: "When you save a file in the editor, start a sync automatically",
         la: "Cum plicam in editore servas, synchronizationem automatice incipe",
@@ -11589,41 +5908,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Inscribe acta in plicam",
         zh: "将日志写入文件",
     },
-    "Write setting markdown manually": {
-        def: "Write setting markdown manually",
-        la: "Scribe configurationem in Markdown manu",
-        zh: "手动写出设置 Markdown",
-    },
-    "xxhash32 (Fast but less collision resistance)": {
-        def: "xxhash32 (Fast but less collision resistance)",
-        la: "xxhash32 (Celer sed minus collisionibus resistens)",
-        zh: "xxhash32（速度快，但抗碰撞能力较弱）",
-    },
-    "xxhash64 (Fastest)": {
-        def: "xxhash64 (Fastest)",
-        la: "xxhash64 (Celerrimus)",
-        zh: "xxhash64（最快）",
-    },
-    "Yes, I want to add this device to my existing synchronisation": {
-        def: "Yes, I want to add this device to my existing synchronisation",
-        la: "Ita, hoc instrumentum synchronizationi meae exstanti addere volo",
-        zh: "是的，我要把这台设备加入现有同步",
-    },
-    "Yes, I want to set up a new synchronisation": {
-        def: "Yes, I want to set up a new synchronisation",
-        la: "Ita, novam synchronizationem constituere volo",
-        zh: "是的，我要配置新的同步",
-    },
-    "You are adding this device to an existing synchronisation setup.": {
-        def: "You are adding this device to an existing synchronisation setup.",
-        la: "Hoc instrumentum synchronizationi iam constitutae addis.",
-        zh: "你正在将此设备加入到现有同步配置中。",
-    },
-    "You can configure in the Obsidian Plugin Settings.": {
-        def: "You can configure in the Obsidian Plugin Settings.",
-        la: "In optionibus additamentorum Obsidian configurare potes.",
-        zh: "你可以在 Obsidian 插件设置中配置。",
-    },
     "You should create a new synchronisation destination and rebuild your data there.": {
         def: "You should create a new synchronisation destination and rebuild your data there.",
         la: "Novam destinationem synchronizationis creare et data tua ibi reaedificare debes.",
@@ -11635,11 +5919,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Hanc operationem tantum in condicionibus extraordinariis perficere debes, ut cum data ministratoris omnino corrupta sunt, cum mutationes in omnibus aliis instrumentis non iam necessariae sunt, aut cum magnitudo repositorii prae magnitudine tabularii insolite magna facta est.",
             zh: "你只应在特殊情况下执行此操作，例如服务器数据完全损坏、其他所有设备上的更改都不再需要，或数据库体积相对于库体积异常庞大时。",
         },
-    "you wanted(Thank you)!": {
-        def: "you wanted(Thank you)!",
-        la: "voluisti (Gratias tibi)!",
-        zh: "你要求的操作（谢谢）！",
-    },
     "(RegExp) Limit normal files to matching paths. Leave empty to allow all normal file paths. Hidden File Sync uses its own target patterns.":
         {
             la: "(RegExp) Plicas ordinarias ad vias congruentes limita. Vacuum relinque ut omnes viae plicarum ordinariarum permittantur. Synchronizatio plicarum occultarum suis exemplaribus propriis utitur.",

@@ -30,19 +30,6 @@ describe("Russian catalogue interpolation", () => {
         expect(message).not.toContain("${qr_image}");
     });
 
-    it("shows both generated keys in their individual and combined copy areas", () => {
-        setLang("ru");
-        const publicKey = "PUBLIC-KEY-FIXTURE";
-        const privateKey = "PRIVATE-KEY-FIXTURE";
-
-        const message = $msg("Setting.GenerateKeyPair.Desc", { public_key: publicKey, private_key: privateKey });
-
-        expect(message.split(publicKey)).toHaveLength(3);
-        expect(message.split(privateKey)).toHaveLength(3);
-        expect(message).toContain(`${publicKey}\n${privateKey}`);
-        expect(message).not.toMatch(/\$\{(?:public_key|private_key)\}/);
-    });
-
     it("keeps the measured and configured database sizes in the comparison table", () => {
         setLang("ru");
 
