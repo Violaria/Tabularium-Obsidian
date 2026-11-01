@@ -56,7 +56,8 @@
         "test:docker-all:down": "npm run test:docker-couchdb:down ; npm run test:docker-s3:down",
         "test:docker-all:start": "npm run test:docker-all:up && sleep 5 && npm run test:docker-all:init",
         "test:docker-all:stop": "npm run test:docker-all:down",
-        "test:tabularium:sorting": "DISPLAY= WAYLAND_DISPLAY= E2E_OBSIDIAN_CLEANUP_STALE_PROCESSES=false tsx --tsconfig tsconfig.json ../../tests/interop/custom-sorting.ts"
+        "test:tabularium:sorting": "DISPLAY= WAYLAND_DISPLAY= E2E_OBSIDIAN_CLEANUP_STALE_PROCESSES=false tsx --tsconfig tsconfig.json ../../tests/interop/custom-sorting.ts",
+        "check:unreachable": "tsx _tools/findUnreachable.ts"
     },
     "keywords": [],
     "author": "vorotamoroz",
