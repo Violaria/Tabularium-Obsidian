@@ -8215,6 +8215,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.",
         zh: "SSH 主机中登记为禁止的主机，Tabularius 在任何档位都不会抓取指向它的网页（跳转之后也一样）。",
     },
+    "tabularium.release.0.24.4": {
+        def: "Each web page Tabularius fetches through the server opens its own connection, so a connection left open by an earlier fetch can no longer skip the address check of the permission mode or the forbidden hosts.",
+        la: "Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.",
+        zh: "Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
