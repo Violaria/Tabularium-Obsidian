@@ -120,6 +120,7 @@
     "0 scanStartupIssues"
   ],
   "appLifecycle.onSettingLoaded": [
+    "-10 <anonymous>",
     "0 bound _everyOnloadAfterLoadSettings",
     "0 <anonymous>",
     "0 <anonymous>",
