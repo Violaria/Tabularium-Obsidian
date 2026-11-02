@@ -1,8 +1,8 @@
 import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
-import { ServiceFileHandler } from "@/serviceModules/FileHandler";
+import { ServiceFileHandler } from "@/core/serviceModules/FileHandler";
 import { StorageAccessManager } from "@tabularium/sync-core/compat/managers/StorageProcessingManager";
-import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { FileAccessCLI } from "./FileAccessCLI";
 import { ServiceFileAccessCLI } from "./ServiceFileAccessImpl";
@@ -10,7 +10,7 @@ import { ServiceDatabaseFileAccessCLI } from "./DatabaseFileAccess";
 import { StorageEventManagerCLI } from "@/apps/cli/managers/StorageEventManagerCLI";
 import type { ServiceModules } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import type { IgnoreRules } from "./IgnoreRules";
-import { createFileReflectionProvenance } from "@/serviceModules/FileReflectionProvenance";
+import { createFileReflectionProvenance } from "@/core/serviceModules/FileReflectionProvenance";
 
 /**
  * Initialize service modules for CLI version

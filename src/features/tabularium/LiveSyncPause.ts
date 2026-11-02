@@ -8,7 +8,7 @@ import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import type { LiveSyncCore } from "@/main";
 
 export const LIVE_SYNC_PAUSE_KEY = "live-sync-paused";

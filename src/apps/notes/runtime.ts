@@ -2,7 +2,7 @@
  * Read-only LiveSync runtime for the web notes page: the upstream core with an OPFS directory as its vault.
  * Settings live in memory only, so the passphrase never reaches browser storage.
  */
-import { createCore, type LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import { createCore, type LiveSyncBaseCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";

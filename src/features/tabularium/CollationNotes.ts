@@ -1,7 +1,7 @@
 // In reading view, the notes after " —— " in the list of Collation.md fold into an icon after the name, as the
 // explanations on the settings page do: shown on hover, and opened or closed below the name by a tap.
 import { setIcon, setTooltip, type Plugin } from "obsidian";
-import { isRulesNote, NOTE_SEPARATOR } from "@/common/fileOrder";
+import { isRulesNote, NOTE_SEPARATOR } from "@/core/common/fileOrder";
 
 /** Folds the note of one list item, if it has one: the text after the separator up to the item's nested list. */
 export function foldNote(item: HTMLElement) {

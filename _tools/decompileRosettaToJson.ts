@@ -1,10 +1,10 @@
-import { allMessages } from "../src/common/messages/combinedMessages.prod.ts";
+import { allMessages } from "../src/core/common/messages/combinedMessages.prod.ts";
 const __dirname = import.meta.dirname;
 
 const { writeFileSync } = process.getBuiltinModule("node:fs");
 const path = process.getBuiltinModule("node:path");
 const thisFileDir = __dirname;
-const outDir = path.resolve(thisFileDir, "../src/common/messagesJson");
+const outDir = path.resolve(thisFileDir, "../src/core/common/messagesJson");
 
 const out = {} as Record<string, { [key: string]: string | undefined }>;
 

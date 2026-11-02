@@ -12,7 +12,7 @@ import {
     SvelteDialogSession,
     type SvelteDialogRenderer,
     type SvelteDialogSurface,
-} from "@/modules/services/SvelteDialogSession";
+} from "@/ui/dialogs/SvelteDialogSession";
 
 describe("SvelteDialogSession", () => {
     it("mounts, resolves the selected result, and unmounts through the owning surface", async () => {

@@ -7,7 +7,7 @@ const fsPromises = process.getBuiltinModule("node:fs/promises");
 const path = process.getBuiltinModule("node:path");
 const __dirname = import.meta.dirname;
 
-const targetDir = path.resolve(path.join(__dirname, "../src/common/messagesJson/"));
+const targetDir = path.resolve(path.join(__dirname, "../src/core/common/messagesJson/"));
 process.stdout.write(`Target directory: ${targetDir}\n`);
 const files = await glob(`*.json`, { expandDirectories: false, absolute: true, cwd: targetDir });
 for (const file of files) {

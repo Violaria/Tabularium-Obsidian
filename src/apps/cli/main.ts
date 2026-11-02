@@ -1,5 +1,5 @@
 import { NodeServiceContext, NodeServiceHub } from "./services/NodeServiceHub";
-import { createCore, type StartupDatabaseOptions } from "@/LiveSyncBaseCore";
+import { createCore, type StartupDatabaseOptions } from "@/core/createCore";
 import { initialiseServiceModulesCLI } from "./serviceModules/CLIServiceModules";
 import {
     LOG_LEVEL_VERBOSE,
@@ -23,7 +23,7 @@ import { getPathFromUXFileInfo } from "@tabularium/sync-core/compat/common/typeU
 import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { IgnoreRules } from "./serviceModules/IgnoreRules";
 import { useOfflineScanner } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
-import type { ReplicationSchedulingControl } from "@/serviceFeatures/replicationScheduling";
+import type { ReplicationSchedulingControl } from "@/core/serviceFeatures/replicationScheduling";
 import { createNodeStandardIo, fsPromises as fs, path } from "@tabularium/sync-core/node";
 import type { StandardIo } from "@tabularium/sync-core/context";
 import { writeStderrLine, writeStdoutLine } from "./cliOutput";

@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { setLang } from "@/common/translation";
+import { setLang } from "@/core/common/translation";
 
 // The messages are checked in Chinese.
 beforeAll(() => setLang("zh"));

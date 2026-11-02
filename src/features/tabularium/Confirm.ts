@@ -1,5 +1,5 @@
 import { Modal, Setting, type App } from "obsidian";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import { destructive } from "./hint";
 
 export interface ConfirmOptions<C extends string = string> {

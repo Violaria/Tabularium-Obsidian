@@ -1,6 +1,6 @@
 import { evalObsidianJson } from "./cli.ts";
 import { SERVICE_CONTEXT_MEMBERS } from "../../contracts/serviceContext.ts";
-import { DATABASE_COMPATIBILITY_VERSION_KEY } from "../../../src/common/databaseCompatibility.ts";
+import { DATABASE_COMPATIBILITY_VERSION_KEY } from "../../../src/obsidian/common/databaseCompatibility.ts";
 import { CURRENT_SETTING_VERSION } from "@tabularium/sync-core/compat/common/models/setting.const";
 import { type ObsidianLiveSyncSettings, VER } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";

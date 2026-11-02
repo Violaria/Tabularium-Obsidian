@@ -5,7 +5,7 @@ import type { ControlService } from "@tabularium/sync-core/compat/services/base/
 import type { ReplicatorService } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
 import type { InjectableAPIService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAPIService";
 import { UIService } from "@tabularium/sync-core/compat/services/implements/base/UIService";
-import DialogToCopy from "@/modules/services/LiveSyncUI/dialogues/DialogueToCopy.svelte";
+import DialogToCopy from "@/ui/dialogs/dialogues/DialogueToCopy.svelte";
 import { BrowserSvelteDialogManager } from "./BrowserSvelteDialogManager";
 
 export interface LiveSyncBrowserUIServiceDependencies<T extends ServiceContext> {

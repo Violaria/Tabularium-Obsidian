@@ -13,7 +13,7 @@ const deleted = vi.hoisted(() => [] as string[]);
 vi.mock("idb", () => ({ deleteDB: (name: string) => Promise.resolve(void deleted.push(name)) }));
 /** The old key-value database of the upgraded device: which revision each file was last reflected from. */
 const oldKeyValues = vi.hoisted(() => new Map<string, unknown>());
-vi.mock("@/common/KeyValueDB", () => ({
+vi.mock("@/obsidian/common/KeyValueDB", () => ({
     OpenKeyValueDatabase: () =>
         Promise.resolve({
             keys: (range: { lower: string; upper: string }) =>

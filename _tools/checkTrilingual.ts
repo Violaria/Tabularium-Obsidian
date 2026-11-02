@@ -1,11 +1,11 @@
 // Tabularium ships English, Chinese and Latin. Every plug-in message — catalogue, Commonlib and provisional — must
 // exist in all three, and no plug-in or web page text may contain emoji. Run after `npm run i18n:bake`; exits non-zero with the offending keys.
 import { commonlibEnglishMessages } from "@tabularium/sync-core/context";
-import { liveSyncProvisionalEnglishMessages } from "../src/common/messages/LiveSyncProvisionalMessages.ts";
+import { liveSyncProvisionalEnglishMessages } from "../src/core/common/messages/LiveSyncProvisionalMessages.ts";
 
 const fs = process.getBuiltinModule("node:fs");
 const path = process.getBuiltinModule("node:path");
-const dir = path.resolve(import.meta.dirname, "../src/common/messagesJson");
+const dir = path.resolve(import.meta.dirname, "../src/core/common/messagesJson");
 const load = (lang: string) => JSON.parse(fs.readFileSync(path.join(dir, `${lang}.json`), "utf8")) as Record<string, string>;
 const en = load("en");
 const catalogues = { zh: load("zh"), la: load("la") };

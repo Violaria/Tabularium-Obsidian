@@ -6,7 +6,7 @@ import { Menu, sanitizeHTMLToDom, type Editor, type Plugin } from "@/deps";
 import type { LiveSyncCore } from "@/main";
 import { StateField, type EditorState } from "@codemirror/state";
 import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import { ownStorageKeys } from "./ownNames";
 import { format, insertTemplate, type Format, type Template, type TextEdit } from "./formatting";
 import { FORMAT_ACTIONS, HEADINGS, INSERT_ACTIONS, LINE_ACTIONS } from "./editorActions";

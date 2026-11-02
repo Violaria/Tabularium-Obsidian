@@ -6,8 +6,8 @@ import { createNativeElement } from "@/apps/browserDom";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { SvelteDialogManagerDependencies } from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
 import { _activeDocument } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
-import DialogHost from "@/modules/services/LiveSyncUI/DialogHost.svelte";
-import { SvelteDialogSession } from "@/modules/services/SvelteDialogSession";
+import DialogHost from "@/ui/dialogs/DialogHost.svelte";
+import { SvelteDialogSession } from "@/ui/dialogs/SvelteDialogSession";
 
 export class BrowserModal {
     contentEl: HTMLElement;

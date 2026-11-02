@@ -1,7 +1,7 @@
 // In Collation.md, a list item's note after " —— " goes behind an ⓘ icon after the name, shown on hover or tap like the
 // explanations on the web pages (`tip`).
 import type MarkdownIt from "markdown-it";
-import { NOTE_SEPARATOR } from "@/common/fileOrder";
+import { NOTE_SEPARATOR } from "@/core/common/fileOrder";
 
 export function foldSortingNotes(md: MarkdownIt, tip: (text: string) => string) {
     md.core.ruler.push("collation_notes", (state) => {

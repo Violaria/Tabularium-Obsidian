@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { eventHub } from "@/common/events";
-import { translateLiveSyncMessage } from "@/common/translation";
+import { eventHub } from "@/core/common/events";
+import { translateLiveSyncMessage } from "@/core/common/translation";
 import {
     observeServiceComposition,
     observeServiceContext,

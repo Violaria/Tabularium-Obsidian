@@ -1,5 +1,5 @@
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import { serverError } from "./texts";
 
 /** Server details kept next to the plug-in settings; contains no secrets. */

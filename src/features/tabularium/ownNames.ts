@@ -5,7 +5,7 @@
 // value starts with "tabularium:". A device that synchronised under the old names fetches once into the new ones
 // (NamespaceMigration.ts). This module is loaded by the services, before the features.
 import { SuffixDatabaseName, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
-import { legacyDatabaseCompatibilityVersionKey } from "@/common/databaseCompatibility";
+import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
 
 export const DATABASE_SUFFIX = "tabularium";
 export const DEVICE_VALUE_PREFIX = "tabularium:";

@@ -5,13 +5,13 @@ import { normalizePath, Notice } from "@/deps";
 import { deleteDB } from "idb";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import { FlagFiles, UpstreamFlagFiles } from "@tabularium/sync-core/compat/common/models/redflag.const";
-import { legacyDatabaseCompatibilityVersionKey } from "@/common/databaseCompatibility";
-import { rememberFetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";
-import { $msg } from "@/common/translation";
+import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
+import { rememberFetchChoice } from "@/obsidian/serviceFeatures/redFlag.simpleFetch";
+import { $msg } from "@/core/common/translation";
 import type { LiveSyncCore } from "@/main";
 import type { TabulariumServer } from "./ServerLogin";
-import { OpenKeyValueDatabase } from "@/common/KeyValueDB";
-import { FILE_REFLECTION_PROVENANCE_STORE } from "@/serviceModules/FileReflectionProvenance";
+import { OpenKeyValueDatabase } from "@/obsidian/common/KeyValueDB";
+import { FILE_REFLECTION_PROVENANCE_STORE } from "@/core/serviceModules/FileReflectionProvenance";
 import { formerStorageKeys, namesFor, NAMESPACE_MIGRATION_KEY } from "./ownNames";
 
 /** The original plug-in's folder in a vault: while it is there, the old names may be its own and are kept. */

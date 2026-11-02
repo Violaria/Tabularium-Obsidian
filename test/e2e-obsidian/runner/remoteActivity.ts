@@ -5,7 +5,7 @@ import { withObsidianPage } from "./ui.ts";
 import {
     REMOTE_OPERATION_ACTIVITY_ICON,
     REMOTE_REQUEST_ACTIVITY_ICON,
-} from "../../../src/modules/features/RemoteActivityStatus.ts";
+} from "../../../src/ui/statusBar/RemoteActivityStatus.ts";
 
 export const REMOTE_ACTIVITY_E2E_STATE_KEY = "__livesyncE2ERemoteActivity";
 export const REMOTE_ACTIVITY_GATE_KIND = {

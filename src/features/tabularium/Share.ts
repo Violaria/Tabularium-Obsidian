@@ -5,7 +5,7 @@ import { Modal, Notice, TFile, TFolder, requestUrl, type Plugin, type TAbstractF
 import { mount, unmount } from "svelte";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import type { LiveSyncCore } from "@/main";
-import { getResolvedLang } from "@/common/translation";
+import { getResolvedLang } from "@/core/common/translation";
 import { catalogues, type Language } from "../../../../server/ui/messages";
 import type { TabulariumServer } from "./ServerLogin";
 import type { TabulariumSorting } from "./FileSorting";

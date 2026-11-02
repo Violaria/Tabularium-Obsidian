@@ -1,0 +1,242 @@
+import { App, Modal } from "@/deps.ts";
+import { DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT } from "diff-match-patch";
+import {
+    CANCELLED,
+    LEAVE_TO_SUBSEQUENT,
+    type diff_result,
+    type FilePathWithPrefix,
+} from "@tabularium/sync-core/compat/common/types";
+import { EVENT_CONFLICT_CANCELLED, EVENT_PLUGIN_UNLOADED, eventHub } from "@/core/common/events.ts";
+import { $msg } from "@/core/common/translation";
+import { promiseWithResolvers } from "octagonal-wheels/promises";
+import { POSTPONED, type MergeDialogResult } from "@/obsidian/serviceFeatures/interactiveConflictResolution/types";
+
+export { POSTPONED, type MergeDialogResult };
+
+export type ConflictResolveModalOptions = {
+    readOnly?: boolean;
+    title?: string;
+    localName?: string;
+    remoteName?: string;
+};
+
+export class ConflictResolveModal extends Modal {
+    result: diff_result;
+    filename: FilePathWithPrefix;
+
+    response: MergeDialogResult = CANCELLED;
+    isClosed = false;
+    consumed = false;
+    private readonly resultPromise = promiseWithResolvers<MergeDialogResult>();
+
+    title: string = $msg("tabularium.conflict.title");
+
+    pluginPickMode: boolean = false;
+    readOnly: boolean = false;
+    localName: string = $msg("tabularium.conflict.base");
+    remoteName: string = $msg("tabularium.conflict.conflicted");
+    private eventSubscriptions?: AbortController;
+    currentDiffIndex = -1;
+    diffView!: HTMLDivElement;
+    diffNavIndicator!: HTMLSpanElement;
+
+    constructor(
+        app: App,
+        filename: FilePathWithPrefix,
+        diff: diff_result,
+        pluginPickMode?: boolean,
+        remoteName?: string,
+        options?: ConflictResolveModalOptions
+    ) {
+        super(app);
+        this.result = diff;
+        this.filename = filename;
+        this.pluginPickMode = pluginPickMode || false;
+        this.readOnly = options?.readOnly ?? false;
+        if (this.pluginPickMode) {
+            this.title = $msg("tabularium.conflict.pick");
+            this.remoteName = remoteName || $msg("tabularium.conflict.remote");
+            this.localName = $msg("tabularium.conflict.local");
+        } else if (this.readOnly) {
+            this.title = options?.title ?? $msg("tabularium.conflict.vaultAndDatabase");
+            this.localName = options?.localName ?? $msg("tabularium.conflict.vaultFile");
+            this.remoteName = options?.remoteName ?? $msg("tabularium.conflict.databaseRevision");
+        }
+    }
+
+    appendDiffFragment(container: HTMLDivElement, text: string, cls: string) {
+        const lines = text.split("\n");
+        lines.forEach((line, index) => {
+            const span = container.createSpan({ cls });
+            span.setText(line);
+            if (index < lines.length - 1) {
+                container.createSpan({ cls: "tabularium-mark-cr" });
+                container.createEl("br");
+            }
+        });
+    }
+
+    appendVersionInfo(container: HTMLDivElement, cls: string, name: string, date: string) {
+        const line = container.createSpan({ cls });
+        line.createSpan({ text: name, cls: "tabularium-conflict-dev-name" });
+        line.appendText(`: ${date}`);
+        container.createEl("br");
+    }
+
+    navigateDiff(direction: "prev" | "next") {
+        const diffElements = this.diffView.querySelectorAll(".tabularium-added, .deleted");
+        if (diffElements.length === 0) return;
+
+        const prevFocused = this.diffView.querySelector(".tabularium-diff-focused");
+        if (prevFocused) {
+            prevFocused.classList.remove("tabularium-diff-focused");
+        }
+
+        if (direction === "next") {
+            this.currentDiffIndex = (this.currentDiffIndex + 1) % diffElements.length;
+        } else {
+            this.currentDiffIndex = this.currentDiffIndex <= 0 ? diffElements.length - 1 : this.currentDiffIndex - 1;
+        }
+
+        const target = diffElements[this.currentDiffIndex];
+        target.classList.add("tabularium-diff-focused");
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        this.diffNavIndicator.setText(`${this.currentDiffIndex + 1}/${diffElements.length}`);
+    }
+
+    resetDiffNavigation() {
+        this.currentDiffIndex = -1;
+        const diffElements = this.diffView.querySelectorAll(".tabularium-added, .deleted");
+        this.diffNavIndicator.setText(diffElements.length > 0 ? `0/${diffElements.length}` : "\u2014");
+    }
+
+    override onOpen() {
+        const { contentEl } = this;
+        this.eventSubscriptions?.abort();
+        const eventSubscriptions = new AbortController();
+        this.eventSubscriptions = eventSubscriptions;
+        eventHub.onceEvent(
+            EVENT_PLUGIN_UNLOADED,
+            () => {
+                this.sendResponse(CANCELLED);
+            },
+            { signal: eventSubscriptions.signal }
+        );
+        if (!this.readOnly) {
+            // Cancel an older dialogue for this path before subscribing this
+            // instance. Emitting after subscription would close the replacement
+            // itself; the instance-owned result promise then completes the older
+            // caller even when it only begins waiting after this event.
+            eventHub.emitEvent(EVENT_CONFLICT_CANCELLED, this.filename);
+            eventHub.onEvent(
+                EVENT_CONFLICT_CANCELLED,
+                (path) => {
+                    if (path === this.filename) {
+                        this.sendResponse(CANCELLED);
+                    }
+                },
+                { signal: eventSubscriptions.signal }
+            );
+        }
+        this.titleEl.setText(this.title);
+        contentEl.empty();
+        const diffOptionsRow = contentEl.createDiv("");
+        diffOptionsRow.addClass("tabularium-diff-options-row");
+        diffOptionsRow.createSpan({ text: this.filename });
+
+        const diffNavContainer = diffOptionsRow.createDiv("");
+        diffNavContainer.addClass("tabularium-diff-nav");
+        diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.previous") }, (e) => {
+            e.addClass("tabularium-diff-nav-btn");
+            e.addEventListener("click", () => this.navigateDiff("prev"));
+        });
+        diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.next") }, (e) => {
+            e.addClass("tabularium-diff-nav-btn");
+            e.addEventListener("click", () => this.navigateDiff("next"));
+        });
+        this.diffNavIndicator = diffNavContainer.createSpan({ text: "\u2014" });
+        this.diffNavIndicator.addClass("tabularium-diff-nav-indicator");
+
+        this.diffView = contentEl.createDiv("");
+        this.diffView.addClass("tabularium-op-scrollable");
+        this.diffView.addClass("tabularium-dialog");
+        let diffLength = 0;
+        for (const v of this.result.diff) {
+            const x1 = v[0];
+            const x2 = v[1];
+            diffLength += x2.length;
+            if (diffLength > 100 * 1024) {
+                continue;
+            }
+            if (x1 == DIFF_DELETE) {
+                this.appendDiffFragment(this.diffView, x2, "deleted");
+            } else if (x1 == DIFF_EQUAL) {
+                this.appendDiffFragment(this.diffView, x2, "tabularium-normal");
+            } else if (x1 == DIFF_INSERT) {
+                this.appendDiffFragment(this.diffView, x2, "tabularium-added");
+            }
+        }
+
+        const div2 = contentEl.createDiv("");
+        div2.addClass("tabularium-dialog");
+        const date1 =
+            new Date(this.result.left.mtime).toLocaleString() + (this.result.left.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
+        const date2 =
+            new Date(this.result.right.mtime).toLocaleString() + (this.result.right.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
+        this.appendVersionInfo(div2, "deleted", this.localName, date1);
+        this.appendVersionInfo(div2, "tabularium-added", this.remoteName, date2);
+        const actionContainer = contentEl.createDiv("tabularium-conflict-action-container");
+        if (this.readOnly) {
+            actionContainer.createEl("button", { text: $msg("Close") }, (e) => {
+                e.addClass("tabularium-conflict-action-button");
+                e.addEventListener("click", () => this.sendResponse(CANCELLED));
+            });
+        } else {
+            actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.localName }) }, (e) => {
+                e.addClass("tabularium-conflict-action-button");
+                e.addEventListener("click", () => this.sendResponse(this.result.right.rev));
+            });
+            actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.remoteName }) }, (e) => {
+                e.addClass("tabularium-conflict-action-button");
+                e.addEventListener("click", () => this.sendResponse(this.result.left.rev));
+            });
+            if (!this.pluginPickMode) {
+                actionContainer.createEl("button", { text: $msg("Concat both") }, (e) => {
+                    e.addClass("tabularium-conflict-action-button");
+                    e.addEventListener("click", () => this.sendResponse(LEAVE_TO_SUBSEQUENT));
+                });
+            }
+            actionContainer.createEl("button", { text: $msg(this.pluginPickMode ? "tabularium.confirm.cancel" : "tabularium.conflict.later") }, (e) => {
+                e.addClass("tabularium-conflict-action-button");
+                e.addEventListener("click", () => this.sendResponse(this.pluginPickMode ? CANCELLED : POSTPONED));
+            });
+        }
+        if (diffLength > 100 * 1024) {
+            this.diffView.empty();
+            this.diffView.setText($msg("tabularium.conflict.tooLarge"));
+        }
+        this.resetDiffNavigation();
+        this.navigateDiff("next");
+    }
+
+    sendResponse(result: MergeDialogResult) {
+        this.response = result;
+        this.close();
+    }
+
+    override onClose() {
+        const { contentEl } = this;
+        contentEl.empty();
+        this.eventSubscriptions?.abort();
+        this.eventSubscriptions = undefined;
+        if (this.consumed) {
+            return;
+        }
+        this.consumed = true;
+        this.resultPromise.resolve(this.response);
+    }
+
+    async waitForResult(): Promise<MergeDialogResult> {
+        return await this.resultPromise.promise;
+    }
+}

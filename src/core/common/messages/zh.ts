@@ -1,0 +1,4 @@
+import zh from "@/core/common/messagesJson/zh.json";
+export const PartialMessages = {
+    zh,
+} as const;

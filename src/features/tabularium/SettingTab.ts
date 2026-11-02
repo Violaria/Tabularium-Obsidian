@@ -12,16 +12,16 @@ import {
     type SettingDefinitionPage,
     type SettingGroupItem,
 } from "obsidian";
-import { $msg, $t } from "@/common/translation";
-import { SUPPORTED_I18N_LANGS } from "@/common/rosetta";
+import { $msg, $t } from "@/core/common/translation";
+import { SUPPORTED_I18N_LANGS } from "@/core/common/rosetta";
 import {
     EVENT_REQUEST_RELOAD_SETTING_TAB,
     EVENT_REQUEST_RUN_DOCTOR,
     EVENT_REQUEST_RUN_FIX_INCOMPLETE,
     eventHub,
-} from "@/common/events.ts";
-import { VIEW_TYPE_LOG } from "@/modules/features/Log/LogPaneView.ts";
-import { getConfig, type AllSettingItemKey } from "@/modules/features/SettingDialogue/settingConstants.ts";
+} from "@/core/common/events.ts";
+import { VIEW_TYPE_LOG } from "@/ui/Log/LogPaneView.ts";
+import { getConfig, type AllSettingItemKey } from "@/obsidian/settingConstants.ts";
 import { NetworkWarningStyles } from "@tabularium/sync-core/compat/common/models/setting.const";
 import { FlagFiles, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { constructCustomRegExpList, splitCustomRegExpList } from "@tabularium/sync-core/compat/common/utils";
@@ -32,8 +32,8 @@ import {
 import type ObsidianLiveSyncPlugin from "@/main";
 import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
 import { confirmAction } from "./Confirm";
-import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";
-import { REBUILD_CONFIRMED_KEY } from "@/serviceFeatures/redFlag";
+import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/obsidian/serviceFeatures/redFlag.simpleFetch";
+import { REBUILD_CONFIRMED_KEY } from "@/obsidian/serviceFeatures/redFlag";
 import { HELP_TOPICS, RELEASES } from "./help";
 import { destructive, settingRow, shownWhen, textRow } from "./hint";
 

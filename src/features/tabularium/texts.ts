@@ -1,5 +1,5 @@
 // Interface texts of Tabularium's plug-in features that need more than a single catalogue lookup.
-import { $msg, getResolvedLang } from "@/common/translation";
+import { $msg, getResolvedLang } from "@/core/common/translation";
 import type { BookTexts } from "./kindleBook";
 
 const SERVER_ERRORS = [

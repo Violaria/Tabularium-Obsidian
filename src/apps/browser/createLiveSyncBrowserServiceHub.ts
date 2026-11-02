@@ -20,7 +20,7 @@ import { InjectableTestService } from "@tabularium/sync-core/compat/services/imp
 import { InjectableTweakValueService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTweakValueService";
 import { InjectableVaultServiceCompat } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableVaultService";
 
-import { setLang, translateLiveSyncMessage } from "@/common/translation";
+import { setLang, translateLiveSyncMessage } from "@/core/common/translation";
 import { BrowserConfirm } from "./BrowserConfirm";
 import { createBrowserKeyValueDatabaseFactory } from "./BrowserKeyValueDatabase";
 import { LiveSyncBrowserAPIService, type LiveSyncBrowserAPIServiceOptions } from "./LiveSyncBrowserAPIService";

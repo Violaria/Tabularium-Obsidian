@@ -1,7 +1,7 @@
 import { Modal, Notice, Setting, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
 import type { TabulariumServer } from "./ServerLogin";
 import type { LiveSyncCore } from "@/main";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import { MAX_BOOK_BYTES, assembleBook, notesIn, type BookSource } from "./kindleBook";
 import { bookTexts, serverError } from "./texts";
 

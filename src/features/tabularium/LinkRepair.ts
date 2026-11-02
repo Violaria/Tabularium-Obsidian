@@ -4,7 +4,7 @@
 import { Modal, Notice, parseLinktext, Setting, debounce } from "@/deps";
 import type { App, ButtonComponent, Plugin, ReferenceCache, TFile } from "obsidian";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import { ownStorageKeys } from "./ownNames";
 import type { LiveSyncCore } from "@/main";
 

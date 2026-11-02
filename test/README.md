@@ -40,7 +40,7 @@ For an ordinary local edit, first reflect the database content into the Vault, c
 
 ### Preparation and execution
 
-The suite is [FileHandler.multidevice.integration.spec.ts](../src/serviceModules/FileHandler.multidevice.integration.spec.ts). It exercises the installed Commonlib package through LiveSync's shared file handler, the CLI `resolve` command dispatcher, and the shared conflict-resolution operations.
+The suite is [FileHandler.multidevice.integration.spec.ts](../src/core/serviceModules/FileHandler.multidevice.integration.spec.ts). It exercises the installed Commonlib package through LiveSync's shared file handler, the CLI `resolve` command dispatcher, and the shared conflict-resolution operations.
 
 Use a disposable CouchDB service. To use the repository's Docker fixture, set the following values in `.test.env` and ensure `.env` exists. The fixture uses the container name `couchdb-test` and host port `5989`:
 
@@ -54,7 +54,7 @@ Start the fixture, then run the focused suite:
 
 ```bash
 npm run test:docker-couchdb:start
-NODE_OPTIONS=--max-old-space-size=3072 npm run test:integration -- src/serviceModules/FileHandler.multidevice.integration.spec.ts --maxWorkers=1
+NODE_OPTIONS=--max-old-space-size=3072 npm run test:integration -- src/core/serviceModules/FileHandler.multidevice.integration.spec.ts --maxWorkers=1
 ```
 
 The expected result is seven passing tests. Each case creates a uniquely named remote database and removes it during teardown. Stop the fixture after the run, including when the test command fails:

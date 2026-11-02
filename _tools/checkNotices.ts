@@ -73,7 +73,7 @@ for (const file of scanned) {
 const catalogue = Object.fromEntries(
     ["en", "zh", "la"].map((lang) => [
         lang,
-        JSON.parse(fs.readFileSync(path.join(root, `src/common/messagesJson/${lang}.json`), "utf8")) as Record<
+        JSON.parse(fs.readFileSync(path.join(root, `src/core/common/messagesJson/${lang}.json`), "utf8")) as Record<
             string,
             string
         >,

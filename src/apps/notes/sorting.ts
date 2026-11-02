@@ -1,6 +1,6 @@
 // File tree order for web notes: the lists in the vault's Collation.md notes, with the plug-in's file order code, so the
 // tree matches Obsidian's file list.
-import { arrange, defaultOrder, FORMER_RULES_FILE, isRulesNote, namesOf, orderFor, readOrders } from "@/common/fileOrder";
+import { arrange, defaultOrder, FORMER_RULES_FILE, isRulesNote, namesOf, orderFor, readOrders } from "@/core/common/fileOrder";
 
 export interface SortedNode {
     name: string;

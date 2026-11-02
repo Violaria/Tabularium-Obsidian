@@ -9,7 +9,7 @@ import viteConfig from "./vitest.config.common";
 const importOnlyFiles = ["**/encryption/encryptHKDF.ts"];
 const obsidianRuntimeOnlyFiles = [
     "src/deps.ts",
-    "src/serviceModules/FileSystemAdapters/ObsidianTypeGuardAdapter.ts",
+    "src/obsidian/serviceModules/FileSystemAdapters/ObsidianTypeGuardAdapter.ts",
 ];
 export default mergeConfig(
     viteConfig,

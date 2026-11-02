@@ -5,7 +5,7 @@ import { objectToDotted } from "./messagelib.ts";
 const fsPromises = process.getBuiltinModule("node:fs/promises");
 const path = process.getBuiltinModule("node:path");
 const __dirname = import.meta.dirname;
-const targetDir = path.resolve(path.join(__dirname, "../src/common/messagesYAML/"));
+const targetDir = path.resolve(path.join(__dirname, "../src/core/common/messagesYAML/"));
 const files = (await glob(`*.yaml`, { expandDirectories: false, absolute: true, cwd: targetDir })).sort();
 
 function flattenMessages(src: unknown) {

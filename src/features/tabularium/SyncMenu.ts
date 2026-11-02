@@ -5,9 +5,9 @@ import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
-import { $msg } from "@/common/translation";
-import { eventHub } from "@/common/events.ts";
-import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";
+import { $msg } from "@/core/common/translation";
+import { eventHub } from "@/core/common/events.ts";
+import { EVENT_REQUEST_SHOW_HISTORY } from "@/obsidian/common/obsidianEvents.ts";
 import type { LiveSyncCore } from "@/main";
 import type { LiveSyncPause } from "./LiveSyncPause.ts";
 

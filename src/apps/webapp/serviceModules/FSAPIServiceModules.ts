@@ -2,15 +2,15 @@ import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services
 import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
 
 import { StorageAccessManager } from "@tabularium/sync-core/compat/managers/StorageProcessingManager";
-import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { FileAccessFSAPI } from "./FileAccessFSAPI";
 import { ServiceFileAccessFSAPI } from "./ServiceFileAccessImpl";
 import { ServiceDatabaseFileAccessFSAPI } from "./DatabaseFileAccess";
 import { StorageEventManagerFSAPI } from "@/apps/webapp/managers/StorageEventManagerFSAPI";
 import type { ServiceModules } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
-import { ServiceFileHandler } from "@/serviceModules/FileHandler";
-import { createFileReflectionProvenance } from "@/serviceModules/FileReflectionProvenance";
+import { ServiceFileHandler } from "@/core/serviceModules/FileHandler";
+import { createFileReflectionProvenance } from "@/core/serviceModules/FileReflectionProvenance";
 
 export interface FSAPIServiceModules extends ServiceModules {
     vaultAccess: FileAccessFSAPI;

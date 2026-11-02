@@ -1,6 +1,6 @@
 import { StorageEventManagerBase, type StorageEventManagerBaseDependencies } from "@tabularium/sync-core/compat/managers/StorageEventManager";
 import { CLIStorageEventManagerAdapter } from "./CLIStorageEventManagerAdapter";
-import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { IgnoreRules } from "@/apps/cli/serviceModules/IgnoreRules";
 import { LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";

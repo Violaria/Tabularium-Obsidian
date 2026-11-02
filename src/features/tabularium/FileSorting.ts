@@ -1,7 +1,7 @@
 // File sorting in Obsidian's file list from the lists in Collation.md (see common/fileOrder.ts). The file list's own
 // order (the sort the user chose in Obsidian) is kept for everything the rules do not list.
 import { Component, MarkdownView, normalizePath, Notice, Platform, TFile, TFolder, type Menu, type MenuItem, type Plugin, type SettingDefinition, type TAbstractFile } from "obsidian";
-import { $msg } from "@/common/translation";
+import { $msg } from "@/core/common/translation";
 import type { LiveSyncCore } from "@/main";
 import {
     arrange,
@@ -17,10 +17,10 @@ import {
     parseOrder,
     RULES_FILE,
     type FileOrder,
-} from "@/common/fileOrder";
+} from "@/core/common/fileOrder";
 import { confirmAction } from "./Confirm";
 import { settingRow } from "./hint";
-import { EVENT_REQUEST_RELOAD_SETTING_TAB, eventHub } from "@/common/events.ts";
+import { EVENT_REQUEST_RELOAD_SETTING_TAB, eventHub } from "@/core/common/events.ts";
 
 declare module "obsidian" {
     interface App {

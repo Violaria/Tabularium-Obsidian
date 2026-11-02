@@ -8,7 +8,7 @@ const fsPromises = process.getBuiltinModule("node:fs/promises");
 const path = process.getBuiltinModule("node:path");
 const __dirname = import.meta.dirname;
 
-const targetDir = path.resolve(path.join(__dirname, "../src/common/messagesYAML/"));
+const targetDir = path.resolve(path.join(__dirname, "../src/core/common/messagesYAML/"));
 process.stdout.write(`Target directory: ${targetDir}\n`);
 const files = await glob(`*.yaml`, { expandDirectories: false, absolute: true, cwd: targetDir });
 for (const file of files) {

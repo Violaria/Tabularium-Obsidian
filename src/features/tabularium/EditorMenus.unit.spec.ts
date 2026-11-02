@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/deps", () => ({ Menu: class {}, sanitizeHTMLToDom: () => null }));
-vi.mock("@/common/translation", () => ({ $msg: (key: string) => ({ "tabularium.editor.linkText": "链接", "tabularium.editor.word.topic": "主题" })[key] ?? "词" }));
+vi.mock("@/core/common/translation", () => ({ $msg: (key: string) => ({ "tabularium.editor.linkText": "链接", "tabularium.editor.word.topic": "主题" })[key] ?? "词" }));
 
 const { formatEditor, insertInEditor } = await import("./EditorMenus");
 

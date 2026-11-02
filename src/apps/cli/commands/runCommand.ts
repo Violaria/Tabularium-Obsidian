@@ -19,7 +19,7 @@ import {
     REMOTE_RESOURCE_KINDS,
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
-import { withOwnedRemoteResource } from "@/common/ownedRemoteResource";
+import { withOwnedRemoteResource } from "@/core/common/ownedRemoteResource";
 import {
     isCentralRemoteAdministrationCommand,
     runCentralRemoteAdministrationCommand,

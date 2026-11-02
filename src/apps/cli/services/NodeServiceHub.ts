@@ -28,7 +28,7 @@ import { path as nodePath } from "@tabularium/sync-core/node";
 import type { KeyValueDBService } from "@tabularium/sync-core/compat/services/base/KeyValueDBService";
 import { PouchDB } from "@/apps/cli/lib/pouchdb-node";
 import { NodeServiceContext } from "./NodeServiceContext";
-import { setLang } from "@/common/translation";
+import { setLang } from "@/core/common/translation";
 
 export { NodeServiceContext } from "./NodeServiceContext";
 

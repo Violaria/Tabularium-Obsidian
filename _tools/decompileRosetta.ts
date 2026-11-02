@@ -1,5 +1,5 @@
-import { SUPPORTED_I18N_LANGS, type I18N_LANGS } from "../src/common/rosetta";
-import { allMessages } from "../src/common/messages/combinedMessages.dev.ts";
+import { SUPPORTED_I18N_LANGS, type I18N_LANGS } from "../src/core/common/rosetta";
+import { allMessages } from "../src/core/common/messages/combinedMessages.dev.ts";
 
 const { writeFileSync } = process.getBuiltinModule("node:fs");
 const path = process.getBuiltinModule("node:path");
