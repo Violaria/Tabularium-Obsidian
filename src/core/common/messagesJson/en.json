@@ -853,6 +853,7 @@
     "tabularium.release.0.5.0": "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",
     "tabularium.release.1.0.0": "First public release. Code, interface and device data no longer use the original plug-in's name; the first start moves this device's data locally, without fetching or signing in again.",
     "tabularium.release.1.0.1": "Device values are kept in each vault's own storage. Release files are built and attested by GitHub.",
+    "tabularium.release.1.0.2": "Code changes from the directory review; no change in use.",
     "tabularium.server.address": "Server address",
     "tabularium.server.addressScheme": "The server address must start with https:// or http://.",
     "tabularium.server.command": "Server connection",

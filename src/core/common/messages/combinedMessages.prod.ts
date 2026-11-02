@@ -4303,6 +4303,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur.",
         zh: "设备值改存在各笔记库自己的存储中。Release 文件由 GitHub 构建并附构建来源证明。",
     },
+    "tabularium.release.1.0.2": {
+        def: "Code changes from the directory review; no change in use.",
+        la: "Codex ad recensionem indicis mutatus; usus idem manet.",
+        zh: "按目录审核修改代码，使用上没有变化。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
