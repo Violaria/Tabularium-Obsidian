@@ -1,11 +1,22 @@
-import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
+import type ObsidianLiveSyncPlugin from "@/main";
+import type { LiveSyncCore } from "@/main";
 import { VIEW_TYPE_GLOBAL_HISTORY, GlobalHistoryView } from "./GlobalHistory/GlobalHistoryView.ts";
 import type { WorkspaceLeaf } from "@/deps.ts";
 import { $msg } from "@/common/translation";
 
-export class ModuleObsidianGlobalHistory extends AbstractObsidianModule {
+export class ModuleObsidianGlobalHistory {
+    readonly plugin: ObsidianLiveSyncPlugin;
+    readonly core: LiveSyncCore;
+    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+        this.plugin = plugin;
+        this.core = core;
+    }
+    get services() {
+        return this.core.services;
+    }
+
     _everyOnloadStart(): Promise<boolean> {
-        this.addCommand({
+        this.services.API.addCommand({
             id: "livesync-global-history",
             name: $msg("Show vault history"),
             callback: () => {
@@ -13,7 +24,7 @@ export class ModuleObsidianGlobalHistory extends AbstractObsidianModule {
             },
         });
 
-        this.registerView(VIEW_TYPE_GLOBAL_HISTORY, (leaf: WorkspaceLeaf) => new GlobalHistoryView(leaf, this.plugin));
+        this.services.API.registerWindow(VIEW_TYPE_GLOBAL_HISTORY, (leaf: WorkspaceLeaf) => new GlobalHistoryView(leaf, this.plugin));
 
         return Promise.resolve(true);
     }
@@ -21,7 +32,15 @@ export class ModuleObsidianGlobalHistory extends AbstractObsidianModule {
     showGlobalHistory() {
         void this.services.API.showWindow(VIEW_TYPE_GLOBAL_HISTORY);
     }
-    override onBindFunction(core: typeof this.core, services: typeof core.services): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.appLifecycle.onInitialise.addHandler(this._everyOnloadStart.bind(this));
     }
+}
+
+export function installGlobalHistory(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    const component = new ModuleObsidianGlobalHistory(plugin, core);
+    component.install();
+    return component;
 }

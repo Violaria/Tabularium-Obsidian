@@ -64,12 +64,15 @@ function createObsidianEventHarness(settings: Partial<typeof DEFAULT_SETTINGS>) 
         control: { hasUnloaded: vi.fn(() => false) },
         fileProcessing: { commitPendingFileEvents: vi.fn(async () => true) },
         replication: { replicateUnattendedByEvent },
+        setting: {},
     };
     const core = {
         _services: services,
         services,
         settings: p2pSettings(settings),
     } as any;
+    // The components read the settings and the local database through the services, as the core's getters did.
+    Object.defineProperty(core._services.setting, "settings", { get: () => core.settings, set: (value) => (core.settings = value) });
     const plugin = {
         app: {
             commands: {

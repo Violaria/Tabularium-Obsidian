@@ -1,3 +1,5 @@
+import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { fireAndForget } from "octagonal-wheels/promises";
 import {
     LOG_LEVEL_NOTICE,
@@ -12,14 +14,24 @@ import {
     eventHub,
 } from "@/common/events.ts";
 import { $msg, setLang } from "@/common/translation";
-import { AbstractModule } from "@/modules/AbstractModule.ts";
-import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
-import type { LiveSyncCore } from "@/main.ts";
 import { initialiseWorkerModule } from "@tabularium/sync-core/compat/worker/bgWorker";
 import { manifestVersion, packageVersion } from "@tabularium/sync-core/compat/common/coreEnvVars";
 import { VaultScanResults } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 
-export class ModuleLiveSyncMain extends AbstractModule {
+export class ModuleLiveSyncMain {
+    readonly core: LiveSyncBaseCore;
+    private readonly _log: ReturnType<typeof createInstanceLogFunction>;
+    constructor(core: LiveSyncBaseCore) {
+        this.core = core;
+        this._log = createInstanceLogFunction("ModuleLiveSyncMain", core.services.API);
+    }
+    get services() {
+        return this.core.services;
+    }
+    get settings() {
+        return this.core.services.setting.settings;
+    }
+
     async _onLiveSyncReady() {
         if (!(await this.core.services.appLifecycle.onLayoutReady())) return false;
         eventHub.emitEvent(EVENT_LAYOUT_READY);
@@ -38,7 +50,7 @@ export class ModuleLiveSyncMain extends AbstractModule {
             ) {
                 this.settings.suspendFileWatching = false;
                 this.settings.suspendParseReplicationResult = false;
-                await this.saveSettings();
+                await this.services.setting.saveSettingData();
                 this.services.appLifecycle.scheduleRestart();
                 return false;
             }
@@ -123,7 +135,6 @@ export class ModuleLiveSyncMain extends AbstractModule {
         // this.$$replicate = this.$$replicate.bind(this);
         // this.core.$$onLiveSyncReady = this.core.$$onLiveSyncReady.bind(this);
         await this.core.services.appLifecycle.onLoaded();
-        await Promise.all(this.core.addOns.map((e) => Promise.resolve(e.onload())));
         return true;
     }
 
@@ -138,12 +149,12 @@ export class ModuleLiveSyncMain extends AbstractModule {
     //     for (const addOn of this.core.addOns) {
     //         addOn.onunload();
     //     }
-    //     if (this.localDatabase != null) {
-    //         this.localDatabase.onunload();
+    //     if (this.services.database.localDatabase != null) {
+    //         this.services.database.localDatabase.onunload();
     //         if (this.core.replicator) {
     //             this.core.replicator?.closeReplication();
     //         }
-    //         await this.localDatabase.close();
+    //         await this.services.database.localDatabase.close();
     //     }
     //     eventHub.emitEvent(EVENT_PLATFORM_UNLOADED);
     //     eventHub.offAll();
@@ -154,7 +165,7 @@ export class ModuleLiveSyncMain extends AbstractModule {
     // private async _realizeSettingSyncMode(): Promise<void> {
     //     await this.services.appLifecycle.onSuspending();
     //     await this.services.setting.onBeforeRealiseSetting();
-    //     this.localDatabase.refreshSettings();
+    //     this.services.database.localDatabase.refreshSettings();
     //     await this.services.fileProcessing.commitPendingFileEvents();
     //     await this.services.setting.onRealiseSetting();
     //     // disable all sync temporary.
@@ -193,8 +204,9 @@ export class ModuleLiveSyncMain extends AbstractModule {
     //     return this._unloaded;
     // }
 
-    override onBindFunction(core: LiveSyncCore, services: InjectableServiceHub): void {
-        super.onBindFunction(core, services);
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         // services.appLifecycle.isSuspended.setHandler(this._isSuspended.bind(this));
         // services.appLifecycle.setSuspended.setHandler(this._setSuspended.bind(this));
         // services.appLifecycle.isReady.setHandler(this._isReady.bind(this));
@@ -205,4 +217,10 @@ export class ModuleLiveSyncMain extends AbstractModule {
         services.appLifecycle.onWireUpEvents.addHandler(this._wireUpEvents.bind(this));
         services.appLifecycle.onLoad.addHandler(this._onLiveSyncLoad.bind(this));
     }
+}
+
+export function installMainLifecycle(core: LiveSyncBaseCore) {
+    const component = new ModuleLiveSyncMain(core);
+    component.install();
+    return component;
 }

@@ -1,17 +1,16 @@
 import { StorageEventManagerBase, type StorageEventManagerBaseDependencies } from "@tabularium/sync-core/compat/managers/StorageEventManager";
 import { CLIStorageEventManagerAdapter } from "./CLIStorageEventManagerAdapter";
-import type { IMinimumLiveSyncCommands, LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { IgnoreRules } from "@/apps/cli/serviceModules/IgnoreRules";
 import { LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
-// import type { IMinimumLiveSyncCommands } from "@tabularium/sync-core/compat/services/base/IService";
 
 export class StorageEventManagerCLI extends StorageEventManagerBase<CLIStorageEventManagerAdapter> {
-    core: LiveSyncBaseCore<ServiceContext, IMinimumLiveSyncCommands>;
+    core: LiveSyncBaseCore<ServiceContext>;
 
     constructor(
         basePath: string,
-        core: LiveSyncBaseCore<ServiceContext, IMinimumLiveSyncCommands>,
+        core: LiveSyncBaseCore<ServiceContext>,
         dependencies: StorageEventManagerBaseDependencies,
         ignoreRules?: IgnoreRules,
         watchEnabled?: boolean

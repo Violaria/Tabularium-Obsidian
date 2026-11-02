@@ -1,3 +1,5 @@
+import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { Logger, LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
 import { extractObject } from "octagonal-wheels/object";
 import {
@@ -12,10 +14,7 @@ import {
 } from "@tabularium/sync-core/compat/common/types";
 import { assessTweakCompatibility, type TweakAssessment } from "@tabularium/sync-core/settings";
 import { escapeMarkdownValue } from "@tabularium/sync-core/compat/common/utils";
-import { AbstractModule } from "@/modules/AbstractModule.ts";
 import { $msg, translateIfAvailable } from "@/common/translation";
-import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
-import type { LiveSyncCore } from "@/main.ts";
 import { REMOTE_COUCHDB, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
 import { withOwnedRemoteResource } from "@/common/ownedRemoteResource";
 import {
@@ -103,7 +102,20 @@ function resolutionSettingsSignature(settings: ObsidianLiveSyncSettings): string
     return JSON.stringify({ ...settings, autoAcceptCompatibleTweak: settings.autoAcceptCompatibleTweak ?? true });
 }
 
-export class ModuleResolvingMismatchedTweaks extends AbstractModule {
+export class ModuleResolvingMismatchedTweaks {
+    readonly core: LiveSyncBaseCore;
+    private readonly _log: ReturnType<typeof createInstanceLogFunction>;
+    constructor(core: LiveSyncBaseCore) {
+        this.core = core;
+        this._log = createInstanceLogFunction("ModuleResolvingMismatchedTweaks", core.services.API);
+    }
+    get services() {
+        return this.core.services;
+    }
+    get settings() {
+        return this.core.services.setting.settings;
+    }
+
     private requiresIdConfigurationReview(assessment: TweakAssessment): boolean {
         if (
             !assessment.entries.some(({ key, relation }) => key === "idDerivationVersion" && relation === "different")
@@ -345,7 +357,7 @@ export class ModuleResolvingMismatchedTweaks extends AbstractModule {
             if (!rebuildRequired) {
                 // The failed replication has settled before mismatch resolution runs. Reinitialise the
                 // chunk-generation managers now so hash and splitter changes take effect before retrying.
-                await this.localDatabase.managers.reinitialise();
+                await this.services.database.localDatabase.managers.reinitialise();
             }
             if (!(await updateRemote(this.settings))) return "IGNORE";
             if (rebuildRequired) {
@@ -441,7 +453,9 @@ export class ModuleResolvingMismatchedTweaks extends AbstractModule {
         return { result: acceptedSettings, requireFetch: impact === "required" };
     }
 
-    override onBindFunction(core: LiveSyncCore, services: InjectableServiceHub): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.setting.onBeforeSaveSettingData.addHandler(this._onBeforeSaveSettingData.bind(this));
         services.tweakValue.fetchRemotePreferred.setHandler(this._fetchRemotePreferredTweakValues.bind(this));
         services.tweakValue.checkAndAskResolvingMismatched.setHandler(
@@ -454,4 +468,10 @@ export class ModuleResolvingMismatchedTweaks extends AbstractModule {
         services.tweakValue.askUseRemoteConfiguration.setHandler(this._askUseRemoteConfiguration.bind(this));
         services.replication.checkConnectionFailure.addHandler(this._anyAfterConnectCheckFailed.bind(this));
     }
+}
+
+export function installTweakResolution(core: LiveSyncBaseCore) {
+    const component = new ModuleResolvingMismatchedTweaks(core);
+    component.install();
+    return component;
 }

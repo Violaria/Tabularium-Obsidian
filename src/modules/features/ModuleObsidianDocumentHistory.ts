@@ -1,15 +1,29 @@
+import type ObsidianLiveSyncPlugin from "@/main";
+import type { LiveSyncCore } from "@/main";
 import { type TFile } from "@/deps.ts";
 import { $msg } from "@/common/translation";
 import { eventHub } from "@/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";
 import type { FilePathWithPrefix, LoadedEntry, DocumentID } from "@tabularium/sync-core/compat/common/types";
-import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 import { DocumentHistoryModal } from "./DocumentHistory/DocumentHistoryModal.ts";
 import { fireAndForget } from "octagonal-wheels/promises";
 
-export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
+export class ModuleObsidianDocumentHistory {
+    readonly plugin: ObsidianLiveSyncPlugin;
+    readonly core: LiveSyncCore;
+    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+        this.plugin = plugin;
+        this.core = core;
+    }
+    get app() {
+        return this.plugin.app;
+    }
+    get services() {
+        return this.core.services;
+    }
+
     _everyOnloadStart(): Promise<boolean> {
-        this.addCommand({
+        this.services.API.addCommand({
             id: "livesync-history",
             name: $msg("Show history"),
             callback: () => {
@@ -18,7 +32,7 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
             },
         });
 
-        this.addCommand({
+        this.services.API.addCommand({
             id: "livesync-filehistory",
             name: $msg("Pick a file to show history"),
             callback: () => {
@@ -40,8 +54,8 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
 
     async fileHistory() {
         const notes: { id: DocumentID; path: FilePathWithPrefix; dispPath: string; mtime: number }[] = [];
-        for await (const doc of this.localDatabase.findAllDocs()) {
-            notes.push({ id: doc._id, path: this.getPath(doc), dispPath: this.getPath(doc), mtime: doc.mtime });
+        for await (const doc of this.services.database.localDatabase.findAllDocs()) {
+            notes.push({ id: doc._id, path: this.services.path.getPath(doc), dispPath: this.services.path.getPath(doc), mtime: doc.mtime });
         }
         notes.sort((a, b) => b.mtime - a.mtime);
         const notesList = notes.map((e) => e.dispPath);
@@ -51,7 +65,15 @@ export class ModuleObsidianDocumentHistory extends AbstractObsidianModule {
             this.showHistory(targetId.path, targetId.id);
         }
     }
-    override onBindFunction(core: typeof this.core, services: typeof core.services): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.appLifecycle.onInitialise.addHandler(this._everyOnloadStart.bind(this));
     }
+}
+
+export function installDocumentHistory(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    const component = new ModuleObsidianDocumentHistory(plugin, core);
+    component.install();
+    return component;
 }

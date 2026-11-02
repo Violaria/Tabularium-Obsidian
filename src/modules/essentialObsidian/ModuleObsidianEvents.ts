@@ -1,4 +1,5 @@
-import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
+import type ObsidianLiveSyncPlugin from "@/main";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { EVENT_FILE_RENAMED, EVENT_LEAF_ACTIVE_CHANGED, eventHub } from "@/common/events.js";
 import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import { scheduleTask } from "octagonal-wheels/concurrency/task";
@@ -33,7 +34,25 @@ type CodeMirrorAdapter = {
     commands: { save: () => void };
 };
 
-export class ModuleObsidianEvents extends AbstractObsidianModule {
+export class ModuleObsidianEvents {
+    readonly plugin: ObsidianLiveSyncPlugin;
+    readonly core: LiveSyncCore;
+    private readonly _log: ReturnType<typeof createInstanceLogFunction>;
+    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+        this.plugin = plugin;
+        this.core = core;
+        this._log = createInstanceLogFunction("ModuleObsidianEvents", core.services.API);
+    }
+    get app() {
+        return this.plugin.app;
+    }
+    get services() {
+        return this.core.services;
+    }
+    get settings() {
+        return this.core.services.setting.settings;
+    }
+
     _everyOnloadStart(): Promise<boolean> {
         // this.registerEvent(this.app.workspace.on("editor-change", ));
         this.plugin.registerEvent(
@@ -193,8 +212,8 @@ export class ModuleObsidianEvents extends AbstractObsidianModule {
     async watchOnlineAsync() {
         // If some files were failed to retrieve, scan files again.
         // TODO:FIXME AT V0.17.31, this logic has been disabled.
-        if (compatGlobal.navigator.onLine && this.localDatabase.needScanning) {
-            this.localDatabase.needScanning = false;
+        if (compatGlobal.navigator.onLine && this.services.database.localDatabase.needScanning) {
+            this.services.database.localDatabase.needScanning = false;
             await this.services.vault.scanVault();
         }
     }
@@ -395,11 +414,19 @@ export class ModuleObsidianEvents extends AbstractObsidianModule {
     _isReloadingScheduled(): boolean {
         return this._totalProcessingCount !== undefined;
     }
-    override onBindFunction(core: LiveSyncCore, services: typeof core.services): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.appLifecycle.onLayoutReady.addHandler(this._everyOnLayoutReady.bind(this));
         services.appLifecycle.onInitialise.addHandler(this._everyOnloadStart.bind(this));
         services.appLifecycle.askRestart.setHandler(this._askReload.bind(this));
         services.appLifecycle.scheduleRestart.setHandler(this._scheduleAppReload.bind(this));
         services.appLifecycle.isReloadingScheduled.setHandler(this._isReloadingScheduled.bind(this));
     }
+}
+
+export function installObsidianEvents(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    const component = new ModuleObsidianEvents(plugin, core);
+    component.install();
+    return component;
 }

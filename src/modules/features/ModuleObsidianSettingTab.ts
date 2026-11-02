@@ -1,11 +1,24 @@
+import type ObsidianLiveSyncPlugin from "@/main";
 import { TabulariumSettingTab } from "@/features/tabularium/SettingTab.ts";
-import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 // import { PouchDB } from "../../lib/src/pouchdb/pouchdb-browser";
 import { EVENT_REQUEST_OPEN_SETTINGS, eventHub } from "@/common/events.ts";
 import type { LiveSyncCore } from "@/main.ts";
 import { openObsidianSettings } from "@/common/obsidianSettings.ts";
 
-export class ModuleObsidianSettingDialogue extends AbstractObsidianModule {
+export class ModuleObsidianSettingDialogue {
+    readonly plugin: ObsidianLiveSyncPlugin;
+    readonly core: LiveSyncCore;
+    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+        this.plugin = plugin;
+        this.core = core;
+    }
+    get app() {
+        return this.plugin.app;
+    }
+    get services() {
+        return this.core.services;
+    }
+
     settingTab!: TabulariumSettingTab;
 
     _everyOnloadAfterLoadSettings(): Promise<boolean> {
@@ -23,7 +36,15 @@ export class ModuleObsidianSettingDialogue extends AbstractObsidianModule {
     get appId() {
         return `${"appId" in this.app ? this.app.appId : ""}`;
     }
-    override onBindFunction(core: LiveSyncCore, services: typeof core.services): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.appLifecycle.onSettingLoaded.addHandler(this._everyOnloadAfterLoadSettings.bind(this));
     }
+}
+
+export function installSettingTab(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    const component = new ModuleObsidianSettingDialogue(plugin, core);
+    component.install();
+    return component;
 }

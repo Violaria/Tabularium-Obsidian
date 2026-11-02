@@ -1,12 +1,11 @@
 import { NodeServiceContext, NodeServiceHub } from "./services/NodeServiceHub";
-import { LiveSyncBaseCore, type StartupDatabaseOptions } from "@/LiveSyncBaseCore";
+import { createCore, type StartupDatabaseOptions } from "@/LiveSyncBaseCore";
 import { initialiseServiceModulesCLI } from "./serviceModules/CLIServiceModules";
 import {
     LOG_LEVEL_VERBOSE,
     type LOG_LEVEL,
     type ObsidianLiveSyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
-import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import type { InjectableSettingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableSettingService";
 import {
     LOG_LEVEL_DEBUG,
@@ -507,20 +506,11 @@ export async function main(
 
     // Create LiveSync core
     let replicationScheduling: ReplicationSchedulingControl | undefined;
-    const core = new LiveSyncBaseCore(
-        serviceHubInstance,
-        (core: LiveSyncBaseCore<NodeServiceContext, never>, serviceHub: InjectableServiceHub<NodeServiceContext>) => {
-            return initialiseServiceModulesCLI(
-                vaultPath,
-                core,
-                serviceHub,
-                ignoreRules,
-                vaultSyncMode?.watchFiles ?? false
-            );
-        },
-        (core) => [],
-        () => [], // No add-ons
-        (core, coreFeatureViews) => {
+    const core = createCore<NodeServiceContext>({
+        hub: serviceHubInstance,
+        serviceModules: (core, serviceHub) =>
+            initialiseServiceModulesCLI(vaultPath, core, serviceHub, ignoreRules, vaultSyncMode?.watchFiles ?? false),
+        features: (core, coreFeatureViews) => {
             replicationScheduling = coreFeatureViews.replicationScheduling;
             if (vaultSyncMode && vaultSyncMode.scanOnStartup !== false) {
                 useOfflineScanner(core);
@@ -553,8 +543,8 @@ export async function main(
                 }, 0);
             }
         },
-        vaultSyncMode?.startupDatabaseOptions
-    );
+        startupDatabaseOptions: vaultSyncMode?.startupDatabaseOptions,
+    });
     if (!replicationScheduling) {
         throw new Error("Replication scheduling was not provided during core feature composition.");
     }

@@ -47,7 +47,7 @@ function createModuleHarness() {
         core: { services },
     }) as ModuleObsidianSettingDialogue;
 
-    module.onBindFunction(module.core as never, services as never);
+    module.install();
 
     return {
         initialisationHandler: () => initialisationHandler,

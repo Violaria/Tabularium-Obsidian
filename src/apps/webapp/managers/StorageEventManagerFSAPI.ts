@@ -1,15 +1,15 @@
 import { StorageEventManagerBase, type StorageEventManagerBaseDependencies } from "@tabularium/sync-core/compat/managers/StorageEventManager";
 import { FSAPIStorageEventManagerAdapter } from "./FSAPIStorageEventManagerAdapter";
-import type { IMinimumLiveSyncCommands, LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 
 export class StorageEventManagerFSAPI extends StorageEventManagerBase<FSAPIStorageEventManagerAdapter> {
-    core: LiveSyncBaseCore<ServiceContext, IMinimumLiveSyncCommands>;
+    core: LiveSyncBaseCore<ServiceContext>;
     private fsapiAdapter: FSAPIStorageEventManagerAdapter;
 
     constructor(
         rootHandle: FileSystemDirectoryHandle,
-        core: LiveSyncBaseCore<ServiceContext, IMinimumLiveSyncCommands>,
+        core: LiveSyncBaseCore<ServiceContext>,
         dependencies: StorageEventManagerBaseDependencies
     ) {
         const adapter = new FSAPIStorageEventManagerAdapter(rootHandle, (message, level, key) =>

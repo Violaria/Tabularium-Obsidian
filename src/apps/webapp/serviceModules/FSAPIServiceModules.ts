@@ -28,7 +28,7 @@ export interface FSAPIServiceModules extends ServiceModules {
  */
 export function initialiseServiceModulesFSAPI(
     rootHandle: FileSystemDirectoryHandle,
-    core: LiveSyncBaseCore<ServiceContext, never>,
+    core: LiveSyncBaseCore<ServiceContext>,
     services: InjectableServiceHub<ServiceContext>
 ): FSAPIServiceModules {
     const storageAccessManager = new StorageAccessManager();

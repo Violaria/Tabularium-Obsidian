@@ -1,3 +1,5 @@
+import type ObsidianLiveSyncPlugin from "@/main";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { computed, reactive, reactiveSource, type ReactiveValue } from "octagonal-wheels/dataobject/reactive";
 import {
     LOG_LEVEL_DEBUG,
@@ -23,7 +25,6 @@ import {
     EVENT_ON_UNRESOLVED_ERROR,
     eventHub,
 } from "@/common/events.ts";
-import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 import { addIcon, debounce, normalizePath, Notice, stringifyYaml, type WorkspaceLeaf } from "@/deps.ts";
 import { LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/logger";
 import { LogPaneView, VIEW_TYPE_LOG } from "./Log/LogPaneView.ts";
@@ -124,7 +125,25 @@ const STATUS_MARKS = {
     hiddenFiles: "H",
     conflicts: "≠",
 } as const;
-export class ModuleLog extends AbstractObsidianModule {
+export class ModuleLog {
+    readonly plugin: ObsidianLiveSyncPlugin;
+    readonly core: LiveSyncCore;
+    private readonly _log: ReturnType<typeof createInstanceLogFunction>;
+    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+        this.plugin = plugin;
+        this.core = core;
+        this._log = createInstanceLogFunction("ModuleLog", core.services.API);
+    }
+    get app() {
+        return this.plugin.app;
+    }
+    get services() {
+        return this.core.services;
+    }
+    get settings() {
+        return this.core.services.setting.settings;
+    }
+
     statusBar?: HTMLElement;
 
     statusDiv?: HTMLElement;
@@ -438,18 +457,18 @@ export class ModuleLog extends AbstractObsidianModule {
         <path d="m106 346v44h70v-44zm45 16h-20v-8h20z"/>
        </g>`
         );
-        this.addRibbonIcon("view-log", $msg("moduleLog.showLog"), () => {
+        this.services.API.addRibbonIcon("view-log", $msg("moduleLog.showLog"), () => {
             void this.services.API.showWindow(VIEW_TYPE_LOG);
         }).addClass("livesync-ribbon-showlog");
 
-        this.addCommand({
+        this.services.API.addCommand({
             id: "view-log",
             name: $msg("Show log"),
             callback: () => {
                 void this.services.API.showWindow(VIEW_TYPE_LOG);
             },
         });
-        this.addCommand({
+        this.services.API.addCommand({
             id: "dump-debug-info",
             name: $msg("Generate full report for opening the issue with debug info"),
             callback: async () => {
@@ -468,7 +487,7 @@ ${stringifyYaml(info)}
                 }
             },
         });
-        this.registerView(VIEW_TYPE_LOG, (leaf: WorkspaceLeaf) => new LogPaneView(leaf, this.plugin));
+        this.services.API.registerWindow(VIEW_TYPE_LOG, (leaf: WorkspaceLeaf) => new LogPaneView(leaf, this.plugin));
         return Promise.resolve(true);
     }
     private _everyOnloadAfterLoadSettings(): Promise<boolean> {
@@ -610,11 +629,19 @@ ${stringifyYaml(info)}
             }
         }
     }
-    override onBindFunction(core: LiveSyncCore, services: typeof core.services): void {
+    install(): void {
+        const core = this.core;
+        const services = core.services;
         services.API.addLog.setHandler(globalLogFunction);
         services.appLifecycle.onInitialise.addHandler(this._everyOnloadStart.bind(this));
         services.appLifecycle.onSettingLoaded.addHandler(this._everyOnloadAfterLoadSettings.bind(this));
         services.appLifecycle.onLoaded.addHandler(this._everyOnload.bind(this));
         services.appLifecycle.onBeforeUnload.addHandler(this._allStartOnUnload.bind(this));
     }
+}
+
+export function installLog(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    const component = new ModuleLog(plugin, core);
+    component.install();
+    return component;
 }

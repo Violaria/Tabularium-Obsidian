@@ -2,14 +2,11 @@ import { LOG_LEVEL_URGENT } from "octagonal-wheels/common/logger";
 import { getLanguage, Notice, Plugin, type App, type PluginManifest } from "./deps";
 import { setGetLanguage } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 setGetLanguage(getLanguage);
-import { LiveSyncCommands } from "./features/LiveSyncCommands.ts";
-// import { ModuleDev } from "./modules/extras/ModuleDev.ts";
-
-import { ModuleLog } from "./modules/features/ModuleLog.ts";
-import { ModuleObsidianEvents } from "./modules/essentialObsidian/ModuleObsidianEvents.ts";
-import { ModuleObsidianSettingDialogue } from "./modules/features/ModuleObsidianSettingTab.ts";
-import { ModuleObsidianDocumentHistory } from "./modules/features/ModuleObsidianDocumentHistory.ts";
-import { ModuleObsidianGlobalHistory } from "./modules/features/ModuleGlobalHistory.ts";
+import { installLog } from "./modules/features/ModuleLog.ts";
+import { installObsidianEvents } from "./modules/essentialObsidian/ModuleObsidianEvents.ts";
+import { installSettingTab } from "./modules/features/ModuleObsidianSettingTab.ts";
+import { installDocumentHistory } from "./modules/features/ModuleObsidianDocumentHistory.ts";
+import { installGlobalHistory } from "./modules/features/ModuleGlobalHistory.ts";
 import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import { ObsidianServiceHub } from "./modules/services/ObsidianServiceHub.ts";
 import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
@@ -22,7 +19,7 @@ import { StorageEventManagerObsidian } from "./managers/StorageEventManagerObsid
 import type { ServiceModules } from "./types.ts";
 import { setNoticeClass } from "@tabularium/sync-core/compat/mock_and_interop/wrapper";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
-import { LiveSyncBaseCore } from "./LiveSyncBaseCore.ts";
+import { createCore, type LiveSyncBaseCore } from "./LiveSyncBaseCore.ts";
 import { enableI18nFeature } from "./serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import { useRedFlagFeatures } from "./serviceFeatures/redFlag.ts";
@@ -46,7 +43,7 @@ import { installLiveSyncPause, type LiveSyncPause } from "./features/tabularium/
 import { installNamespaceMigration } from "./features/tabularium/NamespaceMigration.ts";
 import { installLinkRepair, type TabulariumLinkRepair } from "./features/tabularium/LinkRepair.ts";
 import { installEditorMenus, type TabulariumEditorMenus } from "./features/tabularium/EditorMenus.ts";
-export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
+export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext>;
 export default class ObsidianLiveSyncPlugin extends Plugin {
     core: LiveSyncCore;
     sorting?: TabulariumSorting;
@@ -61,7 +58,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
      * Initialise service modules.
      */
     private initialiseServiceModules(
-        core: LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>,
+        core: LiveSyncBaseCore<ObsidianServiceContext>,
         services: InjectableServiceHub<ObsidianServiceContext>
     ): ServiceModules {
         const storageAccessManager = new StorageAccessManager();
@@ -154,27 +151,10 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
 
         const serviceHub = new ObsidianServiceHub(this);
 
-        this.core = new LiveSyncBaseCore(
-            serviceHub,
-            (core, serviceHub) => {
-                return this.initialiseServiceModules(core, serviceHub);
-            },
-            (core) => {
-                const extraModules = [
-                    new ModuleObsidianEvents(this, core),
-                    new ModuleObsidianSettingDialogue(this, core),
-                    new ModuleLog(this, core),
-                    new ModuleObsidianDocumentHistory(this, core),
-                    new ModuleObsidianGlobalHistory(this, core),
-                    // new ModuleDev(this, core),
-                ];
-                return extraModules;
-            },
-            (core) => {
-                // Hidden-file and customisation sync are off on a Tabularium connection, so their add-ons are not loaded.
-                return [];
-            },
-            (core) => {
+        this.core = createCore({
+            hub: serviceHub,
+            serviceModules: (core, serviceHub) => this.initialiseServiceModules(core, serviceHub),
+            features: (core) => {
                 //TODO Fix: useXXXX
                 const featuresInitialiser = enableI18nFeature;
                 const curriedFeature = () => featuresInitialiser(core);
@@ -209,8 +189,15 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                     inviteToOnboarding: () => this.tabularium!.invite(),
                     waitForCompatibilityReview: () => compatibilityReview.openReview(),
                 });
-            }
-        );
+            },
+            components: (core) => {
+                installObsidianEvents(this, core);
+                installSettingTab(this, core);
+                installLog(this, core);
+                installDocumentHistory(this, core);
+                installGlobalHistory(this, core);
+            },
+        });
     }
 
     private async _startUp() {

@@ -49,7 +49,7 @@ export interface CLIOptions {
 export interface CLICommandContext {
     databasePath: string;
     vaultPath: string;
-    core: LiveSyncBaseCore<NodeServiceContext, never>;
+    core: LiveSyncBaseCore<NodeServiceContext>;
     /** Host-composition view used only to coordinate daemon-owned recurring work. */
     replicationScheduling: ReplicationSchedulingControl;
     settingsPath: string;

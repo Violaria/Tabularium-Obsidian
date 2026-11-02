@@ -2,7 +2,7 @@
  * Read-only LiveSync runtime for the web notes page: the upstream core with an OPFS directory as its vault.
  * Settings live in memory only, so the passphrase never reaches browser storage.
  */
-import { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import { createCore, type LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
@@ -96,7 +96,7 @@ export async function clearLocalVault(userId: string, vaultId: string) {
 }
 
 export class NotesRuntime {
-    private core?: LiveSyncBaseCore<ServiceContext, never>;
+    private core?: LiveSyncBaseCore<ServiceContext>;
     private modules?: FSAPIServiceModules;
     /** The local database's change feed, cancelled when the vault closes. */
     private changes?: { cancel(): void };
@@ -156,13 +156,11 @@ export class NotesRuntime {
             },
             restart: { schedule: () => this.events.restartRequested() },
         });
-        this.core = new LiveSyncBaseCore<ServiceContext, never>(
+        this.core = createCore<ServiceContext>({
             hub,
-            (core, serviceHub) => (this.modules = initialiseServiceModulesFSAPI(root, core, serviceHub)),
-            () => [],
-            () => [] as never[],
-            (core) => useRemoteConfiguration(core)
-        );
+            serviceModules: (core, serviceHub) => (this.modules = initialiseServiceModulesFSAPI(root, core, serviceHub)),
+            features: (core) => useRemoteConfiguration(core),
+        });
         const { services, serviceModules } = this.core;
         if (!(await services.control.onLoad())) throw new Error(t("notes.coreFailed"));
         await services.control.onReady();

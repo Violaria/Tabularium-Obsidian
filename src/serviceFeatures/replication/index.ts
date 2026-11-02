@@ -3,7 +3,7 @@ import { clearHandlers } from "@tabularium/sync-core/compat/replication/SyncPara
 import { UnresolvedErrorManager } from "@tabularium/sync-core/compat/services/base/UnresolvedErrorManager";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { fireAndForget } from "octagonal-wheels/promises";
-import type { IMinimumLiveSyncCommands, LiveSyncBaseCore } from "@/LiveSyncBaseCore";
+import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import { EVENT_APPLICATION_READY } from "@/common/events";
 import { createAutomaticReplicationTriggers } from "./automaticTriggers";
 import { createCentralCompatibilityRecovery } from "./centralCompatibilityRecovery";
@@ -25,11 +25,11 @@ function ownsLocalApplicationActivity(value: object): value is LocalApplicationA
  * compatibility recovery around the existing typed Services.
  *
  * Registration order is observable for equal-priority handlers. The host must
- * call this after host serviceFeatures and add-ons are composed, but before
+ * call this after host serviceFeatures are composed, but before
  * legacy modules are bound, so lifecycle handlers observe the required order.
  */
-export function useReplicationFeature<TContext extends ServiceContext, TCommands extends IMinimumLiveSyncCommands>(
-    core: LiveSyncBaseCore<TContext, TCommands>
+export function useReplicationFeature<TContext extends ServiceContext>(
+    core: LiveSyncBaseCore<TContext>
 ): void {
     const { services } = core;
     // Obsidian adds an application-activity owner to its ReplicatorService.

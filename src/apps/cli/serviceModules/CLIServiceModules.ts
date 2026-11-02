@@ -23,7 +23,7 @@ import { createFileReflectionProvenance } from "@/serviceModules/FileReflectionP
  */
 export function initialiseServiceModulesCLI(
     basePath: string,
-    core: LiveSyncBaseCore<ServiceContext, never>,
+    core: LiveSyncBaseCore<ServiceContext>,
     services: InjectableServiceHub<ServiceContext>,
     ignoreRules?: IgnoreRules,
     watchEnabled: boolean = false

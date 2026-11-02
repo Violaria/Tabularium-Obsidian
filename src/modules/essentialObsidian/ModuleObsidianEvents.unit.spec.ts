@@ -55,6 +55,8 @@ function setup(opts: SetupOptions) {
     } as any;
     Object.defineProperty(core, "services", { get: () => core._services });
 
+    // The components read the settings and the local database through the services, as the core's getters did.
+    Object.defineProperty(core._services.setting, "settings", { get: () => core.settings, set: (value) => (core.settings = value) });
     const module = new ModuleObsidianEvents({} as any, core);
     module.isLastHidden = opts.isLastHidden ?? false;
     module.hasFocus = opts.hasFocus ?? true;

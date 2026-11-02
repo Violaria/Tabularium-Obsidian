@@ -70,6 +70,9 @@ function createModule(settingsOverride: Partial<typeof DEFAULT_SETTINGS> = {}) {
         },
     });
 
+    // The components read the settings and the local database through the services, as the core's getters did.
+    Object.defineProperty(core._services.setting, "settings", { get: () => core.settings, set: (value) => (core.settings = value) });
+    core._services.database = { localDatabase: core.localDatabase };
     const module = new ModuleResolvingMismatchedTweaks(core);
     return { module, core, askSelectStringDialogue, applyPartial, reinitialise };
 }
