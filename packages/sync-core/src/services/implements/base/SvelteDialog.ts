@@ -39,7 +39,6 @@ export type DialogControlBase<T, U> = {
     closeDialog: () => void;
 } & HasSetResult<T> &
     HasGetInitialData<U>;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- base type.
 export type DialogHostProps<T = any, U = any> = DialogSvelteComponentBaseProps<T, U> & {
     /**
      * The Svelte component to mount inside the dialog host
@@ -51,7 +50,6 @@ export type DialogHostProps<T = any, U = any> = DialogSvelteComponentBaseProps<T
      */
     onSetupContext?(props: DialogSvelteComponentBaseProps<T, U>): void;
 };
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- base type.
 export type DialogContext<C extends ServiceContext = ServiceContext, T = any, U = any> = DialogControlBase<T, U> & {
     context: C;
     services: SvelteDialogManagerDependencies<C>;
@@ -154,7 +152,7 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
         override onOpen() {
             const { contentEl } = this;
             contentEl.replaceChildren();
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
+            // eslint-disable-next-line @typescript-eslint/no-this-alias -- the dialogue object is handed to the Svelte component as a plain value.
             const dialog = this;
 
             if (this.resultPromiseWithResolvers) {

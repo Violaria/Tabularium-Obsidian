@@ -18,7 +18,11 @@ export default defineConfig(
         "**/*.svelte",
         "**/svelte.config.js",
         "**/*.unit.spec.ts",
+        "**/*.test.ts",
+        "**/*.spec.ts",
         "**/test/**",
+        "packages/sync-core/_tools/**",
+        "packages/sync-core/vitest.config.ts",
         "src/apps/_test/**",
         "src/apps/cli/testdeno/**",
         "src/apps/notes/vite.config.ts",
@@ -41,6 +45,7 @@ export default defineConfig(
                     "./src/apps/cli/tsconfig.json",
                     "./src/apps/webapp/tsconfig.json",
                     "./src/apps/notes/tsconfig.json",
+                    "./packages/sync-core/tsconfig.json",
                 ],
                 tsconfigRootDir: import.meta.dirname,
             },
@@ -65,6 +70,17 @@ export default defineConfig(
             "@typescript-eslint/no-redundant-type-constituents": "warn",
             "@typescript-eslint/no-unnecessary-type-assertion": "warn",
         },
+    },
+    {
+        // TypeScript checks names, including the PouchDB and NodeJS namespaces that no-undef cannot see.
+        files: ["packages/sync-core/src/**/*.ts"],
+        rules: { "no-undef": "off" },
+    },
+    {
+        // The one place that reaches the global object outside a browser: in Node.js there is no window, and the CLI
+        // adds to the global object later, so a copy would not do. The directory review lists it as a warning.
+        files: ["packages/sync-core/src/common/coreEnvFunctions.ts"],
+        rules: { "obsidianmd/no-global-this": "off" },
     },
     {
         files: ["src/apps/**/*.{ts,js,mjs}"],

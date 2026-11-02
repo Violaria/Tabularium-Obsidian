@@ -9,6 +9,7 @@ import { formatDate, serverError, t } from "../../../../server/ui/i18n";
 import { copyCode, enhance } from "./markdown";
 import { renderDiagrams } from "./diagrams";
 import { paintIcon } from "../../../../server/ui/mark";
+import { element } from "./dom";
 
 // The page comes in its owner's colour theme; a custom theme's colours are set here, as the page allows no inline styles.
 {
@@ -64,7 +65,7 @@ async function refused(response: Response, path = ""): Promise<never> {
     throw new Stop();
 }
 async function request(path = "", headers: Record<string, string> = {}) {
-    const response = await fetch(api + path, { headers: { ...headers, ...(access ? { "x-share-access": access } : {}) }, referrerPolicy: "no-referrer" });
+    const response = await window.fetch(api + path, { headers: { ...headers, ...(access ? { "x-share-access": access } : {}) }, referrerPolicy: "no-referrer" });
     return response.ok ? response : refused(response, path);
 }
 async function bytes(name: string) {
@@ -75,7 +76,7 @@ async function bytes(name: string) {
 /** Asks for the share's password; resolves with what was typed. */
 function askPassword(error = "") {
     return new Promise<string>((resolve) => {
-        const form = document.createElement("form");
+        const form = element("form");
         form.className = "stack";
         setMarkup(form, `${error ? `<p class="notice error" role="alert">${escapeXml(error)}</p>` : ""}<label><span>${escapeXml(t("viewer.password"))}</span><input type="password" name="password" required autocomplete="off"></label><button class="primary" type="submit">${escapeXml(t("viewer.open"))}</button>`);
         form.addEventListener("submit", (event) => {
@@ -126,7 +127,7 @@ async function openPublicWithPassword() {
     for (;;) {
         const password = await askPassword(error);
         notice(t("viewer.loading"));
-        const response = await fetch(api, { headers: { "x-share-password": encodeURIComponent(password) }, referrerPolicy: "no-referrer" });
+        const response = await window.fetch(api, { headers: { "x-share-password": encodeURIComponent(password) }, referrerPolicy: "no-referrer" });
         if (response.status === 403) {
             error = t("viewer.wrongPassword");
             continue;
@@ -269,7 +270,7 @@ function layout() {
         else if (target.dataset.file) {
             const id = target.dataset.file;
             void blobUrl(id).then((url) => {
-                const link = document.createElement("a");
+                const link = element("a");
                 link.href = url;
                 link.download = manifest.files[id].name;
                 link.click();
@@ -290,7 +291,7 @@ function failed(error: unknown) {
 void (async () => {
     try {
         notice(t("viewer.loading"));
-        const first = await fetch(api, { referrerPolicy: "no-referrer" });
+        const first = await window.fetch(api, { referrerPolicy: "no-referrer" });
         if (first.status === 401) await openPublicWithPassword();
         else if (!first.ok) await refused(first);
         else await open((await first.json()) as Meta);

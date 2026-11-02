@@ -7,7 +7,7 @@
         "allowJs": true,
         "noImplicitAny": true,
         "moduleResolution": "bundler",
-        "types": ["svelte", "node"],
+        "types": ["svelte", "node", "pouchdb-replication", "pouchdb-adapter-http", "pouchdb-mapreduce"],
         // "importsNotUsedAsValues": "error",
         "importHelpers": false,
         "alwaysStrict": true,
@@ -15,13 +15,16 @@
         "verbatimModuleSyntax": true,
         "noImplicitOverride": true,
         "noEmit": true,
-        "lib": ["es2018", "DOM", "ES5", "ES6", "ES7", "es2019.array", "ES2021.WeakRef", "ES2020.BigInt", "ESNext.Intl"],
+        "lib": ["ES2022", "DOM", "DOM.Iterable", "ESNext.Intl"],
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "@lib/*": ["./packages/sync-core/src/*"]
         }
     },
+    // The sync core declares the untyped PouchDB modules it uses here; it is type-checked from its sources.
+    "files": ["packages/sync-core/src/replication/couchdb/pouchdb-checkpoints.d.ts"],
     "include": ["**/*.ts", "test/**/*.test.ts", "**/*.unit.spec.ts", "**/*.svelte"],
     "exclude": [
         "pouchdb-browser-webpack",

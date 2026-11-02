@@ -520,7 +520,7 @@ function parseStatusSource(source: string): DatabaseSyncStatus {
     for (const candidate of candidates) {
         try {
             const parsed = JSON.parse(candidate) as unknown;
-            if (parsed && typeof parsed === "object") return parsed as DatabaseSyncStatus;
+            if (parsed && typeof parsed === "object") return parsed;
         } catch {
             // Try the final non-blank line when a proxy has returned an NDJSON response.
         }
@@ -915,14 +915,15 @@ export async function fetchChangesForInitialSync(
                     const item = Object.prototype.hasOwnProperty.call(difference, revision.ref.id)
                         ? difference[revision.ref.id]
                         : undefined;
-                    if (item !== undefined && (!isObject(item) || !Array.isArray(item.missing))) {
+                    const missing: unknown = item !== undefined && isObject(item) ? item.missing : undefined;
+                    if (item !== undefined && !Array.isArray(missing)) {
                         throw new StreamingFetchFailure(
                             "protocol",
                             "Fast Fetch received an invalid local revision check.",
                             false
                         );
                     }
-                    const isMissing = item !== undefined && item.missing.includes(revision.ref.rev);
+                    const isMissing = Array.isArray(missing) && missing.includes(revision.ref.rev);
                     if (!isMissing) {
                         settleRevision(revision);
                     } else if (revision.includedDocument) {

@@ -191,7 +191,7 @@ export function copyCode(event: MouseEvent, copied: string) {
     const label = button.textContent;
     void navigator.clipboard.writeText(code).then(() => {
         button.textContent = copied;
-        setTimeout(() => (button.textContent = label), 1500);
+        window.setTimeout(() => (button.textContent = label), 1500);
     });
     return true;
 }

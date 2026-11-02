@@ -16,13 +16,16 @@ enum ConditionType {
     PLATFORM_CASE_SENSITIVE = "platform-case-sensitive",
     REMOTE_CASE_SENSITIVE = "remote-case-sensitive",
 }
+/** A setting value as text for logs and dialogues: strings as they are, everything else as JSON. */
+const shown = (value: unknown): string => (typeof value === "string" ? value : (JSON.stringify(value) ?? "undefined"));
+
 export enum RuleLevel {
     Must,
     Necessary,
     Recommended,
     Optional,
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- TType names the kind of value a rule describes, for readers.
 type BaseRule<TType extends string, TValue> = {
     // type: TType;
     level?: RuleLevel;
@@ -238,13 +241,13 @@ export function checkUnsuitableValues(
         rules: {},
     };
     for (const key in regulation.rules) {
-        if (!regulation.rules.hasOwnProperty(key)) continue;
+        if (!Object.hasOwn(regulation.rules, key)) continue;
         const rule = regulation.rules[key as keyof DoctorCheckSettings];
         if (!rule) continue;
 
         const value = setting[key as keyof DoctorCheckSettings];
         if (rule.value === value) {
-            Logger(`Rule satisfied: ${key} is ${value}`);
+            Logger(`Rule satisfied: ${key} is ${shown(value)}`);
             continue;
         }
         if (typeof value == "number" && "min" in rule && "max" in rule) {
@@ -256,12 +259,12 @@ export function checkUnsuitableValues(
             }
         }
         if (rule.detectionFunc && !rule.detectionFunc(setting)) {
-            Logger(`Rule condition satisfied: ${key} is ${value}, and detection function returned false`);
+            Logger(`Rule condition satisfied: ${key} is ${shown(value)}, and detection function returned false`);
             continue;
         }
         //@ts-ignore
         result.rules[key as keyof DoctorCheckSettings] = rule;
-        Logger(`Rule violation: ${key} is ${value} but should be ${rule.value}`);
+        Logger(`Rule violation: ${key} is ${shown(value)} but should be ${shown(rule.value)}`);
     }
     return result;
 }
@@ -410,7 +413,7 @@ export async function performDoctorConsultation(
             const ret = await env.confirm.askSelectStringDialogue(
                 translate("Doctor.Dialogue.MainFix", {
                     name: getConfName(key as AllSettingItemKey, translate),
-                    current: `${settings[key]}`,
+                    current: shown(settings[key]),
                     reason: value.reasonFunc?.(settings, translate) ?? value.reason ?? " N/A ",
                     ideal: `${value.valueDisplayFunc ? value.valueDisplayFunc(settings) : value.value}`,
                     //@ts-ignore

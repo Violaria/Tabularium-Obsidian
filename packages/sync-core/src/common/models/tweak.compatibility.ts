@@ -51,7 +51,7 @@ function snapshotTweakValues(values: Readonly<TweakValues>): Readonly<TweakValue
     for (const key of Object.keys(TweakValuesTemplate) as (keyof TweakValues)[]) {
         if (hasOwn(values, key)) snapshot[key] = values[key];
     }
-    return Object.freeze(snapshot) as Readonly<TweakValues>;
+    return Object.freeze(snapshot);
 }
 
 function assessedValue(

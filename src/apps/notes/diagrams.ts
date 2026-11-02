@@ -1,6 +1,7 @@
 // Mermaid diagrams in notes and Tabularius answers, drawn like Obsidian draws them. Mermaid is large, so it is loaded
 // only when a page has a diagram. A diagram that does not parse keeps its source, with Mermaid's message under it.
 import { renderMath } from "./math";
+import { element } from "./dom";
 
 let counter = 0;
 let loading: Promise<typeof import("mermaid").default> | undefined;
@@ -28,7 +29,7 @@ export async function renderDiagrams(root: ParentNode) {
             block.classList.add("drawn");
         } catch (error) {
             document.getElementById(`dmermaid-${counter}`)?.remove();
-            const note = document.createElement("figcaption");
+            const note = element("figcaption");
             note.className = "mermaid-error";
             note.textContent = error instanceof Error ? error.message : String(error);
             block.append(note);

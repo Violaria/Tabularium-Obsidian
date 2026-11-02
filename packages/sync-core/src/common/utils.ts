@@ -6,8 +6,6 @@ import {
     type AnyEntry,
     type DatabaseEntry,
     type EntryLeaf,
-    PREFIX_ENCRYPTED_CHUNK,
-    PREFIX_OBFUSCATED,
     SYNCINFO_ID,
     type SyncInfo,
     type LoadedEntry,
@@ -23,6 +21,7 @@ import {
     type BucketSyncSetting,
     type CouchDBConnection,
     type EncryptionSettings,
+    IDPrefixes,
 } from "./types.ts";
 import { normaliseP2PConnectionPath, normaliseP2PMaxWirePayloadBytes } from "./models/setting.p2p.ts";
 import { isErrorOfMissingDoc } from "@lib/pouchdb/utils_couchdb.ts";
@@ -63,8 +62,14 @@ export function resolveWithIgnoreKnownError<T>(p: Promise<T>, def: T): Promise<T
 // Referenced below
 // https://zenn.dev/sora_kumo/articles/539d7f6e7f3c63
 export const Parallels = (ps = new Set<Promise<unknown>>()) => ({
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    add: (p: Promise<unknown>) => ps.add(!!p.then(() => ps.delete(p)).catch(() => ps.delete(p)) && p),
+    add: (p: Promise<unknown>) => {
+        ps.add(p);
+        void p.then(
+            () => ps.delete(p),
+            () => ps.delete(p)
+        );
+        return ps;
+    },
     wait: (limit: number) => ps.size >= limit && Promise.race(ps),
     all: () => Promise.all(ps),
 });
@@ -156,14 +161,14 @@ export async function isDocContentSame(
 }
 
 export function isObfuscatedEntry(doc: DatabaseEntry): doc is AnyEntry {
-    if (doc._id.startsWith(PREFIX_OBFUSCATED)) {
+    if (doc._id.startsWith(IDPrefixes.Obfuscated)) {
         return true;
     }
     return false;
 }
 
 export function isEncryptedChunkEntry(doc: DatabaseEntry): doc is EntryLeaf {
-    if (doc._id.startsWith(PREFIX_ENCRYPTED_CHUNK)) {
+    if (doc._id.startsWith(IDPrefixes.EncryptedChunk)) {
         return true;
     }
     return false;

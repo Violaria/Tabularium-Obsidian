@@ -36,7 +36,7 @@ export async function clearAccount(userId: string) {
         await clearLocalVault(userId, vaultId);
         await deleteRecord(record.key);
     }
-    localStorage.removeItem("tabularium-notes:last-user");
+    window.localStorage.removeItem("tabularium-notes:last-user");
 }
 /** Leaving the module: the component stops replication and closes the local database before it goes. */
 export async function unmount() {

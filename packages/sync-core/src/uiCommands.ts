@@ -11,7 +11,7 @@ export interface UICommand<Request, Result> {
 
 /** Declare a command without registering it in any global state. */
 export function declareUICommand<Request, Result>(id: string): UICommand<Request, Result> {
-    return Object.freeze({ id }) as UICommand<Request, Result>;
+    return Object.freeze({ id });
 }
 
 type RegisteredCommand = {

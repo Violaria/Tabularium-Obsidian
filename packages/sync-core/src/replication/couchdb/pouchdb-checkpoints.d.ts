@@ -14,7 +14,7 @@ declare module "pouchdb-checkpointer" {
     interface CheckpointEndpoint {
         adapter?: string;
         get(id: string): Promise<unknown>;
-        put(document: any): Promise<unknown>;
+        put(document: unknown): Promise<unknown>;
     }
     export default class Checkpointer {
         constructor(

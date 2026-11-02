@@ -241,7 +241,7 @@ export abstract class ServiceFileHandlerBase
         file: UXFileInfo,
         preferredPath?: FilePathWithPrefix
     ): Promise<string | undefined> {
-        const path = (preferredPath ?? file.path) as FilePathWithPrefix;
+        const path = (preferredPath ?? file.path);
         const recorded =
             (await this.getProvenance(path)) ??
             (preferredPath && preferredPath !== file.path ? await this.getProvenance(file.path) : undefined);
@@ -283,7 +283,7 @@ export abstract class ServiceFileHandlerBase
         | { kind: "matching-leaf"; revision?: string }
         | { kind: "unknown" }
     > {
-        const path = (preferredPath ?? file.path) as FilePathWithPrefix;
+        const path = (preferredPath ?? file.path);
         const recordedRevision = recorded?.revision;
         if (recordedRevision) {
             if (hasContentHash(recorded) && recorded.contentSize === file.body.size &&
@@ -599,7 +599,7 @@ export abstract class ServiceFileHandlerBase
         // Recovery calls revalidate potentially stale observations below;
         // ordinary events use one content read.
         const observedProvenance = await this.readProvenanceSnapshot(
-            (preferredBasePath ?? file.path) as FilePathWithPrefix, retryIfStorageChanges
+            (preferredBasePath ?? file.path), retryIfStorageChanges
         );
         const readFile = await this.readFileFromStub(file);
         // First, check the file on the database
@@ -639,7 +639,7 @@ export abstract class ServiceFileHandlerBase
                 } else if (!currentEntry || currentEntry.deleted || currentEntry._deleted ||
                     classification.revision !== currentEntry._rev) {
                     if (!currentEntry) return false;
-                    return await this.dbToStorageCore(file.path as FilePathWithPrefix, file);
+                    return await this.dbToStorageCore(file.path, file);
                 } else {
                     if (upgradeCurrentRecord && snapshotMatches) {
                         await this.setProvenance(file.path, classification.revision, readFile.stat.mtime, readFile.body, evidence);
@@ -714,7 +714,7 @@ export abstract class ServiceFileHandlerBase
 
         if (!currentEntry || currentEntry.deleted || currentEntry._deleted) {
             // If the file is not exist on the database, then it should be created.
-            const storedRevision = await this.db.storeWithBaseRevision(readFile, entry && entry._rev, true);
+            const storedRevision = await this.db.storeWithBaseRevision(readFile, entry ? entry._rev : undefined, true);
             if (storedRevision === false) return false;
             if (preferredBasePath && preferredBasePath !== file.path) {
                 await this.deleteProvenance(preferredBasePath);
@@ -768,7 +768,8 @@ export abstract class ServiceFileHandlerBase
 
     /** Complete a validated storage deletion when its database effect is already represented. */
     private async deleteFileFromDBIfPresent(info: UXFileInfoStub | UXInternalFileInfoStub | FilePath): Promise<boolean> {
-        const entry = await this.db.fetchEntryMeta(info, undefined, true);
+        // Internal-file stubs and plain paths name a database entry the same way as storage stubs do.
+        const entry = await this.db.fetchEntryMeta(info as UXFileInfoStub | FilePathWithPrefix, undefined, true);
         if (!entry || entry.deleted || entry._deleted) return true;
         return await this.deleteFileFromDBCore(info);
     }
@@ -791,7 +792,7 @@ export abstract class ServiceFileHandlerBase
                 this._log(`File ${tryGetFilePath(info)} is not exist on the storage`, LOG_LEVEL_VERBOSE);
                 return false;
             }
-            const entryByPath = await this.db.fetchEntry(path as FilePathWithPrefix, undefined, true, true);
+            const entryByPath = await this.db.fetchEntry(path, undefined, true, true);
             if (!entryByPath || entryByPath.deleted || entryByPath._deleted) {
                 this._log(
                     `File ${path} is not exist on the storage nor the database (or already deleted)`,
@@ -870,7 +871,7 @@ export abstract class ServiceFileHandlerBase
 
     async renameFileInDB(info: UXFileInfoStub | UXFileInfo, oldPath: FilePath | FilePathWithPrefix): Promise<boolean> {
         const newPath = getStoragePathFromUXFileInfo(info);
-        return await this.serializedByFileEventPaths([oldPath as FilePathWithPrefix, newPath], () =>
+        return await this.serializedByFileEventPaths([oldPath, newPath], () =>
             this.renameFileInDBCore(info, oldPath)
         );
     }
@@ -894,7 +895,7 @@ export abstract class ServiceFileHandlerBase
         if (oldDocumentId === newDocumentId) {
             this._log(`Updating the stored path for case-only rename: ${oldPath} -> ${newPath}`, LOG_LEVEL_VERBOSE);
             return await this.storeFileToDBFromRevision(
-                info, true, false, oldPath as FilePathWithPrefix, retryIfStorageChanges
+                info, true, false, oldPath, retryIfStorageChanges
             );
         }
 
@@ -918,10 +919,10 @@ export abstract class ServiceFileHandlerBase
 
         const oldConflicts = await this.db.getConflictedRevs(oldPath);
         if (oldConflicts.length > 0) {
-            let baseRevision = (await this.getProvenance(oldPath as FilePathWithPrefix))?.revision;
+            let baseRevision = (await this.getProvenance(oldPath))?.revision;
             if (!baseRevision) {
                 const readFile = await this.readFileFromStub(info);
-                const revisions = await this.db.findContentRevisions(oldPath as FilePathWithPrefix, readFile.body);
+                const revisions = await this.db.findContentRevisions(oldPath, readFile.body);
                 baseRevision = revisions.length === 1 ? revisions[0] : undefined;
             }
             if (!baseRevision) {
@@ -929,20 +930,20 @@ export abstract class ServiceFileHandlerBase
                     `Renamed ${oldPath} to ${newPath}, but preserved every conflicted source branch because the displayed source revision is unknown`,
                     LOG_LEVEL_NOTICE
                 );
-                await this.queueConflictCheckFor(oldPath as FilePathWithPrefix);
+                await this.queueConflictCheckFor(oldPath);
                 return true;
             }
             const storedRevision = await this.db.storeDeletionWithBaseRevision(
-                oldPath as FilePathWithPrefix,
+                oldPath,
                 baseRevision
             );
             if (storedRevision === false) return false;
-            await this.deleteProvenance(oldPath as FilePathWithPrefix);
-            await this.queueConflictCheckFor(oldPath as FilePathWithPrefix);
+            await this.deleteProvenance(oldPath);
+            await this.queueConflictCheckFor(oldPath);
             return true;
         }
-        const deleted = await this.db.delete(oldPath as FilePathWithPrefix);
-        if (deleted) await this.deleteProvenance(oldPath as FilePathWithPrefix);
+        const deleted = await this.db.delete(oldPath);
+        if (deleted) await this.deleteProvenance(oldPath);
         return deleted;
     }
 

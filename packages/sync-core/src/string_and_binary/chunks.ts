@@ -71,12 +71,10 @@ function* pickPiece(leftData: string[], minimumChunkSize: number): Generator<str
 
 const charNewLine = "\n".charCodeAt(0);
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const segmenter =
     "Segmenter" in Intl
         ? wrapByDefault(
               // @ts-ignore We have checked Intl existence above.
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
               () => new Intl.Segmenter(compatGlobal.navigator.language, { granularity: "sentence" }),
               (err: Error): undefined => {
                   Logger(`Failed to create Intl.Segmenter: ${err.message}`, LOG_LEVEL_VERBOSE);
@@ -346,7 +344,7 @@ export async function splitPieces2V2(
     useSegmenter?: boolean
 ) {
     if (dataSrc.size == 0) {
-        // eslint-disable-next-line require-yield
+        // eslint-disable-next-line require-yield -- an empty generator: it yields nothing by design.
         return function* noItems(): Generator<string> {
             return;
         };

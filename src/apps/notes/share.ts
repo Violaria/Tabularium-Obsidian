@@ -3,7 +3,7 @@ import { csrfToken } from "./api";
 import type { ShareApi, ShareList, ShareView } from "@/features/tabularium/share/sharing";
 
 async function call<T>(path: string, method = "GET", body?: unknown, binary?: Uint8Array): Promise<T> {
-    const response = await fetch(`/api/v1/shares${path}`, {
+    const response = await window.fetch(`/api/v1/shares${path}`, {
         method,
         credentials: "same-origin",
         headers: { "content-type": binary ? "application/octet-stream" : "application/json", "x-csrf-token": csrfToken() },

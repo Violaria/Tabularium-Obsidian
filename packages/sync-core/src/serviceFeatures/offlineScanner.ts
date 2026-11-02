@@ -390,7 +390,7 @@ export async function inspectMetadataDocumentIdentities(
 function cloneEden(eden: MetaEntry["eden"]): MetaEntry["eden"] {
     return Object.fromEntries(
         Object.entries(eden ?? {}).map(([id, chunk]) => [id, { data: chunk.data, epoch: chunk.epoch }])
-    ) as MetaEntry["eden"];
+    );
 }
 
 function createReaddressedMetadata(source: MetaEntry, expectedDocumentId: DocumentID): MetaEntry {
@@ -528,7 +528,7 @@ export async function repairMetadataDocumentIdentity(
                     ...baseResult,
                     targetCreated,
                     status: MetadataDocumentRepairResults.FAILED,
-                    message: error instanceof Error ? error.message : `${error}`,
+                    message: error instanceof Error ? error.message : JSON.stringify(error),
                 };
             }
         }
@@ -1103,7 +1103,7 @@ async function processFilePair(
                     throw new Error(`Missing storage file for ${path}`);
                 }
                 return await updateToDatabase(host, log, LOG_LEVEL_INFO, file);
-            case "update-storage":
+            case "update-storage": {
                 if (!doc) {
                     throw new Error(`Missing database entry for ${path}`);
                 }
@@ -1112,7 +1112,8 @@ async function processFilePair(
                     updateFileMTimeInMap(host, fileMapKey, doc.mtime);
                 }
                 return updateStorageResult;
-            case "sync-newer":
+            }
+            case "sync-newer": {
                 if (!file || !doc) {
                     throw new Error(`Cannot compare freshness for ${path}`);
                 }
@@ -1121,6 +1122,7 @@ async function processFilePair(
                     updateFileMTimeInMap(host, fileMapKey, Math.max(file.stat.mtime, doc.mtime));
                 }
                 return syncResult;
+            }
             case "delete-local":
                 if (!file) {
                     log(`DELETE LOCAL: ${path} is already absent from storage`, LOG_LEVEL_VERBOSE);
@@ -1213,7 +1215,7 @@ export async function synchroniseAllFilesBetweenDBandStorage(
     for await (const { path, result } of withConcurrency(
         pairs,
         async (e) => {
-            const path = e.file?.path ?? getPathFromEntry(host, e.doc);
+            const path = e.file !== undefined ? e.file.path : getPathFromEntry(host, e.doc);
             try {
                 return { path, result: await processFilePair(host, log, e, options) };
             } catch (ex) {

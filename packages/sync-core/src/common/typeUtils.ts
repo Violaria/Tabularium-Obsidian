@@ -40,9 +40,9 @@ export function getPathFromUXFileInfo(file: UXFileInfoStub | string | FilePathWi
     if (typeof file == "string") return file as FilePathWithPrefix;
     return file.path;
 }
-export function getStoragePathFromUXFileInfo(file: UXFileInfoStub | string | FilePathWithPrefix) {
-    if (typeof file == "string") return stripAllPrefixes(file as FilePathWithPrefix);
-    return stripAllPrefixes(file.path);
+/** The storage path of a file given as a path or as anything with one (stubs, file infos). */
+export function getStoragePathFromUXFileInfo(file: { readonly path: string } | string) {
+    return stripAllPrefixes((typeof file == "string" ? file : file.path) as FilePathWithPrefix);
 }
 export function getDatabasePathFromUXFileInfo(file: UXFileInfoStub | string | FilePathWithPrefix) {
     if (typeof file == "string" && file.startsWith(ICXHeader)) return file as FilePathWithPrefix;

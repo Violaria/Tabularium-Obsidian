@@ -66,12 +66,9 @@ export interface ICommandCompat {
     id: string;
     name: string;
     icon?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
     callback?: () => any;
     checkCallback?: (checking: boolean) => boolean | void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
     editorCallback?: (editor: any, ctx: any) => any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
     editorCheckCallback?: (checking: any, editor: any, ctx: any) => boolean | void;
 }
 

@@ -397,6 +397,7 @@ export class LiveSyncLocalDB {
                 }
             }
             since = changes.results[changes.results.length - 1].seq;
+            // eslint-disable-next-line no-constant-condition -- the loop ends by returning once the changes run out.
         } while (true);
         return { used, existing };
     }

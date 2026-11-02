@@ -16,7 +16,7 @@ export class ContentSplitterRabinKarp extends ContentSplitterBase {
     ): Promise<AsyncGenerator<string, void, unknown> | Generator<string, void, unknown>> {
         if (options.useWorker) {
             return (
-                await splitPieces2WorkerRabinKarp(
+                splitPieces2WorkerRabinKarp(
                     options.blob,
                     options.pieceSize,
                     options.plainSplit,

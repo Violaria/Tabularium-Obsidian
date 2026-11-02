@@ -26,7 +26,7 @@ export async function sendToKindle(runtime: NotesRuntime, items: KindleItem[], v
         const texts = { language: language(), contents: t("notes.contents"), missingImage: (name: string) => t("notes.missingImage", { name }) };
         const book = await assembleBook(source, notes, title, texts, item.folder ? item.path : undefined);
         if (book.length > MAX_BOOK_BYTES) throw new Error(`${title}: ${serverError("Request body too large")}`);
-        const response = await fetch("/api/v1/kindle/send", {
+        const response = await window.fetch("/api/v1/kindle/send", {
             method: "POST",
             headers: { authorization, "content-type": "application/epub+zip", "x-tabularium-filename": encodeURIComponent(`${title}.epub`) },
             body: book.buffer as ArrayBuffer,

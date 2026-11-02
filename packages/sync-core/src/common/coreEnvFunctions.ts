@@ -20,8 +20,7 @@ export function getLanguage() {
 export const compatGlobal = (
     typeof window !== "undefined"
         ? window
-        : // compatibility for CLIs, tests, and other non-browser environments.
-          // eslint-disable-next-line obsidianmd/no-global-this
+        : // Node.js (the CLI and tests): its global object, which the CLI also extends (localStorage).
           globalThis
 ) as typeof window;
 

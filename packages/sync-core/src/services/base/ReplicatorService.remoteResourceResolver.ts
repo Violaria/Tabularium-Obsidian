@@ -18,5 +18,5 @@ export async function resolveRemoteResource<TKind extends RemoteResourceKind>(
     if (capability?.kind !== CAPABILITY_SUPPORT_KINDS.SUPPORTED) {
         return undefined;
     }
-    return await capability.run(setting) as RemoteResourceMap[TKind];
+    return await capability.run(setting);
 }

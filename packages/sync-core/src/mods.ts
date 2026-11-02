@@ -5,14 +5,7 @@ export async function getWebCrypto() {
     if (webcrypto) {
         return webcrypto;
     }
-    if (compatGlobal.crypto) {
-        webcrypto = compatGlobal.crypto;
-        return webcrypto;
-    } else {
-        // This is for Node.js.
-        // eslint-disable-next-line import/no-nodejs-modules
-        const module = await import("crypto");
-        webcrypto = module.webcrypto as Crypto;
-        return webcrypto;
-    }
+    // Browsers, Obsidian and Node.js (19 and later) all provide Web Crypto globally.
+    webcrypto = compatGlobal.crypto;
+    return webcrypto;
 }

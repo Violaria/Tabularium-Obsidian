@@ -29,8 +29,8 @@ export interface CreateNodeStandardIoOptions {
  */
 export function createNodeStandardIo(options: CreateNodeStandardIoOptions = {}): StandardIo {
     const stdin = options.stdin ?? (process.stdin as NodeStandardInput);
-    const stdout = options.stdout ?? (process.stdout as NodeStandardOutput);
-    const stderr = options.stderr ?? (process.stderr as NodeStandardOutput);
+    const stdout = options.stdout ?? (process.stdout);
+    const stderr = options.stderr ?? (process.stderr);
 
     return {
         async readStdin(): Promise<string> {

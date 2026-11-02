@@ -45,7 +45,7 @@ export type EncryptHKDFProcessItem = {
 };
 export type ProcessItem = SplitProcessItem | EncryptProcessItem | EncryptHKDFProcessItem;
 
-export const END_OF_DATA = null as null;
+export const END_OF_DATA: null = null;
 export type END_OF_DATA = typeof END_OF_DATA;
 
 export type ResultPayloadBase = {

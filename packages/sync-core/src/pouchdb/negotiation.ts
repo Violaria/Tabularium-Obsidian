@@ -57,7 +57,7 @@ export const bumpRemoteVersion = async (
     for (let attempt = 0; attempt < 4; attempt++) {
         let current: EntryVersionInfo | undefined;
         try {
-            current = (await db.get(VERSIONING_DOCID)) as EntryVersionInfo;
+            current = (await db.get(VERSIONING_DOCID));
         } catch (error) {
             if (!isErrorOfMissingDoc(error)) throw error;
         }

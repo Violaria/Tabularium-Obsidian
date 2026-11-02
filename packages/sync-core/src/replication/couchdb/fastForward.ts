@@ -12,7 +12,7 @@ type CheckpointDocument = PouchDB.Core.ExistingDocument<{
 
 /** Evidence retained only for the currently running, fresh Fast Fetch. */
 export interface InitialFetchFastForward {
-    recordStoredRevisions(revisions: readonly { id: string; rev: string }[]): void;
+    recordStoredRevisions: (revisions: readonly { id: string; rev: string }[]) => void;
     recordCheckpoint(sequence: Sequence): void;
     fastForward(): Promise<boolean>;
 }
@@ -123,7 +123,7 @@ export async function prepareInitialFetchFastForward(
                     if (document._id !== id || document._rev !== expectedRevision) {
                         throw new Error("The initial-fetch checkpoint no longer matches its import.");
                     }
-                    const response = await (database as unknown as PouchDB.Database<{}>).put(document);
+                    const response = await (database as unknown as PouchDB.Database<object>).put(document);
                     expectedRevision = response.rev;
                     return response;
                 },

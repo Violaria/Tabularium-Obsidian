@@ -2,7 +2,6 @@ import { shouldBeIgnored } from "@lib/string_and_binary/path.ts";
 import {
     DEFAULT_SETTINGS,
     LOG_LEVEL_DEBUG,
-    LOG_LEVEL_INFO,
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
     type FileEventType,
@@ -76,14 +75,12 @@ export interface StorageEventManagerBaseDependencies {
 /**
  * Type helper to extract the file type from a storage event manager adapter
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- This is a type helper for type extraction. Not actually interested to TFolder.
-export type ExtractFile<T> = T extends IStorageEventManagerAdapter<infer F, any> ? F : never;
+export type ExtractFile<T> = T extends IStorageEventManagerAdapter<infer F, unknown> ? F : never;
 
 /**
  * Type helper to extract the folder type from a storage event manager adapter
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- This is a type helper for type extraction. Not actually interested to TFile.
-export type ExtractFolder<T> = T extends IStorageEventManagerAdapter<any, infer D> ? D : never;
+export type ExtractFolder<T> = T extends IStorageEventManagerAdapter<unknown, infer D> ? D : never;
 
 /**
  * Base class for storage event management
@@ -92,8 +89,7 @@ export type ExtractFolder<T> = T extends IStorageEventManagerAdapter<any, infer 
  * @template TAdapter - The storage event manager adapter type
  */
 export abstract class StorageEventManagerBase<
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For type extraction.
-    TAdapter extends IStorageEventManagerAdapter<any, any>,
+    TAdapter extends IStorageEventManagerAdapter<unknown, unknown>,
 > extends StorageEventManager {
     _log: ReturnType<typeof createInstanceLogFunction>;
     protected setting: SettingService;

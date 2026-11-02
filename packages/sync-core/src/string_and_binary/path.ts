@@ -7,10 +7,10 @@ import {
     type FilePath,
     type FilePathWithPrefix,
     FlagFiles,
-    PREFIX_OBFUSCATED,
     PREFIXMD_LOGFILE,
     UpstreamFlagFiles,
     PREFIXMD_LOGFILE_UC,
+    IDPrefixes,
 } from "@lib/common/types.ts";
 import { memorizeFuncWithLRUCache } from "@lib/common/utils.ts";
 import { uint8ArrayToHexString, writeString } from "./convert.ts";
@@ -19,7 +19,7 @@ import { CHeader, ICHeader, ICXHeader, PSCHeader } from "@lib/common/models/file
 import { computeKeyedId } from "@lib/common/idDerivation.ts";
 // --- path utilities
 export function isValidFilenameInWidows(filename: string): boolean {
-    // eslint-disable-next-line no-control-regex
+    // eslint-disable-next-line no-control-regex -- control characters are exactly what this pattern rejects.
     const regex = /[\u0000-\u001f]|[\\":?<>|*#]/g;
     if (regex.test(filename)) return false;
     const win = /(\\|\/)(COM\d|LPT\d|CON|PRN|AUX|NUL|CLOCK$)($|\.)/gi;
@@ -27,18 +27,18 @@ export function isValidFilenameInWidows(filename: string): boolean {
     return true;
 }
 export function isValidFilenameInDarwin(filename: string): boolean {
-    // eslint-disable-next-line no-control-regex
+    // eslint-disable-next-line no-control-regex -- control characters are exactly what this pattern rejects.
     const regex = /[\u0000-\u001f]/g;
     return !regex.test(filename);
 }
 export function isValidFilenameInLinux(filename: string): boolean {
-    // eslint-disable-next-line no-control-regex
+    // eslint-disable-next-line no-control-regex -- control characters are exactly what this pattern rejects.
     const regex = /[\u0000-\u001f]/g;
     return !regex.test(filename);
 }
 export function isValidFilenameInAndroid(filename: string): boolean {
     // In principle, Android can handle the path as like Linux, but most devices mount the storage in VFAT.
-    // eslint-disable-next-line no-control-regex
+    // eslint-disable-next-line no-control-regex -- control characters are exactly what this pattern rejects.
     const regex = /[\u0000-\u001f]|[\\":?<>|*#]/g;
     return !regex.test(filename);
 }
@@ -63,7 +63,7 @@ export function expandFilePathPrefix(path: FilePathWithPrefix | FilePath): [stri
     return ["", path];
 }
 export function expandDocumentIDPrefix(id: DocumentID): [string, FilePathWithPrefix] {
-    for (const prefix of [CHeader, PREFIX_OBFUSCATED]) {
+    for (const prefix of [CHeader, IDPrefixes.Obfuscated]) {
         if (id.startsWith(prefix)) {
             return [prefix, id.substring(prefix.length) as FilePathWithPrefix];
         }
@@ -89,9 +89,9 @@ export async function path2id_base(
     caseInsensitive: boolean,
     idDerivationKey?: string
 ): Promise<DocumentID> {
-    if (filenameSrc.startsWith(PREFIX_OBFUSCATED)) return `${filenameSrc}` as DocumentID;
+    if (filenameSrc.startsWith(IDPrefixes.Obfuscated)) return `${filenameSrc}` as DocumentID;
     let filename = `${filenameSrc}`;
-    const newPrefix = obfuscatePassphrase ? PREFIX_OBFUSCATED : "";
+    const newPrefix = obfuscatePassphrase ? IDPrefixes.Obfuscated : "";
     if (caseInsensitive) {
         filename = filename.toLowerCase();
     }
@@ -106,7 +106,7 @@ export async function path2id_base(
     // obfuscating...
     const [prefix, body] = expandFilePathPrefix(x as FilePathWithPrefix);
     // Already Hashed
-    if (body.startsWith(PREFIX_OBFUSCATED)) return (newPrefix + x) as DocumentID;
+    if (body.startsWith(IDPrefixes.Obfuscated)) return (newPrefix + x) as DocumentID;
     const out = idDerivationKey
         ? await computeKeyedId(idDerivationKey, "document", filename)
         : await hashString(`${await hashString(obfuscatePassphrase)}:${filename}`);
@@ -117,9 +117,9 @@ export function id2path_base(id: DocumentID, entry?: EntryHasPath): FilePathWith
     if (entry && entry?.path) {
         return id2path_base(entry.path as string as DocumentID);
     }
-    if (id.startsWith(PREFIX_OBFUSCATED)) throw new Error("Entry has been obfuscated!");
+    if (id.startsWith(IDPrefixes.Obfuscated)) throw new Error("Entry has been obfuscated!");
     const [prefix, body] = expandDocumentIDPrefix(id);
-    if (body.startsWith(PREFIX_OBFUSCATED)) throw new Error("Entry has been obfuscated!");
+    if (body.startsWith(IDPrefixes.Obfuscated)) throw new Error("Entry has been obfuscated!");
     if (body.startsWith("/")) {
         return body.substring(1) as FilePathWithPrefix;
     }

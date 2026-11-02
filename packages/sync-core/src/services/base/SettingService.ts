@@ -138,12 +138,10 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         if ("workingPassphrase" in settings) delete settings.workingPassphrase;
         // Splitter configurations have been replaced with chunkSplitterVersion.
         if (settings.chunkSplitterVersion == "") {
-            // Migration
-            // eslint-disable-next-line @typescript-eslint/no-deprecated
-            if (settings.enableChunkSplitterV2) {
-                // Migration
-                // eslint-disable-next-line @typescript-eslint/no-deprecated
-                if (settings.useSegmenter) {
+            // Migration from the former switches, read as plain data.
+            const former = settings as { enableChunkSplitterV2?: boolean; useSegmenter?: boolean };
+            if (former.enableChunkSplitterV2) {
+                if (former.useSegmenter) {
                     settings.chunkSplitterVersion = "v2-segmenter";
                 } else {
                     settings.chunkSplitterVersion = "v2";
@@ -963,6 +961,6 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
             remoteConfigurations: Object.fromEntries(
                 Object.entries(settings.remoteConfigurations || {}).map(([id, config]) => [id, { ...config }])
             ),
-        } as ObsidianLiveSyncSettings;
+        };
     }
 }

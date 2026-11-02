@@ -17,7 +17,6 @@ import {
     LOG_LEVEL_VERBOSE,
     DEVICE_ID_PREFERRED,
     type DocumentID,
-    type TweakValues,
     type CouchDBCredentials,
     type SyncParameters,
     type DatabaseEntry,
@@ -113,8 +112,7 @@ class OneShotConnectivityPreflightTimeoutError extends Error {
     }
 }
 
-// eslint-disable-next-line
-type EventParamArray<T extends {}> =
+type EventParamArray<T extends object> =
     | ["change", PouchDB.Replication.SyncResult<T>]
     | ["change", PouchDB.Replication.ReplicationResult<T>]
     | ["active"]
@@ -867,6 +865,7 @@ export class LiveSyncCouchDBReplicator extends LiveSyncAbstractReplicator {
             if (results.some((e) => e === false)) {
                 return false;
             }
+            // eslint-disable-next-line no-constant-condition -- the loop ends by returning when everything is sent.
         } while (true);
         // Logger(`${sendAllDocs.length} chunks Uploaded`, showResult ? LOG_LEVEL_NOTICE : LOG_LEVEL_INFO, "send");
         return true;
@@ -2091,7 +2090,7 @@ export class LiveSyncCouchDBReplicator extends LiveSyncAbstractReplicator {
         return await this.withRemoteConnection(connection, async (db) => {
             let milestone: EntryMilestoneInfo | undefined;
             try {
-                milestone = (await db.get(MILESTONE_DOCID)) as EntryMilestoneInfo;
+                milestone = (await db.get(MILESTONE_DOCID));
             } catch (ex) {
                 if (!isErrorOfMissingDoc(ex)) throw ex;
             }
@@ -2107,7 +2106,7 @@ export class LiveSyncCouchDBReplicator extends LiveSyncAbstractReplicator {
                 read: async () => {
                     let milestone: EntryMilestoneInfo;
                     try {
-                        milestone = (await db.get(MILESTONE_DOCID)) as EntryMilestoneInfo;
+                        milestone = (await db.get(MILESTONE_DOCID));
                     } catch (ex) {
                         if (isErrorOfMissingDoc(ex)) return undefined;
                         throw ex;
@@ -2126,7 +2125,7 @@ export class LiveSyncCouchDBReplicator extends LiveSyncAbstractReplicator {
 
                     let verifiedMilestone: EntryMilestoneInfo;
                     try {
-                        verifiedMilestone = (await db.get(MILESTONE_DOCID)) as EntryMilestoneInfo;
+                        verifiedMilestone = (await db.get(MILESTONE_DOCID));
                     } catch {
                         throw new Error("Could not verify joined-device removal.");
                     }

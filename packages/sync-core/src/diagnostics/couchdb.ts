@@ -12,7 +12,7 @@ const MAX_BULK_URL_LENGTH = 6000;
 
 export interface CouchDBDiagnosticSourceOptions {
     settings: RemoteDBSettings;
-    fetch(request: string, options: RequestInit): Promise<Response>;
+    fetch: (request: string, options: RequestInit) => Promise<Response>;
     signal?: AbortSignal;
 }
 

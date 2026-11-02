@@ -15,7 +15,7 @@ import { isPathProbablyObfuscated, obfuscatePath } from "octagonal-wheels/encryp
 // import { encryptHKDF, decryptHKDF } from "../encryption/encryptHKDF.ts";
 import { getPath } from "@lib/string_and_binary/path.ts";
 import { ICHeader, ICXHeader, PSCHeader } from "@lib/common/models/fileaccess.const";
-import { PREFIX_OBFUSCATED } from "@lib/common/types";
+import { IDPrefixes } from "@lib/common/types";
 import { encryptWorker, decryptWorker, encryptHKDFWorker, decryptHKDFWorker } from "#worker";
 
 export const encrypt = encryptWorker;
@@ -80,7 +80,7 @@ export function isEncryptedMeta<T extends AnyEntry>(doc: T) {
 }
 function isInternalObfuscatedEntry(doc: AnyEntry | EntryLeaf): doc is AnyEntry {
     return [ICHeader, ICXHeader, PSCHeader].some((prefix) =>
-        doc._id.startsWith(`${prefix}${PREFIX_OBFUSCATED}`)
+        doc._id.startsWith(`${prefix}${IDPrefixes.Obfuscated}`)
     );
 }
 type EncryptProps = {

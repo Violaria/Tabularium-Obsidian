@@ -137,11 +137,9 @@ export async function ensureRemoteIsCompatible(
     }
     const info = remoteMilestone.node_info[deviceNodeID];
     const keys = ["device_name", "app_version", "plugin_version", "vault_name", "progress"] as (keyof DeviceInfo)[];
-    for (const key of keys) {
-        if (info[key] != nodeDeviceInfo[key]) {
-            remoteMilestone.node_info[deviceNodeID][key] = nodeDeviceInfo[key];
-            writeMilestone = true;
-        }
+    if (keys.some((key) => info[key] != nodeDeviceInfo[key])) {
+        remoteMilestone.node_info[deviceNodeID] = { ...info, ...Object.fromEntries(keys.map((key) => [key, nodeDeviceInfo[key]])) };
+        writeMilestone = true;
     }
     if (nodeDeviceInfo.platform !== undefined && info.platform !== nodeDeviceInfo.platform) {
         remoteMilestone.node_info[deviceNodeID].platform = nodeDeviceInfo.platform;

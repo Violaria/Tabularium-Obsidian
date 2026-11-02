@@ -32,7 +32,7 @@ let csrf = "";
 export const csrfToken = () => csrf;
 
 async function api<T>(path: string, method = "GET", body?: unknown): Promise<T> {
-    const response = await fetch(`/api/v1${path}`, {
+    const response = await window.fetch(`/api/v1${path}`, {
         method,
         credentials: "same-origin",
         headers: { "content-type": "application/json", ...(csrf ? { "x-csrf-token": csrf } : {}) },
@@ -69,7 +69,7 @@ export const issueDevice = (vaultId: string, name: string) => api<IssuedDevice>(
 export const basicAuth = (username: string, password: string) => `Basic ${btoa(String.fromCharCode(...new TextEncoder().encode(`${username}:${password}`)))}`;
 /** Restarts the device's expiry; the secret stays the same. */
 export async function renewDevice(authorization: string) {
-    const response = await fetch("/api/v1/devices/current/renew", { method: "POST", headers: { authorization } });
+    const response = await window.fetch("/api/v1/devices/current/renew", { method: "POST", headers: { authorization } });
     const data = (await response.json().catch(() => ({}))) as { expiresAt?: number; error?: string };
     if (!response.ok) throw new ApiError(response.status, data.error ?? `HTTP ${response.status}`);
     return data.expiresAt;

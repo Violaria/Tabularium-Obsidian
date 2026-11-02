@@ -1,3 +1,4 @@
+import { compatGlobal } from "@lib/common/coreEnvFunctions";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import type { DiagnosticNameMode } from "./types.ts";
 
@@ -19,7 +20,7 @@ export function parseDiagnosticPathToken(value: string): { salt: string; hash: s
 }
 
 function randomSalt(): string {
-    const bytes = globalThis.crypto.getRandomValues(new Uint8Array(6));
+    const bytes = compatGlobal.crypto.getRandomValues(new Uint8Array(6));
     return btoa(String.fromCharCode(...bytes))
         .replaceAll("+", "-")
         .replaceAll("/", "_");

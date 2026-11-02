@@ -90,8 +90,8 @@ export async function clearLocalVault(userId: string, vaultId: string) {
         });
     }
     // Device values, and PouchDB's own bookkeeping keys (`_pouch_<database>`).
-    for (const key of Object.keys(localStorage)) {
-        if (key.startsWith(storagePrefix(vaultId)) || key.includes(databaseName(vaultId))) localStorage.removeItem(key);
+    for (const key of Object.keys(window.localStorage)) {
+        if (key.startsWith(storagePrefix(vaultId)) || key.includes(databaseName(vaultId))) window.localStorage.removeItem(key);
     }
 }
 
@@ -145,7 +145,7 @@ export class NotesRuntime {
         const { vaultId, userId } = this.connection;
         const root = await vaultDirectory(userId, vaultId, true);
         const hub = createLiveSyncBrowserServiceHub<ServiceContext>({
-            deviceValues: createWebStorageValueStore(localStorage, { prefix: storagePrefix(vaultId) }),
+            deviceValues: createWebStorageValueStore(window.localStorage, { prefix: storagePrefix(vaultId) }),
             getSystemVaultName: () => databaseName(vaultId),
             settings: {
                 load: () => Promise.resolve(this.settings),
@@ -187,7 +187,7 @@ export class NotesRuntime {
         // Offline there is no network round trip in between: wait until the local database can be read.
         for (const deadline = Date.now() + 30_000; !services.database.isDatabaseReady(); ) {
             if (Date.now() > deadline) throw new Error(t("notes.coreFailed"));
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            await new Promise((resolve) => window.setTimeout(resolve, 100));
         }
         this.changes = services.database.localDatabase.localDatabase
             .changes({ since: "now", live: true })
@@ -212,7 +212,7 @@ export class NotesRuntime {
     private async remoteLocked() {
         let response: Response;
         try {
-            response = await fetch(`/sync/${this.connection.vaultId}/_local/obsydian_livesync_milestone`, {
+            response = await window.fetch(`/sync/${this.connection.vaultId}/_local/obsydian_livesync_milestone`, {
                 headers: { authorization: this.auth },
             });
         } catch {
@@ -231,7 +231,7 @@ export class NotesRuntime {
         const range = `startkey=${encodeURIComponent('"f:"')}&endkey=${encodeURIComponent('"f:\ufff0"')}`;
         let response: Response;
         try {
-            response = await fetch(`/sync/${this.connection.vaultId}/_all_docs?include_docs=true&limit=1&${range}`, {
+            response = await window.fetch(`/sync/${this.connection.vaultId}/_all_docs?include_docs=true&limit=1&${range}`, {
                 headers: { authorization: this.auth },
             });
         } catch {

@@ -8,6 +8,7 @@ import { syntaxTree } from "@codemirror/language";
 import { inlineMathEnd } from "./math";
 import { renderDiagrams } from "./diagrams";
 import { renderMath } from "./math";
+import { element } from "./dom";
 
 export interface LiveOptions {
     /** An object URL for an embedded vault file that is an image, or undefined. */
@@ -50,7 +51,7 @@ class Bullet extends WidgetType {
         return true;
     }
     override toDOM() {
-        const span = document.createElement("span");
+        const span = element("span");
         span.className = "cm-bullet";
         span.textContent = "•";
         return span;
@@ -64,7 +65,7 @@ class Checkbox extends WidgetType {
         return other.checked === this.checked;
     }
     override toDOM(view: EditorView) {
-        const box = document.createElement("input");
+        const box = element("input");
         box.type = "checkbox";
         box.checked = this.checked;
         box.className = "cm-task";
@@ -87,7 +88,7 @@ class Rule extends WidgetType {
         return true;
     }
     override toDOM() {
-        const hr = document.createElement("span");
+        const hr = element("span");
         hr.className = "cm-rule";
         return hr;
     }
@@ -100,12 +101,12 @@ class Picture extends WidgetType {
         return other.target === this.target;
     }
     override toDOM() {
-        const span = document.createElement("span");
+        const span = element("span");
         span.className = "cm-embed";
         span.textContent = this.target;
         void this.options.image(this.target).then((url) => {
             if (!url) return;
-            const img = document.createElement("img");
+            const img = element("img");
             img.src = url;
             img.alt = this.target;
             span.replaceChildren(img);
@@ -121,7 +122,7 @@ class InlineFormula extends WidgetType {
         return other.tex === this.tex && other.display === this.display;
     }
     override toDOM() {
-        const span = document.createElement("span");
+        const span = element("span");
         span.className = `math${this.display ? " display" : ""} cm-math`;
         span.dataset.tex = this.tex;
         span.textContent = this.tex;
@@ -130,9 +131,9 @@ class InlineFormula extends WidgetType {
     }
 }
 /** A detached element's own parent, so that the renderers (which search below a root) find it. */
-function wrap(element: HTMLElement) {
-    const holder = document.createElement("span");
-    holder.append(element);
+function wrap(detached: HTMLElement) {
+    const holder = element("span");
+    holder.append(detached);
     return holder;
 }
 /** A drawn block (diagram, formula, table) in place of its source; a click puts the cursor at its start. */
@@ -144,19 +145,19 @@ class Block extends WidgetType {
         return other.kind === this.kind && other.source === this.source;
     }
     override toDOM(view: EditorView) {
-        const box = document.createElement("div");
+        const box = element("div");
         box.className = `cm-block cm-block-${this.kind} md-body`;
         if (this.kind === "mermaid") {
-            const figure = document.createElement("figure");
+            const figure = element("figure");
             figure.className = "mermaid-diagram";
             figure.dataset.source = this.source;
-            const pre = document.createElement("pre");
+            const pre = element("pre");
             pre.textContent = this.source;
             figure.append(pre);
             box.append(figure);
             queueMicrotask(() => void renderDiagrams(box));
         } else if (this.kind === "math") {
-            const div = document.createElement("div");
+            const div = element("div");
             div.className = "math display";
             div.dataset.tex = this.source;
             div.textContent = this.source;

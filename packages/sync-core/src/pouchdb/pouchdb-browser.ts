@@ -31,12 +31,25 @@ type PurgeMultiResult = {
     documentWasRemovedCompletely: boolean;
 };
 type PurgeMultiParam = [docId: string, rev$$1: string];
-function appendPurgeSeqs(db: PouchDB.Database, docs: PurgeMultiParam[]) {
+/** PouchDB's record of purged revisions, kept in a local document. */
+type PurgesDocument = {
+    _id: string;
+    _rev?: string;
+    purgeSeq: number;
+    purges: { docId: string; rev: string; purgeSeq: number }[];
+};
+/** The adapter internals the purge plug-in uses; PouchDB's typings do not describe them. */
+type PurgeCapableDatabase = PouchDB.Database & {
+    adapter: string;
+    purged_infos_limit: number;
+    _purge?: (docId: string, path: unknown, callback: (error: Error, result: PurgeMultiResult) => void) => void;
+    _getRevisionTree: (docId: string, callback: (error: Error, revs: string[]) => void) => void;
+};
+function appendPurgeSeqs(db: PurgeCapableDatabase, docs: PurgeMultiParam[]) {
     return (
         db
-            .get("_local/purges")
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Patches to PouchDB's internal document structure, which is not typed.
-            .then(function (doc: any) {
+            .get<PurgesDocument>("_local/purges")
+            .then(function (doc) {
                 for (const [docId, rev$$1] of docs) {
                     const purgeSeq = doc.purgeSeq + 1;
                     doc.purges.push({
@@ -44,9 +57,7 @@ function appendPurgeSeqs(db: PouchDB.Database, docs: PurgeMultiParam[]) {
                         rev: rev$$1,
                         purgeSeq,
                     });
-                    //@ts-ignore : missing type def
                     if (doc.purges.length > db.purged_infos_limit) {
-                        //@ts-ignore : missing type def
                         doc.purges.splice(0, doc.purges.length - db.purged_infos_limit);
                     }
                     doc.purgeSeq = purgeSeq;
@@ -79,6 +90,7 @@ function appendPurgeSeqs(db: PouchDB.Database, docs: PurgeMultiParam[]) {
 PouchDB.prototype.purgeMulti = adapterFun(
     "_purgeMulti",
     function (
+        this: PurgeCapableDatabase,
         docs: PurgeMultiParam[],
         callback: (
             error: Error,
@@ -87,21 +99,17 @@ PouchDB.prototype.purgeMulti = adapterFun(
             }
         ) => void
     ) {
-        //@ts-ignore
-        if (typeof this._purge === "undefined") {
+        const purge = this._purge;
+        if (purge === undefined) {
             return callback(
-                //@ts-ignore: this ts-ignore might be hiding a `this` bug where we don't have "this" conext.
                 createError(UNKNOWN_ERROR, "Purge is not implemented in the " + this.adapter + " adapter.")
             );
         }
-        //@ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const self = this;
         const tasks = docs.map(
             (param) => () =>
                 new Promise<[PurgeMultiParam, PurgeMultiResult | Error]>((res, rej) => {
                     const [docId, rev$$1] = param;
-                    self._getRevisionTree(docId, (error: Error, revs: string[]) => {
+                    this._getRevisionTree(docId, (error: Error, revs: string[]) => {
                         if (error) {
                             return res([param, error]);
                         }
@@ -115,7 +123,7 @@ PouchDB.prototype.purgeMulti = adapterFun(
                             //@ts-ignore
                             return res([param, error.message || error]);
                         }
-                        self._purge(docId, path, (error: Error, result: PurgeMultiResult) => {
+                        purge.call(this, docId, path, (error: Error, result: PurgeMultiResult) => {
                             if (error) {
                                 return res([param, error]);
                             } else {
@@ -129,7 +137,7 @@ PouchDB.prototype.purgeMulti = adapterFun(
             const ret = await mapAllTasksWithConcurrencyLimit(1, tasks);
             const retAll = ret.map((e) => unwrapTaskResult(e)) as [PurgeMultiParam, PurgeMultiResult | Error][];
             await appendPurgeSeqs(
-                self,
+                this,
                 retAll.filter((e) => "ok" in e[1]).map((e) => e[0])
             );
             const result = Object.fromEntries(retAll.map((e) => [e[0][0], e[1]]));

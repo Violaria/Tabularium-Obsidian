@@ -180,6 +180,14 @@ async function verifyPackageManifest() {
     if (JSON.stringify(committedManifest.typesVersions) !== expected) {
         throw new Error("package.json: typesVersions does not mirror exports.");
     }
+    // src/package.json is the manifest nearest to the sources, which dependency linters read: it lists the same
+    // dependencies (peer dependencies included).
+    const sourceManifest = JSON.parse(await readFile(resolve(sourceDirectory, "package.json"), "utf8"));
+    const declared = { ...committedManifest.dependencies, ...committedManifest.peerDependencies };
+    const sorted = (record) => JSON.stringify(Object.entries(record ?? {}).sort(([a], [b]) => a.localeCompare(b)));
+    if (sorted(sourceManifest.dependencies) !== sorted(declared)) {
+        throw new Error("src/package.json: dependencies differ from package.json's dependencies and peer dependencies.");
+    }
 }
 
 async function copyStaticFiles() {

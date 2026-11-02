@@ -1,3 +1,4 @@
+import { compatGlobal } from "@lib/common/coreEnvFunctions";
 export interface DatabaseUsageGetOptions {
     revs?: boolean;
     revs_info?: boolean;
@@ -99,7 +100,7 @@ interface ChunkInfo {
 const USAGE_ACCOUNTING_YIELD_EVERY = 64;
 
 function asRecord(value: object): UsageDocumentFields {
-    return value as UsageDocumentFields;
+    return value;
 }
 
 function getRevisionNumber(revision: string): string {
@@ -330,7 +331,7 @@ export async function analyseDatabaseUsage(options: {
     };
     const yieldAfterAccountingBatch = async (): Promise<boolean> => {
         reportProgress();
-        await new Promise<void>((resolve) => setTimeout(resolve, 0));
+        await new Promise<void>((resolve) => compatGlobal.setTimeout(resolve, 0));
         return readingWasCancelled || !isCancelled();
     };
 

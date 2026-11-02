@@ -20,16 +20,4 @@ export const IDPrefixes = {
     Obfuscated: "f:",
     Chunk: "h:",
     EncryptedChunk: "h:+",
-};
-/**
- * @deprecated Use `IDPrefixes.Obfuscated` instead.
- */
-export const PREFIX_OBFUSCATED = "f:";
-/**
- * @deprecated Use `IDPrefixes.Chunk` instead.
- */
-export const PREFIX_CHUNK = "h:";
-/**
- * @deprecated Use `IDPrefixes.EncryptedChunk` instead.
- */
-export const PREFIX_ENCRYPTED_CHUNK = "h:+";
+} as const;
