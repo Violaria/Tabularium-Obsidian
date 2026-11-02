@@ -1,9 +1,9 @@
 {
     "id": "tabularium",
     "name": "Tabularium",
-    "version": "0.25.0",
+    "version": "0.26.0",
     "minAppVersion": "1.7.2",
-    "description": "Encrypted note synchronisation with a self-hosted Tabularium server. Based on Self-hosted LiveSync (MIT). Disable Self-hosted LiveSync and other synchronisation plugins before enabling this one.",
+    "description": "Encrypted note synchronisation with a self-hosted Tabularium server, with file sorting, sharing and Send to Kindle.",
     "author": "Hanae Nanako",
     "isDesktopOnly": false
 }
