@@ -932,7 +932,7 @@
                 <Tree node={tree} {current} {selecting} {selected} {conflicted} open={(path) => show(path)} {toggle} send={(item) => kindle([item])} select={(item) => ((selecting = true), (selected = [item]))} {rename} {remove} {share} expandAll={filter.trim() !== ""} />
             </nav>
         </aside>
-        <section class="main" bind:this={mainEl}>
+        <section class="main" class:split-editing={mode === "edit" && !!current && editView === "split"} bind:this={mainEl}>
             {#if collapsed && !current}<div class="note-bar empty-bar"><button class="icon-button small tree-toggle" aria-label={t("notes.showTree")} title={t("notes.showTree")} onclick={toggleTree}>{@html icon("sidebar")}</button></div>{/if}
             {#if !current && mode === "view"}
                 <div class="welcome">

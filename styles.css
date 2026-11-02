@@ -875,17 +875,17 @@ body.is-mobile .tabularium-compatibility-review-notice {
 }
 
 /* Tabularium server login: each label sits above its full-width field, and fields have a visible outline. */
-.tabularium-server-dialog .setting-item:has(input, select) {
+.tabularium-server-dialog .setting-item.tabularium-field {
     flex-direction: column;
     align-items: stretch;
     gap: var(--size-4-2);
 }
 
-.tabularium-server-dialog .setting-item:has(input, select) .setting-item-info {
+.tabularium-server-dialog .setting-item.tabularium-field .setting-item-info {
     margin-inline-end: 0;
 }
 
-.tabularium-server-dialog .setting-item:has(input, select) .setting-item-control {
+.tabularium-server-dialog .setting-item.tabularium-field .setting-item-control {
     justify-content: flex-start;
 }
 
@@ -990,7 +990,7 @@ body.is-mobile .tabularium-compatibility-review-notice {
     cursor: pointer;
 }
 
-.tabularium-choice:has(input:checked) {
+.tabularium-choice.is-selected {
     border-color: var(--interactive-accent);
 }
 
@@ -1013,9 +1013,10 @@ body.is-mobile .tabularium-compatibility-review-notice {
     border-radius: var(--radius-m);
     box-shadow: var(--shadow-s);
 }
-.cm-tooltip:has(> .tabularium-format-menu) {
-    border: 0;
-    background: transparent;
+/* CodeMirror makes the toolbar itself the tooltip: its theme's tooltip frame gives way to the toolbar's. */
+.cm-editor .cm-tooltip.tabularium-format-menu {
+    background: var(--background-primary);
+    border: 1px solid var(--background-modifier-border);
 }
 .tabularium-format-menu button {
     display: grid;

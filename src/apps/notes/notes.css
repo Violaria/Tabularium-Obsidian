@@ -332,9 +332,10 @@
 .notes .editor.readonly .cm-content {
     padding-bottom: 24px;
 }
+/* As specific as CodeMirror's own selection rules, so the accent wins over them. */
 .notes .editor .cm-selectionBackground,
-.notes .editor .cm-focused .cm-selectionBackground {
-    background: color-mix(in oklab, var(--accent) 22%, transparent) !important;
+.notes .editor .cm-editor.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {
+    background: color-mix(in oklab, var(--accent) 22%, transparent);
 }
 /* Live render: the note reads as it will print, the cursor's line shows its Markdown. */
 .notes .cm-live .cm-h { font-family: var(--serif); font-weight: 600; line-height: 1.35; }
@@ -346,17 +347,17 @@
 .notes .cm-live .cm-em { font-style: italic; }
 .notes .cm-live .cm-strike, .notes .cm-live .cm-done { text-decoration: line-through; color: var(--muted); }
 .notes .cm-live .cm-inline-code { font: 0.88em var(--mono); background: var(--recess); border-radius: 5px; padding: 1px 5px; }
-.notes .cm-live .cm-link { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent) 35%, transparent); text-underline-offset: 3px; }
+.notes .cm-live .cm-link { color: var(--accent); text-decoration: none; background: linear-gradient(var(--link-line), var(--link-line)) left bottom / 100% 1px no-repeat; --link-line: color-mix(in oklab, var(--accent) 35%, transparent); }
 .notes .cm-live .cm-highlight { background: color-mix(in oklab, #f5d33d 45%, transparent); border-radius: 3px; }
 .notes .cm-live .cm-comment, .notes .cm-live .cm-math-source { color: var(--faint); }
 .notes .cm-live .cm-math-source { font-family: var(--mono); font-size: 0.9em; }
-.notes .cm-live .cm-quote { color: var(--muted); padding-left: 1em !important; background: linear-gradient(var(--recess), var(--recess)); }
+.notes .editor .cm-live .cm-line.cm-quote { color: var(--muted); padding-left: 1em; background: linear-gradient(var(--recess), var(--recess)); }
 .notes .cm-live .cm-callout-title { font-weight: 600; color: var(--accent); }
 .notes .cm-live .cm-bullet { display: inline-block; width: 1em; color: var(--accent); font-weight: 700; }
 .notes .cm-live .cm-task { width: 15px; height: 15px; margin: 0 6px 0 0; vertical-align: -2px; cursor: pointer; }
 .notes .cm-live .cm-rule { display: inline-block; width: 100%; height: 1px; background: var(--line-strong); vertical-align: middle; }
 .notes .cm-live .cm-fence { font: 12.5px/1.6 var(--mono); color: var(--faint); background: var(--recess); }
-.notes .cm-live .cm-codeblock { font: 13.5px/1.65 var(--mono); background: var(--recess); padding-left: 14px !important; }
+.notes .editor .cm-live .cm-line.cm-codeblock { font: 13.5px/1.65 var(--mono); background: var(--recess); padding-left: 14px; }
 .notes .cm-live .cm-frontmatter { font: 13px/1.6 var(--mono); color: var(--muted); background: var(--recess); }
 .notes .cm-live .cm-embed img { max-width: 100%; border-radius: 8px; vertical-align: middle; }
 .notes .cm-live .cm-embed { color: var(--muted); }
@@ -452,10 +453,10 @@
     overflow: auto;
     padding: 12px 40px 64px 24px;
 }
-.notes .main:has(.edit-area.split) {
+.notes .main.split-editing {
     overflow: hidden;
 }
-.notes .main:has(.edit-area.split) .note-head {
+.notes .main.split-editing .note-head {
     display: none;
 }
 @media (max-width: 720px) {
@@ -831,9 +832,10 @@
 .md-body li.task { list-style: none; margin-left: -1.4em; }
 .md-body li.task input { margin: 0 0.45em 0 0; vertical-align: -0.12em; accent-color: var(--accent); }
 .md-body li.task.done { color: var(--muted); }
-.md-body li.task.done > p, .md-body li.task.done { text-decoration: line-through; text-decoration-color: color-mix(in oklab, var(--muted) 60%, transparent); }
-.md-body a { color: var(--accent); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--accent) 35%, transparent); text-underline-offset: 3px; }
-.md-body a:hover { text-decoration-color: var(--accent); }
+.md-body li.task.done > p, .md-body li.task.done { text-decoration: line-through; }
+/* A light underline drawn as a background, so it can be coloured; it follows the text across lines. */
+.md-body a { --link-line: color-mix(in oklab, var(--accent) 35%, transparent); color: var(--accent); text-decoration: none; background: linear-gradient(var(--link-line), var(--link-line)) left bottom / 100% 1px no-repeat; padding-bottom: 1px; }
+.md-body a:hover { --link-line: var(--accent); }
 .md-body img { max-width: 100%; border-radius: 8px; margin: 0.4em 0; }
 .md-body hr { border: 0; height: 1px; background: var(--line); margin: 2.2em 0; }
 

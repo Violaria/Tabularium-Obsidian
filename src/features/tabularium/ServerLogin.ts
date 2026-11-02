@@ -386,6 +386,7 @@ class ServerModal extends Modal {
                     })
                 )
         );
+        this.markFields();
     }
 
     private changePassword() {
@@ -415,6 +416,7 @@ class ServerModal extends Modal {
                     })
                 )
         );
+        this.markFields();
     }
 
     private async chooseVault() {
@@ -485,8 +487,15 @@ class ServerModal extends Modal {
                         })
                     )
             );
+            this.markFields();
         };
         render();
+    }
+
+    /** Rows holding a field: the label goes above the field (styles.css). */
+    private markFields() {
+        for (const row of Array.from(this.contentEl.querySelectorAll(".setting-item")))
+            if (row.querySelector("input, select")) row.addClass("tabularium-field");
     }
 
     override onClose() {

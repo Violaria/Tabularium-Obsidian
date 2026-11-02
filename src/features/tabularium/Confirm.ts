@@ -45,6 +45,7 @@ export function confirmAction<C extends string = string>(app: App, options: Conf
                 input.name = "tabularium-choice";
                 input.addEventListener("change", () => {
                     chosen = choice.value;
+                    for (const other of Array.from(list.children)) other.toggleClass("is-selected", other === label);
                     update();
                 });
                 const text = label.createDiv();
