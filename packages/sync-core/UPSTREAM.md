@@ -10,6 +10,8 @@ This package is the synchronisation core of Tabularium. It is derived from Commo
 
 A read-only clone of the upstream repository is kept in the parent repository at `reference/livesync-commonlib`; nothing builds from it.
 
+The release commit `029a36f` (Release Commonlib 0.2.1) has the same `src/`; the merge `3ecb95b` adds dependency updates (`markdown-it ^14.3.3`) that the published manifest carries, so the package was built from it.
+
 ## Checking the origin
 
 Building the upstream commit with its own tools gives the published package file for file:
