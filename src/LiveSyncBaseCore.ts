@@ -1,6 +1,5 @@
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import type PouchDB from "pouchdb-core";
-import type { SimpleStore } from "octagonal-wheels/databases/SimpleStoreBase";
 import {
     type HasSettings,
     type ObsidianLiveSyncSettings,
@@ -14,7 +13,6 @@ import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileH
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
 import type { LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
 import type { LiveSyncCouchDBReplicatorEnv } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import type { CheckPointInfo } from "@tabularium/sync-core/compat/replication/journal/JournalSyncTypes";
 import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
 import type { ReplicatorInstance } from "@tabularium/sync-core/replication";
 import { useTargetFilters } from "@tabularium/sync-core/compat/serviceFeatures/targetFilter";
@@ -227,13 +225,6 @@ export class LiveSyncBaseCore<
      */
     getDatabase(): PouchDB.Database<EntryDoc> {
         return this.localDatabase.localDatabase;
-    }
-
-    /**
-     * @obsolete Use services.keyValueDB.simpleStore instead. A simple key-value store for storing non-file data, such as checkpoints, sync status, etc.
-     */
-    get simpleStore() {
-        return this.services.keyValueDB.simpleStore as SimpleStore<CheckPointInfo>;
     }
 
     /**

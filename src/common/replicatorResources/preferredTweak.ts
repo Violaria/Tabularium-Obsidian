@@ -4,10 +4,9 @@ import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
 } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
-/** Host environment sufficient to construct either preferred-tweak probe. */
+/** Host environment sufficient to construct the preferred-tweak probe. */
 export type PreferredTweakResourceHost = LiveSyncCouchDBReplicatorEnv;
 
 interface PreferredTweakReplicator extends ResourceReplicator {
@@ -32,12 +31,3 @@ export function createCouchDBPreferredTweakProbeFactory(host: PreferredTweakReso
     };
 }
 
-/** Build an unpublished, independently disposed Object Storage preferred-tweak probe. */
-export function createObjectStoragePreferredTweakProbeFactory(
-    host: PreferredTweakResourceHost
-): PreferredTweakProbeFactory {
-    return (setting) => {
-        const snapshot = snapshotRemoteSettings(setting);
-        return Promise.resolve(createPreferredTweakProbe(new LiveSyncJournalReplicator(host), snapshot));
-    };
-}

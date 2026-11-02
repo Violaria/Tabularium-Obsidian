@@ -1,9 +1,7 @@
-import { REMOTE_COUCHDB, REMOTE_MINIO, type RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
+import { REMOTE_COUCHDB, type RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 import {
-    CAPABILITY_NOT_APPLICABLE,
     CENTRAL_REMOTE_REPLICATION_READINESS,
     NO_INTERACTION,
-    PROVIDER_OWNED_CENTRAL_REMOTE_REPLICATION_READINESS,
     REPLICATION_PROGRESS_PRESENTATIONS,
     REMOTE_RESOURCE_KINDS,
     defineReplicatorProviderDefinitions,
@@ -22,37 +20,26 @@ import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
 } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
-import {
-    getCouchDBReplicatorConfigurationIdentity,
-    getObjectStorageReplicatorConfigurationIdentity,
-} from "./replicatorConfigurationIdentity";
+import { getCouchDBReplicatorConfigurationIdentity } from "./replicatorConfigurationIdentity";
 import {
     createCouchDBJoinedDevicesResourceFactory,
-    createObjectStorageJoinedDevicesResourceFactory,
     createCouchDBConnectionProbeFactory,
     createCouchDBInitialFetchFastForwardResourceFactory,
     createCouchDBPreferredTweakProbeFactory,
     createCouchDBSecuritySeedResourceFactory,
     createCouchDBSynchronisationInformationResourceFactory,
-    createObjectStorageConnectionProbeFactory,
-    createObjectStoragePreferredTweakProbeFactory,
-    createObjectStorageSecuritySeedResourceFactory,
 } from "./replicatorResources";
-import {
-    COUCHDB_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY,
-    OBJECT_STORAGE_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY,
-} from "./centralRemoteAdministration";
+import { COUCHDB_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY } from "./centralRemoteAdministration";
 
 /** Host environment sufficient to construct every current central provider. */
 export type CentralReplicatorProviderHost = LiveSyncCouchDBReplicatorEnv;
 
-/** Minimal operation required by both central one-shot adapters. */
+/** Minimal operation required by the central one-shot adapters. */
 interface OneShotOutcomeReplicator extends ReplicatorInstance {
     openOneShotReplicationWithOutcome(setting: RemoteDBSettings, showResult: boolean): Promise<ReplicationOutcome>;
 }
 
-/** Narrow structurally so the shared adapter does not depend on either concrete provider class. */
+/** Narrow structurally so the adapter does not depend on the concrete provider class. */
 function isOneShotOutcomeReplicator(instance: ReplicatorInstance): instance is OneShotOutcomeReplicator {
     return (
         "openOneShotReplicationWithOutcome" in instance &&
@@ -86,27 +73,14 @@ const couchDBUnattendedOneShot: UnattendedOneShotRunner = async (instance, setti
     return await runOneShotWithOutcome(instance, setting, false);
 };
 
-const objectStorageUserInitiatedOneShot: UserInitiatedOneShotRunner = async (instance, setting, request) => {
-    return await runOneShotWithOutcome(
-        instance,
-        setting,
-        request.progressPresentation === REPLICATION_PROGRESS_PRESENTATIONS.NOTICE
-    );
-};
-
-const objectStorageUnattendedOneShot: UnattendedOneShotRunner = async (instance, setting, request) => {
-    if (request.interaction.kind !== NO_INTERACTION.kind) return replicationBlocked("interaction-required");
-    return await runOneShotWithOutcome(instance, setting, false);
-};
-
 /**
- * Build the complete, deliberately concrete central-provider matrix for one
+ * Build the complete, deliberately concrete central-provider definitions (CouchDB only) for one
  * LiveSync host. This closed composition is not a runtime provider registry.
  */
 export function createCentralReplicatorProviderDefinitions(
     host: CentralReplicatorProviderHost
 ): ReplicatorProviderDefinitionMap {
-    return defineReplicatorProviderDefinitions([REMOTE_COUCHDB, REMOTE_MINIO] as const, {
+    return defineReplicatorProviderDefinitions([REMOTE_COUCHDB] as const, {
         [REMOTE_COUCHDB]: {
             kind: REMOTE_COUCHDB,
             diagnosticName: "CouchDB",
@@ -139,36 +113,6 @@ export function createCentralReplicatorProviderDefinitions(
             userInitiatedOneShot: supportedCapability(couchDBUserInitiatedOneShot),
             unattendedOneShot: supportedCapability(couchDBUnattendedOneShot),
             continuous: supportedOpenReplicationContinuous(),
-            stopActiveTransfer: supportedStopActiveTransfer(),
-        },
-        [REMOTE_MINIO]: {
-            kind: REMOTE_MINIO,
-            diagnosticName: "Object Storage",
-            readiness: PROVIDER_OWNED_CENTRAL_REMOTE_REPLICATION_READINESS,
-            isConfigured: (settings) =>
-                settings.remoteType === REMOTE_MINIO && !!settings.endpoint?.trim() && !!settings.bucket?.trim(),
-            configurationIdentity: getObjectStorageReplicatorConfigurationIdentity,
-            create: () => Promise.resolve(new LiveSyncJournalReplicator(host)),
-            remoteResources: {
-                [REMOTE_RESOURCE_KINDS.JOINED_DEVICES]: supportedCapability(
-                    createObjectStorageJoinedDevicesResourceFactory(host)
-                ),
-                [REMOTE_RESOURCE_KINDS.CONNECTION]: supportedCapability(
-                    createObjectStorageConnectionProbeFactory(host)
-                ),
-                [REMOTE_RESOURCE_KINDS.PREFERRED_TWEAK]: supportedCapability(
-                    createObjectStoragePreferredTweakProbeFactory(host)
-                ),
-                [REMOTE_RESOURCE_KINDS.SECURITY_SEED]: supportedCapability(
-                    createObjectStorageSecuritySeedResourceFactory(host)
-                ),
-                [REMOTE_RESOURCE_KINDS.SYNCHRONISATION_INFORMATION]: CAPABILITY_NOT_APPLICABLE,
-                [REMOTE_RESOURCE_KINDS.INITIAL_FETCH_FAST_FORWARD]: CAPABILITY_NOT_APPLICABLE,
-            },
-            centralRemoteAdministration: OBJECT_STORAGE_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY,
-            userInitiatedOneShot: supportedCapability(objectStorageUserInitiatedOneShot),
-            unattendedOneShot: supportedCapability(objectStorageUnattendedOneShot),
-            continuous: CAPABILITY_NOT_APPLICABLE,
             stopActiveTransfer: supportedStopActiveTransfer(),
         },
     });

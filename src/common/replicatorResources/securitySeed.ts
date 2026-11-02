@@ -4,10 +4,9 @@ import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
 } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
-/** Host environment sufficient to construct either Security Seed resource. */
+/** Host environment sufficient to construct the Security Seed resource. */
 export type SecuritySeedResourceHost = LiveSyncCouchDBReplicatorEnv;
 
 /** Minimal private Replicator surface required by a Security Seed resource. */
@@ -44,9 +43,3 @@ export function createCouchDBSecuritySeedResourceFactory(host: SecuritySeedResou
     return createSecuritySeedResourceFactory(() => new LiveSyncCouchDBReplicator(host));
 }
 
-/** Build an unpublished, independently disposed Object Storage Security Seed resource. */
-export function createObjectStorageSecuritySeedResourceFactory(
-    host: SecuritySeedResourceHost
-): SecuritySeedResourceFactory {
-    return createSecuritySeedResourceFactory(() => new LiveSyncJournalReplicator(host));
-}

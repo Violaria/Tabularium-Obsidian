@@ -24,7 +24,6 @@ const defaultExternal = [
     "commander",
     "chokidar",
     "punycode",
-    "werift",
 ];
 // Polyfill FileReader at the very top of the CJS bundle. octagonal-wheels uses
 // FileReader for base64 conversion when Uint8Array.toBase64 (TC39 proposal) is
@@ -81,9 +80,6 @@ export default defineConfig({
         conditions: [...defaultServerConditions],
         mainFields: [...defaultServerMainFields],
         alias: {
-            // The CLI runs on Node.js; force AWS XML builder to its CJS Node entry
-            // so Vite does not resolve the browser DOMParser-based XML parser.
-            "@aws-sdk/xml-builder": resolve(__dirname, "../../../node_modules/@aws-sdk/xml-builder/dist-cjs/index.js"),
             // Force fflate to the Node CJS entry; browser entry expects Web Worker globals.
             fflate: resolve(__dirname, "../../../node_modules/fflate/lib/node.cjs"),
             "@": resolve(__dirname, "../../"),
@@ -104,7 +100,6 @@ export default defineConfig({
                 if (id.startsWith("@/")) return false;
                 if (id.endsWith(".ts") || id.endsWith(".js")) return false;
                 if (id.startsWith("pouchdb-")) return true;
-                if (id.startsWith("werift")) return true;
                 return false;
             },
         },

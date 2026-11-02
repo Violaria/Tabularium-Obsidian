@@ -1,6 +1,5 @@
 import type { ServiceContext } from "@lib/services/base/ServiceBase";
 import { InjectableAPIService } from "@lib/services/implements/injectable/InjectableAPIService";
-import type { FetchHttpHandler } from "@smithy/fetch-http-handler";
 import type { ICommandCompat } from "@lib/services/base/IService";
 import type { Confirm, ConfirmActionLayout } from "@lib/interfaces/Confirm";
 // const module = await import("node:crypto");
@@ -79,9 +78,6 @@ export class HeadlessAPIService<T extends ServiceContext> extends InjectableAPIS
         // In a browser environment, showing a window might not be applicable.
         // TODO: Think implementation
         return Promise.resolve();
-    }
-    getCustomFetchHandler(): FetchHttpHandler {
-        return undefined!;
     }
     isMobile(): boolean {
         return false;

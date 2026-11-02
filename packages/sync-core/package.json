@@ -44,11 +44,6 @@
             "import": "./dist/platform/node/index.js",
             "default": "./dist/platform/node/index.js"
         },
-        "./p2p": {
-            "types": "./dist/p2p/index.d.ts",
-            "import": "./dist/p2p/index.js",
-            "default": "./dist/p2p/index.js"
-        },
         "./replication": {
             "types": "./dist/replication/index.d.ts",
             "import": "./dist/replication/index.js",
@@ -278,26 +273,6 @@
             "types": "./dist/replication/httplib.d.ts",
             "import": "./dist/replication/httplib.js",
             "default": "./dist/replication/httplib.js"
-        },
-        "./compat/replication/journal/JournalSyncTypes": {
-            "types": "./dist/replication/journal/JournalSyncTypes.d.ts",
-            "import": "./dist/replication/journal/JournalSyncTypes.js",
-            "default": "./dist/replication/journal/JournalSyncTypes.js"
-        },
-        "./compat/replication/journal/LiveSyncJournalReplicator": {
-            "types": "./dist/replication/journal/LiveSyncJournalReplicator.d.ts",
-            "import": "./dist/replication/journal/LiveSyncJournalReplicator.js",
-            "default": "./dist/replication/journal/LiveSyncJournalReplicator.js"
-        },
-        "./compat/replication/trystero/P2PLogCollector": {
-            "types": "./dist/replication/trystero/P2PLogCollector.d.ts",
-            "import": "./dist/replication/trystero/P2PLogCollector.js",
-            "default": "./dist/replication/trystero/P2PLogCollector.js"
-        },
-        "./compat/replication/trystero/TrysteroReplicator": {
-            "types": "./dist/replication/trystero/TrysteroReplicator.d.ts",
-            "import": "./dist/replication/trystero/TrysteroReplicator.js",
-            "default": "./dist/replication/trystero/TrysteroReplicator.js"
         },
         "./compat/serviceFeatures/offlineScanner": {
             "types": "./dist/serviceFeatures/offlineScanner.d.ts",
@@ -536,9 +511,6 @@
             "node": [
                 "dist/platform/node/index.d.ts"
             ],
-            "p2p": [
-                "dist/p2p/index.d.ts"
-            ],
             "replication": [
                 "dist/replication/index.d.ts"
             ],
@@ -677,18 +649,6 @@
             "compat/replication/httplib": [
                 "dist/replication/httplib.d.ts"
             ],
-            "compat/replication/journal/JournalSyncTypes": [
-                "dist/replication/journal/JournalSyncTypes.d.ts"
-            ],
-            "compat/replication/journal/LiveSyncJournalReplicator": [
-                "dist/replication/journal/LiveSyncJournalReplicator.d.ts"
-            ],
-            "compat/replication/trystero/P2PLogCollector": [
-                "dist/replication/trystero/P2PLogCollector.d.ts"
-            ],
-            "compat/replication/trystero/TrysteroReplicator": [
-                "dist/replication/trystero/TrysteroReplicator.d.ts"
-            ],
             "compat/serviceFeatures/offlineScanner": [
                 "dist/serviceFeatures/offlineScanner.d.ts"
             ],
@@ -825,19 +785,10 @@
     },
     "dependencies": {
         "@aws-crypto/sha256-js": "5.2.0",
-        "@aws-sdk/client-s3": "^3.808.0",
-        "@smithy/fetch-http-handler": "^5.3.10",
-        "@smithy/md5-js": "^4.2.9",
-        "@smithy/middleware-apply-body-checksum": "^4.3.9",
-        "@smithy/types": "^4.14.3",
-        "@smithy/util-retry": "^4.4.5",
-        "@trystero-p2p/nostr": "0.25.3",
         "@vrtmrz/value-store": "0.1.0",
         "diff-match-patch": "^1.0.5",
         "events": "^3.3.0",
         "fflate": "^0.8.2",
-        "idb": "^8.0.3",
-        "markdown-it": "^14.3.3",
         "minimatch": "^10.2.6",
         "octagonal-wheels": "^0.1.55",
         "pouchdb-adapter-http": "^9.0.0",
@@ -853,7 +804,6 @@
         "pouchdb-merge": "^9.0.0",
         "pouchdb-replication": "^9.0.0",
         "pouchdb-utils": "^9.0.0",
-        "qrcode-generator": "^1.4.4",
         "transform-pouch": "^2.0.0",
         "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
     },

@@ -3,10 +3,7 @@ import type {
     CouchDBConnection,
     EncryptionSettings,
     ObsidianLiveSyncSettings,
-    P2PConnectionInfo,
-    P2PSyncSetting,
 } from "@tabularium/sync-core/compat/common/models/setting.type";
-import type { P2PConnectionProbeAdmission } from "@tabularium/sync-core/p2p";
 
 export const TYPE_IDENTICAL = "identical";
 export const TYPE_INDEPENDENT = "independent";
@@ -122,12 +119,6 @@ export type CouchDBSetupMode = "create-or-connect" | "connect-existing" | "setti
 export type SetupRemoteCouchDBInitialData = {
     settings: CouchDBConnection;
     mode: CouchDBSetupMode;
-};
-
-export type SetupRemoteP2PResultType = typeof TYPE_CANCELLED | P2PConnectionInfo;
-export type SetupRemoteP2PInitialData = {
-    settings: P2PSyncSetting;
-    connectionProbe: P2PConnectionProbeAdmission;
 };
 
 export type ScanQRCodeResultType = typeof TYPE_CLOSE;

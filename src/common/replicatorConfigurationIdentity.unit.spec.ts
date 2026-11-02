@@ -1,10 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { createNewVaultSettings } from "@tabularium/sync-core/settings";
-import {
-    getCouchDBReplicatorConfigurationIdentity,
-    getObjectStorageReplicatorConfigurationIdentity,
-} from "./replicatorConfigurationIdentity";
+import { getCouchDBReplicatorConfigurationIdentity } from "./replicatorConfigurationIdentity";
 
 describe("active Replicator configuration identity", () => {
     it("replaces a connection when the path identity mode changes", () => {
@@ -12,9 +9,6 @@ describe("active Replicator configuration identity", () => {
         const next = { ...previous, pathNormalizationVersion: 1 as const };
         expect(getCouchDBReplicatorConfigurationIdentity(next)).not.toBe(
             getCouchDBReplicatorConfigurationIdentity(previous)
-        );
-        expect(getObjectStorageReplicatorConfigurationIdentity(next)).not.toBe(
-            getObjectStorageReplicatorConfigurationIdentity(previous)
         );
     });
 
@@ -25,9 +19,6 @@ describe("active Replicator configuration identity", () => {
 
         expect(getCouchDBReplicatorConfigurationIdentity(explicitVersion0)).toBe(
             getCouchDBReplicatorConfigurationIdentity(missingVersion)
-        );
-        expect(getObjectStorageReplicatorConfigurationIdentity(explicitVersion0)).toBe(
-            getObjectStorageReplicatorConfigurationIdentity(missingVersion)
         );
     });
 
@@ -60,9 +51,6 @@ describe("active Replicator configuration identity", () => {
         const second = { ...first, idDerivationKey: "b".repeat(64) };
         expect(getCouchDBReplicatorConfigurationIdentity(second)).not.toBe(
             getCouchDBReplicatorConfigurationIdentity(first)
-        );
-        expect(getObjectStorageReplicatorConfigurationIdentity(second)).not.toBe(
-            getObjectStorageReplicatorConfigurationIdentity(first)
         );
     });
 
@@ -97,9 +85,6 @@ describe("active Replicator configuration identity", () => {
         expect(getCouchDBReplicatorConfigurationIdentity(otherProfile)).toBe(
             getCouchDBReplicatorConfigurationIdentity(settings)
         );
-        expect(getObjectStorageReplicatorConfigurationIdentity(otherProfile)).toBe(
-            getObjectStorageReplicatorConfigurationIdentity(settings)
-        );
     });
 
     it("recreates the CouchDB connection when internal Metadata encryption becomes effective", () => {
@@ -112,9 +97,6 @@ describe("active Replicator configuration identity", () => {
         const inactive = { ...active, usePathObfuscation: false };
         expect(getCouchDBReplicatorConfigurationIdentity({ ...inactive, encryptInternalMetadata: true })).toBe(
             getCouchDBReplicatorConfigurationIdentity(inactive)
-        );
-        expect(getObjectStorageReplicatorConfigurationIdentity(enabled)).toBe(
-            getObjectStorageReplicatorConfigurationIdentity(active)
         );
     });
 
@@ -140,35 +122,9 @@ describe("active Replicator configuration identity", () => {
         );
     });
 
-    it.each([
-        ["endpoint", "https://other.example.test/base"],
-        ["bucket", "other-vault"],
-        ["bucketPrefix", "archive/"],
-        ["region", "eu-west-1"],
-        ["accessKey", "bob"],
-        ["secretKey", "secret-b"],
-        ["forcePathStyle", false],
-        ["useCustomRequestHandler", true],
-        ["bucketCustomHeaders", "X-First: changed"],
-        ["encrypt", false],
-        ["passphrase", "encryption-b"],
-        ["useDynamicIterationCount", true],
-        ["E2EEAlgorithm", ""],
-        ["permitEmptyPassphrase", true],
-    ] satisfies Array<[keyof ObsidianLiveSyncSettings, ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings]]>)(
-        "detects an Object Storage %s change",
-        (key, value) => {
-            const settings = configuredSettings();
-            expect(getObjectStorageReplicatorConfigurationIdentity({ ...settings, [key]: value })).not.toBe(
-                getObjectStorageReplicatorConfigurationIdentity(settings)
-            );
-        }
-    );
-
     it("normalises endpoint and header representation without using the setup URI grammar", () => {
         const settings = configuredSettings();
         const couchIdentity = getCouchDBReplicatorConfigurationIdentity(settings);
-        const objectStorageIdentity = getObjectStorageReplicatorConfigurationIdentity(settings);
 
         expect(
             getCouchDBReplicatorConfigurationIdentity({
@@ -177,13 +133,6 @@ describe("active Replicator configuration identity", () => {
                 couchDB_CustomHeaders: "X-First: one\nX-Second: two",
             })
         ).toBe(couchIdentity);
-        expect(
-            getObjectStorageReplicatorConfigurationIdentity({
-                ...settings,
-                endpoint: "https://objects.example.test:443/base/",
-                bucketCustomHeaders: "X-First: one\nX-Second: two",
-            })
-        ).toBe(objectStorageIdentity);
     });
 
     it("ignores inactive remote-security credentials", () => {
@@ -198,28 +147,18 @@ describe("active Replicator configuration identity", () => {
                 permitEmptyPassphrase: !settings.permitEmptyPassphrase,
             })
         ).toBe(getCouchDBReplicatorConfigurationIdentity(settings));
-        expect(
-            getObjectStorageReplicatorConfigurationIdentity({
-                ...settings,
-                passphrase: "inactive-b",
-                useDynamicIterationCount: !settings.useDynamicIterationCount,
-                E2EEAlgorithm: "",
-                permitEmptyPassphrase: !settings.permitEmptyPassphrase,
-            })
-        ).toBe(getObjectStorageReplicatorConfigurationIdentity(settings));
     });
 
     it("keeps malformed endpoints deterministic and scoped", () => {
-        const settings = configuredSettings({ couchDB_URI: "not a URL", endpoint: "also not a URL" });
+        const settings = configuredSettings({ couchDB_URI: "not a URL" });
 
         expect(() => getCouchDBReplicatorConfigurationIdentity(settings)).not.toThrow();
-        expect(() => getObjectStorageReplicatorConfigurationIdentity(settings)).not.toThrow();
         expect(
             getCouchDBReplicatorConfigurationIdentity({ ...settings, couchDB_URI: "different invalid URL" })
         ).not.toBe(getCouchDBReplicatorConfigurationIdentity(settings));
         const unrelatedPluginChange = { ...settings, displayLanguage: "ja" };
-        expect(getObjectStorageReplicatorConfigurationIdentity(unrelatedPluginChange)).toBe(
-            getObjectStorageReplicatorConfigurationIdentity(settings)
+        expect(getCouchDBReplicatorConfigurationIdentity(unrelatedPluginChange)).toBe(
+            getCouchDBReplicatorConfigurationIdentity(settings)
         );
     });
 });

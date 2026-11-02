@@ -29,7 +29,6 @@ import { LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/
 import { LogPaneView, VIEW_TYPE_LOG } from "./Log/LogPaneView.ts";
 import { serialized } from "octagonal-wheels/concurrency/lock";
 import { $msg, translateNotice } from "@/common/translation";
-import { P2PLogCollector } from "@tabularium/sync-core/compat/replication/trystero/P2PLogCollector";
 import { REMOTE_REQUEST_ACTIVITY_MINIMUM_VISIBLE_MS, getTrackedRequestCount } from "./RemoteActivityStatus.ts";
 import {
     CHUNK_FETCH_MARKS,
@@ -145,7 +144,6 @@ export class ModuleLog extends AbstractObsidianModule {
     statusLog = reactiveSource("");
     activeFileStatus = reactiveSource("");
     notifies: { [key: string]: { count: number } } = {};
-    p2pLogCollector = new P2PLogCollector(this.services.context.events);
 
     observeForLogs() {
         const registerDisplay = <T extends { dispose(): void }>(display: T): T => {
@@ -213,7 +211,6 @@ export class ModuleLog extends AbstractObsidianModule {
             const replication = replicationStatLabel();
             const queued = queueCountLabel();
             const waiting = waitingLabel();
-            const p2p = this.p2pLogCollector.p2pReplicationLine.value;
             const firstLineParts = [
                 ...replication.parts,
                 ...counterPart("file-processing", STATUS_MARKS.processing, labelProc.count.value, $msg("moduleLog.statusFileProcessing")),
@@ -229,10 +226,9 @@ export class ModuleLog extends AbstractObsidianModule {
                 ...counterPart("queue-conflicts", STATUS_MARKS.conflicts, labelConflictProcessCount.count.value, $msg("moduleLog.statusQueueConflicts")),
             ];
             return {
-                message: replication.message + waiting + queued + (p2p === "" ? "" : "\n" + p2p),
-                parts: p2p === "" ? firstLineParts : [...firstLineParts, { key: "p2p", text: "\n" + p2p }],
+                message: replication.message + waiting + queued,
+                parts: firstLineParts,
                 statusBarParts: firstLineParts,
-                hasP2P: p2p !== "",
             };
         });
 
@@ -240,7 +236,7 @@ export class ModuleLog extends AbstractObsidianModule {
             const scheduleMessage = this.services.appLifecycle.isReloadingScheduled()
                 ? `${$msg("moduleLog.restartScheduled")}\n`
                 : "";
-            const { message, parts, statusBarParts, hasP2P } = statusLineLabel();
+            const { message, parts, statusBarParts } = statusLineLabel();
             const fileStatus = this.activeFileStatus.value;
             const status = scheduleMessage + this.statusLog.value;
             const fileStatusIcon = `${fileStatus && this.settings.hideFileWarningNotice ? " ✗ SKIP" : ""}`;
@@ -249,7 +245,7 @@ export class ModuleLog extends AbstractObsidianModule {
                 message: `${message}${fileStatusIcon}`,
                 status,
                 parts: [...parts, ...skipPart],
-                statusBarParts: hasP2P ? statusBarParts : [...statusBarParts, ...skipPart],
+                statusBarParts: [...statusBarParts, ...skipPart],
             };
         });
         this.statusBarLabels = statusBarLabels;

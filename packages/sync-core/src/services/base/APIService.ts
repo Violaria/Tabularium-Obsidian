@@ -1,4 +1,3 @@
-import type { FetchHttpHandler } from "@smithy/fetch-http-handler";
 import type { LOG_LEVEL } from "@lib/common/logger";
 import type { IAPIService, ICommandCompat } from "./IService";
 import { ServiceBase, type ServiceContext } from "./ServiceBase";
@@ -12,11 +11,6 @@ export abstract class APIService<T extends ServiceContext = ServiceContext>
     extends ServiceBase<T>
     implements IAPIService
 {
-    /**
-     * Get a custom fetch handler for making HTTP requests (e.g., S3 without CORS issues).
-     */
-    abstract getCustomFetchHandler(): FetchHttpHandler;
-
     /**
      * Add a log entry to the log (Now not used).
      * @param message The log message.

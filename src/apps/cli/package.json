@@ -37,8 +37,7 @@
         "pouchdb-merge": "^9.0.0",
         "pouchdb-replication": "^9.0.0",
         "pouchdb-utils": "^9.0.0",
-        "transform-pouch": "^2.0.0",
-        "werift": "^0.24.4"
+        "transform-pouch": "^2.0.0"
     },
     "devDependencies": {
         "typescript": "6.0.3",

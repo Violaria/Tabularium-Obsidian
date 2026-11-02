@@ -89,22 +89,3 @@ export function getCouchDBReplicatorConfigurationIdentity(settings: RemoteDBSett
     ]);
 }
 
-/**
- * Project the effective Object Storage connection settings to a private comparison identity.
- * The returned value can contain credentials and must not be logged, persisted, or displayed.
- */
-export function getObjectStorageReplicatorConfigurationIdentity(settings: RemoteDBSettings): string {
-    return JSON.stringify([
-        "s3",
-        projectEndpoint(settings.endpoint),
-        settings.bucket,
-        settings.bucketPrefix,
-        settings.region,
-        settings.accessKey,
-        settings.secretKey,
-        settings.forcePathStyle,
-        settings.useCustomRequestHandler,
-        projectHeaders(settings.bucketCustomHeaders),
-        projectRemoteSecurity(settings),
-    ]);
-}

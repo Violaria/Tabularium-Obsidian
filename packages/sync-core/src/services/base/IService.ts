@@ -1,5 +1,4 @@
 import type { ValueStore, ValueDeleter } from "@vrtmrz/value-store";
-import type { FetchHttpHandler } from "@smithy/fetch-http-handler";
 import { type LOG_LEVEL } from "octagonal-wheels/common/logger";
 import type {
     AnyEntry,
@@ -77,7 +76,6 @@ export interface ICommandCompat {
 }
 
 export interface IAPIService {
-    getCustomFetchHandler(): FetchHttpHandler;
     addStatusBarItem(): HTMLElement | undefined;
 
     addLog(message: unknown, level: LOG_LEVEL, key?: string): void;

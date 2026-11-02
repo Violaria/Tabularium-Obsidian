@@ -1,7 +1,6 @@
 import { InjectableAPIService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAPIService";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { Platform, type Command, type ViewCreator } from "@/deps.ts";
-import { ObsHttpHandler } from "@/modules/essentialObsidian/APILib/ObsHttpHandler";
 import { ObsidianConfirm } from "./ObsidianConfirm";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import { requestUrl, type RequestUrlParam } from "@/deps";
@@ -17,17 +16,11 @@ declare module "obsidian" {
 }
 
 export class ObsidianAPIService extends InjectableAPIService<ObsidianServiceContext> {
-    _customHandler: ObsHttpHandler | undefined;
     _confirmInstance: Confirm;
     constructor(context: ObsidianServiceContext) {
         super(context);
         this._confirmInstance = new ObsidianConfirm(context);
     }
-    getCustomFetchHandler(): ObsHttpHandler {
-        if (!this._customHandler) this._customHandler = new ObsHttpHandler(undefined, undefined);
-        return this._customHandler;
-    }
-
     async showWindow(viewType: string): Promise<void> {
         const leaves = this.app.workspace.getLeavesOfType(viewType);
         if (leaves.length == 0) {

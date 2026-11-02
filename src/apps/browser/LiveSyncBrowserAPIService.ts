@@ -3,7 +3,6 @@ import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import type { ICommandCompat } from "@tabularium/sync-core/compat/services/base/IService";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { InjectableAPIService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAPIService";
-import { FetchHttpHandler } from "@smithy/fetch-http-handler";
 import { _fetch } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 declare const MANIFEST_VERSION: string | undefined;
@@ -38,10 +37,6 @@ export class LiveSyncBrowserAPIService<T extends ServiceContext> extends Injecta
 
     get confirm(): Confirm {
         return this.options.confirm;
-    }
-
-    getCustomFetchHandler(): FetchHttpHandler {
-        return new FetchHttpHandler();
     }
 
     isMobile(): boolean {

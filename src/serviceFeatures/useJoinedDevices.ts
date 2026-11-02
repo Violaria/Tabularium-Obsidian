@@ -2,7 +2,6 @@ import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/
 import {
     NODEINFO_DOCID,
     REMOTE_COUCHDB,
-    REMOTE_MINIO,
     type EntryNodeInfo,
     type RemoteDBSettings,
 } from "@tabularium/sync-core/compat/common/types";
@@ -11,7 +10,6 @@ import type { ObsidianNoticeGroups } from "@/modules/services/ObsidianNoticeGrou
 import JoinedDevicesDialog from "@/modules/services/LiveSyncUI/dialogues/JoinedDevicesDialog.svelte";
 import {
     getCouchDBReplicatorConfigurationIdentity,
-    getObjectStorageReplicatorConfigurationIdentity,
 } from "@/common/replicatorConfigurationIdentity";
 import { $msg } from "@/common/translation";
 import { OPEN_JOINED_DEVICES } from "./joinedDevicesCommand";
@@ -27,9 +25,6 @@ const noticeGroup = "joined-device-versions";
 function remoteIdentity(settings: RemoteDBSettings): string | undefined {
     if (settings.remoteType === REMOTE_COUCHDB && settings.couchDB_URI && settings.couchDB_DBNAME) {
         return getCouchDBReplicatorConfigurationIdentity(settings);
-    }
-    if (settings.remoteType === REMOTE_MINIO && settings.endpoint && settings.bucket) {
-        return getObjectStorageReplicatorConfigurationIdentity(settings);
     }
     return undefined;
 }

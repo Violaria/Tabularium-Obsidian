@@ -4,7 +4,6 @@ import {
     type RemoteDBSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import type { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import type { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import {
     CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS,
     CENTRAL_REMOTE_ADMINISTRATION_OBSERVATION_KINDS,
@@ -24,13 +23,12 @@ import {
 } from "@tabularium/sync-core/replication";
 
 /**
- * Central milestone administration shared by the two central providers.
+ * Central milestone administration for the CouchDB provider.
  *
- * The provider definition selects a reader before mutation. CouchDB then owns
- * a fresh verification connection, while Object Storage borrows the active
- * Journal client. Local node identity is established before either mutation.
+ * The provider definition selects a reader before mutation; CouchDB owns a
+ * fresh verification connection. Local node identity is established before the
+ * mutation.
  */
-const JOURNAL_MILESTONE_PATH = "_00000000-milestone.json";
 
 /** A provider read result, including failures which settled without a throw. */
 type CentralMilestoneReadResult =
@@ -48,8 +46,6 @@ type CentralMilestoneReaderPreparer = (
 
 type CouchDBAdministrationReplicator = CentralRemoteAdministrationReplicator &
     Pick<LiveSyncCouchDBReplicator, "connectRemoteCouchDBWithSetting" | "isMobile">;
-
-type JournalAdministrationClient = Pick<LiveSyncJournalReplicator["client"], "downloadJsonWithResult">;
 
 function isCentralRemoteAdministrationReplicator(
     replicator: ReplicatorInstance
@@ -194,60 +190,6 @@ function prepareCouchDBMilestoneReader(
     };
 }
 
-function isJournalAdministrationClient(client: unknown): client is JournalAdministrationClient {
-    return (
-        typeof client === "object" &&
-        client !== null &&
-        "downloadJsonWithResult" in client &&
-        typeof client.downloadJsonWithResult === "function"
-    );
-}
-
-function requireJournalAdministrationClient(
-    replicator: CentralRemoteAdministrationReplicator
-): JournalAdministrationClient {
-    if (!("client" in replicator) || !isJournalAdministrationClient(replicator.client)) {
-        throw new Error("The configured Object Storage administration adapter does not provide milestone access.");
-    }
-    return replicator.client;
-}
-
-function assertNeverJournalStorageRead(result: never): never {
-    throw new Error(`Unexpected Journal storage read result: ${String(result)}`);
-}
-
-function prepareObjectStorageMilestoneReader(
-    replicator: CentralRemoteAdministrationReplicator
-): PreparedCentralMilestoneReader {
-    // The Journal client belongs to the active Replicator. This reader borrows
-    // it for the provider's distinct milestone path and must not dispose it.
-    const client = requireJournalAdministrationClient(replicator);
-
-    return async () => {
-        try {
-            const result = await client.downloadJsonWithResult<EntryMilestoneInfo>(JOURNAL_MILESTONE_PATH);
-            switch (result.status) {
-                case "available":
-                    return { milestone: result.value };
-                case "not-found":
-                    return { milestone: undefined };
-                case "unavailable":
-                    return {
-                        failureReason: CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS.MILESTONE_READ_FAILED,
-                        detail: result.error,
-                    };
-                default:
-                    return assertNeverJournalStorageRead(result);
-            }
-        } catch (error) {
-            return {
-                failureReason: CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS.MILESTONE_READ_FAILED,
-                detail: error,
-            };
-        }
-    };
-}
-
 const runCouchDBCentralRemoteAdministration: CentralRemoteAdministrationRunner = async (
     replicator,
     setting,
@@ -261,23 +203,7 @@ const runCouchDBCentralRemoteAdministration: CentralRemoteAdministrationRunner =
     return await runCentralRemoteAdministration(replicator, setting, request, prepareCouchDBMilestoneReader);
 };
 
-const runObjectStorageCentralRemoteAdministration: CentralRemoteAdministrationRunner = async (
-    replicator,
-    setting,
-    request
-) => {
-    if (!isCentralRemoteAdministrationReplicator(replicator)) {
-        return centralRemoteAdministrationVerificationFailed(
-            CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS.CAPABILITY_NOT_APPLICABLE
-        );
-    }
-    return await runCentralRemoteAdministration(replicator, setting, request, prepareObjectStorageMilestoneReader);
-};
-
 /** CouchDB mutation and milestone postcondition verification capability. */
 export const COUCHDB_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY: SupportedCapability<CentralRemoteAdministrationRunner> =
     supportedCapability(runCouchDBCentralRemoteAdministration);
 
-/** Object Storage mutation and milestone postcondition verification capability. */
-export const OBJECT_STORAGE_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY: SupportedCapability<CentralRemoteAdministrationRunner> =
-    supportedCapability(runObjectStorageCentralRemoteAdministration);
