@@ -338,7 +338,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         this.core.services.appLifecycle.performRestart();
     }
 
-    private sync(el: HTMLElement) {
+    private syncMode(el: HTMLElement) {
         const settings = this.settings;
         const mode: SyncMode = settings.liveSync ? "live" : settings.periodicReplication ? "periodic" : "events";
         hint(new Setting(el).setName($msg("tabularium.settings.mode")), $msg("tabularium.settings.modeDesc")).addDropdown((d) =>
@@ -355,6 +355,19 @@ export class TabulariumSettingTab extends PluginSettingTab {
         if (mode === "periodic") this.row(el, "periodicReplicationInterval");
         if (mode !== "live") for (const key of ["syncOnStart", "syncOnSave", "syncOnEditorSave", "syncOnFileOpen", "syncAfterMerge"] as const) this.row(el, key);
         this.row(el, mode === "live" ? "batchSaveInLiveSync" : "batchSave");
+    }
+
+    private sync(el: HTMLElement) {
+        const pause = this.owner.livePause;
+        if (pause?.paused) {
+            // While paused the triggers are off and recorded; editing them here would be overwritten on resume.
+            hint(new Setting(el).setName($msg("tabularium.settings.livePaused")), $msg("tabularium.settings.livePausedDesc")).addButton((b) =>
+                b.setButtonText($msg("tabularium.syncMenu.resume")).onClick(async () => {
+                    await pause.resume();
+                    this.display();
+                })
+            );
+        } else this.syncMode(el);
         if (Platform.isDesktop) this.row(el, "keepReplicationActiveInBackground");
         this.heading(el, "tabularium.settings.whatSyncs");
         this.row(el, "syncMaxSizeInMB");

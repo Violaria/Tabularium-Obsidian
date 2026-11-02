@@ -1797,6 +1797,10 @@ Seconds. The quiet period after the latest pending update before local database 
 Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: 秒。从第一次未写入的改动算起，最多等多久就写入本地数据库。这不保证写入数据库、网络传输或其他设备收到改动的完成时间。
 tabularium.syncMenu.title: 同步
 tabularium.syncMenu.now: 立即同步
+tabularium.syncMenu.pause: 暂停实时同步
+tabularium.syncMenu.resume: 恢复实时同步
+tabularium.settings.livePaused: 实时同步已暂停
+tabularium.settings.livePausedDesc: 修改先留在这台设备上，直到恢复实时同步，或在「同步」菜单中选择「立即同步」。恢复后，同步设置回到暂停之前的样子。
 tabularium.syncMenu.history: 历史版本
 tabularium.syncMenu.flat: 同步：${action}
 tabularium.history.revisions: ${file} / ${count} 个版本

@@ -1808,6 +1808,10 @@ Seconds. The quiet period after the latest pending update before local database 
 Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: Secundae. Maxima exspectatio a prima mutatione nondum scripta antequam repositorium locale scribatur. Non praestat quando scriptura, transmissio per rete aut adventus in alio instrumento perficiatur.
 tabularium.syncMenu.title: Synchronizatio
 tabularium.syncMenu.now: Synchroniza nunc
+tabularium.syncMenu.pause: Synchronizationem vivam suspende
+tabularium.syncMenu.resume: Synchronizationem vivam resume
+tabularium.settings.livePaused: Synchronizatio viva suspensa est
+tabularium.settings.livePausedDesc: Mutationes in hoc instrumento manent donec synchronizationem vivam resumis aut «Synchroniza nunc» in indice «Synchronizatio» eligis. Resumpta synchronizatione, optiones synchronizationis ut ante suspensionem restituuntur.
 tabularium.syncMenu.history: Historia versionum
 tabularium.syncMenu.flat: "Synchronizatio: ${action}"
 tabularium.history.revisions: ${file} / ${count} versiones

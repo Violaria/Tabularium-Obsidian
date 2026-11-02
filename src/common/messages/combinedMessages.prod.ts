@@ -4743,6 +4743,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nexus",
         zh: "链接",
     },
+    "tabularium.settings.livePaused": {
+        def: "Live sync is paused",
+        la: "Synchronizatio viva suspensa est",
+        zh: "实时同步已暂停",
+    },
+    "tabularium.settings.livePausedDesc": {
+        def: "Changes stay on this device until you resume live sync or choose Sync now in the Sync menu. Resuming restores the synchronisation settings from before the pause.",
+        la: "Mutationes in hoc instrumento manent donec synchronizationem vivam resumis aut «Synchroniza nunc» in indice «Synchronizatio» eligis. Resumpta synchronizatione, optiones synchronizationis ut ante suspensionem restituuntur.",
+        zh: "修改先留在这台设备上，直到恢复实时同步，或在「同步」菜单中选择「立即同步」。恢复后，同步设置回到暂停之前的样子。",
+    },
     "tabularium.settings.locked": {
         def: "Vault locked",
         la: "Tabularium clausum",
@@ -5322,6 +5332,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sync now",
         la: "Synchroniza nunc",
         zh: "立即同步",
+    },
+    "tabularium.syncMenu.pause": {
+        def: "Pause live sync",
+        la: "Synchronizationem vivam suspende",
+        zh: "暂停实时同步",
+    },
+    "tabularium.syncMenu.resume": {
+        def: "Resume live sync",
+        la: "Synchronizationem vivam resume",
+        zh: "恢复实时同步",
     },
     "tabularium.syncMenu.title": {
         def: "Sync",

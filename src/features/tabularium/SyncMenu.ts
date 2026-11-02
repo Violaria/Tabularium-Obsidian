@@ -1,4 +1,5 @@
-// "Sync" in the file explorer's context menu, right above the sorting submenu: sync now, and a note's history.
+// "Sync" in the file explorer's context menu, right above the sorting submenu: sync now, pausing or resuming live sync,
+// and a note's history.
 import { Platform, TFile, type Menu, type MenuItem, type Plugin } from "obsidian";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
@@ -8,6 +9,7 @@ import { $msg } from "@/common/translation";
 import { eventHub } from "@/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";
 import type { LiveSyncCore } from "@/main";
+import type { LiveSyncPause } from "./LiveSyncPause.ts";
 
 /** Not in Obsidian's published typings; the sorting component uses the same call. */
 type SubmenuItem = MenuItem & { setSubmenu(): Menu };
@@ -16,13 +18,21 @@ type SubmenuItem = MenuItem & { setSubmenu(): Menu };
  * Must be installed before the sorting component: menu handlers run in the order they were registered, and the sorting
  * submenu is added by its own handler. `connected` is asked when the menu opens.
  */
-export function installSyncMenu(plugin: Plugin, core: LiveSyncCore, connected: () => boolean) {
+export function installSyncMenu(
+    plugin: Plugin,
+    core: LiveSyncCore,
+    connected: () => boolean,
+    livePause: () => LiveSyncPause | undefined
+) {
     const fill = (menu: Menu, file: TFile | undefined, flat: boolean) => {
-        const title = (key: "tabularium.syncMenu.now" | "tabularium.syncMenu.history") =>
-            flat ? $msg("tabularium.syncMenu.flat", { action: $msg(key) }) : $msg(key);
+        type Action = "now" | "pause" | "resume" | "history";
+        const title = (action: Action) => {
+            const key = `tabularium.syncMenu.${action}` as const;
+            return flat ? $msg("tabularium.syncMenu.flat", { action: $msg(key) }) : $msg(key);
+        };
         menu.addItem((item) =>
             item
-                .setTitle(title("tabularium.syncMenu.now"))
+                .setTitle(title("now"))
                 .setIcon("refresh-cw")
                 .onClick(() =>
                     void core.services.replication.replicateUserInitiated({
@@ -32,10 +42,19 @@ export function installSyncMenu(plugin: Plugin, core: LiveSyncCore, connected: (
                     })
                 )
         );
+        const pause = livePause();
+        if (pause?.paused)
+            menu.addItem((item) =>
+                item.setTitle(title("resume")).setIcon("play").onClick(() => void pause.resume())
+            );
+        else if (pause?.canPause())
+            menu.addItem((item) =>
+                item.setTitle(title("pause")).setIcon("pause").onClick(() => void pause.pause())
+            );
         if (file)
             menu.addItem((item) =>
                 item
-                    .setTitle(title("tabularium.syncMenu.history"))
+                    .setTitle(title("history"))
                     .setIcon("history")
                     .onClick(() => eventHub.emitEvent(EVENT_REQUEST_SHOW_HISTORY, { file }))
             );

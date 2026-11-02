@@ -3,6 +3,7 @@ import { hint } from "./hint";
 import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
+import { LIVE_SYNC_PAUSE_KEY } from "./LiveSyncPause.ts";
 import type { LiveSyncCore } from "@/main";
 import { $msg } from "@/common/translation";
 import {
@@ -205,6 +206,8 @@ export class TabulariumServer {
                     if (!(await database.resetDatabaseForCurrentSettings({ databaseEvents, replicator })))
                         throw new Error($msg("tabularium.server.resetFailed"));
                 }
+                // The login wrote new sync settings, so a pause recorded before no longer applies.
+                await this.core.services.setting.deviceValues.delete(LIVE_SYNC_PAUSE_KEY);
                 // The connection is recorded last, once the settings are in place.
                 this.connection = connection;
                 await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(connection, null, 2));
@@ -222,6 +225,7 @@ export class TabulariumServer {
     /** Forgets the connection on this device; the server keeps the device until it is revoked there. */
     async disconnect() {
         this.connection = undefined;
+        await this.core.services.setting.deviceValues.delete(LIVE_SYNC_PAUSE_KEY);
         await this.plugin.app.vault.adapter.remove(this.file);
         await this.core.services.setting.applyPartial(
             {
