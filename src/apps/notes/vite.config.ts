@@ -15,7 +15,6 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "../../"),
-            "@tabularium/custom-sort/engine": path.resolve(__dirname, "../../../../../packages/custom-sort/src/engine.ts"),
             obsidian: path.resolve(__dirname, "obsidian-shim.ts"),
         },
     },

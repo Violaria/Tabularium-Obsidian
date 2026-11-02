@@ -59,10 +59,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-## Custom File Explorer sorting
-
-The built-in file sorting is Custom File Explorer sorting 3.2.0 (commit `6100b0c`) by SebastianMC,
-https://github.com/SebastianMC/obsidian-custom-sort. Its `package.json` declares the MIT License and names no copyright
-holder; it is used under that declaration. (Its repository also contains `LICENSE`, the notice of the Obsidian sample
-plug-in it started from, and `LICENSE.md`, a copy of the GNU GPL v3.)

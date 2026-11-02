@@ -12,8 +12,7 @@
     import { resolveLinkpath } from "@/features/tabularium/linkpath";
     import { repairLinks } from "../../../../server/src/tabularius/links";
     import Tree from "./Tree.svelte";
-    import { frontMatter, isSpecSource, needsMetadata, parseSpecs, sortedTree } from "./sorting";
-    import type { SortSpecsCollection } from "@tabularium/custom-sort/engine";
+    import { isSpecSource, parseSpecs, sortedTree, type SortRules } from "./sorting";
     import Editor from "./Editor.svelte";
     import Conflict, { type Version } from "./Conflict.svelte";
     import { formatDate, language, serverError, setLanguage, t, titles, type Language } from "../../../../server/ui/i18n";
@@ -105,9 +104,8 @@
     /** The replica's state for the symbol beside the vault name: in sync, working, or offline. */
     const syncKind = $derived(offline ? "off" : phase === "open" ? "ok" : "busy");
     // File tree order from the vault's sortspec.md rules; rule texts are read again only when their revision changes.
-    let sortRules = $state.raw<SortSpecsCollection>();
+    let sortRules = $state.raw<SortRules>([]);
     let sortError = $state("");
-    let sortMetadata = $state(new Map<string, Record<string, unknown>>());
     const ruleTexts = new Map<string, { rev: string; text: string }>();
     let runtime: NotesRuntime | undefined;
     let record: VaultRecord | undefined;
@@ -762,7 +760,7 @@
     async function shareSource(): Promise<ShareSource> {
         const active = runtime!;
         const all = await active.files();
-        const ordered = sortedTree(all, vault?.name ?? "", sortRules, sortMetadata);
+        const ordered = sortedTree(all, vault?.name ?? "", sortRules);
         const find = (node: ShareTreeNode, path: string): ShareTreeNode | undefined =>
             node.path === path ? node : node.children.map((child) => find(child, path)).find(Boolean);
         return {
@@ -834,9 +832,9 @@
     const conflicted = $derived(new Set(files.filter((f) => f.conflicted).map((f) => f.path)));
     const tree = $derived.by(() => {
         const query = filter.trim().toLowerCase();
-        return sortedTree(query ? files.filter((f) => f.path.toLowerCase().includes(query)) : files, vault?.name ?? "", sortRules, sortMetadata);
+        return sortedTree(query ? files.filter((f) => f.path.toLowerCase().includes(query)) : files, vault?.name ?? "", sortRules);
     });
-    /** Reads the sorting rules (and, when rules use them, the notes' front matter) after the file list changes. */
+    /** Reads the sorting rules after the file list changes. */
     async function loadSorting(active: NotesRuntime, list: NotesFile[]) {
         const sources = [];
         for (const file of list.filter((f) => isSpecSource(f.path))) {
@@ -849,16 +847,8 @@
         }
         if (active !== runtime) return;
         const parsed = parseSpecs(sources);
-        sortRules = parsed.collection;
-        sortError = parsed.error === undefined ? "" : t("notes.sortError", { error: parsed.error });
-        if (needsMetadata(sources)) {
-            const metadata = new Map<string, Record<string, unknown>>();
-            for (const file of list.filter((f) => isNote(f.path))) {
-                const value = frontMatter(await active.read(file.path));
-                if (value) metadata.set(file.path, value);
-            }
-            if (active === runtime) sortMetadata = metadata;
-        }
+        sortRules = parsed.rules;
+        sortError = parsed.unconverted ? t("notes.sortConvert") : "";
     }
     $effect(() => {
         const list = files;

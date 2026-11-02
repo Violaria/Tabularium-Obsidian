@@ -5,6 +5,8 @@ export interface ConfirmOptions<C extends string = string> {
     title: string;
     /** What will happen. */
     body: string;
+    /** Text shown as it is, in a scrolling block: what will be written. */
+    preview?: string;
     /** What it means for the vault's other devices, shown in the one warning block. */
     impact?: string;
     /** The button, naming the action. */
@@ -29,6 +31,7 @@ export function confirmAction<C extends string = string>(app: App, options: Conf
         modal.setTitle(options.title);
         const { contentEl } = modal;
         for (const paragraph of options.body.split("\n\n")) contentEl.createEl("p", { text: paragraph });
+        if (options.preview !== undefined) contentEl.createEl("pre", { cls: "tabularium-confirm-preview", text: options.preview });
         let button!: HTMLButtonElement;
         const update = () => {
             button.disabled = !typed || (options.choices !== undefined && chosen === undefined);

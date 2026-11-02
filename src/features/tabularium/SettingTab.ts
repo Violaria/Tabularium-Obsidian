@@ -106,7 +106,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         this.owner = plugin;
         // Saving settings (also from commands) asks open setting pages to redraw, e.g. after a language change.
         eventHub.onEvent(EVENT_REQUEST_RELOAD_SETTING_TAB, () => {
-            if (plugin.sorting?.ready) plugin.sorting.updateStatusBar();
+            plugin.sorting?.updateStatusBar();
             if (this.containerEl.isConnected) this.display();
         });
     }
@@ -382,11 +382,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
             new Setting(el).setDesc($msg("tabularium.sorting.standalone"));
             return;
         }
-        if (!sorting.ready) {
-            new Setting(el).setDesc($msg("tabularium.sorting.notReady"));
-            return;
-        }
-        sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }));
+        sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }), () => this.display());
     }
 
     private kindle(el: HTMLElement) {

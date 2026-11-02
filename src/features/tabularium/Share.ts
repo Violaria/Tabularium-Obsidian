@@ -8,7 +8,7 @@ import type { LiveSyncCore } from "@/main";
 import { getResolvedLang } from "@/common/translation";
 import { catalogues, type Language } from "../../../../server/ui/messages";
 import type { TabulariumServer } from "./ServerLogin";
-import type { TabulariumCustomSorting } from "./CustomSorting";
+import type { TabulariumSorting } from "./FileSorting";
 import ShareDialog from "./share/ShareDialog.svelte";
 import { ShareError, Sharing, type ShareApi, type ShareList, type ShareView } from "./share/sharing";
 import type { ShareSource, ShareTreeNode } from "./share/package";
@@ -41,7 +41,7 @@ export class TabulariumShare {
         private readonly plugin: Plugin,
         private readonly server: TabulariumServer,
         private readonly core: LiveSyncCore,
-        private readonly sorting: () => TabulariumCustomSorting | undefined
+        private readonly sorting: () => TabulariumSorting | undefined
     ) {}
 
     install() {
@@ -116,7 +116,7 @@ export class TabulariumShare {
         };
         const ordered = (folder: TFolder): TAbstractFile[] => {
             const sorting = this.sorting();
-            if (sorting) return sorting.orderedFolderItemsForBookmarking(folder, undefined as never);
+            if (sorting) return sorting.ordered(folder);
             return [...folder.children].sort((a, b) =>
                 a instanceof TFolder === b instanceof TFolder ? a.name.localeCompare(b.name) : a instanceof TFolder ? -1 : 1
             );
@@ -237,7 +237,7 @@ function confirm(app: Plugin["app"], title: string, body: string, action: string
     });
 }
 
-export function installShare(plugin: Plugin, server: TabulariumServer, core: LiveSyncCore, sorting: () => TabulariumCustomSorting | undefined) {
+export function installShare(plugin: Plugin, server: TabulariumServer, core: LiveSyncCore, sorting: () => TabulariumSorting | undefined) {
     const share = new TabulariumShare(plugin, server, core, sorting);
     share.install();
     return share;

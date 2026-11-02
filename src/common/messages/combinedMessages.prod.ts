@@ -5064,114 +5064,69 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "同步范围",
     },
     "tabularium.sorting.apply": {
-        def: "Apply sorting rules",
-        la: "Adhibe regulas ordinandi",
-        zh: "应用排序规则",
-    },
-    "tabularium.sorting.applyButton": {
-        def: "Apply",
-        la: "Adhibe",
-        zh: "应用",
+        def: "Sort the file list",
+        la: "Indicem plicarum ex regulis ordina",
+        zh: "按规则排序文件列表",
     },
     "tabularium.sorting.applyDesc": {
-        def: "Read sorting-spec from your notes and update the file explorer.",
-        la: "Lege sorting-spec ex commentariis tuis et indicem plicarum renova.",
-        zh: "从笔记中读取 sorting-spec 并更新文件列表。",
+        def: "Order notes and folders as the lists in sortspec.md say. Items not listed keep Obsidian's order.",
+        la: "Commentarios et capsas ordina ut indices in sortspec.md dicunt. Quae non enumerantur, ordinem Obsidian servant.",
+        zh: "按 sortspec.md 正文中的列表排列笔记和文件夹，没列出的保持 Obsidian 的排序。",
     },
-    "tabularium.sorting.bookmarks": {
-        def: "Order by bookmarks",
-        la: "Ordinare per signa libri",
-        zh: "按书签排序",
+    "tabularium.sorting.commandOff": {
+        def: "Pause file sorting",
+        la: "Ordinationem plicarum suspende",
+        zh: "暂停文件排序",
     },
-    "tabularium.sorting.bookmarksDesc": {
-        def: "Uses the order of items in a group of the core Bookmarks plug-in, so items can be arranged by dragging them there.",
-        la: "Ordine rerum in grege additamenti 'Signa libri' utitur, ut res illic trahendo disponantur.",
-        zh: "使用 Obsidian 核心插件「书签」中某个分组里的顺序，这样可以通过在书签中拖动来排列。",
+    "tabularium.sorting.commandOn": {
+        def: "Sort the file list by sortspec.md",
+        la: "Indicem plicarum ex sortspec.md ordina",
+        zh: "按 sortspec.md 排序文件列表",
     },
-    "tabularium.sorting.bookmarksGroup": {
-        def: "Bookmarks group",
-        la: "Grex signorum",
-        zh: "书签分组",
+    "tabularium.sorting.convert": {
+        def: "Convert the sorting rules",
+        la: "Regulas ordinandi converte",
+        zh: "转换排序规则",
     },
-    "tabularium.sorting.bookmarksGroupDesc": {
-        def: "The group in Bookmarks whose order is used.",
-        la: "Grex signorum cuius ordo adhibetur.",
-        zh: "使用其顺序的书签分组。",
+    "tabularium.sorting.convertAction": {
+        def: "Convert",
+        la: "Converte",
+        zh: "转换",
     },
-    "tabularium.sorting.bookmarksMenus": {
-        def: "Bookmark menu items",
-        la: "Res indicis signorum",
-        zh: "书签菜单项",
+    "tabularium.sorting.convertBody": {
+        def: "The rules in the front matter of ${path} become an indented list at the start of the note. The rest of the note stays below it, and sorting-spec is removed from the front matter. The list:",
+        la: "Regulae in front matter ${path} fiunt index gradatus initio commentarii. Reliquum commentarii infra manet, et sorting-spec e front matter removetur. Index:",
+        zh: "${path} front matter 中的规则会变成笔记开头的缩进列表，原有正文保留在列表之后，front matter 中的 sorting-spec 会删除。转换后的列表：",
     },
-    "tabularium.sorting.bookmarksMenusDesc": {
-        def: "Adds items to the file explorer's right-click menu for adding files and folders to that group.",
-        la: "Res in indicem dextri clici addit ut plicae et capsae ei gregi addantur.",
-        zh: "在文件列表的右键菜单中加入把文件和文件夹加入该分组的菜单项。",
+    "tabularium.sorting.convertButton": {
+        def: "Convert",
+        la: "Converte",
+        zh: "转换",
     },
-    "tabularium.sorting.command": {
-        def: "Open file sorting settings",
-        la: "Aperi optiones ordinandi plicas",
-        zh: "打开文件排序设置",
+    "tabularium.sorting.convertDesc": {
+        def: "${path} still holds the former front-matter rules (sorting-spec), which are no longer read. Until they are converted, the file list keeps Obsidian's order.",
+        la: "${path} adhuc regulas veteres in front matter continet (sorting-spec), quae iam non leguntur. Donec convertuntur, index plicarum ordinem Obsidian servat.",
+        zh: "${path} 仍是旧的 front matter 规则（sorting-spec），现在不再读取；转换之前，文件列表按 Obsidian 的排序显示。",
     },
-    "tabularium.sorting.contextMenu": {
-        def: "Sorting menu in the file explorer",
-        la: "Index ordinandi in indice plicarum",
-        zh: "文件列表中的排序菜单",
+    "tabularium.sorting.converted": {
+        def: "The sorting rules in ${path} are now a list.",
+        la: "Regulae ordinandi in ${path} nunc index sunt.",
+        zh: "${path} 的排序规则已转换为列表。",
     },
-    "tabularium.sorting.contextMenuDesc": {
-        def: "Adds applying and pausing sorting to the file explorer's right-click menu.",
-        la: "Adhibere et suspendere ordinem in indicem dextri clici addit.",
-        zh: "在文件列表的右键菜单中加入应用与暂停排序。",
+    "tabularium.sorting.convertMoved": {
+        def: "These folders were not listed in their parent folder's rules; they now come after the items not listed: ${folders}",
+        la: "Hae capsae in regulis capsae superioris non enumerabantur; nunc post res non enumeratas veniunt: ${folders}",
+        zh: "这些文件夹原来没有列在上级文件夹的规则里，转换后排在未列出的项目之后：${folders}",
     },
-    "tabularium.sorting.delay": {
-        def: "Delay at start (seconds)",
-        la: "Mora initio (secundae)",
-        zh: "启动后延迟（秒）",
+    "tabularium.sorting.convertTitle": {
+        def: "Convert the sorting rules to a list",
+        la: "Regulas ordinandi in indicem converte",
+        zh: "把排序规则转换为列表",
     },
-    "tabularium.sorting.delayDesc": {
-        def: "Seconds to wait after Obsidian starts before sorting, 0 to 30. Increase it if sorting is not applied on large vaults or on mobile.",
-        la: "Quot secundis post initium Obsidian exspectetur antequam ordinetur, 0 ad 30. Auge si in magnis tabulariis vel telephono ordo non adhibetur.",
-        zh: "Obsidian 启动后等待多少秒再排序，0 到 30。大笔记库或手机上排序没有生效时调大。",
-    },
-    "tabularium.sorting.indexNote": {
-        def: "Folder note name",
-        la: "Nomen commentarii capsae",
-        zh: "文件夹笔记名称",
-    },
-    "tabularium.sorting.indexNoteDesc": {
-        def: "If each folder describes itself in a note with a fixed name inside it (such as index), enter that name; its sorting rules and metadata are read too.",
-        la: "Si quaeque capsa se in commentario nominis certi (ut index) describit, hoc nomen scribe; regulae et metadata eius quoque leguntur.",
-        zh: "如果每个文件夹用其中一篇固定名称的笔记（如 index）描述自身，在此填写这个名称，也会读取其中的排序规则和元数据。",
-    },
-    "tabularium.sorting.notReady": {
-        def: "File sorting is still starting; open this page again in a moment.",
-        la: "Ordo fasciculorum adhuc incipit; hanc paginam mox iterum aperi.",
-        zh: "文件排序仍在启动，稍后再打开这一页。",
-    },
-    "tabularium.sorting.parseFailed": {
-        def: "The sorting rules could not be parsed; sorting is paused. ${detail}",
-        la: "Regulae ordinandi interpretari non potuerunt; ordinatio suspensa est. ${detail}",
-        zh: "排序规则解析失败，排序已暂停。${detail}",
-    },
-    "tabularium.sorting.pause": {
-        def: "Pause",
-        la: "Intermitte",
-        zh: "暂停",
-    },
-    "tabularium.sorting.settingDesc": {
-        def: "Arrange notes and folders using sorting rules or bookmarks.",
-        la: "Commentarios et capsas secundum regulas ordinandi vel signacula dispone.",
-        zh: "按排序规则或书签排列笔记和文件夹。",
-    },
-    "tabularium.sorting.specFile": {
-        def: "Additional rule notes",
-        la: "Commentarii regularum additi",
-        zh: "额外的规则笔记",
-    },
-    "tabularium.sorting.specFileDesc": {
-        def: "Names or paths of notes whose front matter holds sorting rules, besides sortspec notes and folder notes. Apply the rules again after changing it.",
-        la: "Nomina vel viae commentariorum quorum praefatio regulas ordinandi continet, praeter commentarios sortspec et commentarios capsarum. Post mutationem regulas iterum adhibe.",
-        zh: "除 sortspec 笔记和文件夹笔记外，另外读取排序规则（front matter）的笔记名称或路径。修改后重新应用规则。",
+    "tabularium.sorting.convertUnsupported": {
+        def: "These rules cannot be written as a list and are dropped:\n${lines}",
+        la: "Hae regulae ut index scribi non possunt et omittuntur:\n${lines}",
+        zh: "下面这些规则无法写成列表，将被丢弃：\n${lines}",
     },
     "tabularium.sorting.standalone": {
         def: "Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.",
@@ -5197,116 +5152,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sorting: on",
         la: "Ordo: adhibetur",
         zh: "排序：开",
-    },
-    "tabularium.sorting.title": {
-        def: "Tabularium file sorting",
-        la: "Ordinatio plicarum Tabularium",
-        zh: "Tabularium 文件排序",
-    },
-    "tabularium.sorting.ui.apply": {
-        def: "Apply sorting",
-        la: "Ordinem adhibere",
-        zh: "应用排序",
-    },
-    "tabularium.sorting.ui.applyFlat": {
-        def: "Sorting: apply",
-        la: "Ordo: adhibere",
-        zh: "排序：应用",
-    },
-    "tabularium.sorting.ui.bookmark": {
-        def: "Add to the sorting bookmarks",
-        la: "Signis ordinandi addere",
-        zh: "加入排序书签",
-    },
-    "tabularium.sorting.ui.bookmarkFlat": {
-        def: "Sorting: add to the bookmarks",
-        la: "Ordo: signis addere",
-        zh: "排序：加入书签",
-    },
-    "tabularium.sorting.ui.bookmarkSelected": {
-        def: "Sorting: add the selection to the bookmarks",
-        la: "Ordo: delecta signis addere",
-        zh: "排序：把所选项目加入书签",
-    },
-    "tabularium.sorting.ui.bookmarkSelectedFlat": {
-        def: "Add the selection to the sorting bookmarks",
-        la: "Delecta signis ordinandi addere",
-        zh: "把所选项目加入排序书签",
-    },
-    "tabularium.sorting.ui.bookmarkSiblings": {
-        def: "Add it and its siblings to the sorting bookmarks",
-        la: "Id et cognata signis ordinandi addere",
-        zh: "连同同级项目加入排序书签",
-    },
-    "tabularium.sorting.ui.bookmarkSiblingsFlat": {
-        def: "Sorting: add it and its siblings to the bookmarks",
-        la: "Ordo: id et cognata signis addere",
-        zh: "排序：连同同级项目加入书签",
-    },
-    "tabularium.sorting.ui.commandOff": {
-        def: "Pause file sorting",
-        la: "Ordinem plicarum suspendere",
-        zh: "暂停文件排序",
-    },
-    "tabularium.sorting.ui.commandOn": {
-        def: "Apply file sorting, reading the sorting rules again",
-        la: "Ordinem plicarum adhibere, regulis iterum lectis",
-        zh: "重新读取排序规则并应用文件排序",
-    },
-    "tabularium.sorting.ui.submenu": {
-        def: "Sorting",
-        la: "Ordo",
-        zh: "排序",
-    },
-    "tabularium.sorting.ui.suspend": {
-        def: "Pause sorting",
-        la: "Ordinem suspendere",
-        zh: "暂停排序",
-    },
-    "tabularium.sorting.ui.suspendFlat": {
-        def: "Sorting: pause",
-        la: "Ordo: suspendere",
-        zh: "排序：暂停",
-    },
-    "tabularium.sorting.ui.toggle": {
-        def: "Turn file sorting on or off",
-        la: "Ordinem plicarum commutare",
-        zh: "开关文件排序",
-    },
-    "tabularium.sorting.ui.unbookmark": {
-        def: "Remove from the sorting bookmarks",
-        la: "E signis ordinandi removere",
-        zh: "从排序书签中移除",
-    },
-    "tabularium.sorting.ui.unbookmarkFlat": {
-        def: "Sorting: remove from the bookmarks",
-        la: "Ordo: e signis removere",
-        zh: "排序：从书签中移除",
-    },
-    "tabularium.sorting.ui.unbookmarkSelected": {
-        def: "Sorting: remove the selection from the bookmarks",
-        la: "Ordo: delecta e signis removere",
-        zh: "排序：把所选项目从书签中移除",
-    },
-    "tabularium.sorting.ui.unbookmarkSelectedFlat": {
-        def: "Remove the selection from the sorting bookmarks",
-        la: "Delecta e signis ordinandi removere",
-        zh: "把所选项目从排序书签中移除",
-    },
-    "tabularium.sorting.ui.unbookmarkSiblings": {
-        def: "Remove it and its siblings from the sorting bookmarks",
-        la: "Id et cognata e signis ordinandi removere",
-        zh: "连同同级项目从排序书签中移除",
-    },
-    "tabularium.sorting.ui.unbookmarkSiblingsFlat": {
-        def: "Sorting: remove it and its siblings from the bookmarks",
-        la: "Ordo: id et cognata e signis removere",
-        zh: "排序：连同同级项目从书签中移除",
-    },
-    "tabularium.sorting.viewProblem": {
-        def: "The file explorer could not be sorted. Open the developer console for details.",
-        la: "Index plicarum ordinari non potuit. Singula in consola elaboratoris vide.",
-        zh: "无法对文件列表排序，详情见开发者控制台。",
     },
     "tabularium.sync.liveOff": {
         def: "Live sync off.",

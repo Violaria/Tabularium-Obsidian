@@ -1192,16 +1192,6 @@ tabularium.serverError.Mail delivery is not configured: Missio ad Kindle in mini
 tabularium.serverError.Request body too large: Liber 50 MB excedit. Eum per partes mitte.
 tabularium.serverError.Too many requests: Nimis multi conatus. Postea iterum conare.
 tabularium.serverError.Vault is not ready: Tabularium nondum paratum est. Praeparationem in consola ministratoris iterum conare.
-tabularium.sorting.parseFailed: "Regulae ordinandi interpretari non potuerunt; ordinatio suspensa est. ${detail}"
-tabularium.sorting.viewProblem: Index plicarum ordinari non potuit. Singula in consola elaboratoris vide.
-tabularium.sorting.apply: Adhibe regulas ordinandi
-tabularium.sorting.applyButton: Adhibe
-tabularium.sorting.applyDesc: Lege sorting-spec ex commentariis tuis et indicem plicarum renova.
-tabularium.sorting.command: Aperi optiones ordinandi plicas
-tabularium.sorting.pause: Intermitte
-tabularium.sorting.settingDesc: Commentarios et capsas secundum regulas ordinandi vel signacula dispone.
-tabularium.sorting.standalone: In hoc tabulario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit.
-tabularium.sorting.title: Ordinatio plicarum Tabularium
 the single, authoritative master copy: unicum et auctoritativum exemplar principale
 username: nomen usoris
 xxhash64 is the current default.: xxhash64 est praedefinitum praesens.
@@ -1492,24 +1482,6 @@ moduleLog.syncStatusStopped: Non synchronizatur
 "tabularium.settings.syncIgnoreRegExDesc": "Expressiones regulares in via plicae, una per lineam; plicae congruentes nec mittuntur nec accipiuntur."
 "tabularium.settings.syncOnlyRegEx": "Has tantum plicas synchronizare"
 "tabularium.settings.syncOnlyRegExDesc": "Expressiones regulares in via plicae, una per lineam. Si positae, tantum plicae congruentes synchronizantur."
-"tabularium.sorting.specFile": "Commentarii regularum additi"
-"tabularium.sorting.specFileDesc": "Nomina vel viae commentariorum quorum praefatio regulas ordinandi continet, praeter commentarios sortspec et commentarios capsarum. Post mutationem regulas iterum adhibe."
-"tabularium.sorting.indexNote": "Nomen commentarii capsae"
-"tabularium.sorting.indexNoteDesc": "Si quaeque capsa se in commentario nominis certi (ut index) describit, hoc nomen scribe; regulae et metadata eius quoque leguntur."
-"tabularium.sorting.delay": "Mora initio (secundae)"
-"tabularium.sorting.delayDesc": "Quot secundis post initium Obsidian exspectetur antequam ordinetur, 0 ad 30. Auge si in magnis tabulariis vel telephono ordo non adhibetur."
-"tabularium.sorting.statusBar": "In vectigali status ostendere"
-"tabularium.sorting.statusBarDesc": "Ostendit utrum ordo plicarum adhibeatur."
-"tabularium.sorting.contextMenu": "Index ordinandi in indice plicarum"
-"tabularium.sorting.contextMenuDesc": "Adhibere et suspendere ordinem in indicem dextri clici addit."
-"tabularium.sorting.bookmarks": "Ordinare per signa libri"
-"tabularium.sorting.bookmarksDesc": "Ordine rerum in grege additamenti 'Signa libri' utitur, ut res illic trahendo disponantur."
-"tabularium.sorting.bookmarksGroup": "Grex signorum"
-"tabularium.sorting.bookmarksGroupDesc": "Grex signorum cuius ordo adhibetur."
-"tabularium.sorting.bookmarksMenus": "Res indicis signorum"
-"tabularium.sorting.bookmarksMenusDesc": "Res in indicem dextri clici addit ut plicae et capsae ei gregi addantur."
-"tabularium.sorting.statusOn": "Ordo: adhibetur"
-"tabularium.sorting.statusOff": "Ordo: suspensus"
 "tabularium.settings.fetch.newer-cleanup": "Recentior vincit; quae in ministratore deleta sunt hic quoque delentur"
 "tabularium.settings.fetch.newer-cleanupDesc": "Quisque commentarius exemplar novissime mutatum servat. Commentarii in ministratore deleti hic quoque delentur."
 "tabularium.settings.fetch.newer-keep": "Recentior vincit; omnes plicae hic servantur"
@@ -1518,26 +1490,6 @@ moduleLog.syncStatusStopped: Non synchronizatur
 "tabularium.settings.fetch.remote-keepDesc": "Commentarii ministratoris exemplaria hic substituunt. Plicae hic exstantes omnes servantur, quod duplicata relinquere potest."
 "tabularium.settings.fetch.remote-delete": "Ministrator vincit; plicae tantum hic delentur"
 "tabularium.settings.fetch.remote-deleteDesc": "Hoc tabularium fit idem atque in ministratore. Plicae tantum hic exstantes delentur."
-"tabularium.sorting.ui.toggle": "Ordinem plicarum commutare"
-"tabularium.sorting.ui.apply": "Ordinem adhibere"
-"tabularium.sorting.ui.applyFlat": "Ordo: adhibere"
-"tabularium.sorting.ui.suspend": "Ordinem suspendere"
-"tabularium.sorting.ui.suspendFlat": "Ordo: suspendere"
-"tabularium.sorting.ui.bookmark": "Signis ordinandi addere"
-"tabularium.sorting.ui.bookmarkFlat": "Ordo: signis addere"
-"tabularium.sorting.ui.unbookmark": "E signis ordinandi removere"
-"tabularium.sorting.ui.unbookmarkFlat": "Ordo: e signis removere"
-"tabularium.sorting.ui.bookmarkSiblings": "Id et cognata signis ordinandi addere"
-"tabularium.sorting.ui.bookmarkSiblingsFlat": "Ordo: id et cognata signis addere"
-"tabularium.sorting.ui.unbookmarkSiblings": "Id et cognata e signis ordinandi removere"
-"tabularium.sorting.ui.unbookmarkSiblingsFlat": "Ordo: id et cognata e signis removere"
-"tabularium.sorting.ui.bookmarkSelected": "Ordo: delecta signis addere"
-"tabularium.sorting.ui.bookmarkSelectedFlat": "Delecta signis ordinandi addere"
-"tabularium.sorting.ui.unbookmarkSelected": "Ordo: delecta e signis removere"
-"tabularium.sorting.ui.unbookmarkSelectedFlat": "Delecta e signis ordinandi removere"
-"tabularium.sorting.ui.submenu": "Ordo"
-"tabularium.sorting.ui.commandOn": "Ordinem plicarum adhibere, regulis iterum lectis"
-"tabularium.sorting.ui.commandOff": "Ordinem plicarum suspendere"
 "tabularium.conflict.title": "Mutationes inter se pugnant"
 "tabularium.conflict.base": "Haec versio"
 "tabularium.conflict.conflicted": "Altera versio"
@@ -1784,7 +1736,6 @@ No active replicator found: Nulla synchronizatio constituta est
 Network is offline: Rete abest
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": "Synchronizatio perfecta: ${processedCount} plicae tractatae (${completedCount} perfectae, ${skippedCount} omissae, ${failedCount} errores)"
 tabularium.settings.resolveAllImpact: Versio vetustior cuiusque commentarii discrepantis in omnibus instrumentis abicitur; hic revocari non potest.
-tabularium.sorting.notReady: Ordo fasciculorum adhuc incipit; hanc paginam mox iterum aperi.
 tabularium.release.0.18.1: Unum vocabularium Latinum in additamento et paginis interretialibus.
 tabularium.release.0.18.2: Tabularius novo colloquio formula ante primum nuntium electa respondet.
 Allow sleep during synchronisation: Somnum per synchronizationem permittere
@@ -1885,3 +1836,21 @@ tabularium.release.0.24.3: Tabularius paginam ab hospite inter hospites SSH ut v
 tabularium.release.0.24.4: Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.
 tabularium.release.0.24.5: Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.
 tabularium.release.0.25.0: Additamentum fere quinta parte minus est. Nucleus synchronizationis nunc pars Tabularii est et solum nexum cum ministratore Tabularii servat; codex repositorii obiectorum et synchronizationis inter pares sublatus est. Instrumentum cuius optiones adhuc repositorium obiectorum aut synchronizationem inter pares nominant eis non utitur et per Tabularium ut solet conectit.
+"tabularium.sorting.standalone": "In hoc tabulario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit."
+"tabularium.sorting.statusBar": "In vectigali status ostendere"
+"tabularium.sorting.statusBarDesc": "Ostendit utrum ordo plicarum adhibeatur."
+"tabularium.sorting.statusOn": "Ordo: adhibetur"
+"tabularium.sorting.statusOff": "Ordo: suspensus"
+"tabularium.sorting.apply": "Indicem plicarum ex regulis ordina"
+"tabularium.sorting.applyDesc": "Commentarios et capsas ordina ut indices in sortspec.md dicunt. Quae non enumerantur, ordinem Obsidian servant."
+"tabularium.sorting.commandOn": "Indicem plicarum ex sortspec.md ordina"
+"tabularium.sorting.commandOff": "Ordinationem plicarum suspende"
+"tabularium.sorting.convert": "Regulas ordinandi converte"
+"tabularium.sorting.convertDesc": "${path} adhuc regulas veteres in front matter continet (sorting-spec), quae iam non leguntur. Donec convertuntur, index plicarum ordinem Obsidian servat."
+"tabularium.sorting.convertButton": "Converte"
+"tabularium.sorting.convertTitle": "Regulas ordinandi in indicem converte"
+"tabularium.sorting.convertBody": "Regulae in front matter ${path} fiunt index gradatus initio commentarii. Reliquum commentarii infra manet, et sorting-spec e front matter removetur. Index:"
+"tabularium.sorting.convertAction": "Converte"
+"tabularium.sorting.convertUnsupported": "Hae regulae ut index scribi non possunt et omittuntur:\n${lines}"
+"tabularium.sorting.convertMoved": "Hae capsae in regulis capsae superioris non enumerabantur; nunc post res non enumeratas veniunt: ${folders}"
+"tabularium.sorting.converted": "Regulae ordinandi in ${path} nunc index sunt."

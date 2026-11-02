@@ -38,7 +38,7 @@ import type { ObsidianNoticeGroups } from "@/modules/services/ObsidianNoticeGrou
 import { useDatabaseDiagnosticsFeature } from "./serviceFeatures/useDatabaseDiagnostics";
 import { installTabulariumServer, type TabulariumServer } from "./features/tabularium/ServerLogin.ts";
 import { installKindle, type TabulariumKindle } from "./features/tabularium/Kindle.ts";
-import { installCustomSorting, type TabulariumCustomSorting } from "./features/tabularium/CustomSorting.ts";
+import { installFileSorting, type TabulariumSorting } from "./features/tabularium/FileSorting.ts";
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
 import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
 import { installLiveSyncPause, type LiveSyncPause } from "./features/tabularium/LiveSyncPause.ts";
@@ -48,7 +48,7 @@ import { installEditorMenus, type TabulariumEditorMenus } from "./features/tabul
 export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
 export default class ObsidianLiveSyncPlugin extends Plugin {
     core: LiveSyncCore;
-    sorting?: TabulariumCustomSorting;
+    sorting?: TabulariumSorting;
     tabularium?: TabulariumServer;
     kindle?: TabulariumKindle;
     share?: TabulariumShare;
@@ -220,7 +220,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
     override onload() {
         // Before the sorting component, so "Sync" comes right above its submenu in the file menu.
         installSyncMenu(this, this.core, () => !!this.tabularium?.connection, () => this.livePause);
-        this.sorting = installCustomSorting(this, this.core);
+        this.sorting = installFileSorting(this, this.core);
         void this._startUp();
     }
     override onunload(): void {

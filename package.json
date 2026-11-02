@@ -132,7 +132,6 @@
         "yaml": "^2.8.2"
     },
     "dependencies": {
-        "@tabularium/custom-sort": "file:../../packages/custom-sort",
         "@vrtmrz/browser-ui-kit": "0.1.0",
         "@tabularium/sync-core": "0.2.1",
         "@vrtmrz/obsidian-plugin-kit": "0.1.4",

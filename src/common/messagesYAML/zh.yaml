@@ -760,56 +760,6 @@ tabularium:
     sendingTo: "发送到 ${address}，今天还可发送 ${remaining} 次。"
     contents: 目录
     missingImage: "[图片：${name}]"
-  sorting:
-    ui:
-      toggle: "开关文件排序"
-      apply: "应用排序"
-      applyFlat: "排序：应用"
-      suspend: "暂停排序"
-      suspendFlat: "排序：暂停"
-      bookmark: "加入排序书签"
-      bookmarkFlat: "排序：加入书签"
-      unbookmark: "从排序书签中移除"
-      unbookmarkFlat: "排序：从书签中移除"
-      bookmarkSiblings: "连同同级项目加入排序书签"
-      bookmarkSiblingsFlat: "排序：连同同级项目加入书签"
-      unbookmarkSiblings: "连同同级项目从排序书签中移除"
-      unbookmarkSiblingsFlat: "排序：连同同级项目从书签中移除"
-      bookmarkSelected: "排序：把所选项目加入书签"
-      bookmarkSelectedFlat: "把所选项目加入排序书签"
-      unbookmarkSelected: "排序：把所选项目从书签中移除"
-      unbookmarkSelectedFlat: "把所选项目从排序书签中移除"
-      submenu: "排序"
-      commandOn: "重新读取排序规则并应用文件排序"
-      commandOff: "暂停文件排序"
-    specFile: "额外的规则笔记"
-    specFileDesc: "除 sortspec 笔记和文件夹笔记外，另外读取排序规则（front matter）的笔记名称或路径。修改后重新应用规则。"
-    indexNote: "文件夹笔记名称"
-    indexNoteDesc: "如果每个文件夹用其中一篇固定名称的笔记（如 index）描述自身，在此填写这个名称，也会读取其中的排序规则和元数据。"
-    delay: "启动后延迟（秒）"
-    delayDesc: "Obsidian 启动后等待多少秒再排序，0 到 30。大笔记库或手机上排序没有生效时调大。"
-    statusBar: "在状态栏显示"
-    statusBarDesc: "显示文件排序是否开启。"
-    contextMenu: "文件列表中的排序菜单"
-    contextMenuDesc: "在文件列表的右键菜单中加入应用与暂停排序。"
-    bookmarks: "按书签排序"
-    bookmarksDesc: "使用 Obsidian 核心插件「书签」中某个分组里的顺序，这样可以通过在书签中拖动来排列。"
-    bookmarksGroup: "书签分组"
-    bookmarksGroupDesc: "使用其顺序的书签分组。"
-    bookmarksMenus: "书签菜单项"
-    bookmarksMenusDesc: "在文件列表的右键菜单中加入把文件和文件夹加入该分组的菜单项。"
-    statusOn: "排序：开"
-    statusOff: "排序：关"
-    parseFailed: "排序规则解析失败，排序已暂停。${detail}"
-    viewProblem: 无法对文件列表排序，详情见开发者控制台。
-    title: Tabularium 文件排序
-    settingDesc: 按排序规则或书签排列笔记和文件夹。
-    apply: 应用排序规则
-    applyDesc: 从笔记中读取 sorting-spec 并更新文件列表。
-    applyButton: 应用
-    pause: 暂停
-    standalone: 这个笔记库启用了 Custom File Explorer sorting，文件列表由它排序，内置的文件排序不启用。停用它之后，下次加载 Tabularium 时内置排序恢复。
-    command: 打开文件排序设置
   confirm:
     cancel: "取消"
     typeName: "输入笔记库名称 ${name} 以确认"
@@ -1771,7 +1721,6 @@ No active replicator found: 没有设置同步
 Network is offline: 网络已断开
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": 同步完成：处理了 ${processedCount} 个文件（完成 ${completedCount}，跳过 ${skippedCount}，出错 ${failedCount}）
 tabularium.settings.resolveAllImpact: 每篇冲突笔记的较旧版本都会被丢弃，所有设备都一样，这里无法撤销。
-tabularium.sorting.notReady: 文件排序仍在启动，稍后再打开这一页。
 tabularium.release.0.18.1: 插件与网页的拉丁语统一用词。
 tabularium.release.0.18.2: 书记员的新对话按开始前选的配方回答。
 Allow sleep during synchronisation: 同步时允许休眠
@@ -1872,3 +1821,21 @@ tabularium.release.0.24.3: SSH 主机中登记为禁止的主机，Tabularius �
 tabularium.release.0.24.4: Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。
 tabularium.release.0.24.5: 插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。
 tabularium.release.0.25.0: 插件小了约五分之一。同步核心并入 Tabularium，只保留与 Tabularium 服务器的连接，对象存储和 P2P 同步的代码已删除。设置里仍写着对象存储或 P2P 的设备不会去使用它们，照常通过 Tabularium 连接。
+"tabularium.sorting.standalone": "这个笔记库启用了 Custom File Explorer sorting，文件列表由它排序，内置的文件排序不启用。停用它之后，下次加载 Tabularium 时内置排序恢复。"
+"tabularium.sorting.statusBar": "在状态栏显示"
+"tabularium.sorting.statusBarDesc": "显示文件排序是否开启。"
+"tabularium.sorting.statusOn": "排序：开"
+"tabularium.sorting.statusOff": "排序：关"
+"tabularium.sorting.apply": "按规则排序文件列表"
+"tabularium.sorting.applyDesc": "按 sortspec.md 正文中的列表排列笔记和文件夹，没列出的保持 Obsidian 的排序。"
+"tabularium.sorting.commandOn": "按 sortspec.md 排序文件列表"
+"tabularium.sorting.commandOff": "暂停文件排序"
+"tabularium.sorting.convert": "转换排序规则"
+"tabularium.sorting.convertDesc": "${path} 仍是旧的 front matter 规则（sorting-spec），现在不再读取；转换之前，文件列表按 Obsidian 的排序显示。"
+"tabularium.sorting.convertButton": "转换"
+"tabularium.sorting.convertTitle": "把排序规则转换为列表"
+"tabularium.sorting.convertBody": "${path} front matter 中的规则会变成笔记开头的缩进列表，原有正文保留在列表之后，front matter 中的 sorting-spec 会删除。转换后的列表："
+"tabularium.sorting.convertAction": "转换"
+"tabularium.sorting.convertUnsupported": "下面这些规则无法写成列表，将被丢弃：\n${lines}"
+"tabularium.sorting.convertMoved": "这些文件夹原来没有列在上级文件夹的规则里，转换后排在未列出的项目之后：${folders}"
+"tabularium.sorting.converted": "${path} 的排序规则已转换为列表。"

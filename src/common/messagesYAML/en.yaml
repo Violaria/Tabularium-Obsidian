@@ -1037,17 +1037,6 @@ tabularium:
     sendingTo: "Sending to ${address}; ${remaining} sends left today."
     contents: Contents
     missingImage: "[Image: ${name}]"
-  sorting:
-    parseFailed: "The sorting rules could not be parsed; sorting is paused. ${detail}"
-    viewProblem: The file explorer could not be sorted. Open the developer console for details.
-    title: Tabularium file sorting
-    settingDesc: Arrange notes and folders using sorting rules or bookmarks.
-    apply: Apply sorting rules
-    applyDesc: Read sorting-spec from your notes and update the file explorer.
-    applyButton: Apply
-    pause: Pause
-    standalone: Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.
-    command: Open file sorting settings
 Apply: Apply
 Done: Done
 Error while loading file.: Error while loading file.
@@ -1211,44 +1200,6 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.settings.unlockTitle": "Unlock the vault?"
 "tabularium.settings.version": "Tabularium ${version}"
 "tabularium.settings.whatSyncs": "What is synchronised"
-"tabularium.sorting.bookmarks": "Order by bookmarks"
-"tabularium.sorting.bookmarksDesc": "Uses the order of items in a group of the core Bookmarks plug-in, so items can be arranged by dragging them there."
-"tabularium.sorting.bookmarksGroup": "Bookmarks group"
-"tabularium.sorting.bookmarksGroupDesc": "The group in Bookmarks whose order is used."
-"tabularium.sorting.bookmarksMenus": "Bookmark menu items"
-"tabularium.sorting.bookmarksMenusDesc": "Adds items to the file explorer's right-click menu for adding files and folders to that group."
-"tabularium.sorting.contextMenu": "Sorting menu in the file explorer"
-"tabularium.sorting.contextMenuDesc": "Adds applying and pausing sorting to the file explorer's right-click menu."
-"tabularium.sorting.delay": "Delay at start (seconds)"
-"tabularium.sorting.delayDesc": "Seconds to wait after Obsidian starts before sorting, 0 to 30. Increase it if sorting is not applied on large vaults or on mobile."
-"tabularium.sorting.indexNote": "Folder note name"
-"tabularium.sorting.indexNoteDesc": "If each folder describes itself in a note with a fixed name inside it (such as index), enter that name; its sorting rules and metadata are read too."
-"tabularium.sorting.specFile": "Additional rule notes"
-"tabularium.sorting.specFileDesc": "Names or paths of notes whose front matter holds sorting rules, besides sortspec notes and folder notes. Apply the rules again after changing it."
-"tabularium.sorting.statusBar": "Show in the status bar"
-"tabularium.sorting.statusBarDesc": "Shows whether file sorting is on."
-"tabularium.sorting.statusOff": "Sorting: off"
-"tabularium.sorting.statusOn": "Sorting: on"
-"tabularium.sorting.ui.apply": "Apply sorting"
-"tabularium.sorting.ui.applyFlat": "Sorting: apply"
-"tabularium.sorting.ui.bookmark": "Add to the sorting bookmarks"
-"tabularium.sorting.ui.bookmarkFlat": "Sorting: add to the bookmarks"
-"tabularium.sorting.ui.bookmarkSelected": "Sorting: add the selection to the bookmarks"
-"tabularium.sorting.ui.bookmarkSelectedFlat": "Add the selection to the sorting bookmarks"
-"tabularium.sorting.ui.bookmarkSiblings": "Add it and its siblings to the sorting bookmarks"
-"tabularium.sorting.ui.bookmarkSiblingsFlat": "Sorting: add it and its siblings to the bookmarks"
-"tabularium.sorting.ui.commandOff": "Pause file sorting"
-"tabularium.sorting.ui.commandOn": "Apply file sorting, reading the sorting rules again"
-"tabularium.sorting.ui.submenu": "Sorting"
-"tabularium.sorting.ui.suspend": "Pause sorting"
-"tabularium.sorting.ui.suspendFlat": "Sorting: pause"
-"tabularium.sorting.ui.toggle": "Turn file sorting on or off"
-"tabularium.sorting.ui.unbookmark": "Remove from the sorting bookmarks"
-"tabularium.sorting.ui.unbookmarkFlat": "Sorting: remove from the bookmarks"
-"tabularium.sorting.ui.unbookmarkSelected": "Sorting: remove the selection from the bookmarks"
-"tabularium.sorting.ui.unbookmarkSelectedFlat": "Remove the selection from the sorting bookmarks"
-"tabularium.sorting.ui.unbookmarkSiblings": "Remove it and its siblings from the sorting bookmarks"
-"tabularium.sorting.ui.unbookmarkSiblingsFlat": "Sorting: remove it and its siblings from the bookmarks"
 "Connected to ${connection.info.db_name} successfully": "Connected to ${connection.info.db_name}."
 "The document ID configurations differ. Import the correct Setup URI, or configure the matching ID key, before synchronising.": "The document ID settings differ between this device and the server. Configure the matching ID key before synchronising."
 "The remote type does not support preferred tweak values.": "This server type does not support preferred tweak values."
@@ -1464,7 +1415,6 @@ We don't have any history for this note.: We don't have any history for this not
 "Network is offline": "The network is offline"
 "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)": "Synchronisation completed: ${processedCount} files processed (${completedCount} completed, ${skippedCount} skipped, ${failedCount} failed)"
 "tabularium.settings.resolveAllImpact": "The older version of every conflicting note is discarded on all devices; this cannot be undone here."
-"tabularium.sorting.notReady": "File sorting is still starting; open this page again in a moment."
 "tabularium.release.0.18.1": "One Latin vocabulary for the plug-in and the web pages."
 "tabularium.release.0.18.2": "Tabularius answers a new conversation with the recipe chosen before its first message."
 "Allow sleep during synchronisation": "Allow sleep during synchronisation"
@@ -1567,3 +1517,21 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.release.0.24.4": "Each web page Tabularius fetches through the server opens its own connection, so a connection left open by an earlier fetch can no longer skip the address check of the permission mode or the forbidden hosts."
 "tabularium.release.0.24.5": "Code for upstream features that Tabularium had already switched off (peer-to-peer sync, the set-up wizard, Setup URIs and QR codes, hidden-file and customisation sync) is removed from the plug-in, along with about a thousand unused messages. A device whose settings still turn those features on keeps them off. The 0.20.0 entry of this history shows its text again."
 "tabularium.release.0.25.0": "The plug-in is about a fifth smaller. Its sync core is now part of Tabularium and keeps only the connection to the Tabularium server; the code for object storage and peer-to-peer sync is gone. A device whose settings still name object storage or peer-to-peer does not try to use them and connects through Tabularium as usual."
+"tabularium.sorting.standalone": "Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads."
+"tabularium.sorting.statusBar": "Show in the status bar"
+"tabularium.sorting.statusBarDesc": "Shows whether file sorting is on."
+"tabularium.sorting.statusOn": "Sorting: on"
+"tabularium.sorting.statusOff": "Sorting: off"
+"tabularium.sorting.apply": "Sort the file list"
+"tabularium.sorting.applyDesc": "Order notes and folders as the lists in sortspec.md say. Items not listed keep Obsidian's order."
+"tabularium.sorting.commandOn": "Sort the file list by sortspec.md"
+"tabularium.sorting.commandOff": "Pause file sorting"
+"tabularium.sorting.convert": "Convert the sorting rules"
+"tabularium.sorting.convertDesc": "${path} still holds the former front-matter rules (sorting-spec), which are no longer read. Until they are converted, the file list keeps Obsidian's order."
+"tabularium.sorting.convertButton": "Convert"
+"tabularium.sorting.convertTitle": "Convert the sorting rules to a list"
+"tabularium.sorting.convertBody": "The rules in the front matter of ${path} become an indented list at the start of the note. The rest of the note stays below it, and sorting-spec is removed from the front matter. The list:"
+"tabularium.sorting.convertAction": "Convert"
+"tabularium.sorting.convertUnsupported": "These rules cannot be written as a list and are dropped:\n${lines}"
+"tabularium.sorting.convertMoved": "These folders were not listed in their parent folder's rules; they now come after the items not listed: ${folders}"
+"tabularium.sorting.converted": "The sorting rules in ${path} are now a list."
