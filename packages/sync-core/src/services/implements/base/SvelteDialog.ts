@@ -58,7 +58,7 @@ export type DialogContext<C extends ServiceContext = ServiceContext, T = unknown
     services: SvelteDialogManagerDependencies<C>;
 };
 
-export interface SvelteDialogManager<T extends ServiceContext> {
+export interface SvelteDialogManager {
     open<TResult, TInitial = TResult>(
         component: ComponentHasResult<TResult, TInitial>,
         initialData?: TInitial
@@ -210,7 +210,7 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
     return SvelteDialog;
 }
 
-export abstract class SvelteDialogManagerBase<T extends ServiceContext> implements SvelteDialogManager<T> {
+export abstract class SvelteDialogManagerBase<T extends ServiceContext> implements SvelteDialogManager {
     abstract openSvelteDialog<T, U = T>(component: ComponentHasResult<T, U>, initialData?: U): Promise<T | undefined>;
 
     protected _context: T;

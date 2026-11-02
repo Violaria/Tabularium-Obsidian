@@ -17,7 +17,7 @@ const ALLOWED = [
 /** Where the former names are defined, for migrations: the core's names, the CLI's files, the original plug-in's id. */
 const DEFINITIONS = new Set([
     "packages/sync-core/src/common/models/shared.const.ts",
-    "src/apps/cli/currentNames.ts",
+    "../server/clients/cli/currentNames.ts",
     "src/features/tabularium/NamespaceMigration.ts",
 ]);
 const SKIP = /(\.spec|\.test)\.ts$|\/testdeno\/|\/messagesJson\/|combinedMessages\./;
@@ -41,6 +41,8 @@ const walk = (dir: string) => {
 };
 walk(path.join(root, "src"));
 walk(path.join(root, "packages/sync-core/src"));
+// Further directories given on the command line, relative to the plug-in: the server's clients, from the parent repository.
+for (const extra of process.argv.slice(2)) walk(path.join(root, extra));
 if (problems.length) {
     process.stderr.write(`The original plug-in's name in the sources:\n${problems.join("\n")}\n`);
     process.exit(1);

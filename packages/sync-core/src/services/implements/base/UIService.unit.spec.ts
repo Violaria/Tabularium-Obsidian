@@ -16,7 +16,7 @@ describe("UIService command ownership", () => {
     it("disposes its command registry when the plug-in unloads", async () => {
         const context = createServiceContext();
         const service = new TestUIService(context, {
-            dialogManager: {} as SvelteDialogManager<ServiceContext>,
+            dialogManager: {} as SvelteDialogManager,
             APIService: {} as IAPIService,
         });
         const command = declareUICommand<{ deviceId: string }, boolean>("joinedDevices/service-lifecycle");

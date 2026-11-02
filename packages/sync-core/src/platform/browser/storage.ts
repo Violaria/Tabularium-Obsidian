@@ -60,6 +60,7 @@ export class FileSystemAccessStorageAdapter implements IStorageAdapter<FileSyste
         validateStoragePath(path, false);
         const parts = path.split("/").filter((part) => part !== "");
         const fileName = parts.pop();
+        if (fileName === undefined) return null;
         const parentPath = parts.join("/");
         await this.mkdir(parentPath);
         const dirHandle = await this.getDirectoryHandle(parentPath);

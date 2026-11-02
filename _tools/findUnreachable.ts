@@ -18,21 +18,22 @@ const path = process.getBuiltinModule("node:path");
 const root = path.resolve(import.meta.dirname, "..");
 const ENTRIES = [
     "src/main.ts",
-    "src/apps/notes/main.ts",
-    "src/apps/notes/viewer.ts",
-    "src/apps/notes/answer.ts",
-    "src/apps/cli/entrypoint.ts",
+    // The web notes and the CLI, in the server repository beside this one.
+    "../server/clients/notes/main.ts",
+    "../server/clients/notes/viewer.ts",
+    "../server/clients/notes/answer.ts",
+    "../server/clients/cli/entrypoint.ts",
 ];
 /** Test infrastructure used from outside: the parent repository's interop tests and the scripts they run. */
 const HARNESS = [
     "test/e2e-obsidian/scripts/install-appimage.ts",
-    "test/e2e-obsidian/scripts/cli-to-obsidian-sync.ts",
     ...fs
         .readdirSync(path.join(root, "../../tests/interop"))
         .filter((f) => /\.(ts|mjs)$/.test(f))
         .map((f) => path.join("../../tests/interop", f)),
 ];
 const CORE = "packages/sync-core";
+const CLIENTS = "../server/clients";
 const coreManifest = JSON.parse(fs.readFileSync(path.join(root, CORE, "package.json"), "utf8")) as {
     name: string;
     exports: Record<string, string | { import?: string; default?: string }>;
@@ -87,6 +88,7 @@ function resolve(from: string, specifier: string): string | undefined {
     } else if (specifier.startsWith("@lib/") && from.startsWith(`${CORE}/`))
         base = path.join(CORE, "src", specifier.slice("@lib/".length));
     else if (specifier.startsWith("@/")) base = path.join("src", specifier.slice(2));
+    else if (specifier.startsWith("@clients/")) base = path.join(CLIENTS, specifier.slice("@clients/".length));
     else if (specifier.startsWith(".")) base = path.join(path.dirname(from), specifier);
     else return undefined;
     const candidates = [
@@ -101,9 +103,13 @@ function resolve(from: string, specifier: string): string | undefined {
     );
 }
 
-const files = [...walk("src"), ...walk("test"), ...walk(`${CORE}/src`), ...walk(`${CORE}/test`)];
+const files = [...walk("src"), ...walk("test"), ...walk(`${CORE}/src`), ...walk(`${CORE}/test`), ...walk(CLIENTS)];
 const isLocal = (spec: string) =>
-    spec.startsWith(".") || spec.startsWith("@/") || spec.startsWith("@lib/") || spec.startsWith(coreManifest.name);
+    spec.startsWith(".") ||
+    spec.startsWith("@/") ||
+    spec.startsWith("@clients/") ||
+    spec.startsWith("@lib/") ||
+    spec.startsWith(coreManifest.name);
 /** Files with a local import that resolves to no file; a test among them tests code that has been removed. */
 const broken = new Set<string>();
 const edges = new Map(

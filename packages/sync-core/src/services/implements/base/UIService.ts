@@ -6,8 +6,8 @@ import type { IAPIService, IUIService } from "@lib/services/base/IService";
 
 import { ServiceBase, type ServiceContext } from "@lib/services/base/ServiceBase";
 
-export type UIServiceDependencies<T extends ServiceContext = ServiceContext> = {
-    dialogManager: SvelteDialogManager<T>;
+export type UIServiceDependencies = {
+    dialogManager: SvelteDialogManager;
     APIService: IAPIService;
 };
 
@@ -22,17 +22,17 @@ export abstract class UIService<T extends ServiceContext = ServiceContext>
     implements IUIService
 {
     readonly commands: UICommandRegistry;
-    private _dialogManager: SvelteDialogManager<T>;
+    private _dialogManager: SvelteDialogManager;
     protected _APIService: IAPIService;
     abstract get dialogToCopy(): ComponentHasResult<DialogResult, DialogParams>;
-    constructor(context: T, dependents: UIServiceDependencies<T>) {
+    constructor(context: T, dependents: UIServiceDependencies) {
         super(context);
         this.commands = new UICommandRegistry();
         this.context.events.once(EVENT_PLUGIN_UNLOADED, () => this.commands.dispose());
         this._dialogManager = dependents.dialogManager;
         this._APIService = dependents.APIService;
     }
-    get dialogManager(): SvelteDialogManager<T> {
+    get dialogManager(): SvelteDialogManager {
         return this._dialogManager;
     }
 

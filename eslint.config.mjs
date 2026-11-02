@@ -7,13 +7,7 @@ import svelteParser from "svelte-eslint-parser";
 import importAlias from "./utils/import-alias.mjs";
 import { baseRules, ImportAliasRules, obsidianRules } from "./eslint.config.common.mjs";
 const warnWhileDev = "off"; // Change to "warn" to enable warnings for rules that are currently disabled.
-const lintProjects = [
-    "./tsconfig.json",
-    "./src/apps/browser/tsconfig.json",
-    "./src/apps/cli/tsconfig.json",
-    "./src/apps/webapp/tsconfig.json",
-    "./src/apps/notes/tsconfig.json",
-];
+const lintProjects = ["./tsconfig.json"];
 export default defineConfig([
     globalIgnores([
         // Build outputs and legacy files
@@ -41,14 +35,10 @@ export default defineConfig([
         ".prettierrc.mjs",
         "*.config.mjs",
         "vite.*",
-        "src/apps/notes/vite.config.ts",
-        "src/apps/notes/public/**",
         "vitest.*",
         // Testing files (Simplified patterns)
         "test/**",
         "**/test/**",
-        "src/apps/_test/**",
-        "src/apps/cli/testdeno/**",
         "**/*.test.ts",
         "**/*.unit.spec.ts",
         "**/test.ts",
@@ -107,33 +97,6 @@ export default defineConfig([
         rules: {
             // External-service integrations also run in Node and do not own window UI.
             "obsidianmd/no-global-this": "off",
-        },
-    },
-    {
-        files: ["src/apps/**/*.ts"],
-        rules: {
-            // Platform adapters implement asynchronous contracts even when a local operation is synchronous.
-            "@typescript-eslint/require-await": "off",
-            // Keep existing application code visible without making gradual type tightening a release blocker.
-            "@typescript-eslint/no-base-to-string": "warn",
-            "@typescript-eslint/no-unnecessary-type-assertion": "warn",
-            "@typescript-eslint/restrict-template-expressions": "warn",
-        },
-    },
-    {
-        files: ["src/apps/browser/**/*.{ts,svelte}", "src/apps/webapp/**/*.ts", "src/apps/notes/**/*.{ts,svelte}"],
-        rules: {
-            // Browser applications use the DOM rather than Obsidian's DOM extensions, and have no popout windows.
-            "obsidianmd/prefer-create-el": "off",
-            "obsidianmd/prefer-active-doc": "off",
-            "obsidianmd/prefer-window-timers": "off",
-        },
-    },
-    {
-        files: ["src/apps/notes/**/*.{ts,svelte}"],
-        rules: {
-            // A standalone web page: Obsidian's requestUrl and vault-scoped storage do not exist there.
-            "no-restricted-globals": "off",
         },
     },
 ]);

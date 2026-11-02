@@ -39,11 +39,6 @@
             "import": "./dist/diagnostics/index.js",
             "default": "./dist/diagnostics/index.js"
         },
-        "./node": {
-            "types": "./src/platform/node/index.ts",
-            "import": "./dist/platform/node/index.js",
-            "default": "./dist/platform/node/index.js"
-        },
         "./replication": {
             "types": "./src/replication/index.ts",
             "import": "./dist/replication/index.js",
@@ -394,11 +389,6 @@
             "import": "./dist/services/implements/base/UIService.js",
             "default": "./dist/services/implements/base/UIService.js"
         },
-        "./compat/services/implements/headless/HeadlessAPIService": {
-            "types": "./src/services/implements/headless/HeadlessAPIService.ts",
-            "import": "./dist/services/implements/headless/HeadlessAPIService.js",
-            "default": "./dist/services/implements/headless/HeadlessAPIService.js"
-        },
         "./compat/services/implements/injectable/InjectableAPIService": {
             "types": "./src/services/implements/injectable/InjectableAPIService.ts",
             "import": "./dist/services/implements/injectable/InjectableAPIService.js",
@@ -507,9 +497,6 @@
             ],
             "diagnostics": [
                 "src/diagnostics/index.ts"
-            ],
-            "node": [
-                "src/platform/node/index.ts"
             ],
             "replication": [
                 "src/replication/index.ts"
@@ -720,9 +707,6 @@
             ],
             "compat/services/implements/base/UIService": [
                 "src/services/implements/base/UIService.ts"
-            ],
-            "compat/services/implements/headless/HeadlessAPIService": [
-                "src/services/implements/headless/HeadlessAPIService.ts"
             ],
             "compat/services/implements/injectable/InjectableAPIService": [
                 "src/services/implements/injectable/InjectableAPIService.ts"

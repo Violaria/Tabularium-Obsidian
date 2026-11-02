@@ -9,9 +9,8 @@ const path = process.getBuiltinModule("node:path");
 const root = path.resolve(import.meta.dirname, "..");
 const commonlib = path.join(root, "node_modules/@tabularium/sync-core/dist");
 
-/** Code whose notices Tabularium never shows: the other apps built from this source, and the parts of Commonlib it does not load. */
+/** Code whose notices Tabularium never shows: the parts of Commonlib it does not load. */
 const NOT_LOADED = [
-    "src/apps/",
     "dist/replication/trystero/",
     "dist/replication/journal/",
     "dist/serviceFeatures/setupObsidian/",
