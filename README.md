@@ -1,5 +1,7 @@
 # Tabularium for Obsidian
 
+English · [中文](README.zh-CN.md) · [Lingua Latīna](README.la.md)
+
 An Obsidian plug-in that synchronises a vault, end-to-end encrypted, with a self-hosted [Tabularium](https://github.com/Violaria/Tabularium) server. It is a fork of [Self-hosted LiveSync](https://github.com/vrtmrz/obsidian-livesync) 1.0.40 and includes the File Explorer sorting of [Custom File Explorer sorting](https://github.com/SebastianMC/obsidian-custom-sort) 3.2.0, so it replaces both plug-ins. Disable Self-hosted LiveSync and any other synchronisation plug-in in a vault before enabling this one.
 
 ## Requirements and network use
