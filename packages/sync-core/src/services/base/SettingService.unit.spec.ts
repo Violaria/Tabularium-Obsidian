@@ -1,0 +1,880 @@
+import { describe, expect, it, vi } from "vitest";
+import { ValueStoreError } from "@vrtmrz/value-store";
+import {
+    CURRENT_SETTING_VERSION,
+    DEFAULT_SETTINGS,
+    REMOTE_COUCHDB,
+    SALT_OF_PASSPHRASE,
+    SETTING_KEY_P2P_DEVICE_NAME,
+} from "@lib/common/types";
+import { SettingService } from "./SettingService";
+import { ServiceContext } from "./ServiceBase";
+import type { ObsidianLiveSyncSettings } from "@lib/common/types";
+import { ConnectionStringParser } from "@lib/common/ConnectionString";
+import { encryptString } from "@lib/encryption/stringEncryption";
+
+function createMapBackedValueStore(values = new Map<string, string>()) {
+    return {
+        values,
+        getValue: async (key: string) => values.get(key) ?? null,
+        setValue: async (key: string, value: string) => {
+            values.set(key, value);
+        },
+        delete: async (key: string) => {
+            values.delete(key);
+        },
+    };
+}
+
+type MapBackedValueStore = ReturnType<typeof createMapBackedValueStore>;
+
+function deferred<T>() {
+    let resolve!: (value: T | PromiseLike<T>) => void;
+    const promise = new Promise<T>((resolvePromise) => {
+        resolve = resolvePromise;
+    });
+    return { promise, resolve };
+}
+
+function deviceNameStoreKey(suffix = DEFAULT_SETTINGS.additionalSuffixOfDatabaseName): string {
+    return `obsidian-live-sync-vaultanddevicename-vault${typeof suffix === "undefined" ? "" : `-${suffix}`}`;
+}
+
+class TestSettingService extends SettingService<ServiceContext> {
+    lastSavedSetting?: ObsidianLiveSyncSettings;
+    readonly localItems: Map<string, string>;
+    constructor(context: ServiceContext, dependencies: any, deviceValues: MapBackedValueStore) {
+        super(context, { ...dependencies, deviceValues } as any);
+        this.localItems = deviceValues.values;
+    }
+    protected saveData(setting: ObsidianLiveSyncSettings): Promise<void> {
+        this.lastSavedSetting = JSON.parse(JSON.stringify(setting));
+        return Promise.resolve();
+    }
+    protected loadData(): Promise<ObsidianLiveSyncSettings | undefined> {
+        return Promise.resolve(undefined);
+    }
+}
+
+function createService(
+    onDisplayLanguageChanged?: (language: ObsidianLiveSyncSettings["displayLanguage"]) => void,
+    options: { vaultName?: string; deviceValues?: MapBackedValueStore } = {}
+) {
+    const deviceValues = options.deviceValues ?? createMapBackedValueStore();
+    const service = new TestSettingService(
+        new ServiceContext(),
+        {
+            APIService: {
+                getSystemVaultName: vi.fn(() => options.vaultName ?? "vault"),
+                getAppID: vi.fn(() => "app"),
+                confirm: {
+                    askString: vi.fn(() => Promise.resolve("")),
+                },
+                addLog: vi.fn(),
+            } as any,
+            onDisplayLanguageChanged,
+        } as any,
+        deviceValues
+    );
+    service.settings = {
+        ...DEFAULT_SETTINGS,
+        remoteConfigurations: {},
+        activeConfigurationId: "",
+    };
+    return service;
+}
+
+const MANAGED_FIELDS = {
+    P2P_managedType: "CF",
+    P2P_managedId: "key-id",
+    P2P_managedToken: "secret-token",
+};
+
+function managedP2PProfileURI(settings: ObsidianLiveSyncSettings): string {
+    return ConnectionStringParser.serialize({
+        type: "p2p",
+        settings: {
+            ...settings,
+            P2P_roomID: settings.P2P_roomID || "managed-room",
+            ...MANAGED_FIELDS,
+        },
+    });
+}
+
+function centralProfileURI(settings: ObsidianLiveSyncSettings): string {
+    return ConnectionStringParser.serialize({
+        type: "couchdb",
+        settings: {
+            ...settings,
+            couchDB_URI: "http://localhost:5984",
+            couchDB_USER: "user",
+            couchDB_PASSWORD: "password",
+            couchDB_DBNAME: "vault",
+        },
+    });
+}
+
+describe("SettingService", () => {
+    it("encrypts the ID derivation key before persisting version 1 settings", async () => {
+        const service = createService();
+        const key = "ab".repeat(32);
+        service.settings = {
+            ...service.settings,
+            idDerivationVersion: 1,
+            idDerivationKey: key,
+        };
+
+        await service.saveSettingData();
+
+        expect(service.lastSavedSetting?.idDerivationKey).toBe("");
+        const encrypted = service.lastSavedSetting?.encryptedIdDerivationKey ?? "";
+        expect(encrypted).not.toBe("");
+        await expect(service.decryptConfigurationItem(encrypted, "*")).resolves.toBe(key);
+    });
+
+    it("does not save version 1 settings when the ID key is invalid", async () => {
+        const service = createService();
+        service.settings = {
+            ...service.settings,
+            idDerivationVersion: 1,
+            idDerivationKey: "not-a-256-bit-key",
+        };
+
+        await expect(service.saveSettingData()).rejects.toThrow("configured ID derivation");
+        expect(service.lastSavedSetting).toBeUndefined();
+    });
+
+    it("does not persist version 1 settings when the configuration passphrase is unavailable", async () => {
+        const service = createService();
+        service.settings = {
+            ...service.settings,
+            idDerivationVersion: 1,
+            idDerivationKey: "cd".repeat(32),
+        };
+        vi.spyOn(service, "getPassphrase").mockResolvedValue(false);
+
+        await expect(service.saveSettingData()).rejects.toThrow("Settings were not saved");
+        expect(service.lastSavedSetting).toBeUndefined();
+    });
+
+    it("decrypts the ID derivation key before using loaded version 1 settings", async () => {
+        const service = createService();
+        const key = "ef".repeat(32);
+        const encryptedIdDerivationKey = await encryptString(key, "*" + SALT_OF_PASSPHRASE);
+
+        const loaded = await service.decryptSettings({
+            ...DEFAULT_SETTINGS,
+            idDerivationVersion: 1,
+            idDerivationKey: "",
+            encryptedIdDerivationKey,
+        });
+
+        expect(loaded.idDerivationKey).toBe(key);
+    });
+
+    it("rejects loaded version 1 settings when the configuration passphrase is unavailable", async () => {
+        const service = createService();
+        vi.spyOn(service, "getPassphrase").mockResolvedValue(false);
+
+        await expect(
+            service.decryptSettings({
+                ...DEFAULT_SETTINGS,
+                idDerivationVersion: 1,
+                idDerivationKey: "",
+                encryptedIdDerivationKey: "persisted-ciphertext",
+            })
+        ).rejects.toThrow("cannot be decrypted without a passphrase");
+    });
+
+    it.each(["", "not-encrypted"])(
+        "rejects a version 1 setting with unavailable encrypted key data",
+        async (encryptedIdDerivationKey) => {
+            const service = createService();
+            await expect(
+                service.decryptSettings({
+                    ...DEFAULT_SETTINGS,
+                    idDerivationVersion: 1,
+                    idDerivationKey: "",
+                    encryptedIdDerivationKey,
+                })
+            ).rejects.toThrow("configured ID derivation key");
+        }
+    );
+
+    it("delegates the loaded display language to the host", async () => {
+        const onDisplayLanguageChanged = vi.fn();
+        const service = createService(onDisplayLanguageChanged);
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            displayLanguage: "ja",
+        });
+
+        await service.loadSettings();
+
+        expect(onDisplayLanguageChanged).toHaveBeenCalledOnce();
+        expect(onDisplayLanguageChanged).toHaveBeenCalledWith("ja");
+    });
+
+    it("exposes exact device-local values without placing them in the settings document", async () => {
+        const service = createService();
+
+        await service.deviceValues.setValue("legacy-version-marker", "12");
+
+        expect(await service.deviceValues.getValue("legacy-version-marker")).toBe("12");
+        expect(service.localItems.get("legacy-version-marker")).toBe("12");
+        expect(service.currentSettings()).not.toHaveProperty("legacy-version-marker");
+
+        await service.deviceValues.delete("legacy-version-marker");
+        expect(await service.deviceValues.getValue("legacy-version-marker")).toBeNull();
+    });
+
+    it("preserves Vault and changing database-suffix config keys", async () => {
+        const service = createService(undefined, { vaultName: "synthetic-vault" });
+
+        await service.config.setValue("checkpoint", "empty-suffix-value");
+
+        expect(service.localItems.get("synthetic-vault--checkpoint")).toBe("empty-suffix-value");
+        service.settings.additionalSuffixOfDatabaseName = "first";
+
+        await service.config.setValue("checkpoint", "first-value");
+
+        expect(service.localItems.get("synthetic-vault-first-checkpoint")).toBe("first-value");
+        service.settings.additionalSuffixOfDatabaseName = "second";
+        expect(await service.config.getValue("checkpoint")).toBeNull();
+
+        await service.config.setValue("checkpoint", "second-value");
+
+        expect(service.localItems.get("synthetic-vault-second-checkpoint")).toBe("second-value");
+        expect(await service.config.getValue("checkpoint")).toBe("second-value");
+    });
+
+    it("keeps config values isolated between independently injected service instances", async () => {
+        const first = createService(undefined, {
+            vaultName: "synthetic-vault",
+            deviceValues: createMapBackedValueStore(),
+        });
+        const second = createService(undefined, {
+            vaultName: "synthetic-vault",
+            deviceValues: createMapBackedValueStore(),
+        });
+        first.settings.additionalSuffixOfDatabaseName = "first";
+        second.settings.additionalSuffixOfDatabaseName = "first";
+
+        await first.config.setValue("checkpoint", "first-instance");
+
+        expect(await first.config.getValue("checkpoint")).toBe("first-instance");
+        expect(await second.config.getValue("checkpoint")).toBeNull();
+
+        await second.config.setValue("checkpoint", "second-instance");
+
+        expect(await first.config.getValue("checkpoint")).toBe("first-instance");
+        expect(await second.config.getValue("checkpoint")).toBe("second-instance");
+    });
+
+    it("waits for a deferred device-value write before committing settings", async () => {
+        const deviceValues = createMapBackedValueStore();
+        const writeStarted = deferred<void>();
+        const heldWrite = deferred<void>();
+        const setValue = deviceValues.setValue;
+        deviceValues.setValue = async (key, value) => {
+            await setValue(key, value);
+            if (key.startsWith("obsidian-live-sync-vaultanddevicename-")) {
+                writeStarted.resolve();
+                await heldWrite.promise;
+            }
+        };
+        const service = createService(undefined, { deviceValues });
+        const previousTweak = service.settings.tweakModified;
+        service.onBeforeSaveSettingData.addHandler(async () => ({ tweakModified: 123 }));
+        const saveData = vi.spyOn(service as any, "saveData");
+
+        const saving = service.saveSettingData();
+        await writeStarted.promise;
+
+        expect(saveData).not.toHaveBeenCalled();
+        expect(service.settings.tweakModified).toBe(previousTweak);
+
+        heldWrite.resolve();
+        await saving;
+
+        expect(saveData).toHaveBeenCalledOnce();
+        expect(service.settings.tweakModified).toBe(123);
+    });
+
+    it.each([
+        {
+            description: "device-name root",
+            shouldFail: (key: string) => key.startsWith("obsidian-live-sync-vaultanddevicename-"),
+            makeError: () => new Error("device-value write failed"),
+            expectedError: { message: "device-value write failed" },
+        },
+        {
+            description: "P2P-scoped name",
+            shouldFail: (key: string) => key.endsWith(`-${SETTING_KEY_P2P_DEVICE_NAME}`),
+            makeError: () => new ValueStoreError("operation-failed"),
+            expectedError: { code: "operation-failed" },
+        },
+    ])(
+        "does not commit settings when the $description write fails",
+        async ({ shouldFail, makeError, expectedError }) => {
+            const deviceValues = createMapBackedValueStore();
+            const setValue = deviceValues.setValue;
+            deviceValues.setValue = async (key, value) => {
+                if (shouldFail(key)) throw makeError();
+                await setValue(key, value);
+            };
+            const service = createService(undefined, { deviceValues });
+            service.settings.tweakModified = 42;
+            service.settings.P2P_DevicePeerName = "new-peer-name";
+            service.setDeviceAndVaultName("new-device-name");
+            service.onBeforeSaveSettingData.addHandler(async () => ({ tweakModified: 123 }));
+            const saveData = vi.spyOn(service as any, "saveData");
+            const onSettingSaved = vi.fn();
+            service.onSettingSaved.addHandler(onSettingSaved);
+
+            await expect(service.saveSettingData()).rejects.toMatchObject(expectedError);
+
+            expect(saveData).not.toHaveBeenCalled();
+            expect(onSettingSaved).not.toHaveBeenCalled();
+            expect(service.settings.tweakModified).toBe(42);
+            expect(service.settings.P2P_DevicePeerName).toBe("new-peer-name");
+            expect(service.getDeviceAndVaultName()).toBe("new-device-name");
+        }
+    );
+
+    it("moves a legacy device name to the exact-key root before clearing the settings field", async () => {
+        const deviceValues = createMapBackedValueStore();
+        const service = createService(undefined, { deviceValues });
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            deviceAndVaultName: "legacy-device-name",
+        });
+        vi.spyOn(service, "saveSettingData").mockResolvedValue();
+
+        await service.loadSettings();
+
+        expect(deviceValues.values.get(deviceNameStoreKey())).toBe("legacy-device-name");
+        expect(service.settings.deviceAndVaultName).toBe("");
+        expect(service.getDeviceAndVaultName()).toBe("legacy-device-name");
+    });
+
+    it("keeps an existing exact-key device name ahead of the legacy settings field", async () => {
+        const deviceNameKey = deviceNameStoreKey();
+        const deviceValues = createMapBackedValueStore(new Map([[deviceNameKey, "stored-device-name"]]));
+        const service = createService(undefined, { deviceValues });
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            deviceAndVaultName: "legacy-device-name",
+        });
+        vi.spyOn(service, "saveSettingData").mockResolvedValue();
+
+        await service.loadSettings();
+
+        expect(deviceValues.values.get(deviceNameKey)).toBe("stored-device-name");
+        expect(service.getDeviceAndVaultName()).toBe("stored-device-name");
+    });
+
+    it("keeps the legacy device name until its exact-key write completes", async () => {
+        const deviceNameKey = deviceNameStoreKey();
+        const deviceValues = createMapBackedValueStore();
+        const writeStarted = deferred<void>();
+        const heldWrite = deferred<void>();
+        const setValue = deviceValues.setValue;
+        deviceValues.setValue = async (key, value) => {
+            await setValue(key, value);
+            if (key === deviceNameKey) {
+                writeStarted.resolve();
+                await heldWrite.promise;
+            }
+        };
+        const service = createService(undefined, { deviceValues });
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            deviceAndVaultName: "legacy-device-name",
+        });
+        vi.spyOn(service, "saveSettingData").mockResolvedValue();
+
+        const loading = service.loadSettings();
+        await writeStarted.promise;
+
+        try {
+            expect(service.settings.deviceAndVaultName).toBe("legacy-device-name");
+        } finally {
+            heldWrite.resolve();
+        }
+        await loading;
+
+        expect(service.settings.deviceAndVaultName).toBe("");
+        expect(deviceValues.values.get(deviceNameKey)).toBe("legacy-device-name");
+    });
+
+    it("preserves and reports a legacy device name when its exact-key write fails", async () => {
+        const deviceNameKey = deviceNameStoreKey();
+        const deviceValues = createMapBackedValueStore();
+        const setValue = deviceValues.setValue;
+        deviceValues.setValue = async (key, value) => {
+            if (key === deviceNameKey) throw new Error("legacy device-name write failed");
+            await setValue(key, value);
+        };
+        const service = createService(undefined, { deviceValues });
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            deviceAndVaultName: "legacy-device-name",
+        });
+        vi.spyOn(service, "saveSettingData").mockResolvedValue();
+
+        await expect(service.loadSettings()).rejects.toThrow("legacy device-name write failed");
+
+        expect(service.settings.deviceAndVaultName).toBe("legacy-device-name");
+        expect(deviceValues.values.has(deviceNameKey)).toBe(false);
+    });
+
+    it("adjustSettings should migrate legacy remote settings into remoteConfigurations", async () => {
+        const service = createService();
+        const settings = {
+            ...DEFAULT_SETTINGS,
+            remoteConfigurations: {},
+            activeConfigurationId: "",
+            remoteType: REMOTE_COUCHDB,
+            couchDB_URI: "http://localhost:5984",
+            couchDB_USER: "user",
+            couchDB_PASSWORD: "password",
+            couchDB_DBNAME: "vault",
+        };
+
+        const adjusted = await service.adjustSettings(settings);
+
+        expect(adjusted.remoteConfigurations["legacy-couchdb"]?.uri).toContain(
+            "sls+http://user:password@localhost:5984"
+        );
+        expect(adjusted.activeConfigurationId).toBe("legacy-couchdb");
+    });
+
+    it("migrates flat CouchDB and managed P2P settings into one P2P profile", async () => {
+        const service = createService();
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            remoteType: REMOTE_COUCHDB,
+            couchDB_URI: "https://couchdb.example.test",
+            couchDB_DBNAME: "review-vault",
+            couchDB_USER: "review-user",
+            couchDB_PASSWORD: "review-password",
+            P2P_Enabled: true,
+            P2P_roomID: "review-room",
+            P2P_passphrase: "review-passphrase",
+            ...MANAGED_FIELDS,
+            remoteConfigurations: {},
+            activeConfigurationId: "",
+            P2P_ActiveRemoteConfigurationId: "",
+        });
+
+        await service.loadSettings();
+
+        const p2pProfiles = Object.values(service.currentSettings().remoteConfigurations).filter((profile) =>
+            profile.uri.startsWith("sls+p2p://")
+        );
+        expect(p2pProfiles).toHaveLength(1);
+        expect(service.currentSettings().P2P_ActiveRemoteConfigurationId).toBe("legacy-p2p");
+    });
+
+    it("applyExternalSettings should merge current settings and migrate imported legacy remote settings", async () => {
+        const service = createService();
+        const saveSpy = vi.spyOn(service, "saveSettingData").mockResolvedValue();
+
+        await service.applyExternalSettings(
+            {
+                couchDB_URI: "http://localhost:5984",
+                couchDB_USER: "user",
+                couchDB_PASSWORD: "password",
+                couchDB_DBNAME: "vault",
+            },
+            true
+        );
+
+        expect(service.currentSettings().remoteConfigurations["legacy-couchdb"]?.uri).toContain(
+            "sls+http://user:password@localhost:5984"
+        );
+        expect(service.currentSettings().activeConfigurationId).toBe("legacy-couchdb");
+        expect(saveSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("saveSettingData should encrypt remote configuration URIs before persisting", async () => {
+        const service = createService();
+        const plainURI = "sls+http://user:password@localhost:5984/?db=vault";
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                r1: {
+                    id: "r1",
+                    name: "Primary",
+                    uri: plainURI,
+                    isEncrypted: false,
+                },
+            },
+            activeConfigurationId: "r1",
+        };
+
+        await service.saveSettingData();
+
+        const persisted = service.lastSavedSetting;
+        expect(persisted).toBeDefined();
+        expect(persisted?.remoteConfigurations.r1.isEncrypted).toBe(true);
+        expect(persisted?.remoteConfigurations.r1.uri).not.toBe(plainURI);
+    });
+
+    it.each([
+        ["ordinary-passphrase", false],
+        ["%example", false],
+        ["%example", true],
+        ["%$example", false],
+    ])(
+        "encrypts and restores an E2EE passphrase %s with cached storage key %s",
+        async (passphrase, cacheStorageKey) => {
+            const service = createService();
+            service.settings = { ...service.settings, encrypt: true, passphrase };
+            if (cacheStorageKey) {
+                const existing = await service.encryptConfigurationItem("existing", service.settings);
+                expect(await service.decryptConfigurationItem(existing, "*")).toBe("existing");
+            }
+
+            await service.saveSettingData();
+
+            const persisted = service.lastSavedSetting!;
+            expect(persisted.passphrase).toBe("");
+            expect(persisted.encryptedPassphrase).not.toBe(passphrase);
+            expect(JSON.stringify(persisted)).not.toContain(passphrase);
+
+            const restored = createService();
+            vi.spyOn(restored as any, "loadData").mockResolvedValue(persisted);
+            await restored.loadSettings();
+            expect(restored.currentSettings().passphrase).toBe(passphrase);
+        }
+    );
+
+    it("preserves the legacy plaintext fallback when a non-managed URI cannot be encrypted", async () => {
+        const service = createService();
+        const plainURI = "sls+http://user:password@localhost:5984/?db=vault";
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                r1: {
+                    id: "r1",
+                    name: "Primary",
+                    uri: plainURI,
+                    isEncrypted: false,
+                },
+            },
+        };
+        vi.spyOn(service, "encryptConfigurationItem").mockResolvedValue("");
+
+        await service.saveSettingData();
+
+        expect(service.lastSavedSetting?.remoteConfigurations.r1.uri).toBe(plainURI);
+        expect(service.lastSavedSetting?.remoteConfigurations.r1.isEncrypted).toBe(false);
+    });
+
+    it("fails closed when a managed profile URI cannot be encrypted", async () => {
+        const service = createService();
+        const managedURI = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings: {
+                ...service.settings,
+                P2P_roomID: "managed-room",
+                ...MANAGED_FIELDS,
+            },
+        });
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                p2p: {
+                    id: "p2p",
+                    name: "Managed P2P",
+                    uri: managedURI,
+                    isEncrypted: false,
+                },
+            },
+        };
+        vi.spyOn(service, "encryptConfigurationItem").mockResolvedValue("");
+
+        await expect(service.saveSettingData()).rejects.toThrow(/managed P2P remote configuration/i);
+        expect(service.lastSavedSetting).toBeUndefined();
+    });
+
+    it("omits managed credentials from profile encryption failures", async () => {
+        const service = createService();
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                p2p: {
+                    id: "p2p",
+                    name: "Managed P2P",
+                    uri: managedP2PProfileURI(service.settings),
+                    isEncrypted: false,
+                },
+            },
+        };
+        vi.spyOn(service, "encryptConfigurationItem").mockRejectedValue(new Error("secret-token"));
+        const log = vi.spyOn(service, "_log");
+
+        await expect(service.saveSettingData()).rejects.toThrow("Failed to encrypt managed P2P remote configuration");
+
+        expect(log.mock.calls.flat().map(String).join("\n")).not.toContain("secret-token");
+        expect(service.lastSavedSetting).toBeUndefined();
+    });
+
+    it("persists managed settings only in its P2P profile and restores them on load", async () => {
+        const service = createService();
+        const managedSettings = {
+            ...service.settings,
+            remoteType: REMOTE_COUCHDB,
+            activeConfigurationId: "central",
+            P2P_ActiveRemoteConfigurationId: "p2p",
+            P2P_Enabled: true,
+            P2P_AutoStart: true,
+            P2P_roomID: "managed-room",
+            P2P_passphrase: "managed-passphrase",
+            ...MANAGED_FIELDS,
+        };
+        service.settings = {
+            ...managedSettings,
+            remoteConfigurations: {
+                central: {
+                    id: "central",
+                    name: "Central",
+                    uri: centralProfileURI(managedSettings),
+                    isEncrypted: false,
+                },
+                p2p: { id: "p2p", name: "P2P", uri: managedP2PProfileURI(managedSettings), isEncrypted: false },
+            },
+        };
+        let notified: ObsidianLiveSyncSettings | undefined;
+        service.onSettingSaved.addHandler(async (settings) => {
+            notified = settings;
+            return true;
+        });
+
+        await service.saveSettingData();
+
+        const persisted = service.lastSavedSetting!;
+        expect(persisted).not.toHaveProperty("P2P_managedType");
+        expect(persisted).not.toHaveProperty("P2P_managedId");
+        expect(persisted).not.toHaveProperty("P2P_managedToken");
+        expect(JSON.stringify(persisted)).not.toContain("secret-token");
+        expect(persisted.remoteConfigurations.p2p.isEncrypted).toBe(true);
+        expect(service.currentSettings().remoteConfigurations.p2p.isEncrypted).toBe(false);
+        expect(notified).not.toHaveProperty("P2P_managedToken");
+
+        const restored = createService();
+        vi.spyOn(restored as any, "loadData").mockResolvedValue(persisted);
+        await restored.loadSettings();
+        expect(restored.currentSettings()).toMatchObject({
+            remoteType: REMOTE_COUCHDB,
+            activeConfigurationId: "central",
+            P2P_ActiveRemoteConfigurationId: "p2p",
+            P2P_Enabled: true,
+            P2P_AutoStart: true,
+            P2P_roomID: "managed-room",
+            P2P_passphrase: "managed-passphrase",
+            ...MANAGED_FIELDS,
+        });
+    });
+
+    it("omits runtime ICE and duplicate managed projections when saving", async () => {
+        const service = createService();
+        service.settings = {
+            ...service.settings,
+            ...MANAGED_FIELDS,
+            P2P_iceServers: [{ urls: "turn:turn.example.com", credential: "issued-secret" }],
+            P2P_iceServersExpiresAt: 123_456,
+        };
+
+        await service.saveSettingData();
+        expect(service.lastSavedSetting).not.toHaveProperty("P2P_iceServers");
+        expect(service.lastSavedSetting).not.toHaveProperty("P2P_iceServersExpiresAt");
+        expect(service.lastSavedSetting).not.toHaveProperty("P2P_managedType");
+        expect(service.lastSavedSetting).not.toHaveProperty("P2P_managedId");
+        expect(service.lastSavedSetting).not.toHaveProperty("P2P_managedToken");
+    });
+
+    it("discards runtime ICE fields from imported settings", async () => {
+        const service = createService();
+
+        await service.applyExternalSettings({
+            P2P_iceServers: [{ urls: "turn:external.example.com", credential: "external-secret" }],
+            P2P_iceServersExpiresAt: 999_999,
+        });
+
+        expect(service.currentSettings()).not.toHaveProperty("P2P_iceServers");
+        expect(service.currentSettings()).not.toHaveProperty("P2P_iceServersExpiresAt");
+    });
+
+    it("saveSettingData should not mutate in-memory remote configuration URIs", async () => {
+        const service = createService();
+        const plainURI = "sls+http://user:password@localhost:5984/?db=vault";
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                r1: {
+                    id: "r1",
+                    name: "Primary",
+                    uri: plainURI,
+                    isEncrypted: false,
+                },
+            },
+            activeConfigurationId: "r1",
+        };
+
+        await service.saveSettingData();
+
+        expect(service.currentSettings().remoteConfigurations.r1.uri).toBe(plainURI);
+        expect(service.currentSettings().remoteConfigurations.r1.isEncrypted).toBe(false);
+    });
+
+    it("decryptSettings should restore encrypted remote configuration URIs", async () => {
+        const service = createService();
+        const plainURI = "sls+s3://ak:sk@example.com/?endpoint=https%3A%2F%2Fexample.com&bucket=vault";
+        service.settings = {
+            ...service.settings,
+            remoteConfigurations: {
+                r1: {
+                    id: "r1",
+                    name: "Primary",
+                    uri: plainURI,
+                    isEncrypted: false,
+                },
+            },
+            activeConfigurationId: "r1",
+        };
+
+        await service.saveSettingData();
+        const encrypted = JSON.parse(JSON.stringify(service.lastSavedSetting!)) as ObsidianLiveSyncSettings;
+
+        const decrypted = await service.decryptSettings(encrypted);
+
+        expect(decrypted.remoteConfigurations.r1.isEncrypted).toBe(false);
+        expect(decrypted.remoteConfigurations.r1.uri).toBe(plainURI);
+    });
+
+    it("decryptSettings should repair a plain-text remote URI that is incorrectly marked as encrypted", async () => {
+        const service = createService();
+        const plainURI = "sls+http://user:password@localhost:5984/?db=vault";
+
+        const decrypted = await service.decryptSettings({
+            ...DEFAULT_SETTINGS,
+            remoteConfigurations: {
+                r1: {
+                    id: "r1",
+                    name: "Primary",
+                    uri: plainURI,
+                    isEncrypted: true,
+                },
+            },
+            activeConfigurationId: "r1",
+        });
+
+        expect(decrypted.remoteConfigurations.r1.uri).toBe(plainURI);
+        expect(decrypted.remoteConfigurations.r1.isEncrypted).toBe(false);
+    });
+
+    it("loadSettings should apply P2P active remote fields without overwriting remoteType", async () => {
+        const service = createService();
+        const couchURI = ConnectionStringParser.serialize({
+            type: "couchdb",
+            settings: {
+                ...DEFAULT_SETTINGS,
+                couchDB_URI: "http://localhost:5984",
+                couchDB_USER: "user",
+                couchDB_PASSWORD: "password",
+                couchDB_DBNAME: "vault",
+            },
+        });
+        const p2pURI = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings: {
+                ...DEFAULT_SETTINGS,
+                P2P_roomID: "123-456-789-abc",
+                P2P_passphrase: "passphrase",
+                P2P_relays: "wss://exp-relay.vrtmrz.net/",
+            },
+        });
+
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            ...DEFAULT_SETTINGS,
+            remoteType: REMOTE_COUCHDB,
+            remoteConfigurations: {
+                couch: {
+                    id: "couch",
+                    name: "CouchDB",
+                    uri: couchURI,
+                    isEncrypted: false,
+                },
+                p2p: {
+                    id: "p2p",
+                    name: "P2P",
+                    uri: p2pURI,
+                    isEncrypted: false,
+                },
+            },
+            activeConfigurationId: "couch",
+            P2P_ActiveRemoteConfigurationId: "p2p",
+        } as ObsidianLiveSyncSettings);
+
+        await service.loadSettings();
+
+        expect(service.currentSettings().remoteType).toBe(REMOTE_COUCHDB);
+        expect(service.currentSettings().P2P_roomID).toBe("123-456-789-abc");
+        expect(service.currentSettings().P2P_ActiveRemoteConfigurationId).toBe("p2p");
+    });
+
+    it("loadSettings should persist the detected schema version without changing explicit sync choices", async () => {
+        const service = createService();
+        const storedSettings: Partial<ObsidianLiveSyncSettings> = {
+            ...DEFAULT_SETTINGS,
+            liveSync: true,
+            syncOnSave: true,
+            syncOnStart: true,
+            remoteConfigurations: {
+                couch: {
+                    id: "couch",
+                    name: "CouchDB",
+                    uri: "sls+http://user:password@localhost:5984/?db=vault",
+                    isEncrypted: false,
+                },
+            },
+            activeConfigurationId: "couch",
+        };
+        delete storedSettings.settingVersion;
+        vi.spyOn(service as any, "loadData").mockResolvedValue(storedSettings);
+
+        await service.loadSettings();
+
+        expect(service.lastSavedSetting).toMatchObject({
+            settingVersion: CURRENT_SETTING_VERSION,
+            liveSync: true,
+            syncOnSave: true,
+            syncOnStart: true,
+        });
+    });
+
+    it("keeps a non-empty legacy default-equivalent store unconfigured when isConfigured is absent", async () => {
+        const service = createService();
+        vi.spyOn(service as any, "loadData").mockResolvedValue({
+            liveSync: DEFAULT_SETTINGS.liveSync,
+        });
+
+        await service.loadSettings();
+
+        expect(service.currentSettings().isConfigured).toBe(false);
+    });
+
+    it("saveSettingData should apply patches from onBeforeSaveSettingData handlers", async () => {
+        const service = createService();
+
+        (service.onBeforeSaveSettingData as any).addHandler(async () => ({ tweakModified: 100 }), 10);
+        (service.onBeforeSaveSettingData as any).addHandler(async () => ({ tweakModified: 200 }), 20);
+
+        await service.saveSettingData();
+
+        expect(service.lastSavedSetting?.tweakModified).toBe(200);
+    });
+});

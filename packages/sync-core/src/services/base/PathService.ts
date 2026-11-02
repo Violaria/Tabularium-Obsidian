@@ -1,0 +1,127 @@
+import type {
+    DocumentID,
+    EntryHasPath,
+    FilePathWithPrefix,
+    FilePath,
+    AnyEntry,
+    UXFileInfo,
+    UXFileInfoStub,
+} from "@lib/common/types";
+import { getPathNormalizationVersion, normalisePathForIdentity } from "@lib/common/pathNormalization.ts";
+import type { PathNormalizationVersion } from "@lib/common/models/setting.type.ts";
+import type { IPathService, ISettingService, PathIDSettings } from "./IService";
+import { ServiceBase, type ServiceContext } from "./ServiceBase";
+import { addPrefix, expandFilePathPrefix, id2path_base, path2id_base } from "@lib/string_and_binary/path";
+import { configuredIdKey } from "@lib/common/idDerivation.ts";
+import { isInternalMetadata, stripInternalMetadataPrefix } from "@lib/common/typeUtils";
+import type { BASE_IS_NEW, EVEN, TARGET_IS_NEW } from "@lib/common/models/shared.const.symbols";
+
+export interface PathServiceDependencies {
+    settingService: ISettingService;
+    /**
+     * Optional host capability for consumers which keep content encryption and
+     * path-obfuscation passphrases separate.
+     */
+    getPathObfuscationPassphrase?: () => string | false;
+}
+/**
+ * The PathService provides methods for converting between file paths and document IDs.
+ * This class would be migrated to the new logic later.
+ */
+export abstract class PathService<T extends ServiceContext = ServiceContext>
+    extends ServiceBase<T>
+    implements IPathService
+{
+    protected settingService: ISettingService;
+    private readonly getPathObfuscationPassphrase?: () => string | false;
+    protected abstract normalizePath(path: string): string;
+    get settings() {
+        return this.settingService.currentSettings();
+    }
+    constructor(context: T, dependencies: PathServiceDependencies) {
+        super(context);
+        this.settingService = dependencies.settingService;
+        this.getPathObfuscationPassphrase = dependencies.getPathObfuscationPassphrase;
+    }
+    private _id2path(id: DocumentID, entry?: EntryHasPath): FilePathWithPrefix {
+        const filename = id2path_base(id, entry);
+        const [prefix, path] = expandFilePathPrefix(filename);
+        return (prefix + this.normalizePath(path)) as FilePathWithPrefix;
+    }
+    private async _path2id(
+        filename: FilePathWithPrefix | FilePath,
+        obfuscatePassphrase: string | false,
+        caseInsensitive: boolean,
+        idDerivationKey: string | undefined,
+        pathNormalizationVersion: PathNormalizationVersion
+    ): Promise<DocumentID> {
+        const [prefix, path] = expandFilePathPrefix(filename);
+        const fixedPath = (prefix +
+            normalisePathForIdentity(this.normalizePath(path), pathNormalizationVersion)) as FilePathWithPrefix;
+
+        const out = await path2id_base(fixedPath, obfuscatePassphrase, caseInsensitive, idDerivationKey);
+        return out;
+    }
+    /**
+     * Convert a document ID or entry to a virtual file path.
+     * @param id A document ID. Nowadays, it is mostly not the same as the file path.
+     * If the document has `_` prefixed, saved as `/_`.
+     * @param entry An entry object. If provided, it can be used to get the path directly.
+     * @param stripPrefix Whether to strip the prefix from the path.
+     */
+    id2path(id: DocumentID, entry?: EntryHasPath, stripPrefix?: boolean): FilePathWithPrefix {
+        const tempId = this._id2path(id, entry);
+        if (stripPrefix && isInternalMetadata(tempId)) {
+            const out = stripInternalMetadataPrefix(tempId);
+            return out;
+        }
+        return tempId;
+    }
+
+    /**
+     * Convert a virtual file path to a document ID (with prefix if any).
+     * @param filename A file path with or without prefix.
+     * @param prefix The prefix to use for the document ID.
+     */
+    async path2id(filename: FilePathWithPrefix | FilePath, prefix?: string): Promise<DocumentID> {
+        return this.path2idWithSettings(filename, this.settings, prefix);
+    }
+
+    /** Convert a path using the caller's settings snapshot and this host's path normalisation. */
+    async path2idWithSettings(
+        filename: FilePathWithPrefix | FilePath,
+        setting: PathIDSettings,
+        prefix?: string
+    ): Promise<DocumentID> {
+        const pathNormalizationVersion = getPathNormalizationVersion(setting);
+        const destPath = addPrefix(filename, prefix ?? "");
+        const pathObfuscationPassphrase =
+            this.getPathObfuscationPassphrase?.() ?? (setting.usePathObfuscation ? setting.passphrase : false);
+        return await this._path2id(
+            destPath,
+            pathObfuscationPassphrase,
+            !setting.handleFilenameCaseSensitive,
+            (setting.encrypt && configuredIdKey(setting)) || undefined,
+            pathNormalizationVersion
+        );
+    }
+
+    getPath(entry: AnyEntry): FilePathWithPrefix {
+        return this.id2path(entry._id, entry);
+    }
+
+    abstract markChangesAreSame(
+        old: UXFileInfo | AnyEntry | FilePathWithPrefix,
+        newMtime: number,
+        oldMtime: number
+    ): boolean | undefined;
+    abstract unmarkChanges(file: AnyEntry | FilePathWithPrefix | UXFileInfoStub): void;
+    abstract compareFileFreshness(
+        baseFile: UXFileInfoStub | AnyEntry | undefined,
+        checkTarget: UXFileInfo | AnyEntry | undefined
+    ): typeof BASE_IS_NEW | typeof TARGET_IS_NEW | typeof EVEN;
+    abstract isMarkedAsSameChanges(
+        file: UXFileInfoStub | AnyEntry | FilePathWithPrefix,
+        mtimes: number[]
+    ): undefined | typeof EVEN;
+}

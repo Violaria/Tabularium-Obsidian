@@ -1,0 +1,633 @@
+import type { ValueStore, ValueDeleter } from "@vrtmrz/value-store";
+import type { FetchHttpHandler } from "@smithy/fetch-http-handler";
+import { type LOG_LEVEL } from "octagonal-wheels/common/logger";
+import type {
+    AnyEntry,
+    AUTO_MERGED,
+    CouchDBCredentials,
+    ConfigPassphraseStore,
+    diff_result,
+    DocumentID,
+    EntryDoc,
+    EntryHasPath,
+    FileEventItem,
+    FilePath,
+    FilePathWithPrefix,
+    LoadedEntry,
+    MetaEntry,
+    MISSING_OR_ERROR,
+    ObsidianLiveSyncSettings,
+    RemoteDBSettings,
+    RemotePreferredTweakResult,
+    SettingsMigrationState,
+    TweakAssessment,
+    TweakValues,
+    UXFileInfo,
+    UXFileInfoStub,
+} from "@lib/common/types";
+
+import type { LiveSyncLocalDB } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { ReplicatorInstance } from "@lib/replication/ReplicatorInstance";
+import type { SimpleStore } from "octagonal-wheels/databases/SimpleStoreBase";
+import type { Confirm } from "@lib/interfaces/Confirm";
+import type { ReactiveSource } from "octagonal-wheels/dataobject/reactive";
+import type { ReplicationStatics } from "@lib/common/models/shared.definition";
+import type { ReplicatorService } from "./ReplicatorService";
+import type { DatabaseEventService } from "./DatabaseEventService";
+import type { BASE_IS_NEW, EVEN, TARGET_IS_NEW } from "@lib/common/models/shared.const.symbols";
+import type { AsyncActivityOptions } from "@lib/interfaces/AsyncActivityRunner.ts";
+import type { OwnedCouchDBConnection, RemoteConnectionOpenOptions } from "./RemoteConnection.ts";
+import type {
+    ActiveReplicatorContext,
+    ContinuousReplicationRequest,
+    ReplicationAttemptFailure,
+    ReplicationFailureRequest,
+    ReplicatorProviderDefinitionMap,
+    ReplicationOutcome,
+    ReplicationReadinessRequirements,
+    UnattendedOneShotRequest,
+    UserInitiatedOneShotRequest,
+} from "@lib/replication/ReplicatorProvider.ts";
+import type { RemoteResourceKind, RemoteResourceMap } from "@lib/replication/RemoteResource.ts";
+import type {
+    CentralRemoteAdministrationRequest,
+    CentralRemoteAdministrationResult,
+} from "@lib/replication/CentralRemoteAdministration.ts";
+import type { HandlerOutcome, MultipleHandlerFunction } from "@lib/services/lib/HandlerUtils.ts";
+import type { VaultScanResult } from "./VaultScanResult.ts";
+import type { UICommandRegistry } from "@lib/uiCommands";
+
+declare global {
+    interface OPTIONAL_SYNC_FEATURES {
+        DISABLE: "DISABLE";
+    }
+}
+
+export interface ICommandCompat {
+    id: string;
+    name: string;
+    icon?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
+    callback?: () => any;
+    checkCallback?: (checking: boolean) => boolean | void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
+    editorCallback?: (editor: any, ctx: any) => any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- For interoperability with Obsidian's and cross-platform command system.
+    editorCheckCallback?: (checking: any, editor: any, ctx: any) => boolean | void;
+}
+
+export interface IAPIService {
+    getCustomFetchHandler(): FetchHttpHandler;
+    addStatusBarItem(): HTMLElement | undefined;
+
+    addLog(message: unknown, level: LOG_LEVEL, key?: string): void;
+
+    isMobile(): boolean;
+
+    showWindow(type: string): Promise<void>;
+    showWindowOnRight?(type: string): Promise<void>;
+
+    getAppID(): string;
+
+    getSystemVaultName(): string;
+
+    getPlatform(): string;
+
+    getAppVersion(): string;
+
+    getPluginVersion(): string;
+    addCommand<TCommand extends ICommandCompat>(command: TCommand): TCommand;
+    registerWindow<T>(type: string, factory: (leaf: T) => unknown): void;
+    addRibbonIcon(icon: string, title: string, callback: (evt: MouseEvent) => unknown): HTMLElement;
+    registerProtocolHandler(action: string, handler: (params: Record<string, string>) => unknown): void;
+    confirm: Confirm;
+    responseCount: ReactiveSource<number>;
+    requestCount: ReactiveSource<number>;
+    isOnline: boolean;
+    webCompatFetch(url: string | Request, opts?: RequestInit): Promise<Response>;
+    nativeFetch(url: string | Request, opts?: RequestInit): Promise<Response>;
+    setInterval(handler: () => void, timeout: number): number;
+    clearInterval(timerId: number): void;
+    getSystemConfigDir(): string;
+}
+export interface IPathService {
+    id2path(id: DocumentID, entry?: EntryHasPath, stripPrefix?: boolean): FilePathWithPrefix;
+
+    path2id(filename: FilePathWithPrefix | FilePath, prefix?: string): Promise<DocumentID>;
+    path2idWithSettings(
+        filename: FilePathWithPrefix | FilePath,
+        setting: PathIDSettings,
+        prefix?: string
+    ): Promise<DocumentID>;
+    getPath(entry: AnyEntry): FilePathWithPrefix;
+    markChangesAreSame(
+        old: UXFileInfo | AnyEntry | FilePathWithPrefix,
+        newMtime: number,
+        oldMtime: number
+    ): boolean | undefined;
+    unmarkChanges(file: AnyEntry | FilePathWithPrefix | UXFileInfoStub): void;
+    compareFileFreshness(
+        baseFile: UXFileInfoStub | AnyEntry | undefined,
+        checkTarget: UXFileInfo | AnyEntry | undefined
+    ): typeof BASE_IS_NEW | typeof TARGET_IS_NEW | typeof EVEN;
+    isMarkedAsSameChanges(
+        file: UXFileInfoStub | AnyEntry | FilePathWithPrefix,
+        mtimes: number[]
+    ): undefined | typeof EVEN;
+}
+
+export type PathIDSettings = Pick<
+    RemoteDBSettings,
+    | "encrypt"
+    | "usePathObfuscation"
+    | "passphrase"
+    | "handleFilenameCaseSensitive"
+    | "idDerivationVersion"
+    | "idDerivationKey"
+> &
+    Partial<Pick<RemoteDBSettings, "pathNormalizationVersion">>;
+
+export interface openDatabaseParameters {
+    replicator: ReplicatorService;
+    databaseEvents: DatabaseEventService;
+}
+export interface IDatabaseService {
+    localDatabase: LiveSyncLocalDB;
+    createPouchDBInstance<T extends object>(
+        name?: string,
+        options?: PouchDB.Configuration.DatabaseConfiguration
+    ): PouchDB.Database<T>;
+
+    openDatabase(params: openDatabaseParameters): Promise<boolean>;
+
+    resetDatabase(): Promise<boolean>;
+
+    resetDatabaseForCurrentSettings(params: openDatabaseParameters): Promise<boolean>;
+
+    onDatabaseReset: () => Promise<boolean>;
+
+    onOpenDatabase: (vaultName: string) => Promise<boolean>;
+
+    isDatabaseReady(): boolean;
+}
+export interface IDatabaseEventService {
+    onUnloadDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+
+    onCloseDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+
+    onDatabaseInitialisation(db: LiveSyncLocalDB): Promise<boolean>;
+
+    onDatabaseInitialised(showNotice: boolean): Promise<boolean>;
+
+    onDatabaseHasReady(): Promise<boolean>;
+
+    onResetDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+
+    initialiseDatabase(
+        showingNotice?: boolean,
+        reopenDatabase?: boolean,
+        ignoreSuspending?: boolean,
+        continueOnFileFailure?: boolean
+    ): Promise<VaultScanResult>;
+}
+export interface IKeyValueDBService {
+    openSimpleStore<T>(kind: string): SimpleStore<T>;
+    simpleStore: SimpleStore<unknown>;
+}
+/** Options for completing an admitted optional file event. */
+export interface OptionalFileEventOptions {
+    /** Resolves when a finite flush needs this event to finish without its debounce delay. */
+    whenFlushRequested?: Promise<void>;
+}
+
+export interface IFileProcessingService {
+    processFileEvent(item: FileEventItem): Promise<boolean>;
+
+    /** Legacy notification contract; its boolean does not confirm persistence. */
+    processOptionalFileEvent(path: FilePath): Promise<boolean>;
+
+    /** Complete the actual optional file operation, or explain why it is not completed. */
+    processOptionalFileEventWithResult?(
+        path: FilePath,
+        options?: OptionalFileEventOptions
+    ): Promise<HandlerOutcome<void, string>>;
+
+    commitPendingFileEvents(): Promise<boolean>;
+    batched: ReactiveSource<number>;
+    processing: ReactiveSource<number>;
+    totalQueued: ReactiveSource<number>;
+    totalStorageFileEventCount: number;
+    onStorageFileEvent(): void;
+}
+export interface IReplicatorService {
+    /**
+     * Fence new work, drain admitted work, and close the active Replicator.
+     *
+     * Do not await this command from an admitted active-context callback: the
+     * retirement command waits for that callback to settle.
+     */
+    onCloseActiveReplication(): Promise<boolean>;
+
+    /**
+     * Run host preparation after candidate initialisation and before active publication.
+     *
+     * This hook runs inside the ownership transition. A handler must not call or await
+     * `acquireActiveReplicatorContext()` or `runWithActiveReplicatorContext()`, because
+     * both wait for that same transition. Work which requires the new active context
+     * belongs after publication.
+     */
+    onBeforeReplicatorPublication(): Promise<boolean>;
+
+    getNewReplicator: ReplicatorFactoryHandler;
+
+    /** Add the fixed provider definitions composed by the current host. */
+    registerReplicatorProviderDefinitions(definitions: ReplicatorProviderDefinitionMap): void;
+
+    /** Resolve one provider-owned finite resource without changing active publication. */
+    createRemoteResource<TKind extends RemoteResourceKind>(
+        kind: TKind,
+        setting: RemoteDBSettings
+    ): Promise<RemoteResourceMap[TKind] | undefined>;
+
+    /** Apply and verify one typed provider-specific central-remote administration action. */
+    runCentralRemoteAdministration(
+        request: CentralRemoteAdministrationRequest
+    ): Promise<CentralRemoteAdministrationResult>;
+
+    /** Wait for queued ownership transitions, then return the published active context. */
+    acquireActiveReplicatorContext(): Promise<ActiveReplicatorContext | undefined>;
+
+    /**
+     * Run one task against an exact active publication admitted before later transitions.
+     *
+     * Invocation is ordered with replacement and disposal. A later
+     * transition fences new admission, requests transfer cancellation, waits for
+     * admitted tasks, and only then closes the old Replicator. The
+     * callback must not initiate or await settings realisation, database
+     * replacement, Replicator retirement, or another operation which queues that
+     * same lifecycle transition. Stage such recovery after this promise settles.
+     * Terminal plug-in unload uses the same retirement drain before the local
+     * database closes. Reversible host suspension only requests transfer
+     * cancellation and retains the publication, so it is not a retirement fence.
+     *
+     * The callback is not invoked when no typed publication can be admitted.
+     */
+    runWithActiveReplicatorContext<TResult>(
+        task: (context: ActiveReplicatorContext) => TResult | PromiseLike<TResult>
+    ): Promise<TResult | undefined>;
+
+    /**
+     * Return the legacy unreserved view of the active Replicator.
+     *
+     * Missing active state retains its established diagnostic. New work must
+     * acquire or admit an `ActiveReplicatorContext` instead.
+     */
+    getActiveReplicator(): ReplicatorInstance | undefined;
+    /**
+     * Return whether a compatibility active Replicator exists without
+     * acquiring or returning it.
+     *
+     * This side-effect-free, non-owning predicate exists only for
+     * compatibility-state classification. Work must acquire or admit an
+     * `ActiveReplicatorContext` before using a Replicator.
+     */
+    hasActiveReplicator(): boolean;
+    replicationStatics: ReactiveSource<ReplicationStatics>;
+    /** Number of finite remote operations currently in progress. */
+    boundedRemoteActivityCount: ReactiveSource<number>;
+    /** Number of finite replication operations which can still deliver database documents. */
+    finiteReplicationActivityCount: ReactiveSource<number>;
+    /** Runs a finite remote operation within the host activity policy. */
+    runBoundedRemoteActivity<T>(task: () => T | PromiseLike<T>, options?: AsyncActivityOptions): Promise<T>;
+    /** Runs finite replication which may place documents in the local database. */
+    runFiniteReplicationActivity<T>(task: () => T | PromiseLike<T>, options?: AsyncActivityOptions): Promise<T>;
+}
+
+export type ReplicatorFactoryCallback = (
+    settingOverride?: Partial<ObsidianLiveSyncSettings>
+) => Promise<ReplicatorInstance | undefined | false>;
+export type ReplicatorFactoryHandler = MultipleHandlerFunction<ReplicatorFactoryCallback>;
+export interface IReplicationService {
+    processSynchroniseResult(doc: MetaEntry): Promise<boolean>;
+
+    processOptionalSynchroniseResult(doc: LoadedEntry): Promise<boolean>;
+    processVirtualDocument(docs: PouchDB.Core.ExistingDocument<EntryDoc>): Promise<boolean>;
+    onBeforeReplicate(showMessage: boolean): Promise<boolean>;
+    /** Prepare provider state which exists only for the central remote. */
+    onPrepareCentralRemoteReplication(showMessage: boolean): Promise<boolean>;
+    checkConnectionFailure(failure: ReplicationAttemptFailure): Promise<boolean | "CHECKAGAIN" | undefined>;
+
+    /** Lightweight, idempotent policy checks which every replication entry point may invoke. */
+    onCheckReplicationReady(showMessage: boolean): Promise<boolean>;
+    /**
+     * Evaluate ordered host and provider readiness without acquiring a Replicator.
+     *
+     * The provider requirements determine whether central-remote preparation
+     * applies. A false result means no remote work has been admitted.
+     */
+    isReplicationReady(showMessage: boolean, readiness?: ReplicationReadinessRequirements): Promise<boolean>;
+    /**
+     * Run one user-initiated typed capability against an atomically acquired context.
+     *
+     * Readiness precedes finite activity, and failure recovery receives only
+     * the interaction authority carried by the request.
+     */
+    replicateUserInitiated(request?: UserInitiatedOneShotRequest): Promise<ReplicationOutcome>;
+    /**
+     * Run one unattended typed capability without granting interaction authority.
+     *
+     * Readiness precedes finite activity, and failed outcomes reach unattended
+     * recovery only after activity accounting has settled.
+     */
+    replicateUnattended(request: UnattendedOneShotRequest): Promise<ReplicationOutcome>;
+    /** Serialise and rate-limit an unattended event-triggered finite capability. */
+    replicateUnattendedByEvent(request: UnattendedOneShotRequest): Promise<ReplicationOutcome>;
+    /**
+     * Start a supported continuous capability after its provider-specific readiness.
+     *
+     * Applicability is checked before readiness. Continuous work is not wrapped
+     * as finite activity and does not use the finite-operation recovery handler.
+     */
+    startContinuous(request: ContinuousReplicationRequest): Promise<ReplicationOutcome>;
+    /**
+     * Stop finite transfer work on the current typed active Replicator.
+     *
+     * This operator action bypasses readiness, finite activity accounting, and
+     * failure-recovery handlers.
+     */
+    stopActiveTransfer(): Promise<ReplicationOutcome>;
+    performReplication(showMessage?: boolean): Promise<boolean | void>;
+    replicate(showMessage?: boolean): Promise<boolean | void>;
+    replicateByEvent(showMessage?: boolean): Promise<boolean | void>;
+    onReplicationFailed(request: ReplicationFailureRequest): Promise<boolean>;
+    parseSynchroniseResult(docs: Array<PouchDB.Core.ExistingDocument<EntryDoc>>): Promise<boolean>;
+    databaseQueueCount: ReactiveSource<number>;
+    storageApplyingCount: ReactiveSource<number>;
+    replicationResultCount: ReactiveSource<number>;
+
+    replicateAllToRemote(showingNotice?: boolean): Promise<boolean>;
+
+    replicateAllFromRemote(showingNotice?: boolean): Promise<boolean>;
+
+    markLocked(lockByClean?: boolean): Promise<void>;
+
+    markUnlocked(): Promise<void>;
+
+    markResolved(): Promise<void>;
+}
+export interface IRemoteService {
+    /**
+     * Opens an owned remote CouchDB connection.
+     *
+     * @remarks
+     * The caller must transfer ownership or call `close()` on the returned
+     * connection. Closing it aborts outstanding abort-capable requests before
+     * closing the PouchDB handle. Host-native request adapters may not honour
+     * `AbortSignal`; callers must not report those requests as cancelled without
+     * a host guarantee.
+     *
+     * @returns An error description, or an owned remote connection. When
+     * `skipInfo` is true, the `info` field retains its compatibility placeholder.
+     *
+     * @throws When PouchDB construction or local connection configuration fails
+     * before a connection result can be produced.
+     */
+    connect(
+        uri: string,
+        auth: CouchDBCredentials,
+        disableRequestURI: boolean,
+        passphrase: string | false,
+        useDynamicIterationCount: boolean,
+        performSetup: boolean,
+        skipInfo: boolean,
+        compression: boolean,
+        customHeaders: Record<string, string>,
+        useRequestAPI: boolean,
+        getPBKDF2Salt: () => Promise<Uint8Array<ArrayBuffer>>,
+        options?: RemoteConnectionOpenOptions
+    ): Promise<string | OwnedCouchDBConnection<EntryDoc>>;
+
+    /**
+     * State if the last POST request failed due to payload size.
+     */
+    get hadLastPostFailedBySize(): boolean;
+}
+export interface IConflictService {
+    getOptionalConflictCheckMethod(path: FilePathWithPrefix): Promise<boolean | undefined | "newer">;
+    resolveByUserInteraction: (
+        filename: FilePathWithPrefix,
+        conflictCheckResult: diff_result
+    ) => Promise<boolean | undefined>;
+
+    queueCheckForIfOpen(path: FilePathWithPrefix): Promise<void>;
+
+    queueCheckFor(path: FilePathWithPrefix): Promise<void>;
+
+    ensureAllProcessed(): Promise<boolean>;
+
+    resolveByDeletingRevision(
+        path: FilePathWithPrefix,
+        deleteRevision: string,
+        title: string
+    ): Promise<typeof MISSING_OR_ERROR | typeof AUTO_MERGED>;
+
+    resolve(filename: FilePathWithPrefix): Promise<void>;
+
+    resolveByNewest(filename: FilePathWithPrefix): Promise<boolean>;
+
+    resolveAllConflictedFilesByNewerOnes(): Promise<void>;
+    conflictProcessQueueCount: ReactiveSource<number>;
+}
+export interface IAppLifecycleService {
+    onLayoutReady(): Promise<boolean>;
+    onFirstInitialise(): Promise<boolean>;
+    onReady(): Promise<boolean>;
+    onWireUpEvents(): Promise<boolean>;
+    onInitialise(): Promise<boolean>;
+    onLoad(): Promise<boolean>;
+    onSettingLoaded(): Promise<boolean>;
+    onLoaded(): Promise<boolean>;
+    onScanningStartupIssues(): Promise<boolean>;
+    onAppUnload(): Promise<undefined[]>;
+    onBeforeUnload(): Promise<boolean>;
+    onUnload(): Promise<boolean>;
+    onSuspending(): Promise<boolean>;
+    onResuming(): Promise<boolean>;
+    onResumed(): Promise<boolean>;
+    getUnresolvedMessages: () => Promise<(string | Error)[][]>;
+
+    performRestart(): void;
+
+    askRestart(message?: string): void;
+
+    scheduleRestart(): void;
+
+    isSuspended(): boolean;
+
+    setSuspended(suspend: boolean): void;
+
+    isReady(): boolean;
+
+    markIsReady(): void;
+
+    resetIsReady(): void;
+
+    isReloadingScheduled(): boolean;
+}
+export interface ISettingService {
+    onBeforeRealiseSetting(): Promise<boolean>;
+    onSettingRealised(): Promise<boolean>;
+    onRealiseSetting(): Promise<boolean>;
+    suspendAllSync(): Promise<boolean>;
+    suspendExtraSync(): Promise<boolean>;
+    enableOptionalFeature(mode: keyof OPTIONAL_SYNC_FEATURES): Promise<boolean>;
+
+    clearUsedPassphrase(): void;
+
+    decryptSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings>;
+
+    adjustSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings>;
+
+    loadSettings(): Promise<void>;
+
+    getSettingsMigrationState(): SettingsMigrationState | undefined;
+
+    getDeviceAndVaultName(): string;
+
+    setDeviceAndVaultName(name: string): void;
+
+    saveDeviceAndVaultName(): Promise<void>;
+
+    /** Exact-key host storage; values are local to this application instance. */
+    readonly deviceValues: ValueStore & ValueDeleter;
+    /** Storage scoped by the current Vault and database suffix. */
+    readonly config: IConfigService;
+
+    onBeforeSaveSettingData(
+        nextSettings: ObsidianLiveSyncSettings,
+        previousSettings: ObsidianLiveSyncSettings
+    ): Promise<(Partial<ObsidianLiveSyncSettings> | void)[]>;
+
+    saveSettingData(): Promise<void>;
+
+    /** Save a new configuration wrapper and its device-local key, retaining the protected values. */
+    changeConfigurationEncryption(store: ConfigPassphraseStore, passphrase?: string): Promise<void>;
+
+    currentSettings(): ObsidianLiveSyncSettings;
+
+    updateSettings(
+        updateFn: (current: ObsidianLiveSyncSettings) => ObsidianLiveSyncSettings,
+        saveImmediately?: boolean
+    ): Promise<void>;
+    applyExternalSettings(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void>;
+    applyPartial(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void>;
+
+    onSettingLoaded(settings: ObsidianLiveSyncSettings): Promise<boolean>;
+    onSettingChanged(settings: ObsidianLiveSyncSettings): Promise<boolean>;
+    onSettingSaved(settings: ObsidianLiveSyncSettings): Promise<boolean>;
+}
+export interface ITweakValueService {
+    fetchRemotePreferred(trialSetting: RemoteDBSettings): Promise<RemotePreferredTweakResult>;
+
+    checkAndAskResolvingMismatched(
+        preferred: Partial<TweakValues>,
+        assessment?: TweakAssessment
+    ): Promise<[TweakValues | boolean, boolean]>;
+
+    askResolvingMismatched(
+        preferredSource: TweakValues,
+        updatePreferredRemote?: (setting: ObsidianLiveSyncSettings) => Promise<boolean>,
+        assessment?: TweakAssessment
+    ): Promise<"OK" | "CHECKAGAIN" | "IGNORE">;
+
+    checkAndAskUseRemoteConfiguration(
+        settings: RemoteDBSettings
+    ): Promise<{ result: false | TweakValues; requireFetch: boolean }>;
+
+    askUseRemoteConfiguration(
+        trialSetting: RemoteDBSettings,
+        preferred: TweakValues
+    ): Promise<{ result: false | TweakValues; requireFetch: boolean }>;
+}
+export interface IVaultService {
+    vaultName(): string;
+
+    getVaultName(): string;
+
+    scanVault(
+        showingNotice?: boolean,
+        ignoreSuspending?: boolean,
+        continueOnFileFailure?: boolean
+    ): Promise<VaultScanResult>;
+
+    isIgnoredByIgnoreFile(file: string | UXFileInfoStub): Promise<boolean>;
+
+    isTargetFile(
+        file: string | UXFileInfoStub,
+        /** Inspect selection policy without treating a filename collision as an exclusion. */
+        options?: { skipCaseCollisionCheck?: boolean }
+    ): Promise<boolean>;
+
+    isTargetFileInExtra(file: string | UXFileInfoStub): Promise<boolean>;
+
+    isFileSizeTooLarge(size: number): boolean;
+
+    getActiveFilePath(): FilePath | undefined;
+
+    isStorageInsensitive(): boolean;
+
+    shouldCheckCaseInsensitively(): boolean;
+
+    isValidPath(path: string): boolean;
+}
+export interface ITestService {
+    test(): Promise<boolean>;
+    testMultiDevice(): Promise<boolean>;
+
+    addTestResult(name: string, key: string, result: boolean, summary?: string, message?: string): void;
+}
+export interface IUIService {
+    readonly commands: UICommandRegistry;
+
+    promptCopyToClipboard(title: string, value: string): Promise<boolean>;
+
+    showMarkdownDialog<T extends string[]>(
+        title: string,
+        contentMD: string,
+        buttons: T
+    ): Promise<(typeof buttons)[number] | false>;
+
+    get confirm(): Confirm;
+}
+/** Asynchronous device configuration selected by the host composition. */
+export type IConfigService = ValueStore & ValueDeleter;
+
+export interface IServiceHub {
+    API: IAPIService;
+    path: IPathService;
+    database: IDatabaseService;
+    databaseEvents: IDatabaseEventService;
+    replicator: IReplicatorService;
+    fileProcessing: IFileProcessingService;
+    replication: IReplicationService;
+    remote: IRemoteService;
+    conflict: IConflictService;
+    appLifecycle: IAppLifecycleService;
+    setting: ISettingService;
+    tweakValue: ITweakValueService;
+    vault: IVaultService;
+    test: ITestService;
+    UI: IUIService;
+    config: IConfigService;
+    keyValueDB: IKeyValueDBService;
+    control: IControlService;
+}
+
+export interface IControlService {
+    applySettings(): Promise<void>;
+    onLoad(): Promise<boolean>;
+    onReady(): Promise<boolean>;
+    onUnload(): Promise<void>;
+    hasUnloaded(): boolean;
+    activated: Promise<boolean>;
+}

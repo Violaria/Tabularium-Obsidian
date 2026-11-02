@@ -1,0 +1,11 @@
+{
+    "type": "module",
+    "imports": {
+        "#worker": {
+            "browser": "./worker/bgWorker.ts",
+            "deno": "./worker/bgWorker.direct.ts",
+            "node": "./worker/bgWorker.direct.ts",
+            "default": "./worker/bgWorker.direct.ts"
+        }
+    }
+}

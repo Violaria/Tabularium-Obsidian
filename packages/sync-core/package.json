@@ -1,0 +1,1055 @@
+{
+    "name": "@vrtmrz/livesync-commonlib",
+    "version": "0.2.1",
+    "private": true,
+    "description": "Shared data, storage, and replication primitives for Self-hosted LiveSync clients.",
+    "type": "module",
+    "types": "./dist/index.d.ts",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vrtmrz/livesync-commonlib.git"
+    },
+    "scripts": {
+        "build": "node _tools/build-package.mjs"
+    },
+    "sideEffects": [
+        "./dist/pouchdb/pouchdb-browser.js",
+        "./dist/pouchdb/pouchdb-http.js",
+        "./dist/pouchdb/pouchdb-test.js"
+    ],
+    "imports": {
+        "#worker": {
+            "browser": "./dist/worker/bgWorker.js",
+            "node": "./dist/worker/bgWorker.direct.js",
+            "default": "./dist/worker/bgWorker.direct.js"
+        }
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        },
+        "./browser": {
+            "types": "./dist/platform/browser/index.d.ts",
+            "import": "./dist/platform/browser/index.js",
+            "default": "./dist/platform/browser/index.js"
+        },
+        "./context": {
+            "types": "./dist/context.d.ts",
+            "import": "./dist/context.js",
+            "default": "./dist/context.js"
+        },
+        "./diagnostics": {
+            "types": "./dist/diagnostics/index.d.ts",
+            "import": "./dist/diagnostics/index.js",
+            "default": "./dist/diagnostics/index.js"
+        },
+        "./hashing": {
+            "types": "./dist/hashing.d.ts",
+            "import": "./dist/hashing.js",
+            "default": "./dist/hashing.js"
+        },
+        "./node": {
+            "types": "./dist/platform/node/index.d.ts",
+            "import": "./dist/platform/node/index.js",
+            "default": "./dist/platform/node/index.js"
+        },
+        "./p2p": {
+            "types": "./dist/p2p/index.d.ts",
+            "import": "./dist/p2p/index.js",
+            "default": "./dist/p2p/index.js"
+        },
+        "./replication": {
+            "types": "./dist/replication/index.d.ts",
+            "import": "./dist/replication/index.js",
+            "default": "./dist/replication/index.js"
+        },
+        "./rpc": {
+            "types": "./dist/rpc/index.d.ts",
+            "import": "./dist/rpc/index.js",
+            "default": "./dist/rpc/index.js"
+        },
+        "./remote-configurations": {
+            "types": "./dist/remoteConfigurations.d.ts",
+            "import": "./dist/remoteConfigurations.js",
+            "default": "./dist/remoteConfigurations.js"
+        },
+        "./settings": {
+            "types": "./dist/settings.d.ts",
+            "import": "./dist/settings.js",
+            "default": "./dist/settings.js"
+        },
+        "./setup-uri": {
+            "types": "./dist/setupUri.d.ts",
+            "import": "./dist/setupUri.js",
+            "default": "./dist/setupUri.js"
+        },
+        "./ui-commands": {
+            "types": "./dist/uiCommands.d.ts",
+            "import": "./dist/uiCommands.js",
+            "default": "./dist/uiCommands.js"
+        },
+        "./compat/API/processSetting": {
+            "types": "./dist/API/processSetting.d.ts",
+            "import": "./dist/API/processSetting.js",
+            "default": "./dist/API/processSetting.js"
+        },
+        "./compat/common/ConnectionString": {
+            "types": "./dist/common/ConnectionString.d.ts",
+            "import": "./dist/common/ConnectionString.js",
+            "default": "./dist/common/ConnectionString.js"
+        },
+        "./compat/common/LSError": {
+            "types": "./dist/common/LSError.d.ts",
+            "import": "./dist/common/LSError.js",
+            "default": "./dist/common/LSError.js"
+        },
+        "./compat/common/configForDoc": {
+            "types": "./dist/common/configForDoc.d.ts",
+            "import": "./dist/common/configForDoc.js",
+            "default": "./dist/common/configForDoc.js"
+        },
+        "./compat/common/coreEnvFunctions": {
+            "types": "./dist/common/coreEnvFunctions.d.ts",
+            "import": "./dist/common/coreEnvFunctions.js",
+            "default": "./dist/common/coreEnvFunctions.js"
+        },
+        "./compat/common/coreEnvVars": {
+            "types": "./dist/common/coreEnvVars.d.ts",
+            "import": "./dist/common/coreEnvVars.js",
+            "default": "./dist/common/coreEnvVars.js"
+        },
+        "./compat/common/logger": {
+            "types": "./dist/common/logger.d.ts",
+            "import": "./dist/common/logger.js",
+            "default": "./dist/common/logger.js"
+        },
+        "./compat/common/models/fileaccess.const": {
+            "types": "./dist/common/models/fileaccess.const.d.ts",
+            "import": "./dist/common/models/fileaccess.const.js",
+            "default": "./dist/common/models/fileaccess.const.js"
+        },
+        "./compat/common/models/redflag.const": {
+            "types": "./dist/common/models/redflag.const.d.ts",
+            "import": "./dist/common/models/redflag.const.js",
+            "default": "./dist/common/models/redflag.const.js"
+        },
+        "./compat/common/models/setting.const": {
+            "types": "./dist/common/models/setting.const.d.ts",
+            "import": "./dist/common/models/setting.const.js",
+            "default": "./dist/common/models/setting.const.js"
+        },
+        "./compat/common/models/setting.type": {
+            "types": "./dist/common/models/setting.type.d.ts",
+            "import": "./dist/common/models/setting.type.js",
+            "default": "./dist/common/models/setting.type.js"
+        },
+        "./compat/common/models/shared.const": {
+            "types": "./dist/common/models/shared.const.d.ts",
+            "import": "./dist/common/models/shared.const.js",
+            "default": "./dist/common/models/shared.const.js"
+        },
+        "./compat/common/models/shared.const.symbols": {
+            "types": "./dist/common/models/shared.const.symbols.d.ts",
+            "import": "./dist/common/models/shared.const.symbols.js",
+            "default": "./dist/common/models/shared.const.symbols.js"
+        },
+        "./compat/common/models/tweak.definition": {
+            "types": "./dist/common/models/tweak.definition.d.ts",
+            "import": "./dist/common/models/tweak.definition.js",
+            "default": "./dist/common/models/tweak.definition.js"
+        },
+        "./compat/common/settingConstants": {
+            "types": "./dist/common/settingConstants.d.ts",
+            "import": "./dist/common/settingConstants.js",
+            "default": "./dist/common/settingConstants.js"
+        },
+        "./compat/common/typeUtils": {
+            "types": "./dist/common/typeUtils.d.ts",
+            "import": "./dist/common/typeUtils.js",
+            "default": "./dist/common/typeUtils.js"
+        },
+        "./compat/common/types": {
+            "types": "./dist/common/types.d.ts",
+            "import": "./dist/common/types.js",
+            "default": "./dist/common/types.js"
+        },
+        "./compat/common/utils": {
+            "types": "./dist/common/utils.d.ts",
+            "import": "./dist/common/utils.js",
+            "default": "./dist/common/utils.js"
+        },
+        "./compat/common/utils.doc": {
+            "types": "./dist/common/utils.doc.d.ts",
+            "import": "./dist/common/utils.doc.js",
+            "default": "./dist/common/utils.doc.js"
+        },
+        "./compat/common/utils.type": {
+            "types": "./dist/common/utils.type.d.ts",
+            "import": "./dist/common/utils.type.js",
+            "default": "./dist/common/utils.type.js"
+        },
+        "./compat/dev/checks": {
+            "types": "./dist/dev/checks.d.ts",
+            "import": "./dist/dev/checks.js",
+            "default": "./dist/dev/checks.js"
+        },
+        "./compat/encryption/stringEncryption": {
+            "types": "./dist/encryption/stringEncryption.d.ts",
+            "import": "./dist/encryption/stringEncryption.js",
+            "default": "./dist/encryption/stringEncryption.js"
+        },
+        "./compat/events/coreEvents": {
+            "types": "./dist/events/coreEvents.d.ts",
+            "import": "./dist/events/coreEvents.js",
+            "default": "./dist/events/coreEvents.js"
+        },
+        "./compat/interfaces/Confirm": {
+            "types": "./dist/interfaces/Confirm.d.ts",
+            "import": "./dist/interfaces/Confirm.js",
+            "default": "./dist/interfaces/Confirm.js"
+        },
+        "./compat/interfaces/DatabaseFileAccess": {
+            "types": "./dist/interfaces/DatabaseFileAccess.d.ts",
+            "import": "./dist/interfaces/DatabaseFileAccess.js",
+            "default": "./dist/interfaces/DatabaseFileAccess.js"
+        },
+        "./compat/interfaces/DatabaseRebuilder": {
+            "types": "./dist/interfaces/DatabaseRebuilder.d.ts",
+            "import": "./dist/interfaces/DatabaseRebuilder.js",
+            "default": "./dist/interfaces/DatabaseRebuilder.js"
+        },
+        "./compat/interfaces/FileHandler": {
+            "types": "./dist/interfaces/FileHandler.d.ts",
+            "import": "./dist/interfaces/FileHandler.js",
+            "default": "./dist/interfaces/FileHandler.js"
+        },
+        "./compat/interfaces/FileReflectionProvenance": {
+            "types": "./dist/interfaces/FileReflectionProvenance.d.ts",
+            "import": "./dist/interfaces/FileReflectionProvenance.js",
+            "default": "./dist/interfaces/FileReflectionProvenance.js"
+        },
+        "./compat/interfaces/KeyValueDatabase": {
+            "types": "./dist/interfaces/KeyValueDatabase.d.ts",
+            "import": "./dist/interfaces/KeyValueDatabase.js",
+            "default": "./dist/interfaces/KeyValueDatabase.js"
+        },
+        "./compat/interfaces/ServiceModule": {
+            "types": "./dist/interfaces/ServiceModule.d.ts",
+            "import": "./dist/interfaces/ServiceModule.js",
+            "default": "./dist/interfaces/ServiceModule.js"
+        },
+        "./compat/interfaces/StorageAccess": {
+            "types": "./dist/interfaces/StorageAccess.d.ts",
+            "import": "./dist/interfaces/StorageAccess.js",
+            "default": "./dist/interfaces/StorageAccess.js"
+        },
+        "./compat/managers/StorageEventManager": {
+            "types": "./dist/managers/StorageEventManager.d.ts",
+            "import": "./dist/managers/StorageEventManager.js",
+            "default": "./dist/managers/StorageEventManager.js"
+        },
+        "./compat/managers/StorageProcessingManager": {
+            "types": "./dist/managers/StorageProcessingManager.d.ts",
+            "import": "./dist/managers/StorageProcessingManager.js",
+            "default": "./dist/managers/StorageProcessingManager.js"
+        },
+        "./compat/managers/adapters": {
+            "types": "./dist/managers/adapters/index.d.ts",
+            "import": "./dist/managers/adapters/index.js",
+            "default": "./dist/managers/adapters/index.js"
+        },
+        "./compat/mock_and_interop/stores": {
+            "types": "./dist/mock_and_interop/stores.d.ts",
+            "import": "./dist/mock_and_interop/stores.js",
+            "default": "./dist/mock_and_interop/stores.js"
+        },
+        "./compat/mock_and_interop/wrapper": {
+            "types": "./dist/mock_and_interop/wrapper.d.ts",
+            "import": "./dist/mock_and_interop/wrapper.js",
+            "default": "./dist/mock_and_interop/wrapper.js"
+        },
+        "./compat/pouchdb/LiveSyncLocalDB": {
+            "types": "./dist/pouchdb/LiveSyncLocalDB.d.ts",
+            "import": "./dist/pouchdb/LiveSyncLocalDB.js",
+            "default": "./dist/pouchdb/LiveSyncLocalDB.js"
+        },
+        "./compat/pouchdb/chunks": {
+            "types": "./dist/pouchdb/chunks.d.ts",
+            "import": "./dist/pouchdb/chunks.js",
+            "default": "./dist/pouchdb/chunks.js"
+        },
+        "./compat/pouchdb/negotiation": {
+            "types": "./dist/pouchdb/negotiation.d.ts",
+            "import": "./dist/pouchdb/negotiation.js",
+            "default": "./dist/pouchdb/negotiation.js"
+        },
+        "./compat/pouchdb/pouchdb-browser": {
+            "types": "./dist/pouchdb/pouchdb-browser.d.ts",
+            "import": "./dist/pouchdb/pouchdb-browser.js",
+            "default": "./dist/pouchdb/pouchdb-browser.js"
+        },
+        "./compat/pouchdb/utils_couchdb": {
+            "types": "./dist/pouchdb/utils_couchdb.d.ts",
+            "import": "./dist/pouchdb/utils_couchdb.js",
+            "default": "./dist/pouchdb/utils_couchdb.js"
+        },
+        "./compat/replication/LiveSyncAbstractReplicator": {
+            "types": "./dist/replication/LiveSyncAbstractReplicator.d.ts",
+            "import": "./dist/replication/LiveSyncAbstractReplicator.js",
+            "default": "./dist/replication/LiveSyncAbstractReplicator.js"
+        },
+        "./compat/replication/SyncParamsHandler": {
+            "types": "./dist/replication/SyncParamsHandler.d.ts",
+            "import": "./dist/replication/SyncParamsHandler.js",
+            "default": "./dist/replication/SyncParamsHandler.js"
+        },
+        "./compat/replication/couchdb/LiveSyncReplicator": {
+            "types": "./dist/replication/couchdb/LiveSyncReplicator.d.ts",
+            "import": "./dist/replication/couchdb/LiveSyncReplicator.js",
+            "default": "./dist/replication/couchdb/LiveSyncReplicator.js"
+        },
+        "./compat/replication/httplib": {
+            "types": "./dist/replication/httplib.d.ts",
+            "import": "./dist/replication/httplib.js",
+            "default": "./dist/replication/httplib.js"
+        },
+        "./compat/replication/journal/JournalSyncCore": {
+            "types": "./dist/replication/journal/JournalSyncCore.d.ts",
+            "import": "./dist/replication/journal/JournalSyncCore.js",
+            "default": "./dist/replication/journal/JournalSyncCore.js"
+        },
+        "./compat/replication/journal/JournalSyncTypes": {
+            "types": "./dist/replication/journal/JournalSyncTypes.d.ts",
+            "import": "./dist/replication/journal/JournalSyncTypes.js",
+            "default": "./dist/replication/journal/JournalSyncTypes.js"
+        },
+        "./compat/replication/journal/LiveSyncJournalReplicator": {
+            "types": "./dist/replication/journal/LiveSyncJournalReplicator.d.ts",
+            "import": "./dist/replication/journal/LiveSyncJournalReplicator.js",
+            "default": "./dist/replication/journal/LiveSyncJournalReplicator.js"
+        },
+        "./compat/replication/journal/LiveSyncJournalReplicatorEnv": {
+            "types": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.d.ts",
+            "import": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.js",
+            "default": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.js"
+        },
+        "./compat/replication/journal/objectstore/MinioStorageAdapter": {
+            "types": "./dist/replication/journal/objectstore/MinioStorageAdapter.d.ts",
+            "import": "./dist/replication/journal/objectstore/MinioStorageAdapter.js",
+            "default": "./dist/replication/journal/objectstore/MinioStorageAdapter.js"
+        },
+        "./compat/replication/trystero/LiveSyncTrysteroReplicator": {
+            "types": "./dist/replication/trystero/LiveSyncTrysteroReplicator.d.ts",
+            "import": "./dist/replication/trystero/LiveSyncTrysteroReplicator.js",
+            "default": "./dist/replication/trystero/LiveSyncTrysteroReplicator.js"
+        },
+        "./compat/replication/trystero/P2PLogCollector": {
+            "types": "./dist/replication/trystero/P2PLogCollector.d.ts",
+            "import": "./dist/replication/trystero/P2PLogCollector.js",
+            "default": "./dist/replication/trystero/P2PLogCollector.js"
+        },
+        "./compat/replication/trystero/P2PReplicatorPaneCommon": {
+            "types": "./dist/replication/trystero/P2PReplicatorPaneCommon.d.ts",
+            "import": "./dist/replication/trystero/P2PReplicatorPaneCommon.js",
+            "default": "./dist/replication/trystero/P2PReplicatorPaneCommon.js"
+        },
+        "./compat/replication/trystero/TrysteroReplicator": {
+            "types": "./dist/replication/trystero/TrysteroReplicator.d.ts",
+            "import": "./dist/replication/trystero/TrysteroReplicator.js",
+            "default": "./dist/replication/trystero/TrysteroReplicator.js"
+        },
+        "./compat/replication/trystero/TrysteroReplicatorP2PServer": {
+            "types": "./dist/replication/trystero/TrysteroReplicatorP2PServer.d.ts",
+            "import": "./dist/replication/trystero/TrysteroReplicatorP2PServer.js",
+            "default": "./dist/replication/trystero/TrysteroReplicatorP2PServer.js"
+        },
+        "./compat/replication/trystero/UseP2PReplicatorResult": {
+            "types": "./dist/replication/trystero/UseP2PReplicatorResult.d.ts",
+            "import": "./dist/replication/trystero/UseP2PReplicatorResult.js",
+            "default": "./dist/replication/trystero/UseP2PReplicatorResult.js"
+        },
+        "./compat/replication/trystero/types": {
+            "types": "./dist/replication/trystero/types.d.ts",
+            "import": "./dist/replication/trystero/types.js",
+            "default": "./dist/replication/trystero/types.js"
+        },
+        "./compat/replication/trystero/useP2PReplicatorCommands": {
+            "types": "./dist/replication/trystero/useP2PReplicatorCommands.d.ts",
+            "import": "./dist/replication/trystero/useP2PReplicatorCommands.js",
+            "default": "./dist/replication/trystero/useP2PReplicatorCommands.js"
+        },
+        "./compat/replication/trystero/useP2PReplicatorFeature": {
+            "types": "./dist/replication/trystero/useP2PReplicatorFeature.d.ts",
+            "import": "./dist/replication/trystero/useP2PReplicatorFeature.js",
+            "default": "./dist/replication/trystero/useP2PReplicatorFeature.js"
+        },
+        "./compat/rpc/transports/DiagRTCPeerConnections.utils": {
+            "types": "./dist/rpc/transports/DiagRTCPeerConnections.utils.d.ts",
+            "import": "./dist/rpc/transports/DiagRTCPeerConnections.utils.js",
+            "default": "./dist/rpc/transports/DiagRTCPeerConnections.utils.js"
+        },
+        "./compat/serviceFeatures/checkRemoteSize": {
+            "types": "./dist/serviceFeatures/checkRemoteSize.d.ts",
+            "import": "./dist/serviceFeatures/checkRemoteSize.js",
+            "default": "./dist/serviceFeatures/checkRemoteSize.js"
+        },
+        "./compat/serviceFeatures/offlineScanner": {
+            "types": "./dist/serviceFeatures/offlineScanner.d.ts",
+            "import": "./dist/serviceFeatures/offlineScanner.js",
+            "default": "./dist/serviceFeatures/offlineScanner.js"
+        },
+        "./compat/serviceFeatures/prepareDatabaseForUse": {
+            "types": "./dist/serviceFeatures/prepareDatabaseForUse.d.ts",
+            "import": "./dist/serviceFeatures/prepareDatabaseForUse.js",
+            "default": "./dist/serviceFeatures/prepareDatabaseForUse.js"
+        },
+        "./compat/serviceFeatures/remoteConfig": {
+            "types": "./dist/serviceFeatures/remoteConfig.d.ts",
+            "import": "./dist/serviceFeatures/remoteConfig.js",
+            "default": "./dist/serviceFeatures/remoteConfig.js"
+        },
+        "./compat/serviceFeatures/targetFilter": {
+            "types": "./dist/serviceFeatures/targetFilter.d.ts",
+            "import": "./dist/serviceFeatures/targetFilter.js",
+            "default": "./dist/serviceFeatures/targetFilter.js"
+        },
+        "./compat/serviceModules/FileAccessBase": {
+            "types": "./dist/serviceModules/FileAccessBase.d.ts",
+            "import": "./dist/serviceModules/FileAccessBase.js",
+            "default": "./dist/serviceModules/FileAccessBase.js"
+        },
+        "./compat/serviceModules/Rebuilder": {
+            "types": "./dist/serviceModules/Rebuilder.d.ts",
+            "import": "./dist/serviceModules/Rebuilder.js",
+            "default": "./dist/serviceModules/Rebuilder.js"
+        },
+        "./compat/serviceModules/ServiceDatabaseFileAccessBase": {
+            "types": "./dist/serviceModules/ServiceDatabaseFileAccessBase.d.ts",
+            "import": "./dist/serviceModules/ServiceDatabaseFileAccessBase.js",
+            "default": "./dist/serviceModules/ServiceDatabaseFileAccessBase.js"
+        },
+        "./compat/serviceModules/ServiceFileAccessBase": {
+            "types": "./dist/serviceModules/ServiceFileAccessBase.d.ts",
+            "import": "./dist/serviceModules/ServiceFileAccessBase.js",
+            "default": "./dist/serviceModules/ServiceFileAccessBase.js"
+        },
+        "./compat/serviceModules/ServiceFileHandlerBase": {
+            "types": "./dist/serviceModules/ServiceFileHandlerBase.d.ts",
+            "import": "./dist/serviceModules/ServiceFileHandlerBase.js",
+            "default": "./dist/serviceModules/ServiceFileHandlerBase.js"
+        },
+        "./compat/serviceModules/adapters": {
+            "types": "./dist/serviceModules/adapters/index.d.ts",
+            "import": "./dist/serviceModules/adapters/index.js",
+            "default": "./dist/serviceModules/adapters/index.js"
+        },
+        "./compat/services/ServiceHub": {
+            "types": "./dist/services/ServiceHub.d.ts",
+            "import": "./dist/services/ServiceHub.js",
+            "default": "./dist/services/ServiceHub.js"
+        },
+        "./compat/services/base/AppLifecycleService": {
+            "types": "./dist/services/base/AppLifecycleService.d.ts",
+            "import": "./dist/services/base/AppLifecycleService.js",
+            "default": "./dist/services/base/AppLifecycleService.js"
+        },
+        "./compat/services/base/ControlService": {
+            "types": "./dist/services/base/ControlService.d.ts",
+            "import": "./dist/services/base/ControlService.js",
+            "default": "./dist/services/base/ControlService.js"
+        },
+        "./compat/services/base/DatabaseService": {
+            "types": "./dist/services/base/DatabaseService.d.ts",
+            "import": "./dist/services/base/DatabaseService.js",
+            "default": "./dist/services/base/DatabaseService.js"
+        },
+        "./compat/services/base/FileProcessingService": {
+            "types": "./dist/services/base/FileProcessingService.d.ts",
+            "import": "./dist/services/base/FileProcessingService.js",
+            "default": "./dist/services/base/FileProcessingService.js"
+        },
+        "./compat/services/base/IService": {
+            "types": "./dist/services/base/IService.d.ts",
+            "import": "./dist/services/base/IService.js",
+            "default": "./dist/services/base/IService.js"
+        },
+        "./compat/services/base/KeyValueDBService": {
+            "types": "./dist/services/base/KeyValueDBService.d.ts",
+            "import": "./dist/services/base/KeyValueDBService.js",
+            "default": "./dist/services/base/KeyValueDBService.js"
+        },
+        "./compat/services/base/PathService": {
+            "types": "./dist/services/base/PathService.d.ts",
+            "import": "./dist/services/base/PathService.js",
+            "default": "./dist/services/base/PathService.js"
+        },
+        "./compat/services/base/ReplicatorService": {
+            "types": "./dist/services/base/ReplicatorService.d.ts",
+            "import": "./dist/services/base/ReplicatorService.js",
+            "default": "./dist/services/base/ReplicatorService.js"
+        },
+        "./compat/services/base/ServiceBase": {
+            "types": "./dist/services/base/ServiceBase.d.ts",
+            "import": "./dist/services/base/ServiceBase.js",
+            "default": "./dist/services/base/ServiceBase.js"
+        },
+        "./compat/services/base/SettingService": {
+            "types": "./dist/services/base/SettingService.d.ts",
+            "import": "./dist/services/base/SettingService.js",
+            "default": "./dist/services/base/SettingService.js"
+        },
+        "./compat/services/base/UnresolvedErrorManager": {
+            "types": "./dist/services/base/UnresolvedErrorManager.d.ts",
+            "import": "./dist/services/base/UnresolvedErrorManager.js",
+            "default": "./dist/services/base/UnresolvedErrorManager.js"
+        },
+        "./compat/services/implements/base/SvelteDialog": {
+            "types": "./dist/services/implements/base/SvelteDialog.d.ts",
+            "import": "./dist/services/implements/base/SvelteDialog.js",
+            "default": "./dist/services/implements/base/SvelteDialog.js"
+        },
+        "./compat/services/implements/base/UIService": {
+            "types": "./dist/services/implements/base/UIService.d.ts",
+            "import": "./dist/services/implements/base/UIService.js",
+            "default": "./dist/services/implements/base/UIService.js"
+        },
+        "./compat/services/implements/headless/HeadlessAPIService": {
+            "types": "./dist/services/implements/headless/HeadlessAPIService.d.ts",
+            "import": "./dist/services/implements/headless/HeadlessAPIService.js",
+            "default": "./dist/services/implements/headless/HeadlessAPIService.js"
+        },
+        "./compat/services/implements/injectable/InjectableAPIService": {
+            "types": "./dist/services/implements/injectable/InjectableAPIService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableAPIService.js",
+            "default": "./dist/services/implements/injectable/InjectableAPIService.js"
+        },
+        "./compat/services/implements/injectable/InjectableAppLifecycleService": {
+            "types": "./dist/services/implements/injectable/InjectableAppLifecycleService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableAppLifecycleService.js",
+            "default": "./dist/services/implements/injectable/InjectableAppLifecycleService.js"
+        },
+        "./compat/services/implements/injectable/InjectableConflictService": {
+            "types": "./dist/services/implements/injectable/InjectableConflictService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableConflictService.js",
+            "default": "./dist/services/implements/injectable/InjectableConflictService.js"
+        },
+        "./compat/services/implements/injectable/InjectableDatabaseEventService": {
+            "types": "./dist/services/implements/injectable/InjectableDatabaseEventService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableDatabaseEventService.js",
+            "default": "./dist/services/implements/injectable/InjectableDatabaseEventService.js"
+        },
+        "./compat/services/implements/injectable/InjectableFileProcessingService": {
+            "types": "./dist/services/implements/injectable/InjectableFileProcessingService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableFileProcessingService.js",
+            "default": "./dist/services/implements/injectable/InjectableFileProcessingService.js"
+        },
+        "./compat/services/implements/injectable/InjectablePathService": {
+            "types": "./dist/services/implements/injectable/InjectablePathService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectablePathService.js",
+            "default": "./dist/services/implements/injectable/InjectablePathService.js"
+        },
+        "./compat/services/implements/injectable/InjectableRemoteService": {
+            "types": "./dist/services/implements/injectable/InjectableRemoteService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableRemoteService.js",
+            "default": "./dist/services/implements/injectable/InjectableRemoteService.js"
+        },
+        "./compat/services/implements/injectable/InjectableReplicationService": {
+            "types": "./dist/services/implements/injectable/InjectableReplicationService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableReplicationService.js",
+            "default": "./dist/services/implements/injectable/InjectableReplicationService.js"
+        },
+        "./compat/services/implements/injectable/InjectableReplicatorService": {
+            "types": "./dist/services/implements/injectable/InjectableReplicatorService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableReplicatorService.js",
+            "default": "./dist/services/implements/injectable/InjectableReplicatorService.js"
+        },
+        "./compat/services/implements/injectable/InjectableServiceHub": {
+            "types": "./dist/services/implements/injectable/InjectableServiceHub.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableServiceHub.js",
+            "default": "./dist/services/implements/injectable/InjectableServiceHub.js"
+        },
+        "./compat/services/implements/injectable/InjectableSettingService": {
+            "types": "./dist/services/implements/injectable/InjectableSettingService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableSettingService.js",
+            "default": "./dist/services/implements/injectable/InjectableSettingService.js"
+        },
+        "./compat/services/implements/injectable/InjectableTestService": {
+            "types": "./dist/services/implements/injectable/InjectableTestService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableTestService.js",
+            "default": "./dist/services/implements/injectable/InjectableTestService.js"
+        },
+        "./compat/services/implements/injectable/InjectableTweakValueService": {
+            "types": "./dist/services/implements/injectable/InjectableTweakValueService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableTweakValueService.js",
+            "default": "./dist/services/implements/injectable/InjectableTweakValueService.js"
+        },
+        "./compat/services/implements/injectable/InjectableVaultService": {
+            "types": "./dist/services/implements/injectable/InjectableVaultService.d.ts",
+            "import": "./dist/services/implements/injectable/InjectableVaultService.js",
+            "default": "./dist/services/implements/injectable/InjectableVaultService.js"
+        },
+        "./compat/services/lib/HandlerUtils": {
+            "types": "./dist/services/lib/HandlerUtils.d.ts",
+            "import": "./dist/services/lib/HandlerUtils.js",
+            "default": "./dist/services/lib/HandlerUtils.js"
+        },
+        "./compat/services/lib/logUtils": {
+            "types": "./dist/services/lib/logUtils.d.ts",
+            "import": "./dist/services/lib/logUtils.js",
+            "default": "./dist/services/lib/logUtils.js"
+        },
+        "./compat/string_and_binary/chunks": {
+            "types": "./dist/string_and_binary/chunks.d.ts",
+            "import": "./dist/string_and_binary/chunks.js",
+            "default": "./dist/string_and_binary/chunks.js"
+        },
+        "./compat/string_and_binary/convert": {
+            "types": "./dist/string_and_binary/convert.d.ts",
+            "import": "./dist/string_and_binary/convert.js",
+            "default": "./dist/string_and_binary/convert.js"
+        },
+        "./compat/string_and_binary/hash": {
+            "types": "./dist/string_and_binary/hash.d.ts",
+            "import": "./dist/string_and_binary/hash.js",
+            "default": "./dist/string_and_binary/hash.js"
+        },
+        "./compat/string_and_binary/path": {
+            "types": "./dist/string_and_binary/path.d.ts",
+            "import": "./dist/string_and_binary/path.js",
+            "default": "./dist/string_and_binary/path.js"
+        },
+        "./compat/worker/bgWorker": {
+            "types": "./dist/worker/bgWorker.d.ts",
+            "browser": "./dist/worker/bgWorker.js",
+            "node": "./dist/worker/bgWorker.direct.js",
+            "default": "./dist/worker/bgWorker.direct.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "typesVersions": {
+        "*": {
+            "browser": [
+                "dist/platform/browser/index.d.ts"
+            ],
+            "context": [
+                "dist/context.d.ts"
+            ],
+            "diagnostics": [
+                "dist/diagnostics/index.d.ts"
+            ],
+            "hashing": [
+                "dist/hashing.d.ts"
+            ],
+            "node": [
+                "dist/platform/node/index.d.ts"
+            ],
+            "p2p": [
+                "dist/p2p/index.d.ts"
+            ],
+            "replication": [
+                "dist/replication/index.d.ts"
+            ],
+            "rpc": [
+                "dist/rpc/index.d.ts"
+            ],
+            "remote-configurations": [
+                "dist/remoteConfigurations.d.ts"
+            ],
+            "settings": [
+                "dist/settings.d.ts"
+            ],
+            "setup-uri": [
+                "dist/setupUri.d.ts"
+            ],
+            "ui-commands": [
+                "dist/uiCommands.d.ts"
+            ],
+            "compat/API/processSetting": [
+                "dist/API/processSetting.d.ts"
+            ],
+            "compat/common/ConnectionString": [
+                "dist/common/ConnectionString.d.ts"
+            ],
+            "compat/common/LSError": [
+                "dist/common/LSError.d.ts"
+            ],
+            "compat/common/configForDoc": [
+                "dist/common/configForDoc.d.ts"
+            ],
+            "compat/common/coreEnvFunctions": [
+                "dist/common/coreEnvFunctions.d.ts"
+            ],
+            "compat/common/coreEnvVars": [
+                "dist/common/coreEnvVars.d.ts"
+            ],
+            "compat/common/logger": [
+                "dist/common/logger.d.ts"
+            ],
+            "compat/common/models/fileaccess.const": [
+                "dist/common/models/fileaccess.const.d.ts"
+            ],
+            "compat/common/models/redflag.const": [
+                "dist/common/models/redflag.const.d.ts"
+            ],
+            "compat/common/models/setting.const": [
+                "dist/common/models/setting.const.d.ts"
+            ],
+            "compat/common/models/setting.type": [
+                "dist/common/models/setting.type.d.ts"
+            ],
+            "compat/common/models/shared.const": [
+                "dist/common/models/shared.const.d.ts"
+            ],
+            "compat/common/models/shared.const.symbols": [
+                "dist/common/models/shared.const.symbols.d.ts"
+            ],
+            "compat/common/models/tweak.definition": [
+                "dist/common/models/tweak.definition.d.ts"
+            ],
+            "compat/common/settingConstants": [
+                "dist/common/settingConstants.d.ts"
+            ],
+            "compat/common/typeUtils": [
+                "dist/common/typeUtils.d.ts"
+            ],
+            "compat/common/types": [
+                "dist/common/types.d.ts"
+            ],
+            "compat/common/utils": [
+                "dist/common/utils.d.ts"
+            ],
+            "compat/common/utils.doc": [
+                "dist/common/utils.doc.d.ts"
+            ],
+            "compat/common/utils.type": [
+                "dist/common/utils.type.d.ts"
+            ],
+            "compat/dev/checks": [
+                "dist/dev/checks.d.ts"
+            ],
+            "compat/encryption/stringEncryption": [
+                "dist/encryption/stringEncryption.d.ts"
+            ],
+            "compat/events/coreEvents": [
+                "dist/events/coreEvents.d.ts"
+            ],
+            "compat/interfaces/Confirm": [
+                "dist/interfaces/Confirm.d.ts"
+            ],
+            "compat/interfaces/DatabaseFileAccess": [
+                "dist/interfaces/DatabaseFileAccess.d.ts"
+            ],
+            "compat/interfaces/DatabaseRebuilder": [
+                "dist/interfaces/DatabaseRebuilder.d.ts"
+            ],
+            "compat/interfaces/FileHandler": [
+                "dist/interfaces/FileHandler.d.ts"
+            ],
+            "compat/interfaces/FileReflectionProvenance": [
+                "dist/interfaces/FileReflectionProvenance.d.ts"
+            ],
+            "compat/interfaces/KeyValueDatabase": [
+                "dist/interfaces/KeyValueDatabase.d.ts"
+            ],
+            "compat/interfaces/ServiceModule": [
+                "dist/interfaces/ServiceModule.d.ts"
+            ],
+            "compat/interfaces/StorageAccess": [
+                "dist/interfaces/StorageAccess.d.ts"
+            ],
+            "compat/managers/StorageEventManager": [
+                "dist/managers/StorageEventManager.d.ts"
+            ],
+            "compat/managers/StorageProcessingManager": [
+                "dist/managers/StorageProcessingManager.d.ts"
+            ],
+            "compat/managers/adapters": [
+                "dist/managers/adapters/index.d.ts"
+            ],
+            "compat/mock_and_interop/stores": [
+                "dist/mock_and_interop/stores.d.ts"
+            ],
+            "compat/mock_and_interop/wrapper": [
+                "dist/mock_and_interop/wrapper.d.ts"
+            ],
+            "compat/pouchdb/LiveSyncLocalDB": [
+                "dist/pouchdb/LiveSyncLocalDB.d.ts"
+            ],
+            "compat/pouchdb/chunks": [
+                "dist/pouchdb/chunks.d.ts"
+            ],
+            "compat/pouchdb/negotiation": [
+                "dist/pouchdb/negotiation.d.ts"
+            ],
+            "compat/pouchdb/pouchdb-browser": [
+                "dist/pouchdb/pouchdb-browser.d.ts"
+            ],
+            "compat/pouchdb/utils_couchdb": [
+                "dist/pouchdb/utils_couchdb.d.ts"
+            ],
+            "compat/replication/LiveSyncAbstractReplicator": [
+                "dist/replication/LiveSyncAbstractReplicator.d.ts"
+            ],
+            "compat/replication/SyncParamsHandler": [
+                "dist/replication/SyncParamsHandler.d.ts"
+            ],
+            "compat/replication/couchdb/LiveSyncReplicator": [
+                "dist/replication/couchdb/LiveSyncReplicator.d.ts"
+            ],
+            "compat/replication/httplib": [
+                "dist/replication/httplib.d.ts"
+            ],
+            "compat/replication/journal/JournalSyncCore": [
+                "dist/replication/journal/JournalSyncCore.d.ts"
+            ],
+            "compat/replication/journal/JournalSyncTypes": [
+                "dist/replication/journal/JournalSyncTypes.d.ts"
+            ],
+            "compat/replication/journal/LiveSyncJournalReplicator": [
+                "dist/replication/journal/LiveSyncJournalReplicator.d.ts"
+            ],
+            "compat/replication/journal/LiveSyncJournalReplicatorEnv": [
+                "dist/replication/journal/LiveSyncJournalReplicatorEnv.d.ts"
+            ],
+            "compat/replication/journal/objectstore/MinioStorageAdapter": [
+                "dist/replication/journal/objectstore/MinioStorageAdapter.d.ts"
+            ],
+            "compat/replication/trystero/LiveSyncTrysteroReplicator": [
+                "dist/replication/trystero/LiveSyncTrysteroReplicator.d.ts"
+            ],
+            "compat/replication/trystero/P2PLogCollector": [
+                "dist/replication/trystero/P2PLogCollector.d.ts"
+            ],
+            "compat/replication/trystero/P2PReplicatorPaneCommon": [
+                "dist/replication/trystero/P2PReplicatorPaneCommon.d.ts"
+            ],
+            "compat/replication/trystero/TrysteroReplicator": [
+                "dist/replication/trystero/TrysteroReplicator.d.ts"
+            ],
+            "compat/replication/trystero/TrysteroReplicatorP2PServer": [
+                "dist/replication/trystero/TrysteroReplicatorP2PServer.d.ts"
+            ],
+            "compat/replication/trystero/UseP2PReplicatorResult": [
+                "dist/replication/trystero/UseP2PReplicatorResult.d.ts"
+            ],
+            "compat/replication/trystero/types": [
+                "dist/replication/trystero/types.d.ts"
+            ],
+            "compat/replication/trystero/useP2PReplicatorCommands": [
+                "dist/replication/trystero/useP2PReplicatorCommands.d.ts"
+            ],
+            "compat/replication/trystero/useP2PReplicatorFeature": [
+                "dist/replication/trystero/useP2PReplicatorFeature.d.ts"
+            ],
+            "compat/rpc/transports/DiagRTCPeerConnections.utils": [
+                "dist/rpc/transports/DiagRTCPeerConnections.utils.d.ts"
+            ],
+            "compat/serviceFeatures/checkRemoteSize": [
+                "dist/serviceFeatures/checkRemoteSize.d.ts"
+            ],
+            "compat/serviceFeatures/offlineScanner": [
+                "dist/serviceFeatures/offlineScanner.d.ts"
+            ],
+            "compat/serviceFeatures/prepareDatabaseForUse": [
+                "dist/serviceFeatures/prepareDatabaseForUse.d.ts"
+            ],
+            "compat/serviceFeatures/remoteConfig": [
+                "dist/serviceFeatures/remoteConfig.d.ts"
+            ],
+            "compat/serviceFeatures/targetFilter": [
+                "dist/serviceFeatures/targetFilter.d.ts"
+            ],
+            "compat/serviceModules/FileAccessBase": [
+                "dist/serviceModules/FileAccessBase.d.ts"
+            ],
+            "compat/serviceModules/Rebuilder": [
+                "dist/serviceModules/Rebuilder.d.ts"
+            ],
+            "compat/serviceModules/ServiceDatabaseFileAccessBase": [
+                "dist/serviceModules/ServiceDatabaseFileAccessBase.d.ts"
+            ],
+            "compat/serviceModules/ServiceFileAccessBase": [
+                "dist/serviceModules/ServiceFileAccessBase.d.ts"
+            ],
+            "compat/serviceModules/ServiceFileHandlerBase": [
+                "dist/serviceModules/ServiceFileHandlerBase.d.ts"
+            ],
+            "compat/serviceModules/adapters": [
+                "dist/serviceModules/adapters/index.d.ts"
+            ],
+            "compat/services/ServiceHub": [
+                "dist/services/ServiceHub.d.ts"
+            ],
+            "compat/services/base/AppLifecycleService": [
+                "dist/services/base/AppLifecycleService.d.ts"
+            ],
+            "compat/services/base/ControlService": [
+                "dist/services/base/ControlService.d.ts"
+            ],
+            "compat/services/base/DatabaseService": [
+                "dist/services/base/DatabaseService.d.ts"
+            ],
+            "compat/services/base/FileProcessingService": [
+                "dist/services/base/FileProcessingService.d.ts"
+            ],
+            "compat/services/base/IService": [
+                "dist/services/base/IService.d.ts"
+            ],
+            "compat/services/base/KeyValueDBService": [
+                "dist/services/base/KeyValueDBService.d.ts"
+            ],
+            "compat/services/base/PathService": [
+                "dist/services/base/PathService.d.ts"
+            ],
+            "compat/services/base/ReplicatorService": [
+                "dist/services/base/ReplicatorService.d.ts"
+            ],
+            "compat/services/base/ServiceBase": [
+                "dist/services/base/ServiceBase.d.ts"
+            ],
+            "compat/services/base/SettingService": [
+                "dist/services/base/SettingService.d.ts"
+            ],
+            "compat/services/base/UnresolvedErrorManager": [
+                "dist/services/base/UnresolvedErrorManager.d.ts"
+            ],
+            "compat/services/implements/base/SvelteDialog": [
+                "dist/services/implements/base/SvelteDialog.d.ts"
+            ],
+            "compat/services/implements/base/UIService": [
+                "dist/services/implements/base/UIService.d.ts"
+            ],
+            "compat/services/implements/headless/HeadlessAPIService": [
+                "dist/services/implements/headless/HeadlessAPIService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableAPIService": [
+                "dist/services/implements/injectable/InjectableAPIService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableAppLifecycleService": [
+                "dist/services/implements/injectable/InjectableAppLifecycleService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableConflictService": [
+                "dist/services/implements/injectable/InjectableConflictService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableDatabaseEventService": [
+                "dist/services/implements/injectable/InjectableDatabaseEventService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableFileProcessingService": [
+                "dist/services/implements/injectable/InjectableFileProcessingService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectablePathService": [
+                "dist/services/implements/injectable/InjectablePathService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableRemoteService": [
+                "dist/services/implements/injectable/InjectableRemoteService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableReplicationService": [
+                "dist/services/implements/injectable/InjectableReplicationService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableReplicatorService": [
+                "dist/services/implements/injectable/InjectableReplicatorService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableServiceHub": [
+                "dist/services/implements/injectable/InjectableServiceHub.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableSettingService": [
+                "dist/services/implements/injectable/InjectableSettingService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableTestService": [
+                "dist/services/implements/injectable/InjectableTestService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableTweakValueService": [
+                "dist/services/implements/injectable/InjectableTweakValueService.d.ts"
+            ],
+            "compat/services/implements/injectable/InjectableVaultService": [
+                "dist/services/implements/injectable/InjectableVaultService.d.ts"
+            ],
+            "compat/services/lib/HandlerUtils": [
+                "dist/services/lib/HandlerUtils.d.ts"
+            ],
+            "compat/services/lib/logUtils": [
+                "dist/services/lib/logUtils.d.ts"
+            ],
+            "compat/string_and_binary/chunks": [
+                "dist/string_and_binary/chunks.d.ts"
+            ],
+            "compat/string_and_binary/convert": [
+                "dist/string_and_binary/convert.d.ts"
+            ],
+            "compat/string_and_binary/hash": [
+                "dist/string_and_binary/hash.d.ts"
+            ],
+            "compat/string_and_binary/path": [
+                "dist/string_and_binary/path.d.ts"
+            ],
+            "compat/worker/bgWorker": [
+                "dist/worker/bgWorker.d.ts"
+            ]
+        }
+    },
+    "dependencies": {
+        "@aws-crypto/sha256-js": "5.2.0",
+        "@aws-sdk/client-s3": "^3.808.0",
+        "@smithy/fetch-http-handler": "^5.3.10",
+        "@smithy/md5-js": "^4.2.9",
+        "@smithy/middleware-apply-body-checksum": "^4.3.9",
+        "@smithy/types": "^4.14.3",
+        "@smithy/util-retry": "^4.4.5",
+        "@trystero-p2p/nostr": "0.25.3",
+        "@vrtmrz/value-store": "0.1.0",
+        "diff-match-patch": "^1.0.5",
+        "events": "^3.3.0",
+        "fflate": "^0.8.2",
+        "idb": "^8.0.3",
+        "markdown-it": "^14.3.3",
+        "minimatch": "^10.2.6",
+        "octagonal-wheels": "^0.1.55",
+        "pouchdb-adapter-http": "^9.0.0",
+        "pouchdb-adapter-idb": "^9.0.0",
+        "pouchdb-adapter-indexeddb": "^9.0.0",
+        "pouchdb-adapter-memory": "^9.0.0",
+        "pouchdb-checkpointer": "9.0.0",
+        "pouchdb-core": "^9.0.0",
+        "pouchdb-errors": "^9.0.0",
+        "pouchdb-find": "^9.0.0",
+        "pouchdb-generate-replication-id": "9.0.0",
+        "pouchdb-mapreduce": "^9.0.0",
+        "pouchdb-merge": "^9.0.0",
+        "pouchdb-replication": "^9.0.0",
+        "pouchdb-utils": "^9.0.0",
+        "qrcode-generator": "^1.4.4",
+        "transform-pouch": "^2.0.0",
+        "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
+    },
+    "devDependencies": {
+        "@types/diff-match-patch": "^1.0.36",
+        "@types/markdown-it": "^14.1.2",
+        "@types/node": "^24.10.13",
+        "@types/pouchdb": "^6.4.2",
+        "@types/pouchdb-adapter-http": "^6.1.6",
+        "@types/pouchdb-adapter-idb": "^6.1.7",
+        "@types/pouchdb-core": "^7.0.15",
+        "@types/pouchdb-mapreduce": "^6.1.10",
+        "@types/transform-pouch": "^1.0.6",
+        "esbuild": "0.28.1",
+        "esbuild-plugin-inline-worker": "^0.1.1",
+        "fake-indexeddb": "^6.2.5",
+        "svelte": "5.56.3",
+        "tinyglobby": "^0.2.15",
+        "typescript": "5.9.3"
+    },
+    "peerDependencies": {
+        "svelte": "5.56.3"
+    },
+    "peerDependenciesMeta": {
+        "svelte": {
+            "optional": true
+        }
+    },
+    "engines": {
+        "node": ">=20"
+    }
+}

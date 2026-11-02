@@ -1,0 +1,1385 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import PouchDB from "pouchdb-core";
+import MemoryAdapter from "pouchdb-adapter-memory";
+import { ConflictManager } from "./ConflictManager";
+import type { ConflictManagerOptions } from "./ConflictManager";
+import type {
+    DocumentID,
+    EntryDoc,
+    FilePathWithPrefix,
+    // diff_result_leaf,
+    LoadedEntry,
+    // SavingEntry,
+} from "@lib/common/types";
+import { MISSING_OR_ERROR, NOT_CONFLICTED } from "@lib/common/types";
+import type { EntryManager } from "./EntryManager/EntryManager";
+import type { IPathService } from "@lib/services/base/IService";
+
+// Set up PouchDB with memory adapter
+PouchDB.plugin(MemoryAdapter);
+let dbCounter = 0;
+
+/**
+ * Helper function to create a test document
+ */
+function createTestDoc(id: string, data: string, mtime: number = Date.now(), ctime: number = Date.now()) {
+    return {
+        _id: id as DocumentID,
+        path: id.replace("i:", "") as FilePathWithPrefix,
+        type: "plain",
+        datatype: "plain",
+        data: [data],
+        mtime: mtime,
+        ctime: ctime,
+        size: data.length,
+        children: [],
+        eden: {},
+    } as unknown as EntryDoc & Awaited<ReturnType<PouchDB.Database["put"]>>;
+}
+
+const i2p = (id: DocumentID): FilePathWithPrefix => id as unknown as FilePathWithPrefix;
+const p2i = (path: FilePathWithPrefix | string): DocumentID => path as unknown as DocumentID;
+function unused(v: any) {}
+/**
+ * Helper function to create a conflicted document in PouchDB
+ */
+async function createConflict(
+    db: PouchDB.Database<EntryDoc>,
+    id: string,
+    data1: string,
+    data2: string,
+    mtime1: number = Date.now(),
+    mtime2: number = Date.now() + 100
+): Promise<{ rev1: string; rev2: string }> {
+    // Create first version
+    const doc1 = createTestDoc(id, data1, mtime1);
+    const result1 = await db.put(doc1);
+    const rev1 = result1.rev;
+
+    // Create second version with force to create conflict
+    const doc2 = {
+        ...createTestDoc(id, data2, mtime2),
+        _rev: rev1.split("-")[0] + "-conflict", // Different rev with same generation
+    };
+    await db.put(doc2, { force: true } as any);
+
+    // Get the actual rev of the conflicted version
+    const conflictedDoc = await db.get(id, { conflicts: true });
+    const rev2 = conflictedDoc._conflicts?.[0] || "";
+
+    return { rev1, rev2 };
+}
+unused(createConflict);
+
+/**
+ * Reproduce two devices creating the same document before either has seen the
+ * other. The two generation-one leaves deliberately have no common revision.
+ */
+async function createIndependentConflict(
+    db: PouchDB.Database<EntryDoc>,
+    id: string,
+    leftData: string,
+    rightData: string
+): Promise<void> {
+    const left = {
+        ...createTestDoc(id, leftData, 1000),
+        _rev: "1-left",
+        _revisions: { start: 1, ids: ["left"] },
+    };
+    const right = {
+        ...createTestDoc(id, rightData, 2000),
+        _rev: "1-right",
+        _revisions: { start: 1, ids: ["right"] },
+    };
+    await db.bulkDocs([left, right], { new_edits: false });
+}
+
+/** Create two generation-two leaves which share one real available base. */
+async function createSharedBaseConflict(
+    db: PouchDB.Database<EntryDoc>,
+    id: string,
+    baseData: string,
+    leftData: string,
+    rightData: string
+): Promise<void> {
+    const base = {
+        ...createTestDoc(id, baseData, 1000),
+        _rev: "1-base",
+        _revisions: { start: 1, ids: ["base"] },
+    };
+    const left = {
+        ...createTestDoc(id, leftData, 2000),
+        _rev: "2-left",
+        _revisions: { start: 2, ids: ["left", "base"] },
+    };
+    const right = {
+        ...createTestDoc(id, rightData, 2100),
+        _rev: "2-right",
+        _revisions: { start: 2, ids: ["right", "base"] },
+    };
+    await db.bulkDocs([base, left, right], { new_edits: false });
+}
+
+describe("ConflictManager", () => {
+    let db: PouchDB.Database<EntryDoc>;
+    let conflictManager: ConflictManager;
+    let mockEntryManager: Partial<EntryManager>;
+    let mockPathService: Partial<IPathService>;
+
+    beforeEach(() => {
+        // Create a unique in-memory database for each test
+        dbCounter++;
+        db = new PouchDB(`test-conflict-${dbCounter}`, { adapter: "memory" });
+
+        // Mock PathService
+        mockPathService = {
+            path2id: vi.fn((path: FilePathWithPrefix | string) => {
+                return Promise.resolve(p2i(path));
+            }),
+            id2path: vi.fn((id: DocumentID) => {
+                return i2p(id);
+            }),
+        };
+
+        // Mock EntryManager
+        mockEntryManager = {
+            getDBEntry: vi.fn(
+                async (
+                    path: FilePathWithPrefix,
+                    opt?: any,
+                    waitForReady?: boolean,
+                    skipCheck?: boolean,
+                    includeDeleted?: boolean
+                ) => {
+                    try {
+                        const doc = await db.get(p2i(path), opt);
+                        return doc as LoadedEntry;
+                    } catch (ex) {
+                        unused(ex);
+                        return false;
+                    }
+                }
+            ),
+        };
+
+        const options: ConflictManagerOptions = {
+            entryManager: mockEntryManager as EntryManager,
+            pathService: mockPathService as IPathService,
+            database: db,
+        };
+
+        conflictManager = new ConflictManager(options);
+    });
+
+    afterEach(async () => {
+        await db.destroy();
+    });
+
+    it("retains named properties when merging JSON revisions", async () => {
+        const marker = "livesyncSyntheticJSONConflictMarker";
+        const before = Object.getOwnPropertyDescriptors(Object.prototype);
+        const path = "synthetic-properties.json" as FilePathWithPrefix;
+        const left = JSON.parse(
+            JSON.stringify({
+                container: {
+                    ["__proto__"]: { [marker]: "synthetic" },
+                    constructor: { prototype: { [marker]: "synthetic" } },
+                },
+            })
+        );
+        try {
+            await createSharedBaseConflict(
+                db,
+                path,
+                '{"container":{}}',
+                JSON.stringify(left),
+                '{"container":{},"ordinary":"synthetic"}'
+            );
+            const merged = await conflictManager.mergeObject(path, "1-base", "2-left", "2-right");
+            expect(Object.getOwnPropertyDescriptors(Object.prototype)).toEqual(before);
+            expect(merged).not.toBe(false);
+            expect(JSON.parse(merged as string)).toEqual({ ...left, ordinary: "synthetic" });
+        } finally {
+            Reflect.deleteProperty(Object.prototype, marker);
+            Object.defineProperties(Object.prototype, before);
+        }
+    });
+
+    describe("Initialization", () => {
+        it("should initialize successfully", () => {
+            expect(conflictManager).toBeDefined();
+            expect(conflictManager.options).toBeDefined();
+        });
+
+        it("should have access to database", () => {
+            expect(conflictManager.database).toBe(db);
+        });
+    });
+
+    describe("getConflictedDoc", () => {
+        it("should return false for non-existent document", async () => {
+            const result = await conflictManager.getConflictedDoc("non-existent" as FilePathWithPrefix, "1-abc");
+
+            expect(result).toBe(false);
+        });
+
+        it("should retrieve a document with specific revision", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const doc = createTestDoc(path, "test data", 1000, 900);
+            const putResult = await db.put(doc);
+
+            const result = await conflictManager.getConflictedDoc(path, putResult.rev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                expect(result.data).toBe("test data");
+                expect(result.rev).toBe(putResult.rev);
+                expect(result.mtime).toBe(1000);
+                expect(result.ctime).toBe(900);
+            }
+        });
+
+        it("should handle deleted documents", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const doc = createTestDoc(path, "test data");
+            const putResult = await db.put(doc);
+
+            // Mock the entry manager to return a deleted doc structure
+            const deleteResult = await db.remove(putResult.id, putResult.rev);
+            mockEntryManager.getDBEntry = vi.fn(async (p: FilePathWithPrefix, opt?: any) => {
+                try {
+                    const deletedDoc = await db.get(p2i(p), { ...opt, revs: true });
+                    return { ...deletedDoc, _deleted: true, deleted: true, data: "" } as LoadedEntry;
+                } catch (ex) {
+                    unused(ex);
+                    return false;
+                }
+            });
+
+            const result = await conflictManager.getConflictedDoc(path, deleteResult.rev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                expect(result.deleted).toBe(true);
+            }
+        });
+
+        it("should handle newnote datatype", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const doc = {
+                ...createTestDoc(path, "dGVzdCBkYXRh"), // base64 encoded "test data"
+                datatype: "newnote",
+            };
+            const putResult = await db.put(doc as any);
+
+            const result = await conflictManager.getConflictedDoc(path, putResult.rev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                expect(result.data).toContain("test data");
+            }
+        });
+    });
+
+    describe("mergeSensibly", () => {
+        it("should return false when base document is missing", async () => {
+            const result = await conflictManager.mergeSensibly(
+                "test" as FilePathWithPrefix,
+                "1-missing",
+                "2-missing",
+                "3-missing"
+            );
+
+            expect(result).toBe(false);
+        });
+
+        it("should return false when both revisions are deleted", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+
+            // Create base version with actual content
+            const baseDoc = createTestDoc(path, "base data", 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create two conflicting versions (not deleted)
+            const doc1 = { ...createTestDoc(path, "version1", 2000), _rev: baseResult.rev };
+            const result1 = await db.put(doc1);
+
+            const doc2 = {
+                ...createTestDoc(path, "version2", 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(doc2, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            // Now delete both revisions by updating the entry manager mock
+            mockEntryManager.getDBEntry = vi.fn(async (p: FilePathWithPrefix, opt?: any) => {
+                const doc = await db.get(p2i(p), opt);
+                return { ...doc, _deleted: true, deleted: true } as LoadedEntry;
+            });
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, result1.rev, conflictedRev);
+
+            expect(result).toBe(false);
+        });
+
+        it("should return false when only one revision is deleted", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+
+            // Create base version with actual content
+            const baseDoc = createTestDoc(path, "base data", 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create two conflicting versions (not deleted)
+            const doc1 = { ...createTestDoc(path, "version1", 2000), _rev: baseResult.rev };
+            const result1 = await db.put(doc1);
+
+            const doc2 = {
+                ...createTestDoc(path, "version2", 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(doc2, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            // Now delete only the conflicted revision by updating the entry manager mock
+            mockEntryManager.getDBEntry = vi.fn(async (p: FilePathWithPrefix, opt?: any) => {
+                const doc = await db.get(p2i(p), opt);
+                if (opt && opt.rev === conflictedRev) {
+                    return { ...doc, _deleted: true, deleted: true } as LoadedEntry;
+                }
+                return doc as LoadedEntry;
+            });
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, result1.rev, conflictedRev);
+
+            expect(result).toBe(false);
+        });
+
+        it("should merge non-conflicting changes", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const leftData = "line1\nline2 modified left\nline3\n";
+            const rightData = "line1\nline2\nline3 modified right\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const mergedText = result
+                    .filter((e) => e[0] !== -1)
+                    .map((e) => e[1])
+                    .join("");
+                expect(mergedText).toContain("line2 modified left");
+                expect(mergedText).toContain("line3 modified right");
+            }
+        });
+
+        it("should return false for conflicting changes on same line", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const leftData = "line1\nline2 left\nline3\n";
+            const rightData = "line1\nline2 right\nline3\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            // Should not be able to auto-merge conflicting changes
+            expect(result).toBe(false);
+        });
+
+        it("should merge when one side deletes a line and the other changes a different line", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const leftData = "line1\nline3\n";
+            const rightData = "line1\nline2\nline3 modified right\n";
+
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result === false) return;
+            const mergedText = result
+                .filter((e) => e[0] !== -1)
+                .map((e) => e[1])
+                .join("");
+            expect(mergedText).toBe("line1\nline3 modified right\n");
+        });
+
+        it("should return false when one side deletes a line and the other changes the same line", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const leftData = "line1\nline3\n";
+            const rightData = "line1\nline2 modified right\nline3\n";
+
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).toBe(false);
+        });
+
+        it("should not reintroduce an unchanged line deleted on the other side (#993)", async () => {
+            const path = "issue-993.md" as FilePathWithPrefix;
+            const baseData = "intro\nold content\nshared\n";
+            const leftData = "intro\nshared\n";
+            const rightData = "intro\nold content\nshared\nnew mobile content\n";
+
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result === false) return;
+            const mergedText = result
+                .filter((e) => e[0] !== -1)
+                .map((e) => e[1])
+                .join("");
+            expect(mergedText).toBe("intro\nshared\nnew mobile content\n");
+        });
+
+        it("should merge when both sides delete the same line", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const bothData = "line1\nline3\n";
+
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            const leftDoc = { ...createTestDoc(path, bothData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            const rightDoc = {
+                ...createTestDoc(path, bothData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const mergedText = result
+                    .filter((e) => e[0] !== -1)
+                    .map((e) => e[1])
+                    .join("");
+                expect(mergedText).toBe(bothData);
+            }
+        });
+
+        it("should merge checkbox toggles on different consecutive markdown task lines", async () => {
+            const path = "test.md" as FilePathWithPrefix;
+            const baseData = "- [ ] A\n- [ ] B\n- [ ] C\n";
+            const leftData = "- [x] A\n- [ ] B\n- [ ] C\n";
+            const rightData = "- [ ] A\n- [x] B\n- [ ] C\n";
+            const expected = "- [x] A\n- [x] B\n- [ ] C\n";
+
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const mergedText = result
+                    .filter((e) => e[0] !== -1)
+                    .map((e) => e[1])
+                    .join("");
+                expect(mergedText).toBe(expected);
+            }
+        });
+
+        it("should merge when both sides add the same line", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const baseData = "line1\nline3\n";
+            const bothData = "line1\nline2\nline3\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, bothData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+            // Create right (conflicting) version with same change
+            const rightDoc = {
+                ...createTestDoc(path, bothData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeSensibly(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const mergedText = result
+                    .filter((e) => e[0] !== -1)
+                    .map((e) => e[1])
+                    .join("");
+                expect(mergedText).toBe(bothData);
+            }
+        });
+    });
+
+    describe("mergeObject", () => {
+        it("should return false when documents are missing", async () => {
+            const result = await conflictManager.mergeObject(
+                "test" as FilePathWithPrefix,
+                "1-missing",
+                "2-missing",
+                "3-missing"
+            );
+
+            expect(result).toBe(false);
+        });
+
+        it("should return false when both revisions are deleted", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+
+            // Create base version
+            const baseDoc = createTestDoc(path, JSON.stringify({ key: "base" }), 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create two conflicting versions
+            const doc1 = { ...createTestDoc(path, JSON.stringify({ key: "v1" }), 2000), _rev: baseResult.rev };
+            const result1 = await db.put(doc1);
+            unused(result1);
+            const doc2 = {
+                ...createTestDoc(path, JSON.stringify({ key: "v2" }), 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(doc2, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            // Now make the entry manager return deleted versions
+            mockEntryManager.getDBEntry = vi.fn(async (p: FilePathWithPrefix, opt?: any) => {
+                const doc = await db.get(p2i(p), opt);
+                return { ...doc, _deleted: true, deleted: true } as LoadedEntry;
+            });
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, result1.rev, conflictedRev);
+
+            expect(result).toBe(false);
+        });
+
+        it("should return false when only one revision is deleted", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+
+            // Create base version
+            const baseDoc = createTestDoc(path, JSON.stringify({ key: "base" }), 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create two conflicting versions
+            const doc1 = { ...createTestDoc(path, JSON.stringify({ key: "v1" }), 2000), _rev: baseResult.rev };
+            const result1 = await db.put(doc1);
+            unused(result1);
+            const doc2 = {
+                ...createTestDoc(path, JSON.stringify({ key: "v2" }), 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(doc2, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            // Now make the entry manager return a deleted version for the conflicted revision
+            mockEntryManager.getDBEntry = vi.fn(async (p: FilePathWithPrefix, opt?: any) => {
+                const doc = await db.get(p2i(p), opt);
+                if (opt && opt.rev === conflictedRev) {
+                    return { ...doc, _deleted: true, deleted: true } as LoadedEntry;
+                }
+                return doc as LoadedEntry;
+            });
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, result1.rev, conflictedRev);
+
+            expect(result).toBe(false);
+        });
+
+        it("should merge non-conflicting object changes", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ a: 1, b: 2, c: 3 });
+            const leftData = JSON.stringify({ a: 1, b: 20, c: 3 }); // Changed b
+            const rightData = JSON.stringify({ a: 1, b: 2, c: 30 }); // Changed c
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const merged = JSON.parse(result);
+                expect(merged.b).toBe(20); // Left change
+                expect(merged.c).toBe(30); // Right change
+                expect(merged.a).toBe(1); // Unchanged
+            }
+        });
+
+        it("should return false for conflicting object changes on same key", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ a: 1, b: 2 });
+            const leftData = JSON.stringify({ a: 1, b: 20 }); // Changed b to 20
+            const rightData = JSON.stringify({ a: 1, b: 30 }); // Changed b to 30
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            // Should not be able to auto-merge conflicting changes on same key
+            expect(result).toBe(false);
+        });
+
+        it("should merge when both sides change to the same value", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ a: 1, b: 2 });
+            const bothData = JSON.stringify({ a: 1, b: 20 }); // Both changed b to 20
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, bothData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+            // Create right (conflicting) version with same change
+            const rightDoc = {
+                ...createTestDoc(path, bothData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const merged = JSON.parse(result);
+                expect(merged.b).toBe(20);
+            }
+        });
+
+        it("should handle complex nested object merges", async () => {
+            const path = "test.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ a: { x: 1, y: 2 }, b: { z: 3 } });
+            const leftData = JSON.stringify({ a: { x: 10, y: 2 }, b: { z: 3 } }); // Changed a.x
+            const rightData = JSON.stringify({ a: { x: 1, y: 2 }, b: { z: 30 } }); // Changed b.z
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const currentDoc = await db.get(path, { conflicts: true });
+            const conflictedRev = currentDoc._conflicts?.[0] || "";
+
+            const result = await conflictManager.mergeObject(path, baseResult.rev, currentDoc._rev, conflictedRev);
+
+            expect(result).not.toBe(false);
+            if (result !== false) {
+                const merged = JSON.parse(result);
+                expect(merged.a.x).toBe(10); // Left change
+                expect(merged.b.z).toBe(30); // Right change
+            }
+        });
+    });
+
+    describe("tryAutoMerge", () => {
+        it("should return MISSING_OR_ERROR for non-existent document", async () => {
+            const result = await conflictManager.tryAutoMerge("non-existent" as FilePathWithPrefix, true);
+
+            expect(result).toHaveProperty("ok");
+            if ("ok" in result) {
+                expect(result.ok).toBe(MISSING_OR_ERROR);
+            }
+        });
+
+        it("should return NOT_CONFLICTED for document without conflicts", async () => {
+            const path = "test-doc" as FilePathWithPrefix;
+            const doc = createTestDoc(path, "test data");
+            await db.put(doc);
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            expect(result).toHaveProperty("ok");
+            if ("ok" in result) {
+                expect(result.ok).toBe(NOT_CONFLICTED);
+            }
+        });
+
+        it("selects remaining leaves by generation, missing mtime, mtime, and full revision ID", async () => {
+            const path = "multiple-conflicts.md" as FilePathWithPrefix;
+            const revisions = [
+                { rev: "1-old", ids: ["old"], data: "Old root\n", mtime: 7000 },
+                { rev: "2-zzzz", ids: ["zzzz", "winner-root"], data: "Winner\n", mtime: 9000 },
+                { rev: "2-bbbb", ids: ["bbbb", "b-root"], data: "Later candidate\n", mtime: 3000 },
+                { rev: "2-aaaa", ids: ["aaaa", "a-root"], data: "Earlier candidate\n", mtime: 1000 },
+                { rev: "2-cccc", ids: ["cccc", "c-root"], data: "Missing mtime\n", mtime: undefined },
+            ];
+            for (const revision of revisions) {
+                const doc = {
+                    ...createTestDoc(path, revision.data, revision.mtime),
+                    _rev: revision.rev,
+                    _revisions: {
+                        start: Number(revision.rev.split("-")[0]),
+                        ids: revision.ids,
+                    },
+                };
+                if (revision.mtime === undefined) {
+                    delete (doc as Partial<EntryDoc>).mtime;
+                }
+                await db.put(doc, { new_edits: false } as PouchDB.Core.PutOptions);
+            }
+
+            const expectedOrder = ["1-old", "2-cccc", "2-aaaa", "2-bbbb"];
+            for (const expectedRevision of expectedOrder) {
+                const result = await conflictManager.tryAutoMerge(path, true);
+
+                expect(result).toHaveProperty("rightRev", expectedRevision);
+                if (!("rightRev" in result)) {
+                    throw new Error(`Expected ${expectedRevision} to be selected for pairwise resolution`);
+                }
+                await db.remove(path, result.rightRev);
+            }
+
+            const finalResult = await conflictManager.tryAutoMerge(path, true);
+            expect(finalResult).toEqual({ ok: NOT_CONFLICTED });
+        });
+
+        it("returns identical independently created leaves for duplicate collapse", async () => {
+            const path = "independently-created.md" as FilePathWithPrefix;
+            await createIndependentConflict(db, path, "Same content\n", "Same content\n");
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+            expect(result).not.toHaveProperty("result");
+            if ("leftRev" in result) {
+                expect(result.leftLeaf).not.toBe(false);
+                expect(result.rightLeaf).not.toBe(false);
+                if (result.leftLeaf !== false && result.rightLeaf !== false) {
+                    expect(result.leftLeaf.data).toBe("Same content\n");
+                    expect(result.rightLeaf.data).toBe("Same content\n");
+                }
+            }
+        });
+
+        it("does not three-way merge different independently created leaves without a common revision", async () => {
+            const path = "independently-created.md" as FilePathWithPrefix;
+            await createIndependentConflict(db, path, "Left content\n", "Right content\n");
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+            expect(result).not.toHaveProperty("result");
+            if ("leftRev" in result) {
+                expect(result.leftLeaf).not.toBe(false);
+                expect(result.rightLeaf).not.toBe(false);
+                if (result.leftLeaf !== false && result.rightLeaf !== false) {
+                    expect(new Set([result.leftLeaf.data, result.rightLeaf.data])).toEqual(
+                        new Set(["Left content\n", "Right content\n"])
+                    );
+                }
+            }
+        });
+
+        it("sensible-merges non-overlapping changes from a real shared revision", async () => {
+            const path = "shared-base-clean.md" as FilePathWithPrefix;
+            await createSharedBaseConflict(
+                db,
+                path,
+                "Title\nLeft slot\nRight slot\n",
+                "Title\nLeft changed\nRight slot\n",
+                "Title\nLeft slot\nRight changed\n"
+            );
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            expect(result).toHaveProperty("result");
+            expect(result).not.toHaveProperty("leftRev");
+            if ("result" in result) {
+                expect(result.result).toBe("Title\nLeft changed\nRight changed\n");
+                expect(new Set([result.conflictedRev, (await db.get(path, { conflicts: true }))._rev])).toEqual(
+                    new Set(["2-left", "2-right"])
+                );
+            }
+        });
+
+        it("rebuilds the next pair from live leaves after a sensible merge leaves a manual conflict", async () => {
+            const path = "three-shared-branches.md" as FilePathWithPrefix;
+            const revisions = [
+                { rev: "1-base", ids: ["base"], content: "Title\nLeft slot\nRight slot\n", mtime: 500 },
+                {
+                    rev: "2-zzzz",
+                    ids: ["zzzz", "base"],
+                    content: "Title\nLeft changed\nRight slot\n",
+                    mtime: 2000,
+                },
+                {
+                    rev: "2-aaaa",
+                    ids: ["aaaa", "base"],
+                    content: "Title\nLeft slot\nRight changed\n",
+                    mtime: 1000,
+                },
+                {
+                    rev: "2-bbbb",
+                    ids: ["bbbb", "base"],
+                    content: "Title\nOverlapping left\nRight slot\n",
+                    mtime: 3000,
+                },
+            ];
+            for (const revision of revisions) {
+                await db.put(
+                    {
+                        ...createTestDoc(path, revision.content, revision.mtime),
+                        _rev: revision.rev,
+                        _revisions: {
+                            start: Number(revision.rev.split("-")[0]),
+                            ids: revision.ids,
+                        },
+                    },
+                    { new_edits: false } as PouchDB.Core.PutOptions
+                );
+            }
+
+            const firstPair = await conflictManager.tryAutoMerge(path, true);
+            expect(firstPair).toEqual({
+                result: "Title\nLeft changed\nRight changed\n",
+                conflictedRev: "2-aaaa",
+            });
+            if (!("result" in firstPair)) {
+                throw new Error("Expected the first pair to merge sensibly");
+            }
+
+            const current = await db.get(path);
+            await db.put({
+                ...current,
+                data: [firstPair.result],
+                mtime: 4000,
+            });
+            await db.remove(path, firstPair.conflictedRev);
+
+            const remainingPair = await conflictManager.tryAutoMerge(path, true);
+            expect(remainingPair).toHaveProperty("rightRev", "2-bbbb");
+            expect(remainingPair).not.toHaveProperty("result");
+            if ("rightRev" in remainingPair) {
+                expect(remainingPair.leftLeaf).not.toBe(false);
+                expect(remainingPair.rightLeaf).not.toBe(false);
+                if (remainingPair.leftLeaf !== false && remainingPair.rightLeaf !== false) {
+                    expect(remainingPair.leftLeaf.data).toBe("Title\nLeft changed\nRight changed\n");
+                    expect(remainingPair.rightLeaf.data).toBe("Title\nOverlapping left\nRight slot\n");
+                }
+            }
+        });
+
+        it("requires manual resolution for overlapping changes from a real shared revision", async () => {
+            const path = "shared-base-overlap.md" as FilePathWithPrefix;
+            await createSharedBaseConflict(
+                db,
+                path,
+                "Title\nShared line\nTail\n",
+                "Title\nLeft replacement\nTail\n",
+                "Title\nRight replacement\nTail\n"
+            );
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+            expect(result).not.toHaveProperty("result");
+            if ("leftRev" in result) {
+                expect(new Set([result.leftRev, result.rightRev])).toEqual(new Set(["2-left", "2-right"]));
+            }
+        });
+
+        it("should return UserActionRequired when auto-merge is disabled", async () => {
+            const path = "test.md" as FilePathWithPrefix;
+            const baseData = "line1\nline2\n";
+            const leftData = "line1 left\nline2\n";
+            const rightData = "line1 right\nline2\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const result = await conflictManager.tryAutoMerge(path, false); // Auto-merge disabled
+
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+            if ("leftRev" in result) {
+                expect(result.leftRev).toBeDefined();
+                expect(result.rightRev).toBeDefined();
+            }
+        });
+
+        it("should auto-merge when enableMarkdownAutoMerge is true and merge is possible", async () => {
+            const path = "test.md" as FilePathWithPrefix;
+            const baseData = "line1\nline2\nline3\n";
+            const leftData = "line1\nline2 left\nline3\n";
+            const rightData = "line1\nline2\nline3 right\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should return merged result
+            if ("result" in result) {
+                expect(result.result).toBeDefined();
+                expect(result.conflictedRev).toBeDefined();
+                expect(result.result).toContain("line2 left");
+                expect(result.result).toContain("line3 right");
+            }
+        });
+
+        it("should return UserActionRequired when auto-merge fails", async () => {
+            const path = "test.md" as FilePathWithPrefix;
+            const baseData = "line1\nline2\n";
+            const leftData = "line1 left\nline2\n";
+            const rightData = "line1 right\nline2\n";
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should return UserActionRequired because changes conflict
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+        });
+
+        it("should auto-merge using object merge when isObjectMargeApplicable applies", async () => {
+            const path = "settings.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ theme: "light", fontSize: 12, debug: false });
+            const leftData = JSON.stringify({ theme: "light", fontSize: 14, debug: false }); // Changed fontSize
+            const rightData = JSON.stringify({ theme: "light", fontSize: 12, debug: true }); // Changed debug
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should return merged result using object merge
+            if ("result" in result) {
+                expect(result.result).toBeDefined();
+                expect(result.conflictedRev).toBeDefined();
+                const merged = JSON.parse(result.result);
+                expect(merged.fontSize).toBe(14); // Left change
+                expect(merged.debug).toBe(true); // Right change
+                expect(merged.theme).toBe("light"); // Unchanged
+            }
+        });
+
+        it("should fail object merge when changes conflict on same key", async () => {
+            const path = "config.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ apiUrl: "http://localhost:3000", timeout: 30 });
+            const leftData = JSON.stringify({ apiUrl: "http://api.local:3000", timeout: 30 }); // Changed apiUrl
+            const rightData = JSON.stringify({ apiUrl: "http://api.production:3000", timeout: 30 }); // Different apiUrl
+
+            // Create base document
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+
+            // Create left version
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseResult.rev };
+            await db.put(leftDoc);
+
+            // Create right (conflicting) version
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseResult.rev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should return UserActionRequired because object merge fails due to conflicting key
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+        });
+
+        it("should find commonBase and auto-merge when base revision exists in history", async () => {
+            const path = "document.md" as FilePathWithPrefix;
+            const baseData = "# Document\n\nOriginal content\n";
+            const leftData = "# Document\n\nLeft updated content\n";
+            const rightData = "# Document\n\nRight updated content\n";
+
+            // Step 1: Create base document (rev 1)
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+            const baseRev = baseResult.rev; // Should be 1-xxx
+
+            // Step 2: Create left version by updating from base (rev 2)
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseRev };
+            const leftResult = await db.put(leftDoc);
+            const leftRev = leftResult.rev; // Should be 2-xxx
+            unused(leftRev);
+            // Step 3: Before updating, create a conflicting version based on rev 1
+            // This simulates a branch from the base revision
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseRev.split("-")[0] + "-conflict", // rev 2 but different generation
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            // Verify that the document now has conflicts
+            const currentDoc = await db.get(path, { conflicts: true, revs_info: true });
+            expect(currentDoc._conflicts).toBeDefined();
+            expect(currentDoc._conflicts?.length).toBeGreaterThan(0);
+
+            // Now test tryAutoMergeSensibly which should find the commonBase
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // If text merge is applicable, it should successfully merge
+            // Left change is in the middle of the document, right change is at the end
+            // These don't conflict, so auto-merge should succeed
+            if ("result" in result && typeof result.result === "string") {
+                expect(result.result).toBeDefined();
+                expect(result.conflictedRev).toBeDefined();
+                // The merged result should contain parts from both versions
+                expect(result.result).toContain("Document");
+                expect(result.result).toContain("updated");
+            }
+        });
+        it("should find commonBase and auto-merge when base revision exists in history", async () => {
+            const path = "document.md" as FilePathWithPrefix;
+            const baseData = "# Document\n\nOriginal content\nNext Line content\n";
+            const leftData = "# Document\n\nLeft updated content\nNext Line content\n";
+            const rightData = "# Document\n\nOriginal content\nRight updated next line\n";
+
+            // Step 1: Create base document (rev 1)
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+            const baseRev = baseResult.rev; // Should be 1-xxx
+
+            // Step 2: Create left version by updating from base (rev 2)
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseRev };
+            const leftResult = await db.put(leftDoc);
+            const leftRev = leftResult.rev; // Should be 2-xxx
+            unused(leftRev);
+            // Step 3: Before updating, create a conflicting version based on rev 1
+            // This simulates a branch from the base revision
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseRev.split("-")[0] + "-conflict", // rev 2 but different generation
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            // Verify that the document now has conflicts
+            const currentDoc = await db.get(path, { conflicts: true, revs_info: true });
+            expect(currentDoc._conflicts).toBeDefined();
+            expect(currentDoc._conflicts?.length).toBeGreaterThan(0);
+
+            // Now test tryAutoMergeSensibly which should find the commonBase
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // If text merge is applicable, it should successfully merge
+            // Left change is in the middle of the document, right change is at the end
+            // These don't conflict, so auto-merge should succeed
+            if ("result" in result && typeof result.result === "string") {
+                expect(result.result).toBeDefined();
+                expect(result.conflictedRev).toBeDefined();
+                // The merged result should contain parts from both versions
+                expect(result.result).toBe("# Document\n\nLeft updated content\nRight updated next line\n");
+            }
+        });
+
+        it("should handle commonBase with conflicting lines correctly", async () => {
+            const path = "notes.md" as FilePathWithPrefix;
+            const baseData = "Line 1\nLine 2\nLine 3\n";
+            const leftData = "Line 1\nLine 2 MODIFIED LEFT\nLine 3\n";
+            const rightData = "Line 1\nLine 2 MODIFIED RIGHT\nLine 3\n";
+
+            // Step 1: Create base document (rev 1)
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+            const baseRev = baseResult.rev;
+
+            // Step 2: Create left version (rev 2)
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseRev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            // Step 3: Create conflicting version from base (rev 2, different branch)
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseRev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            // Test tryAutoMerge with commonBase existing
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should return UserActionRequired because Line 2 has conflicting modifications
+            // even though commonBase (rev 1) exists
+            expect(result).toHaveProperty("leftRev");
+            expect(result).toHaveProperty("rightRev");
+        });
+
+        it("should use commonBase for object merge when applicable", async () => {
+            const path = "config.json" as FilePathWithPrefix;
+            const baseData = JSON.stringify({ server: "localhost", port: 3000, debug: false });
+            const leftData = JSON.stringify({ server: "localhost", port: 3000, debug: true }); // Changed debug
+            const rightData = JSON.stringify({ server: "localhost", port: 8080, debug: false }); // Changed port
+
+            // Step 1: Create base document (rev 1)
+            const baseDoc = createTestDoc(path, baseData, 1000);
+            const baseResult = await db.put(baseDoc);
+            const baseRev = baseResult.rev;
+
+            // Step 2: Create left version (rev 2)
+            const leftDoc = { ...createTestDoc(path, leftData, 2000), _rev: baseRev };
+            const leftResult = await db.put(leftDoc);
+            unused(leftResult);
+
+            // Step 3: Create conflicting version from base (rev 2, different branch)
+            const rightDoc = {
+                ...createTestDoc(path, rightData, 2100),
+                _rev: baseRev.split("-")[0] + "-conflict",
+            };
+            await db.put(rightDoc, { force: true } as any);
+
+            // Test tryAutoMerge with commonBase existing
+            const result = await conflictManager.tryAutoMerge(path, true);
+
+            // Should successfully merge using object merge since changes are on different keys
+            if ("result" in result && typeof result.result === "string") {
+                expect(result.result).toBeDefined();
+                const merged = JSON.parse(result.result);
+                expect(merged.debug).toBe(true); // Left change
+                expect(merged.port).toBe(8080); // Right change
+                expect(merged.server).toBe("localhost"); // Unchanged from base
+            }
+        });
+
+        it("uses the nearest available ancestor shared by unequal conflict branches", async () => {
+            const path = "unequal-branches.md" as FilePathWithPrefix;
+            const revisions = [
+                { rev: "1-a1", history: ["a1"], content: "A1\n" },
+                { rev: "2-b1", history: ["b1", "a1"], content: "A1\nB1\n" },
+                { rev: "3-c1", history: ["c1", "b1", "a1"], content: "A1\nB1\nC1\n" },
+                { rev: "4-d1", history: ["d1", "c1", "b1", "a1"], content: "A1\nB1\nC1\nD1\n" },
+                { rev: "2-b2", history: ["b2", "a1"], content: "A1\nB2\n" },
+                { rev: "3-c2", history: ["c2", "b2", "a1"], content: "A1\nB2\nC2\n" },
+            ];
+            for (const revision of revisions) {
+                await db.put(
+                    {
+                        ...createTestDoc(path, revision.content),
+                        _rev: revision.rev,
+                        _revisions: {
+                            start: Number(revision.rev.split("-")[0]),
+                            ids: revision.history,
+                        },
+                    },
+                    { new_edits: false } as PouchDB.Core.PutOptions
+                );
+            }
+
+            const conflicted = await db.get(path, { conflicts: true });
+            expect(conflicted._rev).toBe("4-d1");
+            expect(conflicted._conflicts).toEqual(["3-c2"]);
+            const merge = vi.spyOn(conflictManager, "mergeSensibly").mockResolvedValue(false);
+
+            await conflictManager.tryAutoMerge(path, true);
+
+            expect(merge).toHaveBeenCalledWith(path, "1-a1", "4-d1", "3-c2");
+        });
+    });
+});

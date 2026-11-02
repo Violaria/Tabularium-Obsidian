@@ -6,6 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "prebuild": "npm run build:core --prefix ../../..",
         "build": "vite build",
         "preview": "vite preview",
         "cli": "node dist/index.cjs",

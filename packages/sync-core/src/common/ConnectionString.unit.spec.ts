@@ -1,0 +1,375 @@
+import { describe, expect, it } from "vitest";
+import { ConnectionStringParser } from "./ConnectionString";
+
+describe("ConnectionStringParser CouchDB JWT", () => {
+    it("should serialize and parse all JWT fields", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "couchdb",
+            settings: {
+                couchDB_URI: "https://example.com:5984",
+                couchDB_USER: "user",
+                couchDB_PASSWORD: "pass",
+                couchDB_DBNAME: "vault",
+                couchDB_CustomHeaders: "x-test:1",
+                useJWT: true,
+                jwtAlgorithm: "HS256",
+                jwtKey: "secret-key",
+                jwtKid: "kid-1",
+                jwtSub: "device-a",
+                jwtExpDuration: 10,
+                useRequestAPI: true,
+            },
+        });
+
+        expect(uri).toContain("useJWT=true");
+        expect(uri).toContain("jwtAlg=HS256");
+        expect(uri).toContain("jwtKey=secret-key");
+        expect(uri).toContain("jwtKid=kid-1");
+        expect(uri).toContain("jwtSub=device-a");
+        expect(uri).toContain("jwtExp=10");
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "couchdb") {
+            throw new Error("Expected couchdb type");
+        }
+
+        expect(parsed.settings.couchDB_URI).toBe("https://example.com:5984");
+        expect(parsed.settings.couchDB_DBNAME).toBe("vault");
+        expect(parsed.settings.useJWT).toBe(true);
+        expect(parsed.settings.jwtAlgorithm).toBe("HS256");
+        expect(parsed.settings.jwtKey).toBe("secret-key");
+        expect(parsed.settings.jwtKid).toBe("kid-1");
+        expect(parsed.settings.jwtSub).toBe("device-a");
+        expect(parsed.settings.jwtExpDuration).toBe(10);
+        expect(parsed.settings.useRequestAPI).toBe(true);
+    });
+});
+
+describe("ConnectionStringParser CouchDB credentials round-trip", () => {
+    it("should preserve username and password through serialize/parse", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "couchdb",
+            settings: {
+                couchDB_URI: "https://example.com",
+                couchDB_USER: "user-name",
+                couchDB_PASSWORD: "p@ss:word!",
+                couchDB_DBNAME: "vault",
+                couchDB_CustomHeaders: "",
+                useJWT: false,
+                jwtAlgorithm: "",
+                jwtKey: "",
+                jwtKid: "",
+                jwtSub: "",
+                jwtExpDuration: 5,
+                useRequestAPI: false,
+            },
+        });
+
+        expect(uri.startsWith("sls+https://")).toBe(true);
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "couchdb") {
+            throw new Error("Expected couchdb type");
+        }
+
+        expect(parsed.settings.couchDB_URI).toBe("https://example.com");
+        expect(parsed.settings.couchDB_USER).toBe("user-name");
+        expect(parsed.settings.couchDB_PASSWORD).toBe("p@ss:word!");
+        expect(parsed.settings.couchDB_DBNAME).toBe("vault");
+    });
+
+    it("should preserve credentials for the http (insecure) variant too", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "couchdb",
+            settings: {
+                couchDB_URI: "http://127.0.0.1:5984",
+                couchDB_USER: "admin",
+                couchDB_PASSWORD: "secret",
+                couchDB_DBNAME: "vault",
+                couchDB_CustomHeaders: "",
+                useJWT: false,
+                jwtAlgorithm: "",
+                jwtKey: "",
+                jwtKid: "",
+                jwtSub: "",
+                jwtExpDuration: 5,
+                useRequestAPI: false,
+            },
+        });
+
+        expect(uri.startsWith("sls+http://")).toBe(true);
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "couchdb") {
+            throw new Error("Expected couchdb type");
+        }
+
+        expect(parsed.settings.couchDB_URI).toBe("http://127.0.0.1:5984");
+        expect(parsed.settings.couchDB_USER).toBe("admin");
+        expect(parsed.settings.couchDB_PASSWORD).toBe("secret");
+    });
+});
+
+describe("ConnectionStringParser P2P", () => {
+    it("should serialize and parse P2P settings including enabled and TURN fields", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings: {
+                P2P_Enabled: false,
+                P2P_roomID: "room-abc",
+                P2P_passphrase: "pass-123",
+                P2P_relays: "wss://relay.example",
+                P2P_AppID: "self-hosted-livesync",
+                P2P_AutoStart: true,
+                P2P_AutoBroadcast: true,
+                P2P_turnServers: "turn:turn.example:3478",
+                P2P_turnUsername: "turn-user",
+                P2P_turnCredential: "turn-pass",
+                P2P_maxWirePayloadBytes: 800,
+                P2P_connectionPath: "relay",
+            },
+        });
+
+        expect(uri).toContain("sls+p2p://");
+        expect(uri).toContain("enabled=false");
+        expect(uri).toContain("relays=");
+        expect(uri).toContain("appId=self-hosted-livesync");
+        expect(uri).toContain("autoStart=true");
+        expect(uri).toContain("autoBroadcast=true");
+        expect(uri).toContain("turnServers=");
+        expect(uri).toContain("turnUser=turn-user");
+        expect(uri).toContain("turnPass=turn-pass");
+        expect(uri).toContain("maxWirePayloadBytes=800");
+        expect(uri).toContain("connectionPath=relay");
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "p2p") {
+            throw new Error("Expected p2p type");
+        }
+
+        expect(parsed.settings.P2P_Enabled).toBe(false);
+        expect(parsed.settings.P2P_roomID).toBe("room-abc");
+        expect(parsed.settings.P2P_passphrase).toBe("pass-123");
+        expect(parsed.settings.P2P_relays).toBe("wss://relay.example");
+        expect(parsed.settings.P2P_AppID).toBe("self-hosted-livesync");
+        expect(parsed.settings.P2P_AutoStart).toBe(true);
+        expect(parsed.settings.P2P_AutoBroadcast).toBe(true);
+        expect(parsed.settings.P2P_turnServers).toBe("turn:turn.example:3478");
+        expect(parsed.settings.P2P_turnUsername).toBe("turn-user");
+        expect(parsed.settings.P2P_turnCredential).toBe("turn-pass");
+        expect(parsed.settings.P2P_maxWirePayloadBytes).toBe(800);
+        expect(parsed.settings.P2P_connectionPath).toBe("relay");
+    });
+
+    it("should handle edge case characters in room ID and passphrase", () => {
+        const settings = {
+            P2P_Enabled: true,
+            P2P_roomID: "My_P2P-Room@123",
+            P2P_passphrase: "p@ss:word!",
+            P2P_relays: "wss://relay.example",
+            P2P_AppID: "self-hosted-livesync",
+            P2P_AutoStart: false,
+            P2P_AutoBroadcast: false,
+            P2P_turnServers: "",
+            P2P_turnUsername: "",
+            P2P_turnCredential: "",
+        };
+
+        const uri = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings,
+        });
+
+        expect(uri).toContain("sls+p2p://:p%40ss%3Aword!@My_P2P-Room%40123");
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "p2p") {
+            throw new Error("Expected p2p type");
+        }
+
+        expect(parsed.settings.P2P_roomID).toBe("My_P2P-Room@123");
+        expect(parsed.settings.P2P_passphrase).toBe("p@ss:word!");
+    });
+
+    it("should handle empty passphrase", () => {
+        const settings = {
+            P2P_Enabled: true,
+            P2P_roomID: "room-simple",
+            P2P_passphrase: "",
+            P2P_relays: "wss://relay.example",
+            P2P_AppID: "self-hosted-livesync",
+            P2P_AutoStart: false,
+            P2P_AutoBroadcast: false,
+            P2P_turnServers: "",
+            P2P_turnUsername: "",
+            P2P_turnCredential: "",
+        };
+
+        const uri = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings,
+        });
+
+        expect(uri).toBe(
+            "sls+p2p://room-simple?relays=wss%3A%2F%2Frelay.example&appId=self-hosted-livesync&maxWirePayloadBytes=15360&connectionPath=automatic"
+        );
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "p2p") {
+            throw new Error("Expected p2p type");
+        }
+
+        expect(parsed.settings.P2P_roomID).toBe("room-simple");
+        expect(parsed.settings.P2P_passphrase).toBe("");
+    });
+
+    it("applies compatibility defaults when parsing a legacy P2P URI", () => {
+        const parsed = ConnectionStringParser.parse(
+            "sls+p2p://room-simple?relays=wss%3A%2F%2Frelay.example&appId=self-hosted-livesync"
+        );
+        if (parsed.type !== "p2p") {
+            throw new Error("Expected p2p type");
+        }
+
+        expect(parsed.settings.P2P_maxWirePayloadBytes).toBe(15 * 1024);
+        expect(parsed.settings.P2P_connectionPath).toBe("automatic");
+    });
+
+    it("normalises unsafe P2P compatibility parameters", () => {
+        const parsed = ConnectionStringParser.parse(
+            "sls+p2p://room-simple?maxWirePayloadBytes=1&connectionPath=direct"
+        );
+        if (parsed.type !== "p2p") {
+            throw new Error("Expected p2p type");
+        }
+
+        expect(parsed.settings.P2P_maxWirePayloadBytes).toBe(15 * 1024);
+        expect(parsed.settings.P2P_connectionPath).toBe("automatic");
+    });
+
+    it("uses the ordinary URI and preserves managed provider scalars", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings: {
+                ...{
+                    P2P_Enabled: true,
+                    P2P_roomID: "managed-room",
+                    P2P_passphrase: "room-passphrase",
+                    P2P_relays: "wss://relay.example",
+                    P2P_AppID: "self-hosted-livesync",
+                    P2P_AutoStart: true,
+                    P2P_AutoBroadcast: false,
+                    P2P_turnServers: "",
+                    P2P_turnUsername: "",
+                    P2P_turnCredential: "",
+                },
+                P2P_managedType: "CF",
+                P2P_managedId: "key-id",
+                P2P_managedToken: "secret-token",
+            },
+        });
+
+        expect(uri.startsWith("sls+p2p://")).toBe(true);
+        expect(uri).toContain("managedType=CF");
+        expect(uri).toContain("managedId=key-id");
+        expect(uri).toContain("secret-token");
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "p2p") throw new Error("Expected p2p type");
+        expect(parsed.settings).toMatchObject({
+            P2P_managedType: "CF",
+            P2P_managedId: "key-id",
+            P2P_managedToken: "secret-token",
+        });
+        expect(parsed.settings.P2P_roomID).toBe("managed-room");
+    });
+
+    it("preserves unknown managed provider types for host-side handling", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "p2p",
+            settings: {
+                P2P_Enabled: true,
+                P2P_roomID: "future-room",
+                P2P_passphrase: "",
+                P2P_relays: "",
+                P2P_AppID: "self-hosted-livesync",
+                P2P_AutoStart: false,
+                P2P_AutoBroadcast: false,
+                P2P_turnServers: "turn:manual.example:3478",
+                P2P_turnUsername: "manual-user",
+                P2P_turnCredential: "manual-pass",
+                P2P_managedType: "future-provider",
+                P2P_managedId: "opaque-id",
+                P2P_managedToken: "opaque-token",
+            },
+        });
+
+        expect(uri.startsWith("sls+p2p://")).toBe(true);
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "p2p") throw new Error("Expected p2p type");
+        expect(parsed.settings).toMatchObject({
+            P2P_managedType: "future-provider",
+            P2P_managedId: "opaque-id",
+            P2P_managedToken: "opaque-token",
+        });
+    });
+});
+
+describe("ConnectionStringParser S3", () => {
+    it("should serialize and parse all BucketSyncSetting fields", () => {
+        const uri = ConnectionStringParser.serialize({
+            type: "s3",
+            settings: {
+                accessKey: "ak",
+                secretKey: "sk",
+                endpoint: "http://minio.local:9000/custom/path",
+                bucket: "my-bucket",
+                region: "ap-northeast-1",
+                bucketPrefix: "vault/",
+                useCustomRequestHandler: true,
+                bucketCustomHeaders: "x-amz-meta-test:1",
+                forcePathStyle: false,
+            },
+        });
+
+        expect(uri).toContain("sls+s3://");
+        expect(uri).toContain("endpoint=http%3A%2F%2Fminio.local%3A9000%2Fcustom%2Fpath");
+        expect(uri).toContain("bucket=my-bucket");
+        expect(uri).toContain("region=ap-northeast-1");
+        expect(uri).toContain("prefix=vault%2F");
+        expect(uri).toContain("headers=x-amz-meta-test%3A1");
+        expect(uri).toContain("useProxy=true");
+        expect(uri).toContain("pathStyle=false");
+
+        const parsed = ConnectionStringParser.parse(uri);
+        if (parsed.type !== "s3") {
+            throw new Error("Expected s3 type");
+        }
+
+        expect(parsed.settings.accessKey).toBe("ak");
+        expect(parsed.settings.secretKey).toBe("sk");
+        expect(parsed.settings.endpoint).toBe("http://minio.local:9000/custom/path");
+        expect(parsed.settings.bucket).toBe("my-bucket");
+        expect(parsed.settings.region).toBe("ap-northeast-1");
+        expect(parsed.settings.bucketPrefix).toBe("vault/");
+        expect(parsed.settings.useCustomRequestHandler).toBe(true);
+        expect(parsed.settings.bucketCustomHeaders).toBe("x-amz-meta-test:1");
+        expect(parsed.settings.forcePathStyle).toBe(false);
+    });
+});
+
+
+describe("connection-string error privacy", () => {
+    it("omits supplied credentials from unsupported URI errors", () => {
+        const uri = "invalid://?token=private-token";
+        let failure: unknown;
+        try {
+            ConnectionStringParser.parse(uri);
+        } catch (error) {
+            failure = error;
+        }
+        expect(failure).toBeInstanceOf(Error);
+        expect(String(failure)).not.toContain("private-token");
+        expect(String(failure)).not.toContain("token");
+    });
+});

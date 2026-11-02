@@ -6,8 +6,12 @@
     "type": "module",
     "scripts": {
         "dev": "node --env-file=.env esbuild.config.mjs",
+        "build:core": "npm run build --workspace @vrtmrz/livesync-commonlib",
+        "prebuild": "npm run build:core",
         "build": "node esbuild.config.mjs production",
+        "prebuild:notes": "npm run build:core",
         "build:notes": "vite build --config src/apps/notes/vite.config.ts src/apps/notes",
+        "pretest:notes": "npm run build:core",
         "test:notes": "vitest run --config src/apps/notes/vite.config.ts --dir src/apps/notes",
         "buildDev": "node esbuild.config.mjs dev",
         "lint": "eslint --cache --cache-strategy content --concurrency off src",
@@ -22,13 +26,16 @@
         "prettyNoWrite": "prettier --config ./.prettierrc.mjs \"**/*.js\" \"**/*.ts\" \"**/*.json\" ",
         "precheck:compatibility": "npm run build",
         "check:compatibility": "node utils/check-compatibility.js --file main.js --ios 15",
+        "precheck": "npm run build:core",
         "check": "npm run tsc-check && npm run tsc-check:apps && npm run lint && npm run lint:community && npm run lint:community:tools && npm run svelte-check && npm run check:compatibility && npm run i18n:check",
         "i18n:bake": "npm run i18n:yaml2json && npm run i18n:bakejson && npm run i18n:format",
         "i18n:bakejson": "tsx _tools/bakei18n.ts",
         "i18n:format": "prettier --config .prettierrc.mjs --write --log-level error 'src/common/messagesJson/*.json' 'src/common/messages/*.ts'",
+        "prei18n:check": "npm run build:core",
         "i18n:check": "tsx _tools/checkTrilingual.ts && tsx _tools/checkNotices.ts",
         "i18n:json2yaml": "tsx _tools/json2yaml.ts",
         "i18n:yaml2json": "tsx _tools/yaml2json.ts",
+        "pretest:unit": "npm run build:core",
         "test:unit": "vitest run --config vitest.config.unit.ts",
         "test:contract:contexts": "vitest run --config vitest.config.unit.ts src/modules/services/ObsidianServiceContext.unit.spec.ts src/apps/cli/services/NodeServiceContext.unit.spec.ts src/apps/browser/createLiveSyncBrowserServiceHub.unit.spec.ts",
         "test:contract:context:cli": "npm run build --workspace self-hosted-livesync-cli && deno task --cwd src/apps/cli/testdeno test:setup-put-cat",
@@ -165,7 +172,8 @@
         }
     },
     "workspaces": [
-        "src/apps/cli"
+        "src/apps/cli",
+        "packages/sync-core"
     ],
     "allowScripts": {
         "esbuild@0.28.1": true,

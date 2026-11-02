@@ -25,6 +25,7 @@
     "include": ["**/*.ts", "test/**/*.test.ts", "**/*.unit.spec.ts", "**/*.svelte"],
     "exclude": [
         "pouchdb-browser-webpack",
+        "packages",
         "utils",
         "src/apps",
         "src/**/*.test.ts",

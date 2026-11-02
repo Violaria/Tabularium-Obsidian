@@ -1,0 +1,140 @@
+import {
+    type FilePathWithPrefix,
+    type FilePath,
+    type LoadedEntry,
+    type EntryDoc,
+    REMOTE_COUCHDB,
+    type SavingEntry,
+    type MetaEntry,
+} from "@lib/common/types";
+import type { ChunkManager } from "@lib/managers/ChunkManager";
+import type { ContentSplitter } from "@lib/ContentSplitter/ContentSplitters";
+import type { HashManager } from "@lib/managers/HashManager/HashManager";
+import type { GeneratedChunk } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { IPathService, ISettingService } from "@lib/services/base/IService";
+import { assertDatabasePathIdentity } from "@lib/pouchdb/pathIdentityCompatibility";
+import {
+    deleteDBEntryByPath,
+    getDBEntryByPath,
+    getDBEntryFromMeta,
+    getDBEntryMetaByPath,
+    isTargetFile,
+    prepareChunk,
+    putDBEntry,
+    putDBEntryWithLiveBaseRevision,
+    putDBEntryAsIndependentRoot,
+    storeDeletionByPathAtRevision,
+} from "./EntryManagerImpls";
+
+export interface EntryManagerOptions {
+    hashManager: HashManager;
+    chunkManager: ChunkManager;
+    splitter: ContentSplitter;
+    database: PouchDB.Database<EntryDoc>;
+    settingService: ISettingService;
+    pathService: IPathService;
+}
+
+export class EntryManager {
+    options: EntryManagerOptions;
+
+    constructor(options: EntryManagerOptions) {
+        this.options = options;
+    }
+    get localDatabase(): PouchDB.Database<EntryDoc> {
+        return this.options.database;
+    }
+    get hashManager(): HashManager {
+        return this.options.hashManager;
+    }
+    get chunkManager(): ChunkManager {
+        return this.options.chunkManager;
+    }
+
+    get splitter(): ContentSplitter {
+        return this.options.splitter;
+    }
+    get serviceHost() {
+        return {
+            services: {
+                setting: this.options.settingService,
+                path: this.options.pathService,
+            },
+            serviceModules: {},
+        };
+    }
+
+    get isOnDemandChunkEnabled() {
+        const settings = this.options.settingService.currentSettings();
+        if (settings.remoteType !== REMOTE_COUCHDB) {
+            return false;
+        }
+        if (settings.useOnlyLocalChunk) {
+            return false;
+        }
+        return true;
+    }
+
+    isTargetFile(filenameSrc: string) {
+        return isTargetFile(this.serviceHost, filenameSrc);
+    }
+
+    async prepareChunk(piece: string): Promise<GeneratedChunk> {
+        return await prepareChunk(this, piece);
+    }
+
+    async getDBEntryMeta(
+        path: FilePathWithPrefix | FilePath,
+        opt?: PouchDB.Core.GetOptions,
+        includeDeleted = false
+    ): Promise<false | LoadedEntry> {
+        return await getDBEntryMetaByPath(this.serviceHost, this, path, opt, includeDeleted);
+    }
+    async getDBEntry(
+        path: FilePathWithPrefix | FilePath,
+        opt?: PouchDB.Core.GetOptions,
+        dump = false,
+        waitForReady = true,
+        includeDeleted = false,
+        localOnly = false
+    ): Promise<false | LoadedEntry> {
+        return await getDBEntryByPath(this.serviceHost, this, path, opt, dump, waitForReady, includeDeleted, localOnly);
+    }
+    async getDBEntryFromMeta(
+        meta: LoadedEntry | MetaEntry,
+        dump = false,
+        waitForReady = true,
+        localOnly = false
+    ): Promise<false | LoadedEntry> {
+        return await getDBEntryFromMeta(this.serviceHost, this, meta, dump, waitForReady, localOnly);
+    }
+
+    async deleteDBEntry(path: FilePathWithPrefix | FilePath, opt?: PouchDB.Core.GetOptions): Promise<boolean> {
+        await this.checkPathIdentity();
+        return await deleteDBEntryByPath(this.serviceHost, this, path, opt);
+    }
+
+    async storeDeletionAtRevision(path: FilePathWithPrefix | FilePath, baseRevision: string) {
+        await this.checkPathIdentity();
+        return await storeDeletionByPathAtRevision(this.serviceHost, this, path, baseRevision);
+    }
+
+    async putDBEntry(note: SavingEntry, onlyChunks?: boolean, conflictBaseRev?: string) {
+        await this.checkPathIdentity();
+        return await putDBEntry(this.serviceHost, this, note, onlyChunks, conflictBaseRev);
+    }
+
+    async putDBEntryWithLiveBaseRevision(note: SavingEntry, baseRevision: string, onlyChunks?: boolean) {
+        await this.checkPathIdentity();
+        return await putDBEntryWithLiveBaseRevision(this.serviceHost, this, note, baseRevision, onlyChunks);
+    }
+    /** Store unknown ancestry as a fresh root; return the Metadata write result or `false`. */
+    async putDBEntryAsIndependentRoot(note: SavingEntry) {
+        await this.checkPathIdentity();
+        return await putDBEntryAsIndependentRoot(this.serviceHost, this, note);
+    }
+
+    private async checkPathIdentity(): Promise<void> {
+        await assertDatabasePathIdentity(this.localDatabase, this.options.settingService.currentSettings(), true);
+    }
+}
