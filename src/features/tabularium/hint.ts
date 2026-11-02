@@ -1,4 +1,4 @@
-import { setIcon, setTooltip, type ButtonComponent, type Setting } from "obsidian";
+import { setIcon, setTooltip, type ButtonComponent, type Setting, type SettingDefinition, type SettingDefinitionRender } from "obsidian";
 
 /** An explanation behind an icon after the setting name: shown on hover; tapping it (on mobile) shows or hides it below the name. */
 export function hint(setting: Setting, text: string) {
@@ -12,10 +12,39 @@ export function hint(setting: Setting, text: string) {
 }
 
 /**
- * Marks a button as destructive. Obsidian 1.13 has setDestructive and deprecates setWarning; both set this class, and
- * the plug-in supports Obsidian 1.7.2.
+ * A drawn row shown only while `visible` says so. Obsidian draws hidden rows too; this one stays empty while hidden, as
+ * what it shows may not exist then. Every change that can show it redraws the page (update()).
  */
+export function shownWhen(visible: (() => boolean) | undefined, row: SettingDefinitionRender): SettingDefinitionRender {
+    if (!visible) return row;
+    return { ...row, visible, render: (setting, group) => (visible() ? row.render(setting, group) : undefined) };
+}
+
+/**
+ * A row of the settings page that draws its own control. The description goes behind the icon (see hint) and is a
+ * search term, so Obsidian's settings search finds the row by it.
+ */
+export function settingRow(
+    name: string,
+    desc: string | undefined,
+    draw: (setting: Setting) => unknown,
+    visible?: () => boolean
+): SettingDefinition {
+    return shownWhen(visible, {
+        name,
+        aliases: desc ? [desc] : undefined,
+        render: (setting) => {
+            if (desc) hint(setting, desc);
+            draw(setting);
+        },
+    });
+}
+
+/** A row with text only, a state or an explanation, shown as the description; without a name it is not offered in search. */
+export function textRow(name: string, text: () => string, visible?: () => boolean): SettingDefinition {
+    return shownWhen(visible, { name, searchable: name !== "", render: (setting) => void setting.setDesc(text()) });
+}
+
 export function destructive(button: ButtonComponent) {
-    button.buttonEl.addClass("mod-warning");
-    return button;
+    return button.setDestructive();
 }

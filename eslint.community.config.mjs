@@ -64,9 +64,6 @@ export default defineConfig(
             "@typescript-eslint/no-base-to-string": "warn",
             "@typescript-eslint/no-redundant-type-constituents": "warn",
             "@typescript-eslint/no-unnecessary-type-assertion": "warn",
-            // A suggestion, not a requirement: getSettingDefinitions() needs Obsidian 1.13 and the plug-in supports 1.7.2,
-            // so the settings page stays imperative. The directory review still lists it.
-            "obsidianmd/settings-tab/prefer-setting-definitions": "off",
         },
     },
     {

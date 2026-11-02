@@ -40,8 +40,9 @@ describe("reading the order from the list in the body", () => {
 
     it("lets the nearest rules note decide for its folders", () => {
         const sources = readOrders([
-            { path: "sortspec.md", text: "- A\n  - one\n- B" },
-            { path: "A/sortspec.md", text: "- two\n- one" },
+            { path: "Collation.md", text: "- A\n  - one\n- B" },
+            { path: "A/Collation.md", text: "- two\n- one" },
+            { path: "B/sortspec.md", text: "- not read" },
             { path: "A/notes.md", text: "- ignored" },
         ]);
         expect(orderFor(sources, "")).toEqual(["A", "B"]);

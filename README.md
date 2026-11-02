@@ -6,7 +6,7 @@ An Obsidian plug-in that synchronises a vault, end-to-end encrypted, with a self
 
 ## Requirements and network use
 
-You need a Tabularium server; without a server and an account the plug-in does nothing. Every network request goes to the server address you enter: signing in, issuing and renewing this device's credentials, synchronisation, Send to Kindle and sharing. The plug-in sends no telemetry, and its help pages are bundled with it.
+The plug-in needs Obsidian 1.13 or later and a Tabularium server; without a server and an account the plug-in does nothing. Every network request goes to the server address you enter: signing in, issuing and renewing this device's credentials, synchronisation, Send to Kindle and sharing. The plug-in sends no telemetry, and its help pages are bundled with it.
 
 Notes are encrypted on the device with the vault's passphrase (E2EE V2, with path obfuscation) before they leave it. The passphrase is stored only on the device, and the server rejects unencrypted documents. Two features send readable content, and only when you use them: Send to Kindle mails an EPUB through the server, and a shared note is published at a link that anyone with the link can open.
 
@@ -15,7 +15,7 @@ Notes are encrypted on the device with the vault's passphrase (E2EE V2, with pat
 - Sign in with the server address, user name and password, then choose an existing vault or create one, name the device and enter the passphrase. The plug-in gets credentials of its own for this device and renews them while it is in use.
 - Live, periodic or event-triggered synchronisation, conflict handling and per-note history. Encryption and path obfuscation are always on while connected. Synchronisation goes through the Tabularium server only: hidden files and plug-in and theme settings are not synchronised, and CouchDB, object storage or peer-to-peer cannot be set up by hand.
 - Maintenance from the settings page: fetch everything from the server, overwrite the server from this device (after the vault owner allows it on the web), unlock, diagnostics.
-- Your own File Explorer ordering, defined in `sortspec.md` files.
+- Your own File Explorer ordering, written as an indented list in `Collation.md` notes.
 - Send a note, a folder or a selection to a Kindle address configured on the server.
 - Share a note or folder as a web page; the page updates when the shared files change.
 - A formatting toolbar on text selection, and a tool to find and repair broken internal links.
@@ -27,13 +27,15 @@ Until the plug-in is listed in Obsidian's community directory, copy `main.js`, `
 
 ## Building
 
-This repository is a submodule of [Tabularium](https://github.com/Violaria/Tabularium); it depends on the sorting package there. Clone the parent with `--recurse-submodules` and, with Node.js 24.10.0:
+With Node.js 24.10.0, in this repository:
 
 ```bash
-npm run bootstrap
-npm run build --prefix apps/obsidian      # main.js
-npm run check --prefix apps/obsidian      # type checks, lint, Svelte checks
-npm run test:unit --prefix apps/obsidian
+npm ci
+npm run build       # main.js
+npm run check       # type checks, lint, Svelte checks
+npm run test:unit
 ```
+
+It is also a submodule of [Tabularium](https://github.com/Violaria/Tabularium), which holds the server and the tests that run real Obsidian clients.
 
 The same source also produces the browser client (`src/apps/notes/`) and the command-line client (`src/apps/cli/`) that the Tabularium server uses.

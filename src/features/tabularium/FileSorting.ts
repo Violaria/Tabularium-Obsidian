@@ -1,6 +1,6 @@
-// File sorting in Obsidian's file list from the lists in sortspec.md (see common/fileOrder.ts). The file list's own
+// File sorting in Obsidian's file list from the lists in Collation.md (see common/fileOrder.ts). The file list's own
 // order (the sort the user chose in Obsidian) is kept for everything the rules do not list.
-import { Component, normalizePath, Notice, Setting, TFile, TFolder, type Plugin, type TAbstractFile } from "obsidian";
+import { Component, normalizePath, Notice, TFile, TFolder, type Plugin, type SettingDefinition, type TAbstractFile } from "obsidian";
 import { $msg } from "@/common/translation";
 import type { LiveSyncCore } from "@/main";
 import {
@@ -8,6 +8,8 @@ import {
     bodyOf,
     convertFrontMatter,
     defaultOrder,
+    FORMER_RULES_FILE,
+    isRulesNote,
     namesOf,
     orderFor,
     parseOrder,
@@ -15,7 +17,8 @@ import {
     type FileOrder,
 } from "@/common/fileOrder";
 import { confirmAction } from "./Confirm";
-import { hint } from "./hint";
+import { settingRow } from "./hint";
+import { EVENT_REQUEST_RELOAD_SETTING_TAB, eventHub } from "@/common/events.ts";
 
 declare module "obsidian" {
     interface App {
@@ -43,9 +46,8 @@ interface FileListView {
 }
 
 const folderPath = (folder: TFolder) => (folder.isRoot() ? "" : folder.path);
-const isRules = (path: string) => path === RULES_FILE || path.endsWith(`/${RULES_FILE}`);
-/** Front-matter rules of Custom File Explorer sorting, which this component no longer reads. */
-const hasFormerRules = (text: string) => /^---\r?\n(?:[\s\S]*?\r?\n)?sorting-spec:/.test(text);
+const isRules = (path: string) => isRulesNote(path) || isRulesNote(path, FORMER_RULES_FILE);
+const folderOf = (path: string) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
 
 export class TabulariumSorting extends Component {
     settings: SortingSettings = { ...DEFAULT_SETTINGS };
@@ -53,7 +55,7 @@ export class TabulariumSorting extends Component {
     steppedAside = false;
     /** The rules notes, parsed; refreshed when one of them changes. */
     private orders: { folder: string; order: FileOrder }[] = [];
-    /** Rules notes that still hold only front-matter rules. */
+    /** Rules notes under the former name (sortspec.md) where the folder has no Collation.md: not read, offered for conversion. */
     formerRules: string[] = [];
     private statusBarItem?: HTMLElement;
     private patched?: { active: boolean };
@@ -104,13 +106,19 @@ export class TabulariumSorting extends Component {
     }
 
     private async readRules() {
-        const notes = this.app.vault.getMarkdownFiles().filter((file) => isRules(file.path));
+        const notes = this.app.vault.getMarkdownFiles().filter((file) => isRulesNote(file.path));
         const texts = await Promise.all(notes.map(async (file) => ({ path: file.path, text: await this.app.vault.cachedRead(file) })));
-        this.orders = texts.map((note) => {
-            const folder = note.path.includes("/") ? note.path.slice(0, note.path.lastIndexOf("/")) : "";
-            return { folder, order: parseOrder(note.text, folder) };
-        });
-        this.formerRules = texts.filter((note) => hasFormerRules(note.text) && parseOrder(note.text).size === 0).map((note) => note.path);
+        this.orders = texts.map((note) => ({ folder: folderOf(note.path), order: parseOrder(note.text, folderOf(note.path)) }));
+        const current = new Set(notes.map((file) => folderOf(file.path)));
+        const former = this.app.vault
+            .getMarkdownFiles()
+            .filter((file) => isRulesNote(file.path, FORMER_RULES_FILE) && !current.has(folderOf(file.path)))
+            .map((file) => file.path);
+        // The settings page offers a conversion for each of them.
+        if (former.join("\n") !== this.formerRules.join("\n")) {
+            this.formerRules = former;
+            eventHub.emitEvent(EVENT_REQUEST_RELOAD_SETTING_TAB);
+        }
     }
 
     private fileList(): FileListView | undefined {
@@ -193,16 +201,21 @@ export class TabulariumSorting extends Component {
         this.statusBarItem?.setText($msg(this.settings.suspended ? "tabularium.sorting.statusOff" : "tabularium.sorting.statusOn"));
     }
 
-    /** Converts a rules note that holds only front-matter rules into the list, after showing the result. */
+    /**
+     * Converts a rules note under the former name, after showing the result: front-matter rules become the list at its
+     * start, and the note is renamed to Collation.md (links to it follow). A note already holding the list is only renamed.
+     */
     async convert(path: string) {
         const file = this.app.vault.getFileByPath(path);
         if (!file) return;
-        const folder = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
+        const folder = folderOf(path);
+        const target = folder ? `${folder}/${RULES_FILE}` : RULES_FILE;
         const childrenOf = (folderPath: string) => {
-            const target = folderPath ? this.app.vault.getFolderByPath(folderPath) : this.app.vault.getRoot();
-            return target ? this.ordered(target).map((item) => (item instanceof TFile && item.extension === "md" ? item.basename : item.name)) : [];
+            const at = folderPath ? this.app.vault.getFolderByPath(folderPath) : this.app.vault.getRoot();
+            return at ? this.ordered(at).map((item) => (item instanceof TFile && item.extension === "md" ? item.basename : item.name)) : [];
         };
-        const result = convertFrontMatter(await this.app.vault.read(file), folder, childrenOf);
+        const text = await this.app.vault.read(file);
+        const result = parseOrder(text, folder).size ? { text, unsupported: [], moved: [] } : convertFrontMatter(text, folder, childrenOf);
         const list = bodyOf(result.text).split("\n\n")[0];
         const notes = [
             result.unsupported.length ? $msg("tabularium.sorting.convertUnsupported", { lines: result.unsupported.join("\n") }) : "",
@@ -210,38 +223,45 @@ export class TabulariumSorting extends Component {
         ].filter(Boolean);
         const confirmed = await confirmAction(this.app, {
             title: $msg("tabularium.sorting.convertTitle"),
-            body: $msg("tabularium.sorting.convertBody", { path }),
+            body: $msg("tabularium.sorting.convertBody", { path, target }),
             preview: list,
             impact: notes.length ? notes.join("\n\n") : undefined,
             action: $msg("tabularium.sorting.convertAction"),
         });
         if (confirmed !== true) return;
-        await this.app.vault.process(file, () => result.text);
-        new Notice($msg("tabularium.sorting.converted", { path }));
+        if (result.text !== text) await this.app.vault.process(file, () => result.text);
+        await this.app.fileManager.renameFile(file, target);
+        new Notice($msg("tabularium.sorting.converted", { path: target }));
     }
 
-    /** The sorting part of the settings page. */
-    renderSettings(el: HTMLElement, redraw: () => void) {
-        for (const path of this.formerRules) {
-            hint(new Setting(el).setName($msg("tabularium.sorting.convert")), $msg("tabularium.sorting.convertDesc", { path })).addButton(
-                (button) =>
+    /** The rows of the settings page's file sorting part; `changed` redraws the page after a conversion. */
+    settingRows(changed: () => void): SettingDefinition[] {
+        const convert = this.formerRules.map((path) =>
+            settingRow(`${$msg("tabularium.sorting.convert")} · ${path}`, $msg("tabularium.sorting.convertDesc", { path }), (setting) =>
+                setting.addButton((button) =>
                     button
                         .setButtonText($msg("tabularium.sorting.convertButton"))
                         .setCta()
-                        .onClick(() => void this.convert(path).then(redraw))
-            );
-        }
-        hint(new Setting(el).setName($msg("tabularium.sorting.apply")), $msg("tabularium.sorting.applyDesc")).addToggle((toggle) =>
-            toggle.setValue(!this.settings.suspended).onChange((on) => void this.setSuspended(!on))
+                        .onClick(() => void this.convert(path).then(changed))
+                )
+            )
         );
-        hint(new Setting(el).setName($msg("tabularium.sorting.statusBar")), $msg("tabularium.sorting.statusBarDesc")).addToggle((toggle) =>
-            toggle.setValue(this.settings.statusBar).onChange(async (on) => {
-                this.settings.statusBar = on;
-                await this.saveSettings();
-                if (on) this.showStatusBar();
-                else this.statusBarItem?.detach();
-            })
-        );
+        return [
+            ...convert,
+            settingRow($msg("tabularium.sorting.apply"), $msg("tabularium.sorting.applyDesc"), (setting) =>
+                setting.addToggle((toggle) => toggle.setValue(!this.settings.suspended).onChange((on) => void this.setSuspended(!on)))
+            ),
+            settingRow($msg("tabularium.sorting.statusBar"), $msg("tabularium.sorting.statusBarDesc"), (setting) =>
+                setting.addToggle((toggle) =>
+                    toggle.setValue(this.settings.statusBar).onChange(async (on) => {
+                        this.settings.statusBar = on;
+                        await this.saveSettings();
+                        if (on) this.showStatusBar();
+                        else this.statusBarItem?.detach();
+                    })
+                )
+            ),
+        ];
     }
 }
 

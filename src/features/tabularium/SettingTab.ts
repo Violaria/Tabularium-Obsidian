@@ -1,7 +1,17 @@
-// Tabularium's settings page, the plug-in's only one: connection, sync, file sorting, Send to Kindle, appearance,
-// maintenance and help. Options that a Tabularium connection forces (encryption, path obfuscation, hidden-file and
-// customisation sync) or that only apply to other remotes are not offered.
-import { Platform, PluginSettingTab, Setting, setIcon } from "obsidian";
+// Tabularium's settings page, the plug-in's only one: connection, then pages for sync, file sorting, Send to Kindle,
+// appearance, maintenance and help. Options that a Tabularium connection forces (encryption, path obfuscation,
+// hidden-file and customisation sync) or that only apply to other remotes are not offered. The page is declared
+// (getSettingDefinitions), so Obsidian's settings search finds every row; update() draws it again after a change.
+import {
+    Platform,
+    PluginSettingTab,
+    type Setting,
+    type SettingDefinition,
+    type SettingDefinitionGroup,
+    type SettingDefinitionItem,
+    type SettingDefinitionPage,
+    type SettingGroupItem,
+} from "obsidian";
 import { $msg, $t } from "@/common/translation";
 import { SUPPORTED_I18N_LANGS } from "@/common/rosetta";
 import {
@@ -24,19 +34,7 @@ import { confirmAction } from "./Confirm";
 import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";
 import { REBUILD_CONFIRMED_KEY } from "@/serviceFeatures/redFlag";
 import { HELP_TOPICS, RELEASES } from "./help";
-import { destructive, hint } from "./hint";
-
-const SECTIONS = ["connection", "sync", "sorting", "kindle", "appearance", "maintenance", "help"] as const;
-type Section = (typeof SECTIONS)[number];
-const ICONS: Record<Section, string> = {
-    connection: "server",
-    sync: "refresh-cw",
-    sorting: "arrow-down-wide-narrow",
-    kindle: "send",
-    appearance: "palette",
-    maintenance: "wrench",
-    help: "help-circle",
-};
+import { destructive, settingRow, shownWhen, textRow } from "./hint";
 
 /** Rarely needed options, in Maintenance under Advanced. None of them needs the server's data rebuilt. */
 const ADVANCED: { heading: string; keys: AllSettingItemKey[] }[] = [
@@ -96,20 +94,42 @@ const BOUNDS: Partial<Record<AllSettingItemKey, [number, number]>> = {
 
 type SyncMode = "live" | "periodic" | "events";
 
-// The page is drawn imperatively (render): the declarative getSettingDefinitions() arrived in Obsidian 1.13, and the
-// plug-in supports Obsidian 1.7.2.
+type Section = (SettingGroupItem | SettingDefinitionGroup)[];
+
+/** Marks Tabularium's groups, for the divider fix in styles.css. */
+const GROUP_CLASS = "tabularium-settings-group";
+const group = (heading: string | undefined, items: SettingGroupItem[], visible?: () => boolean): SettingDefinitionGroup => ({
+    type: "group",
+    heading: heading && $msg(heading as never),
+    cls: GROUP_CLASS,
+    items,
+    visible,
+});
+const isGroup = (item: Section[number]): item is SettingDefinitionGroup => "type" in item && item.type !== "page";
+/** A page whose rows outside a group are put in an unnamed one, as Obsidian would, but marked as Tabularium's. */
+const page = (name: string, items: Section, desc?: string): SettingDefinitionPage => {
+    const grouped: SettingDefinitionItem[] = [];
+    let loose: SettingGroupItem[] | undefined;
+    for (const item of items) {
+        if (isGroup(item)) {
+            grouped.push(item);
+            loose = undefined;
+        } else if (loose) loose.push(item);
+        else grouped.push(group(undefined, (loose = [item])));
+    }
+    return { type: "page", name, desc, items: grouped };
+};
+
 export class TabulariumSettingTab extends PluginSettingTab {
-    private section: Section = "connection";
-    private advancedOpen = false;
     private readonly owner: ObsidianLiveSyncPlugin;
 
     constructor(plugin: ObsidianLiveSyncPlugin) {
         super(plugin.app, plugin);
         this.owner = plugin;
-        // Saving settings (also from commands) asks open setting pages to redraw, e.g. after a language change.
+        // Saving settings (also from commands) asks for the page again, e.g. after a language change.
         eventHub.onEvent(EVENT_REQUEST_RELOAD_SETTING_TAB, () => {
             plugin.sorting?.updateStatusBar();
-            if (this.containerEl.isConnected) this.redraw();
+            this.update();
         });
     }
 
@@ -119,68 +139,44 @@ export class TabulariumSettingTab extends PluginSettingTab {
     private get settings() {
         return this.core.services.setting.currentSettings();
     }
+    private get connected() {
+        return Boolean(this.owner.tabularium?.connection);
+    }
+    private get mode(): SyncMode {
+        const settings = this.settings;
+        return settings.liveSync ? "live" : settings.periodicReplication ? "periodic" : "events";
+    }
 
     private async save(partial: Partial<ObsidianLiveSyncSettings>) {
         await this.core.services.setting.applyPartial(partial, true);
     }
 
-    show(section: Section) {
-        this.section = section;
-        this.redraw();
-    }
-
-    override display(): void {
-        this.redraw();
-    }
-
-    /** Draws the page, again when something changed, keeping its scroll position. */
-    private redraw(): void {
-        const { containerEl } = this;
-        const scrolled = containerEl.scrollTop;
-        containerEl.empty();
-        containerEl.addClass("tabularium-settings");
-        const nav = containerEl.createDiv({ cls: "tabularium-settings-nav" });
-        for (const section of SECTIONS) {
-            const button = nav.createEl("button", { cls: section === this.section ? "is-active" : "" });
-            setIcon(button.createSpan(), ICONS[section]);
-            button.createSpan({ text: $msg(`tabularium.settings.${section}`) });
-            button.addEventListener("click", () => this.show(section));
-        }
-        const body = containerEl.createDiv({ cls: "tabularium-settings-body" });
-        this.render(body);
-        containerEl.scrollTop = scrolled;
-    }
-
-    private render(el: HTMLElement) {
-        switch (this.section) {
-            case "connection":
-                return this.connection(el);
-            case "sync":
-                return this.sync(el);
-            case "sorting":
-                return this.sorting(el);
-            case "kindle":
-                return this.kindle(el);
-            case "appearance":
-                return this.appearance(el);
-            case "maintenance":
-                return this.maintenance(el);
-            case "help":
-                return this.help(el);
-        }
+    override getSettingDefinitions(): SettingDefinitionItem[] {
+        return [
+            group("tabularium.settings.connection", this.connection()),
+            group(undefined, [
+                page($msg("tabularium.settings.sync"), this.sync()),
+                page($msg("tabularium.settings.sorting"), this.sorting()),
+                page($msg("tabularium.settings.kindle"), this.kindle()),
+                page($msg("tabularium.settings.appearance"), this.appearance()),
+                page($msg("tabularium.settings.maintenance"), this.maintenance()),
+                page($msg("tabularium.settings.help"), this.help()),
+            ]),
+        ];
     }
 
     /** A row for a stored setting, its control chosen by the value's type; the description goes behind an icon. */
-    private row(el: HTMLElement, key: AllSettingItemKey) {
+    private stored(key: AllSettingItemKey, visible?: () => boolean): SettingDefinition {
         // The pattern lists have no upstream description; theirs are in Tabularium's catalogue.
         const config = REGEX_LISTS.has(key)
             ? { name: $msg(`tabularium.settings.${key}` as never), desc: $msg(`tabularium.settings.${key}Desc` as never), placeHolder: "" }
             : getConfig(key);
         if (!config) throw new Error(`No setting description for ${key}`);
-        const setting = new Setting(el).setName(config.name);
-        if (config.desc) hint(setting, config.desc);
-        const settings = this.settings as unknown as Record<string, unknown>;
-        const value = settings[key];
+        return settingRow(config.name, config.desc, (setting) => this.control(setting, key, config.placeHolder), visible);
+    }
+
+    private control(setting: Setting, key: AllSettingItemKey, placeholder: string | undefined) {
+        const value = (this.settings as unknown as Record<string, unknown>)[key];
         if (REGEX_LISTS.has(key)) {
             setting.addTextArea((text) => {
                 text.inputEl.rows = 3;
@@ -210,68 +206,100 @@ export class TabulariumSettingTab extends PluginSettingTab {
             });
         } else {
             setting.addText((text) => {
-                if (config.placeHolder) text.setPlaceholder(config.placeHolder);
+                if (placeholder) text.setPlaceholder(placeholder);
                 text.setValue(typeof value === "string" ? value : "");
                 text.inputEl.addEventListener("change", () => void this.save({ [key]: text.getValue() }));
             });
         }
-        return setting;
     }
 
-    private heading(el: HTMLElement, key: string) {
-        new Setting(el).setName($msg(key as never)).setHeading();
+    /** A row whose button runs an action; destructive ones are marked. */
+    private action(name: string, desc: string, button: string, run: () => unknown, options: { warning?: boolean; visible?: () => boolean } = {}) {
+        return settingRow(
+            $msg(name as never),
+            $msg(desc as never),
+            (setting) =>
+                setting.addButton((b) => {
+                    b.setButtonText($msg(button as never)).onClick(() => void run());
+                    if (options.warning) destructive(b);
+                }),
+            options.visible
+        );
     }
 
-    private connection(el: HTMLElement) {
-        const server = this.owner.tabularium!;
-        const connection = server.connection;
-        if (!connection) {
-            new Setting(el)
-                .setName($msg("tabularium.server.notConnected"))
-                .setDesc($msg("tabularium.settings.notConnectedDesc"))
-                .addButton((b) => b.setButtonText($msg("tabularium.server.openConnection")).setCta().onClick(() => server.open()));
-            return;
-        }
-        new Setting(el).setName($msg("tabularium.server.server")).setDesc(connection.server);
-        new Setting(el).setName($msg("tabularium.server.vault")).setDesc(connection.vaultName);
-        new Setting(el)
-            .setName($msg("tabularium.server.device"))
-            .setDesc(
-                $msg("tabularium.server.deviceExpiry", {
-                    device: connection.deviceName,
-                    date: new Date(connection.expiresAt).toLocaleString(),
-                })
-            );
-        new Setting(el)
-            .setName($msg("tabularium.settings.status"))
-            .setDesc(this.status())
-            .addButton((b) =>
-                b.setButtonText($msg("tabularium.settings.syncNow")).onClick(async () => {
-                    b.setDisabled(true);
-                    await this.core.services.replication.replicateUserInitiated({
-                        trigger: "manual",
-                        progressPresentation: REPLICATION_PROGRESS_PRESENTATIONS.QUIET,
-                        interaction: USER_INITIATED_REPLICATION_AUTHORITY,
-                    });
-                    this.redraw();
-                })
-            );
-        this.lock(el);
-        new Setting(el)
-            .addButton((b) => b.setButtonText($msg("tabularium.settings.changeVault")).onClick(() => server.openLogin()))
-            .addButton((b) =>
-                destructive(b.setButtonText($msg("tabularium.server.disconnect")))
-                    .onClick(async () => {
-                        const ok = await confirmAction(this.app, {
-                            title: $msg("tabularium.settings.disconnectTitle"),
-                            body: $msg("tabularium.server.disconnectHint"),
-                            action: $msg("tabularium.server.disconnect"),
-                        });
-                        if (!ok) return;
-                        await server.disconnect();
-                        this.redraw();
-                    })
-            );
+    private connection(): SettingDefinition[] {
+        const server = () => this.owner.tabularium!;
+        const connection = () => server().connection!;
+        const connected = () => this.connected;
+        return [
+            shownWhen(() => !connected(), {
+                name: $msg("tabularium.server.notConnected"),
+                render: (setting) =>
+                    void setting
+                        .setDesc($msg("tabularium.settings.notConnectedDesc"))
+                        .addButton((b) => b.setButtonText($msg("tabularium.server.openConnection")).setCta().onClick(() => server().open())),
+            }),
+            textRow($msg("tabularium.server.server"), () => connection().server, connected),
+            textRow($msg("tabularium.server.vault"), () => connection().vaultName, connected),
+            textRow(
+                $msg("tabularium.server.device"),
+                () =>
+                    $msg("tabularium.server.deviceExpiry", {
+                        device: connection().deviceName,
+                        date: new Date(connection().expiresAt).toLocaleString(),
+                    }),
+                connected
+            ),
+            shownWhen(connected, {
+                name: $msg("tabularium.settings.status"),
+                render: (setting) =>
+                    void setting.setDesc(this.status()).addButton((b) =>
+                        b.setButtonText($msg("tabularium.settings.syncNow")).onClick(async () => {
+                            b.setDisabled(true);
+                            await this.core.services.replication.replicateUserInitiated({
+                                trigger: "manual",
+                                progressPresentation: REPLICATION_PROGRESS_PRESENTATIONS.QUIET,
+                                interaction: USER_INITIATED_REPLICATION_AUTHORITY,
+                            });
+                            this.update();
+                        })
+                    ),
+            }),
+            // The remote lock that a rebuild leaves: explained, with the way out.
+            shownWhen(() => connected() && Boolean(this.core.replicator?.remoteLocked), {
+                name: $msg("tabularium.settings.locked"),
+                render: (setting) =>
+                    void setting
+                        .setDesc(
+                            $msg(
+                                this.core.replicator.remoteLockedAndDeviceNotAccepted
+                                    ? "tabularium.settings.lockedNotAccepted"
+                                    : "tabularium.settings.lockedAccepted"
+                            )
+                        )
+                        .addButton((b) => b.setButtonText($msg("tabularium.settings.fetch")).onClick(() => void this.fetchFromServer()))
+                        .addButton((b) => destructive(b.setButtonText($msg("tabularium.settings.unlock"))).onClick(() => void this.unlock())),
+            }),
+            shownWhen(connected, {
+                name: "",
+                searchable: false,
+                render: (setting) =>
+                    void setting
+                        .addButton((b) => b.setButtonText($msg("tabularium.settings.changeVault")).onClick(() => server().openLogin()))
+                        .addButton((b) =>
+                            destructive(b.setButtonText($msg("tabularium.server.disconnect"))).onClick(async () => {
+                                const ok = await confirmAction(this.app, {
+                                    title: $msg("tabularium.settings.disconnectTitle"),
+                                    body: $msg("tabularium.server.disconnectHint"),
+                                    action: $msg("tabularium.server.disconnect"),
+                                });
+                                if (!ok) return;
+                                await server().disconnect();
+                                this.update();
+                            })
+                        ),
+            }),
+        ];
     }
 
     private status() {
@@ -292,23 +320,6 @@ export class TabulariumSettingTab extends PluginSettingTab {
         return pending > 0 ? `${text} ${$msg("tabularium.settings.pending", { count: String(pending) })}` : text;
     }
 
-    /** The remote lock that a rebuild leaves: explained, with the way out. */
-    private lock(el: HTMLElement) {
-        const replicator = this.core.replicator;
-        if (!replicator?.remoteLocked) return;
-        const accepted = !replicator.remoteLockedAndDeviceNotAccepted;
-        new Setting(el)
-            .setName($msg("tabularium.settings.locked"))
-            .setDesc($msg(accepted ? "tabularium.settings.lockedAccepted" : "tabularium.settings.lockedNotAccepted"))
-            .addButton((b) =>
-                b.setButtonText($msg("tabularium.settings.fetch")).onClick(() => void this.fetchFromServer())
-            )
-            .addButton((b) =>
-                destructive(b.setButtonText($msg("tabularium.settings.unlock")))
-                    .onClick(() => void this.unlock())
-            );
-    }
-
     private async unlock() {
         const ok = await confirmAction(this.app, {
             title: $msg("tabularium.settings.unlockTitle"),
@@ -319,7 +330,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         });
         if (!ok) return;
         await this.core.services.replication.markUnlocked();
-        this.redraw();
+        this.update();
     }
 
     private async fetchFromServer() {
@@ -341,148 +352,169 @@ export class TabulariumSettingTab extends PluginSettingTab {
         this.core.services.appLifecycle.performRestart();
     }
 
-    private syncMode(el: HTMLElement) {
-        const settings = this.settings;
-        const mode: SyncMode = settings.liveSync ? "live" : settings.periodicReplication ? "periodic" : "events";
-        hint(new Setting(el).setName($msg("tabularium.settings.mode")), $msg("tabularium.settings.modeDesc")).addDropdown((d) =>
-            d
-                .addOption("live", $msg("tabularium.settings.modeLive"))
-                .addOption("periodic", $msg("tabularium.settings.modePeriodic"))
-                .addOption("events", $msg("tabularium.settings.modeEvents"))
-                .setValue(mode)
-                .onChange(async (next) => {
-                    await this.save({ liveSync: next === "live", periodicReplication: next === "periodic" });
-                    this.redraw();
-                })
-        );
-        if (mode === "periodic") this.row(el, "periodicReplicationInterval");
-        if (mode !== "live") for (const key of ["syncOnStart", "syncOnSave", "syncOnEditorSave", "syncOnFileOpen", "syncAfterMerge"] as const) this.row(el, key);
-        this.row(el, mode === "live" ? "batchSaveInLiveSync" : "batchSave");
-    }
-
-    private sync(el: HTMLElement) {
-        const pause = this.owner.livePause;
-        if (pause?.paused) {
+    private sync(): Section {
+        const paused = () => Boolean(this.owner.livePause?.paused);
+        const mode = (...modes: SyncMode[]) => () => !paused() && modes.includes(this.mode);
+        return [
             // While paused the triggers are off and recorded; editing them here would be overwritten on resume.
-            hint(new Setting(el).setName($msg("tabularium.settings.livePaused")), $msg("tabularium.settings.livePausedDesc")).addButton((b) =>
-                b.setButtonText($msg("tabularium.syncMenu.resume")).onClick(async () => {
-                    await pause.resume();
-                    this.redraw();
-                })
-            );
-        } else this.syncMode(el);
-        if (Platform.isDesktop) this.row(el, "keepReplicationActiveInBackground");
-        this.heading(el, "tabularium.settings.whatSyncs");
-        this.row(el, "syncMaxSizeInMB");
-        this.row(el, "syncIgnoreRegEx");
-        this.heading(el, "tabularium.settings.conflicts");
-        this.row(el, "resolveConflictsByNewerFile");
+            settingRow(
+                $msg("tabularium.settings.livePaused"),
+                $msg("tabularium.settings.livePausedDesc"),
+                (setting) =>
+                    setting.addButton((b) =>
+                        b.setButtonText($msg("tabularium.syncMenu.resume")).onClick(async () => {
+                            await this.owner.livePause!.resume();
+                            this.update();
+                        })
+                    ),
+                paused
+            ),
+            settingRow(
+                $msg("tabularium.settings.mode"),
+                $msg("tabularium.settings.modeDesc"),
+                (setting) =>
+                    setting.addDropdown((d) =>
+                        d
+                            .addOption("live", $msg("tabularium.settings.modeLive"))
+                            .addOption("periodic", $msg("tabularium.settings.modePeriodic"))
+                            .addOption("events", $msg("tabularium.settings.modeEvents"))
+                            .setValue(this.mode)
+                            .onChange(async (next) => {
+                                await this.save({ liveSync: next === "live", periodicReplication: next === "periodic" });
+                                this.update();
+                            })
+                    ),
+                () => !paused()
+            ),
+            this.stored("periodicReplicationInterval", mode("periodic")),
+            ...(["syncOnStart", "syncOnSave", "syncOnEditorSave", "syncOnFileOpen", "syncAfterMerge"] as const).map((key) =>
+                this.stored(key, mode("periodic", "events"))
+            ),
+            this.stored("batchSaveInLiveSync", mode("live")),
+            this.stored("batchSave", mode("periodic", "events")),
+            this.stored("keepReplicationActiveInBackground", () => Platform.isDesktop),
+            group("tabularium.settings.whatSyncs", [this.stored("syncMaxSizeInMB"), this.stored("syncIgnoreRegEx")]),
+            group("tabularium.settings.conflicts", [this.stored("resolveConflictsByNewerFile")]),
+        ];
     }
 
-    private sorting(el: HTMLElement) {
+    private sorting(): Section {
         const sorting = this.owner.sorting;
-        if (!sorting || sorting.steppedAside) {
-            new Setting(el).setDesc($msg("tabularium.sorting.standalone"));
-            return;
-        }
-        sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }), () => this.redraw());
+        const active = () => Boolean(sorting && !sorting.steppedAside);
+        const rows = sorting ? sorting.settingRows(() => this.update()).map((row) => ({ ...row, visible: active })) : [];
+        return [textRow("", () => $msg("tabularium.sorting.standalone"), () => !active()), ...rows];
     }
 
-    private kindle(el: HTMLElement) {
-        const kindle = this.owner.kindle!;
-        if (!this.owner.tabularium?.connection) {
-            new Setting(el).setDesc($msg("tabularium.settings.needsConnection"));
-            return;
-        }
-        void kindle.renderStatus(el);
+    private kindle(): Section {
+        const connected = () => this.connected;
+        return [
+            textRow("", () => $msg("tabularium.settings.needsConnection"), () => !connected()),
+            shownWhen(connected, {
+                name: $msg("tabularium.kindle.serverStatus"),
+                render: (setting) => void this.owner.kindle!.statusText().then((text) => setting.setDesc(text)),
+            }),
+            textRow("", () => $msg("tabularium.kindle.settingDesc"), connected),
+        ];
     }
 
-    private appearance(el: HTMLElement) {
-        const settings = this.settings;
-        new Setting(el).setName($msg("tabularium.settings.language")).addDropdown((d) => {
-            // Default follows Obsidian; Obsidian offers no Latin, so Latin is only chosen here.
-            d.addOption("", $t("lang-auto"));
-            for (const language of SUPPORTED_I18N_LANGS) d.addOption(language, $t(`lang-${language}`));
-            d.setValue(settings.displayLanguage).onChange((next) => void this.save({ displayLanguage: next as never }));
-        });
-        this.row(el, "showStatusOnStatusbar");
-        this.row(el, "showStatusOnEditor");
-        if (settings.showStatusOnEditor) this.row(el, "showOnlyIconsOnEditor");
-        new Setting(el).setName($msg("tabularium.settings.networkWarning")).addDropdown((d) =>
-            d
-                .addOption(NetworkWarningStyles.BANNER, $msg("tabularium.settings.networkBanner"))
-                .addOption(NetworkWarningStyles.ICON, $msg("tabularium.settings.networkIcon"))
-                .addOption(NetworkWarningStyles.HIDDEN, $msg("tabularium.settings.networkHidden"))
-                .setValue(settings.networkWarningStyle)
-                .onChange((next) => void this.save({ networkWarningStyle: next as never }))
-        );
-        this.row(el, "hideFileWarningNotice");
+    private appearance(): Section {
+        return [
+            settingRow($msg("tabularium.settings.language"), undefined, (setting) =>
+                setting.addDropdown((d) => {
+                    // Default follows Obsidian; Obsidian offers no Latin, so Latin is only chosen here.
+                    d.addOption("", $t("lang-auto"));
+                    for (const language of SUPPORTED_I18N_LANGS) d.addOption(language, $t(`lang-${language}`));
+                    d.setValue(this.settings.displayLanguage).onChange((next) => void this.save({ displayLanguage: next as never }));
+                })
+            ),
+            this.stored("showStatusOnStatusbar"),
+            this.stored("showStatusOnEditor"),
+            this.stored("showOnlyIconsOnEditor", () => this.settings.showStatusOnEditor),
+            settingRow($msg("tabularium.settings.networkWarning"), undefined, (setting) =>
+                setting.addDropdown((d) =>
+                    d
+                        .addOption(NetworkWarningStyles.BANNER, $msg("tabularium.settings.networkBanner"))
+                        .addOption(NetworkWarningStyles.ICON, $msg("tabularium.settings.networkIcon"))
+                        .addOption(NetworkWarningStyles.HIDDEN, $msg("tabularium.settings.networkHidden"))
+                        .setValue(this.settings.networkWarningStyle)
+                        .onChange((next) => void this.save({ networkWarningStyle: next as never }))
+                )
+            ),
+            this.stored("hideFileWarningNotice"),
+        ];
     }
 
-    private maintenance(el: HTMLElement) {
-        const connected = Boolean(this.owner.tabularium?.connection);
-        const action = (name: string, desc: string, button: string, run: () => unknown, warning = false) =>
-            hint(new Setting(el).setName($msg(name as never)), $msg(desc as never)).addButton((b) => {
-                b.setButtonText($msg(button as never)).onClick(() => void run());
-                if (warning) destructive(b);
-            });
-        this.heading(el, "tabularium.settings.recovery");
-        if (connected) {
-            action("tabularium.settings.fetch", "tabularium.settings.fetchDesc", "tabularium.settings.fetchAction", () => this.fetchFromServer());
-            action("tabularium.settings.overwrite", "tabularium.settings.overwriteDesc", "tabularium.settings.overwriteAction", () => this.overwriteServer(), true);
-            if (this.core.replicator?.remoteLocked)
-                action("tabularium.settings.unlock", "tabularium.settings.unlockDesc", "tabularium.settings.unlock", () => this.unlock(), true);
-        }
-        action("tabularium.settings.suspend", "tabularium.settings.suspendDesc", "tabularium.settings.suspendAction", async () => {
-            await this.core.storageAccess.writeFileAuto(FlagFiles.SUSPEND_ALL, "");
-            this.core.services.appLifecycle.performRestart();
-        });
-        action("tabularium.settings.resetLocal", "tabularium.settings.resetLocalDesc", "tabularium.settings.resetLocalAction", () => this.resetLocal(), true);
-        this.heading(el, "tabularium.settings.diagnosis");
-        action("tabularium.settings.log", "tabularium.settings.logDesc", "tabularium.settings.open", () => this.core.services.API.showWindow(VIEW_TYPE_LOG));
-        action("tabularium.settings.report", "tabularium.settings.reportDesc", "tabularium.settings.copy", () =>
-            this.app.commands.executeCommandById("tabularium:dump-debug-info")
-        );
-        action("tabularium.settings.doctor", "tabularium.settings.doctorDesc", "tabularium.settings.run", () =>
-            eventHub.emitEvent(EVENT_REQUEST_RUN_DOCTOR, "")
-        );
-        action("tabularium.settings.broken", "tabularium.settings.brokenDesc", "tabularium.settings.run", () =>
-            eventHub.emitEvent(EVENT_REQUEST_RUN_FIX_INCOMPLETE)
-        );
-        action("tabularium.settings.resolveAll", "tabularium.settings.resolveAllDesc", "tabularium.settings.run", async () => {
-            const ok = await confirmAction(this.app, {
-                title: $msg("tabularium.settings.resolveAll"),
-                body: $msg("tabularium.settings.resolveAllDesc"),
-                impact: $msg("tabularium.settings.resolveAllImpact"),
-                action: $msg("tabularium.settings.run"),
-            });
-            if (ok) await this.core.services.conflict.resolveAllConflictedFilesByNewerOnes();
-        });
-        const links = this.owner.linkRepair;
-        if (links) {
-            this.heading(el, "tabularium.settings.links");
-            action("tabularium.settings.checkLinks", "tabularium.settings.checkLinksDesc", "tabularium.settings.run", () => links.check());
-            hint(new Setting(el).setName($msg("tabularium.settings.autoLinks")), $msg("tabularium.settings.autoLinksDesc")).addToggle((toggle) =>
-                toggle.setValue(links.auto).onChange((on) => (links.auto = on))
-            );
-        }
-        const menus = this.owner.editorMenus;
-        if (menus) {
-            this.heading(el, "tabularium.settings.editor");
-            hint(new Setting(el).setName($msg("tabularium.settings.formatToolbar")), $msg("tabularium.settings.formatToolbarDesc")).addToggle((toggle) =>
-                toggle.setValue(menus.toolbar).onChange((on) => (menus.toolbar = on))
-            );
-        }
-        const advanced = el.createEl("details", { cls: "tabularium-advanced" });
-        // Saving a setting redraws the page: the fold stays as it was.
-        advanced.open = this.advancedOpen;
-        advanced.addEventListener("toggle", () => (this.advancedOpen = advanced.open));
-        advanced.createEl("summary", { text: $msg("tabularium.settings.advanced") });
-        advanced.createEl("p", { cls: "setting-item-description", text: $msg("tabularium.settings.advancedDesc") });
-        for (const group of ADVANCED) {
-            this.heading(advanced, group.heading);
-            for (const key of group.keys) this.row(advanced, key);
-        }
+    private maintenance(): Section {
+        const connected = () => this.connected;
+        const links = () => this.owner.linkRepair;
+        const menus = () => this.owner.editorMenus;
+        return [
+            group("tabularium.settings.recovery", [
+                this.action("tabularium.settings.fetch", "tabularium.settings.fetchDesc", "tabularium.settings.fetchAction", () => this.fetchFromServer(), {
+                    visible: connected,
+                }),
+                this.action("tabularium.settings.overwrite", "tabularium.settings.overwriteDesc", "tabularium.settings.overwriteAction", () => this.overwriteServer(), {
+                    warning: true,
+                    visible: connected,
+                }),
+                this.action("tabularium.settings.unlock", "tabularium.settings.unlockDesc", "tabularium.settings.unlock", () => this.unlock(), {
+                    warning: true,
+                    visible: () => connected() && Boolean(this.core.replicator?.remoteLocked),
+                }),
+                this.action("tabularium.settings.suspend", "tabularium.settings.suspendDesc", "tabularium.settings.suspendAction", async () => {
+                    await this.core.storageAccess.writeFileAuto(FlagFiles.SUSPEND_ALL, "");
+                    this.core.services.appLifecycle.performRestart();
+                }),
+                this.action("tabularium.settings.resetLocal", "tabularium.settings.resetLocalDesc", "tabularium.settings.resetLocalAction", () => this.resetLocal(), {
+                    warning: true,
+                }),
+            ]),
+            group("tabularium.settings.diagnosis", [
+                this.action("tabularium.settings.log", "tabularium.settings.logDesc", "tabularium.settings.open", () => this.core.services.API.showWindow(VIEW_TYPE_LOG)),
+                this.action("tabularium.settings.report", "tabularium.settings.reportDesc", "tabularium.settings.copy", () =>
+                    this.app.commands.executeCommandById("tabularium:dump-debug-info")
+                ),
+                this.action("tabularium.settings.doctor", "tabularium.settings.doctorDesc", "tabularium.settings.run", () =>
+                    eventHub.emitEvent(EVENT_REQUEST_RUN_DOCTOR, "")
+                ),
+                this.action("tabularium.settings.broken", "tabularium.settings.brokenDesc", "tabularium.settings.run", () =>
+                    eventHub.emitEvent(EVENT_REQUEST_RUN_FIX_INCOMPLETE)
+                ),
+                this.action("tabularium.settings.resolveAll", "tabularium.settings.resolveAllDesc", "tabularium.settings.run", async () => {
+                    const ok = await confirmAction(this.app, {
+                        title: $msg("tabularium.settings.resolveAll"),
+                        body: $msg("tabularium.settings.resolveAllDesc"),
+                        impact: $msg("tabularium.settings.resolveAllImpact"),
+                        action: $msg("tabularium.settings.run"),
+                    });
+                    if (ok) await this.core.services.conflict.resolveAllConflictedFilesByNewerOnes();
+                }),
+            ]),
+            group(
+                "tabularium.settings.links",
+                [
+                    this.action("tabularium.settings.checkLinks", "tabularium.settings.checkLinksDesc", "tabularium.settings.run", () => links()!.check()),
+                    settingRow($msg("tabularium.settings.autoLinks"), $msg("tabularium.settings.autoLinksDesc"), (setting) =>
+                        setting.addToggle((toggle) => toggle.setValue(links()!.auto).onChange((on) => (links()!.auto = on)))
+                    ),
+                ]
+            ),
+            group(
+                "tabularium.settings.editor",
+                [
+                    settingRow($msg("tabularium.settings.formatToolbar"), $msg("tabularium.settings.formatToolbarDesc"), (setting) =>
+                        setting.addToggle((toggle) => toggle.setValue(menus()!.toolbar).onChange((on) => (menus()!.toolbar = on)))
+                    ),
+                ]
+            ),
+            group(undefined, [
+                page(
+                    $msg("tabularium.settings.advanced"),
+                    ADVANCED.map(({ heading, keys }) => group(heading, keys.map((key) => this.stored(key)))),
+                    $msg("tabularium.settings.advancedDesc")
+                ),
+            ]),
+        ];
     }
 
     private async overwriteServer() {
@@ -512,23 +544,38 @@ export class TabulariumSettingTab extends PluginSettingTab {
             throw new Error($msg("Ui.Common.LocalDatabaseInitialisationFailed"));
     }
 
-    private help(el: HTMLElement) {
-        for (const topic of HELP_TOPICS) {
-            const details = el.createEl("details", { cls: "tabularium-help" });
-            details.createEl("summary", { text: $msg(`tabularium.help.${topic}.title` as never) });
-            for (const paragraph of $msg(`tabularium.help.${topic}.body` as never, { pluginDir: `${this.owner.manifest.dir ?? ""}/` }).split("\n\n"))
-                details.createEl("p", { text: paragraph });
-        }
-        this.heading(el, "tabularium.settings.changelog");
-        for (const version of RELEASES) {
-            const details = el.createEl("details", { cls: "tabularium-help" });
-            details.createEl("summary", { text: version });
-            for (const line of $msg(`tabularium.release.${version}` as never).split("\n"))
-                details.createEl("p", { text: line });
-        }
-        this.heading(el, "tabularium.settings.about");
-        new Setting(el)
-            .setName($msg("tabularium.settings.version", { version: this.owner.manifest.version }))
-            .setDesc($msg("tabularium.settings.aboutDesc"));
+    private help(): Section {
+        const paragraphs = (texts: string[], cls?: string) => (setting: Setting) => {
+            setting.settingEl.addClass("tabularium-help");
+            for (const text of texts) setting.descEl.createEl("p", { cls, text });
+        };
+        return [
+            group(
+                undefined,
+                HELP_TOPICS.map((topic) =>
+                    page($msg(`tabularium.help.${topic}.title` as never), [
+                        {
+                            name: "",
+                            searchable: false,
+                            render: paragraphs(
+                                $msg(`tabularium.help.${topic}.body` as never, { pluginDir: `${this.owner.manifest.dir ?? ""}/` }).split("\n\n")
+                            ),
+                        },
+                    ])
+                )
+            ),
+            group(undefined, [
+                page(
+                    $msg("tabularium.settings.changelog"),
+                    RELEASES.map((version) => ({
+                        name: version,
+                        render: paragraphs($msg(`tabularium.release.${version}` as never).split("\n"), "tabularium-help-line"),
+                    }))
+                ),
+            ]),
+            group("tabularium.settings.about", [
+                textRow($msg("tabularium.settings.version", { version: this.owner.manifest.version }), () => $msg("tabularium.settings.aboutDesc")),
+            ]),
+        ];
     }
 }

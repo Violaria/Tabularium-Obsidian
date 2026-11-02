@@ -1,6 +1,6 @@
-// File tree order for web notes: the lists in the vault's sortspec.md notes, with the plug-in's file order code, so the
+// File tree order for web notes: the lists in the vault's Collation.md notes, with the plug-in's file order code, so the
 // tree matches Obsidian's file list.
-import { arrange, defaultOrder, namesOf, orderFor, parseOrder, readOrders, RULES_FILE } from "@/common/fileOrder";
+import { arrange, defaultOrder, FORMER_RULES_FILE, isRulesNote, namesOf, orderFor, readOrders } from "@/common/fileOrder";
 
 export interface SortedNode {
     name: string;
@@ -14,11 +14,15 @@ const folderOf = (path: string) => (path.includes("/") ? path.slice(0, path.last
 const nameOf = (path: string) => path.slice(path.lastIndexOf("/") + 1);
 
 /** Notes that may hold sorting rules. */
-export const isSpecSource = (path: string) => path === RULES_FILE || path.endsWith(`/${RULES_FILE}`);
+export const isSpecSource = (path: string) => isRulesNote(path);
 
-/** The rules in the rules notes, and whether any of them still holds only front-matter rules (not read any more). */
-export function parseSpecs(sources: { path: string; text: string }[]): { rules: SortRules; unconverted: boolean } {
-    const unconverted = sources.some((source) => /^---\r?\n(?:[\s\S]*?\r?\n)?sorting-spec:/.test(source.text) && parseOrder(source.text).size === 0);
+/**
+ * The rules in the rules notes, and whether a folder still has only the former rules note (sortspec.md, no longer read),
+ * which the plug-in converts. `paths` are all the vault's files.
+ */
+export function parseSpecs(sources: { path: string; text: string }[], paths: string[]): { rules: SortRules; unconverted: boolean } {
+    const current = new Set(paths.filter((path) => isRulesNote(path)).map(folderOf));
+    const unconverted = paths.some((path) => isRulesNote(path, FORMER_RULES_FILE) && !current.has(folderOf(path)));
     return { rules: readOrders(sources), unconverted };
 }
 

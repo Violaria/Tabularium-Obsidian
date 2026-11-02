@@ -914,12 +914,12 @@ body.is-mobile .tabularium-compatibility-review-notice {
     height: var(--icon-s);
 }
 
-/* sortspec.md in reading view: a list item's note behind the same icon, opened after the name by a tap. */
-.tabularium-sortspec-note-text {
+/* Collation.md in reading view: a list item's note behind the same icon, opened after the name by a tap. */
+.tabularium-collation-note-text {
     display: none;
 }
 
-.tabularium-sortspec-note-text.is-open {
+.tabularium-collation-note-text.is-open {
     display: inline;
     margin-inline-start: var(--size-4-1);
     color: var(--text-muted);
@@ -930,51 +930,24 @@ body.is-mobile .tabularium-compatibility-review-notice {
     width: min(720px, 94vw);
 }
 
-/* Tabularium settings: a row of section buttons, then one section at a time. */
-.tabularium-settings-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-4-1);
-    padding-bottom: var(--size-4-3);
-    margin-bottom: var(--size-4-2);
-    border-bottom: 1px solid var(--background-modifier-border);
+/* Settings: rows hidden for now (as Obsidian hides them) leave no divider above the first row shown in a group. */
+.setting-group.tabularium-settings-group .setting-item:not(.setting-item-heading)::before {
+    content: none;
 }
 
-.tabularium-settings-nav button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--size-4-1);
-    background: transparent;
-    box-shadow: none;
-    color: var(--text-muted);
+.setting-group.tabularium-settings-group .setting-item:not([style*="display: none"]) ~ .setting-item:not(.setting-item-heading)::before {
+    content: "";
 }
 
-.tabularium-settings-nav button svg {
-    width: var(--icon-s);
-    height: var(--icon-s);
-}
-
-.tabularium-settings-nav button.is-active {
-    background: var(--interactive-accent);
-    color: var(--text-on-accent);
-}
-
-.tabularium-advanced,
-.tabularium-help {
-    margin-top: var(--size-4-3);
-}
-
-.tabularium-advanced > summary,
-.tabularium-help > summary {
-    cursor: pointer;
-    font-weight: var(--font-semibold);
-    padding: var(--size-4-2) 0;
-}
-
-.tabularium-help > p {
+/* Help topics and version history in the settings: paragraphs and lines in the normal text colour. */
+.tabularium-help .setting-item-description p {
     margin: 0 0 var(--size-4-2);
     color: var(--text-normal);
     line-height: var(--line-height-normal);
+}
+
+.tabularium-help .setting-item-description p.tabularium-help-line {
+    margin: 0 0 var(--size-4-1);
 }
 
 /* Confirmations: one light warning block for the effect on other devices, no bar. */

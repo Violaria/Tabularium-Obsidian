@@ -1,6 +1,6 @@
 {
     "name": "tabularium-obsidian",
-    "version": "0.26.2",
+    "version": "0.26.3",
     "description": "Reflect your vault changes to some other devices immediately. Please make sure to disable other synchronize solutions to avoid content corruption or duplication.",
     "main": "main.js",
     "type": "module",
@@ -14,7 +14,7 @@
         "pretest:notes": "npm run build:core",
         "test:notes": "vitest run --config src/apps/notes/vite.config.ts --dir src/apps/notes",
         "buildDev": "node esbuild.config.mjs dev",
-        "lint": "eslint --cache --cache-strategy content --concurrency off src",
+        "lint": "eslint --cache --cache-strategy content --concurrency off --max-warnings 0 src",
         "lint:community": "eslint --config eslint.community.config.mjs --concurrency off --max-warnings 0 src",
         "lint:community:tools": "eslint --config eslint.community.config.mjs --concurrency off --max-warnings 0 _tools",
         "svelte-check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
@@ -64,6 +64,7 @@
         "test:docker-all:down": "npm run test:docker-couchdb:down ; npm run test:docker-s3:down",
         "test:docker-all:start": "npm run test:docker-all:up && sleep 5 && npm run test:docker-all:init",
         "test:docker-all:stop": "npm run test:docker-all:down",
+        "test:tabularium:settings": "DISPLAY= WAYLAND_DISPLAY= E2E_OBSIDIAN_CLEANUP_STALE_PROCESSES=false tsx --tsconfig tsconfig.json ../../tests/interop/settings.ts",
         "test:tabularium:sorting": "DISPLAY= WAYLAND_DISPLAY= E2E_OBSIDIAN_CLEANUP_STALE_PROCESSES=false tsx --tsconfig tsconfig.json ../../tests/interop/custom-sorting.ts",
         "check:unreachable": "tsx _tools/findUnreachable.ts"
     },

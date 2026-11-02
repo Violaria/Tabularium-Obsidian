@@ -106,7 +106,7 @@ export class TabulariumShare {
         return sharing;
     }
 
-    /** The vault's files, with folders in the order the file explorer shows them (the vault's sortspec.md rules). */
+    /** The vault's files, with folders in the order the file explorer shows them (the vault's Collation.md rules). */
     private source(): ShareSource {
         const { vault } = this.plugin.app;
         const file = (path: string) => {
@@ -223,7 +223,7 @@ function confirm(app: Plugin["app"], title: string, body: string, action: string
                 this.contentEl.createEl("p", { text: body });
                 const buttons = this.contentEl.createDiv({ cls: "modal-button-container" });
                 buttons.createEl("button", { text: shareText("share.cancel") }).addEventListener("click", () => this.close());
-                buttons.createEl("button", { text: action, cls: "mod-warning" }).addEventListener("click", () => {
+                buttons.createEl("button", { text: action, cls: "mod-destructive" }).addEventListener("click", () => {
                     this.answered = true;
                     this.close();
                 });

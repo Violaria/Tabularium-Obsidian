@@ -229,7 +229,7 @@
                                             {translate("Cancel")}
                                         </button>
                                         <button
-                                            class="mod-warning"
+                                            class="mod-destructive"
                                             disabled={busy}
                                             onclick={() => void forgetDevice(device)}
                                         >

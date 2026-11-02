@@ -4258,6 +4258,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "In modo legendi, notae post « —— » in sortspec.md post quodque nomen in signum ⓘ conduntur: cursore superposito leguntur, tactu post nomen aperiuntur et iterum tactu clauduntur. Commentarii interretiales sortspec.md eodem modo ostendunt.",
         zh: "阅读模式下，sortspec.md 中「 —— 」后面的说明收进名称后的 ⓘ 图标：悬停显示，点一下在名称后展开，再点收起。云笔记中阅读 sortspec.md 也一样。",
     },
+    "tabularium.release.0.26.3": {
+        def: "Needs Obsidian 1.13 or later. The settings page is laid out like Obsidian's own: the connection first, then a page each for sync, file sorting, Send to Kindle, appearance, maintenance and help, and the search box of Obsidian's settings finds every setting. The sorting note is now Collation.md: a sortspec.md with no Collation.md beside it is no longer read, and Settings → File sorting renames it after a preview, converting rules in its front matter. Web notes, shares and Tabularius use Collation.md as well.",
+        la: "Obsidian 1.13 vel recentior requiritur. Pagina optionum more ipsius Obsidian disponitur: primum conexio, deinde singulae paginae synchronizationis, ordinis plicarum, missionis ad Kindle, speciei, curae et auxilii; capsa quaerendi optionum Obsidian quamque optionem invenit. Nota ordinis nunc Collation.md appellatur: sortspec.md sine Collation.md iuxta posito non iam legitur, et in Optionibus → Ordo plicarum post praevisionem renominatur, regulis in front matter conversis. Commentarii interretiales, communicationes et Tabularius quoque Collation.md adhibent.",
+        zh: "需要 Obsidian 1.13 或更新版本。设置页改用 Obsidian 自己的样式：最上面是连接，下面是同步、文件排序、发送到 Kindle、外观、维护、帮助各一页，Obsidian 设置的搜索框能找到每一项。排序笔记改名为 Collation.md：同一文件夹中没有 Collation.md 的 sortspec.md 不再读取，在「设置 → 文件排序」预览后改名，front matter 中的规则一并转换。云笔记、分享和 Tabularius 也改用 Collation.md。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
@@ -5084,9 +5089,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "按规则排序文件列表",
     },
     "tabularium.sorting.applyDesc": {
-        def: "Order notes and folders as the lists in sortspec.md say. Items not listed keep Obsidian's order.",
-        la: "Commentarios et capsas ordina ut indices in sortspec.md dicunt. Quae non enumerantur, ordinem Obsidian servant.",
-        zh: "按 sortspec.md 正文中的列表排列笔记和文件夹，没列出的保持 Obsidian 的排序。",
+        def: "Order notes and folders as the lists in Collation.md say. Items not listed keep Obsidian's order.",
+        la: "Commentarios et capsas ordina ut indices in Collation.md dicunt. Quae non enumerantur, ordinem Obsidian servant.",
+        zh: "按 Collation.md 正文中的列表排列笔记和文件夹，没列出的保持 Obsidian 的排序。",
     },
     "tabularium.sorting.commandOff": {
         def: "Pause file sorting",
@@ -5094,9 +5099,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "暂停文件排序",
     },
     "tabularium.sorting.commandOn": {
-        def: "Sort the file list by sortspec.md",
-        la: "Indicem plicarum ex sortspec.md ordina",
-        zh: "按 sortspec.md 排序文件列表",
+        def: "Sort the file list by Collation.md",
+        la: "Indicem plicarum ex Collation.md ordina",
+        zh: "按 Collation.md 排序文件列表",
     },
     "tabularium.sorting.convert": {
         def: "Convert the sorting rules",
@@ -5109,9 +5114,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "转换",
     },
     "tabularium.sorting.convertBody": {
-        def: "The rules in the front matter of ${path} become an indented list at the start of the note. The rest of the note stays below it, and sorting-spec is removed from the front matter. The list:",
-        la: "Regulae in front matter ${path} fiunt index gradatus initio commentarii. Reliquum commentarii infra manet, et sorting-spec e front matter removetur. Index:",
-        zh: "${path} front matter 中的规则会变成笔记开头的缩进列表，原有正文保留在列表之后，front matter 中的 sorting-spec 会删除。转换后的列表：",
+        def: "${path} is renamed to ${target}, and links to it follow. Rules in its front matter (sorting-spec) become an indented list at its start, with the rest of the note below. The list:",
+        la: "${path} in ${target} renominatur, et nexus ad eum sequuntur. Regulae in front matter (sorting-spec) fiunt index gradatus initio commentarii, reliquo infra manente. Index:",
+        zh: "${path} 将改名为 ${target}，指向它的链接随之更新。front matter 中的规则（sorting-spec）会变成笔记开头的缩进列表，原有正文保留在后面。转换后的列表：",
     },
     "tabularium.sorting.convertButton": {
         def: "Convert",
@@ -5119,14 +5124,14 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "转换",
     },
     "tabularium.sorting.convertDesc": {
-        def: "${path} still holds the former front-matter rules (sorting-spec), which are no longer read. Until they are converted, the file list keeps Obsidian's order.",
-        la: "${path} adhuc regulas veteres in front matter continet (sorting-spec), quae iam non leguntur. Donec convertuntur, index plicarum ordinem Obsidian servat.",
-        zh: "${path} 仍是旧的 front matter 规则（sorting-spec），现在不再读取；转换之前，文件列表按 Obsidian 的排序显示。",
+        def: "${path} is the former sorting note and is no longer read: the rules are now kept in Collation.md, as a list. Until it is converted, the file list keeps Obsidian's order.",
+        la: "${path} commentarius ordinandi vetus est et iam non legitur: regulae nunc in Collation.md ut index servantur. Donec convertitur, index plicarum ordinem Obsidian servat.",
+        zh: "${path} 是旧的排序笔记，现在不再读取：排序规则改为以列表写在 Collation.md 中。转换之前，文件列表按 Obsidian 的排序显示。",
     },
     "tabularium.sorting.converted": {
-        def: "The sorting rules in ${path} are now a list.",
-        la: "Regulae ordinandi in ${path} nunc index sunt.",
-        zh: "${path} 的排序规则已转换为列表。",
+        def: "The sorting rules are now in ${path}.",
+        la: "Regulae ordinandi nunc in ${path} sunt.",
+        zh: "排序规则现在在 ${path} 中。",
     },
     "tabularium.sorting.convertMoved": {
         def: "These folders were not listed in their parent folder's rules; they now come after the items not listed: ${folders}",
@@ -5134,9 +5139,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "这些文件夹原来没有列在上级文件夹的规则里，转换后排在未列出的项目之后：${folders}",
     },
     "tabularium.sorting.convertTitle": {
-        def: "Convert the sorting rules to a list",
-        la: "Regulas ordinandi in indicem converte",
-        zh: "把排序规则转换为列表",
+        def: "Convert the sorting rules",
+        la: "Regulas ordinandi converte",
+        zh: "转换排序规则",
     },
     "tabularium.sorting.convertUnsupported": {
         def: "These rules cannot be written as a list and are dropped:\n${lines}",

@@ -231,7 +231,7 @@
         </section>
 
         <div class="buttons">
-            {#if share}<button class="danger mod-warning" onclick={revoke} disabled={busy}>{t("share.revoke")}</button>{/if}
+            {#if share}<button class="danger mod-destructive" onclick={revoke} disabled={busy}>{t("share.revoke")}</button>{/if}
             <span class="spacer"></span>
             <button onclick={close} disabled={busy}>{share ? t("share.close") : t("share.cancel")}</button>
             <button class="primary mod-cta" onclick={save} disabled={busy || loading || (expiry === "custom" && !until)}>

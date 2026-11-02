@@ -5,7 +5,7 @@ import { arch } from "node:process";
 import { basename, join, resolve } from "node:path";
 import { spawn } from "node:child_process";
 
-const defaultVersion = "1.12.7";
+const defaultVersion = "1.14.5";
 
 function appImageArch(): string {
     const requestedArch = process.env.E2E_OBSIDIAN_APPIMAGE_ARCH?.trim();

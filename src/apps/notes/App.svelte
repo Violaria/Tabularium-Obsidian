@@ -103,7 +103,7 @@
     }
     /** The replica's state for the symbol beside the vault name: in sync, working, or offline. */
     const syncKind = $derived(offline ? "off" : phase === "open" ? "ok" : "busy");
-    // File tree order from the vault's sortspec.md rules; rule texts are read again only when their revision changes.
+    // File tree order from the vault's Collation.md rules; rule texts are read again only when their revision changes.
     let sortRules = $state.raw<SortRules>([]);
     let sortError = $state("");
     const ruleTexts = new Map<string, { rev: string; text: string }>();
@@ -846,7 +846,7 @@
             sources.push({ path: file.path, text: cached.text });
         }
         if (active !== runtime) return;
-        const parsed = parseSpecs(sources);
+        const parsed = parseSpecs(sources, list.map((f) => f.path));
         sortRules = parsed.rules;
         sortError = parsed.unconverted ? t("notes.sortConvert") : "";
     }

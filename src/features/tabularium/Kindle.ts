@@ -162,23 +162,15 @@ export class TabulariumKindle {
     }
 
     /** The server's mail setting and this account's Kindle address with today's remaining sends. */
-    async renderStatus(el: HTMLElement) {
+    async statusText() {
         const status = await this.status().catch((error: Error) => error);
-        new Setting(el)
-            .setName($msg("tabularium.kindle.serverStatus"))
-            .setDesc(
-                status instanceof Error
-                    ? status.message
-                    : !status.configured
-                      ? serverError("Mail delivery is not configured")
-                      : status.address
-                        ? $msg("tabularium.kindle.sendingTo", {
-                              address: status.address,
-                              remaining: String(status.remaining),
-                          })
-                        : serverError("Kindle address not set")
-            );
-        new Setting(el).setDesc($msg("tabularium.kindle.settingDesc"));
+        return status instanceof Error
+            ? status.message
+            : !status.configured
+              ? serverError("Mail delivery is not configured")
+              : status.address
+                ? $msg("tabularium.kindle.sendingTo", { address: status.address, remaining: String(status.remaining) })
+                : serverError("Kindle address not set");
     }
 }
 
@@ -191,7 +183,8 @@ class KindleModal extends Modal {
     }
     override async onOpen() {
         this.contentEl.empty();
-        await this.kindle.renderStatus(this.contentEl);
+        new Setting(this.contentEl).setName($msg("tabularium.kindle.serverStatus")).setDesc(await this.kindle.statusText());
+        new Setting(this.contentEl).setDesc($msg("tabularium.kindle.settingDesc"));
     }
     override onClose() {
         this.contentEl.empty();

@@ -39,7 +39,7 @@ import { useDatabaseDiagnosticsFeature } from "./serviceFeatures/useDatabaseDiag
 import { installTabulariumServer, type TabulariumServer } from "./features/tabularium/ServerLogin.ts";
 import { installKindle, type TabulariumKindle } from "./features/tabularium/Kindle.ts";
 import { installFileSorting, type TabulariumSorting } from "./features/tabularium/FileSorting.ts";
-import { installSortspecNotes } from "./features/tabularium/SortspecNotes.ts";
+import { installCollationNotes } from "./features/tabularium/CollationNotes.ts";
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
 import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
 import { installLiveSyncPause, type LiveSyncPause } from "./features/tabularium/LiveSyncPause.ts";
@@ -222,7 +222,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
         // Before the sorting component, so "Sync" comes right above its submenu in the file menu.
         installSyncMenu(this, this.core, () => !!this.tabularium?.connection, () => this.livePause);
         this.sorting = installFileSorting(this, this.core);
-        installSortspecNotes(this);
+        installCollationNotes(this);
         void this._startUp();
     }
     override onunload(): void {

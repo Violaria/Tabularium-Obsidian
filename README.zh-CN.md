@@ -6,7 +6,7 @@
 
 ## 使用条件与网络访问
 
-你需要一个 Tabularium 服务器；没有服务器与账户，插件什么也不做。所有网络请求都发往你填写的服务器地址：登录、签发和续期本设备的凭据、同步、发送到 Kindle 和分享。插件不发送任何遥测数据，帮助页面随插件打包。
+插件需要 Obsidian 1.13 或更新版本，以及一个 Tabularium 服务器；没有服务器与账户，插件什么也不做。所有网络请求都发往你填写的服务器地址：登录、签发和续期本设备的凭据、同步、发送到 Kindle 和分享。插件不发送任何遥测数据，帮助页面随插件打包。
 
 笔记在离开设备前，用笔记库的密码短语在设备上加密（E2EE V2，带路径混淆）。密码短语只保存在设备上，服务器会拒绝未加密的文档。只有两个功能会发送可读内容，而且只在你使用时发送：发送到 Kindle 经服务器发出一个 EPUB；分享的笔记会发布在一个链接上，任何拿到链接的人都能打开。
 
@@ -18,7 +18,7 @@
   - 连接时始终开启加密和路径混淆。
   - 只经 Tabularium 服务器同步：不同步隐藏文件和插件、主题设置，也不能手动配置 CouchDB、对象存储或 P2P。
 - 设置页中的维护功能：从服务器取回全部内容、用本设备覆盖服务器（需笔记库所有者先在网页上允许）、解除锁定、诊断。
-- 用 `sortspec.md` 文件自定义文件列表的排序。
+- 在 `Collation.md` 笔记中用缩进列表自定义文件列表的排序。
 - 把一篇笔记、一个文件夹或一段选中内容发送到服务器上配置的 Kindle 地址。
 - 把笔记或文件夹分享为网页；分享的文件改动后，网页随之更新。
 - 选中文字时出现格式工具条；还有查找并修复失效内部链接的工具。
@@ -33,14 +33,16 @@
 
 ## 构建
 
-本仓库是 [Tabularium](https://github.com/Violaria/Tabularium) 的子模块，依赖父仓库中的排序包。用 `--recurse-submodules` 克隆父仓库，然后使用 Node.js 24.10.0：
+使用 Node.js 24.10.0，在本仓库中：
 
 ```bash
-npm run bootstrap
-npm run build --prefix apps/obsidian      # main.js
-npm run check --prefix apps/obsidian      # 类型检查、lint、Svelte 检查
-npm run test:unit --prefix apps/obsidian
+npm ci
+npm run build       # main.js
+npm run check       # 类型检查、lint、Svelte 检查
+npm run test:unit
 ```
+
+本仓库也是 [Tabularium](https://github.com/Violaria/Tabularium) 的子模块，服务器和用真实 Obsidian 客户端的测试在那里。
 
 同一份源码还会生成 Tabularium 服务器使用的云笔记（`src/apps/notes/`）和命令行客户端（`src/apps/cli/`）。
 

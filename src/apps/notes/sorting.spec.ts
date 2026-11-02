@@ -9,32 +9,35 @@ const names = (node: { children: { name: string }[] }) => node.children.map((chi
 
 describe("web notes sorting", () => {
     it("reads the rules notes", () => {
-        expect(isSpecSource("sortspec.md")).toBe(true);
-        expect(isSpecSource("a/b/sortspec.md")).toBe(true);
+        expect(isSpecSource("Collation.md")).toBe(true);
+        expect(isSpecSource("a/b/Collation.md")).toBe(true);
+        expect(isSpecSource("sortspec.md")).toBe(false);
         expect(isSpecSource("Zeta/Zeta.md")).toBe(false);
         expect(isSpecSource("Tabularius.md")).toBe(false);
     });
 
     it("orders as the list says, the rest by name with folders first, as in Obsidian", () => {
-        const parsed = parseSpecs([{ path: "sortspec.md", text: "规则\n\n- Zeta —— 先放\n  - two\n  - ...\n  - one\n- Alpha\n- sortspec\n" }]);
+        const parsed = parseSpecs([{ path: "Collation.md", text: "规则\n\n- Zeta —— 先放\n  - two\n  - ...\n  - one\n- Alpha\n- Collation\n" }], []);
         expect(parsed.unconverted).toBe(false);
-        const files = ["Alpha/a.md", "Beta.md", "Zeta/one.md", "Zeta/two.md", "Zeta/three.md", "sortspec.md", "Gamma/g.md"].map(file);
+        const files = ["Alpha/a.md", "Beta.md", "Zeta/one.md", "Zeta/two.md", "Zeta/three.md", "Collation.md", "Gamma/g.md"].map(file);
         const tree = sortedTree(files, "Vault", parsed.rules);
         expect(tree.name).toBe("Vault");
-        expect(names(tree)).toEqual(["Zeta", "Alpha", "sortspec.md", "Gamma", "Beta.md"]);
+        expect(names(tree)).toEqual(["Zeta", "Alpha", "Collation.md", "Gamma", "Beta.md"]);
         expect(names(tree.children[0])).toEqual(["two.md", "three.md", "one.md"]);
     });
 
     it("sorts by name without rules, and says when the rules are still in front matter", () => {
         const files = ["b.md", "A/x.md", "c.md", "a10.md", "a9.md"].map(file);
         expect(names(sortedTree(files, ""))).toEqual(["A", "a9.md", "a10.md", "b.md", "c.md"]);
-        const former = parseSpecs([{ path: "sortspec.md", text: "---\nsorting-spec: |-\n  target-folder: /\n  c\n---\n" }]);
+        // The former note is not read, and the page asks to convert it until the folder has a Collation.md.
+        const former = parseSpecs([], ["sortspec.md", "b.md"]);
         expect(former.unconverted).toBe(true);
+        expect(parseSpecs([], ["sortspec.md", "Collation.md"]).unconverted).toBe(false);
         expect(names(sortedTree(files, "", former.rules))).toEqual(["A", "a9.md", "a10.md", "b.md", "c.md"]);
     });
 });
 
-describe("notes in sortspec.md when reading", () => {
+describe("notes in Collation.md when reading", () => {
     it("puts a list item's note behind an icon, and leaves other notes as written", () => {
         const tip = (text: string) => `<span class="tip" data-tip="${text}"></span>`;
         const render = (fold: boolean) => {

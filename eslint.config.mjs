@@ -123,9 +123,10 @@ export default defineConfig([
     {
         files: ["src/apps/browser/**/*.{ts,svelte}", "src/apps/webapp/**/*.ts", "src/apps/notes/**/*.{ts,svelte}"],
         rules: {
-            // Browser applications use the DOM rather than Obsidian's DOM extensions.
+            // Browser applications use the DOM rather than Obsidian's DOM extensions, and have no popout windows.
             "obsidianmd/prefer-create-el": "off",
             "obsidianmd/prefer-active-doc": "off",
+            "obsidianmd/prefer-window-timers": "off",
         },
     },
     {

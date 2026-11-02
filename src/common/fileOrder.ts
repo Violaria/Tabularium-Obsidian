@@ -1,4 +1,4 @@
-// File order from sortspec.md: the body holds a Markdown list, one item per file or folder, nesting for folders.
+// File order from Collation.md: the body holds a Markdown list, one item per file or folder, nesting for folders.
 //
 //     - 网络工程
 //       - 路由服务器 —— notes after the separator are for the reader
@@ -15,7 +15,12 @@ export const NOTE_SEPARATOR = " —— ";
 /** Stands for the items not listed. */
 export const REST = "...";
 /** The rules note in a folder; the one at the vault root covers the whole vault. */
-export const RULES_FILE = "sortspec.md";
+export const RULES_FILE = "Collation.md";
+/** The name it had before 0.26.3, Custom File Explorer sorting's: no longer read, only offered for conversion. */
+export const FORMER_RULES_FILE = "sortspec.md";
+
+/** Whether `path` is a rules note (`name` the current or the former name). */
+export const isRulesNote = (path: string, name = RULES_FILE) => path === name || path.endsWith(`/${name}`);
 
 /** The order of one folder: names, with `REST` at most once. */
 export type FolderOrder = string[];
@@ -82,7 +87,7 @@ export function orderFor(sources: { folder: string; order: FileOrder }[], folder
 /** Parses the rules notes among `files` (path and text); the result answers `orderFor`. */
 export function readOrders(files: { path: string; text: string }[]) {
     return files
-        .filter((file) => file.path === RULES_FILE || file.path.endsWith(`/${RULES_FILE}`))
+        .filter((file) => isRulesNote(file.path))
         .map((file) => ({ folder: folderOf(file.path), order: parseOrder(file.text, folderOf(file.path)) }));
 }
 
