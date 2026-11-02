@@ -33,7 +33,7 @@ export async function removeOldNames(core: LiveSyncCore, storage: Storage, from:
         formerStorageKeys.autoLinkRepair(vaultName),
     ])
         storage.removeItem(key);
-    for (const flag of UpstreamFlagFiles) if (await core.storageAccess.isExists(flag)) await core.storageAccess.delete(flag, true);
+    for (const flag of UpstreamFlagFiles) if (await core.serviceModules.storageAccess.isExists(flag)) await core.serviceModules.storageAccess.delete(flag, true);
 }
 
 /**
@@ -110,8 +110,8 @@ export function installNamespaceMigration(
         }
         // The answer is remembered for a short while only, so it is given again on every attempt.
         await rememberFetchChoice(core, "newer-keep");
-        if (!(await core.storageAccess.isExists(FlagFiles.FETCH_ALL)))
-            await core.storageAccess.writeFileAuto(FlagFiles.FETCH_ALL, "");
+        if (!(await core.serviceModules.storageAccess.isExists(FlagFiles.FETCH_ALL)))
+            await core.serviceModules.storageAccess.writeFileAuto(FlagFiles.FETCH_ALL, "");
         new Notice($msg("tabularium.migration.fetching"));
         return true;
     }, 8);
@@ -126,7 +126,7 @@ export function installNamespaceMigration(
     // After the fetch (10) and a rebuild (20), before the compatibility review (30).
     core.services.appLifecycle.onLayoutReady.addHandler(async () => {
         const migration = await pending();
-        if (!migration || (await core.storageAccess.isExists(FlagFiles.FETCH_ALL))) return true;
+        if (!migration || (await core.serviceModules.storageAccess.isExists(FlagFiles.FETCH_ALL))) return true;
         const upstream = normalizePath(`${plugin.app.vault.configDir}/plugins/${UPSTREAM_PLUGIN_ID}`);
         if (!(await plugin.app.vault.adapter.exists(upstream))) await removeOldNames(core, storage, migration.from);
         await core.services.setting.config.delete(NAMESPACE_MIGRATION_KEY);

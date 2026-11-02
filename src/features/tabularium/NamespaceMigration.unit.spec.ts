@@ -174,10 +174,12 @@ function startingDevice(options: { upstreamInstalled?: boolean; online?: boolean
                 createPouchDBInstance: (name: string) => ({ destroy: () => Promise.resolve(void destroyed.push(name)) }),
             },
         },
-        storageAccess: {
-            isExists: (path: string) => Promise.resolve(files.has(path)),
-            writeFileAuto: (path: string) => Promise.resolve(!!files.add(path)),
-            delete: (path: string) => Promise.resolve(void files.delete(path)),
+        serviceModules: {
+            storageAccess: {
+                isExists: (path: string) => Promise.resolve(files.has(path)),
+                writeFileAuto: (path: string) => Promise.resolve(!!files.add(path)),
+                delete: (path: string) => Promise.resolve(void files.delete(path)),
+            },
         },
     };
     const plugin = {

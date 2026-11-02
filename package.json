@@ -143,15 +143,18 @@
         "diff-match-patch": "^1.0.5",
         "highlight.js": "11.11.1",
         "idb": "^8.0.3",
-        "katex": "0.16.47",
+        "katex": "0.19.1",
         "markdown-it": "^14.3.3",
         "mermaid": "11.17.2",
-        "minimatch": "^10.2.5",
+        "minimatch": "^11.0.4",
         "obsidian": "^1.13.1",
         "octagonal-wheels": "^0.1.55",
         "xxhash-wasm-102": "npm:xxhash-wasm@^1.0.2"
     },
     "overrides": {
+        "mermaid": {
+            "katex": "$katex"
+        },
         "obsidian": {
             "moment": "2.31.0"
         },

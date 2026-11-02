@@ -238,7 +238,7 @@ export class TabulariumServer {
             }
         };
         if (initialise === "fetch")
-            return await applySettingsWithScheduledInitialisation(this.core.rebuilder, "fetch", write);
+            return await applySettingsWithScheduledInitialisation(this.core.serviceModules.rebuilder, "fetch", write);
         await write();
         this.core.services.appLifecycle.performRestart();
         return true;

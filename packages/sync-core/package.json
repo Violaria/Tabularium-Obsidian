@@ -789,7 +789,7 @@
         "diff-match-patch": "^1.0.5",
         "events": "^3.3.0",
         "fflate": "^0.8.2",
-        "minimatch": "^10.2.6",
+        "minimatch": "^11.0.4",
         "octagonal-wheels": "^0.1.55",
         "pouchdb-adapter-http": "^9.0.0",
         "pouchdb-adapter-idb": "^9.0.0",

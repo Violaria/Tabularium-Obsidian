@@ -30,6 +30,7 @@ import {
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
 import type ObsidianLiveSyncPlugin from "@/main";
+import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
 import { confirmAction } from "./Confirm";
 import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";
 import { REBUILD_CONFIRMED_KEY } from "@/serviceFeatures/redFlag";
@@ -138,6 +139,11 @@ export class TabulariumSettingTab extends PluginSettingTab {
     }
     private get settings() {
         return this.core.services.setting.currentSettings();
+    }
+    /** The remote lock that a rebuild leaves, as the active replicator saw it on its last connection. */
+    private get remoteLock() {
+        const replicator = this.core.services.replicator.getActiveReplicator() as Partial<LiveSyncAbstractReplicator> | undefined;
+        return { locked: Boolean(replicator?.remoteLocked), accepted: !replicator?.remoteLockedAndDeviceNotAccepted };
     }
     private get connected() {
         return Boolean(this.owner.tabularium?.connection);
@@ -266,13 +272,13 @@ export class TabulariumSettingTab extends PluginSettingTab {
                     ),
             }),
             // The remote lock that a rebuild leaves: explained, with the way out.
-            shownWhen(() => connected() && Boolean(this.core.replicator?.remoteLocked), {
+            shownWhen(() => connected() && Boolean(this.remoteLock.locked), {
                 name: $msg("tabularium.settings.locked"),
                 render: (setting) =>
                     void setting
                         .setDesc(
                             $msg(
-                                this.core.replicator.remoteLockedAndDeviceNotAccepted
+                                !this.remoteLock.accepted
                                     ? "tabularium.settings.lockedNotAccepted"
                                     : "tabularium.settings.lockedAccepted"
                             )
@@ -348,7 +354,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         if (typeof choice !== "string") return;
         // The scheduled fetch after the restart takes this answer instead of asking again.
         await rememberFetchChoice(this.core, choice);
-        await this.core.storageAccess.writeFileAuto(FlagFiles.FETCH_ALL, "");
+        await this.core.serviceModules.storageAccess.writeFileAuto(FlagFiles.FETCH_ALL, "");
         this.core.services.appLifecycle.performRestart();
     }
 
@@ -459,10 +465,10 @@ export class TabulariumSettingTab extends PluginSettingTab {
                 }),
                 this.action("tabularium.settings.unlock", "tabularium.settings.unlockDesc", "tabularium.settings.unlock", () => this.unlock(), {
                     warning: true,
-                    visible: () => connected() && Boolean(this.core.replicator?.remoteLocked),
+                    visible: () => connected() && Boolean(this.remoteLock.locked),
                 }),
                 this.action("tabularium.settings.suspend", "tabularium.settings.suspendDesc", "tabularium.settings.suspendAction", async () => {
-                    await this.core.storageAccess.writeFileAuto(FlagFiles.SUSPEND_ALL, "");
+                    await this.core.serviceModules.storageAccess.writeFileAuto(FlagFiles.SUSPEND_ALL, "");
                     this.core.services.appLifecycle.performRestart();
                 }),
                 this.action("tabularium.settings.resetLocal", "tabularium.settings.resetLocalDesc", "tabularium.settings.resetLocalAction", () => this.resetLocal(), {
@@ -526,7 +532,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
             typeToConfirm: this.owner.tabularium!.connection!.vaultName,
         });
         if (!ok) return;
-        await this.core.storageAccess.writeFileAuto(FlagFiles.REBUILD_ALL, "");
+        await this.core.serviceModules.storageAccess.writeFileAuto(FlagFiles.REBUILD_ALL, "");
         // Confirmed here: the scheduled rebuild after the restart does not ask again.
         await this.core.services.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now()));
         this.core.services.appLifecycle.performRestart();
