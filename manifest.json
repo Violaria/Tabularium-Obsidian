@@ -1,7 +1,7 @@
 {
     "id": "tabularium",
     "name": "Tabularium",
-    "version": "0.26.6",
+    "version": "1.0.0",
     "minAppVersion": "1.13.0",
     "description": "Encrypted note synchronisation with a self-hosted Tabularium server, with file sorting, sharing and Send to Kindle.",
     "author": "Hanae Nanako",

@@ -4293,6 +4293,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Tabularius, scriba artificialis, de tabulario respondet et mutationes proponit (0.5 ad 0.11).",
         zh: "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
     },
+    "tabularium.release.1.0.0": {
+        def: "First public release. Code, interface and device data no longer use the original plug-in's name; the first start moves this device's data locally, without fetching or signing in again.",
+        la: "Prima editio publica. Codex, interfacies et data instrumenti nomen additamenti pristini non iam adhibent; primo initio data huius instrumenti loco moventur, sine nova arcessione aut inscriptione.",
+        zh: "首个正式公开版本。代码、界面与设备数据不再使用原插件的名字；首次启动时在本机迁移数据，无需重新取回或登录。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
