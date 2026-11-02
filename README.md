@@ -20,7 +20,6 @@ Notes are encrypted on the device with the vault's passphrase (E2EE V2, with pat
 - Share a note or folder as a web page; the page updates when the shared files change.
 - A formatting toolbar on text selection, and a tool to find and repair broken internal links.
 - Interface in English, Chinese and Latin.
-- Can be enabled in the same vault as Self-hosted LiveSync and Custom File Explorer sorting: their local data stay apart, and while Custom File Explorer sorting is enabled it does the sorting.
 
 ## Installation
 

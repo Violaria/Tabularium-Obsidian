@@ -1,11 +1,8 @@
 # Notices
 
-Tabularium for Obsidian is licensed under the MIT License (see `LICENSE`). It contains code from the projects below, which
-are also under the MIT License. Their copyright and permission notices are kept here, as their licences require.
-
-## Self-hosted LiveSync
-
-The plug-in started from Self-hosted LiveSync 1.0.40 (commit `935511c6`), https://github.com/vrtmrz/obsidian-livesync.
+Tabularium for Obsidian is licensed under the MIT License (see `LICENSE`). Parts of the plug-in and of its sync core
+(`packages/sync-core`) derive from code by vorotamoroz, released under the MIT License. Its copyright and permission
+notices are kept here, as that licence requires.
 
 ```
 MIT License
@@ -30,11 +27,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-## Self-hosted LiveSync Commonlib
-
-The sync core in `packages/sync-core` is derived from Commonlib 0.2.1 (commit `3ecb95b`),
-https://github.com/vrtmrz/livesync-commonlib; `packages/sync-core/UPSTREAM.md` records the changes.
 
 ```
 MIT License

@@ -20,7 +20,7 @@ function rewriteObsidian(markdown: string) {
     return outsideCode(markdown, (part) =>
         part
             .replace(/%%[\s\S]*?%%/g, "")
-            .replace(/!\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias = "") =>
+            .replace(/!\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias: string = "") =>
                 `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`)
             .replace(/\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (_, target: string, alias?: string) =>
                 `[${(alias ?? target).replace(/[[\]]/g, "")}](note:${encodeURIComponent(target.trim())})`)

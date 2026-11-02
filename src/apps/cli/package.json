@@ -1,5 +1,5 @@
 {
-    "name": "self-hosted-livesync-cli",
+    "name": "tabularium-cli",
     "private": true,
     "version": "1.0.40-cli",
     "main": "dist/index.cjs",

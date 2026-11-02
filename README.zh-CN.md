@@ -23,7 +23,6 @@
 - 把笔记或文件夹分享为网页；分享的文件改动后，网页随之更新。
 - 选中文字时出现格式工具条；还有查找并修复失效内部链接的工具。
 - 界面支持英文、中文和拉丁语。
-- 可以与 Self-hosted LiveSync、Custom File Explorer sorting 在同一个笔记库中同时启用：各自的本地数据互不干扰，Custom File Explorer sorting 启用时由它排序。
 
 ## 安装
 

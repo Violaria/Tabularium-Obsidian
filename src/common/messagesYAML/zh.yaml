@@ -267,7 +267,7 @@ moduleCheckRemoteSize:
     > [!MORE]-
     > 如果您已经使用了很多年,数据库中可能会积累未引用的 chunks——也就是垃圾。因此,我们建议重建所有内容。它可能会变得小得多。
     >
-    > 如果您的库容量只是在增加,最好在整理文件后重建所有内容。即使您为了加速过程删除了文件,Tabularium 也不会删除实际数据。这大致[有文档记录](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md)。
+    > 如果您的库容量只是在增加,最好在整理文件后重建所有内容。即使您为了加速过程删除了文件,Tabularium 也不会删除实际数据。这大致有文档记录。
     >
     > 如果您不介意增加,可以将通知限制增加 100MB。如果您在自己的服务器上运行,就是这种情况。但是,最好还是不时地重建所有内容。
     >
@@ -865,7 +865,7 @@ tabularium:
     changelog: "版本历史"
     about: "关于"
     version: "Tabularium ${version}"
-    aboutDesc: "自托管 Tabularium 服务器的插件，基于 vorotamoroz 的「self-hosted-livesync」（MIT 许可）。"
+    aboutDesc: "自托管 Tabularium 服务器的插件。部分代码派生自 vorotamoroz 的 MIT 许可代码，版权与许可声明见插件目录中的 NOTICE.md。"
   help:
     connect:
       title: "连接与更换笔记库"
@@ -890,7 +890,7 @@ tabularium:
         密码短语无法找回。丢失后服务器上的笔记无法解密；仍有文件的设备可以用这些文件新建笔记库。"
     migrate:
       title: "从旧插件迁移"
-      body: "Tabularium 可以与插件「self-hosted-livesync」在同一个库中同时运行：两者各自同步到自己的服务器，互不使用对方的本地数据库、设置和标记文件。要把笔记迁到 Tabularium，连接 Tabularium 服务器上已经存有这些笔记的笔记库，这台设备会从服务器获取；之后可以关闭旧插件，也可以保留它同步到别的服务器。\n\n旧插件同时同步隐藏文件时，在它的设置中排除 .obsidian/plugins/tabularium/：那里存着这台设备的凭据。"
+      body: "Tabularium 可以与其他同步插件在同一个库中同时运行：各自同步到自己的服务器，互不使用对方的本地数据库、设置和标记文件。要把笔记迁到 Tabularium，连接 Tabularium 服务器上已经存有这些笔记的笔记库，这台设备会从服务器获取；之后可以关闭旧插件，也可以保留它。\n\n其他插件也同步插件目录时，在它的设置中排除 ${pluginDir}：那里存着这台设备的凭据。"
     rebuild:
       title: "重建与解除锁定"
       body: "重建用一台设备的文件替换服务器上的笔记库，例如清理旧数据。所有者先在网页（账户设置 → 笔记库与设备 → 重建笔记库）授权设备，再在那台设备的「维护」中执行「用这台设备覆盖服务器」。
@@ -1243,7 +1243,7 @@ TURN relay only requires TURN configuration. Connection path has been restored t
 TURN relay only requires a TURN server or a configured credential source under Advanced Settings.: 「仅使用 TURN 中继」需要在「高级设置」中配置 TURN 服务器或凭据来源。
 TURN relay only requires at least one valid TURN server URL. Connection path has been restored to Automatic.: 「仅使用 TURN 中继」需要至少一个有效的 TURN 服务器 URL。连接路径已恢复为「自动」。
 The API token is saved with this profile and included in Setup URI and QR code sharing. Temporary TURN credentials are kept in memory only.: API 令牌随此配置档保存，并会包含在 Setup URI 和二维码分享中。临时 TURN 凭据只保存在内存中。
-The Application ID for P2P connection. This should be same among your devices. Default is 'self-hosted-livesync' and could not be modified from the UI.: P2P 连接使用的应用 ID。各设备上应保持一致。默认值为「self-hosted-livesync」，无法在界面中修改。
+The Application ID for P2P connection. This should be same among your devices. It cannot be changed from the interface.: P2P 连接使用的应用 ID。各设备上应保持一致。无法在界面中修改。
 The ID key is derived from the current E2EE passphrase and saved separately. Changing that passphrase later does not change the saved ID key. To reduce the risk of guessing that passphrase from known IDs, use a separate, unpredictable ID source instead.: ID 密钥由当前的 E2EE 密码短语派生并单独保存。之后更改该密码短语不会改变已保存的 ID 密钥。为降低通过已知 ID 猜出该密码短语的风险，请改用一个独立且无法预测的 ID 来源。
 The ID source or recovery code is invalid. Check it and try again.: ID 来源或恢复码无效。请检查后重试。
 The Nostr relay servers to establish connections for P2P connections. Multiple servers can be separated by commas.: 用于建立 P2P 连接的 Nostr 中继服务器。多个服务器用逗号分隔。

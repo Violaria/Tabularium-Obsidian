@@ -20,7 +20,7 @@ import { paintIcon } from "../../../../server/ui/mark";
     paintIcon();
 }
 
-const root = document.getElementById("viewer")!;
+const root = document.getElementById("viewer");
 /** The address as typed; a malformed escape is kept as it is, and the server answers that it does not exist. */
 const slug = (() => {
     const written = location.pathname.replace(/^\/s\//, "");
@@ -52,7 +52,7 @@ function setMarkup(element: Element, markup: string) {
 function notice(title: string, text = "", form?: HTMLFormElement) {
     root.className = "notes share-viewer";
     setMarkup(root, `<div class="share-gate"><section class="card"><h1>${escapeXml(title)}</h1>${text ? `<p>${escapeXml(text)}</p>` : ""}</section></div>`);
-    if (form) root.querySelector(".card")!.append(form);
+    if (form) root.querySelector(".card").append(form);
 }
 /** Shows why the share cannot be opened and stops. */
 async function refused(response: Response, path = ""): Promise<never> {
@@ -80,10 +80,10 @@ function askPassword(error = "") {
         setMarkup(form, `${error ? `<p class="notice error" role="alert">${escapeXml(error)}</p>` : ""}<label><span>${escapeXml(t("viewer.password"))}</span><input type="password" name="password" required autocomplete="off"></label><button class="primary" type="submit">${escapeXml(t("viewer.open"))}</button>`);
         form.addEventListener("submit", (event) => {
             event.preventDefault();
-            resolve(String(new FormData(form).get("password")));
+            resolve(form.querySelector("input")?.value ?? "");
         });
         notice(t("viewer.passwordTitle"), "", form);
-        form.querySelector("input")!.focus();
+        form.querySelector("input").focus();
     });
 }
 
@@ -198,7 +198,7 @@ function render(markdown: string) {
 async function blobUrl(id: string) {
     let url = blobs.get(id);
     if (!url) {
-        url = URL.createObjectURL(new Blob([(await bytes(id)) as BlobPart], { type: manifest.files[id].type }));
+        url = URL.createObjectURL(new Blob([(await bytes(id))], { type: manifest.files[id].type }));
         blobs.set(id, url);
     }
     return url;
@@ -208,14 +208,14 @@ async function show(id: string, push: boolean) {
     const note = manifest.notes[id];
     if (!note) return;
     if (push) history.pushState(null, "", `?note=${encodeURIComponent(id)}${location.hash}`);
-    const main = root.querySelector<HTMLElement>(".main")!;
+    const main = root.querySelector<HTMLElement>(".main");
     setMarkup(main, `<div class="note-head"><h1 class="title">${escapeXml(note.title)}</h1></div><article class="md-body"></article><footer class="share-foot">${escapeXml(t("viewer.generated", { time: formatDate(manifest.generatedAt) }))}</footer>`);
-    const article = main.querySelector("article")!;
+    const article = main.querySelector("article");
     setMarkup(article, render(decoder.decode(await bytes(id))));
     // A note that starts with its own title as a heading does not show the title twice.
     const first = article.firstElementChild;
     if (first?.tagName === "H1" && first.textContent?.trim() === note.title) main.querySelector(".note-head")?.remove();
-    for (const image of article.querySelectorAll<HTMLImageElement>("img[data-file]")) void blobUrl(image.dataset.file!).then((url) => (image.src = url));
+    for (const image of article.querySelectorAll<HTMLImageElement>("img[data-file]")) void blobUrl(image.dataset.file).then((url) => (image.src = url));
     // Diagrams are drawn as in web notes, by the same code.
     void renderDiagrams(article);
     main.scrollTop = 0;
@@ -236,7 +236,7 @@ function tree(nodes: ManifestNode[]): string {
             if (node.children)
                 return `<li><div class="row"><button class="name folder" aria-expanded="false">${FOLDER_ICON}<span class="label">${escapeXml(node.name)}</span></button></div><div class="children" hidden>${tree(node.children)}</div></li>`;
             const note = node.id?.startsWith("n");
-            return `<li><div class="row" data-note="${escapeXml(note ? node.id! : "")}"><button class="name${note ? "" : " other"}" data-${note ? "note" : "file"}="${escapeXml(node.id ?? "")}">${FILE_ICON}<span class="label">${escapeXml(node.name)}</span></button></div></li>`;
+            return `<li><div class="row" data-note="${escapeXml(note ? node.id : "")}"><button class="name${note ? "" : " other"}" data-${note ? "note" : "file"}="${escapeXml(node.id ?? "")}">${FILE_ICON}<span class="label">${escapeXml(node.name)}</span></button></div></li>`;
         })
         .join("")}</ul>`;
 }
@@ -262,7 +262,7 @@ function layout() {
         if (!target || target.classList.contains("row")) return;
         event.preventDefault();
         if (target.classList.contains("folder")) {
-            const children = target.closest("li")!.querySelector<HTMLElement>(":scope > .children")!;
+            const children = target.closest("li").querySelector<HTMLElement>(":scope > .children");
             children.hidden = !children.hidden;
             target.setAttribute("aria-expanded", String(!children.hidden));
         } else if (target.dataset.note) void show(target.dataset.note, true).catch(failed);
@@ -279,12 +279,12 @@ function layout() {
     window.addEventListener("popstate", () => void show(new URLSearchParams(location.search).get("note") ?? manifest.start ?? "", false).catch(failed));
     const start = new URLSearchParams(location.search).get("note") ?? manifest.start;
     if (start && manifest.notes[start]) return show(start, false);
-    setMarkup(root.querySelector(".main")!, `<p class="hint share-empty">${escapeXml(t("viewer.empty"))}</p>`);
+    setMarkup(root.querySelector(".main"), `<p class="hint share-empty">${escapeXml(t("viewer.empty"))}</p>`);
 }
 
 function failed(error: unknown) {
     if (error instanceof Stop) return;
-    notice(t("viewer.failed"), error instanceof Error ? error.message : String(error));
+    notice(t("viewer.failed"), error instanceof Error ? error.message : typeof error === "string" ? error : JSON.stringify(error));
 }
 
 void (async () => {

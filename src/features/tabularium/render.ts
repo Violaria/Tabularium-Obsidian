@@ -27,7 +27,7 @@ function rewriteObsidian(markdown: string) {
             .replace(/%%[\s\S]*?%%/g, "")
             .replace(
                 /!\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]*))?\]\]/g,
-                (_, target: string, alias = "") =>
+                (_, target: string, alias: string = "") =>
                     `![${alias.replace(/^\d+(x\d+)?$/, "")}](embed:${encodeURIComponent(target.trim())})`
             )
             .replace(

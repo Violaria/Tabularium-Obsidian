@@ -23,7 +23,6 @@ Commentarii in instrumento tessera arcana tabularii cryptantur (E2EE V2, viis ob
 - Commentarium vel capsam ut paginam interretialem communica; pagina renovatur cum plicae communicatae mutantur.
 - Instrumenta formae super textum selectum, et instrumentum ad nexus internos fractos inveniendos et reficiendos.
 - Facies Anglice, Sinice et Latine.
-- In eodem tabulario cum Self-hosted LiveSync et Custom File Explorer sorting simul accendi potest: data localia separata manent, et dum Custom File Explorer sorting accensum est, id ordinat.
 
 ## Institutio
 

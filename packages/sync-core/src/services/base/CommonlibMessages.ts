@@ -307,8 +307,8 @@ export const commonlibEnglishMessages = {
     "TURN Username": "TURN Username",
     "Testing only - Resolve file conflicts by syncing newer copies of the file, this can overwrite modified files. Be Warned.":
         "Testing only - Resolve file conflicts by syncing newer copies of the file, this can overwrite modified files. Be Warned.",
-    "The Application ID for P2P connection. This should be same among your devices. Default is 'self-hosted-livesync' and could not be modified from the UI.":
-        "The Application ID for P2P connection. This should be same among your devices. Default is 'self-hosted-livesync' and could not be modified from the UI.",
+    "The Application ID for P2P connection. This should be same among your devices. It cannot be changed from the interface.":
+        "The Application ID for P2P connection. This should be same among your devices. It cannot be changed from the interface.",
     "The Hash algorithm for chunk IDs": "The Hash algorithm for chunk IDs",
     "The Nostr relay servers to establish connections for P2P connections. Multiple servers can be separated by commas.":
         "The Nostr relay servers to establish connections for P2P connections. Multiple servers can be separated by commas.",
@@ -377,7 +377,7 @@ export const commonlibEnglishMessages = {
         "Some mismatches have been detected in the configuration between devices. Running a manual replication will attempt to resolve this issue.",
     "liveSyncReplicator.oneShotSyncBegin": "OneShot Sync begin... (${syncMode})",
     "liveSyncReplicator.remoteDbCorrupted":
-        "Remote database is newer or corrupted, make sure to latest version of self-hosted-livesync installed",
+        "Remote database is newer or corrupted; make sure the latest version of the plug-in is installed",
     "liveSyncReplicator.remoteDbCreatedOrConnected": "Remote Database Created or Connected",
     "liveSyncReplicator.remoteDbDestroyError": "Something happened on Remote Database Destroy:",
     "liveSyncReplicator.remoteDbDestroyed": "Remote Database Destroyed",
@@ -393,7 +393,7 @@ export const commonlibEnglishMessages = {
     "moduleCheckRemoteSize.msgConfirmRebuild":
         "This may take a bit of a long time. Do you really want to rebuild everything now?",
     "moduleCheckRemoteSize.msgDatabaseGrowing":
-        "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Self-hosted LiveSync does not delete the actual data even if you delete it to speed up the process. It is roughly [documented](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
+        "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Self-hosted LiveSync does not delete the actual data even if you delete it to speed up the process. It is roughly documented.\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
     "moduleCheckRemoteSize.msgSetDBCapacity":
         "We can set a maximum database capacity warning, **to take action before running out of space on the remote storage**.\nDo you want to enable this?\n\n> [!MORE]-\n> - 0: Do not warn about storage size.\n>   This is recommended if you have enough space on the remote storage especially you have self-hosted. And you can check the storage size and rebuild manually.\n> - 800: Warn if the remote storage size exceeds 800MB.\n>   This is recommended if you are using fly.io with 1GB limit or IBM Cloudant.\n> - 2000: Warn if the remote storage size exceeds 2GB.\n\nIf we have reached the limit, we will be asked to enlarge the limit step by step.\n",
     "moduleCheckRemoteSize.noticeExceeded":

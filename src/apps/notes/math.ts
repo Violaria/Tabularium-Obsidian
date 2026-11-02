@@ -73,7 +73,7 @@ export function math(md: MarkdownIt) {
         return true;
     });
     md.renderer.rules.math_inline = (tokens, index) =>
-        `<span class="math${tokens[index].meta?.display ? " display" : ""}" data-tex="${escapeXml(tokens[index].content)}">${escapeXml(tokens[index].content)}</span>`;
+        `<span class="math${(tokens[index].meta as { display?: boolean } | null)?.display ? " display" : ""}" data-tex="${escapeXml(tokens[index].content)}">${escapeXml(tokens[index].content)}</span>`;
     md.renderer.rules.math_block = (tokens, index) => `<div class="math display" data-tex="${escapeXml(tokens[index].content)}">${escapeXml(tokens[index].content)}</div>\n`;
 }
 

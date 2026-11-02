@@ -98,7 +98,8 @@ export async function clearLocalVault(userId: string, vaultId: string) {
 export class NotesRuntime {
     private core?: LiveSyncBaseCore<ServiceContext, never>;
     private modules?: FSAPIServiceModules;
-    private changes?: PouchDB.Core.Changes<object>;
+    /** The local database's change feed, cancelled when the vault closes. */
+    private changes?: { cancel(): void };
     private settings: ObsidianLiveSyncSettings;
 
     constructor(

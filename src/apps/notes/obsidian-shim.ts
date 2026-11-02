@@ -31,7 +31,7 @@ export class Vault {
     static recurseChildren(root: TFolder, callback: (file: TAbstractFile) => unknown) {
         const pending: TAbstractFile[] = [root];
         while (pending.length) {
-            const file = pending.pop()!;
+            const file = pending.pop();
             callback(file);
             if (file instanceof TFolder) pending.push(...file.children);
         }

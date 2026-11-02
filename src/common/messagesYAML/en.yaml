@@ -371,7 +371,7 @@ moduleCheckRemoteSize:
         > [!MORE]-
         > If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.
         >
-        > If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Tabularium does not delete the actual data even if you delete it to speed up the process. It is roughly [documented](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).
+        > If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Tabularium does not delete the actual data even if you delete it to speed up the process. It is roughly documented.
         >
         > If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.
         >
@@ -1085,7 +1085,7 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.help.connect.title": "Connecting and changing vaults"
 "tabularium.help.errors.body": "Credentials no longer valid: the device was removed on the server or its credentials expired. Sign in again.\n\nEncryption settings refused: this device's settings differ from the vault's. Disconnect and connect again.\n\nA rebuild is in progress: wait until the owner ends it on the web.\n\nA note does not synchronise: check the size limit and the excluded files under Sync, and look in the log.\n\nThe first synchronisation of a large vault takes a while; keep Obsidian open until the status shows Up to date."
 "tabularium.help.errors.title": "Common problems"
-"tabularium.help.migrate.body": "Tabularium can run beside the plug-in \"self-hosted-livesync\" in the same vault: each synchronises with its own server, and neither uses the other's local database, settings or flag files. To move your notes, connect to the vault on the Tabularium server that already holds them, so this device fetches it; then turn the old plug-in off, or keep it to synchronise with another server.\n\nIf the old plug-in also synchronises hidden files, exclude .obsidian/plugins/tabularium/ there: it holds this device's credentials."
+"tabularium.help.migrate.body": "Tabularium can run beside other sync plug-ins in the same vault: each synchronises with its own server, and they do not share local databases, settings or flag files. To move your notes, connect to the vault on the Tabularium server that already holds them, so this device fetches it; then turn the old plug-in off, or keep it.\n\nIf another plug-in also synchronises plug-in folders, exclude ${pluginDir} there: it holds this device's credentials."
 "tabularium.help.migrate.title": "Moving from the old plug-in"
 "tabularium.help.passphrase.body": "Notes are encrypted on each device with the vault's passphrase before they are sent; the server cannot read them. Every device of a vault uses the same passphrase.\n\nThe passphrase cannot be recovered. If it is lost, the notes on the server cannot be decrypted; devices that still have the files can create a new vault from them."
 "tabularium.help.passphrase.title": "The vault passphrase"
@@ -1104,7 +1104,7 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.release.0.4.0": "Interface in English, Chinese and Latin; web notes can be edited."
 "tabularium.release.0.5.0": "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11)."
 "tabularium.settings.about": "About"
-"tabularium.settings.aboutDesc": "Plug-in for a self-hosted Tabularium server, based on \"self-hosted-livesync\" by vorotamoroz (MIT licence)."
+"tabularium.settings.aboutDesc": "Plug-in for a self-hosted Tabularium server. Parts of it derive from code by vorotamoroz under the MIT licence; the notices are in NOTICE.md in the plug-in folder."
 "tabularium.settings.advanced": "Advanced"
 "tabularium.settings.advancedConflicts": "Conflicts"
 "tabularium.settings.advancedDesc": "Rarely needed. Change them only when the help or a diagnosis points to them."

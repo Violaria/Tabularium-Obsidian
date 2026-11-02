@@ -82,7 +82,7 @@ export function installNamespaceMigration(
     plugin: Plugin,
     core: LiveSyncCore,
     server: TabulariumServer,
-    storage: Storage = localStorage
+    storage: Storage = window.localStorage
 ) {
     const pending = async () =>
         JSON.parse((await core.services.setting.config.getValue(NAMESPACE_MIGRATION_KEY, "")) || "null") as {

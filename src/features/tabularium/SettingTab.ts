@@ -24,7 +24,7 @@ import { confirmAction } from "./Confirm";
 import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";
 import { REBUILD_CONFIRMED_KEY } from "@/serviceFeatures/redFlag";
 import { HELP_TOPICS, RELEASES } from "./help";
-import { hint } from "./hint";
+import { destructive, hint } from "./hint";
 
 const SECTIONS = ["connection", "sync", "sorting", "kindle", "appearance", "maintenance", "help"] as const;
 type Section = (typeof SECTIONS)[number];
@@ -96,6 +96,8 @@ const BOUNDS: Partial<Record<AllSettingItemKey, [number, number]>> = {
 
 type SyncMode = "live" | "periodic" | "events";
 
+// The page is drawn imperatively (render): the declarative getSettingDefinitions() arrived in Obsidian 1.13, and the
+// plug-in supports Obsidian 1.7.2.
 export class TabulariumSettingTab extends PluginSettingTab {
     private section: Section = "connection";
     private advancedOpen = false;
@@ -107,7 +109,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         // Saving settings (also from commands) asks open setting pages to redraw, e.g. after a language change.
         eventHub.onEvent(EVENT_REQUEST_RELOAD_SETTING_TAB, () => {
             plugin.sorting?.updateStatusBar();
-            if (this.containerEl.isConnected) this.display();
+            if (this.containerEl.isConnected) this.redraw();
         });
     }
 
@@ -124,10 +126,15 @@ export class TabulariumSettingTab extends PluginSettingTab {
 
     show(section: Section) {
         this.section = section;
-        this.display();
+        this.redraw();
     }
 
     override display(): void {
+        this.redraw();
+    }
+
+    /** Draws the page, again when something changed, keeping its scroll position. */
+    private redraw(): void {
         const { containerEl } = this;
         const scrolled = containerEl.scrollTop;
         containerEl.empty();
@@ -246,16 +253,14 @@ export class TabulariumSettingTab extends PluginSettingTab {
                         progressPresentation: REPLICATION_PROGRESS_PRESENTATIONS.QUIET,
                         interaction: USER_INITIATED_REPLICATION_AUTHORITY,
                     });
-                    this.display();
+                    this.redraw();
                 })
             );
         this.lock(el);
         new Setting(el)
             .addButton((b) => b.setButtonText($msg("tabularium.settings.changeVault")).onClick(() => server.openLogin()))
             .addButton((b) =>
-                b
-                    .setButtonText($msg("tabularium.server.disconnect"))
-                    .setWarning()
+                destructive(b.setButtonText($msg("tabularium.server.disconnect")))
                     .onClick(async () => {
                         const ok = await confirmAction(this.app, {
                             title: $msg("tabularium.settings.disconnectTitle"),
@@ -264,7 +269,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
                         });
                         if (!ok) return;
                         await server.disconnect();
-                        this.display();
+                        this.redraw();
                     })
             );
     }
@@ -299,9 +304,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
                 b.setButtonText($msg("tabularium.settings.fetch")).onClick(() => void this.fetchFromServer())
             )
             .addButton((b) =>
-                b
-                    .setButtonText($msg("tabularium.settings.unlock"))
-                    .setWarning()
+                destructive(b.setButtonText($msg("tabularium.settings.unlock")))
                     .onClick(() => void this.unlock())
             );
     }
@@ -316,7 +319,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         });
         if (!ok) return;
         await this.core.services.replication.markUnlocked();
-        this.display();
+        this.redraw();
     }
 
     private async fetchFromServer() {
@@ -349,7 +352,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
                 .setValue(mode)
                 .onChange(async (next) => {
                     await this.save({ liveSync: next === "live", periodicReplication: next === "periodic" });
-                    this.display();
+                    this.redraw();
                 })
         );
         if (mode === "periodic") this.row(el, "periodicReplicationInterval");
@@ -364,7 +367,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
             hint(new Setting(el).setName($msg("tabularium.settings.livePaused")), $msg("tabularium.settings.livePausedDesc")).addButton((b) =>
                 b.setButtonText($msg("tabularium.syncMenu.resume")).onClick(async () => {
                     await pause.resume();
-                    this.display();
+                    this.redraw();
                 })
             );
         } else this.syncMode(el);
@@ -382,7 +385,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
             new Setting(el).setDesc($msg("tabularium.sorting.standalone"));
             return;
         }
-        sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }), () => this.display());
+        sorting.renderSettings(el.createDiv({ cls: "tabularium-sorting-settings" }), () => this.redraw());
     }
 
     private kindle(el: HTMLElement) {
@@ -421,7 +424,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         const action = (name: string, desc: string, button: string, run: () => unknown, warning = false) =>
             hint(new Setting(el).setName($msg(name as never)), $msg(desc as never)).addButton((b) => {
                 b.setButtonText($msg(button as never)).onClick(() => void run());
-                if (warning) b.setWarning();
+                if (warning) destructive(b);
             });
         this.heading(el, "tabularium.settings.recovery");
         if (connected) {
@@ -513,7 +516,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         for (const topic of HELP_TOPICS) {
             const details = el.createEl("details", { cls: "tabularium-help" });
             details.createEl("summary", { text: $msg(`tabularium.help.${topic}.title` as never) });
-            for (const paragraph of $msg(`tabularium.help.${topic}.body` as never).split("\n\n"))
+            for (const paragraph of $msg(`tabularium.help.${topic}.body` as never, { pluginDir: `${this.owner.manifest.dir ?? ""}/` }).split("\n\n"))
                 details.createEl("p", { text: paragraph });
         }
         this.heading(el, "tabularium.settings.changelog");

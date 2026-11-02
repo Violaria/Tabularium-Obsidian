@@ -1,5 +1,5 @@
 import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
-import { hint } from "./hint";
+import { destructive, hint } from "./hint";
 import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
@@ -321,9 +321,7 @@ class ServerModal extends Modal {
             .setDesc($msg("tabularium.server.disconnectHint"))
             .addButton((b) => b.setButtonText($msg("tabularium.server.signInAgain")).onClick(() => this.login()))
             .addButton((b) =>
-                b
-                    .setButtonText($msg("tabularium.server.disconnect"))
-                    .setWarning()
+                destructive(b.setButtonText($msg("tabularium.server.disconnect")))
                     .onClick(() =>
                         this.run(b.buttonEl, async () => {
                             await this.server.disconnect();

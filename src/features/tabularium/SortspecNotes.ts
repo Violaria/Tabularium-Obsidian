@@ -9,7 +9,7 @@ const isRules = (path: string) => path === RULES_FILE || path.endsWith(`/${RULES
 export function foldNote(item: HTMLElement) {
     const inline: ChildNode[] = [];
     for (const node of Array.from(item.childNodes)) {
-        if (node instanceof HTMLElement && (node.tagName === "UL" || node.tagName === "OL")) break;
+        if (node.instanceOf(HTMLElement) && (node.tagName === "UL" || node.tagName === "OL")) break;
         inline.push(node);
     }
     const at = inline.findIndex((node) => node.nodeType === Node.TEXT_NODE && node.textContent!.includes(NOTE_SEPARATOR));

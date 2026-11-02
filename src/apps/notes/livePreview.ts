@@ -242,7 +242,7 @@ function inline(view: EditorView, options: LiveOptions): DecorationSet {
     const found: Range<Decoration>[] = [];
     // Line decorations sit at a line's start; marks and replacements need a non-empty range (widgets may be empty).
     const add = (from: number, to: number, decoration: Decoration) => {
-        if (from < to || decoration.spec.widget || isLine(decoration))
+        if (from < to || (decoration.spec as { widget?: unknown }).widget || isLine(decoration))
             found.push(decoration.range(from, to));
     };
     const code: [number, number][] = [];
@@ -383,7 +383,7 @@ function inline(view: EditorView, options: LiveOptions): DecorationSet {
     found.sort((a, b) => a.from - b.from || a.value.startSide - b.value.startSide);
     let last = -1;
     const kept = found.filter((range) => {
-        if (range.value.spec.widget === undefined && range.value !== hide) return true;
+        if ((range.value.spec as { widget?: unknown }).widget === undefined && range.value !== hide) return true;
         if (range.from < last) return false;
         last = range.to;
         return true;

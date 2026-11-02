@@ -1,5 +1,6 @@
 import { Modal, Setting, type App } from "obsidian";
 import { $msg } from "@/common/translation";
+import { destructive } from "./hint";
 
 export interface ConfirmOptions<C extends string = string> {
     title: string;
@@ -67,8 +68,7 @@ export function confirmAction<C extends string = string>(app: App, options: Conf
             .addButton((b) => b.setButtonText($msg("tabularium.confirm.cancel")).onClick(() => modal.close()))
             .addButton((b) => {
                 button = b.buttonEl;
-                b.setButtonText(options.action)
-                    .setWarning()
+                destructive(b.setButtonText(options.action))
                     .onClick(() => {
                         result = chosen ?? true;
                         modal.close();

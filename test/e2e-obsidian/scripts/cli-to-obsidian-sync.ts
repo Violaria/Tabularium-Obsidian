@@ -439,7 +439,7 @@ async function main(): Promise<void> {
     if (process.env.LIVESYNC_CLI_COMMAND === undefined) {
         await access(liveSyncCli).catch(() => {
             throw new Error(
-                `Built LiveSync CLI was not found at ${liveSyncCli}. Run 'npm run build -w self-hosted-livesync-cli' first, or set LIVESYNC_CLI_COMMAND.`
+                `Built LiveSync CLI was not found at ${liveSyncCli}. Run 'npm run build -w tabularium-cli' first, or set LIVESYNC_CLI_COMMAND.`
             );
         });
     }

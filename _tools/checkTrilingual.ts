@@ -26,11 +26,10 @@ for (const [lang, catalogue] of Object.entries(shown)) {
     const withEmoji = Object.entries(catalogue).filter(([, text]) => emoji.test(text));
     if (withEmoji.length) problems.push(`${lang}: ${withEmoji.length} texts with emoji\n  ${withEmoji.slice(0, 20).map(([key]) => key).join("\n  ")}`);
 }
-// The product is Tabularium: shown texts must not use the upstream name. Links to upstream documents and the quoted
-// default P2P application ID ('self-hosted-livesync', a technical identifier) are the only exceptions.
+// The product is Tabularium: shown texts never name the original plug-in, not even by its id or in a link.
 // Placeholders (`${…}`) are code, not displayed text.
 const upstreamName = /livesync/i;
-const exempt = (text: string) => text.replace(/\$\{[^}]*\}/g, "").replace(/https?:\/\/\S+/g, "").replace(/['"「]self-hosted-livesync['"」]/g, "");
+const exempt = (text: string) => text.replace(/\$\{[^}]*\}/g, "");
 for (const [lang, catalogue] of Object.entries(shown)) {
     const named = Object.entries(catalogue).filter(([, text]) => upstreamName.test(exempt(text)));
     if (named.length) problems.push(`${lang}: ${named.length} texts name LiveSync\n  ${named.slice(0, 20).map(([key]) => key).join("\n  ")}`);

@@ -72,6 +72,6 @@ export async function renewDevice(authorization: string) {
     const response = await fetch("/api/v1/devices/current/renew", { method: "POST", headers: { authorization } });
     const data = (await response.json().catch(() => ({}))) as { expiresAt?: number; error?: string };
     if (!response.ok) throw new ApiError(response.status, data.error ?? `HTTP ${response.status}`);
-    return data.expiresAt!;
+    return data.expiresAt;
 }
 export const revokeDevice = (vaultId: string, deviceId: string) => api(`/vaults/${vaultId}/devices/${deviceId}`, "DELETE");

@@ -144,7 +144,7 @@ export const configurationNames: Partial<Record<keyof ObsidianLiveSyncSettings, 
     },
     P2P_AppID: {
         name: "Application ID",
-        desc: "The Application ID for P2P connection. This should be same among your devices. Default is 'self-hosted-livesync' and could not be modified from the UI.",
+        desc: "The Application ID for P2P connection. This should be same among your devices. It cannot be changed from the interface.",
         isAdvanced: true,
     },
     P2P_relays: {

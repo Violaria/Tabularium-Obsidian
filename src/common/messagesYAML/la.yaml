@@ -687,7 +687,7 @@ TURN relay only requires a TURN server or a configured credential source under A
 TURN relay only requires at least one valid TURN server URL. Connection path has been restored to Automatic.: “Solum per nuntium TURN” saltem unum URL ministratoris TURN validum requirit. Iter conexionis ad modum automaticum restitutum est.
 Testing only - Resolve file conflicts by syncing newer copies of the file, this can overwrite modified files. Be Warned.: Probationi tantum - Discrepantias plicarum solve synchronizando recentiora plicarum exemplaria; hoc plicas mutatas superscribere potest. Cave.
 The API token is saved with this profile and included in Setup URI and QR code sharing. Temporary TURN credentials are kept in memory only.: Tessera API cum hac forma servatur et in communicatione Setup URI et codicis QR includitur. Testimonia TURN temporaria in memoria tantum servantur.
-The Application ID for P2P connection. This should be same among your devices. Default is 'self-hosted-livesync' and could not be modified from the UI.: Identificatio applicationis ad conexionem P2P. Haec in omnibus instrumentis tuis eadem esse debet. Praedefinitum est 'self-hosted-livesync' neque per interfaciem mutari potest.
+The Application ID for P2P connection. This should be same among your devices. It cannot be changed from the interface.: Identificatio applicationis ad conexionem P2P. Haec in omnibus instrumentis tuis eadem esse debet. In facie mutari non potest.
 The Hash algorithm for chunk IDs: Algorithmus hash ad identificationes fragmentorum
 The ID key is derived from the current E2EE passphrase and saved separately. Changing that passphrase later does not change the saved ID key. To reduce the risk of guessing that passphrase from known IDs, use a separate, unpredictable ID source instead.: Clavis identificationum ex tessera arcana E2EE praesenti derivatur et seorsum servatur. Si postea illam tesseram arcanam mutaveris, clavis servata non mutabitur. Ut periculum minuatur ne illa tessera arcana ex identificationibus notis divinetur, potius fontem identificationum separatum et incertum adhibe.
 The ID source or recovery code is invalid. Check it and try again.: Fons identificationum aut codex recuperationis invalidus est. Inspice et iterum conare.
@@ -981,7 +981,7 @@ moduleCheckRemoteSize.msgDatabaseGrowing: '**Repositorium tuum crescit!** Sed no
 
   >
 
-  > Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere [documentatum est](https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/tech_info.md).
+  > Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere documentatum est.
 
   >
 
@@ -1422,7 +1422,7 @@ moduleLog.syncStatusStopped: Non synchronizatur
 "tabularium.settings.changelog": "Historia versionum"
 "tabularium.settings.about": "De additamento"
 "tabularium.settings.version": "Tabularium ${version}"
-"tabularium.settings.aboutDesc": "Additamentum ministratoris Tabularium proprii, in \"self-hosted-livesync\" a vorotamoroz fundatum (licentia MIT)."
+"tabularium.settings.aboutDesc": "Additamentum ministratoris Tabularium proprii. Pars eius ex codice vorotamoroz sub licentia MIT derivatur; notitiae in NOTICE.md in capsa additamenti sunt."
 "tabularium.help.connect.title": "Coniungere et tabularium mutare"
 "tabularium.help.connect.body": "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et tesseram arcanam tabularii scribe.
 
@@ -1442,7 +1442,7 @@ moduleLog.syncStatusStopped: Non synchronizatur
 
   Tessera arcana recuperari non potest. Si amittitur, commentarii in ministratore deciphrari non possunt; instrumenta quae plicas habent novum tabularium ex eis creare possunt."
 "tabularium.help.migrate.title": "Ab additamento vetere migrare"
-"tabularium.help.migrate.body": "Tabularium cum additamento \"self-hosted-livesync\" in eodem tabulario simul currere potest: utrumque cum suo ministratore synchronizat, neutrum repositorio locali, optionibus aut fasciculis signorum alterius utitur. Ut commentarios transferas, tabularium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine ut cum alio ministratore synchronizet.\n\nSi additamentum vetus etiam fasciculos occultos synchronizat, ibi .obsidian/plugins/tabularium/ exclude: ibi sunt credentialia huius instrumenti."
+"tabularium.help.migrate.body": "Tabularium cum aliis additamentis synchronizationis in eodem tabulario simul currere potest: utrumque cum suo ministratore synchronizat, neque repositoria localia, optiones aut fasciculos signorum communicant. Ut commentarios transferas, tabularium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine.\n\nSi aliud additamentum etiam capsas additamentorum synchronizat, ibi ${pluginDir} exclude: ibi sunt credentialia huius instrumenti."
 "tabularium.help.rebuild.title": "Reaedificare et reserare"
 "tabularium.help.rebuild.body": "Reaedificatio tabularium in ministratore plicis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.
 

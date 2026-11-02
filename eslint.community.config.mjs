@@ -64,6 +64,9 @@ export default defineConfig(
             "@typescript-eslint/no-base-to-string": "warn",
             "@typescript-eslint/no-redundant-type-constituents": "warn",
             "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+            // A suggestion, not a requirement: getSettingDefinitions() needs Obsidian 1.13 and the plug-in supports 1.7.2,
+            // so the settings page stays imperative. The directory review still lists it.
+            "obsidianmd/settings-tab/prefer-setting-definitions": "off",
         },
     },
     {
@@ -85,6 +88,10 @@ export default defineConfig(
         rules: {
             "obsidianmd/prefer-active-doc": "off",
             "no-restricted-globals": "off",
+            // createEl and friends are Obsidian's additions to the DOM; a web page creates elements the standard way.
+            "obsidianmd/prefer-create-el": "off",
+            // Obsidian's popout windows do not exist in a web page.
+            "obsidianmd/prefer-window-timers": "off",
         },
     }
 );
