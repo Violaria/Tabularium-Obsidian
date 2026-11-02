@@ -1116,6 +1116,7 @@
     "tabularium.release.0.24.5": "插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。",
     "tabularium.release.0.25.0": "插件小了约五分之一。同步核心并入 Tabularium，只保留与 Tabularium 服务器的连接，对象存储和 P2P 同步的代码已删除。设置里仍写着对象存储或 P2P 的设备不会去使用它们，照常通过 Tabularium 连接。",
     "tabularium.release.0.26.0": "可以暂停实时同步：笔记或文件夹右键「同步」菜单，或命令面板中的「暂停实时同步」「恢复实时同步」。暂停期间编辑留在本机，「立即同步」仍可上传。插件的本机数据改用自己的名字，可以与其他同步插件、Custom File Explorer sorting 在同一个笔记库中同时启用；更新后每台设备会从服务器取回一次笔记库，不需要重新登录。文件排序改为读取 sortspec.md 正文中的缩进列表，「 —— 」后面可以写说明；front matter 中的旧规则要在设置页「文件排序」中转换后才生效，转换之前文件列表按 Obsidian 的排序显示。",
+    "tabularium.release.0.26.1": "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。",
     "tabularium.release.0.3.0": "用 Tabularium 账户登录连接；发送到 Kindle；云笔记；凭据自动续期。",
     "tabularium.release.0.4.0": "界面支持英文、中文和拉丁语；云笔记可以编辑。",
     "tabularium.release.0.5.0": "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",

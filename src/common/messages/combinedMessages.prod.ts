@@ -4248,6 +4248,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchronizationem vivam suspendere potes: «Synchronizationem vivam suspende» et «Synchronizationem vivam resume» in indice «Synchronizatio» commentarii aut capsae, vel in tabula mandatorum. Dum suspensa est, mutationes in hoc instrumento manent et «Synchroniza nunc» eas adhuc mittit. Additamentum nunc data sua localia sub nominibus propriis servat, itaque in eodem tabulario cum aliis additamentis synchronizationis et cum Custom File Explorer sorting accendi potest; post renovationem quodque instrumentum tabularium suum semel a ministratore arcessit, sine nova inscriptione. Ordo plicarum nunc indicem gradatum in corpore sortspec.md legit, notis post « —— » scriptis; regulae in front matter tum demum valent cum in Optiones → Ordo plicarum convertuntur, et interea index plicarum ordinem Obsidian servat.",
         zh: "可以暂停实时同步：笔记或文件夹右键「同步」菜单，或命令面板中的「暂停实时同步」「恢复实时同步」。暂停期间编辑留在本机，「立即同步」仍可上传。插件的本机数据改用自己的名字，可以与其他同步插件、Custom File Explorer sorting 在同一个笔记库中同时启用；更新后每台设备会从服务器取回一次笔记库，不需要重新登录。文件排序改为读取 sortspec.md 正文中的缩进列表，「 —— 」后面可以写说明；front matter 中的旧规则要在设置页「文件排序」中转换后才生效，转换之前文件列表按 Obsidian 的排序显示。",
     },
+    "tabularium.release.0.26.1": {
+        def: "Server only: the Tabularius curation rules in a vault's own prompt also change to the list in sortspec.md when the server is upgraded, where they were still as first written. The plug-in is unchanged.",
+        la: "Solum ministrator: regulae ordinandi Tabularii in praecepto tabularii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
+        zh: "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
