@@ -76,11 +76,16 @@ describe("Tabularium's own names", () => {
         expect(namesFor(VAULT, DATABASE_SUFFIX)).toEqual({
             database: `${VAULT}-tabularium`,
             keyPrefix: `${VAULT}-tabularium-`,
+            deviceName: `device-name-${VAULT}-tabularium`,
+            localDatabase: `${VAULT}-tabularium-v2`,
+            keyValueDatabase: `${VAULT}-tabularium-kv`,
+        });
+        expect(namesFor(VAULT, DATABASE_SUFFIX, "former")).toMatchObject({
             deviceName: `obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`,
             localDatabase: `${VAULT}-tabularium-livesync-v2`,
             keyValueDatabase: `${VAULT}-tabularium-livesync-kv`,
         });
-        expect(namesFor(VAULT, "").localDatabase).toBe(`${VAULT}-livesync-v2`);
+        expect(namesFor(VAULT, "", "former").localDatabase).toBe(`${VAULT}-livesync-v2`);
     });
 
     it("leaves a new vault and settings already under its names alone", () => {
@@ -91,6 +96,14 @@ describe("Tabularium's own names", () => {
         expect(storage.keys()).toEqual(before);
     });
 
+    it("moves the device name of a 0.26 device to its current key", () => {
+        const storage = upgradedDevice();
+        storage.setItem(`tabularium:obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`, "Desk");
+        expect(adoptOwnNames(storage, VAULT, { additionalSuffixOfDatabaseName: DATABASE_SUFFIX })).toBeUndefined();
+        expect(storage.getItem(`tabularium:device-name-${VAULT}-tabularium`)).toBe("Desk");
+        expect(storage.getItem(`tabularium:obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`)).toBeNull();
+    });
+
     it("copies the vault's device values to the new names and leaves a migration pending", () => {
         const storage = upgradedDevice();
         const settings = { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID };
@@ -99,7 +112,7 @@ describe("Tabularium's own names", () => {
 
         expect(settings.additionalSuffixOfDatabaseName).toBe(DATABASE_SUFFIX);
         expect(storage.getItem("tabularium:ls-setting-passphrase")).toBe("device-key");
-        expect(storage.getItem(`tabularium:obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`)).toBe("Laptop");
+        expect(storage.getItem(`tabularium:device-name-${VAULT}-tabularium`)).toBe("Laptop");
         expect(storage.getItem(`tabularium:${VAULT}-tabularium-database-compatibility-version`)).toBe("12");
         expect(storage.getItem(`tabularium:${VAULT}-tabularium-fast-fetch-checkpoint`)).toBeNull();
         expect(storage.getItem(`tabularium:${VAULT}-tabularium-${NAMESPACE_MIGRATION_KEY}`)).toBe(JSON.stringify({ from: APP_ID }));
@@ -161,6 +174,7 @@ function startingDevice(options: { upstreamInstalled?: boolean; online?: boolean
                 currentSettings: () => ({ couchDB_URI: "https://notes.example/sync", couchDB_DBNAME: "v1" }),
             },
             appLifecycle: {
+                onSettingLoaded: { addHandler: vi.fn() },
                 onLayoutReady: { addHandler: (handler: Handler, priority: number) => handlers.push({ handler, priority }) },
                 performRestart: vi.fn(),
             },

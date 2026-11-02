@@ -129,6 +129,6 @@ export abstract class APIService<T extends ServiceContext = ServiceContext>
      */
     getSystemConfigDir() {
         // SHIM.
-        return ".livesync";
+        return ".tabularium";
     }
 }

@@ -1,3 +1,4 @@
+import { FORMER_NAMES } from "@lib/common/models/shared.const";
 import { Minimatch, type MinimatchOptions } from "minimatch";
 import { getWebCrypto } from "@lib/mods.ts";
 import {
@@ -9,7 +10,6 @@ import {
     FlagFiles,
     PREFIXMD_LOGFILE,
     UpstreamFlagFiles,
-    PREFIXMD_LOGFILE_UC,
     IDPrefixes,
 } from "@lib/common/types.ts";
 import { memorizeFuncWithLRUCache } from "@lib/common/utils.ts";
@@ -140,13 +140,9 @@ export function stripPrefix(prefixedPath: FilePathWithPrefix): FilePath {
 const flagFiles: readonly string[] = [...Object.values(FlagFiles), ...UpstreamFlagFiles];
 export function shouldBeIgnored(filename: string): boolean {
     if (flagFiles.includes(filename)) return true;
-    if (filename.startsWith(PREFIXMD_LOGFILE)) {
-        return true;
-    }
-    if (filename.startsWith(PREFIXMD_LOGFILE_UC)) {
-        return true;
-    }
-    return false;
+    // Log files, also under the former name, stay on the device that wrote them.
+    const lower = filename.toLowerCase();
+    return lower.startsWith(PREFIXMD_LOGFILE) || lower.startsWith(FORMER_NAMES.logFilePrefix);
 }
 export function isPlainText(filename: string): boolean {
     if (filename.endsWith(".md")) return true;

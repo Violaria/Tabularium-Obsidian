@@ -1,3 +1,4 @@
+import { DeviceNameKeyPrefix } from "@lib/common/models/shared.const";
 import { createDeletableValueStore, type ValueStore, type ValueDeleter } from "@vrtmrz/value-store";
 import {
     ChunkAlgorithmNames,
@@ -174,7 +175,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
      */
     async saveDeviceAndVaultName(): Promise<void> {
         const lsKey =
-            "obsidian-live-sync-vaultanddevicename-" +
+            DeviceNameKeyPrefix +
             this.APIService.getSystemVaultName() +
             this.additionalSuffixOfDatabaseName();
         await this.deviceValues.setValue(lsKey, this.deviceAndVaultName);
@@ -907,7 +908,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
 
         const lsKey =
-            "obsidian-live-sync-vaultanddevicename-" +
+            DeviceNameKeyPrefix +
             this.APIService.getSystemVaultName() +
             this.additionalSuffixOfDatabaseName();
         if (this.settings.deviceAndVaultName != "") {

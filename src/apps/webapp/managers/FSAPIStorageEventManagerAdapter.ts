@@ -216,8 +216,8 @@ class FSAPIWatchAdapter implements IStorageEventWatchAdapter {
                     // Build relative path
                     const relativePath = relativePathComponents ? relativePathComponents.join("/") : "";
 
-                    // Skip .livesync directory to avoid infinite loops
-                    if (relativePath.startsWith(".livesync/") || relativePath === ".livesync") {
+                    // Skip the .tabularium directory to avoid infinite loops
+                    if (relativePath.startsWith(".tabularium/") || relativePath === ".tabularium") {
                         continue;
                     }
 

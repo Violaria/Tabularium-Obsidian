@@ -362,7 +362,7 @@ export const commonlibEnglishMessages = {
     "Write logs into the file": "Write logs into the file",
     "You can enable this setting to process the files with size mismatches, these files can be created by some APIs or integrations.":
         "You can enable this setting to process the files with size mismatches, these files can be created by some APIs or integrations.",
-    "couchdbReplicator.beforeLiveSync": "Before Tabularium, start OneShot once...",
+    "couchdbReplicator.beforeLiveSync": "Before live sync, start OneShot once...",
     "couchdbReplicator.cantReplicateLowerValue": "We can't replicate more lower value.",
     "couchdbReplicator.checkingLastSyncPoint": "Looking for the point last synchronized point.",
     "couchdbReplicator.couldNotConnectTo": "Could not connect to ${uri} : ${name}\n(${db})",

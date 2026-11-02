@@ -120,7 +120,7 @@ export class FSAPIVaultAdapter implements IVaultAdapter<FSAPIFile> {
         const oldPath = file.path;
         const oldPathParts = oldPath.split("/");
         const oldName = oldPathParts.pop() ?? "file";
-        const temporaryName = `.${oldName}.livesync-rename-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
+        const temporaryName = `.${oldName}.tabularium-rename-${Date.now()}-${Math.floor(Math.random() * 1_000_000)}`;
         const temporaryPath = [...oldPathParts, temporaryName].join("/");
         const temporaryFile = await this.createBinary(temporaryPath, data);
 

@@ -1,3 +1,4 @@
+import { FORMER_NAMES, PREFIXMD_LOGFILE } from "@tabularium/sync-core/compat/common/types";
 // Building the content of a share from vault files. References between notes and to attachments are resolved with
 // Obsidian's link rules; those the owner allowed point into the share (`share:<id>`), the others become a placeholder
 // that keeps only the kind of reference (`share:denied:<kind>`), so a page never shows the title or path of something
@@ -39,7 +40,10 @@ const typeOf = (path: string) => TYPES[path.slice(path.lastIndexOf(".") + 1).toL
 
 /** Files of a share target: the note itself, or every file below the folder ("" for the whole vault). */
 /** Operational files at the vault root: the log (which names other notes) and the flag files, this plug-in's and the original's. */
-const OPERATIONAL = /^(livesync_log_.*\.md|redflag[23]?\.md|flag_(fetch|rebuild)\.md|tabularium-(suspend|fetch|rebuild)\.md)$/i;
+const OPERATIONAL = new RegExp(
+    `^((${PREFIXMD_LOGFILE}|${FORMER_NAMES.logFilePrefix}).*\\.md|redflag[23]?\\.md|flag_(fetch|rebuild)\\.md|tabularium-(suspend|fetch|rebuild)\\.md)$`,
+    "i"
+);
 
 export function included(target: string, folder: boolean, files: readonly string[]) {
     return folder

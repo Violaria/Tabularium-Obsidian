@@ -183,7 +183,7 @@ export class ConnectionStringParser {
             P2P_roomID: decodeURIComponent(host),
             P2P_passphrase: decodeURIComponent(password),
             P2P_relays: searchParams.get("relays") || "",
-            P2P_AppID: searchParams.get("appId") || "self-hosted-livesync",
+            P2P_AppID: searchParams.get("appId") || "",
             P2P_AutoStart: searchParams.get("autoStart") === "true",
             P2P_AutoBroadcast: searchParams.get("autoBroadcast") === "true",
             P2P_turnServers: searchParams.get("turnServers") || "",

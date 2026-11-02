@@ -35,7 +35,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("exits 1 when --settings has no value", () => {
-        process.argv = ["node", "livesync-cli", "./databasePath", "--settings"];
+        process.argv = ["node", "tabularium-cli", "./databasePath", "--settings"];
         const exitMock = mockProcessExit();
 
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
@@ -44,7 +44,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("exits 1 when database-path is missing", () => {
-        process.argv = ["node", "livesync-cli", "sync"];
+        process.argv = ["node", "tabularium-cli", "sync"];
         const exitMock = mockProcessExit();
 
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
@@ -53,7 +53,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("exits 1 for unknown command after database-path", () => {
-        process.argv = ["node", "livesync-cli", "./databasePath", "unknown-cmd"];
+        process.argv = ["node", "tabularium-cli", "./databasePath", "unknown-cmd"];
         const exitMock = mockProcessExit();
 
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
@@ -62,7 +62,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("exits 0 and prints help for --help", () => {
-        process.argv = ["node", "livesync-cli", "--help"];
+        process.argv = ["node", "tabularium-cli", "--help"];
         const exitMock = mockProcessExit();
 
         expect(() => parseArgs()).toThrowError("__EXIT__:0");
@@ -70,14 +70,14 @@ describe("CLI parseArgs", () => {
         expect(standardIo.writeStdout).toHaveBeenCalled();
         const combined = standardIo.writeStdout.mock.calls.flat().join("");
         expect(combined).toContain("Usage:");
-        expect(combined).toContain("livesync-cli <database-path> [options] <command> [command-args]");
+        expect(combined).toContain("tabularium-cli <database-path> [options] <command> [command-args]");
         expect(combined).toContain("--compat-remote-admin-exit-zero");
     });
 
     it("parses remote-add command", () => {
         process.argv = [
             "node",
-            "livesync-cli",
+            "tabularium-cli",
             "./databasePath",
             "remote-add",
             "my-remote",
@@ -91,7 +91,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("parses remote-activate command", () => {
-        process.argv = ["node", "livesync-cli", "./databasePath", "remote-activate", "remote-abc"];
+        process.argv = ["node", "tabularium-cli", "./databasePath", "remote-activate", "remote-abc"];
         const parsed = parseArgs();
 
         expect(parsed.databasePath).toBe("./databasePath");
@@ -100,7 +100,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("parses remote-export command", () => {
-        process.argv = ["node", "livesync-cli", "./databasePath", "remote-export", "remote-abc"];
+        process.argv = ["node", "tabularium-cli", "./databasePath", "remote-export", "remote-abc"];
         const parsed = parseArgs();
 
         expect(parsed.databasePath).toBe("./databasePath");
@@ -111,7 +111,7 @@ describe("CLI parseArgs", () => {
     it("parses remote-set command", () => {
         process.argv = [
             "node",
-            "livesync-cli",
+            "tabularium-cli",
             "./databasePath",
             "remote-set",
             "remote-abc",
@@ -125,66 +125,66 @@ describe("CLI parseArgs", () => {
     });
 
     it("parses --interval flag with valid integer", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--interval", "30"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--interval", "30"];
         const parsed = parseArgs();
         expect(parsed.command).toBe("daemon");
         expect(parsed.interval).toBe(30);
     });
 
     it("parses -i shorthand for --interval", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "-i", "10"];
+        process.argv = ["node", "tabularium-cli", "./vault", "-i", "10"];
         const parsed = parseArgs();
         expect(parsed.interval).toBe(10);
     });
 
     it("exits 1 when --interval has no value", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--interval"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--interval"];
         const exitMock = mockProcessExit();
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
         expect(exitMock).toHaveBeenCalledWith(1);
     });
 
     it("exits 1 when --interval is not a positive integer", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--interval", "0"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--interval", "0"];
         const exitMock = mockProcessExit();
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
         expect(exitMock).toHaveBeenCalledWith(1);
     });
 
     it("exits 1 when --interval is negative", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--interval", "-5"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--interval", "-5"];
         mockProcessExit();
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
     });
 
     it("exits 1 when --interval is not numeric", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--interval", "abc"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--interval", "abc"];
         mockProcessExit();
         expect(() => parseArgs()).toThrowError("__EXIT__:1");
     });
 
     it("parses explicit daemon command", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "daemon"];
+        process.argv = ["node", "tabularium-cli", "./vault", "daemon"];
         const parsed = parseArgs();
         expect(parsed.command).toBe("daemon");
         expect(parsed.databasePath).toBe("./vault");
     });
 
     it("defaults to daemon when no command specified", () => {
-        process.argv = ["node", "livesync-cli", "./vault"];
+        process.argv = ["node", "tabularium-cli", "./vault"];
         const parsed = parseArgs();
         expect(parsed.command).toBe("daemon");
     });
 
     it("parses explicit daemon command with --interval", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "daemon", "--interval", "30"];
+        process.argv = ["node", "tabularium-cli", "./vault", "daemon", "--interval", "30"];
         const parsed = parseArgs();
         expect(parsed.command).toBe("daemon");
         expect(parsed.interval).toBe(30);
     });
 
     it("parses --write-settings as a global option", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--write-settings", "ls"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--write-settings", "ls"];
         const parsed = parseArgs();
 
         expect(parsed.command).toBe("ls");
@@ -193,7 +193,7 @@ describe("CLI parseArgs", () => {
     });
 
     it("parses the remote-administration exit compatibility option globally", () => {
-        process.argv = ["node", "livesync-cli", "./vault", "--compat-remote-admin-exit-zero", "mark-resolved"];
+        process.argv = ["node", "tabularium-cli", "./vault", "--compat-remote-admin-exit-zero", "mark-resolved"];
         const parsed = parseArgs();
 
         expect(parsed.command).toBe("mark-resolved");

@@ -33,7 +33,7 @@ describe("IgnoreRules", () => {
     }
 
     async function writeIgnoreFile(vaultPath: string, content: string): Promise<void> {
-        const ignoreDir = path.join(vaultPath, ".livesync");
+        const ignoreDir = path.join(vaultPath, ".tabularium");
         await fs.mkdir(ignoreDir, { recursive: true });
         await fs.writeFile(path.join(ignoreDir, "ignore"), content, "utf-8");
     }
@@ -149,7 +149,7 @@ describe("IgnoreRules", () => {
     });
 
     describe("load() with missing file", () => {
-        it("returns without error when .livesync/ignore is absent", async () => {
+        it("returns without error when .tabularium/ignore is absent", async () => {
             const vaultPath = await createVault();
             // No ignore file created
             const rules = new IgnoreRules(vaultPath);

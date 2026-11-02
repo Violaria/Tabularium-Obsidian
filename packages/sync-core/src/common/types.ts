@@ -174,9 +174,10 @@ import type {
 } from "./models/fileaccess.type.ts";
 import {
     SETTING_KEY_P2P_DEVICE_NAME,
-    configURIBase,
-    configURIBaseQR,
     SuffixDatabaseName,
+    SuffixKeyValueDatabase,
+    DeviceNameKeyPrefix,
+    FORMER_NAMES,
     ExtraSuffixIndexedDB,
 } from "./models/shared.const.ts";
 import {
@@ -200,7 +201,6 @@ import {
     ProtocolVersions,
     type ProtocolVersion,
     DOCID_SYNC_PARAMETERS,
-    DOCID_JOURNAL_SYNC_PARAMETERS,
     type SyncParameters,
     DEFAULT_SYNC_PARAMETERS,
 } from "./models/sync.definition.ts";
@@ -238,7 +238,6 @@ import type {
 } from "./models/diff.definition.ts";
 import {
     PREFIXMD_LOGFILE,
-    PREFIXMD_LOGFILE_UC,
     FlagFiles,
     UpstreamFlagFiles,
 } from "./models/redflag.const.ts";
@@ -425,7 +424,6 @@ export type { DatabaseConnectingStatus };
 
 export {
     PREFIXMD_LOGFILE,
-    PREFIXMD_LOGFILE_UC,
     FlagFiles,
     UpstreamFlagFiles,
 };
@@ -473,14 +471,14 @@ export { ProtocolVersions };
 
 export type { ProtocolVersion };
 export { DOCID_SYNC_PARAMETERS };
-export { DOCID_JOURNAL_SYNC_PARAMETERS };
 export type { SyncParameters };
 export { DEFAULT_SYNC_PARAMETERS };
 
 export {
     SETTING_KEY_P2P_DEVICE_NAME,
-    configURIBase,
-    configURIBaseQR,
     SuffixDatabaseName,
+    SuffixKeyValueDatabase,
+    DeviceNameKeyPrefix,
+    FORMER_NAMES,
     ExtraSuffixIndexedDB,
 };

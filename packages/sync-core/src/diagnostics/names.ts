@@ -28,7 +28,7 @@ function randomSalt(): string {
 
 function nameHash(salt: string, domain: string, value: string): string {
     const hash = new Sha256();
-    hash.update(JSON.stringify(["livesync-diagnostic-v1", salt, domain, value]));
+    hash.update(JSON.stringify(["tabularium-diagnostic-v1", salt, domain, value]));
     return Array.from(hash.digestSync().subarray(0, 16), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 

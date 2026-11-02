@@ -1,3 +1,4 @@
+import { SuffixKeyValueDatabase } from "@lib/common/models/shared.const";
 import type { SimpleStore } from "@lib/common/utils";
 import type { IKeyValueDBService, IVaultService } from "./IService";
 import { ServiceBase, type ServiceContext } from "./ServiceBase";
@@ -51,7 +52,7 @@ export abstract class KeyValueDBService<T extends ServiceContext = ServiceContex
             // localStorage.removeItem(lsKey);
             await this._kvDB?.destroy();
             await yieldMicrotask();
-            this._kvDB = await this.openKeyValueDatabase(this.vault.getVaultName() + "-livesync-kv");
+            this._kvDB = await this.openKeyValueDatabase(this.vault.getVaultName() + SuffixKeyValueDatabase);
             await delay(100);
         } catch (e) {
             this._kvDB = undefined!;
@@ -78,7 +79,7 @@ export abstract class KeyValueDBService<T extends ServiceContext = ServiceContex
             await this.tryCloseKvDB();
             await delay(10);
             await yieldMicrotask();
-            this._kvDB = await this.openKeyValueDatabase(this.vault.getVaultName() + "-livesync-kv");
+            this._kvDB = await this.openKeyValueDatabase(this.vault.getVaultName() + SuffixKeyValueDatabase);
             await yieldMicrotask();
             await delay(100);
         } catch (e) {

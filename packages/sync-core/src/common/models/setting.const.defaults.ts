@@ -13,7 +13,7 @@ import type { CustomRegExpSourceList } from "./shared.type.util";
 export const P2P_DEFAULT_SETTINGS: P2PSyncSetting = {
     P2P_Enabled: false,
     P2P_AutoAccepting: AutoAccepting.NONE,
-    P2P_AppID: "self-hosted-livesync",
+    P2P_AppID: "",
     P2P_roomID: "",
     P2P_passphrase: "",
     P2P_relays: "wss://exp-relay.vrtmrz.net/",
@@ -99,7 +99,7 @@ export const SETTINGS_SCHEMA_DEFAULTS: SyncSettings = {
     syncInternalFiles: false,
     syncInternalFilesBeforeReplication: false,
     syncInternalFilesIgnorePatterns:
-        "\\/node_modules\\/, \\/\\.git\\/, \\/obsidian-livesync\\/" as CustomRegExpSourceList<",">,
+        "\\/node_modules\\/, \\/\\.git\\/, \\/tabularium\\/" as CustomRegExpSourceList<",">,
     syncInternalFilesTargetPatterns: "" as CustomRegExpSourceList<",">,
     syncInternalFilesInterval: 60,
     additionalSuffixOfDatabaseName: "",

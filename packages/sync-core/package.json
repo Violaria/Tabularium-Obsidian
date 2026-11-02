@@ -234,6 +234,11 @@
             "import": "./dist/pouchdb/chunks.js",
             "default": "./dist/pouchdb/chunks.js"
         },
+        "./compat/pouchdb/moveLocalDatabase": {
+            "types": "./src/pouchdb/moveLocalDatabase.ts",
+            "import": "./dist/pouchdb/moveLocalDatabase.js",
+            "default": "./dist/pouchdb/moveLocalDatabase.js"
+        },
         "./compat/pouchdb/negotiation": {
             "types": "./src/pouchdb/negotiation.ts",
             "import": "./dist/pouchdb/negotiation.js",
@@ -619,6 +624,9 @@
             ],
             "compat/pouchdb/chunks": [
                 "src/pouchdb/chunks.ts"
+            ],
+            "compat/pouchdb/moveLocalDatabase": [
+                "src/pouchdb/moveLocalDatabase.ts"
             ],
             "compat/pouchdb/negotiation": [
                 "src/pouchdb/negotiation.ts"

@@ -247,7 +247,7 @@ const protocolFixtures: ProtocolFixture[] = [
 describe("runCommand abnormal cases", () => {
     const context = {
         databasePath: "/tmp/vault",
-        settingsPath: "/tmp/vault/.livesync/settings.json",
+        settingsPath: "/tmp/vault/.tabularium/settings.json",
     } as any;
 
     beforeEach(() => {
@@ -782,7 +782,7 @@ describe("runCommand abnormal cases", () => {
             const decoupledContext = {
                 databasePath: localDatabasePath,
                 vaultPath: localVaultPath,
-                settingsPath: path.join(localDatabasePath, ".livesync/settings.json"),
+                settingsPath: path.join(localDatabasePath, ".tabularium/settings.json"),
             } as any;
 
             const options = {

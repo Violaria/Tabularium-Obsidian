@@ -83,8 +83,8 @@ describe("CLI database preparation", () => {
     }
 
     it("loads legacy device values and persists configuration through the service-owned store", async () => {
-        const localStoragePath = join(directory, ".livesync", "runtime", "local-storage.json");
-        await mkdir(join(directory, ".livesync", "runtime"), { recursive: true });
+        const localStoragePath = join(directory, ".tabularium", "runtime", "local-storage.json");
+        await mkdir(join(directory, ".tabularium", "runtime"), { recursive: true });
         await writeFile(localStoragePath, JSON.stringify({ ["__proto__"]: "legacy value" }));
         let legacyValue: string | null | undefined;
         const runner = vi.fn<CliCommandRunner>(async (_options, { core }) => {
@@ -114,8 +114,8 @@ describe("CLI database preparation", () => {
                 settingsPath,
                 JSON.stringify({ ...createDefaultCliSettings(), isConfigured: true, suspendFileWatching })
             );
-            await mkdir(join(vaultPath, ".livesync"));
-            await writeFile(join(vaultPath, ".livesync/ignore"), "*.tmp\n");
+            await mkdir(join(vaultPath, ".tabularium"));
+            await writeFile(join(vaultPath, ".tabularium/ignore"), "*.tmp\n");
             await writeFile(join(vaultPath, "notes/ignored.tmp"), "ignored");
             const storedPaths: string[] = [];
             let content: string | undefined;

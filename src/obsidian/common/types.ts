@@ -51,7 +51,6 @@ export type queueItem = {
 
 export const FileWatchEventQueueMax = 10;
 
-export { configURIBase, configURIBaseQR } from "@tabularium/sync-core/compat/common/types";
 
 export {
     CHeader,

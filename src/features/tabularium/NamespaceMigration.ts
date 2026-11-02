@@ -13,6 +13,8 @@ import type { TabulariumServer } from "./ServerLogin";
 import { OpenKeyValueDatabase } from "@/obsidian/common/KeyValueDB";
 import { FILE_REFLECTION_PROVENANCE_STORE } from "@/core/serviceModules/FileReflectionProvenance";
 import { formerStorageKeys, namesFor, NAMESPACE_MIGRATION_KEY } from "./ownNames";
+import { FORMER_NAMES, SuffixDatabaseName, SuffixKeyValueDatabase } from "@tabularium/sync-core/compat/common/types";
+import { moveLocalDatabase } from "@tabularium/sync-core/compat/pouchdb/moveLocalDatabase";
 
 /** The original plug-in's folder in a vault: while it is there, the old names may be its own and are kept. */
 export const UPSTREAM_PLUGIN_ID = "obsidian-livesync";
@@ -20,7 +22,7 @@ export const UPSTREAM_PLUGIN_ID = "obsidian-livesync";
 /** Removes what the old names held on this device: the local databases, the vault's device values and flag files. */
 export async function removeOldNames(core: PluginCore, storage: Storage, from: string) {
     const vaultName = core.services.API.getSystemVaultName();
-    const old = namesFor(vaultName, from);
+    const old = namesFor(vaultName, from, "former");
     await core.services.database.createPouchDBInstance(old.localDatabase).destroy();
     await deleteDB(old.keyValueDatabase);
     const keys = Array.from({ length: storage.length }, (_, i) => storage.key(i)!);
@@ -60,6 +62,31 @@ export async function carryOverProvenance(core: PluginCore, oldKeyValueDatabase:
     }
 }
 
+/**
+ * 1.0 renamed the local and the key-value database. A device that synchronised under the names of 0.26 moves its data
+ * here, on the device and before the database opens: nothing is fetched again and the connection stays.
+ */
+export async function moveToCurrentNames(core: PluginCore) {
+    const name = core.services.vault.getVaultName();
+    const existing = (await indexedDB.databases()).map((database) => database.name ?? "");
+    const formerLocal = name + FORMER_NAMES.databaseSuffix;
+    if (existing.some((database) => database.startsWith(`_pouch_${formerLocal}`))) {
+        const moved = await moveLocalDatabase((database) => core.services.database.createPouchDBInstance(database), formerLocal, name + SuffixDatabaseName);
+        core.services.API.addLog(`Moved ${moved} documents from ${formerLocal} to ${name + SuffixDatabaseName}`, LOG_LEVEL_INFO);
+    }
+    const formerKeyValue = name + FORMER_NAMES.keyValueSuffix;
+    if (existing.includes(formerKeyValue)) {
+        const from = await OpenKeyValueDatabase(formerKeyValue);
+        const to = await OpenKeyValueDatabase(name + SuffixKeyValueDatabase);
+        const keys = (await from.keys()).filter((key) => typeof key === "string");
+        for (const key of keys) if ((await to.get(key)) === undefined) await to.set(key, await from.get(key));
+        await from.close();
+        await deleteDB(formerKeyValue);
+        core.services.API.addLog(`Moved ${keys.length} values from ${formerKeyValue} to ${name + SuffixKeyValueDatabase}`, LOG_LEVEL_INFO);
+    }
+    return true;
+}
+
 /** Why the server cannot be used for the fetch right now, or undefined when it can. */
 async function unavailable(core: PluginCore, server: TabulariumServer) {
     const settings = core.services.setting.currentSettings();
@@ -88,6 +115,8 @@ export function installNamespaceMigration(
         JSON.parse((await core.services.setting.config.getValue(NAMESPACE_MIGRATION_KEY, "")) || "null") as {
             from: string;
         } | null;
+    // Before anything opens the local or the key-value database.
+    core.services.appLifecycle.onSettingLoaded.addHandler(() => moveToCurrentNames(core), -10);
     let waitingForNetwork = false;
     const waitForNetwork = () => {
         if (waitingForNetwork) return;
@@ -119,7 +148,7 @@ export function installNamespaceMigration(
     // The fetch resets the local databases before it reconciles the vault's files with what it fetched.
     core.services.databaseEvents.onResetDatabase.addHandler(async () => {
         const migration = await pending();
-        if (migration) await carryOverProvenance(core, namesFor(core.services.API.getSystemVaultName(), migration.from).keyValueDatabase);
+        if (migration) await carryOverProvenance(core, namesFor(core.services.API.getSystemVaultName(), migration.from, "former").keyValueDatabase);
         return true;
     });
 

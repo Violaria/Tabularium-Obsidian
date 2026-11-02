@@ -9,7 +9,7 @@ describe("reproducible diagnostic pseudonyms", () => {
         const mapper = createDiagnosticNameMapper("pseudonym", salt);
         const path = "Private/cafe\u0301.md";
         const digest = createHash("sha256")
-            .update(JSON.stringify(["livesync-diagnostic-v1", salt, "path", path]))
+            .update(JSON.stringify(["tabularium-diagnostic-v1", salt, "path", path]))
             .digest("hex")
             .slice(0, 32);
         expect(mapper.path(path)).toBe(`${salt}$${digest}`);

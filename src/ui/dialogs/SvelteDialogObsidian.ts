@@ -31,7 +31,7 @@ export class SvelteDialogObsidian<T, U, C extends ObsidianServiceContext = Obsid
 
     override onOpen(): void {
         this.session.onOpen();
-        this.contentEl.closest(".modal-container")?.classList.add("livesync-svelte-dialog-container");
+        this.contentEl.closest(".modal-container")?.classList.add("tabularium-dialog-container");
     }
 
     override onClose(): void {

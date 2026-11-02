@@ -591,7 +591,7 @@ export interface P2PConnectionInfo {
     /**
      * The Application ID for the P2P connection.
      * This is used to identify the application using the P2P network.
-     * In Tabularium, fixed to "self-hosted-livesync".
+     * Peer-to-peer sync is not part of Tabularium; the value is unused.
      */
     P2P_AppID: string;
 

@@ -113,7 +113,7 @@ describe("KeyValueDBService factory boundary", () => {
 
         expect(onSettingLoaded).toBeDefined();
         await expect(onSettingLoaded!()).resolves.toBe(true);
-        expect(openKeyValueDatabase).toHaveBeenCalledWith("test-vault-livesync-kv");
+        expect(openKeyValueDatabase).toHaveBeenCalledWith("test-vault-kv");
         await store.set("key", "value");
         expect(database.set).toHaveBeenCalledWith("composed-before-open-key", "value");
     });

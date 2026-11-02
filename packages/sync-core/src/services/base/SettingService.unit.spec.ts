@@ -37,7 +37,7 @@ function deferred<T>() {
 }
 
 function deviceNameStoreKey(suffix = DEFAULT_SETTINGS.additionalSuffixOfDatabaseName): string {
-    return `obsidian-live-sync-vaultanddevicename-vault${typeof suffix === "undefined" ? "" : `-${suffix}`}`;
+    return `device-name-vault${typeof suffix === "undefined" ? "" : `-${suffix}`}`;
 }
 
 class TestSettingService extends SettingService<ServiceContext> {
@@ -278,7 +278,7 @@ describe("SettingService", () => {
         const setValue = deviceValues.setValue;
         deviceValues.setValue = async (key, value) => {
             await setValue(key, value);
-            if (key.startsWith("obsidian-live-sync-vaultanddevicename-")) {
+            if (key.startsWith("device-name-")) {
                 writeStarted.resolve();
                 await heldWrite.promise;
             }
@@ -304,7 +304,7 @@ describe("SettingService", () => {
     it.each([
         {
             description: "device-name root",
-            shouldFail: (key: string) => key.startsWith("obsidian-live-sync-vaultanddevicename-"),
+            shouldFail: (key: string) => key.startsWith("device-name-"),
             makeError: () => new Error("device-value write failed"),
             expectedError: { message: "device-value write failed" },
         },

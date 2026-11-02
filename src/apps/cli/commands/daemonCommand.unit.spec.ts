@@ -76,7 +76,7 @@ function makeDaemonOptions(interval?: number): CLIOptions {
 
 const baseContext = {
     vaultPath: "/tmp/vault",
-    settingsPath: "/tmp/vault/.livesync/settings.json",
+    settingsPath: "/tmp/vault/.tabularium/settings.json",
     originalSyncSettings: {
         liveSync: true,
         syncOnStart: false,

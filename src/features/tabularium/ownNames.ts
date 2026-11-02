@@ -4,7 +4,13 @@
 // "tabularium" (which names the local database, the key-value database and the per-vault device values) and every device
 // value starts with "tabularium:". A device that synchronised under the old names fetches once into the new ones
 // (NamespaceMigration.ts). This module is loaded by the services, before the features.
-import { SuffixDatabaseName, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
+import {
+    DeviceNameKeyPrefix,
+    FORMER_NAMES,
+    SuffixDatabaseName,
+    SuffixKeyValueDatabase,
+    type SyncSettings,
+} from "@tabularium/sync-core/compat/common/types";
 import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
 
 export const DATABASE_SUFFIX = "tabularium";
@@ -16,17 +22,21 @@ const PASSPHRASE_KEY = "ls-setting-passphrase";
 /** Where an interrupted fetch would resume in the old local database; meaningless for the new one. */
 const FAST_FETCH_CHECKPOINT_KEY = "fast-fetch-checkpoint";
 
-/** The names the sync core forms from a vault name and a database suffix. */
-export function namesFor(vaultName: string, suffix: string) {
+/**
+ * The names the sync core forms from a vault name and a database suffix: as they are now, or as they were before 1.0
+ * (which were also the original plug-in's).
+ */
+export function namesFor(vaultName: string, suffix: string, era: "current" | "former" = "current") {
     const database = vaultName + (suffix ? `-${suffix}` : "");
+    const former = era === "former";
     return {
         /** The vault name with the suffix, as the local database and its stores are named. */
         database,
         /** Per-vault device values (`setting.config`). */
         keyPrefix: `${vaultName}-${suffix}-`,
-        deviceName: `obsidian-live-sync-vaultanddevicename-${vaultName}-${suffix}`,
-        localDatabase: database + SuffixDatabaseName,
-        keyValueDatabase: `${database}-livesync-kv`,
+        deviceName: `${former ? FORMER_NAMES.deviceNameKeyPrefix : DeviceNameKeyPrefix}${vaultName}-${suffix}`,
+        localDatabase: database + (former ? FORMER_NAMES.databaseSuffix : SuffixDatabaseName),
+        keyValueDatabase: database + (former ? FORMER_NAMES.keyValueSuffix : SuffixKeyValueDatabase),
     };
 }
 
@@ -56,9 +66,19 @@ export function adoptOwnNames(
     vaultName: string,
     settings: Partial<SyncSettings>
 ): string | undefined {
-    if (Object.keys(settings).length === 0 || settings.additionalSuffixOfDatabaseName === DATABASE_SUFFIX) return undefined;
+    if (Object.keys(settings).length === 0) return undefined;
+    if (settings.additionalSuffixOfDatabaseName === DATABASE_SUFFIX) {
+        // A device of 0.26: its device name moves to the current key (the databases move in moveToCurrentNames).
+        const former = namesFor(vaultName, DATABASE_SUFFIX, "former").deviceName;
+        const current = namesFor(vaultName, DATABASE_SUFFIX).deviceName;
+        const value = storage.getItem(DEVICE_VALUE_PREFIX + former);
+        if (value !== null && storage.getItem(DEVICE_VALUE_PREFIX + current) === null)
+            storage.setItem(DEVICE_VALUE_PREFIX + current, value);
+        storage.removeItem(DEVICE_VALUE_PREFIX + former);
+        return undefined;
+    }
     const from = settings.additionalSuffixOfDatabaseName ?? "";
-    const old = namesFor(vaultName, from);
+    const old = namesFor(vaultName, from, "former");
     const own = namesFor(vaultName, DATABASE_SUFFIX);
     const copies: [string, string][] = [
         [PASSPHRASE_KEY, PASSPHRASE_KEY],

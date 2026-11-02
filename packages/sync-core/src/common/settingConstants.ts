@@ -26,8 +26,8 @@ export type { FilePath, FilePathWithPrefixLC, FilePathWithPrefix, DocumentID };
  */
 export type OnDialogSettings = {
     configPassphrase: string;
-    preset: "" | "PERIODIC" | "LIVESYNC" | "DISABLE";
-    syncMode: "ONEVENTS" | "PERIODIC" | "LIVESYNC";
+    preset: "" | "PERIODIC" | "LIVE" | "DISABLE";
+    syncMode: "ONEVENTS" | "PERIODIC" | "LIVE";
     dummy: number;
     deviceAndVaultName: string;
 };

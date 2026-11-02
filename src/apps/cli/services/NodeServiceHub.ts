@@ -1,3 +1,4 @@
+import { CLI_DIRECTORY } from "@/apps/cli/currentNames";
 import type { AppLifecycleServiceDependencies } from "@tabularium/sync-core/compat/services/base/AppLifecycleService";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type {
@@ -88,7 +89,7 @@ class NodeUIService<T extends ServiceContext> extends UIService<T> {
 
 export class NodeServiceHub<T extends NodeServiceContext> extends InjectableServiceHub<T> {
     constructor(basePath: string, context: T) {
-        const runtimeDir = nodePath.join(basePath, ".livesync", "runtime");
+        const runtimeDir = nodePath.join(basePath, CLI_DIRECTORY, "runtime");
         const localStoragePath = nodePath.join(runtimeDir, "local-storage.json");
         const keyValueDBPath = nodePath.join(runtimeDir, "keyvalue-db.json");
 

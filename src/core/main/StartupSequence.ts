@@ -133,7 +133,6 @@ export class StartupSequence {
         // this.core.$$realizeSettingSyncMode = this.core.$$realizeSettingSyncMode.bind(this);
         // this.$$parseReplicationResult = this.$$parseReplicationResult.bind(this);
         // this.$$replicate = this.$$replicate.bind(this);
-        // this.core.$$onLiveSyncReady = this.core.$$onLiveSyncReady.bind(this);
         await this.core.services.appLifecycle.onLoaded();
         return true;
     }

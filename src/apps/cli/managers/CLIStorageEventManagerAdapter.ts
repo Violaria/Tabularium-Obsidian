@@ -1,3 +1,5 @@
+import { FORMER_NAMES, SuffixDatabaseName } from "@tabularium/sync-core/compat/common/types";
+import { SNAPSHOT_FILE } from "@/apps/cli/currentNames";
 import type { FilePath, UXFileInfoStub, UXInternalFileInfoStub } from "@tabularium/sync-core/compat/common/types";
 import type { FileEventItem } from "@tabularium/sync-core/compat/common/types";
 import type { IStorageEventManagerAdapter } from "@tabularium/sync-core/compat/managers/adapters";
@@ -50,7 +52,7 @@ class CLIPersistenceAdapter implements IStorageEventPersistenceAdapter {
         basePath: string,
         private reportDiagnostic: CliDiagnosticReporter = () => undefined
     ) {
-        this.snapshotPath = path.join(basePath, ".livesync-snapshot.json");
+        this.snapshotPath = path.join(basePath, SNAPSHOT_FILE);
     }
 
     async saveSnapshot(snapshot: (FileEventItem | FileEventItemSentinel)[]): Promise<void> {
@@ -142,7 +144,7 @@ class CLIWatchAdapter implements IStorageEventWatchAdapter {
         if (!this.watchEnabled) return;
         const baseIgnored: Array<RegExp | string | ((p: string) => boolean)> = [
             /(^|[/\\])\./,
-            /(^|[/\\])[^/\\]*-livesync-v2([/\\]|$)/,
+            new RegExp(`(^|[/\\\\])[^/\\\\]*(${SuffixDatabaseName}|${FORMER_NAMES.databaseSuffix})([/\\\\]|$)`),
         ];
         // Bind rules to a local const before the closure — chokidar v4 requires a
         // MatchFunction, not glob strings, for custom patterns.

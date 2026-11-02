@@ -42,7 +42,7 @@
 </div>
 
 <style>
-    :global(body.is-mobile .livesync-svelte-dialog-container) {
+    :global(body.is-mobile .tabularium-dialog-container) {
         box-sizing: border-box;
         padding-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
         padding-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
@@ -50,11 +50,11 @@
         padding-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
     }
 
-    :global(body.is-mobile .livesync-svelte-dialog-container .modal) {
+    :global(body.is-mobile .tabularium-dialog-container .modal) {
         max-height: 100%;
     }
 
-    :global(body.is-mobile .livesync-svelte-dialog-container .dialog-host > .button-group) {
+    :global(body.is-mobile .tabularium-dialog-container .dialog-host > .button-group) {
         background: var(--modal-background, var(--background-primary));
         bottom: 0;
         padding-bottom: 1px;

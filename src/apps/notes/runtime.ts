@@ -2,6 +2,8 @@
  * Read-only Tabularium runtime for the web notes page: the upstream core with an OPFS directory as its vault.
  * Settings live in memory only, so the passphrase never reaches browser storage.
  */
+import { moveLocalDatabase } from "@tabularium/sync-core/compat/pouchdb/moveLocalDatabase";
+import { FORMER_NAMES, SuffixDatabaseName } from "@tabularium/sync-core/compat/common/types";
 import { createCore, type SyncCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { AbstractReplicator } from "@tabularium/sync-core/compat/replication/AbstractReplicator";
@@ -159,7 +161,15 @@ export class NotesRuntime {
         this.core = createCore<ServiceContext>({
             hub,
             serviceModules: (core, serviceHub) => (this.modules = initialiseServiceModulesFSAPI(root, core, serviceHub)),
-            features: (core) => useRemoteConfiguration(core),
+            features: (core) => {
+                useRemoteConfiguration(core);
+                // 1.0 renamed the local database; a browser that synchronised before moves its copy before it opens.
+                core.services.appLifecycle.onSettingLoaded.addHandler(async () => {
+                    const name = core.services.vault.getVaultName();
+                    await moveLocalDatabase((database) => core.services.database.createPouchDBInstance(database), name + FORMER_NAMES.databaseSuffix, name + SuffixDatabaseName);
+                    return true;
+                }, -10);
+            },
         });
         const { services, serviceModules } = this.core;
         if (!(await services.control.onLoad())) throw new Error(t("notes.coreFailed"));

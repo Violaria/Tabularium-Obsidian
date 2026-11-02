@@ -1,7 +1,6 @@
 import type { FilePath } from "./db.type";
 
-export const PREFIXMD_LOGFILE = "livesync_log_";
-export const PREFIXMD_LOGFILE_UC = "LIVESYNC_LOG_";
+export const PREFIXMD_LOGFILE = "tabularium-log-";
 
 /**
  * Tabularium's flag files at the vault root: each asks the plug-in to suspend, fetch or rebuild at the next start. Their

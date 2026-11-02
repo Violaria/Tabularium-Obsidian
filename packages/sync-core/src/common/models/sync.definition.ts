@@ -8,7 +8,6 @@ export const ProtocolVersions: { readonly UNSET: undefined; readonly LEGACY: 1; 
 };
 export type ProtocolVersion = (typeof ProtocolVersions)[keyof typeof ProtocolVersions];
 export const DOCID_SYNC_PARAMETERS = "_local/obsidian_livesync_sync_parameters" as DocumentID;
-export const DOCID_JOURNAL_SYNC_PARAMETERS = "_obsidian_livesync_journal_sync_parameters.json" as DocumentID;
 
 export interface SyncParameters extends DatabaseEntry {
     _id: typeof DOCID_SYNC_PARAMETERS;

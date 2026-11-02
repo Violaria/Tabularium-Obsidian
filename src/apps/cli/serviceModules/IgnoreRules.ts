@@ -1,9 +1,10 @@
+import { CLI_DIRECTORY } from "@/apps/cli/currentNames";
 import { Minimatch } from "minimatch";
 import { fsPromises as fs, path } from "@tabularium/sync-core/node";
 import type { CliDiagnosticReporter } from "@/apps/cli/cliOutput";
 
 /**
- * Loads and evaluates ignore rules from `.livesync/ignore` inside the vault.
+ * Loads and evaluates ignore rules from `.tabularium/ignore` inside the vault.
  *
  * File format:
  *   - Lines starting with `#` are comments.
@@ -15,7 +16,7 @@ import type { CliDiagnosticReporter } from "@/apps/cli/cliOutput";
  * ruleset containing them throws an error — use separate include/exclude files
  * instead.
  *
- * Missing files (`.livesync/ignore` or `.gitignore`) are silently skipped.
+ * Missing files (`.tabularium/ignore` or `.gitignore`) are silently skipped.
  */
 export class IgnoreRules {
     private patterns: Minimatch[] = [];
@@ -26,7 +27,7 @@ export class IgnoreRules {
     ) {}
 
     /**
-     * Reads `.livesync/ignore` (and optionally `.gitignore`) and populates the
+     * Reads `.tabularium/ignore` (and optionally `.gitignore`) and populates the
      * pattern list.  Safe to call multiple times — each call replaces the
      * previous state.  Does not throw if files are absent.
      *
@@ -34,7 +35,7 @@ export class IgnoreRules {
      */
     async load(): Promise<void> {
         this.patterns = [];
-        const ignorePath = path.join(this.vaultPath, ".livesync", "ignore");
+        const ignorePath = path.join(this.vaultPath, CLI_DIRECTORY, "ignore");
         let rawLines: string[];
         try {
             const content = await fs.readFile(ignorePath, "utf-8");
@@ -109,7 +110,7 @@ export class IgnoreRules {
         if (raw.startsWith("!")) {
             throw new Error(
                 `[IgnoreRules] Negation pattern '${raw}' is not supported. ` +
-                    `Remove it from .livesync/ignore or use a separate include/exclude file.`
+                    `Remove it from .tabularium/ignore or use a separate include/exclude file.`
             );
         }
         this.patterns.push(new Minimatch(this._normalisePattern(raw), { dot: true }));

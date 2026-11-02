@@ -1,4 +1,6 @@
 import { NodeServiceContext, NodeServiceHub } from "./services/NodeServiceHub";
+import { CLI_DIRECTORY, moveToCurrentNames } from "./currentNames";
+import { FORMER_NAMES, SuffixDatabaseName } from "@tabularium/sync-core/compat/common/types";
 import { createCore, type StartupDatabaseOptions } from "@/core/createCore";
 import { initialiseServiceModulesCLI } from "./serviceModules/CLIServiceModules";
 import {
@@ -39,7 +41,7 @@ import {
     settingsEqual,
 } from "./settingsPersistence";
 
-const SETTINGS_FILE = ".livesync/settings.json";
+const SETTINGS_FILE = `${CLI_DIRECTORY}/settings.json`;
 
 interface CLIVaultSyncMode {
     readonly watchFiles: boolean;
@@ -86,8 +88,8 @@ function printHelp(standardIo: StandardIo): void {
 Tabularium CLI
 
 Usage:
-  livesync-cli <database-path> [options] <command> [command-args]
-  livesync-cli init-settings [path]
+  tabularium-cli <database-path> [options] <command> [command-args]
+  tabularium-cli init-settings [path]
 
 Arguments:
   database-path           Path to the local database directory
@@ -160,7 +162,7 @@ Examples:
     tabularium-cli ./my-database unlock-remote remote-abc123
     tabularium-cli ./my-database lock-remote remote-abc123
     tabularium-cli ./my-database remote-status remote-abc123
-    livesync-cli init-settings ./data.json
+    tabularium-cli init-settings ./data.json
     tabularium-cli ./my-database --verbose
         `
     );
@@ -405,6 +407,7 @@ export async function main(
         writeStderrLine(standardIo, `Error: Vault directory ${vaultPath} does not exist`);
         process.exit(1);
     }
+    await moveToCurrentNames(databasePath, vaultPath);
 
     infoLog(`Tabularium CLI`);
     infoLog(`Database Path: ${databasePath}`);
@@ -524,7 +527,7 @@ export async function main(
                     return await Promise.resolve(false);
                 }
                 // PouchDB LevelDB database directory lives in the vault directory.
-                if (parts[0]?.endsWith("-livesync-v2")) {
+                if (parts[0]?.endsWith(SuffixDatabaseName) || parts[0]?.endsWith(FORMER_NAMES.databaseSuffix)) {
                     return await Promise.resolve(false);
                 }
                 return await Promise.resolve(true);
