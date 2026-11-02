@@ -57,11 +57,11 @@ export class TabulariumEditorMenus {
     }
     /** Whether the toolbar over a selection shows on this device. */
     get toolbar() {
-        return window.localStorage.getItem(this.menuKey) !== "off";
+        return this.plugin.app.loadLocalStorage(this.menuKey) !== "off";
     }
     set toolbar(on: boolean) {
-        if (on) window.localStorage.removeItem(this.menuKey);
-        else window.localStorage.setItem(this.menuKey, "off");
+        if (on) this.plugin.app.saveLocalStorage(this.menuKey, null);
+        else this.plugin.app.saveLocalStorage(this.menuKey, "off");
     }
 
     install() {

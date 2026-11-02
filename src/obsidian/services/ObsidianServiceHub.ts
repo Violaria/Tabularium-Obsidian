@@ -27,6 +27,7 @@ import { ObsidianNoticeGroupManager } from "./ObsidianNoticeGroups";
 import { KeyedNoticeManager } from "@vrtmrz/obsidian-plugin-kit/notice";
 import { setLang } from "@/core/common/translation";
 import { DEVICE_VALUE_PREFIX } from "@/features/tabularium/ownNames";
+import { adoptSharedValues, createVaultStorage, useVaultStorage } from "@/obsidian/common/vaultStorage";
 
 // InjectableServiceHub
 
@@ -36,6 +37,10 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
         const noticeGroups = new ObsidianNoticeGroupManager();
         const context = new ObsidianServiceContext(plugin.app, plugin, plugin, notices, noticeGroups);
 
+        // This vault's own storage for device values; values of earlier versions are copied in once.
+        const storage = createVaultStorage(plugin.app);
+        adoptSharedValues(compatGlobal.localStorage, storage);
+        useVaultStorage(storage);
         const API = new ObsidianAPIService(context);
         const conflict = new InjectableConflictService<ObsidianServiceContext>(context);
         const fileProcessing = new InjectableFileProcessingService<ObsidianServiceContext>(context);
@@ -45,7 +50,7 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
         const setting = new ObsidianSettingService(context, {
             APIService: API,
             onDisplayLanguageChanged: setLang,
-            deviceValues: createWebStorageValueStore(compatGlobal.localStorage, { prefix: DEVICE_VALUE_PREFIX }),
+            deviceValues: createWebStorageValueStore(storage, { prefix: DEVICE_VALUE_PREFIX }),
         });
         const appLifecycle = new ObsidianAppLifecycleService(context, {
             settingService: setting,

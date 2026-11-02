@@ -10,6 +10,7 @@ import {
 import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { adoptOwnNames } from "@/features/tabularium/ownNames";
+import { vaultStorage } from "@/obsidian/common/vaultStorage";
 
 export function normaliseObsidianSettingsData(data: unknown): SyncSettings | undefined {
     if (typeof data !== "object" || data === null || Array.isArray(data)) return undefined;
@@ -33,7 +34,7 @@ export class ObsidianSettingService<T extends ObsidianServiceContext> extends Se
     }
     protected override async loadData(): Promise<SyncSettings | undefined> {
         const data = normaliseObsidianSettingsData(await this.context.tabulariumPlugin.loadData());
-        if (data) adoptOwnNames(compatGlobal.localStorage, this.APIService.getSystemVaultName(), data);
+        if (data) adoptOwnNames(compatGlobal.localStorage, vaultStorage(), this.APIService.getSystemVaultName(), data);
         return data;
     }
 }

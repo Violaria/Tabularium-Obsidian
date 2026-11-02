@@ -91,15 +91,15 @@ describe("Tabularium's own names", () => {
     it("leaves a new vault and settings already under its names alone", () => {
         const storage = upgradedDevice();
         const before = storage.keys();
-        expect(adoptOwnNames(storage, VAULT, {})).toBeUndefined();
-        expect(adoptOwnNames(storage, VAULT, { additionalSuffixOfDatabaseName: DATABASE_SUFFIX })).toBeUndefined();
+        expect(adoptOwnNames(storage, storage, VAULT, {})).toBeUndefined();
+        expect(adoptOwnNames(storage, storage, VAULT, { additionalSuffixOfDatabaseName: DATABASE_SUFFIX })).toBeUndefined();
         expect(storage.keys()).toEqual(before);
     });
 
     it("moves the device name of a 0.26 device to its current key", () => {
         const storage = upgradedDevice();
         storage.setItem(`tabularium:obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`, "Desk");
-        expect(adoptOwnNames(storage, VAULT, { additionalSuffixOfDatabaseName: DATABASE_SUFFIX })).toBeUndefined();
+        expect(adoptOwnNames(storage, storage, VAULT, { additionalSuffixOfDatabaseName: DATABASE_SUFFIX })).toBeUndefined();
         expect(storage.getItem(`tabularium:device-name-${VAULT}-tabularium`)).toBe("Desk");
         expect(storage.getItem(`tabularium:obsidian-live-sync-vaultanddevicename-${VAULT}-tabularium`)).toBeNull();
     });
@@ -108,7 +108,7 @@ describe("Tabularium's own names", () => {
         const storage = upgradedDevice();
         const settings = { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID };
 
-        expect(adoptOwnNames(storage, VAULT, settings)).toBe(APP_ID);
+        expect(adoptOwnNames(storage, storage, VAULT, settings)).toBe(APP_ID);
 
         expect(settings.additionalSuffixOfDatabaseName).toBe(DATABASE_SUFFIX);
         expect(storage.getItem("tabularium:ls-setting-passphrase")).toBe("device-key");
@@ -127,13 +127,13 @@ describe("Tabularium's own names", () => {
     it("does not overwrite a value the new names already hold", () => {
         const storage = upgradedDevice();
         storage.setItem("tabularium:ls-setting-passphrase", "own-key");
-        adoptOwnNames(storage, VAULT, { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID });
+        adoptOwnNames(storage, storage, VAULT, { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID });
         expect(storage.getItem("tabularium:ls-setting-passphrase")).toBe("own-key");
     });
 
     it("needs no fetch for a vault that is not configured", () => {
         const storage = upgradedDevice();
-        adoptOwnNames(storage, VAULT, { isConfigured: false, additionalSuffixOfDatabaseName: APP_ID });
+        adoptOwnNames(storage, storage, VAULT, { isConfigured: false, additionalSuffixOfDatabaseName: APP_ID });
         expect(storage.getItem(`tabularium:${VAULT}-tabularium-${NAMESPACE_MIGRATION_KEY}`)).toBeNull();
     });
 
@@ -151,7 +151,7 @@ type Handler = () => Promise<boolean>;
 /** A started plug-in with a pending migration: its start-up handlers, server, vault files and old databases. */
 function startingDevice(options: { upstreamInstalled?: boolean; online?: boolean } = {}) {
     const storage = upgradedDevice();
-    adoptOwnNames(storage, VAULT, { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID });
+    adoptOwnNames(storage, storage, VAULT, { isConfigured: true, additionalSuffixOfDatabaseName: APP_ID });
     const config = createWebStorageValueStore(storage, { prefix: `${DEVICE_VALUE_PREFIX}${VAULT}-tabularium-` });
     const files = new Set<string>(["redflag.md", "notes/a.md"]);
     const handlers: { handler: Handler; priority: number }[] = [];

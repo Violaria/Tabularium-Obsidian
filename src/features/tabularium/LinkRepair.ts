@@ -45,11 +45,11 @@ export class TabulariumLinkRepair {
         return ownStorageKeys.autoLinkRepair(this.plugin.app.vault.getName());
     }
     get auto() {
-        return window.localStorage.getItem(this.autoKey) === "on";
+        return this.plugin.app.loadLocalStorage(this.autoKey) === "on";
     }
     set auto(on: boolean) {
-        if (on) window.localStorage.setItem(this.autoKey, "on");
-        else window.localStorage.removeItem(this.autoKey);
+        if (on) this.plugin.app.saveLocalStorage(this.autoKey, "on");
+        else this.plugin.app.saveLocalStorage(this.autoKey, null);
     }
 
     install() {

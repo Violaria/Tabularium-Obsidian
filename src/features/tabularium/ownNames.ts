@@ -12,6 +12,7 @@ import {
     type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
+import type { VaultStorage } from "@/obsidian/common/vaultStorage";
 
 export const DATABASE_SUFFIX = "tabularium";
 export const DEVICE_VALUE_PREFIX = "tabularium:";
@@ -62,7 +63,8 @@ export const formerStorageKeys = {
  * or undefined when there was nothing to adopt.
  */
 export function adoptOwnNames(
-    storage: Storage,
+    shared: Storage,
+    vault: VaultStorage,
     vaultName: string,
     settings: Partial<SyncSettings>
 ): string | undefined {
@@ -71,10 +73,10 @@ export function adoptOwnNames(
         // A device of 0.26: its device name moves to the current key (the databases move in moveToCurrentNames).
         const former = namesFor(vaultName, DATABASE_SUFFIX, "former").deviceName;
         const current = namesFor(vaultName, DATABASE_SUFFIX).deviceName;
-        const value = storage.getItem(DEVICE_VALUE_PREFIX + former);
-        if (value !== null && storage.getItem(DEVICE_VALUE_PREFIX + current) === null)
-            storage.setItem(DEVICE_VALUE_PREFIX + current, value);
-        storage.removeItem(DEVICE_VALUE_PREFIX + former);
+        const value = vault.getItem(DEVICE_VALUE_PREFIX + former);
+        if (value !== null && vault.getItem(DEVICE_VALUE_PREFIX + current) === null)
+            vault.setItem(DEVICE_VALUE_PREFIX + current, value);
+        vault.removeItem(DEVICE_VALUE_PREFIX + former);
         return undefined;
     }
     const from = settings.additionalSuffixOfDatabaseName ?? "";
@@ -85,15 +87,15 @@ export function adoptOwnNames(
         [old.deviceName, own.deviceName],
         [legacyDatabaseCompatibilityVersionKey(vaultName), legacyDatabaseCompatibilityVersionKey(vaultName)],
     ];
-    for (let i = 0; i < storage.length; i++) {
-        const key = storage.key(i)!;
+    for (let i = 0; i < shared.length; i++) {
+        const key = shared.key(i)!;
         if (key.startsWith(old.keyPrefix) && key !== old.keyPrefix + FAST_FETCH_CHECKPOINT_KEY)
             copies.push([key, own.keyPrefix + key.slice(old.keyPrefix.length)]);
     }
     for (const [source, target] of copies) {
-        const value = storage.getItem(source);
-        if (value !== null && storage.getItem(DEVICE_VALUE_PREFIX + target) === null)
-            storage.setItem(DEVICE_VALUE_PREFIX + target, value);
+        const value = shared.getItem(source);
+        if (value !== null && vault.getItem(DEVICE_VALUE_PREFIX + target) === null)
+            vault.setItem(DEVICE_VALUE_PREFIX + target, value);
     }
     const ownCopies: [string, string][] = [
         [formerStorageKeys.sameChanges(old.database), ownStorageKeys.sameChanges(own.database)],
@@ -101,11 +103,11 @@ export function adoptOwnNames(
         [formerStorageKeys.autoLinkRepair(vaultName), ownStorageKeys.autoLinkRepair(vaultName)],
     ];
     for (const [source, target] of ownCopies) {
-        const value = storage.getItem(source);
-        if (value !== null && storage.getItem(target) === null) storage.setItem(target, value);
+        const value = shared.getItem(source);
+        if (value !== null && vault.getItem(target) === null) vault.setItem(target, value);
     }
     if (settings.isConfigured !== false)
-        storage.setItem(DEVICE_VALUE_PREFIX + own.keyPrefix + NAMESPACE_MIGRATION_KEY, JSON.stringify({ from }));
+        vault.setItem(DEVICE_VALUE_PREFIX + own.keyPrefix + NAMESPACE_MIGRATION_KEY, JSON.stringify({ from }));
     settings.additionalSuffixOfDatabaseName = DATABASE_SUFFIX;
     return from;
 }
