@@ -4,18 +4,15 @@ import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
 import type { ServiceInstances } from "@tabularium/sync-core/compat/services/ServiceHub";
 import type ObsidianLiveSyncPlugin from "@/main";
-import {
-    ObsidianConflictService,
-    ObsidianFileProcessingService,
-    ObsidianReplicationService,
-    ObsidianReplicatorService,
-    ObsidianRemoteService,
-    ObsidianTweakValueService,
-    ObsidianTestService,
-    ObsidianDatabaseEventService,
-    ObsidianKeyValueDBService,
-    ObsidianControlService,
-} from "./ObsidianServices";
+import { ObsidianKeyValueDBService, ObsidianReplicatorService } from "./ObsidianServices";
+import { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
+import { InjectableDatabaseEventService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableDatabaseEventService";
+import { InjectableFileProcessingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableFileProcessingService";
+import { InjectableRemoteService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableRemoteService";
+import { InjectableReplicationService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableReplicationService";
+import { InjectableTestService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTestService";
+import { InjectableTweakValueService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTweakValueService";
+import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
 import { ObsidianSettingService } from "./ObsidianSettingService";
 import { ObsidianDatabaseService } from "./ObsidianDatabaseService";
 import { ObsidianAPIService } from "./ObsidianAPIService";
@@ -40,10 +37,10 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
         const context = new ObsidianServiceContext(plugin.app, plugin, plugin, notices, noticeGroups);
 
         const API = new ObsidianAPIService(context);
-        const conflict = new ObsidianConflictService(context);
-        const fileProcessing = new ObsidianFileProcessingService(context);
+        const conflict = new InjectableConflictService<ObsidianServiceContext>(context);
+        const fileProcessing = new InjectableFileProcessingService<ObsidianServiceContext>(context);
 
-        const tweakValue = new ObsidianTweakValueService(context);
+        const tweakValue = new InjectableTweakValueService<ObsidianServiceContext>(context);
 
         const setting = new ObsidianSettingService(context, {
             APIService: API,
@@ -53,7 +50,7 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
         const appLifecycle = new ObsidianAppLifecycleService(context, {
             settingService: setting,
         });
-        const remote = new ObsidianRemoteService(context, {
+        const remote = new InjectableRemoteService<ObsidianServiceContext>(context, {
             pouchDB: PouchDB,
             APIService: API,
             appLifecycle: appLifecycle,
@@ -63,8 +60,8 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
             settingService: setting,
             APIService: API,
         });
-        const test = new ObsidianTestService(context);
-        const databaseEvents = new ObsidianDatabaseEventService(context);
+        const test = new InjectableTestService<ObsidianServiceContext>(context);
+        const databaseEvents = new InjectableDatabaseEventService<ObsidianServiceContext>(context);
         const path = new ObsidianPathService(context, {
             settingService: setting,
         });
@@ -96,7 +93,7 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
             activityRunner: screenWakeLock,
             isMobile: () => API.isMobile(),
         });
-        const replication = new ObsidianReplicationService(context, {
+        const replication = new InjectableReplicationService<ObsidianServiceContext>(context, {
             APIService: API,
             appLifecycleService: appLifecycle,
             replicatorService: replicator,
@@ -105,7 +102,7 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
             databaseService: database,
         });
 
-        const control = new ObsidianControlService(context, {
+        const control = new ControlService<ObsidianServiceContext>(context, {
             appLifecycleService: appLifecycle,
             databaseService: database,
             fileProcessingService: fileProcessing,

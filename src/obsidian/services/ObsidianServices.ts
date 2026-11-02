@@ -1,14 +1,6 @@
-import { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
-import { InjectableDatabaseEventService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableDatabaseEventService";
-import { InjectableFileProcessingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableFileProcessingService";
-import { InjectableRemoteService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableRemoteService";
-import { InjectableReplicationService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableReplicationService";
 import { InjectableReplicatorService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableReplicatorService";
-import { InjectableTestService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTestService";
-import { InjectableTweakValueService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTweakValueService";
 import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
 import { KeyValueDBService } from "@tabularium/sync-core/compat/services/base/KeyValueDBService";
-import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
 import { reactiveSource } from "octagonal-wheels/dataobject/reactive";
 import type { ReplicatorServiceDependencies } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
@@ -47,7 +39,6 @@ function withSleepPreference(dependencies: ObsidianReplicatorServiceDependencies
     };
 }
 
-export class ObsidianDatabaseEventService extends InjectableDatabaseEventService<ObsidianServiceContext> {}
 
 // InjectableReplicatorService
 export class ObsidianReplicatorService extends InjectableReplicatorService<ObsidianServiceContext> {
@@ -68,19 +59,6 @@ export class ObsidianReplicatorService extends InjectableReplicatorService<Obsid
         }
     }
 }
-// InjectableFileProcessingService
-export class ObsidianFileProcessingService extends InjectableFileProcessingService<ObsidianServiceContext> {}
-// InjectableReplicationService
-export class ObsidianReplicationService extends InjectableReplicationService<ObsidianServiceContext> {}
-// InjectableRemoteService
-export class ObsidianRemoteService extends InjectableRemoteService<ObsidianServiceContext> {}
-// InjectableConflictService
-export class ObsidianConflictService extends InjectableConflictService<ObsidianServiceContext> {}
-// InjectableTweakValueService
-export class ObsidianTweakValueService extends InjectableTweakValueService<ObsidianServiceContext> {}
-// InjectableTestService
-export class ObsidianTestService extends InjectableTestService<ObsidianServiceContext> {}
 
+/** The key-value database service is abstract in the core; this is its Obsidian implementation. */
 export class ObsidianKeyValueDBService extends KeyValueDBService<ObsidianServiceContext> {}
-
-export class ObsidianControlService extends ControlService<ObsidianServiceContext> {}
