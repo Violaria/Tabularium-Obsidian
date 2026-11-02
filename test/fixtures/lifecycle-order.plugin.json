@@ -1,0 +1,187 @@
+{
+  "database.onDatabaseReset": [
+    "0 bound _onResetLocalDatabase"
+  ],
+  "database.onOpenDatabase": [
+    "0 bound __onOpenDatabase"
+  ],
+  "databaseEvents.initialiseDatabase": [
+    "0 <anonymous>"
+  ],
+  "databaseEvents.onCloseDatabase": [
+    "0 bound _onOtherDatabaseClose"
+  ],
+  "databaseEvents.onDatabaseHasReady": [
+    "0 bound reinitialiseReplicator",
+    "0 <anonymous>"
+  ],
+  "databaseEvents.onDatabaseInitialisation": [
+    "0 bound _everyOnInitializeDatabase",
+    "0 bound onCloseActiveReplication"
+  ],
+  "databaseEvents.onDatabaseInitialised": [
+    "0 bound reinitialiseReplicator",
+    "0 <anonymous>"
+  ],
+  "databaseEvents.onResetDatabase": [
+    "0 bound _everyOnResetDatabase",
+    "0 <anonymous>"
+  ],
+  "databaseEvents.onUnloadDatabase": [
+    "0 bound _onOtherDatabaseUnload",
+    "0 <anonymous>"
+  ],
+  "replicator.onBeforeReplicatorPublication": [
+    "0 <anonymous>"
+  ],
+  "fileProcessing.commitPendingFileEvents": [
+    "0 bound _everyCommitPendingFileEvent"
+  ],
+  "fileProcessing.processFileEvent": [
+    "100 bound _anyHandlerProcessesFileEvent"
+  ],
+  "replication.checkConnectionFailure": [
+    "0 bound _anyAfterConnectCheckFailed"
+  ],
+  "replication.onBeforeReplicate": [
+    "0 <anonymous>",
+    "10 isOnlineAndCanReplicate",
+    "100 <anonymous>"
+  ],
+  "replication.onPrepareCentralRemoteReplication": [
+    "0 canReplicateWithSecuritySeed"
+  ],
+  "replication.onReplicationFailed": [
+    "0 handleReplicationFailure"
+  ],
+  "replication.parseSynchroniseResult": [
+    "0 <anonymous>"
+  ],
+  "replication.processSynchroniseResult": [
+    "100 bound _anyProcessReplicatedDoc"
+  ],
+  "conflict.resolveByUserInteraction": [
+    "0 resolveByUserInteraction"
+  ],
+  "appLifecycle.getUnresolvedMessages": [
+    "0 bound _reportUnresolvedMessages",
+    "0 bound _reportUnresolvedMessages",
+    "0 bound _reportUnresolvedMessages",
+    "0 bound _reportUnresolvedMessages",
+    "0 bound _reportUnresolvedMessages",
+    "0 getActiveConflictMessages",
+    "0 bound _reportUnresolvedMessages"
+  ],
+  "appLifecycle.onBeforeUnload": [
+    "0 <anonymous>",
+    "0 bound _allStartOnUnload"
+  ],
+  "appLifecycle.onFirstInitialise": [
+    "0 bound _everyOnFirstInitialize",
+    "0 <anonymous>"
+  ],
+  "appLifecycle.onInitialise": [
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 bound _everyOnloadStart",
+    "0 bound _everyOnloadStart",
+    "0 bound _everyOnloadStart",
+    "0 bound _everyOnloadStart"
+  ],
+  "appLifecycle.onLayoutReady": [
+    "0 <anonymous>",
+    "0 bound _everyOnLayoutReady",
+    "1 <anonymous>",
+    "5 <anonymous>",
+    "8 <anonymous>",
+    "10 <anonymous>",
+    "20 <anonymous>",
+    "25 <anonymous>",
+    "30 <anonymous>"
+  ],
+  "appLifecycle.onLoad": [
+    "0 bound _onLiveSyncLoad"
+  ],
+  "appLifecycle.onLoaded": [
+    "0 <anonymous>",
+    "0 refreshSettings",
+    "0 bound _everyOnload"
+  ],
+  "appLifecycle.onReady": [
+    "0 bound _onLiveSyncReady"
+  ],
+  "appLifecycle.onResumed": [
+    "0 <anonymous>"
+  ],
+  "appLifecycle.onScanningStartupIssues": [
+    "0 scanStartupIssues"
+  ],
+  "appLifecycle.onSettingLoaded": [
+    "0 bound _everyOnloadAfterLoadSettings",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 initialiseAutomaticReplicationTriggers",
+    "0 bound _everyOnloadAfterLoadSettings",
+    "0 bound _everyOnloadAfterLoadSettings",
+    "0 <anonymous>"
+  ],
+  "appLifecycle.onSuspending": [
+    "0 bound suspendReplication",
+    "0 <anonymous>"
+  ],
+  "appLifecycle.onUnload": [
+    "0 <anonymous>",
+    "0 bound onCloseActiveReplication",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>",
+    "0 <anonymous>"
+  ],
+  "appLifecycle.onWireUpEvents": [
+    "0 bound _wireUpEvents"
+  ],
+  "setting.onBeforeRealiseSetting": [
+    "0 <anonymous>"
+  ],
+  "setting.onBeforeSaveSettingData": [
+    "0 <anonymous>",
+    "0 bound _onBeforeSaveSettingData"
+  ],
+  "setting.onRealiseSetting": [
+    "0 bound _initialiseReplicator"
+  ],
+  "setting.onSettingLoaded": [
+    "0 <anonymous>"
+  ],
+  "setting.onSettingRealised": [
+    "0 refreshSettings",
+    "0 <anonymous>"
+  ],
+  "setting.onSettingSaved": [
+    "0 <anonymous>"
+  ],
+  "setting.suspendAllSync": [
+    "0 bound _allSuspendAllSync"
+  ],
+  "vault.isIgnoredByIgnoreFile": [
+    "0 <anonymous>"
+  ],
+  "vault.isTargetFile": [
+    "10 isAcceptedInFilenameDuplication",
+    "20 isAcceptedByIgnoreFiles",
+    "30 <anonymous>",
+    "100 <anonymous>"
+  ],
+  "vault.scanVault": [
+    "0 <anonymous>"
+  ]
+}
