@@ -5,8 +5,12 @@
 // import no source file of this repository test the dependencies and are kept. The Obsidian test harness under
 // test/e2e-obsidian is test infrastructure for the parent repository's interop tests; what those tests and the two
 // scripts they run reach counts as reachable.
-// Prints the dead files, one per line; `--count` prints only the numbers. Build configurations and declaration files
-// are not listed.
+// The sync core in packages/sync-core is followed too: `@tabularium/sync-core[/subpath]` resolves through the package's
+// `exports` to its source, and inside the core `@lib/`, `#worker` (every condition) and `?worker&inline` imports are
+// followed. Its unit tests are judged like the others.
+// Prints the dead files, one per line; `--count` prints only the numbers; `--dynamic` lists files that call `import()`
+// with something other than a string literal, whose targets this script cannot see. Build configurations and
+// declaration files are not listed.
 import ts from "typescript";
 const fs = process.getBuiltinModule("node:fs");
 const path = process.getBuiltinModule("node:path");
@@ -28,6 +32,14 @@ const HARNESS = [
         .filter((f) => /\.(ts|mjs)$/.test(f))
         .map((f) => path.join("../../tests/interop", f)),
 ];
+const CORE = "packages/sync-core";
+const coreManifest = JSON.parse(fs.readFileSync(path.join(root, CORE, "package.json"), "utf8")) as {
+    name: string;
+    exports: Record<string, string | { import?: string; default?: string }>;
+};
+const coreSourceImports = JSON.parse(fs.readFileSync(path.join(root, CORE, "src/package.json"), "utf8")) as {
+    imports: Record<string, Record<string, string>>;
+};
 const SOURCE = /\.(ts|svelte)$/;
 const TEST = /(\.(unit|integration)\.(spec|test)\.ts|\.test\.ts|\.spec\.ts)$|\/(_test|test-support|testdeno)\//;
 const NOT_LISTED = /(\.d\.ts|vite\.config\.ts|vitest\.config\.[a-z-]+\.ts)$/;
@@ -47,9 +59,34 @@ function imports(file: string): string[] {
     return ts.preProcessFile(text, true, true).importedFiles.map((entry) => entry.fileName);
 }
 
+/** `./dist/x/y.js` in the core's exports → the source path without extension, `packages/sync-core/src/x/y`. */
+function coreExport(subpath: string): string | undefined {
+    const target = coreManifest.exports[subpath];
+    const file = typeof target === "string" ? target : (target?.import ?? target?.default);
+    return file ? path.join(CORE, "src", file.replace(/^\.\/dist\//, "").replace(/\.js$/, "")) : undefined;
+}
+
+function resolveAll(from: string, specifier: string): string[] {
+    if (specifier === "#worker" && from.startsWith(`${CORE}/`))
+        return Object.values(coreSourceImports.imports["#worker"]).flatMap((target) => {
+            const found = resolve(from, path.join(CORE, "src", target));
+            return found ? [found] : [];
+        });
+    const found = resolve(from, specifier);
+    return found ? [found] : [];
+}
+
 function resolve(from: string, specifier: string): string | undefined {
     let base: string;
-    if (specifier.startsWith("@/")) base = path.join("src", specifier.slice(2));
+    specifier = specifier.replace(/\?.*$/, "");
+    if (specifier.startsWith(`${CORE}/`)) base = specifier;
+    else if (specifier === coreManifest.name || specifier.startsWith(`${coreManifest.name}/`)) {
+        const exported = coreExport(`.${specifier.slice(coreManifest.name.length)}`);
+        if (!exported) return undefined;
+        base = exported;
+    } else if (specifier.startsWith("@lib/") && from.startsWith(`${CORE}/`))
+        base = path.join(CORE, "src", specifier.slice("@lib/".length));
+    else if (specifier.startsWith("@/")) base = path.join("src", specifier.slice(2));
     else if (specifier.startsWith(".")) base = path.join(path.dirname(from), specifier);
     else return undefined;
     const candidates = [
@@ -64,19 +101,19 @@ function resolve(from: string, specifier: string): string | undefined {
     );
 }
 
-const files = [...walk("src"), ...walk("test")];
+const files = [...walk("src"), ...walk("test"), ...walk(`${CORE}/src`), ...walk(`${CORE}/test`)];
+const isLocal = (spec: string) =>
+    spec.startsWith(".") || spec.startsWith("@/") || spec.startsWith("@lib/") || spec.startsWith(coreManifest.name);
 /** Files with a local import that resolves to no file; a test among them tests code that has been removed. */
 const broken = new Set<string>();
 const edges = new Map(
     [...files, ...HARNESS].map((file) => [
         file,
-        imports(file)
-            .map((spec) => {
-                const target = resolve(file, spec);
-                if (!target && (spec.startsWith(".") || spec.startsWith("@/"))) broken.add(file);
-                return target;
-            })
-            .filter((f) => f !== undefined),
+        imports(file).flatMap((spec) => {
+            const targets = resolveAll(file, spec);
+            if (targets.length === 0 && isLocal(spec)) broken.add(file);
+            return targets;
+        }),
     ])
 );
 
@@ -97,9 +134,10 @@ while (queue.length) {
     reachable.add(file);
     for (const next of edges.get(file) ?? []) if (!TEST.test(next)) queue.push(next);
 }
-for (const file of harness) if (file.startsWith("src/")) reachable.add(file);
+for (const file of harness) if (file.startsWith("src/") || file.startsWith(`${CORE}/src/`)) reachable.add(file);
 
-const isTest = (file: string) => TEST.test(file) || file.startsWith("test/");
+const isTest = (file: string) => TEST.test(file) || file.startsWith("test/") || file.startsWith(`${CORE}/test/`);
+const isSource = (file: string) => (file.startsWith("src/") || file.startsWith(`${CORE}/src/`)) && !TEST.test(file);
 /** The source files a test reaches, following imports through other test files and helpers. */
 function testedSources(file: string, seen = new Set<string>()): string[] {
     if (seen.has(file)) return [];
@@ -113,12 +151,13 @@ function testsSomethingAlive(file: string): boolean {
     return sources.length === 0 || sources.some((source) => reachable.has(source));
 }
 
-const deadSources = files.filter(
-    (f) => f.startsWith("src/") && !TEST.test(f) && !reachable.has(f) && !NOT_LISTED.test(f)
-);
+const deadSources = files.filter((f) => isSource(f) && !reachable.has(f) && !NOT_LISTED.test(f));
 const deadTests = files.filter((f) => isTest(f) && !NOT_LISTED.test(f) && !testsSomethingAlive(f));
 
-if (process.argv.includes("--count")) {
+if (process.argv.includes("--dynamic")) {
+    for (const file of files.filter((f) => isSource(f) && reachable.has(f)))
+        if (/\bimport\(\s*[^"'`\s)]/.test(fs.readFileSync(path.join(root, file), "utf8"))) process.stdout.write(`${file}\n`);
+} else if (process.argv.includes("--count")) {
     process.stdout.write(
         `${reachable.size} reachable, ${deadSources.length} dead source files, ${deadTests.length} dead tests\n`
     );

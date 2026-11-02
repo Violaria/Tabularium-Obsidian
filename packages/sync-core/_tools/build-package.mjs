@@ -14,7 +14,6 @@ const outputDirectory = resolve(packageDirectory, "dist");
 const sourceDirectory = resolve(root, "src");
 const sourceManifest = JSON.parse(await readFile(resolve(root, "package.json"), "utf8"));
 const committedManifest = sourceManifest;
-const inventory = JSON.parse(await readFile(resolve(root, "docs/migration/downstream-imports.json"), "utf8"));
 
 async function collectFiles(directory, predicate = () => true) {
     const files = [];
@@ -160,51 +159,6 @@ async function rewriteModuleSpecifiers() {
     }
 }
 
-function exportTarget(sourcePath) {
-    return {
-        types: `./dist/${sourcePath}.d.ts`,
-        import: `./dist/${sourcePath}.js`,
-        default: `./dist/${sourcePath}.js`,
-    };
-}
-
-function compiledCompatibilityPath(sourcePath) {
-    return sourcePath === "managers/adapters" || sourcePath === "serviceModules/adapters"
-        ? `${sourcePath}/index`
-        : sourcePath;
-}
-
-function createExports() {
-    const exports = {
-        ".": exportTarget("index"),
-        "./browser": exportTarget("platform/browser/index"),
-        "./context": exportTarget("context"),
-        "./diagnostics": exportTarget("diagnostics/index"),
-        "./hashing": exportTarget("hashing"),
-        "./node": exportTarget("platform/node/index"),
-        "./p2p": exportTarget("p2p/index"),
-        "./replication": exportTarget("replication/index"),
-        "./rpc": exportTarget("rpc/index"),
-        "./remote-configurations": exportTarget("remoteConfigurations"),
-        "./settings": exportTarget("settings"),
-        "./setup-uri": exportTarget("setupUri"),
-        "./ui-commands": exportTarget("uiCommands"),
-    };
-    for (const sourcePath of inventory.compatibility) {
-        exports[`./compat/${sourcePath}`] =
-            sourcePath === "worker/bgWorker"
-                ? {
-                      types: "./dist/worker/bgWorker.d.ts",
-                      browser: "./dist/worker/bgWorker.js",
-                      node: "./dist/worker/bgWorker.direct.js",
-                      default: "./dist/worker/bgWorker.direct.js",
-                  }
-                : exportTarget(compiledCompatibilityPath(sourcePath));
-    }
-    exports["./package.json"] = "./package.json";
-    return exports;
-}
-
 function createTypesVersions(exports) {
     const mappings = {};
     for (const [exportPath, target] of Object.entries(exports)) {
@@ -218,42 +172,13 @@ function createTypesVersions(exports) {
     return { "*": mappings };
 }
 
+// Tabularium: package.json is the source of truth for the public surface (upstream generated it from an inventory
+// of downstream imports). The build only checks that typesVersions mirrors exports; validateOutput checks that every
+// target exists.
 async function verifyPackageManifest() {
-    const exports = createExports();
-    const manifest = {
-        name: sourceManifest.name,
-        version: sourceManifest.version,
-        description: sourceManifest.description,
-        type: "module",
-        types: "./dist/index.d.ts",
-        license: sourceManifest.license,
-        repository: sourceManifest.repository,
-        sideEffects: [
-            "./dist/pouchdb/pouchdb-browser.js",
-            "./dist/pouchdb/pouchdb-http.js",
-            "./dist/pouchdb/pouchdb-test.js",
-        ],
-        imports: {
-            "#worker": {
-                browser: "./dist/worker/bgWorker.js",
-                node: "./dist/worker/bgWorker.direct.js",
-                default: "./dist/worker/bgWorker.direct.js",
-            },
-        },
-        exports,
-        typesVersions: createTypesVersions(exports),
-        dependencies: sourceManifest.dependencies,
-        peerDependencies: { svelte: sourceManifest.devDependencies.svelte },
-        peerDependenciesMeta: { svelte: { optional: true } },
-        engines: sourceManifest.engines,
-    };
-    // Every field the build derives must match package.json, so a change to the sources or the import inventory
-    // that alters the public surface fails here instead of silently shipping a different manifest.
-    const differing = Object.keys(manifest).filter(
-        (key) => JSON.stringify(manifest[key]) !== JSON.stringify(committedManifest[key])
-    );
-    if (differing.length > 0) {
-        throw new Error(`package.json differs from the generated manifest in: ${differing.join(", ")}`);
+    const expected = JSON.stringify(createTypesVersions(committedManifest.exports));
+    if (JSON.stringify(committedManifest.typesVersions) !== expected) {
+        throw new Error("package.json: typesVersions does not mirror exports.");
     }
 }
 
@@ -310,6 +235,7 @@ async function validateOutput() {
     };
     for (const [key, value] of Object.entries(manifest.exports)) await visitTarget(key, value);
     for (const [key, value] of Object.entries(manifest.imports)) await visitTarget(key, value);
+    for (const value of manifest.sideEffects) await visitTarget("sideEffects", value);
     if (missingTargets.length > 0) throw new Error(`Missing package targets:\n${missingTargets.join("\n")}`);
 
     const modulePaths = await collectFiles(outputDirectory, (path) => path.endsWith(".js") || path.endsWith(".d.ts"));
@@ -348,5 +274,5 @@ await normalisePackagePermissions();
 await validateOutput();
 
 console.log(
-    `Built ${sourceManifest.name}@${sourceManifest.version} with ${inventory.compatibility.length} explicit compatibility exports.`
+    `Built ${sourceManifest.name}@${sourceManifest.version} with ${Object.keys(sourceManifest.exports).length} exports.`
 );

@@ -4,7 +4,6 @@
     "private": true,
     "description": "Shared data, storage, and replication primitives for Self-hosted LiveSync clients.",
     "type": "module",
-    "types": "./dist/index.d.ts",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -15,9 +14,7 @@
         "test": "vitest run"
     },
     "sideEffects": [
-        "./dist/pouchdb/pouchdb-browser.js",
-        "./dist/pouchdb/pouchdb-http.js",
-        "./dist/pouchdb/pouchdb-test.js"
+        "./dist/pouchdb/pouchdb-browser.js"
     ],
     "imports": {
         "#worker": {
@@ -27,11 +24,6 @@
         }
     },
     "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.js",
-            "default": "./dist/index.js"
-        },
         "./browser": {
             "types": "./dist/platform/browser/index.d.ts",
             "import": "./dist/platform/browser/index.js",
@@ -46,11 +38,6 @@
             "types": "./dist/diagnostics/index.d.ts",
             "import": "./dist/diagnostics/index.js",
             "default": "./dist/diagnostics/index.js"
-        },
-        "./hashing": {
-            "types": "./dist/hashing.d.ts",
-            "import": "./dist/hashing.js",
-            "default": "./dist/hashing.js"
         },
         "./node": {
             "types": "./dist/platform/node/index.d.ts",
@@ -67,11 +54,6 @@
             "import": "./dist/replication/index.js",
             "default": "./dist/replication/index.js"
         },
-        "./rpc": {
-            "types": "./dist/rpc/index.d.ts",
-            "import": "./dist/rpc/index.js",
-            "default": "./dist/rpc/index.js"
-        },
         "./remote-configurations": {
             "types": "./dist/remoteConfigurations.d.ts",
             "import": "./dist/remoteConfigurations.js",
@@ -82,20 +64,10 @@
             "import": "./dist/settings.js",
             "default": "./dist/settings.js"
         },
-        "./setup-uri": {
-            "types": "./dist/setupUri.d.ts",
-            "import": "./dist/setupUri.js",
-            "default": "./dist/setupUri.js"
-        },
         "./ui-commands": {
             "types": "./dist/uiCommands.d.ts",
             "import": "./dist/uiCommands.js",
             "default": "./dist/uiCommands.js"
-        },
-        "./compat/API/processSetting": {
-            "types": "./dist/API/processSetting.d.ts",
-            "import": "./dist/API/processSetting.js",
-            "default": "./dist/API/processSetting.js"
         },
         "./compat/common/ConnectionString": {
             "types": "./dist/common/ConnectionString.d.ts",
@@ -147,11 +119,6 @@
             "import": "./dist/common/models/setting.type.js",
             "default": "./dist/common/models/setting.type.js"
         },
-        "./compat/common/models/shared.const": {
-            "types": "./dist/common/models/shared.const.d.ts",
-            "import": "./dist/common/models/shared.const.js",
-            "default": "./dist/common/models/shared.const.js"
-        },
         "./compat/common/models/shared.const.symbols": {
             "types": "./dist/common/models/shared.const.symbols.d.ts",
             "import": "./dist/common/models/shared.const.symbols.js",
@@ -196,11 +163,6 @@
             "types": "./dist/dev/checks.d.ts",
             "import": "./dist/dev/checks.js",
             "default": "./dist/dev/checks.js"
-        },
-        "./compat/encryption/stringEncryption": {
-            "types": "./dist/encryption/stringEncryption.d.ts",
-            "import": "./dist/encryption/stringEncryption.js",
-            "default": "./dist/encryption/stringEncryption.js"
         },
         "./compat/events/coreEvents": {
             "types": "./dist/events/coreEvents.d.ts",
@@ -317,11 +279,6 @@
             "import": "./dist/replication/httplib.js",
             "default": "./dist/replication/httplib.js"
         },
-        "./compat/replication/journal/JournalSyncCore": {
-            "types": "./dist/replication/journal/JournalSyncCore.d.ts",
-            "import": "./dist/replication/journal/JournalSyncCore.js",
-            "default": "./dist/replication/journal/JournalSyncCore.js"
-        },
         "./compat/replication/journal/JournalSyncTypes": {
             "types": "./dist/replication/journal/JournalSyncTypes.d.ts",
             "import": "./dist/replication/journal/JournalSyncTypes.js",
@@ -332,70 +289,15 @@
             "import": "./dist/replication/journal/LiveSyncJournalReplicator.js",
             "default": "./dist/replication/journal/LiveSyncJournalReplicator.js"
         },
-        "./compat/replication/journal/LiveSyncJournalReplicatorEnv": {
-            "types": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.d.ts",
-            "import": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.js",
-            "default": "./dist/replication/journal/LiveSyncJournalReplicatorEnv.js"
-        },
-        "./compat/replication/journal/objectstore/MinioStorageAdapter": {
-            "types": "./dist/replication/journal/objectstore/MinioStorageAdapter.d.ts",
-            "import": "./dist/replication/journal/objectstore/MinioStorageAdapter.js",
-            "default": "./dist/replication/journal/objectstore/MinioStorageAdapter.js"
-        },
-        "./compat/replication/trystero/LiveSyncTrysteroReplicator": {
-            "types": "./dist/replication/trystero/LiveSyncTrysteroReplicator.d.ts",
-            "import": "./dist/replication/trystero/LiveSyncTrysteroReplicator.js",
-            "default": "./dist/replication/trystero/LiveSyncTrysteroReplicator.js"
-        },
         "./compat/replication/trystero/P2PLogCollector": {
             "types": "./dist/replication/trystero/P2PLogCollector.d.ts",
             "import": "./dist/replication/trystero/P2PLogCollector.js",
             "default": "./dist/replication/trystero/P2PLogCollector.js"
         },
-        "./compat/replication/trystero/P2PReplicatorPaneCommon": {
-            "types": "./dist/replication/trystero/P2PReplicatorPaneCommon.d.ts",
-            "import": "./dist/replication/trystero/P2PReplicatorPaneCommon.js",
-            "default": "./dist/replication/trystero/P2PReplicatorPaneCommon.js"
-        },
         "./compat/replication/trystero/TrysteroReplicator": {
             "types": "./dist/replication/trystero/TrysteroReplicator.d.ts",
             "import": "./dist/replication/trystero/TrysteroReplicator.js",
             "default": "./dist/replication/trystero/TrysteroReplicator.js"
-        },
-        "./compat/replication/trystero/TrysteroReplicatorP2PServer": {
-            "types": "./dist/replication/trystero/TrysteroReplicatorP2PServer.d.ts",
-            "import": "./dist/replication/trystero/TrysteroReplicatorP2PServer.js",
-            "default": "./dist/replication/trystero/TrysteroReplicatorP2PServer.js"
-        },
-        "./compat/replication/trystero/UseP2PReplicatorResult": {
-            "types": "./dist/replication/trystero/UseP2PReplicatorResult.d.ts",
-            "import": "./dist/replication/trystero/UseP2PReplicatorResult.js",
-            "default": "./dist/replication/trystero/UseP2PReplicatorResult.js"
-        },
-        "./compat/replication/trystero/types": {
-            "types": "./dist/replication/trystero/types.d.ts",
-            "import": "./dist/replication/trystero/types.js",
-            "default": "./dist/replication/trystero/types.js"
-        },
-        "./compat/replication/trystero/useP2PReplicatorCommands": {
-            "types": "./dist/replication/trystero/useP2PReplicatorCommands.d.ts",
-            "import": "./dist/replication/trystero/useP2PReplicatorCommands.js",
-            "default": "./dist/replication/trystero/useP2PReplicatorCommands.js"
-        },
-        "./compat/replication/trystero/useP2PReplicatorFeature": {
-            "types": "./dist/replication/trystero/useP2PReplicatorFeature.d.ts",
-            "import": "./dist/replication/trystero/useP2PReplicatorFeature.js",
-            "default": "./dist/replication/trystero/useP2PReplicatorFeature.js"
-        },
-        "./compat/rpc/transports/DiagRTCPeerConnections.utils": {
-            "types": "./dist/rpc/transports/DiagRTCPeerConnections.utils.d.ts",
-            "import": "./dist/rpc/transports/DiagRTCPeerConnections.utils.js",
-            "default": "./dist/rpc/transports/DiagRTCPeerConnections.utils.js"
-        },
-        "./compat/serviceFeatures/checkRemoteSize": {
-            "types": "./dist/serviceFeatures/checkRemoteSize.d.ts",
-            "import": "./dist/serviceFeatures/checkRemoteSize.js",
-            "default": "./dist/serviceFeatures/checkRemoteSize.js"
         },
         "./compat/serviceFeatures/offlineScanner": {
             "types": "./dist/serviceFeatures/offlineScanner.d.ts",
@@ -592,11 +494,6 @@
             "import": "./dist/services/implements/injectable/InjectableVaultService.js",
             "default": "./dist/services/implements/injectable/InjectableVaultService.js"
         },
-        "./compat/services/lib/HandlerUtils": {
-            "types": "./dist/services/lib/HandlerUtils.d.ts",
-            "import": "./dist/services/lib/HandlerUtils.js",
-            "default": "./dist/services/lib/HandlerUtils.js"
-        },
         "./compat/services/lib/logUtils": {
             "types": "./dist/services/lib/logUtils.d.ts",
             "import": "./dist/services/lib/logUtils.js",
@@ -611,11 +508,6 @@
             "types": "./dist/string_and_binary/convert.d.ts",
             "import": "./dist/string_and_binary/convert.js",
             "default": "./dist/string_and_binary/convert.js"
-        },
-        "./compat/string_and_binary/hash": {
-            "types": "./dist/string_and_binary/hash.d.ts",
-            "import": "./dist/string_and_binary/hash.js",
-            "default": "./dist/string_and_binary/hash.js"
         },
         "./compat/string_and_binary/path": {
             "types": "./dist/string_and_binary/path.d.ts",
@@ -641,9 +533,6 @@
             "diagnostics": [
                 "dist/diagnostics/index.d.ts"
             ],
-            "hashing": [
-                "dist/hashing.d.ts"
-            ],
             "node": [
                 "dist/platform/node/index.d.ts"
             ],
@@ -653,23 +542,14 @@
             "replication": [
                 "dist/replication/index.d.ts"
             ],
-            "rpc": [
-                "dist/rpc/index.d.ts"
-            ],
             "remote-configurations": [
                 "dist/remoteConfigurations.d.ts"
             ],
             "settings": [
                 "dist/settings.d.ts"
             ],
-            "setup-uri": [
-                "dist/setupUri.d.ts"
-            ],
             "ui-commands": [
                 "dist/uiCommands.d.ts"
-            ],
-            "compat/API/processSetting": [
-                "dist/API/processSetting.d.ts"
             ],
             "compat/common/ConnectionString": [
                 "dist/common/ConnectionString.d.ts"
@@ -701,9 +581,6 @@
             "compat/common/models/setting.type": [
                 "dist/common/models/setting.type.d.ts"
             ],
-            "compat/common/models/shared.const": [
-                "dist/common/models/shared.const.d.ts"
-            ],
             "compat/common/models/shared.const.symbols": [
                 "dist/common/models/shared.const.symbols.d.ts"
             ],
@@ -730,9 +607,6 @@
             ],
             "compat/dev/checks": [
                 "dist/dev/checks.d.ts"
-            ],
-            "compat/encryption/stringEncryption": [
-                "dist/encryption/stringEncryption.d.ts"
             ],
             "compat/events/coreEvents": [
                 "dist/events/coreEvents.d.ts"
@@ -803,53 +677,17 @@
             "compat/replication/httplib": [
                 "dist/replication/httplib.d.ts"
             ],
-            "compat/replication/journal/JournalSyncCore": [
-                "dist/replication/journal/JournalSyncCore.d.ts"
-            ],
             "compat/replication/journal/JournalSyncTypes": [
                 "dist/replication/journal/JournalSyncTypes.d.ts"
             ],
             "compat/replication/journal/LiveSyncJournalReplicator": [
                 "dist/replication/journal/LiveSyncJournalReplicator.d.ts"
             ],
-            "compat/replication/journal/LiveSyncJournalReplicatorEnv": [
-                "dist/replication/journal/LiveSyncJournalReplicatorEnv.d.ts"
-            ],
-            "compat/replication/journal/objectstore/MinioStorageAdapter": [
-                "dist/replication/journal/objectstore/MinioStorageAdapter.d.ts"
-            ],
-            "compat/replication/trystero/LiveSyncTrysteroReplicator": [
-                "dist/replication/trystero/LiveSyncTrysteroReplicator.d.ts"
-            ],
             "compat/replication/trystero/P2PLogCollector": [
                 "dist/replication/trystero/P2PLogCollector.d.ts"
             ],
-            "compat/replication/trystero/P2PReplicatorPaneCommon": [
-                "dist/replication/trystero/P2PReplicatorPaneCommon.d.ts"
-            ],
             "compat/replication/trystero/TrysteroReplicator": [
                 "dist/replication/trystero/TrysteroReplicator.d.ts"
-            ],
-            "compat/replication/trystero/TrysteroReplicatorP2PServer": [
-                "dist/replication/trystero/TrysteroReplicatorP2PServer.d.ts"
-            ],
-            "compat/replication/trystero/UseP2PReplicatorResult": [
-                "dist/replication/trystero/UseP2PReplicatorResult.d.ts"
-            ],
-            "compat/replication/trystero/types": [
-                "dist/replication/trystero/types.d.ts"
-            ],
-            "compat/replication/trystero/useP2PReplicatorCommands": [
-                "dist/replication/trystero/useP2PReplicatorCommands.d.ts"
-            ],
-            "compat/replication/trystero/useP2PReplicatorFeature": [
-                "dist/replication/trystero/useP2PReplicatorFeature.d.ts"
-            ],
-            "compat/rpc/transports/DiagRTCPeerConnections.utils": [
-                "dist/rpc/transports/DiagRTCPeerConnections.utils.d.ts"
-            ],
-            "compat/serviceFeatures/checkRemoteSize": [
-                "dist/serviceFeatures/checkRemoteSize.d.ts"
             ],
             "compat/serviceFeatures/offlineScanner": [
                 "dist/serviceFeatures/offlineScanner.d.ts"
@@ -968,9 +806,6 @@
             "compat/services/implements/injectable/InjectableVaultService": [
                 "dist/services/implements/injectable/InjectableVaultService.d.ts"
             ],
-            "compat/services/lib/HandlerUtils": [
-                "dist/services/lib/HandlerUtils.d.ts"
-            ],
             "compat/services/lib/logUtils": [
                 "dist/services/lib/logUtils.d.ts"
             ],
@@ -979,9 +814,6 @@
             ],
             "compat/string_and_binary/convert": [
                 "dist/string_and_binary/convert.d.ts"
-            ],
-            "compat/string_and_binary/hash": [
-                "dist/string_and_binary/hash.d.ts"
             ],
             "compat/string_and_binary/path": [
                 "dist/string_and_binary/path.d.ts"

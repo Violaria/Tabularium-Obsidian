@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { E2EEAlgorithms, type DocumentID, type FilePathWithPrefix, type PlainEntry } from "@lib/common/types";
 import { enableEncryption, getConfiguredFunctionsForEncryption } from "./encryption";
-import { PouchDB } from "./pouchdb-test";
+import { PouchDB } from "../../test/pouchdb-test";
 import { path2id_base } from "@lib/string_and_binary/path";
 
 describe("HKDF encrypted metadata", () => {

@@ -5,7 +5,7 @@ import type { AppLifecycleService } from "./AppLifecycleService";
 import { RemoteService } from "./RemoteService";
 import { ServiceContext } from "./ServiceBase";
 import type { SettingService } from "./SettingService";
-import { PouchDB } from "@lib/pouchdb/pouchdb-http";
+import { PouchDB } from "../../../test/pouchdb-http";
 import {
     E2EEAlgorithms,
     type DocumentID,

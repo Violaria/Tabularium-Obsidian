@@ -3,7 +3,7 @@ import type PouchDBType from "pouchdb-core";
 import type { EntryDoc, FilePathWithPrefix, RemoteDBSettings } from "@lib/common/types.ts";
 import { path2id_base } from "@lib/string_and_binary/path.ts";
 import { E2EEAlgorithms } from "@lib/common/types.ts";
-import { PouchDB } from "./pouchdb-test.ts";
+import { PouchDB } from "../../test/pouchdb-test.ts";
 import { enableEncryption } from "./encryption.ts";
 import { assessRemoteDocumentIds as assessRemoteDocumentIdsWithPathService } from "./remoteIdCompatibility.ts";
 import { PathServiceCompat } from "@lib/services/implements/injectable/InjectablePathService.ts";
