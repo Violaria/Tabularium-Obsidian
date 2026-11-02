@@ -6,7 +6,7 @@ Additamentum Obsidian quod tabularium cum ministratore domi hospitato [Tabularii
 
 ## Quae requiruntur et usus retis
 
-Additamento opus est Obsidian 1.13 vel recentiore et ministratore Tabularii; sine ministratore et ratione additamentum nihil agit. Omnis petitio retis ad inscriptionem ministratoris quam inscribis it: initus, testimonia huius instrumenti edenda et renovanda, synchronizatio, missio ad Kindle, communicatio. Additamentum nulla telemetrica mittit, et paginae auxilii cum eo continentur.
+Additamento opus est Obsidian 1.13 vel recentiore et ratione in ministratore Tabularii. Omnis petitio retis ad inscriptionem ministratoris quam inscribis it: initus, testimonia huius instrumenti edenda et renovanda, synchronizatio, missio ad Kindle, communicatio. Paginae auxilii cum additamento continentur.
 
 Commentarii in instrumento tessera arcana tabularii cryptantur (E2EE V2, viis obscuratis) antequam id relinquunt. Tessera arcana in instrumento tantum servatur, et ministrator documenta non cryptata reicit. Duae functiones contentum legibile mittunt, et tantum cum eis uteris: missio ad Kindle EPUB per ministratorem mittit, et commentarius communicatus ad nexum editur quem quivis nexum habens aperire potest.
 

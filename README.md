@@ -6,7 +6,7 @@ An Obsidian plug-in that synchronises a vault, end-to-end encrypted, with a self
 
 ## Requirements and network use
 
-The plug-in needs Obsidian 1.13 or later and a Tabularium server; without a server and an account the plug-in does nothing. Every network request goes to the server address you enter: signing in, issuing and renewing this device's credentials, synchronisation, Send to Kindle and sharing. The plug-in sends no telemetry, and its help pages are bundled with it.
+The plug-in needs Obsidian 1.13 or later and an account on a Tabularium server. Every network request goes to the server address you enter: signing in, issuing and renewing this device's credentials, synchronisation, Send to Kindle and sharing. The help pages are bundled with the plug-in.
 
 Notes are encrypted on the device with the vault's passphrase (E2EE V2, with path obfuscation) before they leave it. The passphrase is stored only on the device, and the server rejects unencrypted documents. Two features send readable content, and only when you use them: Send to Kindle mails an EPUB through the server, and a shared note is published at a link that anyone with the link can open.
 
