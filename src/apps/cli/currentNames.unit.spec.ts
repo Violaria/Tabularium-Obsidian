@@ -18,7 +18,7 @@ describe("moving the CLI's data to the current names", () => {
 
         await moveToCurrentNames(db, vault);
 
-        expect((await readdir(db)).sort()).toEqual([".tabularium", "headless-vault-v2"]);
+        expect((await readdir(db)).sort()).toEqual([".tabularium", "headless-vault-localdb"]);
         expect(JSON.parse(await readFile(join(db, ".tabularium", "runtime", "local-storage.json"), "utf8"))).toEqual({
             "device-name-headless-vault-": "Tabularius",
             other: 1,
@@ -27,6 +27,6 @@ describe("moving the CLI's data to the current names", () => {
         expect((await readdir(vault)).sort()).toEqual([".tabularium", ".tabularium-snapshot.json"]);
         // A second start finds nothing to move.
         await moveToCurrentNames(db, vault);
-        expect((await readdir(db)).sort()).toEqual([".tabularium", "headless-vault-v2"]);
+        expect((await readdir(db)).sort()).toEqual([".tabularium", "headless-vault-localdb"]);
     });
 });

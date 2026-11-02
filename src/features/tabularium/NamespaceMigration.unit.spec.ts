@@ -77,7 +77,7 @@ describe("Tabularium's own names", () => {
             database: `${VAULT}-tabularium`,
             keyPrefix: `${VAULT}-tabularium-`,
             deviceName: `device-name-${VAULT}-tabularium`,
-            localDatabase: `${VAULT}-tabularium-v2`,
+            localDatabase: `${VAULT}-tabularium-localdb`,
             keyValueDatabase: `${VAULT}-tabularium-kv`,
         });
         expect(namesFor(VAULT, DATABASE_SUFFIX, "former")).toMatchObject({

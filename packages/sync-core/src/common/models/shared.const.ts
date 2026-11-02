@@ -2,7 +2,7 @@
 export const SETTING_KEY_P2P_DEVICE_NAME = "p2p_device_name";
 
 // Database
-export const SuffixDatabaseName = "-v2";
+export const SuffixDatabaseName = "-localdb";
 export const SuffixKeyValueDatabase = "-kv";
 /** Device value holding this device's name for a vault (followed by the vault's database name). */
 export const DeviceNameKeyPrefix = "device-name-";
