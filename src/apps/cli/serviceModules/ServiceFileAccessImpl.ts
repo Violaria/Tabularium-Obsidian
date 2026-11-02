@@ -1,4 +1,4 @@
-import { ServiceFileAccessBase, type StorageAccessBaseDependencies } from "@vrtmrz/livesync-commonlib/compat/serviceModules/ServiceFileAccessBase";
+import { ServiceFileAccessBase, type StorageAccessBaseDependencies } from "@tabularium/sync-core/compat/serviceModules/ServiceFileAccessBase";
 import { NodeFileSystemAdapter } from "@/apps/cli/adapters/NodeFileSystemAdapter";
 
 /**

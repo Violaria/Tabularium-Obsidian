@@ -1,7 +1,7 @@
 import { LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
     CAPABILITY_UNAVAILABLE_REASONS,
     isReplicationCompleted,
@@ -9,7 +9,7 @@ import {
     type ContinuousReplicationRequest,
     type ReplicationOutcome,
     type UnattendedOneShotRequest,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { PeriodicProcessor } from "@/common/PeriodicProcessor";
 
 type ReplicationSchedulingSettings = Pick<

@@ -8,11 +8,11 @@ import {
     type FilePath,
     type FilePathWithPrefix,
     type LOG_LEVEL,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { MARK_DONE } from "@/modules/features/ModuleLog.ts";
 import type { LiveSyncCore } from "@/main.ts";
-// import { __$checkInstanceBinding } from "@vrtmrz/livesync-commonlib/compat/dev/checks";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+// import { __$checkInstanceBinding } from "@tabularium/sync-core/compat/dev/checks";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 
 let noticeIndex = 0;
 export abstract class LiveSyncCommands {

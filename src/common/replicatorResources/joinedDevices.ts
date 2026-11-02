@@ -1,15 +1,15 @@
-import type { RemoteDBSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 import type {
     JoinedDevicesResource,
     JoinedDevicesResourceFactory,
     JoinedDevicesSnapshot,
     ForgetJoinedDeviceResult,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
-} from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator";
+} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
 interface JoinedDevicesReplicator extends ResourceReplicator {

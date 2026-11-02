@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { LOG_LEVEL_NOTICE, REMOTE_COUCHDB, REMOTE_MINIO } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { createNewVaultSettings } from "@vrtmrz/livesync-commonlib/settings";
+import { LOG_LEVEL_NOTICE, REMOTE_COUCHDB, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/types";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { createNewVaultSettings } from "@tabularium/sync-core/settings";
 
 const mocks = vi.hoisted(() => ({
     logger: vi.fn(),
@@ -31,16 +31,16 @@ const mocks = vi.hoisted(() => ({
     checkSyncInfo: vi.fn(async () => true),
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/common/logger", async (importOriginal) => {
-    const actual = await importOriginal<typeof import("@vrtmrz/livesync-commonlib/compat/common/logger")>();
+vi.mock("@tabularium/sync-core/compat/common/logger", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("@tabularium/sync-core/compat/common/logger")>();
     return { ...actual, Logger: mocks.logger };
 });
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/pouchdb/negotiation", () => ({
+vi.mock("@tabularium/sync-core/compat/pouchdb/negotiation", () => ({
     checkSyncInfo: mocks.checkSyncInfo,
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator", () => ({
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
     LiveSyncCouchDBReplicator: class {
         host: unknown;
         isMobile = vi.fn(() => false);
@@ -60,7 +60,7 @@ vi.mock("@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicato
     },
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator", () => ({
+vi.mock("@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator", () => ({
     LiveSyncJournalReplicator: class {
         host: unknown;
         tryConnectRemote = vi.fn();

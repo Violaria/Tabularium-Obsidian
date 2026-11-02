@@ -1,7 +1,7 @@
 import { EVENT_REQUEST_RUN_DOCTOR, EVENT_REQUEST_RUN_FIX_INCOMPLETE, EVENT_SETTING_SAVED } from "@/common/events";
 import { $msg } from "@/common/translation";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import { LOG_LEVEL_NOTICE } from "@vrtmrz/livesync-commonlib/compat/common/logger";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import { LOG_LEVEL_NOTICE } from "@tabularium/sync-core/compat/common/logger";
 import type {
     StartupLifecycleHost,
     StartupLifecycleFeatureOptions,

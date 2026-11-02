@@ -1,8 +1,8 @@
 import {
     ServiceDatabaseFileAccessBase,
     type ServiceDatabaseFileAccessDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/serviceModules/ServiceDatabaseFileAccessBase";
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
+} from "@tabularium/sync-core/compat/serviceModules/ServiceDatabaseFileAccessBase";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
 
 /**
  * FileSystem API-specific implementation of ServiceDatabaseFileAccess

@@ -12,11 +12,11 @@ import {
     type DiagnosticContent,
     type DiagnosticNameMode,
     type DiagnosticStatus,
-} from "@vrtmrz/livesync-commonlib/diagnostics";
-import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import type { NecessaryServicesInterfaces } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import commonlibPackage from "@vrtmrz/livesync-commonlib/package.json";
+} from "@tabularium/sync-core/diagnostics";
+import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import type { NecessaryServicesInterfaces } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import commonlibPackage from "@tabularium/sync-core/package.json";
 import { LOG_LEVEL_INFO, Logger } from "octagonal-wheels/common/logger";
 
 export type DatabaseDiagnosticKind = "usage" | "integrity";

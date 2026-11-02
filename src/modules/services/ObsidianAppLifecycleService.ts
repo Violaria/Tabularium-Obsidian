@@ -1,4 +1,4 @@
-import { AppLifecycleServiceBase } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableAppLifecycleService";
+import { AppLifecycleServiceBase } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAppLifecycleService";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 declare module "obsidian" {
     interface App {

@@ -12,13 +12,13 @@ import {
 } from "@/common/events.ts";
 import { VIEW_TYPE_LOG } from "@/modules/features/Log/LogPaneView.ts";
 import { getConfig, type AllSettingItemKey } from "@/modules/features/SettingDialogue/settingConstants.ts";
-import { NetworkWarningStyles } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
-import { FlagFilesHumanReadable, FlagFilesOriginal, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { constructCustomRegExpList, splitCustomRegExpList } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+import { NetworkWarningStyles } from "@tabularium/sync-core/compat/common/models/setting.const";
+import { FlagFilesHumanReadable, FlagFilesOriginal, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { constructCustomRegExpList, splitCustomRegExpList } from "@tabularium/sync-core/compat/common/utils";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import type ObsidianLiveSyncPlugin from "@/main";
 import { confirmAction } from "./Confirm";
 import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/serviceFeatures/redFlag.simpleFetch";

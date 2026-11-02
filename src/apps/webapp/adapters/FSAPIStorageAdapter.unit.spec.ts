@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { storageAdapterContractCases } from "@/apps/_test/storageAdapterContract";
 import { FSAPIFileSystemAdapter } from "./FSAPIFileSystemAdapter";
-import { FileSystemAccessStorageAdapter } from "@vrtmrz/livesync-commonlib/browser";
+import { FileSystemAccessStorageAdapter } from "@tabularium/sync-core/browser";
 import { FSAPIVaultAdapter } from "./FSAPIVaultAdapter";
-import { LOG_LEVEL_NOTICE } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { LOG_LEVEL_NOTICE } from "@tabularium/sync-core/compat/common/types";
 
 class MemoryFileHandle {
     readonly kind = "file";

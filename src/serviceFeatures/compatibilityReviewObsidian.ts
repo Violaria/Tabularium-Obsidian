@@ -1,6 +1,6 @@
 import { Notice } from "@/deps.ts";
 import { $msg } from "@/common/translation";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import type { CompatibilityPause } from "@/common/databaseCompatibility.ts";
 import type {
     CompatibilityReviewDetailsAction,

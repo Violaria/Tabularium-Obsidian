@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
+import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import {
     applyStoredSetting,
     changedSettingKeys,

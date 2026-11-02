@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { storageAdapterContractCases } from "@/apps/_test/storageAdapterContract";
-import { fsPromises as fs, os, path, NodeStorageAdapter } from "@vrtmrz/livesync-commonlib/node";
+import { fsPromises as fs, os, path, NodeStorageAdapter } from "@tabularium/sync-core/node";
 
 describe("NodeStorageAdapter", () => {
     const tempDirs: string[] = [];

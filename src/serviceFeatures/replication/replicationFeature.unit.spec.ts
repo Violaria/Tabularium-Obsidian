@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { VERSIONING_DOCID, type EntryDoc } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { REMOTE_FEATURE_GENERATION } from "@vrtmrz/livesync-commonlib/replication";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import { VERSIONING_DOCID, type EntryDoc } from "@tabularium/sync-core/compat/common/types";
+import { REMOTE_FEATURE_GENERATION } from "@tabularium/sync-core/replication";
 import { promiseWithResolvers } from "octagonal-wheels/promises";
 import { EVENT_APPLICATION_READY } from "@/common/events";
 import { useReplicationFeature } from "./index";

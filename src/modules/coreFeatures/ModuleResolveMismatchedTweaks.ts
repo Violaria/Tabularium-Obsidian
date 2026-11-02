@@ -9,14 +9,14 @@ import {
     type RemoteDBSettings,
     type RemotePreferredTweakResult,
     RemotePreferredTweakStatuses,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { assessTweakCompatibility, type TweakAssessment } from "@vrtmrz/livesync-commonlib/settings";
-import { escapeMarkdownValue } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+} from "@tabularium/sync-core/compat/common/types";
+import { assessTweakCompatibility, type TweakAssessment } from "@tabularium/sync-core/settings";
+import { escapeMarkdownValue } from "@tabularium/sync-core/compat/common/utils";
 import { AbstractModule } from "@/modules/AbstractModule.ts";
 import { $msg, translateIfAvailable } from "@/common/translation";
-import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
+import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import type { LiveSyncCore } from "@/main.ts";
-import { REMOTE_COUCHDB, REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
+import { REMOTE_COUCHDB, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
 import { withOwnedRemoteResource } from "@/common/ownedRemoteResource";
 import {
     CENTRAL_COMPATIBILITY_REJECTION_REASONS,
@@ -24,7 +24,7 @@ import {
     usesEncryptedInternalMetadata,
     type ReplicationAttemptFailure,
     type ReplicatorInstance,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 interface PreferredRemoteTweakWriter extends ReplicatorInstance {
     setPreferredRemoteTweakSettings(setting: ObsidianLiveSyncSettings): Promise<void>;

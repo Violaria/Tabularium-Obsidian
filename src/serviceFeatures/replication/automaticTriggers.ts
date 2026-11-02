@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { fireAndForget } from "octagonal-wheels/promises";
 import { scheduleTask } from "octagonal-wheels/concurrency/task";
 import { EVENT_FILE_SAVED, EVENT_SETTING_SAVED, eventHub } from "@/common/events";

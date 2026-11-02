@@ -1,11 +1,11 @@
-import type { IConfigService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { AppLifecycleService } from "@vrtmrz/livesync-commonlib/compat/services/base/AppLifecycleService";
-import type { ReplicatorService } from "@vrtmrz/livesync-commonlib/compat/services/base/ReplicatorService";
-import { UIService } from "@vrtmrz/livesync-commonlib/compat/services/implements/base/UIService";
+import type { IConfigService } from "@tabularium/sync-core/compat/services/base/IService";
+import type { AppLifecycleService } from "@tabularium/sync-core/compat/services/base/AppLifecycleService";
+import type { ReplicatorService } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
+import { UIService } from "@tabularium/sync-core/compat/services/implements/base/UIService";
 import { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { ObsidianSvelteDialogManager } from "./SvelteDialogObsidian";
 import DialogToCopy from "@/modules/services/LiveSyncUI/dialogues/DialogueToCopy.svelte";
-import type { IAPIService, IControlService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
+import type { IAPIService, IControlService } from "@tabularium/sync-core/compat/services/base/IService";
 export type ObsidianUIServiceDependencies<T extends ObsidianServiceContext = ObsidianServiceContext> = {
     appLifecycle: AppLifecycleService<T>;
     config: IConfigService;

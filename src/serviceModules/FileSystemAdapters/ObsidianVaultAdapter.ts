@@ -1,6 +1,6 @@
-import type { UXDataWriteOptions } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IVaultAdapter } from "@vrtmrz/livesync-commonlib/compat/serviceModules/adapters";
-import { toArrayBuffer } from "@vrtmrz/livesync-commonlib/compat/serviceModules/FileAccessBase";
+import type { UXDataWriteOptions } from "@tabularium/sync-core/compat/common/types";
+import type { IVaultAdapter } from "@tabularium/sync-core/compat/serviceModules/adapters";
+import { toArrayBuffer } from "@tabularium/sync-core/compat/serviceModules/FileAccessBase";
 import type { TFile, App, TFolder } from "obsidian";
 import { toIntegerTimestamps } from "./sanitizeWriteOptions";
 import { createPathAliasGuard, type PathAliasGuard } from "./pathAliasGuard";

@@ -3,11 +3,11 @@ import {
     LOG_LEVEL_VERBOSE,
     Logger,
     type LOG_LEVEL,
-} from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { countCompromisedChunks } from "@vrtmrz/livesync-commonlib/compat/pouchdb/negotiation";
-import type { Rebuilder } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseRebuilder";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
+} from "@tabularium/sync-core/compat/common/logger";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { countCompromisedChunks } from "@tabularium/sync-core/compat/pouchdb/negotiation";
+import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import { $msg } from "@/common/translation";
 
 interface CompromisedChunkCounter {

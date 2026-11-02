@@ -1,6 +1,6 @@
-import type { FilePath, UXFileInfoStub, UXInternalFileInfoStub } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { FileEventItem } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IStorageEventManagerAdapter } from "@vrtmrz/livesync-commonlib/compat/managers/adapters";
+import type { FilePath, UXFileInfoStub, UXInternalFileInfoStub } from "@tabularium/sync-core/compat/common/types";
+import type { FileEventItem } from "@tabularium/sync-core/compat/common/types";
+import type { IStorageEventManagerAdapter } from "@tabularium/sync-core/compat/managers/adapters";
 import type {
     IStorageEventTypeGuardAdapter,
     IStorageEventPersistenceAdapter,
@@ -8,11 +8,11 @@ import type {
     IStorageEventStatusAdapter,
     IStorageEventConverterAdapter,
     IStorageEventWatchHandlers,
-} from "@vrtmrz/livesync-commonlib/compat/managers/adapters";
-import type { FileEventItemSentinel } from "@vrtmrz/livesync-commonlib/compat/managers/StorageEventManager";
+} from "@tabularium/sync-core/compat/managers/adapters";
+import type { FileEventItemSentinel } from "@tabularium/sync-core/compat/managers/StorageEventManager";
 import type { FSAPIFile, FSAPIFolder } from "@/apps/webapp/adapters/FSAPITypes";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
-import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "@tabularium/sync-core/compat/common/types";
 import type { WebAppLog } from "@/apps/webapp/WebAppLog";
 
 type FileSystemObserverRecord = {

@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fsPromises as fs, NodeStorageAdapter, os, path } from "@vrtmrz/livesync-commonlib/node";
-import { DEFAULT_SETTINGS, type FilePath } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { fsPromises as fs, NodeStorageAdapter, os, path } from "@tabularium/sync-core/node";
+import { DEFAULT_SETTINGS, type FilePath } from "@tabularium/sync-core/compat/common/types";
 import {
     ServiceRebuilder,
     type ServiceRebuilderDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/serviceModules/Rebuilder";
-import { PathServiceCompat } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectablePathService";
-import { ServiceContext } from "@vrtmrz/livesync-commonlib/compat/services/base/ServiceBase";
+} from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
+import { PathServiceCompat } from "@tabularium/sync-core/compat/services/implements/injectable/InjectablePathService";
+import { ServiceContext } from "@tabularium/sync-core/compat/services/base/ServiceBase";
 import { NodeFileSystemAdapter } from "./NodeFileSystemAdapter";
 
 describe("NodeFileSystemAdapter file enumeration", () => {

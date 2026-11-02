@@ -1,10 +1,10 @@
-import { EVENT_PLUGIN_UNLOADED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
+import { EVENT_PLUGIN_UNLOADED } from "@tabularium/sync-core/compat/events/coreEvents";
 import type {
     ComponentHasResult,
     DialogHostProps,
     SvelteDialogManagerDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
+import { createServiceContext } from "@tabularium/sync-core/context";
 import type { Component } from "svelte";
 import { describe, expect, it, vi } from "vitest";
 

@@ -1,4 +1,4 @@
-import type { RemoteDBSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 
 /**
  * Closeable surface of a concrete Replicator owned by one private resource.

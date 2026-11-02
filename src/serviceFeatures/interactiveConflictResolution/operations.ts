@@ -9,26 +9,26 @@ import {
     type FilePathWithPrefix,
     type ObsidianLiveSyncSettings,
     type diff_result,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
+} from "@tabularium/sync-core/compat/common/types";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
 import type {
     IAppLifecycleService,
     IConflictService,
     IPathService,
     IReplicationService,
     IVaultService,
-} from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { LiveSyncLocalDB } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
-import type { LiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
+} from "@tabularium/sync-core/compat/services/base/IService";
+import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LiveSyncEventHub } from "@tabularium/sync-core/context";
 import { fireAndForget } from "octagonal-wheels/promises";
 import { serialized } from "octagonal-wheels/concurrency/lock";
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
-import { displayRev } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
+import { displayRev } from "@tabularium/sync-core/compat/common/utils";
 import { EVENT_CONFLICT_CANCELLED, EVENT_ON_UNRESOLVED_ERROR } from "@/common/events.ts";
 import { $msg } from "@/common/translation.ts";
-import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
     POSTPONED,
     type ConflictResolveDialogue,

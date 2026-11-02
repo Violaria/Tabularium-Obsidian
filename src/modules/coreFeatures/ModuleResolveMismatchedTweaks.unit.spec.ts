@@ -5,9 +5,9 @@ import {
     TweakValuesTemplate,
     type RemoteDBSettings,
     type TweakValues,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { extractObject } from "octagonal-wheels/object";
-import { assessTweakCompatibility, configuredIdKey } from "@vrtmrz/livesync-commonlib/settings";
+import { assessTweakCompatibility, configuredIdKey } from "@tabularium/sync-core/settings";
 import { ModuleResolvingMismatchedTweaks } from "./ModuleResolveMismatchedTweaks";
 import { setLang } from "@/common/translation";
 import {
@@ -16,7 +16,7 @@ import {
     USER_INITIATED_REPLICATION_AUTHORITY,
     usesEncryptedInternalMetadata,
     type ReplicationAttemptFailure,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 const BASE_TWEAKS = {
     ...extractObject(TweakValuesTemplate, DEFAULT_SETTINGS),

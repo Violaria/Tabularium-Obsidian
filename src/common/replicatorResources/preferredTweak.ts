@@ -1,10 +1,10 @@
-import type { RemoteDBSettings, RemotePreferredTweakResult } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { PreferredTweakProbe, PreferredTweakProbeFactory } from "@vrtmrz/livesync-commonlib/replication";
+import type { RemoteDBSettings, RemotePreferredTweakResult } from "@tabularium/sync-core/compat/common/types";
+import type { PreferredTweakProbe, PreferredTweakProbeFactory } from "@tabularium/sync-core/replication";
 import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
-} from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator";
+} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
 /** Host environment sufficient to construct either preferred-tweak probe. */

@@ -3,7 +3,7 @@ import {
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import {
     EVENT_LAYOUT_READY,
     EVENT_PLUGIN_LOADED,
@@ -13,11 +13,11 @@ import {
 } from "@/common/events.ts";
 import { $msg, setLang } from "@/common/translation";
 import { AbstractModule } from "@/modules/AbstractModule.ts";
-import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
+import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import type { LiveSyncCore } from "@/main.ts";
-import { initialiseWorkerModule } from "@vrtmrz/livesync-commonlib/compat/worker/bgWorker";
-import { manifestVersion, packageVersion } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvVars";
-import { VaultScanResults } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+import { initialiseWorkerModule } from "@tabularium/sync-core/compat/worker/bgWorker";
+import { manifestVersion, packageVersion } from "@tabularium/sync-core/compat/common/coreEnvVars";
+import { VaultScanResults } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 
 export class ModuleLiveSyncMain extends AbstractModule {
     async _onLiveSyncReady() {

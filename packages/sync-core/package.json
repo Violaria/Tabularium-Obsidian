@@ -1,5 +1,5 @@
 {
-    "name": "@vrtmrz/livesync-commonlib",
+    "name": "@tabularium/sync-core",
     "version": "0.2.1",
     "private": true,
     "description": "Shared data, storage, and replication primitives for Self-hosted LiveSync clients.",

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { LoadedEntry, MetaEntry, UXFileInfoStub } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { LoadedEntry, MetaEntry, UXFileInfoStub } from "@tabularium/sync-core/compat/common/types";
 import { checkIncompleteDocuments, type IncompleteDocumentsDependencies } from "./incompleteDocuments";
 
 vi.mock("@/common/utils", () => ({

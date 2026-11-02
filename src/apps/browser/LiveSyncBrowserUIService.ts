@@ -1,10 +1,10 @@
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { AppLifecycleService } from "@vrtmrz/livesync-commonlib/compat/services/base/AppLifecycleService";
-import type { IConfigService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { ControlService } from "@vrtmrz/livesync-commonlib/compat/services/base/ControlService";
-import type { ReplicatorService } from "@vrtmrz/livesync-commonlib/compat/services/base/ReplicatorService";
-import type { InjectableAPIService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableAPIService";
-import { UIService } from "@vrtmrz/livesync-commonlib/compat/services/implements/base/UIService";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import type { AppLifecycleService } from "@tabularium/sync-core/compat/services/base/AppLifecycleService";
+import type { IConfigService } from "@tabularium/sync-core/compat/services/base/IService";
+import type { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
+import type { ReplicatorService } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
+import type { InjectableAPIService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAPIService";
+import { UIService } from "@tabularium/sync-core/compat/services/implements/base/UIService";
 import DialogToCopy from "@/modules/services/LiveSyncUI/dialogues/DialogueToCopy.svelte";
 import { BrowserSvelteDialogManager } from "./BrowserSvelteDialogManager";
 

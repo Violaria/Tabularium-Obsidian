@@ -1,4 +1,4 @@
-import type { ForgetJoinedDeviceResult, JoinedDevice } from "@vrtmrz/livesync-commonlib/replication";
+import type { ForgetJoinedDeviceResult, JoinedDevice } from "@tabularium/sync-core/replication";
 
 export interface JoinedDeviceRow extends JoinedDevice {
     readonly self: boolean;

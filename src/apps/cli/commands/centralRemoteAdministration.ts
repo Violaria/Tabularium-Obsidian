@@ -1,4 +1,4 @@
-import type { StandardIo } from "@vrtmrz/livesync-commonlib/context";
+import type { StandardIo } from "@tabularium/sync-core/context";
 import {
     CENTRAL_REMOTE_ADMINISTRATION_ACTIONS,
     CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS,
@@ -6,8 +6,8 @@ import {
     isCentralRemoteAdministrationVerified,
     type CentralRemoteAdministrationAction,
     type CentralRemoteAdministrationResult,
-} from "@vrtmrz/livesync-commonlib/replication";
-import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
+} from "@tabularium/sync-core/replication";
+import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import { writeStderrLine } from "@/apps/cli/cliOutput";
 import type { CLICommand, CLICommandContext, CLIOptions } from "./types";
 

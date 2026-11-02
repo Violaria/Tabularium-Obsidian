@@ -1,6 +1,6 @@
-import { fsPromises, os, path } from "@vrtmrz/livesync-commonlib/node";
+import { fsPromises, os, path } from "@tabularium/sync-core/node";
 import { describe, expect, it, vi } from "vitest";
-import type { FilePath } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { FilePath } from "@tabularium/sync-core/compat/common/types";
 import { NodeFileSystemAdapter } from "./NodeFileSystemAdapter";
 import { NodeVaultAdapter } from "./NodeVaultAdapter";
 

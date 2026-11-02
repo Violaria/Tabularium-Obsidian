@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/compat/services/base/ServiceBase";
+import { createServiceContext } from "@tabularium/sync-core/compat/services/base/ServiceBase";
 import type { NodeKeyValueDBDependencies } from "./NodeKeyValueDBService";
 import { NodeKeyValueDBService } from "./NodeKeyValueDBService";
 

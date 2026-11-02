@@ -5,8 +5,8 @@ import {
     REMOTE_P2P,
     type FilePathWithPrefix,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/compat/common/types";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 import { EVENT_FILE_SAVED, EVENT_SETTING_SAVED, eventHub } from "@/common/events";
 
 const taskMocks = vi.hoisted(() => ({

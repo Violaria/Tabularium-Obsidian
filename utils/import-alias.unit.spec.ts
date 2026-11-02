@@ -49,7 +49,7 @@ describe("source import aliases", () => {
     it.each([
         "./helper",
         "@/common/types",
-        "@vrtmrz/livesync-commonlib/common/types",
+        "@tabularium/sync-core/common/types",
         "node:path",
         "../../test/helper",
     ])("preserves import %s", (sourcePath) => {

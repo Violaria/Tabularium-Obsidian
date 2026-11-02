@@ -1,12 +1,12 @@
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import {
     NODEINFO_DOCID,
     REMOTE_COUCHDB,
     REMOTE_MINIO,
     type EntryNodeInfo,
     type RemoteDBSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { REMOTE_RESOURCE_KINDS, type JoinedDevicesSnapshot } from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/compat/common/types";
+import { REMOTE_RESOURCE_KINDS, type JoinedDevicesSnapshot } from "@tabularium/sync-core/replication";
 import type { ObsidianNoticeGroups } from "@/modules/services/ObsidianNoticeGroups";
 import JoinedDevicesDialog from "@/modules/services/LiveSyncUI/dialogues/JoinedDevicesDialog.svelte";
 import {

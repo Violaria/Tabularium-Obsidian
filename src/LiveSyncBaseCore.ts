@@ -5,28 +5,28 @@ import {
     type HasSettings,
     type ObsidianLiveSyncSettings,
     type EntryDoc,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { __$checkInstanceBinding } from "@vrtmrz/livesync-commonlib/compat/dev/checks";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
-import type { Rebuilder } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseRebuilder";
-import type { IFileHandler } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileHandler";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import type { LiveSyncLocalDBEnv } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
-import type { LiveSyncCouchDBReplicatorEnv } from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import type { CheckPointInfo } from "@vrtmrz/livesync-commonlib/compat/replication/journal/JournalSyncTypes";
-import type { LiveSyncAbstractReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/LiveSyncAbstractReplicator";
-import type { ReplicatorInstance } from "@vrtmrz/livesync-commonlib/replication";
-import { useTargetFilters } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/targetFilter";
-import { useRemoteConfigurationMigration } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/remoteConfig";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
+} from "@tabularium/sync-core/compat/common/types";
+import { __$checkInstanceBinding } from "@tabularium/sync-core/compat/dev/checks";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
+import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
+import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import type { LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LiveSyncCouchDBReplicatorEnv } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import type { CheckPointInfo } from "@tabularium/sync-core/compat/replication/journal/JournalSyncTypes";
+import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
+import type { ReplicatorInstance } from "@tabularium/sync-core/replication";
+import { useTargetFilters } from "@tabularium/sync-core/compat/serviceFeatures/targetFilter";
+import { useRemoteConfigurationMigration } from "@tabularium/sync-core/compat/serviceFeatures/remoteConfig";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import { AbstractModule } from "./modules/AbstractModule";
 import { ModuleResolvingMismatchedTweaks } from "./modules/coreFeatures/ModuleResolveMismatchedTweaks";
 import { ModuleLiveSyncMain } from "./modules/main/ModuleLiveSyncMain";
-import type { ServiceModules } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { usePrepareDatabaseForUse } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/prepareDatabaseForUse";
-import type { Constructor } from "@vrtmrz/livesync-commonlib/compat/common/utils.type";
+import type { ServiceModules } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { usePrepareDatabaseForUse } from "@tabularium/sync-core/compat/serviceFeatures/prepareDatabaseForUse";
+import type { Constructor } from "@tabularium/sync-core/compat/common/utils.type";
 import { useReplicationScheduling, type ReplicationSchedulingControl } from "./serviceFeatures/replicationScheduling";
 import { createCentralReplicatorProviderDefinitions } from "./common/replicatorProviders";
 import { useReplicationFeature } from "./serviceFeatures/replication";

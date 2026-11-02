@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { comparePluginVersions, differentDeviceVersions, joinedDevicesView } from "./joinedDevices";
-import type { JoinedDevicesSnapshot } from "@vrtmrz/livesync-commonlib/replication";
+import type { JoinedDevicesSnapshot } from "@tabularium/sync-core/replication";
 
 const empty: JoinedDevicesSnapshot = { milestonePresent: false, locked: false, cleaned: false, devices: [] };
 

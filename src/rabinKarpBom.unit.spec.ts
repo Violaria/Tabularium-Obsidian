@@ -1,4 +1,4 @@
-import { splitPiecesRabinKarp } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/chunks";
+import { splitPiecesRabinKarp } from "@tabularium/sync-core/compat/string_and_binary/chunks";
 import { describe, expect, it } from "vitest";
 
 describe("Rabin-Karp text splitting", () => {

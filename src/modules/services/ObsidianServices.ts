@@ -1,17 +1,17 @@
-import { InjectableConflictService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableConflictService";
-import { InjectableDatabaseEventService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableDatabaseEventService";
-import { InjectableFileProcessingService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableFileProcessingService";
-import { InjectableRemoteService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableRemoteService";
-import { InjectableReplicationService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableReplicationService";
-import { InjectableReplicatorService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableReplicatorService";
-import { InjectableTestService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableTestService";
-import { InjectableTweakValueService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableTweakValueService";
+import { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
+import { InjectableDatabaseEventService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableDatabaseEventService";
+import { InjectableFileProcessingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableFileProcessingService";
+import { InjectableRemoteService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableRemoteService";
+import { InjectableReplicationService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableReplicationService";
+import { InjectableReplicatorService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableReplicatorService";
+import { InjectableTestService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTestService";
+import { InjectableTweakValueService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTweakValueService";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
-import { KeyValueDBService } from "@vrtmrz/livesync-commonlib/compat/services/base/KeyValueDBService";
-import { ControlService } from "@vrtmrz/livesync-commonlib/compat/services/base/ControlService";
+import { KeyValueDBService } from "@tabularium/sync-core/compat/services/base/KeyValueDBService";
+import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
 import { reactiveSource } from "octagonal-wheels/dataobject/reactive";
-import type { ReplicatorServiceDependencies } from "@vrtmrz/livesync-commonlib/compat/services/base/ReplicatorService";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { ReplicatorServiceDependencies } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 
 type ActivityOptions = {
     label?: string;

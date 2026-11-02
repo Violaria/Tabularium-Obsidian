@@ -1,10 +1,10 @@
 import {
     FileAccessBase,
     type FileAccessBaseDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/serviceModules/FileAccessBase";
+} from "@tabularium/sync-core/compat/serviceModules/FileAccessBase";
 import { NodeFileSystemAdapter } from "@/apps/cli/adapters/NodeFileSystemAdapter";
 import { LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
-import { getPathNormalizationVersion } from "@vrtmrz/livesync-commonlib/settings";
+import { getPathNormalizationVersion } from "@tabularium/sync-core/settings";
 
 /**
  * CLI-specific implementation of FileAccessBase

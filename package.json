@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "node --env-file=.env esbuild.config.mjs",
-        "build:core": "npm run build --workspace @vrtmrz/livesync-commonlib",
+        "build:core": "npm run build --workspace @tabularium/sync-core",
         "prebuild": "npm run build:core",
         "build": "node esbuild.config.mjs production",
         "prebuild:notes": "npm run build:core",
@@ -141,7 +141,7 @@
         "@smithy/util-retry": "^4.4.5",
         "@tabularium/custom-sort": "file:../../packages/custom-sort",
         "@vrtmrz/browser-ui-kit": "0.1.0",
-        "@vrtmrz/livesync-commonlib": "0.2.1",
+        "@tabularium/sync-core": "0.2.1",
         "@vrtmrz/obsidian-plugin-kit": "0.1.4",
         "@vrtmrz/ui-interactions": "0.1.2",
         "@vrtmrz/value-store": "0.1.0",

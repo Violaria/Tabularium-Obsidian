@@ -1,7 +1,7 @@
-import type { AnyEntry, ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import type { LiveSyncEventHub, ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import type { AnyEntry, ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import type { LiveSyncEventHub, ServiceContext } from "@tabularium/sync-core/context";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import type { ObsidianNoticeGroups } from "@/modules/services/ObsidianNoticeGroups";
 
 /** A value which may be read once or evaluated when a lifecycle handler runs. */

@@ -1,8 +1,8 @@
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
-import type { Rebuilder } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseRebuilder";
-import type { IFileHandler } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileHandler";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import type { IServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
+import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
+import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import type { IServiceHub } from "@tabularium/sync-core/compat/services/base/IService";
 
 export interface ServiceModules {
     storageAccess: StorageAccess;

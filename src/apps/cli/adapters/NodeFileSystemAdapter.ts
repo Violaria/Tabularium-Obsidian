@@ -1,12 +1,12 @@
-import type { FilePath, UXStat } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IFileSystemAdapter } from "@vrtmrz/livesync-commonlib/compat/serviceModules/adapters";
+import type { FilePath, UXStat } from "@tabularium/sync-core/compat/common/types";
+import type { IFileSystemAdapter } from "@tabularium/sync-core/compat/serviceModules/adapters";
 import { NodePathAdapter } from "./NodePathAdapter";
 import { NodeTypeGuardAdapter } from "./NodeTypeGuardAdapter";
 import { NodeConversionAdapter } from "./NodeConversionAdapter";
 import { AmbiguousNormalisedPathError, UnicodeResolvingNodeStorageAdapter } from "./UnicodeResolvingNodeStorageAdapter";
 import { NodeVaultAdapter } from "./NodeVaultAdapter";
 import type { NodeFile, NodeFolder, NodeStat } from "./NodeTypes";
-import { path } from "@vrtmrz/livesync-commonlib/node";
+import { path } from "@tabularium/sync-core/node";
 import type { CliDiagnosticReporter } from "@/apps/cli/cliOutput";
 
 /**

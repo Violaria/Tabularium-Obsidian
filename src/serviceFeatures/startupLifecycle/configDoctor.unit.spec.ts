@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { performDoctorConsultation } from "@vrtmrz/livesync-commonlib/compat/common/configForDoc";
+import { performDoctorConsultation } from "@tabularium/sync-core/compat/common/configForDoc";
 import { runConfigDoctor, type ConfigDoctorDependencies } from "./configDoctor";
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/common/configForDoc", async () => {
-    const actual = await vi.importActual<typeof import("@vrtmrz/livesync-commonlib/compat/common/configForDoc")>(
-        "@vrtmrz/livesync-commonlib/compat/common/configForDoc"
+vi.mock("@tabularium/sync-core/compat/common/configForDoc", async () => {
+    const actual = await vi.importActual<typeof import("@tabularium/sync-core/compat/common/configForDoc")>(
+        "@tabularium/sync-core/compat/common/configForDoc"
     );
     return {
         ...actual,

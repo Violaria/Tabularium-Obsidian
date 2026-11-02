@@ -4,12 +4,12 @@ import {
     REMOTE_COUCHDB,
     REMOTE_P2P,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 
 const diagnosticsMocks = vi.hoisted(() => ({ analyseOptions: vi.fn() }));
 
-vi.mock("@vrtmrz/livesync-commonlib/diagnostics", async (importOriginal) => {
-    const actual = await importOriginal<typeof import("@vrtmrz/livesync-commonlib/diagnostics")>();
+vi.mock("@tabularium/sync-core/diagnostics", async (importOriginal) => {
+    const actual = await importOriginal<typeof import("@tabularium/sync-core/diagnostics")>();
     return {
         ...actual,
         analyseDatabaseIntegrity: (options: Parameters<typeof actual.analyseDatabaseIntegrity>[0]) => {

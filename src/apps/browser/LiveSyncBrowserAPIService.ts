@@ -1,10 +1,10 @@
-import type { LOG_LEVEL } from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
-import type { ICommandCompat } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { InjectableAPIService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableAPIService";
+import type { LOG_LEVEL } from "@tabularium/sync-core/compat/common/logger";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
+import type { ICommandCompat } from "@tabularium/sync-core/compat/services/base/IService";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import { InjectableAPIService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAPIService";
 import { FetchHttpHandler } from "@smithy/fetch-http-handler";
-import { _fetch } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { _fetch } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 declare const MANIFEST_VERSION: string | undefined;
 declare const PACKAGE_VERSION: string | undefined;

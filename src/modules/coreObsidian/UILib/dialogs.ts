@@ -2,7 +2,7 @@ import { ButtonComponent } from "@/deps.ts";
 import { App, FuzzySuggestModal, MarkdownRenderer, Modal, Plugin, Setting, Component } from "@/deps.ts";
 import { EVENT_PLUGIN_UNLOADED, eventHub } from "@/common/events.ts";
 import { $msg } from "@/common/translation";
-import { compatGlobal, type CompatIntervalHandle } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { compatGlobal, type CompatIntervalHandle } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 class AutoClosableModal extends Modal {
     _closeByUnload = () => {

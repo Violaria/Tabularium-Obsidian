@@ -2,7 +2,7 @@ import { type TFile } from "@/deps.ts";
 import { $msg } from "@/common/translation";
 import { eventHub } from "@/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";
-import type { FilePathWithPrefix, LoadedEntry, DocumentID } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { FilePathWithPrefix, LoadedEntry, DocumentID } from "@tabularium/sync-core/compat/common/types";
 import { AbstractObsidianModule } from "@/modules/AbstractObsidianModule.ts";
 import { DocumentHistoryModal } from "./DocumentHistory/DocumentHistoryModal.ts";
 import { fireAndForget } from "octagonal-wheels/promises";

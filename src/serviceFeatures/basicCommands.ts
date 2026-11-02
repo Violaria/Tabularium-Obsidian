@@ -1,11 +1,11 @@
 import { LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
 import { fireAndForget } from "octagonal-wheels/promises";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { $msg } from "@/common/translation";
 import { copyFileDatabaseInfo, type FileDatabaseInfoCore } from "@/serviceFeatures/fileDatabaseInfo";
 

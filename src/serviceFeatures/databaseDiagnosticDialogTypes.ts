@@ -1,4 +1,4 @@
-import type { DiagnosticNameMode } from "@vrtmrz/livesync-commonlib/diagnostics";
+import type { DiagnosticNameMode } from "@tabularium/sync-core/diagnostics";
 import type {
     DatabaseDiagnosticKind,
     DatabaseDiagnosticOutput,

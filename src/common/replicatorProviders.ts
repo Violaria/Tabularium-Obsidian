@@ -1,4 +1,4 @@
-import { REMOTE_COUCHDB, REMOTE_MINIO, type RemoteDBSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { REMOTE_COUCHDB, REMOTE_MINIO, type RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     CAPABILITY_NOT_APPLICABLE,
     CENTRAL_REMOTE_REPLICATION_READINESS,
@@ -17,12 +17,12 @@ import {
     type ReplicatorInstance,
     type UserInitiatedOneShotRunner,
     type UnattendedOneShotRunner,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
-} from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import { LiveSyncJournalReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator";
+} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import {
     getCouchDBReplicatorConfigurationIdentity,
     getObjectStorageReplicatorConfigurationIdentity,

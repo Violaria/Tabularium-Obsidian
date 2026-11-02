@@ -1,4 +1,4 @@
-import { path } from "@vrtmrz/livesync-commonlib/node";
+import { path } from "@tabularium/sync-core/node";
 import { describe, expect, it } from "vitest";
 import { getForceRequirementError, toDatabaseRelativePath } from "./utils";
 

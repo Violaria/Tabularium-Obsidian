@@ -9,7 +9,7 @@ import {
 } from "../../../../test/contracts/serviceContext";
 import { NodeServiceContext } from "./NodeServiceContext";
 import { NodeServiceHub } from "./NodeServiceHub";
-import type { StandardIo } from "@vrtmrz/livesync-commonlib/context";
+import type { StandardIo } from "@tabularium/sync-core/context";
 
 const TRANSLATION_KEY = "Replicator.Message.InitialiseFatalError";
 

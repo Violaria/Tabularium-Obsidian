@@ -1,10 +1,10 @@
 import { addIcon } from "@/deps.ts";
 import { $msg } from "@/common/translation";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 export type ObsidianReplicationRibbonHost = NecessaryServices<"API" | "appLifecycle" | "replication", never>;
 

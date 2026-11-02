@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { LOG_LEVEL_NOTICE } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { LOG_LEVEL_NOTICE } from "@tabularium/sync-core/compat/common/types";
 
 vi.mock("@/common/events.ts", () => ({
     EVENT_LAYOUT_READY: "layout-ready",
@@ -17,7 +17,7 @@ vi.mock("@/common/translation", () => ({
     setLang: vi.fn(),
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/worker/bgWorker", () => ({
+vi.mock("@tabularium/sync-core/compat/worker/bgWorker", () => ({
     initialiseWorkerModule: vi.fn(),
 }));
 

@@ -2,9 +2,9 @@ import {
     MILESTONE_DOCID,
     type EntryMilestoneInfo,
     type RemoteDBSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { LiveSyncCouchDBReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import type { LiveSyncJournalReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator";
+} from "@tabularium/sync-core/compat/common/types";
+import type { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import type { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import {
     CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS,
     CENTRAL_REMOTE_ADMINISTRATION_OBSERVATION_KINDS,
@@ -21,7 +21,7 @@ import {
     type CentralRemoteAdministrationRunner,
     type ReplicatorInstance,
     type SupportedCapability,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 /**
  * Central milestone administration shared by the two central providers.

@@ -4,13 +4,13 @@ import {
     DEFAULT_SETTINGS,
     REMOTE_P2P,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import {
     SettingService,
     type SettingServiceDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/services/base/SettingService";
-import { ServiceContext } from "@vrtmrz/livesync-commonlib/compat/services/base/ServiceBase";
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
+} from "@tabularium/sync-core/compat/services/base/SettingService";
+import { ServiceContext } from "@tabularium/sync-core/compat/services/base/ServiceBase";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import {
     hasManagedTurnSettings,
     omitManagedTurnProfilesFromMarkdown,

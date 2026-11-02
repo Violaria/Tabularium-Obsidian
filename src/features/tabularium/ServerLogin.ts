@@ -1,7 +1,7 @@
 import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
 import { hint } from "./hint";
-import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { upsertRemoteConfigurationInPlace } from "@vrtmrz/livesync-commonlib/remote-configurations";
+import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
 import type { LiveSyncCore } from "@/main";
 import { $msg } from "@/common/translation";

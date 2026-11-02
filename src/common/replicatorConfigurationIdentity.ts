@@ -1,6 +1,6 @@
-import type { RemoteDBSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { usesEncryptedInternalMetadata } from "@vrtmrz/livesync-commonlib/replication";
-import { getPathNormalizationVersion } from "@vrtmrz/livesync-commonlib/settings";
+import type { RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
+import { usesEncryptedInternalMetadata } from "@tabularium/sync-core/replication";
+import { getPathNormalizationVersion } from "@tabularium/sync-core/settings";
 
 type EndpointProjection = readonly [kind: "url" | "invalid-url", value: string];
 

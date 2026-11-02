@@ -1,6 +1,6 @@
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { VERSIONING_DOCID, type EntryDoc } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { EVENT_SETTING_SAVED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import { VERSIONING_DOCID, type EntryDoc } from "@tabularium/sync-core/compat/common/types";
+import { EVENT_SETTING_SAVED } from "@tabularium/sync-core/compat/events/coreEvents";
 import { describe, expect, it, vi } from "vitest";
 import { EVENT_APPLICATION_READY, eventHub } from "@/common/events";
 import { useReplicationFeature } from "./index";

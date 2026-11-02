@@ -1,11 +1,11 @@
 // Avoid using Obsidian's native function for CLIs.
-import { getLanguage } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { getLanguage } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import {
     commonlibEnglishMessages,
     englishMessageTranslator,
     type CommonlibMessageKey,
     type MessageTranslator,
-} from "@vrtmrz/livesync-commonlib/context";
+} from "@tabularium/sync-core/context";
 import { LOG_KIND_WARNING, notice } from "octagonal-wheels/common/logger";
 import type { TaggedType } from "octagonal-wheels/common/types";
 import { SUPPORTED_I18N_LANGS, type AllMessageKeys, type I18N_LANGS, type LiveSyncCatalogueMessageKey } from "./rosetta";

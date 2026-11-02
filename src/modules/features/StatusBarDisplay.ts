@@ -1,6 +1,6 @@
 import { reactiveSource, type ReactiveSource, type ReactiveValue } from "octagonal-wheels/dataobject/reactive";
 
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 const STATUS_COUNTER_PADDING = "\u2007".repeat(10);
 

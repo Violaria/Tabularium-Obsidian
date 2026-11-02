@@ -1,4 +1,4 @@
-import type { ITypeGuardAdapter } from "@vrtmrz/livesync-commonlib/compat/serviceModules/adapters";
+import type { ITypeGuardAdapter } from "@tabularium/sync-core/compat/serviceModules/adapters";
 import type { NodeFile, NodeFolder } from "./NodeTypes";
 
 /**

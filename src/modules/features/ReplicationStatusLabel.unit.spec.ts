@@ -1,6 +1,6 @@
 import { reactiveSource } from "octagonal-wheels/dataobject/reactive";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ReplicationStatics } from "@vrtmrz/livesync-commonlib/replication";
+import type { ReplicationStatics } from "@tabularium/sync-core/replication";
 
 import {
     FAST_FORWARD_COUNT_LINGER_MS,

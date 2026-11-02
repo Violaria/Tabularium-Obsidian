@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { $msg } from "@/common/translation";
 import { serverError } from "./texts";
 

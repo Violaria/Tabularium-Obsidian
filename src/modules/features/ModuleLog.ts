@@ -5,9 +5,9 @@ import {
     LOG_LEVEL_VERBOSE,
     PREFIXMD_LOGFILE,
     type LOG_LEVEL,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { scheduleTask } from "octagonal-wheels/concurrency/task";
-import { fireAndForget, isDirty, throttle } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+import { fireAndForget, isDirty, throttle } from "@tabularium/sync-core/compat/common/utils";
 import {
     chunkFetchCounts,
     pluginScanningCount,
@@ -15,7 +15,7 @@ import {
     hiddenFilesProcessingCount,
     type LogEntry,
     logMessages,
-} from "@vrtmrz/livesync-commonlib/compat/mock_and_interop/stores";
+} from "@tabularium/sync-core/compat/mock_and_interop/stores";
 import {
     EVENT_FILE_RENAMED,
     EVENT_LAYOUT_READY,
@@ -29,7 +29,7 @@ import { LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/
 import { LogPaneView, VIEW_TYPE_LOG } from "./Log/LogPaneView.ts";
 import { serialized } from "octagonal-wheels/concurrency/lock";
 import { $msg, translateNotice } from "@/common/translation";
-import { P2PLogCollector } from "@vrtmrz/livesync-commonlib/compat/replication/trystero/P2PLogCollector";
+import { P2PLogCollector } from "@tabularium/sync-core/compat/replication/trystero/P2PLogCollector";
 import { REMOTE_REQUEST_ACTIVITY_MINIMUM_VISIBLE_MS, getTrackedRequestCount } from "./RemoteActivityStatus.ts";
 import {
     CHUNK_FETCH_MARKS,
@@ -40,16 +40,16 @@ import {
 import { createFastForwardCheckedChangesDisplay, projectReplicationStatusLabel } from "./ReplicationStatusLabel.ts";
 import { createStatusBarRenderer, type StatusBarPart, type StatusBarRenderer } from "./StatusBarRenderer.ts";
 import type { LiveSyncCore } from "@/main.ts";
-import { LiveSyncError } from "@vrtmrz/livesync-commonlib/compat/common/LSError";
+import { LiveSyncError } from "@tabularium/sync-core/compat/common/LSError";
 import { isValidPath } from "@/common/utils.ts";
 import {
     isValidFilenameInAndroid,
     isValidFilenameInDarwin,
     isValidFilenameInWidows,
-} from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
-import { MARK_LOG_NETWORK_ERROR, MARK_LOG_SEPARATOR } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import { NetworkWarningStyles } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+} from "@tabularium/sync-core/compat/string_and_binary/path";
+import { MARK_LOG_NETWORK_ERROR, MARK_LOG_SEPARATOR } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import { NetworkWarningStyles } from "@tabularium/sync-core/compat/common/models/setting.const";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { generateReport } from "@/common/reportTool.ts";
 import {
     ANDROID_LINUX_PATH_COMPONENT_UTF8_WARNING_BOUNDARY,

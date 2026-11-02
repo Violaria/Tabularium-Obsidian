@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { VERSIONING_DOCID, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { assessTweakCompatibility } from "@vrtmrz/livesync-commonlib/settings";
+import { VERSIONING_DOCID, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { assessTweakCompatibility } from "@tabularium/sync-core/settings";
 import { defaultLogger, LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/logger";
 import {
     CENTRAL_COMPATIBILITY_REJECTION_REASONS,
@@ -8,19 +8,19 @@ import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
     replicationFailed,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 const chunkMocks = vi.hoisted(() => ({
     purgeUnreferencedChunks: vi.fn(async (_database: unknown, countOnly: boolean) => (countOnly ? 2 : 0)),
     balanceChunkPurgedDBs: vi.fn(async () => undefined),
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/pouchdb/chunks", () => chunkMocks);
-vi.mock("@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator", () => ({
+vi.mock("@tabularium/sync-core/compat/pouchdb/chunks", () => chunkMocks);
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
     LiveSyncCouchDBReplicator: class {},
 }));
 
-import { LiveSyncCouchDBReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
+import { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
 import { createCentralCompatibilityRecovery } from "./centralCompatibilityRecovery";
 
 describe("central compatibility recovery", () => {

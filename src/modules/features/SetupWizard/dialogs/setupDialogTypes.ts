@@ -5,8 +5,8 @@ import type {
     ObsidianLiveSyncSettings,
     P2PConnectionInfo,
     P2PSyncSetting,
-} from "@vrtmrz/livesync-commonlib/compat/common/models/setting.type";
-import type { P2PConnectionProbeAdmission } from "@vrtmrz/livesync-commonlib/p2p";
+} from "@tabularium/sync-core/compat/common/models/setting.type";
+import type { P2PConnectionProbeAdmission } from "@tabularium/sync-core/p2p";
 
 export const TYPE_IDENTICAL = "identical";
 export const TYPE_INDEPENDENT = "independent";

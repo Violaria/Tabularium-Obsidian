@@ -3,17 +3,17 @@ import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import HttpAdapter from "pouchdb-adapter-http";
 import replication from "pouchdb-replication";
-import type { EntryDoc, FilePathWithPrefix, UXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { DEFAULT_SETTINGS } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { compareMTime, createTextBlob, readContent } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { createLiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
-import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
+import type { EntryDoc, FilePathWithPrefix, UXFileInfo } from "@tabularium/sync-core/compat/common/types";
+import { DEFAULT_SETTINGS } from "@tabularium/sync-core/compat/common/types";
+import { compareMTime, createTextBlob, readContent } from "@tabularium/sync-core/compat/common/utils";
+import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
+import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
 import {
     ServiceDatabaseFileAccessBase,
     type ServiceDatabaseFileAccessDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/serviceModules/ServiceDatabaseFileAccessBase";
-import type { ServiceFileHandlerDependencies } from "@vrtmrz/livesync-commonlib/compat/serviceModules/ServiceFileHandlerBase";
-import type { FileReflectionProvenanceRecord } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileReflectionProvenance";
+} from "@tabularium/sync-core/compat/serviceModules/ServiceDatabaseFileAccessBase";
+import type { ServiceFileHandlerDependencies } from "@tabularium/sync-core/compat/serviceModules/ServiceFileHandlerBase";
+import type { FileReflectionProvenanceRecord } from "@tabularium/sync-core/compat/interfaces/FileReflectionProvenance";
 import { ServiceFileHandler } from "./FileHandler";
 import {
     createConflictResolutionOperations,

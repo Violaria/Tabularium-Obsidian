@@ -1,8 +1,8 @@
-import type { FilePath, FilePathWithPrefix, UXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { readAsBlob } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
-import type { IFileHandler } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileHandler";
-import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+import type { FilePath, FilePathWithPrefix, UXFileInfo } from "@tabularium/sync-core/compat/common/types";
+import { readAsBlob } from "@tabularium/sync-core/compat/common/utils";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
+import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
+import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 
 export type DocumentHistoryRestorationCore = {
     databaseFileAccess: Pick<

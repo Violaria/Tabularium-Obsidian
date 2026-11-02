@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { DEFAULT_SETTINGS, REMOTE_COUCHDB, REMOTE_MINIO } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { DEFAULT_SETTINGS, REMOTE_COUCHDB, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/types";
 import {
     CENTRAL_REMOTE_ADMINISTRATION_ACTIONS,
     CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS,
     CENTRAL_REMOTE_ADMINISTRATION_OBSERVATION_KINDS,
     CENTRAL_REMOTE_ADMINISTRATION_RESULT_STATUSES,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import {
     COUCHDB_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY,
     OBJECT_STORAGE_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY,

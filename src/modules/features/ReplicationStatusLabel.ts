@@ -1,6 +1,6 @@
 import { reactiveSource, type ReactiveValue } from "octagonal-wheels/dataobject/reactive";
-import type { ReplicationStatics } from "@vrtmrz/livesync-commonlib/replication";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import type { ReplicationStatics } from "@tabularium/sync-core/replication";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 import type { DisposableReactiveValue } from "./StatusBarDisplay.ts";
 import type { StatusBarPart } from "./StatusBarRenderer.ts";

@@ -1,7 +1,7 @@
 import {
     createServiceFeature,
     type NecessaryServices,
-} from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
+} from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { EVENT_ANALYSE_DB_USAGE, EVENT_INSPECT_DB_INTEGRITY } from "@/common/events";
 import { $msg } from "@/common/translation";
 import DatabaseDiagnosticDialog from "@/modules/services/LiveSyncUI/dialogues/DatabaseDiagnosticDialog.svelte";

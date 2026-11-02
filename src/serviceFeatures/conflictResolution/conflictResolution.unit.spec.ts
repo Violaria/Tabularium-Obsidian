@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { InjectableConflictService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableConflictService";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
 import {
     AUTO_MERGED,
     DEFAULT_SETTINGS,
@@ -12,9 +12,9 @@ import {
     type FilePathWithPrefix,
     type MetaEntry,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { EVENT_CONFLICT_CANCELLED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/compat/common/types";
+import { EVENT_CONFLICT_CANCELLED } from "@tabularium/sync-core/compat/events/coreEvents";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 import type { ConflictResolutionHost } from "./index";
 import { createConflictResolutionOperations, useConflictResolutionFeature } from "./index";
 import type { ConflictResolutionOperationsDependencies } from "./operations";

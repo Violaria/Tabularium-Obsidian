@@ -1,7 +1,7 @@
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import type { InjectableConflictService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableConflictService";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import type { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
+import type { ServiceContext } from "@tabularium/sync-core/context";
 import { createConflictCheckingHandlers } from "./checker";
 import { createConflictResolutionOperations } from "./operations";
 

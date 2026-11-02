@@ -1,8 +1,8 @@
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { fireAndForget } from "octagonal-wheels/promises";
 import type { Editor, MarkdownFileInfo, MarkdownView } from "@/deps.ts";
-import type { FilePathWithPrefix } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { FilePathWithPrefix } from "@tabularium/sync-core/compat/common/types";
 import { EVENT_CONFLICT_CANCELLED, EVENT_PLUGIN_UNLOADED } from "@/common/events.ts";
 import { createInteractiveConflictResolutionOperations } from "./operations";
 import type { ConflictResolveDialogueFactory } from "./types";

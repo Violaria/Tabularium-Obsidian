@@ -9,7 +9,7 @@
         DatabaseDiagnosticOutput,
         DatabaseDiagnosticProgress,
     } from "@/serviceFeatures/databaseDiagnostics";
-    import type { DiagnosticNameMode } from "@vrtmrz/livesync-commonlib/diagnostics";
+    import type { DiagnosticNameMode } from "@tabularium/sync-core/diagnostics";
 
     const { setResult, getInitialData }: GuestDialogProps<"close", DatabaseDiagnosticDialogOptions> = $props();
     let options = $state<DatabaseDiagnosticDialogOptions>();

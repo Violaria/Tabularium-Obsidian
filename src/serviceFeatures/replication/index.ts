@@ -1,7 +1,7 @@
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
-import { clearHandlers } from "@vrtmrz/livesync-commonlib/compat/replication/SyncParamsHandler";
-import { UnresolvedErrorManager } from "@vrtmrz/livesync-commonlib/compat/services/base/UnresolvedErrorManager";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
+import { clearHandlers } from "@tabularium/sync-core/compat/replication/SyncParamsHandler";
+import { UnresolvedErrorManager } from "@tabularium/sync-core/compat/services/base/UnresolvedErrorManager";
+import type { ServiceContext } from "@tabularium/sync-core/context";
 import { fireAndForget } from "octagonal-wheels/promises";
 import type { IMinimumLiveSyncCommands, LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import { EVENT_APPLICATION_READY } from "@/common/events";

@@ -20,7 +20,7 @@ cd /tmp/commonlib-0.2.1 && npm ci --ignore-scripts && npm run build:package
 # .package/ now equals the contents of the npm tarball of 0.2.1
 ```
 
-Building this package (`npm run build --workspace @vrtmrz/livesync-commonlib` in `apps/obsidian`) gives the same `dist/`, except that the comments naming module paths inside `dist/worker/bgWorker.js` start with `../../node_modules/` instead of `node_modules/`, because the dependencies are installed in the plug-in project two levels up. Diff the two with the paths normalised:
+Building this package (`npm run build:core` in `apps/obsidian`) gives the same `dist/`, except that the comments naming module paths inside `dist/worker/bgWorker.js` start with `../../node_modules/` instead of `node_modules/`, because the dependencies are installed in the plug-in project two levels up. Diff the two with the paths normalised:
 
 ```bash
 norm() { sed -E 's#(// )(\.\./)+(node_modules|src)/#\1\3/#g' "$1"; }
@@ -36,3 +36,4 @@ Each kind of change is listed here when it is made.
 2. Built in place as a workspace of the plug-in project. `package.json` is the published manifest of 0.2.1 (same name, version, `exports`, `imports`, `typesVersions`, `sideEffects` and dependencies) with `private`, a `build` script and the build-time dev dependencies added. Upstream's `prettier`, `vitest` and `@smithy/protocol-http` dev dependencies are left out: the plug-in's vitest runs the tests, and `@smithy/protocol-http` was only used by an object-storage test.
 3. `_tools/build-package.mjs` writes `dist/` in this directory instead of `.package/`, no longer copies the README, licence and documents, and compares the manifest it would generate with `package.json` instead of writing it, failing when they differ. `tsconfig.build.json` emits to `dist`.
 4. `src/package.json` stands in for upstream's source manifest (`"type": "module"`, the `#worker` imports, no `sideEffects`), so that bundling the worker from source keeps the same modules as upstream's build. Without it the published manifest's `sideEffects` list would apply to the sources and drop modules from the worker.
+5. Renamed to `@tabularium/sync-core` (version kept at 0.2.1, the upstream release it starts from). Import specifiers in the plug-in, the CLI, the browser client, their tools and tests, and the examples in `README.md` use the new name; `_tools/package-boundary.mjs` recognises it.

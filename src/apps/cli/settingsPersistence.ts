@@ -1,6 +1,6 @@
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
-import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
+import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import type { CLICommand } from "./commands/types";
 
 const SETTINGS_WRITE_COMMANDS = new Set<CLICommand>([

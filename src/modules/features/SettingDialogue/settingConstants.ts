@@ -2,7 +2,7 @@ export {
     AllSettingDefault,
     OnDialogSettingsDefault,
     SettingInformation,
-} from "@vrtmrz/livesync-commonlib/compat/common/settingConstants";
+} from "@tabularium/sync-core/compat/common/settingConstants";
 export type {
     AllSettings,
     AllSettingItemKey,
@@ -11,14 +11,14 @@ export type {
     AllBooleanItemKey,
     OnDialogSettings,
     ValueOf,
-} from "@vrtmrz/livesync-commonlib/compat/common/settingConstants";
+} from "@tabularium/sync-core/compat/common/settingConstants";
 
 import {
     getConfig as getCommonlibConfig,
     getConfName as getCommonlibConfName,
     type AllSettingItemKey,
-} from "@vrtmrz/livesync-commonlib/compat/common/settingConstants";
-import type { MessageTranslator } from "@vrtmrz/livesync-commonlib/context";
+} from "@tabularium/sync-core/compat/common/settingConstants";
+import type { MessageTranslator } from "@tabularium/sync-core/context";
 import { translateLiveSyncMessage } from "@/common/translation";
 
 // Commonlib defaults `translate` to its English-only translator, so every caller which omits

@@ -1,7 +1,7 @@
 import type {
     Confirm,
     ConfirmActionLayout,
-} from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
+} from "@tabularium/sync-core/compat/interfaces/Confirm";
 import type { UiInteractions, UiNotifications } from "@vrtmrz/ui-interactions";
 
 const DEFAULT_LABELS = {

@@ -1,14 +1,14 @@
-import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
-import { ServiceRebuilder } from "@vrtmrz/livesync-commonlib/compat/serviceModules/Rebuilder";
+import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
+import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
 
-import { StorageAccessManager } from "@vrtmrz/livesync-commonlib/compat/managers/StorageProcessingManager";
+import { StorageAccessManager } from "@tabularium/sync-core/compat/managers/StorageProcessingManager";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
+import type { ServiceContext } from "@tabularium/sync-core/context";
 import { FileAccessFSAPI } from "./FileAccessFSAPI";
 import { ServiceFileAccessFSAPI } from "./ServiceFileAccessImpl";
 import { ServiceDatabaseFileAccessFSAPI } from "./DatabaseFileAccess";
 import { StorageEventManagerFSAPI } from "@/apps/webapp/managers/StorageEventManagerFSAPI";
-import type { ServiceModules } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
+import type { ServiceModules } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { ServiceFileHandler } from "@/serviceModules/FileHandler";
 import { createFileReflectionProvenance } from "@/serviceModules/FileReflectionProvenance";
 

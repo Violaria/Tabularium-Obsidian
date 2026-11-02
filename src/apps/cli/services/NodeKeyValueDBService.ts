@@ -1,14 +1,14 @@
-import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import type { KeyValueDatabase } from "@vrtmrz/livesync-commonlib/compat/interfaces/KeyValueDatabase";
-import type { IKeyValueDBService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { ServiceBase } from "@vrtmrz/livesync-commonlib/compat/services/base/ServiceBase";
-import type { InjectableAppLifecycleService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableAppLifecycleService";
-import type { InjectableDatabaseEventService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableDatabaseEventService";
-import type { IVaultService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
+import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "@tabularium/sync-core/compat/common/logger";
+import type { KeyValueDatabase } from "@tabularium/sync-core/compat/interfaces/KeyValueDatabase";
+import type { IKeyValueDBService } from "@tabularium/sync-core/compat/services/base/IService";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import { ServiceBase } from "@tabularium/sync-core/compat/services/base/ServiceBase";
+import type { InjectableAppLifecycleService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableAppLifecycleService";
+import type { InjectableDatabaseEventService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableDatabaseEventService";
+import type { IVaultService } from "@tabularium/sync-core/compat/services/base/IService";
 import type { SimpleStore } from "octagonal-wheels/databases/SimpleStoreBase";
-import { createInstanceLogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import { fs as nodeFs, path as nodePath } from "@vrtmrz/livesync-commonlib/node";
+import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import { fs as nodeFs, path as nodePath } from "@tabularium/sync-core/node";
 
 const NODE_KV_TYPED_KEY = "__nodeKvType";
 const NODE_KV_VALUES_KEY = "values";

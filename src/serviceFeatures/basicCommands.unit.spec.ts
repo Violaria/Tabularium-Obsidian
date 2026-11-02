@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ICommandCompat } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
+import type { ICommandCompat } from "@tabularium/sync-core/compat/services/base/IService";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { copyFileDatabaseInfo } from "./fileDatabaseInfo";
 import { useBasicCommandsFeature, type BasicCommandsHost } from "./basicCommands";
 

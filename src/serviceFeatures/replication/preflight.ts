@@ -1,9 +1,9 @@
 import { $msg } from "@/common/translation";
 import { withOwnedRemoteResource } from "@/common/ownedRemoteResource";
 import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE, Logger } from "octagonal-wheels/common/logger";
-import { MARK_LOG_NETWORK_ERROR } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import { UnresolvedErrorManager } from "@vrtmrz/livesync-commonlib/compat/services/base/UnresolvedErrorManager";
-import { REMOTE_RESOURCE_KINDS } from "@vrtmrz/livesync-commonlib/replication";
+import { MARK_LOG_NETWORK_ERROR } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import { UnresolvedErrorManager } from "@tabularium/sync-core/compat/services/base/UnresolvedErrorManager";
+import { REMOTE_RESOURCE_KINDS } from "@tabularium/sync-core/replication";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 
 type ReplicationPreflightServices = Pick<LiveSyncBaseCore["services"], "API" | "replicator" | "setting">;

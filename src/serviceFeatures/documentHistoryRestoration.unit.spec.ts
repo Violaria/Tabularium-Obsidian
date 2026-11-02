@@ -5,7 +5,7 @@ import type {
     LoadedEntry,
     MetaEntry,
     UXFileInfo,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { restoreDocumentHistoryRevision, type DocumentHistoryRestorationCore } from "./documentHistoryRestoration";
 
 const path = "history.md" as FilePathWithPrefix;

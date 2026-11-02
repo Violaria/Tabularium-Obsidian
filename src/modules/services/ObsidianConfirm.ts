@@ -2,7 +2,7 @@ import { type App, type Plugin } from "@/deps";
 import { scheduleTask } from "@/common/utils";
 import { EVENT_PLUGIN_UNLOADED } from "@/common/events";
 import { $msg } from "@/common/translation";
-import type { Confirm, ConfirmActionLayout } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
+import type { Confirm, ConfirmActionLayout } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import { confirmAction, pickOne, promptPassword, promptText } from "@vrtmrz/obsidian-plugin-kit";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { confirmWithMessageWithWideButton } from "@/modules/coreObsidian/UILib/dialogs";

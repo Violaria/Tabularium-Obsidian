@@ -32,7 +32,7 @@ vi.mock("@/deps", () => ({
 }));
 
 import { EVENT_PLUGIN_UNLOADED } from "@/common/events";
-import { createLiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
+import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
 import { ObsidianConfirm } from "./ObsidianConfirm";
 import type { ObsidianServiceContext } from "./ObsidianServiceContext";
 

@@ -1,4 +1,4 @@
-import { createServiceFeature } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
+import { createServiceFeature } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { __onMissingTranslation, isSupportedLanguage, setLang } from "@/common/translation";
 
 /**

@@ -5,10 +5,10 @@ export type {
     GuestDialogProps,
     DialogSvelteComponentBaseProps,
     DialogControlBase,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
 export {
     CONTEXT_DIALOG_CONTROLS,
     setupDialogContext,
     getDialogContext,
     SvelteDialogManagerBase,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";

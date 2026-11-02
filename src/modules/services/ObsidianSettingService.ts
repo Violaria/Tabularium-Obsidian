@@ -1,12 +1,12 @@
-import { type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     EVENT_REQUEST_RELOAD_SETTING_TAB,
     EVENT_SETTING_SAVED,
-} from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
+} from "@tabularium/sync-core/compat/events/coreEvents";
 import {
     SettingService,
     type SettingServiceDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/services/base/SettingService";
+} from "@tabularium/sync-core/compat/services/base/SettingService";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 
 export function normaliseObsidianSettingsData(data: unknown): ObsidianLiveSyncSettings | undefined {

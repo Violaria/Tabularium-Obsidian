@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { DEFAULT_SETTINGS } from "@vrtmrz/livesync-commonlib/settings";
-import { REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { DEFAULT_SETTINGS } from "@tabularium/sync-core/settings";
+import { REMOTE_P2P } from "@tabularium/sync-core/compat/common/types";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 import { generateReport } from "./reportTool";
 
 vi.mock("./utils", () => ({ requestToCouchDBWithCredentials: vi.fn() }));
-vi.mock("@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions", () => ({
+vi.mock("@tabularium/sync-core/compat/common/coreEnvFunctions", () => ({
     compatGlobal: { origin: "test", navigator: { userAgent: "test" } },
 }));
 

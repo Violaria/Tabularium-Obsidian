@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { UICommandRegistry } from "@vrtmrz/livesync-commonlib/ui-commands";
-import { createNewVaultSettings } from "@vrtmrz/livesync-commonlib/settings";
-import { REMOTE_COUCHDB } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { JoinedDevicesSnapshot } from "@vrtmrz/livesync-commonlib/replication";
+import { UICommandRegistry } from "@tabularium/sync-core/ui-commands";
+import { createNewVaultSettings } from "@tabularium/sync-core/settings";
+import { REMOTE_COUCHDB } from "@tabularium/sync-core/compat/common/types";
+import type { JoinedDevicesSnapshot } from "@tabularium/sync-core/replication";
 import type { JoinedDevicesDialogOptions } from "./joinedDevicesDialogTypes";
 vi.mock("@/modules/services/LiveSyncUI/dialogues/JoinedDevicesDialog.svelte", () => ({ default: {} }));
 vi.mock("@/common/translation", () => ({

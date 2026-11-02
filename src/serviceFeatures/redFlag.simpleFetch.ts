@@ -1,7 +1,7 @@
 import { LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { type LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import { UnresolvedErrorManager } from "@vrtmrz/livesync-commonlib/compat/services/base/UnresolvedErrorManager";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { type LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import { UnresolvedErrorManager } from "@tabularium/sync-core/compat/services/base/UnresolvedErrorManager";
 import {
     ExtraOnLocal,
     ExtraOnRemote,
@@ -9,7 +9,7 @@ import {
     normaliseFullScanOptions,
     synchroniseAllFilesBetweenDBandStorage,
     type FullScanOptions,
-} from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+} from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import { adjustSettingToRemoteIfNeeded, cancelScheduledInitialisation, processVaultInitialisation } from "./redFlag";
 import { $msg } from "@/common/translation";
 import type { AllMessageKeys } from "@/common/rosetta";

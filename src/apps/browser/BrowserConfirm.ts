@@ -1,6 +1,6 @@
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { _activeDocument } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
-import { EVENT_PLUGIN_UNLOADED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import { _activeDocument } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { EVENT_PLUGIN_UNLOADED } from "@tabularium/sync-core/compat/events/coreEvents";
 import { BrowserUiNotifications, createBrowserUi } from "@vrtmrz/browser-ui-kit";
 
 import { createNativeElement } from "@/apps/browserDom";

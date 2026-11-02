@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
+import { createServiceContext } from "@tabularium/sync-core/context";
 import {
     AUTO_MERGED,
     CANCELLED,
@@ -8,7 +8,7 @@ import {
     MISSING_OR_ERROR,
     type FilePathWithPrefix,
     type diff_result,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { EVENT_CONFLICT_CANCELLED, EVENT_ON_UNRESOLVED_ERROR, EVENT_PLUGIN_UNLOADED } from "@/common/events";
 import {
     createInteractiveConflictResolutionOperations,

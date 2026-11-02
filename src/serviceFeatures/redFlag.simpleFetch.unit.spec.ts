@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { FullScanModes } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { FullScanModes } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import { $msg, setLang } from "@/common/translation";
 import { askSimpleFetchMode } from "./redFlag.simpleFetch";
 

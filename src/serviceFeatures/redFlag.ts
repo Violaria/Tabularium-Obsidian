@@ -1,23 +1,23 @@
 import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
-import type { NecessaryServices } from "@vrtmrz/livesync-commonlib/compat/interfaces/ServiceModule";
-import { createInstanceLogFunction, type LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
+import { createInstanceLogFunction, type LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
     FlagFilesHumanReadable,
     FlagFilesOriginal,
-} from "@vrtmrz/livesync-commonlib/compat/common/models/redflag.const";
+} from "@tabularium/sync-core/compat/common/models/redflag.const";
 import FetchEverything from "@/modules/features/SetupWizard/dialogs/FetchEverything.svelte";
 import RebuildEverything from "@/modules/features/SetupWizard/dialogs/RebuildEverything.svelte";
-import { REMOTE_MINIO, REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
-import { assessTweakCompatibility, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/settings";
-import { RemotePreferredTweakStatuses } from "@vrtmrz/livesync-commonlib/compat/common/models/tweak.definition";
+import { REMOTE_MINIO, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
+import { assessTweakCompatibility, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/settings";
+import { RemotePreferredTweakStatuses } from "@tabularium/sync-core/compat/common/models/tweak.definition";
 import {
     TYPE_BACKUP_SKIPPED,
     type FetchEverythingResult,
     type RebuildEverythingResult,
 } from "@/modules/features/SetupWizard/dialogs/setupDialogTypes";
 import { askAndPerformFastSetupOnScheduledFetchAll } from "./redFlag.simpleFetch";
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
-import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
+import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import { isP2PMainRemote } from "@/common/remoteConfiguration";
 import { $msg } from "@/common/translation";
 

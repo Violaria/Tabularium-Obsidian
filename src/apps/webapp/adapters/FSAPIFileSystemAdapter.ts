@@ -1,9 +1,9 @@
-import { LOG_LEVEL_NOTICE, type FilePath, type UXStat } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IFileSystemAdapter } from "@vrtmrz/livesync-commonlib/compat/serviceModules/adapters";
+import { LOG_LEVEL_NOTICE, type FilePath, type UXStat } from "@tabularium/sync-core/compat/common/types";
+import type { IFileSystemAdapter } from "@tabularium/sync-core/compat/serviceModules/adapters";
 import { FSAPIPathAdapter } from "./FSAPIPathAdapter";
 import { FSAPITypeGuardAdapter } from "./FSAPITypeGuardAdapter";
 import { FSAPIConversionAdapter } from "./FSAPIConversionAdapter";
-import { FileSystemAccessStorageAdapter } from "@vrtmrz/livesync-commonlib/browser";
+import { FileSystemAccessStorageAdapter } from "@tabularium/sync-core/browser";
 import { FSAPIVaultAdapter } from "./FSAPIVaultAdapter";
 import type { FSAPIFile, FSAPIFolder, FSAPIStat } from "./FSAPITypes";
 import { shareRunningResult } from "octagonal-wheels/concurrency/lock_v2";

@@ -1,4 +1,4 @@
-import { NodeStorageAdapter, validateStoragePath } from "@vrtmrz/livesync-commonlib/node";
+import { NodeStorageAdapter, validateStoragePath } from "@tabularium/sync-core/node";
 
 export class AmbiguousNormalisedPathError extends Error {
     constructor(path: string) {

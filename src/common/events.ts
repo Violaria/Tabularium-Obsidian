@@ -1,4 +1,4 @@
-import { createLiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
+import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
 // import type ObsidianLiveSyncPlugin from "../main";
 
 export const EVENT_PLUGIN_LOADED = "plugin-loaded";
@@ -43,7 +43,7 @@ declare global {
     }
 }
 
-export * from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
+export * from "@tabularium/sync-core/compat/events/coreEvents";
 
 /**
  * Self-hosted LiveSync's host event channel.

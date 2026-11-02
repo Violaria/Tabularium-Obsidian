@@ -8,9 +8,9 @@ import {
     isValidFilenameInAndroid,
     stripAllPrefixes,
     expandFilePathPrefix,
-} from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+} from "@tabularium/sync-core/compat/string_and_binary/path";
 
-import { Logger } from "@vrtmrz/livesync-commonlib/compat/common/logger";
+import { Logger } from "@tabularium/sync-core/compat/common/logger";
 import {
     LOG_LEVEL_INFO,
     LOG_LEVEL_NOTICE,
@@ -23,14 +23,14 @@ import {
     type FilePathWithPrefix,
     type UXFileInfo,
     type UXFileInfoStub,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 export { ICHeader, ICXHeader } from "./types.ts";
-import { writeString } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/convert";
+import { writeString } from "@tabularium/sync-core/compat/string_and_binary/convert";
 import { sameChangePairs } from "./stores.ts";
 
 import { scheduleTask } from "octagonal-wheels/concurrency/task";
-import { AuthorizationHeaderGenerator } from "@vrtmrz/livesync-commonlib/compat/replication/httplib";
-import type { KeyValueDatabase } from "@vrtmrz/livesync-commonlib/compat/interfaces/KeyValueDatabase";
+import { AuthorizationHeaderGenerator } from "@tabularium/sync-core/compat/replication/httplib";
+import type { KeyValueDatabase } from "@tabularium/sync-core/compat/interfaces/KeyValueDatabase";
 
 export { scheduleTask, cancelTask, cancelAllTasks } from "octagonal-wheels/concurrency/task";
 
@@ -66,7 +66,7 @@ import {
     getPathFromUXFileInfo,
     getStoragePathFromUXFileInfo,
     getDatabasePathFromUXFileInfo,
-} from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
+} from "@tabularium/sync-core/compat/common/typeUtils";
 export { isInternalFile, getPathFromUXFileInfo, getStoragePathFromUXFileInfo, getDatabasePathFromUXFileInfo };
 
 const memos: { [key: string]: unknown } = {};
@@ -118,7 +118,7 @@ export {
     isCustomisationSyncMetadata,
     isPluginMetadata,
     stripInternalMetadataPrefix,
-} from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
+} from "@tabularium/sync-core/compat/common/typeUtils";
 
 export const _requestToCouchDBFetch = async (
     baseUri: string,
@@ -207,11 +207,11 @@ export function requestToCouchDBWithCredentials(
     return _requestToCouchDB(baseUri, credentials, origin, uri, body, method, customHeaders);
 }
 
-import { BASE_IS_NEW, EVEN, TARGET_IS_NEW } from "@vrtmrz/livesync-commonlib/compat/common/models/shared.const.symbols";
+import { BASE_IS_NEW, EVEN, TARGET_IS_NEW } from "@tabularium/sync-core/compat/common/models/shared.const.symbols";
 export { BASE_IS_NEW, EVEN, TARGET_IS_NEW };
 // Why 2000? : ZIP FILE Does not have enough resolution.
-import { compareMTime } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { _fetch, compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { compareMTime } from "@tabularium/sync-core/compat/common/utils";
+import { _fetch, compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 export { compareMTime };
 function getKey(file: AnyEntry | string | UXFileInfoStub) {
     const key = typeof file == "string" ? file : stripAllPrefixes(file.path);
@@ -398,4 +398,4 @@ export function onlyInNTimes(n: number, proc: (progress: number) => unknown) {
     };
 }
 
-export { displayRev } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+export { displayRev } from "@tabularium/sync-core/compat/common/utils";

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { REMOTE_COUCHDB, REMOTE_MINIO } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { createNewVaultSettings } from "@vrtmrz/livesync-commonlib/settings";
+import { REMOTE_COUCHDB, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/types";
+import { createNewVaultSettings } from "@tabularium/sync-core/settings";
 import {
     CAPABILITY_SUPPORT_KINDS,
     NO_INTERACTION,
@@ -8,7 +8,7 @@ import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     REMOTE_RESOURCE_KINDS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 const constructorMocks = vi.hoisted(() => ({
     couchDB: vi.fn(),
@@ -17,7 +17,7 @@ const constructorMocks = vi.hoisted(() => ({
     objectStorageOneShot: vi.fn(async (..._args: unknown[]) => REPLICATION_COMPLETED),
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator", () => ({
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
     LiveSyncCouchDBReplicator: class {
         constructor(host: unknown) {
             constructorMocks.couchDB(host);
@@ -27,7 +27,7 @@ vi.mock("@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicato
         }
     },
 }));
-vi.mock("@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator", () => ({
+vi.mock("@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator", () => ({
     LiveSyncJournalReplicator: class {
         constructor(host: unknown) {
             constructorMocks.objectStorage(host);

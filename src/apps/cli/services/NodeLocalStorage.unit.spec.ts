@@ -1,4 +1,4 @@
-import { fs, os, path } from "@vrtmrz/livesync-commonlib/node";
+import { fs, os, path } from "@tabularium/sync-core/node";
 import { ValueStoreError } from "@vrtmrz/value-store";
 import { afterEach, describe, expect, it } from "vitest";
 import { createNodeLocalStorage } from "./NodeLocalStorage";

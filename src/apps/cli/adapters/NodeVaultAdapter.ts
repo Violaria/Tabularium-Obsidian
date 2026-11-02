@@ -1,7 +1,7 @@
-import type { FilePath, UXDataWriteOptions } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IVaultAdapter } from "@vrtmrz/livesync-commonlib/compat/serviceModules/adapters";
+import type { FilePath, UXDataWriteOptions } from "@tabularium/sync-core/compat/common/types";
+import type { IVaultAdapter } from "@tabularium/sync-core/compat/serviceModules/adapters";
 import type { NodeFile, NodeFolder } from "./NodeTypes";
-import { NodeStorageAdapter } from "@vrtmrz/livesync-commonlib/node";
+import { NodeStorageAdapter } from "@tabularium/sync-core/node";
 import { UnicodeResolvingNodeStorageAdapter } from "./UnicodeResolvingNodeStorageAdapter";
 
 /**

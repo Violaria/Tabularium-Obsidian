@@ -1,16 +1,16 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 import { runCommand } from "./runCommand";
 import type { CLIOptions } from "./types";
 
 // Track explicit scans: database preparation owns the daemon startup scan.
-vi.mock("@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner", () => ({
+vi.mock("@tabularium/sync-core/compat/serviceFeatures/offlineScanner", () => ({
     performFullScan: vi.fn(async () => true),
 }));
 
 // Mock UnresolvedErrorManager to avoid event-hub side effects.
-vi.mock("@vrtmrz/livesync-commonlib/compat/services/base/UnresolvedErrorManager", () => ({
+vi.mock("@tabularium/sync-core/compat/services/base/UnresolvedErrorManager", () => ({
     UnresolvedErrorManager: class UnresolvedErrorManager {
         showError() {}
         clearError() {}
@@ -18,7 +18,7 @@ vi.mock("@vrtmrz/livesync-commonlib/compat/services/base/UnresolvedErrorManager"
     },
 }));
 
-import * as offlineScanner from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+import * as offlineScanner from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 
 function createCoreMock() {
     const standardIo = {

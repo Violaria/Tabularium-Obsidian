@@ -1,8 +1,8 @@
 import {
     hasManagedP2PTurnConfiguration,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { pickP2PSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+} from "@tabularium/sync-core/compat/common/types";
+import { pickP2PSyncSettings } from "@tabularium/sync-core/compat/common/utils";
 import { CLOUDFLARE_TURN_TYPE } from "@/integrations/cloudflare/settings";
 
 /** Include inactive profiles when deciding whether Markdown would disclose provider settings. */

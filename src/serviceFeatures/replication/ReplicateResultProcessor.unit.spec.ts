@@ -5,13 +5,13 @@ import {
     VERSIONING_DOCID,
     type EntryDoc,
     type FilePathWithPrefix,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import * as replicationCompatibility from "@vrtmrz/livesync-commonlib/replication";
-import { ENCRYPTED_INTERNAL_METADATA_FEATURE, REMOTE_FEATURE_GENERATION } from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/compat/common/types";
+import * as replicationCompatibility from "@tabularium/sync-core/replication";
+import { ENCRYPTED_INTERNAL_METADATA_FEATURE, REMOTE_FEATURE_GENERATION } from "@tabularium/sync-core/replication";
 import {
     isValidFilenameInAndroid,
     isValidFilenameInWidows,
-} from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+} from "@tabularium/sync-core/compat/string_and_binary/path";
 import {
     defaultLogger,
     LOG_LEVEL_DEBUG,

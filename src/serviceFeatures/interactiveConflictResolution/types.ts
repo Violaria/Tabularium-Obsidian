@@ -3,7 +3,7 @@ import {
     LEAVE_TO_SUBSEQUENT,
     type diff_result,
     type FilePathWithPrefix,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 
 export const POSTPONED = Symbol("postponed");
 

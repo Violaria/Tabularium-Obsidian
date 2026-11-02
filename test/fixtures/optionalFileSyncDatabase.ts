@@ -8,10 +8,10 @@ import {
     type SavingEntry,
     type FilePathWithPrefix,
     type DocumentID,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { createTextBlob } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { createLiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
-import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
+} from "@tabularium/sync-core/compat/common/types";
+import { createTextBlob } from "@tabularium/sync-core/compat/common/utils";
+import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
+import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
 
 PouchDB.plugin(MemoryAdapter);
 

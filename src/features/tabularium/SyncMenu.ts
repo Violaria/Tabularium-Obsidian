@@ -3,7 +3,7 @@ import { Platform, TFile, type Menu, type MenuItem, type Plugin } from "obsidian
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { $msg } from "@/common/translation";
 import { eventHub } from "@/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/common/obsidianEvents.ts";

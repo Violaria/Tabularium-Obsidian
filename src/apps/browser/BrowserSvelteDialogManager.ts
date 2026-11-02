@@ -1,11 +1,11 @@
 import {
     type ComponentHasResult,
     SvelteDialogManagerBase,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
 import { createNativeElement } from "@/apps/browserDom";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { SvelteDialogManagerDependencies } from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
-import { _activeDocument } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import type { SvelteDialogManagerDependencies } from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
+import { _activeDocument } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import DialogHost from "@/modules/services/LiveSyncUI/DialogHost.svelte";
 import { SvelteDialogSession } from "@/modules/services/SvelteDialogSession";
 

@@ -9,27 +9,27 @@ import {
     type diff_check_result,
     type FilePathWithPrefix,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { isCustomisationSyncMetadata, isPluginMetadata } from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
-import { TARGET_IS_NEW } from "@vrtmrz/livesync-commonlib/compat/common/models/shared.const.symbols";
-import { compareMTime, displayRev } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import type { DatabaseFileAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseFileAccess";
-import type { IFileHandler } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileHandler";
+} from "@tabularium/sync-core/compat/common/types";
+import { isCustomisationSyncMetadata, isPluginMetadata } from "@tabularium/sync-core/compat/common/typeUtils";
+import { TARGET_IS_NEW } from "@tabularium/sync-core/compat/common/models/shared.const.symbols";
+import { compareMTime, displayRev } from "@tabularium/sync-core/compat/common/utils";
+import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces/DatabaseFileAccess";
+import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
 import type {
     IAppLifecycleService,
     IConflictService,
     IReplicationService,
     IVaultService,
-} from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { LiveSyncLocalDB } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
-import type { LiveSyncEventHub } from "@vrtmrz/livesync-commonlib/context";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import { EVENT_CONFLICT_CANCELLED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
-import { NO_INTERACTION } from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/compat/services/base/IService";
+import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
+import type { LiveSyncEventHub } from "@tabularium/sync-core/context";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import { EVENT_CONFLICT_CANCELLED } from "@tabularium/sync-core/compat/events/coreEvents";
+import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 import { isLockAcquired, serialized } from "octagonal-wheels/concurrency/lock";
 import diff_match_patch from "diff-match-patch";
-import { stripAllPrefixes, isPlainText } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+import { stripAllPrefixes, isPlainText } from "@tabularium/sync-core/compat/string_and_binary/path";
 
 export type ConflictResolutionSettings = Pick<
     ObsidianLiveSyncSettings,

@@ -1,15 +1,15 @@
-import { type FilePathWithPrefix, type EntryDoc } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { isRemediationModeActive } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
+import { type FilePathWithPrefix, type EntryDoc } from "@tabularium/sync-core/compat/common/types";
+import { isRemediationModeActive } from "@tabularium/sync-core/compat/common/utils";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import {
     activateRemoteConfiguration,
     createRemoteConfigurationId,
-} from "@vrtmrz/livesync-commonlib/remote-configurations";
-import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+} from "@tabularium/sync-core/remote-configurations";
+import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 import type { CLICommandContext, CLIOptions } from "./types";
 import { getForceRequirementError, toArrayBuffer, toDatabaseRelativePath } from "./utils";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
-import { fsPromises as fs, getNodeFileCreationTime, path } from "@vrtmrz/livesync-commonlib/node";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { fsPromises as fs, getNodeFileCreationTime, path } from "@tabularium/sync-core/node";
 import { writeStderrLine, writeStdoutLine } from "@/apps/cli/cliOutput";
 import {
     CENTRAL_COMPATIBILITY_REJECTION_REASONS,
@@ -18,7 +18,7 @@ import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     REMOTE_RESOURCE_KINDS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { withOwnedRemoteResource } from "@/common/ownedRemoteResource";
 import {
     isCentralRemoteAdministrationCommand,

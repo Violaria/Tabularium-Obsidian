@@ -1,5 +1,5 @@
-import { EVENT_PLUGIN_UNLOADED } from "@vrtmrz/livesync-commonlib/compat/events/coreEvents";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
+import { EVENT_PLUGIN_UNLOADED } from "@tabularium/sync-core/compat/events/coreEvents";
+import type { ServiceContext } from "@tabularium/sync-core/context";
 import {
     setupDialogContext,
     type ComponentHasResult,
@@ -7,7 +7,7 @@ import {
     type DialogHostProps,
     type DialogSvelteComponentBaseProps,
     type SvelteDialogManagerDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
 import { fireAndForget, promiseWithResolvers, type PromiseWithResolvers } from "octagonal-wheels/promises";
 import { mount, unmount, type Component } from "svelte";
 

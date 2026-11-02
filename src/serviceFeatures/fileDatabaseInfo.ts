@@ -5,14 +5,14 @@ import type {
     FilePathWithPrefix,
     LoadedEntry,
     ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { getFileRegExp } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { isNotFoundError } from "@vrtmrz/livesync-commonlib/compat/common/utils.doc";
-import { ICHeader, ICXHeader, PSCHeader } from "@vrtmrz/livesync-commonlib/compat/common/models/fileaccess.const";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import type { LiveSyncLocalDB } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
-import type { IPathService, IUIService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import { addPrefix, stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+} from "@tabularium/sync-core/compat/common/types";
+import { getFileRegExp } from "@tabularium/sync-core/compat/common/utils";
+import { isNotFoundError } from "@tabularium/sync-core/compat/common/utils.doc";
+import { ICHeader, ICXHeader, PSCHeader } from "@tabularium/sync-core/compat/common/models/fileaccess.const";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { IPathService, IUIService } from "@tabularium/sync-core/compat/services/base/IService";
+import { addPrefix, stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 
 type DatabaseMeta = LoadedEntry & {
     _rawStorageType: string | null;

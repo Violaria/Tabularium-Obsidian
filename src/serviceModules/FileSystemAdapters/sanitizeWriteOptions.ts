@@ -1,4 +1,4 @@
-import type { UXDataWriteOptions } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { UXDataWriteOptions } from "@tabularium/sync-core/compat/common/types";
 
 /**
  * Coerce the timestamp fields of a write-options object to integer milliseconds.

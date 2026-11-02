@@ -31,21 +31,21 @@ does not provide an arbitrary-time checkpoint jump or On Demand repair.
 
 | Entry point                                        | Intended use                                                                      | Current contract status                                                                     |
 | -------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `@vrtmrz/livesync-commonlib`                       | `DirectFileManipulator` for integrations which access CouchDB directly            | Deliberately small, but its high-level lifecycle and file-operation semantics are not final |
-| `@vrtmrz/livesync-commonlib/context`               | Instance-owned events, translation injection, and host-neutral standard-I/O types | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/diagnostics` | Read-only Usage and integrity inspection, name projection, and reports | Focused pre-1.0 diagnostic contract |
-| `@vrtmrz/livesync-commonlib/hashing`               | Chunk ID calculation and exact file-content hashing                            | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/browser`               | Rooted File System Access API storage                                             | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/node`                  | Rooted Node storage, Node standard I/O, and selected Node capabilities            | Supported platform façade; keeps Node-only dependencies behind an explicit boundary         |
-| `@vrtmrz/livesync-commonlib/p2p`                   | Host-composed P2P service views and composition helpers                           | Focused, package-tested pre-1.0 contract with a temporary compatibility façade              |
-| `@vrtmrz/livesync-commonlib/replication`           | Provider capabilities, interaction authority, and typed replication outcomes      | Focused, package-tested pre-1.0 host-composition contract                                   |
-| `@vrtmrz/livesync-commonlib/rpc`                   | Existing LiveSync RPC and PouchDB bridge migration                                | Transitional only; not part of the stable Commonlib 1.0 contract                            |
-| `@vrtmrz/livesync-commonlib/remote-configurations` | Multiple-remote profile creation, naming, and selection                           | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/settings`              | New-Vault defaults, stored-setting fallbacks, and settings migration results      | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/setup-uri`             | Encrypted Setup URI generation, availability, and import                          | Focused, package-tested pre-1.0 contract                                                    |
-| `@vrtmrz/livesync-commonlib/ui-commands` | Instance-owned typed UI command declarations and handlers | Focused, package-tested contract |
-| `@vrtmrz/livesync-commonlib/compat/*`              | Exact legacy imports still required by existing clients                           | Migration-only; retained within 0.2.x, with removals treated as 0.3.0 breaking changes       |
-| `@vrtmrz/livesync-commonlib/package.json`          | Package metadata for tooling                                                      | Metadata export, not a runtime API                                                          |
+| `@tabularium/sync-core`                       | `DirectFileManipulator` for integrations which access CouchDB directly            | Deliberately small, but its high-level lifecycle and file-operation semantics are not final |
+| `@tabularium/sync-core/context`               | Instance-owned events, translation injection, and host-neutral standard-I/O types | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/diagnostics` | Read-only Usage and integrity inspection, name projection, and reports | Focused pre-1.0 diagnostic contract |
+| `@tabularium/sync-core/hashing`               | Chunk ID calculation and exact file-content hashing                            | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/browser`               | Rooted File System Access API storage                                             | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/node`                  | Rooted Node storage, Node standard I/O, and selected Node capabilities            | Supported platform façade; keeps Node-only dependencies behind an explicit boundary         |
+| `@tabularium/sync-core/p2p`                   | Host-composed P2P service views and composition helpers                           | Focused, package-tested pre-1.0 contract with a temporary compatibility façade              |
+| `@tabularium/sync-core/replication`           | Provider capabilities, interaction authority, and typed replication outcomes      | Focused, package-tested pre-1.0 host-composition contract                                   |
+| `@tabularium/sync-core/rpc`                   | Existing LiveSync RPC and PouchDB bridge migration                                | Transitional only; not part of the stable Commonlib 1.0 contract                            |
+| `@tabularium/sync-core/remote-configurations` | Multiple-remote profile creation, naming, and selection                           | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/settings`              | New-Vault defaults, stored-setting fallbacks, and settings migration results      | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/setup-uri`             | Encrypted Setup URI generation, availability, and import                          | Focused, package-tested pre-1.0 contract                                                    |
+| `@tabularium/sync-core/ui-commands` | Instance-owned typed UI command declarations and handlers | Focused, package-tested contract |
+| `@tabularium/sync-core/compat/*`              | Exact legacy imports still required by existing clients                           | Migration-only; retained within 0.2.x, with removals treated as 0.3.0 breaking changes       |
+| `@tabularium/sync-core/package.json`          | Package metadata for tooling                                                      | Metadata export, not a runtime API                                                          |
 
 Import only the entry point required by the current runtime. Browser code must not import the Node entry.
 
@@ -64,7 +64,7 @@ import {
     createLiveSyncEventHub,
     createServiceContext,
     type MessageTranslator,
-} from "@vrtmrz/livesync-commonlib/context";
+} from "@tabularium/sync-core/context";
 
 const events = createLiveSyncEventHub();
 declare const hostTranslations: { translate: MessageTranslator };
@@ -85,10 +85,10 @@ The factory is not implemented yet. Until it is available, service implementatio
 
 ## UI commands
 
-Import `declareUICommand` and `UICommandRegistry` from `@vrtmrz/livesync-commonlib/ui-commands`. A declaration binds a stable command ID to its request and result types. Each `UIService` owns its own `commands` registry; declarations do not register global handlers.
+Import `declareUICommand` and `UICommandRegistry` from `@tabularium/sync-core/ui-commands`. A declaration binds a stable command ID to its request and result types. Each `UIService` owns its own `commands` registry; declarations do not register global handlers.
 
 ```ts
-import { declareUICommand } from "@vrtmrz/livesync-commonlib/ui-commands";
+import { declareUICommand } from "@tabularium/sync-core/ui-commands";
 
 const showDevices = declareUICommand<void, 'closed'>('example:show-devices');
 const unregister = services.UI.commands.register(showDevices, async () => {
@@ -156,7 +156,7 @@ replication options, received documents, or native checkpoints.
 Both platform storage factories receive an existing root from the host. They never select a directory, request browser permission, infer a process directory, or persist a handle.
 
 ```ts
-import { createFileSystemAccessStorage } from "@vrtmrz/livesync-commonlib/browser";
+import { createFileSystemAccessStorage } from "@tabularium/sync-core/browser";
 
 declare const authorisedRoot: FileSystemDirectoryHandle;
 const storage = createFileSystemAccessStorage({ rootHandle: authorisedRoot });
@@ -164,7 +164,7 @@ await storage.write("notes/example.md", "# Example");
 ```
 
 ```ts
-import { createNodeStorage } from "@vrtmrz/livesync-commonlib/node";
+import { createNodeStorage } from "@tabularium/sync-core/node";
 
 const storage = createNodeStorage({ rootPath: "/srv/livesync" });
 await storage.write("notes/example.md", "# Example");
@@ -177,8 +177,8 @@ See [the platform storage contract](docs/platform-storage.md) for path, ownershi
 CLI hosts can inject the platform-neutral `StandardIo` contract from the context entry. The Node entry supplies the concrete stream adapter. This keeps command input and protocol output testable without treating logging or process lifecycle as standard I/O.
 
 ```ts
-import type { StandardIo } from "@vrtmrz/livesync-commonlib/context";
-import { createNodeStandardIo } from "@vrtmrz/livesync-commonlib/node";
+import type { StandardIo } from "@tabularium/sync-core/context";
+import { createNodeStandardIo } from "@tabularium/sync-core/node";
 
 const standardIo: StandardIo = createNodeStandardIo();
 standardIo.writeStdout("ready\n");
@@ -210,7 +210,7 @@ import {
     formatUsageTSV,
     parseDiagnosticPathToken,
     projectUsageReport,
-} from '@vrtmrz/livesync-commonlib/diagnostics';
+} from '@tabularium/sync-core/diagnostics';
 
 const result = await analyseDatabaseUsage({ source: createLocalDiagnosticSource(localPouchDB) });
 const mapper = createDiagnosticNameMapper('pseudonym');

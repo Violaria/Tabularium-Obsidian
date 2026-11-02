@@ -1,8 +1,8 @@
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import {
     REMOTE_P2P,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 
 /** Returns whether the selected main remote represents the P2P-only setup. */
 export function isP2PMainRemote(settings: ObsidianLiveSyncSettings): boolean {

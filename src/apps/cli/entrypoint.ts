@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { RTCPeerConnection } from "werift";
 import { main } from "./main";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
-import { createNodeStandardIo } from "@vrtmrz/livesync-commonlib/node";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { createNodeStandardIo } from "@tabularium/sync-core/node";
 import { writeStderrLine } from "./cliOutput";
 
 if (

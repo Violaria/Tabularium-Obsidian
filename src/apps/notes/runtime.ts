@@ -3,19 +3,19 @@
  * Settings live in memory only, so the passphrase never reaches browser storage.
  */
 import { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
-import type { ServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { LiveSyncAbstractReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/LiveSyncAbstractReplicator";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { useRemoteConfiguration } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/remoteConfig";
-import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+import type { ServiceContext } from "@tabularium/sync-core/context";
+import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { useRemoteConfiguration } from "@tabularium/sync-core/compat/serviceFeatures/remoteConfig";
+import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { decrypt as decryptHKDF } from "octagonal-wheels/encryption/hkdf";
 import { createLiveSyncBrowserServiceHub } from "@/apps/browser/createLiveSyncBrowserServiceHub";
 import { initialiseServiceModulesFSAPI, type FSAPIServiceModules } from "@/apps/webapp/serviceModules/FSAPIServiceModules";
 import { basicAuth } from "./api";
 import type { VaultRecord } from "./store";
-import { createBinaryBlob, createTextBlob } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import type { FilePathWithPrefix, UXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { createBinaryBlob, createTextBlob } from "@tabularium/sync-core/compat/common/utils";
+import type { FilePathWithPrefix, UXFileInfo } from "@tabularium/sync-core/compat/common/types";
 import { t } from "../../../../server/ui/i18n";
 
 export interface NotesFile {

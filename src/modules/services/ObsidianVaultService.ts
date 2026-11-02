@@ -1,7 +1,7 @@
 import { getPathFromTFile, isValidPath } from "@/common/utils";
-import { InjectableVaultService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableVaultService";
+import { InjectableVaultService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableVaultService";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
-import type { FilePath } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { FilePath } from "@tabularium/sync-core/compat/common/types";
 
 declare module "obsidian" {
     interface DataAdapter {

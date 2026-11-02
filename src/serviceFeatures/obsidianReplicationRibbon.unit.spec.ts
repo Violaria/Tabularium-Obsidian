@@ -6,7 +6,7 @@ vi.mock("@/deps.ts", () => ({ addIcon }));
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { $msg } from "@/common/translation";
 import { useObsidianReplicationRibbonFeature, type ObsidianReplicationRibbonHost } from "./obsidianReplicationRibbon";
 

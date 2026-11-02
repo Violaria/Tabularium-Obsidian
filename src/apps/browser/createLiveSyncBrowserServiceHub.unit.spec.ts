@@ -1,5 +1,5 @@
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import { DEFAULT_SETTINGS } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import { DEFAULT_SETTINGS } from "@tabularium/sync-core/compat/common/types";
 import { MemoryValueStore } from "@vrtmrz/value-store";
 import { afterEach, describe, expect, it, vi } from "vitest";
 

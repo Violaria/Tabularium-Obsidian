@@ -1,8 +1,8 @@
-import { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
-import type { ServiceInstances } from "@vrtmrz/livesync-commonlib/compat/services/ServiceHub";
+import type { ServiceInstances } from "@tabularium/sync-core/compat/services/ServiceHub";
 import type ObsidianLiveSyncPlugin from "@/main";
 import {
     ObsidianConflictService,
@@ -24,7 +24,7 @@ import { ObsidianPathService } from "./ObsidianPathService";
 import { ObsidianVaultService } from "./ObsidianVaultService";
 import { ObsidianUIService } from "./ObsidianUIService";
 import { createScreenWakeLockManager } from "octagonal-wheels/browser/wakeLock";
-import { PouchDB } from "@vrtmrz/livesync-commonlib/compat/pouchdb/pouchdb-browser";
+import { PouchDB } from "@tabularium/sync-core/compat/pouchdb/pouchdb-browser";
 import { OpenKeyValueDatabase } from "@/common/KeyValueDB";
 import { ObsidianNoticeGroupManager } from "./ObsidianNoticeGroups";
 import { KeyedNoticeManager } from "@vrtmrz/obsidian-plugin-kit/notice";

@@ -1,4 +1,4 @@
-import { path } from "@vrtmrz/livesync-commonlib/node";
+import { path } from "@tabularium/sync-core/node";
 import type { CLICommand } from "./types";
 
 export function getForceRequirementError(command: CLICommand, force = false): string | undefined {

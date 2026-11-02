@@ -4,7 +4,7 @@ import {
     SvelteDialogManagerBase,
     type ComponentHasResult,
     type SvelteDialogManagerDependencies,
-} from "@vrtmrz/livesync-commonlib/compat/services/implements/base/SvelteDialog";
+} from "@tabularium/sync-core/compat/services/implements/base/SvelteDialog";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import DialogHost from "@/modules/services/LiveSyncUI/DialogHost.svelte";
 import { SvelteDialogSession } from "@/modules/services/SvelteDialogSession";

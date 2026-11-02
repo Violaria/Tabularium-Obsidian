@@ -1,6 +1,6 @@
 import { createDeletableValueStore, sanitiseValueStoreError, ValueStoreError } from "@vrtmrz/value-store";
 import type { ValueDeleter, ValueStore } from "@vrtmrz/value-store";
-import { fs as nodeFs, path as nodePath } from "@vrtmrz/livesync-commonlib/node";
+import { fs as nodeFs, path as nodePath } from "@tabularium/sync-core/node";
 
 type NodeLocalStorage = ValueStore & ValueDeleter;
 

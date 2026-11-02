@@ -1,8 +1,8 @@
-import { performDoctorConsultation, RebuildOptions } from "@vrtmrz/livesync-commonlib/compat/common/configForDoc";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
-import type { Rebuilder } from "@vrtmrz/livesync-commonlib/compat/interfaces/DatabaseRebuilder";
-import type { MessageTranslator } from "@vrtmrz/livesync-commonlib/context";
+import { performDoctorConsultation, RebuildOptions } from "@tabularium/sync-core/compat/common/configForDoc";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
+import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
+import type { MessageTranslator } from "@tabularium/sync-core/context";
 
 /** Collaborators required to run one Config Doctor consultation. */
 export interface ConfigDoctorDependencies {

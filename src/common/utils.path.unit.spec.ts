@@ -16,7 +16,7 @@ vi.mock("@/deps.ts", () => ({
     requestUrl: vi.fn(),
 }));
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/string_and_binary/path", () => ({
+vi.mock("@tabularium/sync-core/compat/string_and_binary/path", () => ({
     path2id_base: mocks.path2idBase,
     id2path_base: mocks.id2pathBase,
     expandFilePathPrefix: mocks.expandFilePathPrefix,

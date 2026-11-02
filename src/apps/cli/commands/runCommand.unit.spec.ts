@@ -1,11 +1,11 @@
-import { fsPromises as fs, os, path } from "@vrtmrz/livesync-commonlib/node";
-import { ConnectionStringParser } from "@vrtmrz/livesync-commonlib/compat/common/ConnectionString";
+import { fsPromises as fs, os, path } from "@tabularium/sync-core/node";
+import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import {
     DEFAULT_SETTINGS,
     REMOTE_COUCHDB,
     REMOTE_MINIO,
     REMOTE_P2P,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { runCommand } from "./runCommand";
 import type { CLIOptions } from "./types";
@@ -19,7 +19,7 @@ import {
     REPLICATION_COMPLETED,
     REPLICATION_PROGRESS_PRESENTATIONS,
     replicationFailed,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 
 vi.mock("node:fs/promises", { spy: true });
 

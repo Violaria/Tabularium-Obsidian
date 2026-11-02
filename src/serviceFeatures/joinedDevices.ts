@@ -1,4 +1,4 @@
-import type { JoinedDevice, JoinedDevicesSnapshot } from "@vrtmrz/livesync-commonlib/replication";
+import type { JoinedDevice, JoinedDevicesSnapshot } from "@tabularium/sync-core/replication";
 import type { JoinedDevicesView } from "./joinedDevicesDialogTypes";
 
 /** Compare recognised SemVer values; unknown development labels have no ordering. */

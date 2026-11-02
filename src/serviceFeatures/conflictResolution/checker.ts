@@ -3,9 +3,9 @@ import {
     type FilePath,
     type FilePathWithPrefix,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IConflictService, IVaultService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+} from "@tabularium/sync-core/compat/common/types";
+import type { IConflictService, IVaultService } from "@tabularium/sync-core/compat/services/base/IService";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import type { ReactiveSource } from "octagonal-wheels/dataobject/reactive";
 import { QueueProcessor } from "octagonal-wheels/concurrency/processor";
 

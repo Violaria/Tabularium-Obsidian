@@ -5,9 +5,9 @@ import {
     LOG_LEVEL_VERBOSE,
     type LOG_LEVEL,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { InjectableServiceHub } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableServiceHub";
-import type { InjectableSettingService } from "@vrtmrz/livesync-commonlib/compat/services/implements/injectable/InjectableSettingService";
+} from "@tabularium/sync-core/compat/common/types";
+import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
+import type { InjectableSettingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableSettingService";
 import {
     LOG_LEVEL_DEBUG,
     setGlobalLogFunction,
@@ -20,13 +20,13 @@ import { runCommand } from "./commands/runCommand";
 import { isCLICommand } from "./commands/types";
 import type { CLICommand, CLICommandContext, CLIOptions } from "./commands/types";
 import { getForceRequirementError } from "./commands/utils";
-import { getPathFromUXFileInfo } from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
-import { stripAllPrefixes } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+import { getPathFromUXFileInfo } from "@tabularium/sync-core/compat/common/typeUtils";
+import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { IgnoreRules } from "./serviceModules/IgnoreRules";
-import { useOfflineScanner } from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+import { useOfflineScanner } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import type { ReplicationSchedulingControl } from "@/serviceFeatures/replicationScheduling";
-import { createNodeStandardIo, fsPromises as fs, path } from "@vrtmrz/livesync-commonlib/node";
-import type { StandardIo } from "@vrtmrz/livesync-commonlib/context";
+import { createNodeStandardIo, fsPromises as fs, path } from "@tabularium/sync-core/node";
+import type { StandardIo } from "@tabularium/sync-core/context";
 import { writeStderrLine, writeStdoutLine } from "./cliOutput";
 import { createDefaultCliSettings } from "./cliSettingsDefaults";
 import {

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { DEFAULT_SETTINGS, REMOTE_MINIO } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { NO_INTERACTION, type ReplicationOutcome } from "@vrtmrz/livesync-commonlib/replication";
+import { DEFAULT_SETTINGS, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/types";
+import { NO_INTERACTION, type ReplicationOutcome } from "@tabularium/sync-core/replication";
 import {
     createReplicationSchedulingContext,
     markInitialOneShotSatisfied,

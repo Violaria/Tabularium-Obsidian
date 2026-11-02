@@ -8,7 +8,7 @@ import { HttpRequest, HttpResponse } from "@smithy/protocol-http";
 import type { HttpHandlerOptions } from "@smithy/types";
 import { buildQueryString } from "@smithy/querystring-builder";
 import { requestUrl, type RequestUrlParam } from "@/deps.ts";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 
 ////////////////////////////////////////////////////////////////////////////////
 // special handler using Obsidian requestUrl

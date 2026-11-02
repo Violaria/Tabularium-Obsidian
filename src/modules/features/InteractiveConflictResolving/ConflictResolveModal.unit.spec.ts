@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { POSTPONED, ConflictResolveModal } from "./ConflictResolveModal.ts";
-import { CANCELLED, type diff_result, type FilePathWithPrefix } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import { CANCELLED, type diff_result, type FilePathWithPrefix } from "@tabularium/sync-core/compat/common/types";
 import { EVENT_CONFLICT_CANCELLED, EVENT_PLUGIN_UNLOADED, eventHub } from "@/common/events.ts";
 
 vi.mock("@/deps.ts", () => ({

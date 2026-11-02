@@ -1,5 +1,5 @@
 import { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { NodeServiceContext } from "@/apps/cli/services/NodeServiceContext";
 import type { ReplicationSchedulingControl } from "@/serviceFeatures/replicationScheduling";
 

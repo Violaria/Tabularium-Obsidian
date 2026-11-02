@@ -1,9 +1,9 @@
-import type { SynchronisationInformationResourceFactory } from "@vrtmrz/livesync-commonlib/replication";
+import type { SynchronisationInformationResourceFactory } from "@tabularium/sync-core/replication";
 import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
-} from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import { checkSyncInfo } from "@vrtmrz/livesync-commonlib/compat/pouchdb/negotiation";
+} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { checkSyncInfo } from "@tabularium/sync-core/compat/pouchdb/negotiation";
 import { createReplicatorDisposer, snapshotRemoteSettings } from "./shared";
 
 /**

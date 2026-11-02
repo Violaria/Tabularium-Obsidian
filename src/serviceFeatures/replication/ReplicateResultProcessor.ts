@@ -2,8 +2,8 @@ import {
     assessRemoteFeatureDocument,
     describeRemoteFeatureRejection,
     NFC_PATH_IDENTITY_FEATURE,
-} from "@vrtmrz/livesync-commonlib/replication";
-import { getPathNormalizationVersion } from "@vrtmrz/livesync-commonlib/settings";
+} from "@tabularium/sync-core/replication";
+import { getPathNormalizationVersion } from "@tabularium/sync-core/settings";
 import {
     SYNCINFO_ID,
     VERSIONING_DOCID,
@@ -13,8 +13,8 @@ import {
     type LoadedEntry,
     type MetaEntry,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { isChunk } from "@vrtmrz/livesync-commonlib/compat/common/typeUtils";
+} from "@tabularium/sync-core/compat/common/types";
+import { isChunk } from "@tabularium/sync-core/compat/common/typeUtils";
 import {
     LOG_LEVEL_DEBUG,
     LOG_LEVEL_INFO,
@@ -22,13 +22,13 @@ import {
     LOG_LEVEL_VERBOSE,
     Logger,
     type LOG_LEVEL,
-} from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import { fireAndForget, isAnyNote, throttle } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+} from "@tabularium/sync-core/compat/common/logger";
+import { fireAndForget, isAnyNote, throttle } from "@tabularium/sync-core/compat/common/utils";
 import { Semaphore } from "octagonal-wheels/concurrency/semaphore_v2";
 import { serialized } from "octagonal-wheels/concurrency/lock";
 import type { ReactiveSource } from "octagonal-wheels/dataobject/reactive_v2";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
-import { isNotFoundError } from "@vrtmrz/livesync-commonlib/compat/common/utils.doc";
+import { isNotFoundError } from "@tabularium/sync-core/compat/common/utils.doc";
 import type PouchDB from "pouchdb-core";
 import { promiseWithResolvers, type PromiseWithResolvers } from "octagonal-wheels/promises";
 import { $msg } from "@/common/translation";

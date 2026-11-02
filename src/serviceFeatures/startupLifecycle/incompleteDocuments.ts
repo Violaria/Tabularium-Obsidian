@@ -3,20 +3,20 @@ import {
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
     Logger,
-} from "@vrtmrz/livesync-commonlib/compat/common/logger";
+} from "@tabularium/sync-core/compat/common/logger";
 import {
     isDeletedEntry,
     isDocContentSame,
     isLoadedEntry,
     readAsBlob,
-} from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { isMetaEntry } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { LiveSyncLocalDB } from "@vrtmrz/livesync-commonlib/compat/pouchdb/LiveSyncLocalDB";
-import type { StorageAccess } from "@vrtmrz/livesync-commonlib/compat/interfaces/StorageAccess";
-import type { IFileHandler } from "@vrtmrz/livesync-commonlib/compat/interfaces/FileHandler";
-import type { KeyValueDatabase } from "@vrtmrz/livesync-commonlib/compat/interfaces/KeyValueDatabase";
-import type { Confirm } from "@vrtmrz/livesync-commonlib/compat/interfaces/Confirm";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+} from "@tabularium/sync-core/compat/common/utils";
+import { isMetaEntry } from "@tabularium/sync-core/compat/common/types";
+import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
+import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
+import type { KeyValueDatabase } from "@tabularium/sync-core/compat/interfaces/KeyValueDatabase";
+import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { $msg } from "@/common/translation";
 import { isValidPath } from "@/common/utils";
 import type { StartupPathReader } from "./types";

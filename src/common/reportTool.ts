@@ -1,13 +1,13 @@
 import { redactTurnSettingsForReport } from "./turnSettingsPrivacy";
-import { REMOTE_COUCHDB, REMOTE_MINIO } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
-import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/settings";
-import { generateCredentialObject } from "@vrtmrz/livesync-commonlib/compat/replication/httplib";
-import { parseHeaderValues } from "@vrtmrz/livesync-commonlib/compat/common/utils";
+import { REMOTE_COUCHDB, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/models/setting.const";
+import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/settings";
+import { generateCredentialObject } from "@tabularium/sync-core/compat/replication/httplib";
+import { parseHeaderValues } from "@tabularium/sync-core/compat/common/utils";
 import { requestToCouchDBWithCredentials } from "./utils";
-import { LOG_LEVEL_VERBOSE, Logger } from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import { isCloudantURI } from "@vrtmrz/livesync-commonlib/compat/pouchdb/utils_couchdb";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
-import { manifestVersion, packageVersion } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvVars";
+import { LOG_LEVEL_VERBOSE, Logger } from "@tabularium/sync-core/compat/common/logger";
+import { isCloudantURI } from "@tabularium/sync-core/compat/pouchdb/utils_couchdb";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { manifestVersion, packageVersion } from "@tabularium/sync-core/compat/common/coreEnvVars";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";
 function redactObject(obj: Record<string, unknown>, dotted: string, redactedValue = "REDACTED") {
     const keys = dotted.split(".");

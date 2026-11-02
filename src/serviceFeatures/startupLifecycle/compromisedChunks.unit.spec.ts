@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { countCompromisedChunks } from "@vrtmrz/livesync-commonlib/compat/pouchdb/negotiation";
+import { countCompromisedChunks } from "@tabularium/sync-core/compat/pouchdb/negotiation";
 import { checkCompromisedChunks, type CompromisedChunksDependencies } from "./compromisedChunks";
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/pouchdb/negotiation", () => ({
+vi.mock("@tabularium/sync-core/compat/pouchdb/negotiation", () => ({
     countCompromisedChunks: vi.fn(),
 }));
 

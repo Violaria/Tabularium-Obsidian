@@ -3,9 +3,9 @@ import { appendFile, mkdtemp, mkdir, readFile, rm, stat, writeFile } from "node:
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import * as chokidar from "chokidar";
-import * as offlineScanner from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
-import { ControlService } from "@vrtmrz/livesync-commonlib/compat/services/base/ControlService";
-import { type FilePathWithPrefix, type ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import * as offlineScanner from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
+import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
+import { type FilePathWithPrefix, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { ServiceFileHandler } from "@/serviceModules/FileHandler";
 import { ServiceFileAccessCLI } from "./serviceModules/ServiceFileAccessImpl";
 import { runCommand } from "./commands/runCommand";
@@ -15,7 +15,7 @@ import { cloneSettings } from "./settingsPersistence";
 import type { CLICommand } from "./commands/types";
 
 vi.mock("chokidar", { spy: true });
-vi.mock("@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner", { spy: true });
+vi.mock("@tabularium/sync-core/compat/serviceFeatures/offlineScanner", { spy: true });
 
 function createStandardIoMock() {
     return {

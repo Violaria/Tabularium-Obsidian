@@ -1,15 +1,15 @@
-import type { RemoteDBSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 import type {
     ConnectionProbeFactory,
     RemoteConnectionProbe,
     RemoteConnectionProbeOptions,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import {
     LiveSyncCouchDBReplicator,
     type LiveSyncCouchDBReplicatorEnv,
-} from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
-import { LOG_LEVEL_NOTICE, Logger } from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import { LiveSyncJournalReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/journal/LiveSyncJournalReplicator";
+} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { LOG_LEVEL_NOTICE, Logger } from "@tabularium/sync-core/compat/common/logger";
+import { LiveSyncJournalReplicator } from "@tabularium/sync-core/compat/replication/journal/LiveSyncJournalReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings } from "./shared";
 
 /** Host environment sufficient to construct either central connection probe. */

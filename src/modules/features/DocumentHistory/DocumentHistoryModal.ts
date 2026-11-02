@@ -1,7 +1,7 @@
 import { TFile, Modal, App, DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT, diff_match_patch } from "@/deps.ts";
 import { getPathFromTFile, isValidPath } from "@/common/utils.ts";
 import { $msg } from "@/common/translation";
-import { decodeBinary, readString } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/convert";
+import { decodeBinary, readString } from "@tabularium/sync-core/compat/string_and_binary/convert";
 import ObsidianLiveSyncPlugin from "@/main.ts";
 import {
     type DocumentID,
@@ -10,14 +10,14 @@ import {
     LOG_LEVEL_INFO,
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { Logger } from "@vrtmrz/livesync-commonlib/compat/common/logger";
-import { isErrorOfMissingDoc } from "@vrtmrz/livesync-commonlib/compat/pouchdb/utils_couchdb";
-import { fireAndForget, getDocData } from "@vrtmrz/livesync-commonlib/compat/common/utils";
-import { isPlainText, stripPrefix } from "@vrtmrz/livesync-commonlib/compat/string_and_binary/path";
+} from "@tabularium/sync-core/compat/common/types";
+import { Logger } from "@tabularium/sync-core/compat/common/logger";
+import { isErrorOfMissingDoc } from "@tabularium/sync-core/compat/pouchdb/utils_couchdb";
+import { fireAndForget, getDocData } from "@tabularium/sync-core/compat/common/utils";
+import { isPlainText, stripPrefix } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { scheduleOnceIfDuplicated } from "octagonal-wheels/concurrency/lock";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore.ts";
-import { compatGlobal } from "@vrtmrz/livesync-commonlib/compat/common/coreEnvFunctions";
+import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import {
     DOCUMENT_HISTORY_PREFERENCE_KEYS,
     loadDocumentHistoryPreference,

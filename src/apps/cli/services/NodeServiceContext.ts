@@ -1,6 +1,6 @@
 import { eventHub } from "@/common/events";
 import { translateLiveSyncMessage } from "@/common/translation";
-import { ServiceContext, type StandardIo } from "@vrtmrz/livesync-commonlib/context";
+import { ServiceContext, type StandardIo } from "@tabularium/sync-core/context";
 
 /** Host capabilities owned by one Self-hosted LiveSync CLI composition. */
 export class NodeServiceContext extends ServiceContext {

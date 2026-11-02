@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
-import type { IAPIService } from "@vrtmrz/livesync-commonlib/compat/services/base/IService";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { IAPIService } from "@tabularium/sync-core/compat/services/base/IService";
 import { MemoryValueStore } from "@vrtmrz/value-store";
 import type { ObsidianServiceContext } from "@/modules/services/ObsidianServiceContext";
 import { normaliseObsidianSettingsData } from "./ObsidianSettingService.ts";

@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
-import { createServiceContext } from "@vrtmrz/livesync-commonlib/context";
-import type { LogFunction } from "@vrtmrz/livesync-commonlib/compat/services/lib/logUtils";
+import { createServiceContext } from "@tabularium/sync-core/context";
+import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
     FlagFilesHumanReadable,
     FlagFilesOriginal,
-} from "@vrtmrz/livesync-commonlib/compat/common/models/redflag.const";
-import { REMOTE_MINIO, REMOTE_P2P } from "@vrtmrz/livesync-commonlib/compat/common/models/setting.const";
+} from "@tabularium/sync-core/compat/common/models/redflag.const";
+import { REMOTE_MINIO, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
 import {
     createFetchAllFlagHandler,
     createRebuildFlagHandler,
@@ -25,12 +25,12 @@ import {
     TweakValuesShouldMatchedTemplate,
     TweakValuesTemplate,
     type TweakValues,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
+} from "@tabularium/sync-core/compat/common/types";
 import {
     ExtraOnLocal,
     FullScanModes,
     synchroniseAllFilesBetweenDBandStorage,
-} from "@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner";
+} from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import {
     SIMPLE_FETCH_STAGE1_DETAILED,
     SIMPLE_FETCH_STAGE1_NEWER_WINS,
@@ -44,9 +44,9 @@ import {
     askSimpleFetchMode,
     rememberFetchChoice,
 } from "./redFlag.simpleFetch";
-import { activateRemoteConfiguration } from "@vrtmrz/livesync-commonlib/remote-configurations";
+import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 //Mock synchroniseAllFilesBetweenDBandStorage
-vi.mock("@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner", async (importOriginal) => {
+vi.mock("@tabularium/sync-core/compat/serviceFeatures/offlineScanner", async (importOriginal) => {
     const originalModule = (await importOriginal()) as any;
     return {
         ...originalModule,
@@ -54,7 +54,7 @@ vi.mock("@vrtmrz/livesync-commonlib/compat/serviceFeatures/offlineScanner", asyn
     };
 });
 
-vi.mock("@vrtmrz/livesync-commonlib/compat/serviceFeatures/remoteConfig", () => {
+vi.mock("@tabularium/sync-core/compat/serviceFeatures/remoteConfig", () => {
     return {
         activateRemoteConfiguration: vi.fn((settings: any, configurationId: string) => {
             if (!settings?.remoteConfigurations?.[configurationId]) return false;

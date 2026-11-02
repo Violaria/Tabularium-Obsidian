@@ -2,12 +2,12 @@ import {
     VERSIONING_DOCID,
     type EntryDoc,
     type ObsidianLiveSyncSettings,
-} from "@vrtmrz/livesync-commonlib/compat/common/types";
-import { assessTweakCompatibility } from "@vrtmrz/livesync-commonlib/settings";
+} from "@tabularium/sync-core/compat/common/types";
+import { assessTweakCompatibility } from "@tabularium/sync-core/settings";
 import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, Logger } from "octagonal-wheels/common/logger";
 import { skipIfDuplicated } from "octagonal-wheels/concurrency/lock";
-import { balanceChunkPurgedDBs, purgeUnreferencedChunks } from "@vrtmrz/livesync-commonlib/compat/pouchdb/chunks";
-import { LiveSyncCouchDBReplicator } from "@vrtmrz/livesync-commonlib/compat/replication/couchdb/LiveSyncReplicator";
+import { balanceChunkPurgedDBs, purgeUnreferencedChunks } from "@tabularium/sync-core/compat/pouchdb/chunks";
+import { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
 import {
     CENTRAL_COMPATIBILITY_REJECTION_REASONS,
     REPLICATION_PROGRESS_PRESENTATIONS,
@@ -15,7 +15,7 @@ import {
     describeRemoteFeatureRejection,
     type ReplicatorInstance,
     type ReplicationFailureRequest,
-} from "@vrtmrz/livesync-commonlib/replication";
+} from "@tabularium/sync-core/replication";
 import { $msg } from "@/common/translation";
 import { usesLegacyIndexedDBAdapter } from "@/common/compatibilitySettings";
 import type { LiveSyncBaseCore } from "@/LiveSyncBaseCore";

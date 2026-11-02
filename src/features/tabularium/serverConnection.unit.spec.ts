@@ -4,7 +4,7 @@ import { setLang } from "@/common/translation";
 // The messages are checked in Chinese.
 beforeAll(() => setLang("zh"));
 afterAll(() => setLang("def"));
-import type { ObsidianLiveSyncSettings } from "@vrtmrz/livesync-commonlib/compat/common/types";
+import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     connectionSettings,
     enforcedOverrides,
