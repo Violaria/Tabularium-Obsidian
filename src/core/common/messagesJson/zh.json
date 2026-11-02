@@ -1126,6 +1126,7 @@
     "tabularium.release.0.4.0": "界面支持英文、中文和拉丁语；云笔记可以编辑。",
     "tabularium.release.0.5.0": "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
     "tabularium.release.1.0.0": "首个正式公开版本。代码、界面与设备数据不再使用原插件的名字；首次启动时在本机迁移数据，无需重新取回或登录。",
+    "tabularium.release.1.0.1": "设备值改存在各笔记库自己的存储中。Release 文件由 GitHub 构建并附构建来源证明。",
     "tabularium.server.address": "服务器地址",
     "tabularium.server.addressScheme": "服务器地址须以 https:// 或 http:// 开头。",
     "tabularium.server.command": "服务器连接",

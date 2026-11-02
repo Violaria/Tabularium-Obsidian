@@ -4298,6 +4298,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Prima editio publica. Codex, interfacies et data instrumenti nomen additamenti pristini non iam adhibent; primo initio data huius instrumenti loco moventur, sine nova arcessione aut inscriptione.",
         zh: "首个正式公开版本。代码、界面与设备数据不再使用原插件的名字；首次启动时在本机迁移数据，无需重新取回或登录。",
     },
+    "tabularium.release.1.0.1": {
+        def: "Device values are kept in each vault's own storage. Release files are built and attested by GitHub.",
+        la: "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur.",
+        zh: "设备值改存在各笔记库自己的存储中。Release 文件由 GitHub 构建并附构建来源证明。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
