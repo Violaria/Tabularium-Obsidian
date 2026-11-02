@@ -4253,6 +4253,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Solum ministrator: regulae ordinandi Tabularii in praecepto tabularii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
         zh: "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。",
     },
+    "tabularium.release.0.26.2": {
+        def: 'In reading view, the notes after " —— " in sortspec.md fold behind an info icon after each name: hover to read one, or tap to show it after the name and tap again to hide it. Web notes show sortspec.md the same way.',
+        la: "In modo legendi, notae post « —— » in sortspec.md post quodque nomen in signum ⓘ conduntur: cursore superposito leguntur, tactu post nomen aperiuntur et iterum tactu clauduntur. Commentarii interretiales sortspec.md eodem modo ostendunt.",
+        zh: "阅读模式下，sortspec.md 中「 —— 」后面的说明收进名称后的 ⓘ 图标：悬停显示，点一下在名称后展开，再点收起。云笔记中阅读 sortspec.md 也一样。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
