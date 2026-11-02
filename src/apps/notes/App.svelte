@@ -384,7 +384,7 @@
         }
         const paths = files.map((f) => f.path);
         noteText = await runtime.read(path);
-        html = renderPreview(noteText, (target) => resolveLinkpath(target, path, paths));
+        html = renderPreview(noteText, (target) => resolveLinkpath(target, path, paths), { sortingNotes: isSpecSource(path) });
         await tick();
         if (scroll) mainEl?.scrollTo(0, 0);
         if (previewEl) await drawExtras(previewEl);

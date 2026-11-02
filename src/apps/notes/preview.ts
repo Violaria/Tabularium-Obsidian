@@ -6,6 +6,8 @@ import { escapeXml } from "@/features/tabularium/epub";
 import { outsideCode, stripFrontMatter } from "@/features/tabularium/render";
 import { t } from "../../../../server/ui/i18n";
 import { enhance } from "./markdown";
+import { tip } from "../../../../server/ui/core";
+import { foldSortingNotes } from "./sortingNotes";
 
 export type Resolver = (target: string) => string | undefined;
 
@@ -36,9 +38,10 @@ function target(href: string) {
     }
 }
 
-export function renderPreview(markdown: string, resolve: Resolver) {
+export function renderPreview(markdown: string, resolve: Resolver, options: { sortingNotes?: boolean } = {}) {
     const md = new MarkdownIt({ html: false, linkify: true, breaks: true });
     enhance(md, { copy: t("notes.copyCode") });
+    if (options.sortingNotes) foldSortingNotes(md, tip);
     const internal = new WeakMap<object, string | null>();
     md.renderer.rules.image = (tokens, index) => {
         const src = tokens[index].attrGet("src") ?? "";

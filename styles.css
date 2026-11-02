@@ -914,6 +914,18 @@ body.is-mobile .tabularium-compatibility-review-notice {
     height: var(--icon-s);
 }
 
+/* sortspec.md in reading view: a list item's note behind the same icon, opened after the name by a tap. */
+.tabularium-sortspec-note-text {
+    display: none;
+}
+
+.tabularium-sortspec-note-text.is-open {
+    display: inline;
+    margin-inline-start: var(--size-4-1);
+    color: var(--text-muted);
+    font-size: var(--font-ui-small);
+}
+
 .tabularium-share-modal {
     width: min(720px, 94vw);
 }

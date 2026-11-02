@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
+import MarkdownIt from "markdown-it";
 
 import { isSpecSource, parseSpecs, sortedTree } from "./sorting";
+import { foldSortingNotes } from "./sortingNotes";
 
 const file = (path: string) => ({ path });
 const names = (node: { children: { name: string }[] }) => node.children.map((child) => child.name);
@@ -29,5 +31,21 @@ describe("web notes sorting", () => {
         const former = parseSpecs([{ path: "sortspec.md", text: "---\nsorting-spec: |-\n  target-folder: /\n  c\n---\n" }]);
         expect(former.unconverted).toBe(true);
         expect(names(sortedTree(files, "", former.rules))).toEqual(["A", "a9.md", "a10.md", "b.md", "c.md"]);
+    });
+});
+
+describe("notes in sortspec.md when reading", () => {
+    it("puts a list item's note behind an icon, and leaves other notes as written", () => {
+        const tip = (text: string) => `<span class="tip" data-tip="${text}"></span>`;
+        const render = (fold: boolean) => {
+            const md = new MarkdownIt();
+            if (fold) foldSortingNotes(md, tip);
+            return md.render("- 网络工程 —— 按路由、交换、组网的顺序\n  - 路由服务器 —— 先读 [[基本WAN_LAN]] 再看 PPPoE\n- 其他\n\n正文 —— 不是列表\n");
+        };
+        const folded = render(true);
+        expect(folded).toContain('<li>网络工程<span class="tip" data-tip="按路由、交换、组网的顺序"></span>');
+        expect(folded).toContain('data-tip="先读 [[基本WAN_LAN]] 再看 PPPoE"');
+        expect(folded).toContain("<p>正文 —— 不是列表</p>");
+        expect(render(false)).toContain("网络工程 —— 按路由");
     });
 });
