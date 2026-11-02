@@ -16,13 +16,9 @@ export function getLanguage() {
     return _getLanguage();
 }
 
-// Compatibility for globalThis across different environments (browser, Node.js, etc.)
-export const compatGlobal = (
-    typeof window !== "undefined"
-        ? window
-        : // Node.js (the CLI and tests): its global object, which the CLI also extends (localStorage).
-          globalThis
-) as typeof window;
+// The global object: window in Obsidian and web pages, self in web workers (the encryption worker). Node hosts define
+// self as their global object at build time: the CLI's build does, and so do the Node test configurations.
+export const compatGlobal: typeof window = typeof window !== "undefined" ? window : self;
 
 export type CompatTimeoutHandle = ReturnType<typeof setTimeout> | number;
 export type CompatIntervalHandle = ReturnType<typeof setInterval> | number;

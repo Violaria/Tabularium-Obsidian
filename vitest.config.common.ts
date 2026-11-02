@@ -79,6 +79,8 @@ const define = {
     PACKAGE_VERSION: `"${packageJson.version}"`,
     UPDATE_INFO: `${updateInfo}`,
     global: "globalThis",
+    // The core takes its global object from window or, outside a document, self; in Node that is the global object.
+    self: "globalThis",
     hostPlatform: `"${platform}"`,
 };
 export default defineConfig({

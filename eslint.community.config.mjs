@@ -65,11 +65,4 @@ export default defineConfig(
         files: ["packages/sync-core/src/**/*.ts"],
         rules: { "no-undef": "off" },
     },
-    {
-        // The one place that reaches the global object outside a browser: in Node.js (the CLI and tests) there is no
-        // window, and the CLI adds to the global object later, so a copy would not do. The directory review lists it
-        // as a warning.
-        files: ["packages/sync-core/src/common/coreEnvFunctions.ts"],
-        rules: { "obsidianmd/no-global-this": "off" },
-    },
 );

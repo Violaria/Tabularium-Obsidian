@@ -6,6 +6,8 @@ import { defineConfig } from "vitest/config";
 const root = fileURLToPath(new URL(".", import.meta.url));
 
 export default defineConfig({
+    // The core takes its global object from window or, outside a document, self; in Node that is the global object.
+    define: { self: "globalThis" },
     resolve: {
         alias: {
             "@lib": resolve(root, "src"),
