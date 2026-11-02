@@ -33,7 +33,7 @@ Donec additamentum in indice additamentorum communitatis Obsidian inscriptum est
 
 ## Constructio
 
-Cum Node.js 24.10.0, in hoc repositorio:
+Hoc repositorium submodulus est [Tabularii](https://github.com/Violaria/Tabularium) et ibi construitur: dialogus communicandi textus interretiales [Tabularium-Server](https://github.com/Violaria/Tabularium-Server) adhibet, quod iuxta ut `apps/server` positum est. Parentem cum `--recurse-submodules` exscribe et, cum Node.js 24.10.0, in `apps/obsidian`:
 
 ```bash
 npm ci
@@ -42,6 +42,6 @@ npm run check       # examina typorum, lint, examina Svelte
 npm run test:unit
 ```
 
-Idem submodulus est [Tabularii](https://github.com/Violaria/Tabularium), ubi ministrator et probationes cum clientibus Obsidian veris sunt.
+Plicae editionum ab GitHub Actions ex commisso signato construuntur, cum constructione probata per singulos bytos comparantur et testimonium originis constructionis ferunt (`gh attestation verify main.js --repo Violaria/Tabularium-Obsidian`).
 
 Idem fons etiam commentarios interretiales (`src/apps/notes/`) et clientem lineae iussorum (`src/apps/cli/`) gignit, quibus ministrator Tabularii utitur.

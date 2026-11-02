@@ -33,7 +33,7 @@
 
 ## 构建
 
-使用 Node.js 24.10.0，在本仓库中：
+本仓库是 [Tabularium](https://github.com/Violaria/Tabularium) 的子模块，在父仓库中构建：分享对话框使用 [Tabularium-Server](https://github.com/Violaria/Tabularium-Server) 的网页文字，它位于旁边的 `apps/server`。用 `--recurse-submodules` 克隆父仓库，使用 Node.js 24.10.0，在 `apps/obsidian` 中：
 
 ```bash
 npm ci
@@ -42,7 +42,7 @@ npm run check       # 类型检查、lint、Svelte 检查
 npm run test:unit
 ```
 
-本仓库也是 [Tabularium](https://github.com/Violaria/Tabularium) 的子模块，服务器和用真实 Obsidian 客户端的测试在那里。
+Release 中的文件由 GitHub Actions 从带标签的提交构建，与测试过的构建逐字节核对，并附有构建来源证明（`gh attestation verify main.js --repo Violaria/Tabularium-Obsidian`）。
 
 同一份源码还会生成 Tabularium 服务器使用的云笔记（`src/apps/notes/`）和命令行客户端（`src/apps/cli/`）。
 

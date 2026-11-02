@@ -1,0 +1,64 @@
+# Builds the plug-in from this repository, with Tabularium-Server beside it (the share dialogue uses the server's web
+# texts), checks that the files are byte for byte the ones that were tested, attests their provenance and publishes the
+# GitHub Release that Obsidian's community directory reads. Started by scripts/release-github.sh in Tabularium, on the
+# version's tag.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      server:
+        description: Commit of Tabularium-Server that Tabularium records for this version
+        required: true
+      sha256:
+        description: SHA-256 of main.js, manifest.json and styles.css as built and tested (sha256sum lines)
+        required: true
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: apps/obsidian
+      - uses: actions/checkout@v4
+        with:
+          repository: Violaria/Tabularium-Server
+          ref: ${{ inputs.server }}
+          path: apps/server
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.10.0
+      - run: npm install --global npm@11.6.1
+      - name: Build
+        working-directory: apps/obsidian
+        run: npm ci && npm run build
+      - name: Same files as the tested build
+        working-directory: apps/obsidian
+        env:
+          SUMS: ${{ inputs.sha256 }}
+        run: printf '%s\n' "$SUMS" | sha256sum --check
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            apps/obsidian/main.js
+            apps/obsidian/manifest.json
+            apps/obsidian/styles.css
+      - name: Release
+        working-directory: apps/obsidian
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          node -e '
+            const en = require("./src/core/common/messagesJson/en.json"), zh = require("./src/core/common/messagesJson/zh.json");
+            const key = `tabularium.release.${process.env.VERSION}`;
+            if (!en[key]) { console.error(`No ${key} in the version history`); process.exit(1); }
+            console.log(`${en[key]}\n\n${zh[key]}`);
+          ' > notes.md
+          gh release create "$VERSION" --title "$VERSION" --notes-file notes.md main.js manifest.json styles.css

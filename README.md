@@ -27,7 +27,7 @@ Until the plug-in is listed in Obsidian's community directory, copy `main.js`, `
 
 ## Building
 
-With Node.js 24.10.0, in this repository:
+This repository is a submodule of [Tabularium](https://github.com/Violaria/Tabularium) and is built there: the share dialogue uses the server's web texts from [Tabularium-Server](https://github.com/Violaria/Tabularium-Server), which sits beside it as `apps/server`. Clone the parent with `--recurse-submodules` and, with Node.js 24.10.0, in `apps/obsidian`:
 
 ```bash
 npm ci
@@ -36,6 +36,6 @@ npm run check       # type checks, lint, Svelte checks
 npm run test:unit
 ```
 
-It is also a submodule of [Tabularium](https://github.com/Violaria/Tabularium), which holds the server and the tests that run real Obsidian clients.
+Release files are built by GitHub Actions from the tagged commit, checked byte for byte against the tested build, and carry a build provenance attestation (`gh attestation verify main.js --repo Violaria/Tabularium-Obsidian`).
 
 The same source also produces the browser client (`src/apps/notes/`) and the command-line client (`src/apps/cli/`) that the Tabularium server uses.
