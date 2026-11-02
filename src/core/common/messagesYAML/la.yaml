@@ -1836,6 +1836,7 @@ tabularium.release.0.24.2: Sententiae arcanae et claves in paginis interretis ru
 tabularium.release.0.24.3: Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.
 tabularium.release.0.24.4: Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.
 tabularium.release.0.24.5: Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.
+"tabularium.release.1.0.3": "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis."
 "tabularium.release.1.0.2": "Codex ad recensionem indicis mutatus; usus idem manet."
 "tabularium.release.1.0.1": "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur."
 "tabularium.release.1.0.0": "Prima editio publica. Codex, interfacies et data instrumenti nomen additamenti pristini non iam adhibent; primo initio data huius instrumenti loco moventur, sine nova arcessione aut inscriptione."

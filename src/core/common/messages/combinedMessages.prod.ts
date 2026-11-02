@@ -4308,6 +4308,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Codex ad recensionem indicis mutatus; usus idem manet.",
         zh: "按目录审核修改代码，使用上没有变化。",
     },
+    "tabularium.release.1.0.3": {
+        def: "Server: Tabularius recipes offer every parameter of each provider's API; TensorRT-LLM as a local provider.",
+        la: "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis.",
+        zh: "服务器：Tabularius 配方提供各提供商接口的全部参数；新增本机提供商 TensorRT-LLM。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",

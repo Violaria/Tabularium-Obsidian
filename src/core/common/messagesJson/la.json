@@ -1128,6 +1128,7 @@
     "tabularium.release.1.0.0": "Prima editio publica. Codex, interfacies et data instrumenti nomen additamenti pristini non iam adhibent; primo initio data huius instrumenti loco moventur, sine nova arcessione aut inscriptione.",
     "tabularium.release.1.0.1": "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur.",
     "tabularium.release.1.0.2": "Codex ad recensionem indicis mutatus; usus idem manet.",
+    "tabularium.release.1.0.3": "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis.",
     "tabularium.server.address": "Inscriptio ministratoris",
     "tabularium.server.addressScheme": "Inscriptio ministratoris incipere debet ab https:// vel http://.",
     "tabularium.server.command": "Conexio ministratoris",

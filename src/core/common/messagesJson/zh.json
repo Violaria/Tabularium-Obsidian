@@ -1128,6 +1128,7 @@
     "tabularium.release.1.0.0": "首个正式公开版本。代码、界面与设备数据不再使用原插件的名字；首次启动时在本机迁移数据，无需重新取回或登录。",
     "tabularium.release.1.0.1": "设备值改存在各笔记库自己的存储中。Release 文件由 GitHub 构建并附构建来源证明。",
     "tabularium.release.1.0.2": "按目录审核修改代码，使用上没有变化。",
+    "tabularium.release.1.0.3": "服务器：Tabularius 配方提供各提供商接口的全部参数；新增本机提供商 TensorRT-LLM。",
     "tabularium.server.address": "服务器地址",
     "tabularium.server.addressScheme": "服务器地址须以 https:// 或 http:// 开头。",
     "tabularium.server.command": "服务器连接",

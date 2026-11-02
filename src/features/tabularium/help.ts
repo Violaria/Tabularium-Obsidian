@@ -4,6 +4,7 @@ export const HELP_TOPICS = ["connect", "status", "passphrase", "migrate", "rebui
 
 /** Newest first. */
 export const RELEASES = [
+    "1.0.3",
     "1.0.2",
     "1.0.1",
     "1.0.0",
