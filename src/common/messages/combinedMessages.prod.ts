@@ -4268,6 +4268,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Menu contextuale indicis plicarum rursus «Ordo» habet: ordinem adhibe aut suspende, rem in Collation.md ostende, aut eam ad summum vel imum plicae suae move, quod indicem in Collation.md pro te scribit. Plures res eiusdem plicae simul moventur et ordinem suum servant.",
         zh: "文件列表的右键菜单重新有了「排序」：应用或暂停排序、在 Collation.md 中定位，以及移到所在文件夹的最前或最后（自动改写 Collation.md 中的列表）。同一文件夹的多个项目可以一起移动，先后不变。",
     },
+    "tabularium.release.0.26.5": {
+        def: "A plug-in folder copied from another vault no longer connects to that vault: its connection is cleared at start.",
+        la: "Plica additamenti ex alio tabulario exscripta ad illud non iam conectitur: conexio initio deletur.",
+        zh: "从其他笔记库复制来的插件文件夹不再连接原笔记库，启动时清除连接。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
@@ -4362,6 +4367,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "The first sign-in requires a new password of at least 12 characters.",
         la: "Primus ingressus novam tesseram saltem 12 characterum requirit.",
         zh: "首次登录需要设置新的登录密码（至少 12 个字符）。",
+    },
+    "tabularium.server.foreignConnection": {
+        def: "Connection belonged to another vault; cleared.",
+        la: "Conexio alterius tabularii erat; deleta est.",
+        zh: "连接属于其他笔记库，已清除。",
     },
     "tabularium.server.invalidAddress": {
         def: "The server address is not valid.",

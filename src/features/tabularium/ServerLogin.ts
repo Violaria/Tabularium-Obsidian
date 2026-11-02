@@ -50,6 +50,10 @@ export class TabulariumServer {
         this.core = core;
     }
 
+    private get appId() {
+        return this.app.appId ?? "";
+    }
+
     private get file() {
         return normalizePath(`${this.plugin.manifest.dir}/tabularium.json`);
     }
@@ -72,9 +76,20 @@ export class TabulariumServer {
                 callback: () => this.open(),
             });
             const adapter = this.plugin.app.vault.adapter;
-            if (await adapter.exists(this.file))
-                this.connection = JSON.parse(await adapter.read(this.file)) as TabulariumConnection;
-            if (!this.connection) return true;
+            if (!(await adapter.exists(this.file))) return true;
+            const stored = JSON.parse(await adapter.read(this.file)) as TabulariumConnection;
+            // Settled before anything synchronises: a connection signed in from another vault is cleared here.
+            if (stored.appId && stored.appId !== this.appId) {
+                await this.forget();
+                new Notice($msg("tabularium.server.foreignConnection"));
+                return true;
+            }
+            this.connection = stored;
+            // Connections made before 0.26.5 are bound to the vault that has them now.
+            if (!stored.appId && this.appId) {
+                this.connection = { ...stored, appId: this.appId };
+                await adapter.write(this.file, JSON.stringify(this.connection, null, 2));
+            }
             const current = settings.currentSettings();
             const overrides = enforcedOverrides(current, current);
             if (Object.keys(overrides).length) await settings.applyPartial(overrides, true);
@@ -189,6 +204,7 @@ export class TabulariumServer {
             deviceId: device.id,
             deviceName,
             expiresAt: device.expiresAt,
+            appId: this.appId,
         };
         const write = async () => {
             // Nothing synchronises until the new settings and an empty local database are in place, and data.json is
@@ -230,6 +246,12 @@ export class TabulariumServer {
 
     /** Forgets the connection on this device; the server keeps the device until it is revoked there. */
     async disconnect() {
+        await this.forget();
+        await this.core.services.control.applySettings();
+    }
+
+    /** Removes the connection and its sync settings from this vault, without applying them yet. */
+    private async forget() {
         this.connection = undefined;
         await this.core.services.setting.config.delete(LIVE_SYNC_PAUSE_KEY);
         await this.plugin.app.vault.adapter.remove(this.file);
@@ -249,7 +271,6 @@ export class TabulariumServer {
             },
             true
         );
-        await this.core.services.control.applySettings();
     }
 
     open() {

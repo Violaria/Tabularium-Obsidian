@@ -10,6 +10,8 @@ export interface TabulariumConnection {
     deviceId: string;
     deviceName: string;
     expiresAt: number;
+    /** Obsidian's ID of the vault that signed in; a plug-in folder copied into another vault does not connect there. */
+    appId?: string;
 }
 export interface TabulariumUser {
     id: string;
