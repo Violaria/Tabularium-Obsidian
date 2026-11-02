@@ -11,7 +11,8 @@
         "url": "git+https://github.com/vrtmrz/livesync-commonlib.git"
     },
     "scripts": {
-        "build": "node _tools/build-package.mjs"
+        "build": "node _tools/build-package.mjs",
+        "test": "vitest run"
     },
     "sideEffects": [
         "./dist/pouchdb/pouchdb-browser.js",
