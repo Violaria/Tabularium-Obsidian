@@ -4223,6 +4223,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.",
         zh: "Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。",
     },
+    "tabularium.release.0.24.5": {
+        def: "Code for upstream features that Tabularium had already switched off (peer-to-peer sync, the set-up wizard, Setup URIs and QR codes, hidden-file and customisation sync) is removed from the plug-in, along with about a thousand unused messages. A device whose settings still turn those features on keeps them off. The 0.20.0 entry of this history shows its text again.",
+        la: "Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.",
+        zh: "插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
