@@ -220,8 +220,7 @@ export async function purgeChunksLocal(db: PouchDB.Database, docs: { id: string;
         const batchDocs = arrayToChunkedArray(docs, 100);
         let totalRemoved = 0;
         for (const docsInBatch of batchDocs) {
-            //@ts-ignore: type def missing
-            const removed = await db.purgeMulti(docsInBatch.map((e) => [e.id, e.rev]));
+            const removed = await (db as PouchDB.Database & PouchDB.PurgeMulti).purgeMulti(docsInBatch.map((e) => [e.id, e.rev]));
             const removedCount = Object.values(removed).filter((e) => "ok" in (e as object)).length;
             totalRemoved += removedCount;
             Logger(`Purging:  ${totalRemoved} / ${docs.length}`, LOG_LEVEL_NOTICE, "purge-local");
@@ -250,6 +249,8 @@ export async function collectChunks(db: PouchDB.Database, type: "INUSE" | "DANGL
     const items = docs.filter((e) => !("error" in e)).map((e) => ({ id: e.id, rev: e.value.rev }));
     return items;
 }
+/** The view server's emit, available where the map function below runs (it is stored as text). */
+declare function emit(key: unknown, value: unknown): void;
 async function prepareChunkDesignDoc(db: PouchDB.Database) {
     const chunkDesignDoc = {
         _id: "_design/chunks",
@@ -259,11 +260,9 @@ async function prepareChunkDesignDoc(db: PouchDB.Database) {
             collectDangling: {
                 map: function (doc: EntryDoc) {
                     if (doc._id.startsWith("h:")) {
-                        //@ts-ignore
                         emit([doc._id], 0);
                     } else {
                         if ("children" in doc) {
-                            //@ts-ignore
                             doc.children.forEach((e) => emit([e], 1));
                         }
                     }

@@ -15,10 +15,8 @@ export type ChunkManagerOptions = {
 };
 export type ChunkReadOptions = {
     skipCache?: boolean; // Skip cache when reading
-    /** Wait for an already-observable finite delivery lifecycle. */
+    /** Wait for an already-observable finite delivery lifecycle (the default). */
     waitForDelivery?: boolean;
-    /** @deprecated Use `waitForDelivery`. Positive values no longer represent an arrival duration. */
-    timeout?: number;
     preventRemoteRequest?: boolean; // Prevent dispatching missing chunk event
 };
 export type ChunkWriteOptions = {

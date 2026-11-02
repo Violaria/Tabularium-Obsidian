@@ -121,7 +121,7 @@ export class ArrivalWaitLayer implements IReadLayer {
         options: ChunkReadOptions,
         next: (remaining: DocumentID[]) => Promise<(EntryLeaf | false)[]>
     ): Promise<(EntryLeaf | false)[]> {
-        const waitForDelivery = options.waitForDelivery ?? (options.timeout === undefined || options.timeout > 0);
+        const waitForDelivery = options.waitForDelivery ?? true;
         if (!waitForDelivery || ids.length === 0) return ids.map(() => false);
 
         const tasks = ids.map((id) => this.enqueueWaiting(id));

@@ -1030,7 +1030,7 @@ export class CouchDBReplicator extends AbstractReplicator {
                             );
                     }
                     if (syncResult == "NEED_RETRY") {
-                        const tempSetting: RemoteDBSettings = JSON.parse(JSON.stringify(setting));
+                        const tempSetting = JSON.parse(JSON.stringify(setting)) as RemoteDBSettings;
                         tempSetting.batch_size = Math.ceil(tempSetting.batch_size / 2) + 2;
                         tempSetting.batches_limit = Math.ceil(tempSetting.batches_limit / 2) + 2;
                         if (tempSetting.batch_size <= 5 && tempSetting.batches_limit <= 5) {
@@ -1528,7 +1528,7 @@ export class CouchDBReplicator extends AbstractReplicator {
                         };
                     }
                     if (syncResult == "NEED_RETRY") {
-                        const tempSetting: RemoteDBSettings = JSON.parse(JSON.stringify(setting));
+                        const tempSetting = JSON.parse(JSON.stringify(setting)) as RemoteDBSettings;
                         tempSetting.batch_size = Math.ceil(tempSetting.batch_size / 2) + 2;
                         tempSetting.batches_limit = Math.ceil(tempSetting.batches_limit / 2) + 2;
                         if (tempSetting.batch_size <= 5 && tempSetting.batches_limit <= 5) {

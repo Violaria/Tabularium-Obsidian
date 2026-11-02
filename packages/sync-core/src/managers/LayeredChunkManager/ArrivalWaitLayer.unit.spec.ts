@@ -30,16 +30,15 @@ describe("ArrivalWaitLayer", () => {
         expect(eventEmitter).not.toHaveBeenCalled();
     });
 
-    it.each([{ waitForDelivery: false }, { timeout: 0 }, { timeout: -1 }])(
-        "returns immediately when delivery waiting is disabled by $waitForDelivery$timeout",
-        async (options) => {
-            await expect(arrivalWaitLayer.read(["chunk-1" as DocumentID], options, vi.fn())).resolves.toEqual([false]);
-            expect(eventEmitter).not.toHaveBeenCalled();
-        }
-    );
+    it("returns immediately when delivery waiting is disabled", async () => {
+        await expect(
+            arrivalWaitLayer.read(["chunk-1" as DocumentID], { waitForDelivery: false }, vi.fn())
+        ).resolves.toEqual([false]);
+        expect(eventEmitter).not.toHaveBeenCalled();
+    });
 
-    it.each([{}, { waitForDelivery: true }, { timeout: 1 }, { timeout: 60_000 }])(
-        "does not guess an arrival delay when no producer is observable with $timeout",
+    it.each([{}, { waitForDelivery: true }])(
+        "does not guess an arrival delay when no producer is observable with %o",
         async (options) => {
             const id = "chunk-1" as DocumentID;
 

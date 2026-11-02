@@ -45,8 +45,8 @@ describe("document history preferences", () => {
         saveDocumentHistoryPreference(app as never, DOCUMENT_HISTORY_PREFERENCE_KEYS.highlightDiff, true);
         saveDocumentHistoryPreference(app as never, DOCUMENT_HISTORY_PREFERENCE_KEYS.highlightDiff, false);
 
-        expect(app.loadLocalStorage).toHaveBeenCalledWith("ols-history-diffonly");
-        expect(app.saveLocalStorage).toHaveBeenNthCalledWith(1, "ols-history-highlightdiff", "1");
-        expect(app.saveLocalStorage).toHaveBeenNthCalledWith(2, "ols-history-highlightdiff", null);
+        expect(app.loadLocalStorage).toHaveBeenCalledWith("tabularium:history-diff-only");
+        expect(app.saveLocalStorage).toHaveBeenNthCalledWith(1, "tabularium:history-highlight-diff", "1");
+        expect(app.saveLocalStorage).toHaveBeenNthCalledWith(2, "tabularium:history-highlight-diff", null);
     });
 });

@@ -122,17 +122,16 @@ export async function declareRemoteFeatures(
 
 export const checkSyncInfo = async (db: PouchDB.Database): Promise<boolean> => {
     try {
-        const syncinfo = (await db.get(SYNCINFO_ID)) as SyncInfo;
-        console.log(syncinfo);
+        await db.get(SYNCINFO_ID);
         // if we could decrypt the doc, it must be ok.
         return true;
     } catch (ex) {
         if (isErrorOfMissingDoc(ex)) {
             const randomStrSrc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const temp = [...Array(30)]
-                .map((_e) => Math.floor(Math.random() * randomStrSrc.length))
-                .map((e) => randomStrSrc[e])
-                .join("");
+            const temp = Array.from(
+                { length: 30 },
+                () => randomStrSrc[Math.floor(Math.random() * randomStrSrc.length)]
+            ).join("");
             const newSyncInfo: SyncInfo = {
                 _id: SYNCINFO_ID,
                 type: "syncinfo",
@@ -143,7 +142,7 @@ export const checkSyncInfo = async (db: PouchDB.Database): Promise<boolean> => {
             }
             return false;
         } else {
-            console.dir(ex);
+            Logger(ex, LOG_LEVEL_VERBOSE);
             return false;
         }
     }

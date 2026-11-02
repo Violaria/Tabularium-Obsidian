@@ -1,5 +1,5 @@
 import { isPlainText } from "@lib/string_and_binary/path.ts";
-import type { FilePath, UXDataWriteOptions, UXFileInfoStub, UXFolderInfo } from "@lib/common/types.ts";
+import type { FilePath, UXDataWriteOptions, UXFileInfoStub, UXFolderInfo, UXStat } from "@lib/common/types.ts";
 import { createBinaryBlob, isDocContentSame } from "@lib/common/utils.ts";
 import type { IStorageAccessManager } from "@lib/interfaces/StorageAccess.ts";
 import type { IAPIService, IPathService, ISettingService, IVaultService } from "@lib/services/base/IService.ts";
@@ -28,22 +28,39 @@ export interface FileAccessBaseDependencies {
 /**
  * Type helper to extract the abstract file type from a file system adapter
  */
-export type ExtractAbstractFile<T> = T extends IFileSystemAdapter<infer A, any, any, any> ? A : never;
+export type ExtractAbstractFile<T> = T extends IFileSystemAdapter<infer A, unknown, unknown, UXStat> ? A : never;
+
+/** What every adapter's native file has: a path and its stat. */
+export type NativeFileShape = { path: string; stat: { ctime: number; mtime: number; size: number } };
+/** What every adapter's native folder has. */
+export type NativeFolderShape = { path: string };
 
 /**
  * Type helper to extract the file type from a file system adapter
  */
-export type ExtractFile<T> = T extends IFileSystemAdapter<any, infer F, any, any> ? F : never;
+export type ExtractFile<T> = NativeFileShape & (T extends IFileSystemAdapter<unknown, infer F, unknown, UXStat> ? F : never);
 
 /**
  * Type helper to extract the folder type from a file system adapter
  */
-export type ExtractFolder<T> = T extends IFileSystemAdapter<any, any, infer D, any> ? D : never;
+export type ExtractFolder<T> = NativeFolderShape &
+    (T extends IFileSystemAdapter<unknown, unknown, infer D, UXStat> ? D : never);
 
 /**
  * Type helper to extract the stat type from a file system adapter
  */
-export type ExtractStat<T> = T extends IFileSystemAdapter<any, any, any, infer S> ? S : never;
+export type ExtractStat<T> = T extends IFileSystemAdapter<unknown, unknown, unknown, infer S> ? S : never;
+
+/** A file system adapter described by its own native types; FileAccessBase and its users are generic over it. */
+export type FileSystemAdapterOf<TAdapter> = IFileSystemAdapter<
+    ExtractAbstractFile<TAdapter>,
+    ExtractFile<TAdapter>,
+    ExtractFolder<TAdapter>,
+    ExtractStat<TAdapter>
+>;
+
+/** Any native entry of the adapter: abstract file, file or folder. */
+export type ExtractEntry<T> = ExtractAbstractFile<T> | ExtractFile<T> | ExtractFolder<T>;
 
 /**
  * Base class for file access operations
@@ -51,7 +68,7 @@ export type ExtractStat<T> = T extends IFileSystemAdapter<any, any, any, infer S
  *
  * @template TAdapter - The file system adapter type, which determines all native file types
  */
-export class FileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, any>> {
+export class FileAccessBase<TAdapter extends FileSystemAdapterOf<TAdapter>> {
     protected storageAccessManager: IStorageAccessManager;
     protected vaultService: IVaultService;
     protected settingService: ISettingService;
@@ -96,7 +113,7 @@ export class FileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, a
         return this.adapter.typeGuard.isFolder(item);
     }
 
-    getPath(file: ExtractAbstractFile<TAdapter> | string): FilePath {
+    getPath(file: ExtractEntry<TAdapter> | string): FilePath {
         return this.adapter.path.getPath(file);
     }
 
@@ -112,7 +129,7 @@ export class FileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, a
         return this.adapter.path.normalisePath(path);
     }
 
-    protected _writeOp<T extends ExtractAbstractFile<TAdapter> | string, U>(
+    protected _writeOp<T extends ExtractEntry<TAdapter> | string, U>(
         file: T,
         callback: (path: FilePath, file: T) => Promise<U>
     ): Promise<U> {
@@ -120,7 +137,7 @@ export class FileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, a
         return this.storageAccessManager.processWriteFile(path, async () => await callback(path, file));
     }
 
-    protected _readOp<T extends ExtractAbstractFile<TAdapter> | string, U>(
+    protected _readOp<T extends ExtractEntry<TAdapter> | string, U>(
         file: T,
         callback: (path: FilePath, file: T) => Promise<U>
     ): Promise<U> {
@@ -267,11 +284,11 @@ export class FileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, a
         return await this.adapter.storage.append(normalizedPath, data, options);
     }
 
-    async delete(file: ExtractAbstractFile<TAdapter> | ExtractFolder<TAdapter>, force?: boolean): Promise<void> {
+    async delete(file: ExtractEntry<TAdapter>, force?: boolean): Promise<void> {
         return await this._writeOp(file, async (path, file) => await this.adapter.vault.delete(file, force));
     }
 
-    async trash(file: ExtractAbstractFile<TAdapter> | ExtractFolder<TAdapter>, force?: boolean): Promise<void> {
+    async trash(file: ExtractEntry<TAdapter>, force?: boolean): Promise<void> {
         return await this._writeOp(file, async (path, file) => await this.adapter.vault.trash(file, force));
     }
 

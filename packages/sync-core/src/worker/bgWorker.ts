@@ -14,6 +14,8 @@ import type {
     EncryptHKDFProcessItem,
     EncryptProcessItem,
     ProcessItem,
+    ResultPayload,
+    ResultPayloadWithSeq,
     SplitArguments,
     SplitProcessItem,
 } from "./universalTypes.ts";
@@ -121,8 +123,9 @@ export function initialiseWorkerModule(events: SyncEventHub) {
     }
     workers = initialiseWorkers();
     for (const inst of workers) {
-        inst.worker.onmessage = ({ data }) => {
-            const key = data.key as number;
+        // The reply's shape follows the task: pieces with a sequence number for splitting, one result for encryption.
+        inst.worker.onmessage = ({ data }: MessageEvent<ResultPayload | ResultPayloadWithSeq>) => {
+            const key = data.key;
             // debugger;
             const process = tasks.get(key);
             if (!process) {
@@ -130,7 +133,7 @@ export function initialiseWorkerModule(events: SyncEventHub) {
                 return;
             }
             if (process.type === "split") {
-                handleTaskSplit(process, data);
+                handleTaskSplit(process, data as ResultPayloadWithSeq);
             } else if (process.type === "encrypt" || process.type === "decrypt") {
                 handleTaskEncrypt(process, data);
             } else if (process.type === "encryptHKDF" || process.type === "decryptHKDF") {

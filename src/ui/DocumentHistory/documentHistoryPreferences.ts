@@ -1,8 +1,8 @@
 import { requireApiVersion, type App } from "@/deps.ts";
 
 export const DOCUMENT_HISTORY_PREFERENCE_KEYS = {
-    diffOnly: "ols-history-diffonly",
-    highlightDiff: "ols-history-highlightdiff",
+    diffOnly: "tabularium:history-diff-only",
+    highlightDiff: "tabularium:history-highlight-diff",
 } as const;
 
 export type DocumentHistoryPreferenceKey =

@@ -151,8 +151,8 @@ describe("LayeredChunkManager Integration Tests", () => {
             expect((results[0] as EntryLeaf)._id).toBe("chunk-1");
         });
 
-        it("should return false for non-existent chunks with timeout=0", async () => {
-            const results = await chunkManager.read(["non-existent" as DocumentID], { timeout: 0 });
+        it("should return false for non-existent chunks without waiting for delivery", async () => {
+            const results = await chunkManager.read(["non-existent" as DocumentID], { waitForDelivery: false });
 
             expect(results).toHaveLength(1);
             expect(results[0]).toBe(false);
@@ -283,7 +283,7 @@ describe("LayeredChunkManager Integration Tests", () => {
             chunkManager.addListener(EVENT_MISSING_CHUNKS, listener);
 
             // Read non-existent chunks (will trigger missing chunks event)
-            const promise = chunkManager.read(["missing-1" as DocumentID, "missing-2" as DocumentID], { timeout: 10 });
+            const promise = chunkManager.read(["missing-1" as DocumentID, "missing-2" as DocumentID], { waitForDelivery: true });
 
             // Wait a bit for event to be emitted
             await new Promise((resolve) => setTimeout(resolve, 5));
@@ -298,7 +298,7 @@ describe("LayeredChunkManager Integration Tests", () => {
             const listener = vi.fn();
             chunkManager.addListener(EVENT_MISSING_CHUNKS, listener);
 
-            await chunkManager.read(["missing-1" as DocumentID], { timeout: 10, preventRemoteRequest: true });
+            await chunkManager.read(["missing-1" as DocumentID], { waitForDelivery: true, preventRemoteRequest: true });
 
             expect(listener).not.toHaveBeenCalled();
         });

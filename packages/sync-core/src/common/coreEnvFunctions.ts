@@ -39,6 +39,6 @@ export type CompatIntervalHandle = ReturnType<typeof setInterval> | number;
  */
 export const _fetch = compatGlobal.fetch.bind(compatGlobal);
 
-type ActiveDocumentWindow = typeof window & { activeDocument?: Document };
-const activeDocumentWindow = compatGlobal as ActiveDocumentWindow;
-export const _activeDocument: Document = activeDocumentWindow.activeDocument ?? activeDocumentWindow.document;
+// Obsidian's window has the document of the active (possibly popout) window; elsewhere there is only document.
+const { activeDocument } = compatGlobal as { activeDocument?: Document };
+export const _activeDocument: Document = activeDocument ?? compatGlobal.document;

@@ -66,10 +66,11 @@ export interface ICommandCompat {
     id: string;
     name: string;
     icon?: string;
-    callback?: () => any;
-    checkCallback?: (checking: boolean) => boolean | void;
-    editorCallback?: (editor: any, ctx: any) => any;
-    editorCheckCallback?: (checking: any, editor: any, ctx: any) => boolean | void;
+    callback?(): unknown;
+    checkCallback?(checking: boolean): boolean | void;
+    // The editor and its context are the platform's own types (in Obsidian: Editor and MarkdownView or MarkdownFileInfo).
+    editorCallback?(editor: unknown, ctx: unknown): unknown;
+    editorCheckCallback?(checking: boolean, editor: unknown, ctx: unknown): boolean | void;
 }
 
 export interface IAPIService {

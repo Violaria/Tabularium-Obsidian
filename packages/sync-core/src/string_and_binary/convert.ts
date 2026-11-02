@@ -31,7 +31,7 @@ export async function arrayBufferToBase64Single(buffer: Uint8Array<ArrayBuffer> 
     }
 }
 export { uint8ArrayToHexString, hexStringToUint8Array } from "octagonal-wheels/binary/hex";
-export { encodeBinaryEach, decodeToArrayBuffer } from "octagonal-wheels/binary/encodedUTF16";
+export { decodeToArrayBuffer } from "octagonal-wheels/binary/encodedUTF16";
 export { decodeBinary, encodeBinary } from "octagonal-wheels/binary";
 export { escapeStringToHTML } from "octagonal-wheels/string";
 export function versionNumberString2Number(version: string): number {

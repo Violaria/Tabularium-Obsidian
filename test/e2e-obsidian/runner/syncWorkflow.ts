@@ -127,7 +127,7 @@ export async function readE2eCompatibilityMarker(
             "const expectedStorageKey=`tabularium:${vaultName}${additionalSuffix}-${markerKey}`;",
             "return JSON.stringify({",
             "vaultName,additionalSuffix,expectedStorageKey,",
-            "rawStorageValue:app.loadLocalStorage(expectedStorageKey),",
+            "rawStorageValue:app.loadLocalStorage(expectedStorageKey)?.[0]??null,",
             "serviceValue:await setting.config.getValue(markerKey,''),",
             "versionUpFlash:settings.versionUpFlash,",
             "});",

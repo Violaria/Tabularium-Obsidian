@@ -7,7 +7,7 @@ import replication from "pouchdb-replication";
 import find from "pouchdb-find";
 import transform from "transform-pouch";
 //@ts-ignore
-import { findPathToLeaf } from "pouchdb-merge";
+import { findPathToLeaf, type RevisionTreeNode } from "pouchdb-merge";
 //@ts-ignore
 import { adapterFun } from "pouchdb-utils";
 //@ts-ignore
@@ -22,6 +22,12 @@ type PurgeMultiResult = {
     documentWasRemovedCompletely: boolean;
 };
 type PurgeMultiParam = [docId: string, rev$$1: string];
+/** The adapter internals the purge plug-in uses; PouchDB's typings do not describe them. */
+type PurgeCapableDatabase = PouchDB.Database & {
+    adapter: string;
+    _purge?: (docId: string, path: string[], callback: (error: Error, result: PurgeMultiResult) => void) => void;
+    _getRevisionTree: (docId: string, callback: (error: Error, revs: RevisionTreeNode[]) => void) => void;
+};
 function appendPurgeSeqs(db: PouchDB.Database, docs: PurgeMultiParam[]) {
     return (
         db
@@ -70,6 +76,7 @@ function appendPurgeSeqs(db: PouchDB.Database, docs: PurgeMultiParam[]) {
 PouchDB.prototype.purgeMulti = adapterFun(
     "_purgeMulti",
     function (
+        this: PurgeCapableDatabase,
         docs: PurgeMultiParam[],
         callback: (
             error?: Error,
@@ -92,7 +99,7 @@ PouchDB.prototype.purgeMulti = adapterFun(
             (param) => () =>
                 new Promise<[PurgeMultiParam, PurgeMultiResult | Error]>((res, rej) => {
                     const [docId, rev$$1] = param;
-                    self._getRevisionTree(docId, (error: Error, revs: string[]) => {
+                    self._getRevisionTree(docId, (error: Error, revs: RevisionTreeNode[]) => {
                         if (error) {
                             return res([param, error]);
                         }

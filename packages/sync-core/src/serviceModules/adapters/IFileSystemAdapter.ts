@@ -10,13 +10,13 @@ import type { IVaultAdapter } from "./IVaultAdapter.ts";
  * Composes all other adapters and provides platform-specific operations
  */
 export interface IFileSystemAdapter<
-    TNativeAbstractFile = any,
-    TNativeFile = any,
-    TNativeFolder = any,
+    TNativeAbstractFile,
+    TNativeFile,
+    TNativeFolder,
     TStat extends UXStat = UXStat,
 > {
-    /** Path operations */
-    readonly path: IPathAdapter<TNativeAbstractFile>;
+    /** Path operations, for any native entry */
+    readonly path: IPathAdapter<TNativeAbstractFile | TNativeFile | TNativeFolder>;
 
     /** Type guard operations */
     readonly typeGuard: ITypeGuardAdapter<TNativeFile, TNativeFolder>;

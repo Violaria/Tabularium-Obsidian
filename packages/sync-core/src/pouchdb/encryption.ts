@@ -297,7 +297,7 @@ async function outgoingDecryptHKDF(
             if (decryptedEden === false) throw new Error(MESSAGE_FALLBACK_DECRYPT_FAILED);
             readEden = {
                 ...readEden,
-                ...JSON.parse(decryptedEden),
+                ...(JSON.parse(decryptedEden) as EntryWithEden["eden"]),
             };
             edenDecrypted = true;
         } catch (ex) {
@@ -318,7 +318,7 @@ async function outgoingDecryptHKDF(
             );
             readEden = {
                 ...readEden,
-                ...JSON.parse(decryptedEdenData),
+                ...(JSON.parse(decryptedEdenData) as EntryWithEden["eden"]),
             };
             edenDecrypted = true;
         } catch (ex) {
@@ -427,7 +427,7 @@ async function outgoingDecryptV1(
             if (_shouldDecryptEden) {
                 loadDoc.eden = JSON.parse(
                     await decrypt(loadDoc.eden[EDEN_ENCRYPTED_KEY].data, passphrase, useDynamicIterationCount)
-                );
+                ) as EntryWithEden["eden"];
             }
             if (migrationDecrypt) {
                 decrypted.set(loadDoc._id, true);
@@ -447,7 +447,7 @@ async function outgoingDecryptV1(
                     if (_shouldDecryptEden) {
                         loadDoc.eden = JSON.parse(
                             await decrypt(loadDoc.eden[EDEN_ENCRYPTED_KEY].data, passphrase, false)
-                        );
+                        ) as EntryWithEden["eden"];
                     }
                     if (migrationDecrypt) {
                         decrypted.set(loadDoc._id, true);
@@ -490,7 +490,7 @@ export function getConfiguredFunctionsForEncryption(
     incoming: (doc: AnyEntry | EntryLeaf) => Promise<AnyEntry | EntryLeaf>;
     outgoing: (doc: EntryDoc) => Promise<AnyEntry | EntryLeaf>;
 } {
-    const decryptedCache = new Map();
+    const decryptedCache = new Map<DocumentID, boolean>();
     const incoming = (doc: AnyEntry | EntryLeaf) =>
         algorithm === E2EEAlgorithms.V2
             ? incomingEncryptHKDF(doc, passphrase, useDynamicIterationCount, getPBKDF2Salt, encryptInternalMetadata)

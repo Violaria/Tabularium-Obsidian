@@ -19,9 +19,8 @@ import { StorageEventManager } from "@lib/interfaces/StorageEventManager.ts";
 import { createBlob, fireAndForget, type CustomRegExp } from "@lib/common/utils";
 import type { VaultService } from "@lib/services/base/VaultService";
 import type { SettingService } from "@lib/services/base/SettingService";
-import type { FileAccessBase, ExtractFile, ExtractFolder } from "@lib/serviceModules/FileAccessBase";
-import type { IFileSystemAdapter } from "@lib/serviceModules/adapters";
-export interface StorageAccessBaseDependencies<TAdapter extends IFileSystemAdapter<any, any, any, any>> {
+import type { FileAccessBase, ExtractFile, ExtractFolder, FileSystemAdapterOf } from "@lib/serviceModules/FileAccessBase";
+export interface StorageAccessBaseDependencies<TAdapter extends FileSystemAdapterOf<TAdapter>> {
     API: APIService;
     appLifecycle: AppLifecycleService;
     fileProcessing: FileProcessingService;
@@ -31,7 +30,7 @@ export interface StorageAccessBaseDependencies<TAdapter extends IFileSystemAdapt
     storageAccessManager: IStorageAccessManager;
     vaultAccess: FileAccessBase<TAdapter>;
 }
-export class ServiceFileAccessBase<TAdapter extends IFileSystemAdapter<any, any, any, any>>
+export class ServiceFileAccessBase<TAdapter extends FileSystemAdapterOf<TAdapter>>
     extends ServiceModuleBase<StorageAccessBaseDependencies<TAdapter>>
     implements StorageAccess
 {
@@ -332,7 +331,8 @@ export class ServiceFileAccessBase<TAdapter extends IFileSystemAdapter<any, any,
         const xFile = typeof file === "string" ? await this.vaultAccess.getAbstractFileByPath(file) : file;
         if (xFile === null) return false;
         if (this.vaultAccess.isFolder(xFile)) return false;
-        return this.vaultAccess.recentlyTouched(xFile);
+        // Anything but a folder is a file.
+        return this.vaultAccess.recentlyTouched(xFile as ExtractFile<TAdapter> | UXFileInfoStub);
     }
     clearTouched(): void {
         this.vaultAccess.clearTouched();
@@ -359,7 +359,7 @@ export class ServiceFileAccessBase<TAdapter extends IFileSystemAdapter<any, any,
         if (this.vaultAccess.isFile(file)) {
             if (!(await this.vault.isTargetFile(filePath))) return;
         }
-        const dir = (file as { parent: ExtractFolder<TAdapter> | null }).parent;
+        const dir = (file as { parent?: ExtractFolder<TAdapter> | null }).parent;
         const settings = this.setting.currentSettings();
         if (settings.trashInsteadDelete) {
             await this.vaultAccess.trash(file, false);
@@ -368,8 +368,9 @@ export class ServiceFileAccessBase<TAdapter extends IFileSystemAdapter<any, any,
         }
         this._log(`xxx <- STORAGE (deleted) ${filePath}`);
         if (dir) {
-            this._log(`files: ${(dir as { children?: unknown[] })?.children?.length ?? "unknown"}`);
-            if ((dir?.children?.length ?? 0) === 0) {
+            const children = (dir as { children?: unknown[] }).children;
+            this._log(`files: ${children?.length ?? "unknown"}`);
+            if ((children?.length ?? 0) === 0) {
                 if (!settings.doNotDeleteFolder) {
                     this._log(
                         `All files under the parent directory (${dir.path}) have been deleted, so delete this one.`

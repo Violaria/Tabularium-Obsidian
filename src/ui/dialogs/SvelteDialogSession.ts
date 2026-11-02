@@ -46,11 +46,7 @@ const svelteDialogRenderer: SvelteDialogRenderer = {
 };
 
 /** Owns one Svelte dialogue result and mount lifecycle for a concrete host surface. */
-export class SvelteDialogSession<
-    TResult,
-    TInitial,
-    TContext extends ServiceContext = ServiceContext,
-> {
+export class SvelteDialogSession<TResult, TInitial, TContext extends ServiceContext = ServiceContext> {
     private readonly surface: SvelteDialogSurface;
     private readonly context: TContext;
     private readonly dependencies: SvelteDialogManagerDependencies<TContext>;
@@ -94,7 +90,8 @@ export class SvelteDialogSession<
             this.surface.close();
         });
 
-        this.mountedDialog = this.renderer.mount(this.dialogHost, this.surface.contentEl, {
+        // The host forwards these props unchanged whatever the result type; its own type says unknown.
+        const props: DialogHostProps<TResult, TInitial> = {
             onSetupContext: (props: DialogSvelteComponentBaseProps<TResult, TInitial>) => {
                 setupDialogContext({
                     ...props,
@@ -113,7 +110,8 @@ export class SvelteDialogSession<
             },
             getInitialData: () => this.initialData,
             mountComponent: this.component,
-        });
+        };
+        this.mountedDialog = this.renderer.mount(this.dialogHost, this.surface.contentEl, props as DialogHostProps);
     }
 
     waitForClose(): Promise<TResult | undefined> {

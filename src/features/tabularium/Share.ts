@@ -6,7 +6,7 @@ import { mount, unmount } from "svelte";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import type { PluginCore } from "@/main";
 import { getResolvedLang } from "@/core/common/translation";
-import { catalogues, type Language } from "../../../../server/ui/messages";
+import { catalogues, type Language } from "./share/texts";
 import type { TabulariumServer } from "./ServerLogin";
 import type { TabulariumSorting } from "./FileSorting";
 import ShareDialog from "./share/ShareDialog.svelte";

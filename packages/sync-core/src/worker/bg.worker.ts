@@ -8,8 +8,8 @@ import type { EncryptArguments } from "./universalTypes.ts";
 import { processSplit } from "./bg.worker.splitting.ts";
 import { processEncryption } from "./bg.worker.encryption.ts";
 
-self.onmessage = (e: MessageEvent) => {
-    const data = e.data.data as SplitArguments | EncryptArguments;
+self.onmessage = (e: MessageEvent<{ data: SplitArguments | EncryptArguments }>) => {
+    const data = e.data.data;
     if (data.type === "split") {
         return processSplit(data);
     } else if (data.type === "encrypt" || data.type === "decrypt") {

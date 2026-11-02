@@ -10,13 +10,17 @@ export interface VaultStorage {
     removeItem(key: string): void;
 }
 
+/**
+ * Obsidian stores a value as JSON and removes the key when the value is falsy, so an empty string would be lost; each
+ * value is kept inside a one-element array.
+ */
 export function createVaultStorage(app: App): VaultStorage {
     return {
         getItem: (key) => {
-            const value: unknown = app.loadLocalStorage(key);
-            return typeof value === "string" ? value : null;
+            const stored: unknown = app.loadLocalStorage(key);
+            return Array.isArray(stored) && typeof stored[0] === "string" ? stored[0] : null;
         },
-        setItem: (key, value) => app.saveLocalStorage(key, value),
+        setItem: (key, value) => app.saveLocalStorage(key, [value]),
         removeItem: (key) => app.saveLocalStorage(key, null),
     };
 }

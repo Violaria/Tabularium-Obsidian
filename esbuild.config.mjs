@@ -109,6 +109,7 @@ const plugins = [
         setup(build) {
             let count = 0;
             build.onEnd(async (result) => {
+                if (result.errors.length) return;
                 if (count++ === 0) {
                     console.log("first build:");
                     if (prod) {

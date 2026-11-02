@@ -39,7 +39,7 @@ export type DialogControlBase<T, U> = {
     closeDialog: () => void;
 } & HasSetResult<T> &
     HasGetInitialData<U>;
-export type DialogHostProps<T = any, U = any> = DialogSvelteComponentBaseProps<T, U> & {
+export type DialogHostProps<T = unknown, U = unknown> = DialogSvelteComponentBaseProps<T, U> & {
     /**
      * The Svelte component to mount inside the dialog host
      */
@@ -50,7 +50,10 @@ export type DialogHostProps<T = any, U = any> = DialogSvelteComponentBaseProps<T
      */
     onSetupContext?(props: DialogSvelteComponentBaseProps<T, U>): void;
 };
-export type DialogContext<C extends ServiceContext = ServiceContext, T = any, U = any> = DialogControlBase<T, U> & {
+export type DialogContext<C extends ServiceContext = ServiceContext, T = unknown, U = unknown> = DialogControlBase<
+    T,
+    U
+> & {
     context: C;
     services: SvelteDialogManagerDependencies<C>;
 };
@@ -67,7 +70,7 @@ export interface SvelteDialogManager<T extends ServiceContext> {
 }
 
 export const CONTEXT_DIALOG_CONTROLS = "svelte-dialog-controls";
-export function setupDialogContext<T extends DialogContext>(controls: T) {
+export function setupDialogContext<C extends ServiceContext, T, U>(controls: DialogContext<C, T, U>) {
     setContext(CONTEXT_DIALOG_CONTROLS, controls);
 }
 export function getDialogContext<T = unknown, U = unknown>(): DialogContext<ServiceContext, T, U> {
@@ -166,29 +169,28 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
                 }
             });
             this.resultPromiseWithResolvers = pr;
-            this.mountedComponent = mount(d, {
-                target: contentEl,
-                props: {
-                    onSetupContext: (props: DialogSvelteComponentBaseProps<T, U>) => {
-                        setupDialogContext({
-                            ...props,
-                            context: this.context,
-                            services: this.dependents,
-                        } satisfies DialogContext<C>);
-                    },
-                    setTitle: (title: string) => {
-                        dialog.setTitle(title);
-                    },
-                    closeDialog: () => {
-                        dialog.close();
-                    },
-                    setResult: (result: T) => {
-                        this.result = result;
-                    },
-                    getInitialData: () => this.initialData,
-                    mountComponent: this.component,
+            // The host forwards these props unchanged whatever the result type; its own type says unknown.
+            const props: DialogHostProps<T, U> = {
+                onSetupContext: (props: DialogSvelteComponentBaseProps<T, U>) => {
+                    setupDialogContext({
+                        ...props,
+                        context: this.context,
+                        services: this.dependents,
+                    } satisfies DialogContext<C, T, U>);
                 },
-            });
+                setTitle: (title: string) => {
+                    dialog.setTitle(title);
+                },
+                closeDialog: () => {
+                    dialog.close();
+                },
+                setResult: (result: T) => {
+                    this.result = result;
+                },
+                getInitialData: () => this.initialData,
+                mountComponent: this.component,
+            };
+            this.mountedComponent = mount(d, { target: contentEl, props: props as DialogHostProps });
         }
         waitForClose(): Promise<T | undefined> {
             if (!this.resultPromiseWithResolvers) {
@@ -205,7 +207,7 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
             });
         }
     };
-    return SvelteDialog as SvelteDialogClass<TBase>;
+    return SvelteDialog;
 }
 
 export abstract class SvelteDialogManagerBase<T extends ServiceContext> implements SvelteDialogManager<T> {

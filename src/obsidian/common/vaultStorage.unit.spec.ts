@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { adoptSharedValues, type VaultStorage } from "./vaultStorage";
+import type { App } from "obsidian";
+import { adoptSharedValues, createVaultStorage, type VaultStorage } from "./vaultStorage";
 
 function sharedStorage(entries: Record<string, string>): Storage {
     const map = new Map(Object.entries(entries));
@@ -33,5 +34,24 @@ describe("moving device values into the vault's own storage", () => {
         shared.setItem("tabularium:late", "y");
         adoptSharedValues(shared, vault);
         expect(vault.getItem("tabularium:late")).toBeNull();
+    });
+});
+
+describe("the vault's storage", () => {
+    it("keeps empty strings, which Obsidian's storage would drop", () => {
+        // App#saveLocalStorage as Obsidian implements it: JSON, and a falsy value removes the key.
+        const map = new Map<string, string>();
+        const app = {
+            loadLocalStorage: (key: string): unknown => (map.has(key) ? JSON.parse(map.get(key)!) : null),
+            saveLocalStorage: (key: string, value: unknown) => (value ? map.set(key, JSON.stringify(value)) : map.delete(key)),
+        } as unknown as App;
+        const storage = createVaultStorage(app);
+        storage.setItem("a", "");
+        storage.setItem("b", "1");
+        expect(storage.getItem("a")).toBe("");
+        expect(storage.getItem("b")).toBe("1");
+        storage.removeItem("b");
+        expect(storage.getItem("b")).toBeNull();
+        expect(storage.getItem("missing")).toBeNull();
     });
 });

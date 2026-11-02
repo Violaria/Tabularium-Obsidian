@@ -290,7 +290,7 @@ export async function checkRemoteFeaturesForInitialSync(
     const text = await readResponseText(response, operation);
     let result: { total_rows?: number; rows?: Array<{ key?: string; error?: string; doc?: unknown }> };
     try {
-        result = JSON.parse(text);
+        result = JSON.parse(text) as typeof result;
     } catch (cause) {
         throw new StreamingFetchFailure("protocol", "The remote feature response is invalid.", false, { cause });
     }
@@ -766,7 +766,7 @@ export async function fetchChangesForInitialSync(
                     }
                     throw new StreamingFetchFailure(
                         "protocol",
-                        `Fast Fetch could not read a required revision for ${result.id}: ${String(item.reason ?? item.error)}.`,
+                        `Fast Fetch could not read a required revision for ${result.id}: ${typeof item.reason === "string" ? item.reason : item.error}.`,
                         false
                     );
                 }
