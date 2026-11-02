@@ -4273,6 +4273,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Plica additamenti ex alio tabulario exscripta ad illud non iam conectitur: conexio initio deletur.",
         zh: "从其他笔记库复制来的插件文件夹不再连接原笔记库，启动时清除连接。",
     },
+    "tabularium.release.0.26.6": {
+        def: "Internal restructuring, with no change in use. Style sheets and dependencies follow the community review.",
+        la: "Structura interna ordinata, usu non mutato. Folia stilorum et dependentiae recensionem communitatis sequuntur.",
+        zh: "内部结构整理，使用上没有变化；样式表和依赖按社区审核的建议更新。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",

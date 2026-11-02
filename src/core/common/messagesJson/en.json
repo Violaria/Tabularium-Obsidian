@@ -847,6 +847,7 @@
     "tabularium.release.0.26.3": "Needs Obsidian 1.13 or later. The settings page is laid out like Obsidian's own: the connection first, then a page each for sync, file sorting, Send to Kindle, appearance, maintenance and help, and the search box of Obsidian's settings finds every setting. The sorting note is now Collation.md: a sortspec.md with no Collation.md beside it is no longer read, and Settings → File sorting renames it after a preview, converting rules in its front matter. Web notes, shares and Tabularius use Collation.md as well.",
     "tabularium.release.0.26.4": "The file list's context menu has Sorting again: apply or pause sorting, show the item in Collation.md, or move it to the top or the bottom of its folder, which writes the list in Collation.md for you. Several items of one folder move together and keep their order.",
     "tabularium.release.0.26.5": "A plug-in folder copied from another vault no longer connects to that vault: its connection is cleared at start.",
+    "tabularium.release.0.26.6": "Internal restructuring, with no change in use. Style sheets and dependencies follow the community review.",
     "tabularium.release.0.3.0": "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
     "tabularium.release.0.4.0": "Interface in English, Chinese and Latin; web notes can be edited.",
     "tabularium.release.0.5.0": "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",

@@ -1821,6 +1821,7 @@ tabularium.release.0.24.2: 网页上输入的密码短语与密钥重新显示�
 tabularium.release.0.24.3: SSH 主机中登记为禁止的主机，Tabularius 在任何档位都不会抓取指向它的网页（跳转之后也一样）。
 tabularium.release.0.24.4: Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。
 tabularium.release.0.24.5: 插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。
+"tabularium.release.0.26.6": "内部结构整理，使用上没有变化；样式表和依赖按社区审核的建议更新。"
 "tabularium.release.0.26.5": "从其他笔记库复制来的插件文件夹不再连接原笔记库，启动时清除连接。"
 "tabularium.release.0.26.4": "文件列表的右键菜单重新有了「排序」：应用或暂停排序、在 Collation.md 中定位，以及移到所在文件夹的最前或最后（自动改写 Collation.md 中的列表）。同一文件夹的多个项目可以一起移动，先后不变。"
 "tabularium.release.0.26.3": "需要 Obsidian 1.13 或更新版本。设置页改用 Obsidian 自己的样式：最上面是连接，下面是同步、文件排序、发送到 Kindle、外观、维护、帮助各一页，Obsidian 设置的搜索框能找到每一项。排序笔记改名为 Collation.md：同一文件夹中没有 Collation.md 的 sortspec.md 不再读取，在「设置 → 文件排序」预览后改名，front matter 中的规则一并转换。云笔记、分享和 Tabularius 也改用 Collation.md。"

@@ -1121,6 +1121,7 @@
     "tabularium.release.0.26.3": "需要 Obsidian 1.13 或更新版本。设置页改用 Obsidian 自己的样式：最上面是连接，下面是同步、文件排序、发送到 Kindle、外观、维护、帮助各一页，Obsidian 设置的搜索框能找到每一项。排序笔记改名为 Collation.md：同一文件夹中没有 Collation.md 的 sortspec.md 不再读取，在「设置 → 文件排序」预览后改名，front matter 中的规则一并转换。云笔记、分享和 Tabularius 也改用 Collation.md。",
     "tabularium.release.0.26.4": "文件列表的右键菜单重新有了「排序」：应用或暂停排序、在 Collation.md 中定位，以及移到所在文件夹的最前或最后（自动改写 Collation.md 中的列表）。同一文件夹的多个项目可以一起移动，先后不变。",
     "tabularium.release.0.26.5": "从其他笔记库复制来的插件文件夹不再连接原笔记库，启动时清除连接。",
+    "tabularium.release.0.26.6": "内部结构整理，使用上没有变化；样式表和依赖按社区审核的建议更新。",
     "tabularium.release.0.3.0": "用 Tabularium 账户登录连接；发送到 Kindle；云笔记；凭据自动续期。",
     "tabularium.release.0.4.0": "界面支持英文、中文和拉丁语；云笔记可以编辑。",
     "tabularium.release.0.5.0": "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
