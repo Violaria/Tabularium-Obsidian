@@ -1835,6 +1835,7 @@ tabularium.release.0.24.2: Sententiae arcanae et claves in paginis interretis ru
 tabularium.release.0.24.3: Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.
 tabularium.release.0.24.4: Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.
 tabularium.release.0.24.5: Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.
+"tabularium.release.0.26.4": "Menu contextuale indicis plicarum rursus «Ordo» habet: ordinem adhibe aut suspende, rem in Collation.md ostende, aut eam ad summum vel imum plicae suae move, quod indicem in Collation.md pro te scribit. Plures res eiusdem plicae simul moventur et ordinem suum servant."
 "tabularium.release.0.26.3": "Obsidian 1.13 vel recentior requiritur. Pagina optionum more ipsius Obsidian disponitur: primum conexio, deinde singulae paginae synchronizationis, ordinis plicarum, missionis ad Kindle, speciei, curae et auxilii; capsa quaerendi optionum Obsidian quamque optionem invenit. Nota ordinis nunc Collation.md appellatur: sortspec.md sine Collation.md iuxta posito non iam legitur, et in Optionibus → Ordo plicarum post praevisionem renominatur, regulis in front matter conversis. Commentarii interretiales, communicationes et Tabularius quoque Collation.md adhibent."
 "tabularium.release.0.26.2": "In modo legendi, notae post « —— » in sortspec.md post quodque nomen in signum ⓘ conduntur: cursore superposito leguntur, tactu post nomen aperiuntur et iterum tactu clauduntur. Commentarii interretiales sortspec.md eodem modo ostendunt."
 "tabularium.release.0.26.1": "Solum ministrator: regulae ordinandi Tabularii in praecepto tabularii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur."
@@ -1849,6 +1850,13 @@ tabularium.release.0.25.0: Additamentum fere quinta parte minus est. Nucleus syn
 "tabularium.sorting.applyDesc": "Commentarios et capsas ordina ut indices in Collation.md dicunt. Quae non enumerantur, ordinem Obsidian servant."
 "tabularium.sorting.commandOn": "Indicem plicarum ex Collation.md ordina"
 "tabularium.sorting.commandOff": "Ordinationem plicarum suspende"
+"tabularium.sorting.menu.title": "Ordo"
+"tabularium.sorting.menu.flat": "Ordo: ${action}"
+"tabularium.sorting.menu.apply": "Ordinem adhibe"
+"tabularium.sorting.menu.pause": "Ordinem suspende"
+"tabularium.sorting.menu.locate": "In Collation.md ostende"
+"tabularium.sorting.menu.first": "Ad summum move"
+"tabularium.sorting.menu.last": "Ad imum move"
 "tabularium.sorting.convert": "Regulas ordinandi converte"
 "tabularium.sorting.convertDesc": "${path} commentarius ordinandi vetus est et iam non legitur: regulae nunc in Collation.md ut index servantur. Donec convertitur, index plicarum ordinem Obsidian servat."
 "tabularium.sorting.convertButton": "Converte"

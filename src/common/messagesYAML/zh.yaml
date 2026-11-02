@@ -1820,6 +1820,7 @@ tabularium.release.0.24.2: 网页上输入的密码短语与密钥重新显示�
 tabularium.release.0.24.3: SSH 主机中登记为禁止的主机，Tabularius 在任何档位都不会抓取指向它的网页（跳转之后也一样）。
 tabularium.release.0.24.4: Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。
 tabularium.release.0.24.5: 插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。
+"tabularium.release.0.26.4": "文件列表的右键菜单重新有了「排序」：应用或暂停排序、在 Collation.md 中定位，以及移到所在文件夹的最前或最后（自动改写 Collation.md 中的列表）。同一文件夹的多个项目可以一起移动，先后不变。"
 "tabularium.release.0.26.3": "需要 Obsidian 1.13 或更新版本。设置页改用 Obsidian 自己的样式：最上面是连接，下面是同步、文件排序、发送到 Kindle、外观、维护、帮助各一页，Obsidian 设置的搜索框能找到每一项。排序笔记改名为 Collation.md：同一文件夹中没有 Collation.md 的 sortspec.md 不再读取，在「设置 → 文件排序」预览后改名，front matter 中的规则一并转换。云笔记、分享和 Tabularius 也改用 Collation.md。"
 "tabularium.release.0.26.2": "阅读模式下，sortspec.md 中「 —— 」后面的说明收进名称后的 ⓘ 图标：悬停显示，点一下在名称后展开，再点收起。云笔记中阅读 sortspec.md 也一样。"
 "tabularium.release.0.26.1": "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。"
@@ -1834,6 +1835,13 @@ tabularium.release.0.25.0: 插件小了约五分之一。同步核心并入 Tabu
 "tabularium.sorting.applyDesc": "按 Collation.md 正文中的列表排列笔记和文件夹，没列出的保持 Obsidian 的排序。"
 "tabularium.sorting.commandOn": "按 Collation.md 排序文件列表"
 "tabularium.sorting.commandOff": "暂停文件排序"
+"tabularium.sorting.menu.title": "排序"
+"tabularium.sorting.menu.flat": "排序：${action}"
+"tabularium.sorting.menu.apply": "应用排序"
+"tabularium.sorting.menu.pause": "暂停排序"
+"tabularium.sorting.menu.locate": "在 Collation.md 中定位"
+"tabularium.sorting.menu.first": "移到最前"
+"tabularium.sorting.menu.last": "移到最后"
 "tabularium.sorting.convert": "转换排序规则"
 "tabularium.sorting.convertDesc": "${path} 是旧的排序笔记，现在不再读取：排序规则改为以列表写在 Collation.md 中。转换之前，文件列表按 Obsidian 的排序显示。"
 "tabularium.sorting.convertButton": "转换"

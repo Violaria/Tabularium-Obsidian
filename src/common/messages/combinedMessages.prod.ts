@@ -4263,6 +4263,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Obsidian 1.13 vel recentior requiritur. Pagina optionum more ipsius Obsidian disponitur: primum conexio, deinde singulae paginae synchronizationis, ordinis plicarum, missionis ad Kindle, speciei, curae et auxilii; capsa quaerendi optionum Obsidian quamque optionem invenit. Nota ordinis nunc Collation.md appellatur: sortspec.md sine Collation.md iuxta posito non iam legitur, et in Optionibus → Ordo plicarum post praevisionem renominatur, regulis in front matter conversis. Commentarii interretiales, communicationes et Tabularius quoque Collation.md adhibent.",
         zh: "需要 Obsidian 1.13 或更新版本。设置页改用 Obsidian 自己的样式：最上面是连接，下面是同步、文件排序、发送到 Kindle、外观、维护、帮助各一页，Obsidian 设置的搜索框能找到每一项。排序笔记改名为 Collation.md：同一文件夹中没有 Collation.md 的 sortspec.md 不再读取，在「设置 → 文件排序」预览后改名，front matter 中的规则一并转换。云笔记、分享和 Tabularius 也改用 Collation.md。",
     },
+    "tabularium.release.0.26.4": {
+        def: "The file list's context menu has Sorting again: apply or pause sorting, show the item in Collation.md, or move it to the top or the bottom of its folder, which writes the list in Collation.md for you. Several items of one folder move together and keep their order.",
+        la: "Menu contextuale indicis plicarum rursus «Ordo» habet: ordinem adhibe aut suspende, rem in Collation.md ostende, aut eam ad summum vel imum plicae suae move, quod indicem in Collation.md pro te scribit. Plures res eiusdem plicae simul moventur et ordinem suum servant.",
+        zh: "文件列表的右键菜单重新有了「排序」：应用或暂停排序、在 Collation.md 中定位，以及移到所在文件夹的最前或最后（自动改写 Collation.md 中的列表）。同一文件夹的多个项目可以一起移动，先后不变。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",
@@ -5147,6 +5152,41 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "These rules cannot be written as a list and are dropped:\n${lines}",
         la: "Hae regulae ut index scribi non possunt et omittuntur:\n${lines}",
         zh: "下面这些规则无法写成列表，将被丢弃：\n${lines}",
+    },
+    "tabularium.sorting.menu.apply": {
+        def: "Apply sorting",
+        la: "Ordinem adhibe",
+        zh: "应用排序",
+    },
+    "tabularium.sorting.menu.first": {
+        def: "Move to the top",
+        la: "Ad summum move",
+        zh: "移到最前",
+    },
+    "tabularium.sorting.menu.flat": {
+        def: "Sorting: ${action}",
+        la: "Ordo: ${action}",
+        zh: "排序：${action}",
+    },
+    "tabularium.sorting.menu.last": {
+        def: "Move to the bottom",
+        la: "Ad imum move",
+        zh: "移到最后",
+    },
+    "tabularium.sorting.menu.locate": {
+        def: "Show in Collation.md",
+        la: "In Collation.md ostende",
+        zh: "在 Collation.md 中定位",
+    },
+    "tabularium.sorting.menu.pause": {
+        def: "Pause sorting",
+        la: "Ordinem suspende",
+        zh: "暂停排序",
+    },
+    "tabularium.sorting.menu.title": {
+        def: "Sorting",
+        la: "Ordo",
+        zh: "排序",
     },
     "tabularium.sorting.standalone": {
         def: "Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.",

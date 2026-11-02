@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { arrange, convertFrontMatter, defaultOrder, itemName, namesOf, orderFor, parseOrder, readOrders, REST } from "./fileOrder";
+import { arrange, convertFrontMatter, defaultOrder, itemName, locateItem, moveItem, namesOf, orderFor, parseOrder, readOrders, REST } from "./fileOrder";
 
 const order = (text: string, folder = "") => Object.fromEntries(parseOrder(text, folder));
 const names = (items: string[]) => (item: string) => namesOf(item, !item.includes("."));
@@ -146,5 +146,48 @@ describe("converting front-matter rules", () => {
 
     it("leaves a note without front-matter rules unchanged", () => {
         expect(convertFrontMatter("- A\n", "", childrenOf)).toEqual({ text: "- A\n", unsupported: [], moved: [] });
+    });
+});
+
+describe("finding and moving an item in the list", () => {
+    const note = ["---", "tags: x", "---", "说明。", "", "- A —— 甲", "  - a1", "  - ...", "  - a2", "- B", "  - b1", "    - deep", "- C", ""].join("\n");
+    const lines = note.split("\n");
+    const line = (text: string) => lines.indexOf(text);
+
+    it("finds an item, else the nearest listed folder above it, else the start of the list", () => {
+        expect(locateItem(note, "", "A/a2.md", namesOf("a2.md", false))).toBe(line("  - a2"));
+        expect(locateItem(note, "", "B/b1/other.md", namesOf("other.md", false))).toBe(line("  - b1"));
+        expect(locateItem(note, "", "Z/z.md", namesOf("z.md", false))).toBe(line("- A —— 甲"));
+        expect(locateItem("no list", "", "x.md", ["x"])).toBeUndefined();
+    });
+
+    it("moves an item with what it holds to the first place, keeping its note", () => {
+        const moved = moveItem(note, "", "C", "C", ["C"], "first");
+        expect(parseOrder(moved).get("")).toEqual(["C", "A", "B"]);
+        const again = moveItem(moved, "", "B", "B", ["B"], "first");
+        expect(parseOrder(again).get("")).toEqual(["B", "C", "A"]);
+        expect(parseOrder(again).get("B/b1")).toEqual(["deep"]);
+        expect(again).toContain("- A —— 甲");
+        expect(again.startsWith("---\ntags: x\n---\n说明。\n")).toBe(true);
+    });
+
+    it("moves to the last place after the unlisted items, adding ... where the folder has none", () => {
+        expect(parseOrder(moveItem(note, "", "A/a1.md", "a1", namesOf("a1.md", false), "last")).get("A")).toEqual([REST, "a2", "a1"]);
+        expect(parseOrder(moveItem(note, "", "A", "A", ["A"], "last")).get("")).toEqual(["B", "C", REST, "A"]);
+    });
+
+    it("writes in an item not listed, and the folders above it where the unlisted items stand", () => {
+        const added = moveItem(note, "", "C/new/x.md", "x", namesOf("x.md", false), "first");
+        expect(parseOrder(added).get("C")).toEqual(["new"]);
+        expect(parseOrder(added).get("C/new")).toEqual(["x"]);
+        expect(added).toContain("- C\n  - new\n    - x\n");
+        const inA = moveItem(note, "", "A/new/y.md", "y", namesOf("y.md", false), "first");
+        expect(parseOrder(inA).get("A")).toEqual(["a1", "new", REST, "a2"]);
+    });
+
+    it("works in a rules note of a folder and in an empty note", () => {
+        expect(parseOrder(moveItem("- x\n- y\n", "F", "F/y.md", "y", ["y", "y.md"], "first"), "F").get("F")).toEqual(["y", "x"]);
+        expect(moveItem("说明。\n", "", "n.md", "n", ["n", "n.md"], "first")).toBe("说明。\n\n- n\n");
+        expect(moveItem("", "", "n.md", "n", ["n", "n.md"], "last")).toBe("- ...\n- n\n");
     });
 });

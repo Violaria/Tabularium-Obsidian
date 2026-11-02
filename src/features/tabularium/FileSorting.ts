@@ -1,6 +1,6 @@
 // File sorting in Obsidian's file list from the lists in Collation.md (see common/fileOrder.ts). The file list's own
 // order (the sort the user chose in Obsidian) is kept for everything the rules do not list.
-import { Component, normalizePath, Notice, TFile, TFolder, type Plugin, type SettingDefinition, type TAbstractFile } from "obsidian";
+import { Component, MarkdownView, normalizePath, Notice, Platform, TFile, TFolder, type Menu, type MenuItem, type Plugin, type SettingDefinition, type TAbstractFile } from "obsidian";
 import { $msg } from "@/common/translation";
 import type { LiveSyncCore } from "@/main";
 import {
@@ -10,6 +10,8 @@ import {
     defaultOrder,
     FORMER_RULES_FILE,
     isRulesNote,
+    locateItem,
+    moveItem,
     namesOf,
     orderFor,
     parseOrder,
@@ -48,6 +50,11 @@ interface FileListView {
 const folderPath = (folder: TFolder) => (folder.isRoot() ? "" : folder.path);
 const isRules = (path: string) => isRulesNote(path) || isRulesNote(path, FORMER_RULES_FILE);
 const folderOf = (path: string) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
+/** Not in Obsidian's published typings; the sync menu uses the same call. */
+type SubmenuItem = MenuItem & { setSubmenu(): Menu };
+/** The name an item is listed by: a note without `.md`, a folder or another file by its name. */
+const listedName = (file: TAbstractFile) => (file instanceof TFile && file.extension === "md" ? file.basename : file.name);
+const namesOfFile = (file: TAbstractFile) => namesOf(file.name, file instanceof TFolder);
 
 export class TabulariumSorting extends Component {
     settings: SortingSettings = { ...DEFAULT_SETTINGS };
@@ -89,6 +96,8 @@ export class TabulariumSorting extends Component {
                 if (isRules(file.path) || isRules(oldPath)) void this.readRules().then(() => this.refresh());
             })
         );
+        this.registerEvent(this.app.workspace.on("file-menu", (menu, file) => this.addMenu(menu, [file])));
+        this.registerEvent(this.app.workspace.on("files-menu", (menu, files) => this.addMenu(menu, files)));
         // The file list may be created later, or deferred until it is shown.
         this.registerEvent(this.app.workspace.on("layout-change", () => this.takeOver()));
         this.app.workspace.onLayoutReady(() => this.takeOver());
@@ -232,6 +241,92 @@ export class TabulariumSorting extends Component {
         if (result.text !== text) await this.app.vault.process(file, () => result.text);
         await this.app.fileManager.renameFile(file, target);
         new Notice($msg("tabularium.sorting.converted", { path: target }));
+    }
+
+    /**
+     * "Sorting" in the file explorer's context menu, below "Sync": apply or pause, and for items of one folder, show the
+     * item in its rules note or move it to the top or the bottom of its folder.
+     */
+    private addMenu(menu: Menu, files: TAbstractFile[]) {
+        const items = files.filter((file) => !(file instanceof TFolder && file.isRoot()));
+        const parent = items.length ? folderOf(items[0].path) : undefined;
+        const ofOneFolder = parent !== undefined && items.every((file) => folderOf(file.path) === parent);
+        type Action = "apply" | "pause" | "locate" | "first" | "last";
+        const fill = (target: Menu, flat: boolean) => {
+            const add = (action: Action, icon: string, run: () => Promise<void>) =>
+                target.addItem((item) => {
+                    const key = `tabularium.sorting.menu.${action}` as const;
+                    item.setTitle(flat ? $msg("tabularium.sorting.menu.flat", { action: $msg(key) }) : $msg(key))
+                        .setIcon(icon)
+                        .onClick(() => void run().catch((error: Error) => new Notice(error.message)));
+                });
+            if (this.settings.suspended) add("apply", "play", () => this.setSuspended(false));
+            else add("pause", "pause", () => this.setSuspended(true));
+            if (!ofOneFolder) return;
+            if (!flat) target.addSeparator();
+            if (items.length === 1 && this.rulesNoteFor(parent)) add("locate", "locate", () => this.locate(items[0]));
+            add("first", "arrow-up-to-line", () => this.move(items, "first"));
+            add("last", "arrow-down-to-line", () => this.move(items, "last"));
+        };
+        // Mobile menus have no submenus: the items go into the menu itself, named with the submenu's title.
+        if (Platform.isMobile) {
+            menu.addSeparator();
+            fill(menu, true);
+            return;
+        }
+        menu.addItem((item) => {
+            item.setTitle($msg("tabularium.sorting.menu.title")).setIcon("arrow-down-wide-narrow");
+            fill((item as SubmenuItem).setSubmenu(), false);
+        });
+    }
+
+    /** The rules note that orders a folder: the nearest Collation.md at or above it. */
+    private rulesNoteFor(folder: string): TFile | undefined {
+        const covering = this.orders
+            .map((source) => source.folder)
+            .filter((at) => at === "" || folder === at || folder.startsWith(`${at}/`))
+            .sort((a, b) => b.length - a.length);
+        for (const at of covering) {
+            const file = this.app.vault.getFileByPath(at ? `${at}/${RULES_FILE}` : RULES_FILE);
+            if (file) return file;
+        }
+        return undefined;
+    }
+
+    /** Opens the rules note with the cursor on the item, or on the nearest listed folder above it. */
+    private async locate(file: TAbstractFile) {
+        const note = this.rulesNoteFor(folderOf(file.path));
+        if (!note) return;
+        const line = locateItem(await this.app.vault.read(note), folderOf(note.path), file.path, namesOfFile(file)) ?? 0;
+        const leaf = this.app.workspace.getLeaf(false);
+        await leaf.openFile(note, { state: { mode: "source" } });
+        const view = leaf.view instanceof MarkdownView ? leaf.view : undefined;
+        if (!view) return;
+        const at = { line, ch: view.editor.getLine(line).length };
+        view.editor.setCursor(at);
+        view.editor.scrollIntoView({ from: at, to: at }, true);
+        view.editor.focus();
+    }
+
+    /**
+     * Moves items of one folder to its top or bottom in the rules note that orders it, keeping their order among
+     * themselves; writes them in if they are not listed. Without a rules note, Collation.md is made at the vault root.
+     */
+    private async move(files: TAbstractFile[], place: "first" | "last") {
+        const parent = folderOf(files[0].path);
+        const folder = parent ? this.app.vault.getFolderByPath(parent) : this.app.vault.getRoot();
+        if (!folder) return;
+        const shown = this.ordered(folder);
+        const inOrder = [...files].sort((a, b) => shown.indexOf(a) - shown.indexOf(b));
+        // Each move puts one item at the edge: the last one moved ends up outermost.
+        const sequence = place === "first" ? inOrder.reverse() : inOrder;
+        const note = this.rulesNoteFor(parent) ?? (await this.app.vault.create(RULES_FILE, ""));
+        const at = folderOf(note.path);
+        await this.app.vault.process(note, (text) =>
+            sequence.reduce((current, file) => moveItem(current, at, file.path, listedName(file), namesOfFile(file), place), text)
+        );
+        await this.readRules();
+        this.refresh();
     }
 
     /** The rows of the settings page's file sorting part; `changed` redraws the page after a conversion. */

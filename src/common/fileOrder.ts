@@ -49,18 +49,40 @@ export function itemName(text: string) {
 const LIST_ITEM = /^([ \t]*)(?:[-*+]|\d+[.)])[ \t]+(.*)$/;
 const width = (indent: string) => [...indent].reduce((n, c) => n + (c === "\t" ? 4 : 1), 0);
 
-/** The order a rules note gives, relative to `folder`, the folder it is in. */
-export function parseOrder(text: string, folder = ""): FileOrder {
-    const order: FileOrder = new Map();
+/** A list item of a rules note, as read: where it is and which file or folder it stands for. */
+export interface ListItem {
+    /** Line index in the whole text, front matter included. */
+    line: number;
+    /** The indentation as written, and its width (a tab counts four). */
+    indentText: string;
+    indent: number;
+    /** The folder the item orders, and the item's own path in it (`REST` items get a path no file has). */
+    parent: string;
+    name: string;
+    path: string;
+    /** Set on the first item after text at the margin: a list of its own begins there. */
+    listStart: boolean;
+}
+
+/** The list items of a rules note in `folder`, in the order written. */
+export function listItems(text: string, folder = ""): ListItem[] {
+    const items: ListItem[] = [];
+    const lines = text.split(/\r?\n/);
+    const offset = lines.length - bodyOf(text).split(/\r?\n/).length;
     let stack: { indent: number; path: string }[] = [];
     let fenced = false;
-    for (const line of bodyOf(text).split(/\r?\n/)) {
+    let listStart = true;
+    for (let index = offset; index < lines.length; index++) {
+        const line = lines[index];
         if (/^\s*(```|~~~)/.test(line)) fenced = !fenced;
         if (fenced) continue;
         const item = LIST_ITEM.exec(line);
         if (!item) {
             // Text at the margin ends a list; indented text continues an item, and blank lines separate nothing.
-            if (/^\S/.test(line)) stack = [];
+            if (/^\S/.test(line)) {
+                stack = [];
+                listStart = true;
+            }
             continue;
         }
         const indent = width(item[1]);
@@ -68,12 +90,123 @@ export function parseOrder(text: string, folder = ""): FileOrder {
         const parent = stack.length ? stack[stack.length - 1].path : folder;
         const name = itemName(item[2]);
         if (!name) continue;
-        const names = order.get(parent) ?? [];
-        if (!names.includes(name)) names.push(name);
-        order.set(parent, names);
-        stack.push({ indent, path: name === REST ? `${parent}/\0` : join(parent, name) });
+        const path = name === REST ? `${parent}/\0` : join(parent, name);
+        items.push({ line: index, indentText: item[1], indent, parent, name, path, listStart });
+        listStart = false;
+        stack.push({ indent, path });
+    }
+    return items;
+}
+
+/** The order a rules note gives, relative to `folder`, the folder it is in. */
+export function parseOrder(text: string, folder = ""): FileOrder {
+    const order: FileOrder = new Map();
+    for (const item of listItems(text, folder)) {
+        const names = order.get(item.parent) ?? [];
+        if (!names.includes(item.name)) names.push(item.name);
+        order.set(item.parent, names);
     }
     return order;
+}
+
+/** The first item standing for `path` (one of its `names` in its folder). */
+const findItem = (items: ListItem[], parent: string, names: string[]) =>
+    items.find((item) => item.parent === parent && names.includes(item.name));
+
+/**
+ * The line to show for an item: its own, else that of the nearest folder above it that is listed, else the first item
+ * of the list. Undefined when the note has no list. `names` are the names the item answers to (see namesOf).
+ */
+export function locateItem(text: string, folder: string, path: string, names: string[]): number | undefined {
+    const items = listItems(text, folder);
+    const own = findItem(items, folderOf(path), names);
+    if (own) return own.line;
+    for (let at = folderOf(path); at !== folder && at !== ""; at = folderOf(at)) {
+        const listed = findItem(items, folderOf(at), [at.slice(at.lastIndexOf("/") + 1)]);
+        if (listed) return listed.line;
+    }
+    return items[0]?.line;
+}
+
+/** The lines an item takes: its own, its nested items and text continuing them. */
+function extent(lines: string[], items: ListItem[], item: ListItem): [number, number] {
+    const index = items.indexOf(item);
+    let last = item.line;
+    for (const next of items.slice(index + 1)) {
+        if (next.listStart || next.indent <= item.indent) break;
+        last = next.line;
+    }
+    // Indented text after the last line still belongs to it.
+    while (last + 1 < lines.length && /^[ \t]+\S/.test(lines[last + 1]) && !LIST_ITEM.exec(lines[last + 1])) last++;
+    return [item.line, last + 1];
+}
+
+/** The indentation of items one level below `item`: as its children have it, else one step more than the list uses. */
+function childIndent(items: ListItem[], item: ListItem | undefined): string {
+    if (!item) return "";
+    const child = items.find((other) => other.parent === item.path);
+    if (child) return child.indentText;
+    const step = items.map((other) => other.indent).filter((indent) => indent > 0).sort((a, b) => a - b)[0];
+    return item.indentText + (item.indentText.includes("\t") ? "\t" : " ".repeat(step ?? 2));
+}
+
+/**
+ * Moves an item to the first or the last place of its folder's list, writing it in if it is not listed (folders above
+ * it that are not listed are written in where the unlisted items stand, so the order shown does not jump). Last means
+ * after the unlisted items too: a `...` is added before it when the folder's list has none. `name` is the name to write
+ * for the item, `names` the names it answers to. Returns the new text.
+ */
+export function moveItem(text: string, folder: string, path: string, name: string, names: string[], place: "first" | "last"): string {
+    const newline = text.includes("\r\n") ? "\r\n" : "\n";
+    let lines = text.split(/\r?\n/);
+    const parent = folderOf(path);
+    // The chain of folders between the note's folder and the item, outermost first.
+    const chain: string[] = [];
+    for (let at = parent; at !== folder && at !== ""; at = folderOf(at)) chain.unshift(at);
+    if (folder !== "" && !(parent === folder || parent.startsWith(`${folder}/`))) throw new Error(`${path} is not under ${folder}`);
+    /** Inserts lines at `index` and returns the new text's items. A first list gets a paragraph of its own. */
+    const insert = (index: number, added: string[]) => {
+        if (!listItems(lines.join(newline), folder).length && index > 0 && lines[index - 1].trim()) added = ["", ...added];
+        lines = [...lines.slice(0, index), ...added, ...lines.slice(index)];
+        return listItems(lines.join(newline), folder);
+    };
+    /** Where an item goes among its siblings: before the first, before `...`, or after the last. */
+    const slot = (items: ListItem[], at: string, where: "first" | "rest" | "last") => {
+        const siblings = items.filter((item) => item.parent === at);
+        if (!siblings.length) {
+            const owner = at === folder ? undefined : items.find((item) => item.path === at);
+            if (owner) return extent(lines, items, owner)[1];
+            // No list yet: after the text, before the final line break.
+            return items[0]?.line ?? (lines[lines.length - 1] === "" ? lines.length - 1 : lines.length);
+        }
+        if (where === "first") return siblings[0].line;
+        const rest = siblings.find((item) => item.name === REST);
+        if (where === "rest" && rest) return rest.line;
+        return extent(lines, items, siblings[siblings.length - 1])[1];
+    };
+    const indentFor = (items: ListItem[], at: string) =>
+        at === folder ? (items.find((item) => item.parent === folder)?.indentText ?? "") : childIndent(items, items.find((item) => item.path === at));
+    let items = listItems(text, folder);
+    // Folders on the way that are not listed yet.
+    for (const at of chain) {
+        if (items.some((item) => item.path === at)) continue;
+        const owner = folderOf(at);
+        items = insert(slot(items, owner, "rest"), [`${indentFor(items, owner)}- ${at.slice(at.lastIndexOf("/") + 1)}`]);
+    }
+    // The item itself, cut out with what it holds, or written new.
+    const found = findItem(items, parent, names);
+    let block = [`${indentFor(items, parent)}- ${name}`];
+    if (found) {
+        const [from, to] = extent(lines, items, found);
+        block = lines.slice(from, to);
+        lines = [...lines.slice(0, from), ...lines.slice(to)];
+        items = listItems(lines.join(newline), folder);
+    }
+    const siblingIndent = indentFor(items, parent);
+    if (place === "last" && !items.some((item) => item.parent === parent && item.name === REST))
+        items = insert(slot(items, parent, "last"), [`${siblingIndent}- ${REST}`]);
+    insert(slot(items, parent, place), block);
+    return lines.join(newline);
 }
 
 /** The order for a folder from the rules notes found in the vault: the nearest one at or above the folder decides. */
