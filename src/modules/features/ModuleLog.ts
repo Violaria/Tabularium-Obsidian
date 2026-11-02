@@ -427,7 +427,7 @@ export class ModuleLog extends AbstractObsidianModule {
         if (this.statusDiv) {
             this.statusDiv.remove();
         }
-        compatGlobal.document.querySelectorAll(`.livesync-status`)?.forEach((e) => e.remove());
+        compatGlobal.document.querySelectorAll(`.tabularium-status`)?.forEach((e) => e.remove());
         return Promise.resolve(true);
     }
     _everyOnloadStart(): Promise<boolean> {
@@ -482,23 +482,23 @@ ${stringifyYaml(info)}
             void this.setFileStatus();
         });
 
-        const w = compatGlobal.document.querySelectorAll(`.livesync-status`);
+        const w = compatGlobal.document.querySelectorAll(`.tabularium-status`);
         w.forEach((e) => e.remove());
 
         this.observeForLogs();
 
         if (this.settings.showStatusOnEditor) {
-            this.statusDiv = this.app.workspace.containerEl.createDiv({ cls: "livesync-status" });
-            this.statusLine = this.statusDiv.createDiv({ cls: "livesync-status-statusline" });
-            this.messageArea = this.statusDiv.createDiv({ cls: "livesync-status-messagearea" });
-            this.logMessage = this.statusDiv.createDiv({ cls: "livesync-status-logmessage" });
-            this.logHistory = this.statusDiv.createDiv({ cls: "livesync-status-loghistory" });
+            this.statusDiv = this.app.workspace.containerEl.createDiv({ cls: "tabularium-status" });
+            this.statusLine = this.statusDiv.createDiv({ cls: "tabularium-status-statusline" });
+            this.messageArea = this.statusDiv.createDiv({ cls: "tabularium-status-messagearea" });
+            this.logMessage = this.statusDiv.createDiv({ cls: "tabularium-status-logmessage" });
+            this.logHistory = this.statusDiv.createDiv({ cls: "tabularium-status-loghistory" });
             this.statusDiv.setCssStyles({ display: this.settings?.showStatusOnEditor ? "" : "none" });
         }
         eventHub.onEvent(EVENT_LAYOUT_READY, () => this.adjustStatusDivPosition());
         if (this.settings?.showStatusOnStatusbar) {
             this.statusBar = this.services.API.addStatusBarItem();
-            this.statusBar?.addClass("syncstatusbar");
+            this.statusBar?.addClass("tabularium-syncstatusbar");
         }
         if (this.statusLine) {
             const renderer = createStatusBarRenderer(this.statusLine);

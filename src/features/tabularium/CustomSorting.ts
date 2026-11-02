@@ -1,7 +1,7 @@
 import { $msg } from "@/common/translation";
 import { hint } from "./hint";
 import type { LiveSyncCore } from "@/main";
-import { Modal, Notice, normalizePath, Plugin, PluginSettingTab, Setting } from "obsidian";
+import { Modal, normalizePath, Plugin, PluginSettingTab, Setting } from "obsidian";
 import { CustomSortPlugin, type CustomSortPluginSettings } from "@tabularium/custom-sort";
 
 /** The sorting component's menu, ribbon and command texts, and their keys in the catalogue (tabularium.sorting.ui.*). */
@@ -28,9 +28,14 @@ const SORT_TEXTS: Record<string, string> = {
     "Suspend the custom sorting. Sort-off.": "commandOff",
 };
 
+/** The standalone Custom File Explorer sorting plug-in. While it is enabled in the vault, it sorts and this component steps aside. */
+export const STANDALONE_SORTING_ID = "custom-sort";
+
 /** Own the upstream sorting component within the Tabularium plug-in. */
 export class TabulariumCustomSorting extends CustomSortPlugin {
     ready = false;
+    /** Set once the standalone plug-in was found enabled; the component stays unloaded until Tabularium loads again. */
+    steppedAside = false;
     private running = false;
     private sortingSettingsTab!: PluginSettingTab;
     private settingsDialogue?: Modal;
@@ -71,6 +76,22 @@ export class TabulariumCustomSorting extends CustomSortPlugin {
     override isThePluginStillInstalledAndEnabled(): boolean {
         return this.running;
     }
+
+    /**
+     * Every take-over of the file explorer goes through here. Obsidian reports no plug-in being enabled, so the standalone
+     * plug-in enabled while this one runs is noticed at the next take-over: the patch is removed instead of installed.
+     */
+    override switchPluginStateTo(enabled: boolean) {
+        if (this.app.plugins.enabledPlugins.has(STANDALONE_SORTING_ID)) {
+            this.steppedAside = true;
+            this.stepAside();
+            return;
+        }
+        super.switchPluginStateTo(enabled);
+    }
+
+    /** Replaced by installCustomSorting: unloads this component, which removes its patch, status bar entry and ribbon button. */
+    stepAside() {}
 
     override initialize(): void {
         const applyWhenReady = () => {
@@ -190,12 +211,11 @@ export class TabulariumCustomSorting extends CustomSortPlugin {
     }
 }
 
+/** Not installed while the standalone plug-in is enabled; the settings page says that it sorts the files. */
 export function installCustomSorting(plugin: Plugin, core: LiveSyncCore): TabulariumCustomSorting | undefined {
-    if (plugin.app.plugins.enabledPlugins.has("custom-sort")) {
-        new Notice($msg("tabularium.sorting.standalone"));
-        return undefined;
-    }
+    if (plugin.app.plugins.enabledPlugins.has(STANDALONE_SORTING_ID)) return undefined;
     const sorting = plugin.addChild(new TabulariumCustomSorting(plugin.app, plugin.manifest));
+    sorting.stepAside = () => plugin.removeChild(sorting);
     // Registered once the display language is known, so the command name follows it.
     core.services.appLifecycle.onSettingLoaded.addHandler(() => {
         plugin.addCommand({

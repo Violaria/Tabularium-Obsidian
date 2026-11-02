@@ -5,6 +5,7 @@ import { Modal, Notice, parseLinktext, Setting, debounce } from "@/deps";
 import type { App, ButtonComponent, Plugin, ReferenceCache, TFile } from "obsidian";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import { $msg } from "@/common/translation";
+import { ownStorageKeys } from "./ownNames";
 import type { LiveSyncCore } from "@/main";
 
 /** One broken link: where it is, what it says, and the files it could mean. */
@@ -23,7 +24,6 @@ export interface BrokenLink {
 }
 
 /** Turned on per device: plug-in settings are not synced, and two devices fixing the same notes would conflict. */
-const AUTO_KEY = "tabularium-auto-link-repair";
 const AUTO_DELAY_MS = 10_000;
 
 /** The text shown instead of the target: `[[target|alias]]`, or the text of `[text](target)` when it differs from the path. */
@@ -42,7 +42,7 @@ export class TabulariumLinkRepair {
 
     // Kept in this device's browser storage for this vault (Obsidian's own vault storage needs 1.8.7).
     private get autoKey() {
-        return `${AUTO_KEY}:${this.plugin.app.vault.getName()}`;
+        return ownStorageKeys.autoLinkRepair(this.plugin.app.vault.getName());
     }
     get auto() {
         return window.localStorage.getItem(this.autoKey) === "on";

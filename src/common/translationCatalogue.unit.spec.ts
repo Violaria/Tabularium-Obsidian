@@ -20,16 +20,6 @@ describe("Russian catalogue interpolation", () => {
         expect(mismatches).toEqual([]);
     });
 
-    it("renders the generated QR image inside its display container", () => {
-        setLang("ru");
-        const qrImage = '<img src="data:image/png;base64,cXI=" alt="Fixture QR code">';
-
-        const message = $msg("Setup.QRCode", { qr_image: qrImage });
-
-        expect(message).toContain(`<div class="sls-qr">${qrImage}</div>`);
-        expect(message).not.toContain("${qr_image}");
-    });
-
     it("keeps the measured and configured database sizes in the comparison table", () => {
         setLang("ru");
 

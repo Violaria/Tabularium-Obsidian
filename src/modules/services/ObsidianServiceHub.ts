@@ -29,6 +29,7 @@ import { OpenKeyValueDatabase } from "@/common/KeyValueDB";
 import { ObsidianNoticeGroupManager } from "./ObsidianNoticeGroups";
 import { KeyedNoticeManager } from "@vrtmrz/obsidian-plugin-kit/notice";
 import { setLang } from "@/common/translation";
+import { DEVICE_VALUE_PREFIX } from "@/features/tabularium/ownNames";
 
 // InjectableServiceHub
 
@@ -47,7 +48,7 @@ export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceCont
         const setting = new ObsidianSettingService(context, {
             APIService: API,
             onDisplayLanguageChanged: setLang,
-            deviceValues: createWebStorageValueStore(compatGlobal.localStorage, { prefix: "" }),
+            deviceValues: createWebStorageValueStore(compatGlobal.localStorage, { prefix: DEVICE_VALUE_PREFIX }),
         });
         const appLifecycle = new ObsidianAppLifecycleService(context, {
             settingService: setting,

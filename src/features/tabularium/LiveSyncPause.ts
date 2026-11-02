@@ -1,6 +1,7 @@
 // Pausing live sync on this device. Every automatic trigger is recorded and switched off, so edits stay in the local
 // database until the user syncs now or resumes; switching off live sync alone would let the save and start-up triggers
-// upload instead. The record is a device value: it belongs to this device, survives a restart and is not synchronised.
+// upload instead. The record is a per-vault device value: it belongs to this device and vault, survives a restart and is
+// not synchronised.
 import type { Plugin } from "obsidian";
 import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
@@ -29,7 +30,7 @@ export class LiveSyncPause {
     constructor(private readonly core: LiveSyncCore) {}
 
     private get values() {
-        return this.core.services.setting.deviceValues;
+        return this.core.services.setting.config;
     }
 
     async load() {

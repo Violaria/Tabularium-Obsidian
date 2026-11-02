@@ -242,13 +242,8 @@ import type {
 import {
     PREFIXMD_LOGFILE,
     PREFIXMD_LOGFILE_UC,
-    FlagFilesOriginal,
-    FlagFilesHumanReadable,
-    FLAGMD_REDFLAG,
-    FLAGMD_REDFLAG2,
-    FLAGMD_REDFLAG2_HR,
-    FLAGMD_REDFLAG3,
-    FLAGMD_REDFLAG3_HR,
+    FlagFiles,
+    UpstreamFlagFiles,
 } from "./models/redflag.const.ts";
 import { DatabaseConnectingStatuses, type DatabaseConnectingStatus } from "./models/shared.definition.ts";
 
@@ -434,13 +429,8 @@ export type { DatabaseConnectingStatus };
 export {
     PREFIXMD_LOGFILE,
     PREFIXMD_LOGFILE_UC,
-    FlagFilesOriginal,
-    FlagFilesHumanReadable,
-    FLAGMD_REDFLAG,
-    FLAGMD_REDFLAG2,
-    FLAGMD_REDFLAG2_HR,
-    FLAGMD_REDFLAG3,
-    FLAGMD_REDFLAG3_HR,
+    FlagFiles,
+    UpstreamFlagFiles,
 };
 
 export { SYNCINFO_ID };

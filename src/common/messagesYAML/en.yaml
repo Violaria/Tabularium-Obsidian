@@ -710,17 +710,6 @@ Seconds. Saving to the local database will be delayed until this value after we 
 Send: Send
 Server URI: Server URI
 SESSION: SESSION
-Setup:
-    QRCode: >-
-        We have generated a QR code to transfer the settings. Please scan the QR
-        code with your phone or other device.
-
-        Note: The QR code is not encrypted, so be careful to open this.
-
-
-        >[!FOR YOUR EYES ONLY]-
-
-        > <div class="sls-qr">${qr_image}</div>
 "Please select 'Cancel' explicitly to cancel this operation.": Please select 'Cancel' explicitly to cancel this operation.
 Stat: Stat
 Stats: Stats
@@ -1057,7 +1046,7 @@ tabularium:
     applyDesc: Read sorting-spec from your notes and update the file explorer.
     applyButton: Apply
     pause: Pause
-    standalone: Disable the standalone Custom Sort plug-in, then reload Tabularium to use its built-in file sorting.
+    standalone: Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.
     command: Open file sorting settings
 Apply: Apply
 Done: Done
@@ -1107,7 +1096,7 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.help.connect.title": "Connecting and changing vaults"
 "tabularium.help.errors.body": "Credentials no longer valid: the device was removed on the server or its credentials expired. Sign in again.\n\nEncryption settings refused: this device's settings differ from the vault's. Disconnect and connect again.\n\nA rebuild is in progress: wait until the owner ends it on the web.\n\nA note does not synchronise: check the size limit and the excluded files under Sync, and look in the log.\n\nThe first synchronisation of a large vault takes a while; keep Obsidian open until the status shows Up to date."
 "tabularium.help.errors.title": "Common problems"
-"tabularium.help.migrate.body": "Turn off the plug-in \"self-hosted-livesync\" in this vault before connecting Tabularium; the two must not run together. Then connect to the vault that already holds your notes on the Tabularium server, so this device fetches it.\n\nThe old plug-in's settings and local database are not used."
+"tabularium.help.migrate.body": "Tabularium can run beside the plug-in \"self-hosted-livesync\" in the same vault: each synchronises with its own server, and neither uses the other's local database, settings or flag files. To move your notes, connect to the vault on the Tabularium server that already holds them, so this device fetches it; then turn the old plug-in off, or keep it to synchronise with another server.\n\nIf the old plug-in also synchronises hidden files, exclude .obsidian/plugins/tabularium/ there: it holds this device's credentials."
 "tabularium.help.migrate.title": "Moving from the old plug-in"
 "tabularium.help.passphrase.body": "Notes are encrypted on each device with the vault's passphrase before they are sent; the server cannot read them. Every device of a vault uses the same passphrase.\n\nThe passphrase cannot be recovered. If it is lost, the notes on the server cannot be decrypted; devices that still have the files can create a new vault from them."
 "tabularium.help.passphrase.title": "The vault passphrase"
@@ -1495,6 +1484,9 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.settings.livePausedDesc": "Changes stay on this device until you resume live sync or choose Sync now in the Sync menu. Resuming restores the synchronisation settings from before the pause."
 "tabularium.syncMenu.history": "Version history"
 "tabularium.syncMenu.flat": "Sync: ${action}"
+"tabularium.migration.fetching": "Tabularium now keeps its local data under names of its own, apart from other sync plug-ins. Fetching this vault from the server once; newer files win and files only on this device are kept."
+"tabularium.migration.waiting": "Tabularium has not finished moving its local data to names of its own: the server cannot be reached (${reason}). Nothing synchronises until it can; the fetch starts by itself once the device is back online, or at the next start."
+"tabularium.migration.done": "Tabularium's local data now has names of its own. Synchronisation continues as before."
 "tabularium.history.revisions": "${file} / ${count} revisions"
 "tabularium.history.revision": "Version ${current}/${total}"
 "tabularium.history.deleted": "(The file was deleted in this version)"

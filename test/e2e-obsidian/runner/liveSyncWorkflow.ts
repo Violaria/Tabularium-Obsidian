@@ -92,14 +92,21 @@ const E2E_PREFERRED_SETTINGS = {
     doctorProcessedVersion: "0.25.27",
     settingVersion: CURRENT_SETTING_VERSION,
     isConfigured: true,
+    // Settings stored under another suffix would make Tabularium migrate them at start.
+    additionalSuffixOfDatabaseName: "tabularium",
 } as const;
 
+/**
+ * The compatibility marker of a vault already reviewed, under Tabularium's device-value names by default; the original
+ * Self-hosted LiveSync stores it without a prefix, under its own suffix.
+ */
 export function createE2eObsidianDeviceLocalState(
     vaultName: string,
-    additionalSuffixOfDatabaseName = ""
+    additionalSuffixOfDatabaseName = "tabularium",
+    prefix = "tabularium:"
 ): Readonly<Record<string, string>> {
     return {
-        [`${vaultName}-${additionalSuffixOfDatabaseName}-${DATABASE_COMPATIBILITY_VERSION_KEY}`]: `${VER}`,
+        [`${prefix}${vaultName}-${additionalSuffixOfDatabaseName}-${DATABASE_COMPATIBILITY_VERSION_KEY}`]: `${VER}`,
     };
 }
 
@@ -117,7 +124,7 @@ export async function readE2eCompatibilityMarker(
             "const vaultName=core.services.API.getSystemVaultName();",
             `const markerKey=${JSON.stringify(DATABASE_COMPATIBILITY_VERSION_KEY)};`,
             "const additionalSuffix=`-${settings.additionalSuffixOfDatabaseName??''}`;",
-            "const expectedStorageKey=`${vaultName}${additionalSuffix}-${markerKey}`;",
+            "const expectedStorageKey=`tabularium:${vaultName}${additionalSuffix}-${markerKey}`;",
             "return JSON.stringify({",
             "vaultName,additionalSuffix,expectedStorageKey,",
             "rawStorageValue:localStorage.getItem(expectedStorageKey),",

@@ -5,6 +5,7 @@ import { ObsidianConfirm } from "./ObsidianConfirm";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import { requestUrl, type RequestUrlParam } from "@/deps";
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
+import { DATABASE_SUFFIX } from "@/features/tabularium/ownNames";
 // All Services will be migrated to be based on Plain Services, not Injectable Services.
 // This is a migration step.
 
@@ -86,8 +87,13 @@ export class ObsidianAPIService extends InjectableAPIService<ObsidianServiceCont
     override isMobile(): boolean {
         return "isMobile" in this.app ? !!this.app.isMobile : false;
     }
+    /**
+     * The sync core takes this as the suffix of the local database names, for a new vault and when the local database is
+     * reset, which is all it is used for. Upstream returns Obsidian's app id, the same for the original plug-in on this
+     * device; Tabularium's own suffix keeps their databases apart.
+     */
     override getAppID(): string {
-        return `${"appId" in this.app ? this.app.appId : ""}`;
+        return DATABASE_SUFFIX;
     }
 
     override getSystemVaultName(): string {

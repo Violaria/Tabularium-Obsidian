@@ -613,14 +613,6 @@ SettingService.ConfigurationPassphraseRetryTitle: Configuratio decryptari non po
 SettingService.ConfigurationPassphraseRollbackFailed: Tessera arcana configurationis post scriptionem defectam restitui non potuit. Optiones servatas et clavem instrumenti verifica antequam rursus conaris.
 SettingService.ConfigurationPassphraseTitle: Tessera arcana configurationis
 'Setup Complete: Preparing to Fetch from Another Device': 'Constitutio perfecta: arcessitio ex alio instrumento paratur'
-Setup.QRCode: 'Codicem QR ad optiones transferendas generavimus. Quaeso codicem QR telephono tuo vel alio instrumento lege.
-
-  Nota: codex QR non cryptatus est, ergo cave cum hoc aperis.
-
-
-  >[!FOR YOUR EYES ONLY]-
-
-  > <div class="sls-qr">${qr_image}</div>'
 Shared ancestor ${REVISION} is not readable on this device. Automatic three-way merging may be unavailable, but the live revisions remain available for explicit review.: Antecessor communis ${REVISION} in hoc instrumento legi non potest. Conflatio automatica trium viarum fortasse non praesto erit, sed recensiones vivae ad recognitionem expressam praesto manent.
 Should we keep folders that don't have any files inside?: Visne thecas servari quae nullas plicas continent?
 Should we only check for conflicts when a file is opened?: Visne discrepantias solum inspici cum plica aperitur?
@@ -1208,7 +1200,7 @@ tabularium.sorting.applyDesc: Lege sorting-spec ex commentariis tuis et indicem 
 tabularium.sorting.command: Aperi optiones ordinandi plicas
 tabularium.sorting.pause: Intermitte
 tabularium.sorting.settingDesc: Commentarios et capsas secundum regulas ordinandi vel signacula dispone.
-tabularium.sorting.standalone: Deactiva additamentum separatum Custom Sort, deinde Tabularium iterum onera ut ordinatione plicarum interna utaris.
+tabularium.sorting.standalone: In hoc tabulario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit.
 tabularium.sorting.title: Ordinatio plicarum Tabularium
 the single, authoritative master copy: unicum et auctoritativum exemplar principale
 username: nomen usoris
@@ -1460,10 +1452,7 @@ moduleLog.syncStatusStopped: Non synchronizatur
 
   Tessera arcana recuperari non potest. Si amittitur, commentarii in ministratore deciphrari non possunt; instrumenta quae plicas habent novum tabularium ex eis creare possunt."
 "tabularium.help.migrate.title": "Ab additamento vetere migrare"
-"tabularium.help.migrate.body": "Antequam Tabularium coniungis, \"self-hosted-livesync\" in hoc tabulario exstingue; ambo simul currere non debent. Deinde tabularium coniunge quod commentarios tuos in ministratore iam continet, ut hoc instrumentum id arcessat.
-
-
-  Optiones et repositorium locale additamenti veteris non adhibentur."
+"tabularium.help.migrate.body": "Tabularium cum additamento \"self-hosted-livesync\" in eodem tabulario simul currere potest: utrumque cum suo ministratore synchronizat, neutrum repositorio locali, optionibus aut fasciculis signorum alterius utitur. Ut commentarios transferas, tabularium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine ut cum alio ministratore synchronizet.\n\nSi additamentum vetus etiam fasciculos occultos synchronizat, ibi .obsidian/plugins/tabularium/ exclude: ibi sunt credentialia huius instrumenti."
 "tabularium.help.rebuild.title": "Reaedificare et reserare"
 "tabularium.help.rebuild.body": "Reaedificatio tabularium in ministratore plicis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.
 
@@ -1814,6 +1803,9 @@ tabularium.settings.livePaused: Synchronizatio viva suspensa est
 tabularium.settings.livePausedDesc: Mutationes in hoc instrumento manent donec synchronizationem vivam resumis aut «Synchroniza nunc» in indice «Synchronizatio» eligis. Resumpta synchronizatione, optiones synchronizationis ut ante suspensionem restituuntur.
 tabularium.syncMenu.history: Historia versionum
 tabularium.syncMenu.flat: "Synchronizatio: ${action}"
+tabularium.migration.fetching: "Tabularium nunc data sua localia sub nominibus propriis servat, ab aliis additamentis synchronizationis separata. Hoc tabularium semel a servitore repetitur: recentiora servantur, et quae in hoc solo instrumento sunt manent."
+tabularium.migration.waiting: "Tabularium data sua localia nondum ad nomina propria transtulit: servitor attingi non potest (${reason}). Donec potest, nihil synchronizatur; repetitio sponte incipit cum instrumentum rursus conexum est, aut proximo initio."
+tabularium.migration.done: Data localia Tabularii nunc nomina propria habent. Synchronizatio ut antea pergit.
 tabularium.history.revisions: ${file} / ${count} versiones
 tabularium.history.revision: Versio ${current}/${total}
 tabularium.history.deleted: (Hac versione plica deleta est)

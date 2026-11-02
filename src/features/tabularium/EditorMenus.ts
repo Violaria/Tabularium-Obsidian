@@ -7,11 +7,11 @@ import type { LiveSyncCore } from "@/main";
 import { StateField, type EditorState } from "@codemirror/state";
 import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
 import { $msg } from "@/common/translation";
+import { ownStorageKeys } from "./ownNames";
 import { format, insertTemplate, type Format, type Template, type TextEdit } from "./formatting";
 import { FORMAT_ACTIONS, HEADINGS, INSERT_ACTIONS, LINE_ACTIONS } from "./editorActions";
 
 /** Turned off per device and vault, like automatic link repair: plug-in settings are synced, habits are not. */
-const MENU_KEY = "tabularium-editor-menu";
 
 const words = () => ({
     start: $msg("tabularium.editor.word.start"), end: $msg("tabularium.editor.word.end"), step: $msg("tabularium.editor.word.step"),
@@ -53,7 +53,7 @@ export class TabulariumEditorMenus {
     ) {}
 
     private get menuKey() {
-        return `${MENU_KEY}:${this.plugin.app.vault.getName()}`;
+        return ownStorageKeys.editorMenu(this.plugin.app.vault.getName());
     }
     /** Whether the toolbar over a selection shows on this device. */
     get toolbar() {

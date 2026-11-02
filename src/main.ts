@@ -42,6 +42,7 @@ import { installCustomSorting, type TabulariumCustomSorting } from "./features/t
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
 import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
 import { installLiveSyncPause, type LiveSyncPause } from "./features/tabularium/LiveSyncPause.ts";
+import { installNamespaceMigration } from "./features/tabularium/NamespaceMigration.ts";
 import { installLinkRepair, type TabulariumLinkRepair } from "./features/tabularium/LinkRepair.ts";
 import { installEditorMenus, type TabulariumEditorMenus } from "./features/tabularium/EditorMenus.ts";
 export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext, LiveSyncCommands>;
@@ -183,6 +184,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 this.linkRepair = installLinkRepair(this, core);
                 this.editorMenus = installEditorMenus(this, core);
                 this.livePause = installLiveSyncPause(this, core, () => !!this.tabularium?.connection);
+                installNamespaceMigration(this, core, this.tabularium);
                 useObsidianReplicationRibbonFeature(core);
                 useDatabaseDiagnosticsFeature(core);
                 // A vault's devices run different software (this plug-in, the server mirror's CLI, Tabularius, web notes), so

@@ -32,6 +32,8 @@ type Initialise = "upload" | "fetch";
 export const RENEW_BEFORE_MS = 15 * 86_400_000;
 const RENEW_CHECK_MS = 6 * 3_600_000;
 
+/** The device value holding the key that encrypts the settings of this device's vaults. */
+const CONFIGURATION_KEY = "ls-setting-passphrase";
 const randomKey = () =>
     Array.from(crypto.getRandomValues(new Uint8Array(32)), (byte) => byte.toString(16).padStart(2, "0")).join("");
 
@@ -193,8 +195,12 @@ export class TabulariumServer {
             // encrypted with this device's own key before the credentials are written to it.
             this.core.services.appLifecycle.setSuspended(true);
             try {
+                // The key is one per device, shared by its vaults: another vault's key is reused, not replaced.
                 if (settings.currentSettings().configPassphraseStore !== "LOCALSTORAGE")
-                    await settings.changeConfigurationEncryption("LOCALSTORAGE", randomKey());
+                    await settings.changeConfigurationEncryption(
+                        "LOCALSTORAGE",
+                        (await settings.deviceValues.getValue(CONFIGURATION_KEY, "")) || randomKey()
+                    );
                 const newSettings = await prepare();
                 settings.clearUsedPassphrase();
                 await settings.applyExternalSettings(newSettings, true);
@@ -207,7 +213,7 @@ export class TabulariumServer {
                         throw new Error($msg("tabularium.server.resetFailed"));
                 }
                 // The login wrote new sync settings, so a pause recorded before no longer applies.
-                await this.core.services.setting.deviceValues.delete(LIVE_SYNC_PAUSE_KEY);
+                await this.core.services.setting.config.delete(LIVE_SYNC_PAUSE_KEY);
                 // The connection is recorded last, once the settings are in place.
                 this.connection = connection;
                 await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(connection, null, 2));
@@ -225,7 +231,7 @@ export class TabulariumServer {
     /** Forgets the connection on this device; the server keeps the device until it is revoked there. */
     async disconnect() {
         this.connection = undefined;
-        await this.core.services.setting.deviceValues.delete(LIVE_SYNC_PAUSE_KEY);
+        await this.core.services.setting.config.delete(LIVE_SYNC_PAUSE_KEY);
         await this.plugin.app.vault.adapter.remove(this.file);
         await this.core.services.setting.applyPartial(
             {

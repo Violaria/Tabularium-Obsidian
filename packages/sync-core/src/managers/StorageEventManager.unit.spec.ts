@@ -19,7 +19,7 @@ import type { IStorageAccessManager } from "@lib/interfaces/StorageAccess";
 import type { IAPIService, IVaultService } from "@lib/services/base/IService";
 import type { SettingService } from "@lib/services/base/SettingService";
 import type { FileProcessingService } from "@lib/services/base/FileProcessingService";
-import { DEFAULT_SETTINGS, FlagFilesHumanReadable } from "@lib/common/types";
+import { DEFAULT_SETTINGS, FlagFiles } from "@lib/common/types";
 
 // Mock file types
 interface MockFile {
@@ -895,7 +895,7 @@ describe("StorageEventManagerBase", () => {
             expect(enqueueSpy).toHaveBeenCalled();
         });
         it("should skip `shouldBeIgnored` files", async () => {
-            const file = createMockFile(FlagFilesHumanReadable.FETCH_ALL, FlagFilesHumanReadable.FETCH_ALL);
+            const file = createMockFile(FlagFiles.FETCH_ALL, FlagFiles.FETCH_ALL);
             const cachedData = "cached content";
             const enqueueSpy = vi.spyOn(manager, "enqueue");
             await manager.testAppendQueue([

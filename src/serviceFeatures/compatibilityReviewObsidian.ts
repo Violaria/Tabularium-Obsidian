@@ -69,7 +69,7 @@ export class ObsidianCompatibilityReviewUi implements CompatibilityReviewUi {
             });
         });
         this.reminder = new Notice(fragment, 0);
-        reminderAnchor?.closest<HTMLElement>(".notice")?.classList.add("livesync-compatibility-review-notice");
+        reminderAnchor?.closest<HTMLElement>(".notice")?.classList.add("tabularium-compatibility-review-notice");
     }
 
     clearReminder(): void {

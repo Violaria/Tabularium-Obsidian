@@ -50,7 +50,7 @@ export class InputStringDialog extends AutoClosableModal {
         const formEl = contentEl.createDiv();
         new Setting(formEl)
             .setName(this.key)
-            .setClass(this.isPassword ? "password-input" : "normal-input")
+            .setClass(this.isPassword ? "tabularium-password-input" : "normal-input")
             .addText((text) =>
                 text.onChange((value) => {
                     this.result = value;
@@ -189,7 +189,7 @@ export class MessageBox<T extends readonly string[]> extends AutoClosableModal {
     override onOpen() {
         this.component.load();
         const { contentEl } = this;
-        contentEl.closest(".modal-container")?.classList.add("livesync-message-box-container");
+        contentEl.closest(".modal-container")?.classList.add("tabularium-message-box-container");
         this.titleEl.setText(this.title);
         const div = contentEl.createDiv();
         div.setCssStyles({
@@ -199,11 +199,11 @@ export class MessageBox<T extends readonly string[]> extends AutoClosableModal {
         void MarkdownRenderer.render(this.plugin.app, this.contentMd, div, "/", this.component);
         const buttonSetting = new Setting(contentEl);
         const labelWrapper = contentEl.createDiv();
-        labelWrapper.addClass("sls-dialogue-note-wrapper");
+        labelWrapper.addClass("tabularium-dialogue-note-wrapper");
         const labelEl = labelWrapper.createEl("label", {
             text: $msg("To stop the countdown, tap anywhere on the dialogue"),
         });
-        labelEl.addClass("sls-dialogue-note-countdown");
+        labelEl.addClass("tabularium-dialogue-note-countdown");
         if (!this.timeout || !this.timer) {
             labelWrapper.empty();
             labelWrapper.setCssStyles({ display: "none" });

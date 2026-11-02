@@ -3360,11 +3360,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "SESSIO",
         zh: "会话",
     },
-    "Setup.QRCode": {
-        def: 'We have generated a QR code to transfer the settings. Please scan the QR code with your phone or other device.\nNote: The QR code is not encrypted, so be careful to open this.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
-        la: 'Codicem QR ad optiones transferendas generavimus. Quaeso codicem QR telephono tuo vel alio instrumento lege.\nNota: codex QR non cryptatus est, ergo cave cum hoc aperis.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
-        zh: 'We have generated a QR code to transfer the settings. Please scan the QR code with your phone or other device.\nNote: The QR code is not encrypted, so be careful to open this.\n\n>[!FOR YOUR EYES ONLY]-\n> <div class="sls-qr">${qr_image}</div>',
-    },
     "Should we keep folders that don't have any files inside?": {
         def: "Should we keep folders that don't have any files inside?",
         la: "Visne thecas servari quae nullas plicas continent?",
@@ -3919,9 +3914,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "常见问题",
     },
     "tabularium.help.migrate.body": {
-        def: 'Turn off the plug-in "self-hosted-livesync" in this vault before connecting Tabularium; the two must not run together. Then connect to the vault that already holds your notes on the Tabularium server, so this device fetches it.\n\nThe old plug-in\'s settings and local database are not used.',
-        la: 'Antequam Tabularium coniungis, "self-hosted-livesync" in hoc tabulario exstingue; ambo simul currere non debent. Deinde tabularium coniunge quod commentarios tuos in ministratore iam continet, ut hoc instrumentum id arcessat.\n\nOptiones et repositorium locale additamenti veteris non adhibentur.',
-        zh: "连接 Tabularium 之前，先在这个库中关闭插件「self-hosted-livesync」，两者不能同时运行。然后连接 Tabularium 服务器上已经存有你笔记的笔记库，这台设备会从服务器获取。\n\n旧插件的设置和本地数据库不会被使用。",
+        def: "Tabularium can run beside the plug-in \"self-hosted-livesync\" in the same vault: each synchronises with its own server, and neither uses the other's local database, settings or flag files. To move your notes, connect to the vault on the Tabularium server that already holds them, so this device fetches it; then turn the old plug-in off, or keep it to synchronise with another server.\n\nIf the old plug-in also synchronises hidden files, exclude .obsidian/plugins/tabularium/ there: it holds this device's credentials.",
+        la: 'Tabularium cum additamento "self-hosted-livesync" in eodem tabulario simul currere potest: utrumque cum suo ministratore synchronizat, neutrum repositorio locali, optionibus aut fasciculis signorum alterius utitur. Ut commentarios transferas, tabularium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine ut cum alio ministratore synchronizet.\n\nSi additamentum vetus etiam fasciculos occultos synchronizat, ibi .obsidian/plugins/tabularium/ exclude: ibi sunt credentialia huius instrumenti.',
+        zh: "Tabularium 可以与插件「self-hosted-livesync」在同一个库中同时运行：两者各自同步到自己的服务器，互不使用对方的本地数据库、设置和标记文件。要把笔记迁到 Tabularium，连接 Tabularium 服务器上已经存有这些笔记的笔记库，这台设备会从服务器获取；之后可以关闭旧插件，也可以保留它同步到别的服务器。\n\n旧插件同时同步隐藏文件时，在它的设置中排除 .obsidian/plugins/tabularium/：那里存着这台设备的凭据。",
     },
     "tabularium.help.migrate.title": {
         def: "Moving from the old plug-in",
@@ -4122,6 +4117,21 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "${count} broken links",
         la: "${count} nexus fracti",
         zh: "${count} 处断链",
+    },
+    "tabularium.migration.done": {
+        def: "Tabularium's local data now has names of its own. Synchronisation continues as before.",
+        la: "Data localia Tabularii nunc nomina propria habent. Synchronizatio ut antea pergit.",
+        zh: "Tabularium 的本机数据已换到自己的名字下，同步照常进行。",
+    },
+    "tabularium.migration.fetching": {
+        def: "Tabularium now keeps its local data under names of its own, apart from other sync plug-ins. Fetching this vault from the server once; newer files win and files only on this device are kept.",
+        la: "Tabularium nunc data sua localia sub nominibus propriis servat, ab aliis additamentis synchronizationis separata. Hoc tabularium semel a servitore repetitur: recentiora servantur, et quae in hoc solo instrumento sunt manent.",
+        zh: "Tabularium 现在把本机数据放在自己的名字下，与其他同步插件分开。正在从服务器取回一次这个笔记库：较新的文件保留，只在本机的文件也保留。",
+    },
+    "tabularium.migration.waiting": {
+        def: "Tabularium has not finished moving its local data to names of its own: the server cannot be reached (${reason}). Nothing synchronises until it can; the fetch starts by itself once the device is back online, or at the next start.",
+        la: "Tabularium data sua localia nondum ad nomina propria transtulit: servitor attingi non potest (${reason}). Donec potest, nihil synchronizatur; repetitio sponte incipit cum instrumentum rursus conexum est, aut proximo initio.",
+        zh: "Tabularium 还没有把本机数据换到自己的名字下：无法连接服务器（${reason}）。在此之前不同步；设备恢复联网后或下次启动时会自动取回。",
     },
     "tabularium.release.0.12.0": {
         def: "Tabularium names throughout the plug-in; large vaults synchronise reliably; misleading version notices removed.",
@@ -5164,9 +5174,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "除 sortspec 笔记和文件夹笔记外，另外读取排序规则（front matter）的笔记名称或路径。修改后重新应用规则。",
     },
     "tabularium.sorting.standalone": {
-        def: "Disable the standalone Custom Sort plug-in, then reload Tabularium to use its built-in file sorting.",
-        la: "Deactiva additamentum separatum Custom Sort, deinde Tabularium iterum onera ut ordinatione plicarum interna utaris.",
-        zh: "请先停用独立的 Custom Sort 插件，然后重新加载 Tabularium 以使用内置的文件排序。",
+        def: "Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.",
+        la: "In hoc tabulario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit.",
+        zh: "这个笔记库启用了 Custom File Explorer sorting，文件列表由它排序，内置的文件排序不启用。停用它之后，下次加载 Tabularium 时内置排序恢复。",
     },
     "tabularium.sorting.statusBar": {
         def: "Show in the status bar",

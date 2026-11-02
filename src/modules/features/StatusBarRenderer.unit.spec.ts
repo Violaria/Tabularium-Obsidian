@@ -188,20 +188,20 @@ function createFixture() {
 }
 
 function findItem(root: TestElement, key: string): TestElement {
-    const item = root.children.find((child) => child.className.split(" ").includes("livesync-stat-" + key));
+    const item = root.children.find((child) => child.className.split(" ").includes("tabularium-stat-" + key));
     if (!item) throw new Error("Missing item: " + key);
     return item;
 }
 
 function findValue(item: TestElement): TestElement {
-    const value = item.children.find((child) => child.className.split(" ").includes("livesync-stat-value"));
+    const value = item.children.find((child) => child.className.split(" ").includes("tabularium-stat-value"));
     if (!value) throw new Error("Missing numeric value");
     return value;
 }
 
 function visibleItems(root: TestElement): TestElement[] {
     return root.children.filter(
-        (child) => !child.classList.contains("livesync-stat-inactive") && child.classList.contains("livesync-stat-item")
+        (child) => !child.classList.contains("tabularium-stat-inactive") && child.classList.contains("tabularium-stat-item")
     );
 }
 
@@ -217,17 +217,17 @@ describe("createStatusBarRenderer", () => {
 
         const sync = findItem(root, "sync");
         const queue = findItem(root, "queue");
-        expect(sync.className.split(" ")).toEqual(["livesync-stat-item", "livesync-stat-sync"]);
+        expect(sync.className.split(" ")).toEqual(["tabularium-stat-item", "tabularium-stat-sync"]);
         expect(sync.textContent).toBe("<sync>");
-        expect(queue.className.split(" ")).toContain("livesync-stat-queue");
+        expect(queue.className.split(" ")).toContain("tabularium-stat-queue");
         expect(queue.textContent).toBe(" (queued: 2)");
-        expect(findValue(queue).className).toBe("livesync-stat-value");
+        expect(findValue(queue).className).toBe("tabularium-stat-value");
 
         renderer.render([{ key: "queue", text: " (queued: ", value: 3, suffix: ")" }]);
-        expect(sync.classList.contains("livesync-stat-inactive")).toBe(true);
+        expect(sync.classList.contains("tabularium-stat-inactive")).toBe(true);
         expect(sync.hidden).toBe(false);
         expect(sync.getAttribute("aria-hidden")).toBe("true");
-        expect(queue.classList.contains("livesync-stat-inactive")).toBe(false);
+        expect(queue.classList.contains("tabularium-stat-inactive")).toBe(false);
         expect(queue.textContent).toBe(" (queued: 3)");
         renderer.render([{ key: "queue", text: "Queue idle" }]);
         expect(queue.textContent).toBe("Queue idle");
@@ -258,15 +258,15 @@ describe("createStatusBarRenderer", () => {
         const item = findItem(root, "count");
         const value = findValue(item);
         expect(item.textContent).toBe("(9)");
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("1ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("1ch");
 
         renderer.render([{ key: "count", text: "(", value: 123, suffix: ")" }]);
         expect(value.textContent).toBe("123");
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("3ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("3ch");
 
         renderer.render([{ key: "count", text: "(", value: 4, suffix: ")" }]);
         expect(value.textContent).toBe("4");
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("3ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("3ch");
         renderer.dispose();
     });
 
@@ -277,20 +277,20 @@ describe("createStatusBarRenderer", () => {
         renderer.render([{ key: "count", text: " ", value: 1234 }]);
         const item = findItem(root, "count");
         const value = findValue(item);
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("4ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("4ch");
 
         renderer.render([]);
-        expect(item.classList.contains("livesync-stat-inactive")).toBe(true);
+        expect(item.classList.contains("tabularium-stat-inactive")).toBe(true);
         expect(item.hidden).toBe(false);
         expect(item.getAttribute("aria-hidden")).toBe("true");
         expect(item.textContent).toBe(" 1234");
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("4ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("4ch");
 
         renderer.render([{ key: "count", text: " ", value: 5 }]);
         expect(findItem(root, "count")).toBe(item);
-        expect(item.classList.contains("livesync-stat-inactive")).toBe(false);
+        expect(item.classList.contains("tabularium-stat-inactive")).toBe(false);
         expect(item.getAttribute("aria-hidden")).toBeNull();
-        expect(value.style.getPropertyValue("--livesync-stat-width")).toBe("1ch");
+        expect(value.style.getPropertyValue("--tabularium-stat-width")).toBe("1ch");
         renderer.dispose();
     });
 
@@ -315,7 +315,7 @@ describe("createStatusBarRenderer", () => {
         renderer.render([first, added, last]);
         expect(root.children.map((item) => item.textContent)).toEqual(["first ", "count 1234", "added ", "last"]);
         expect(omitted.textContent).toBe("count 1234");
-        expect(findValue(omitted).style.getPropertyValue("--livesync-stat-width")).toBe("4ch");
+        expect(findValue(omitted).style.getPropertyValue("--tabularium-stat-width")).toBe("4ch");
 
         renderer.render([first, count, added, last]);
         expect(findItem(root, "count")).toBe(omitted);

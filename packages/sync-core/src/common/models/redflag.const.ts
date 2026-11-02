@@ -3,34 +3,25 @@ import type { FilePath } from "./db.type";
 export const PREFIXMD_LOGFILE = "livesync_log_";
 export const PREFIXMD_LOGFILE_UC = "LIVESYNC_LOG_";
 
-export const FlagFilesOriginal = {
-    SUSPEND_ALL: "redflag.md" as FilePath,
-    REBUILD_ALL: "redflag2.md" as FilePath,
-    FETCH_ALL: "redflag3.md" as FilePath,
+/**
+ * Tabularium's flag files at the vault root: each asks the plug-in to suspend, fetch or rebuild at the next start. Their
+ * names are its own, so the original Self-hosted LiveSync in the same vault does not respond to them, nor Tabularium to
+ * the original's.
+ */
+export const FlagFiles = {
+    SUSPEND_ALL: "tabularium-suspend.md" as FilePath,
+    REBUILD_ALL: "tabularium-rebuild.md" as FilePath,
+    FETCH_ALL: "tabularium-fetch.md" as FilePath,
 } as const;
 
-export const FlagFilesHumanReadable = {
-    REBUILD_ALL: "flag_rebuild.md" as FilePath,
-    FETCH_ALL: "flag_fetch.md" as FilePath,
-} as const;
-
 /**
- * @deprecated Use `FlagFilesOriginal.SUSPEND_ALL` instead.
+ * The original plug-in's flag files. They trigger nothing here, and are still never synchronised, so that one device's
+ * flag cannot reach the original plug-in on another device through Tabularium.
  */
-export const FLAGMD_REDFLAG = FlagFilesOriginal.SUSPEND_ALL;
-/**
- * @deprecated Use `FlagFilesHumanReadable.REBUILD_ALL` instead.
- */
-export const FLAGMD_REDFLAG2 = FlagFilesOriginal.REBUILD_ALL;
-/**
- * @deprecated Use `FlagFilesHumanReadable.FETCH_ALL` instead.
- */
-export const FLAGMD_REDFLAG2_HR = FlagFilesHumanReadable.REBUILD_ALL;
-/**
- * @deprecated Use `FlagFilesOriginal.FETCH_ALL` instead.
- */
-export const FLAGMD_REDFLAG3 = FlagFilesOriginal.FETCH_ALL;
-/**
- * @deprecated Use `FlagFilesHumanReadable.FETCH_ALL` instead.
- */
-export const FLAGMD_REDFLAG3_HR = FlagFilesHumanReadable.FETCH_ALL;
+export const UpstreamFlagFiles: readonly FilePath[] = [
+    "redflag.md" as FilePath,
+    "redflag2.md" as FilePath,
+    "redflag3.md" as FilePath,
+    "flag_rebuild.md" as FilePath,
+    "flag_fetch.md" as FilePath,
+];

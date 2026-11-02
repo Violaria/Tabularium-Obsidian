@@ -500,16 +500,6 @@ Secret Key: 私有访问密钥
 Send: 发送
 Server URI: 服务器 URI
 SESSION: 会话
-Setup:
-  QRCode: >-
-    We have generated a QR code to transfer the settings. Please scan the QR code with your phone or other device.
-
-    Note: The QR code is not encrypted, so be careful to open this.
-
-
-    >[!FOR YOUR EYES ONLY]-
-
-    > <div class="sls-qr">${qr_image}</div>
 Should we keep folders that don't have any files inside?: 我们是否应该保留内部没有任何文件的文件夹？
 Should we only check for conflicts when a file is opened?: 我们是否应该仅在文件打开时检查冲突？
 Should we prompt you about conflicting files when a file is opened?: 当文件打开时,是否提示冲突文件？
@@ -818,7 +808,7 @@ tabularium:
     applyDesc: 从笔记中读取 sorting-spec 并更新文件列表。
     applyButton: 应用
     pause: 暂停
-    standalone: 请先停用独立的 Custom Sort 插件，然后重新加载 Tabularium 以使用内置的文件排序。
+    standalone: 这个笔记库启用了 Custom File Explorer sorting，文件列表由它排序，内置的文件排序不启用。停用它之后，下次加载 Tabularium 时内置排序恢复。
     command: 打开文件排序设置
   confirm:
     cancel: "取消"
@@ -950,10 +940,7 @@ tabularium:
         密码短语无法找回。丢失后服务器上的笔记无法解密；仍有文件的设备可以用这些文件新建笔记库。"
     migrate:
       title: "从旧插件迁移"
-      body: "连接 Tabularium 之前，先在这个库中关闭插件「self-hosted-livesync」，两者不能同时运行。然后连接 Tabularium 服务器上已经存有你笔记的笔记库，这台设备会从服务器获取。
-
-
-        旧插件的设置和本地数据库不会被使用。"
+      body: "Tabularium 可以与插件「self-hosted-livesync」在同一个库中同时运行：两者各自同步到自己的服务器，互不使用对方的本地数据库、设置和标记文件。要把笔记迁到 Tabularium，连接 Tabularium 服务器上已经存有这些笔记的笔记库，这台设备会从服务器获取；之后可以关闭旧插件，也可以保留它同步到别的服务器。\n\n旧插件同时同步隐藏文件时，在它的设置中排除 .obsidian/plugins/tabularium/：那里存着这台设备的凭据。"
     rebuild:
       title: "重建与解除锁定"
       body: "重建用一台设备的文件替换服务器上的笔记库，例如清理旧数据。所有者先在网页（账户设置 → 笔记库与设备 → 重建笔记库）授权设备，再在那台设备的「维护」中执行「用这台设备覆盖服务器」。
@@ -1803,6 +1790,9 @@ tabularium.settings.livePaused: 实时同步已暂停
 tabularium.settings.livePausedDesc: 修改先留在这台设备上，直到恢复实时同步，或在「同步」菜单中选择「立即同步」。恢复后，同步设置回到暂停之前的样子。
 tabularium.syncMenu.history: 历史版本
 tabularium.syncMenu.flat: 同步：${action}
+tabularium.migration.fetching: Tabularium 现在把本机数据放在自己的名字下，与其他同步插件分开。正在从服务器取回一次这个笔记库：较新的文件保留，只在本机的文件也保留。
+tabularium.migration.waiting: "Tabularium 还没有把本机数据换到自己的名字下：无法连接服务器（${reason}）。在此之前不同步；设备恢复联网后或下次启动时会自动取回。"
+tabularium.migration.done: Tabularium 的本机数据已换到自己的名字下，同步照常进行。
 tabularium.history.revisions: ${file} / ${count} 个版本
 tabularium.history.revision: 第 ${current}/${total} 版
 tabularium.history.deleted: （这个版本中文件已被删除）

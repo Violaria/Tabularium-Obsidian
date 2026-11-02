@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { promiseWithResolvers } from "octagonal-wheels/promises";
 import { REMOTE_COUCHDB, REMOTE_MINIO, REMOTE_P2P } from "@lib/common/models/setting.const";
-import { FlagFilesHumanReadable } from "@lib/common/models/redflag.const";
+import { FlagFiles } from "@lib/common/models/redflag.const";
 import { ServiceRebuilder } from "./Rebuilder";
 import { createLiveSyncEventHub } from "@lib/hub/hub";
 import { EVENT_DATABASE_REBUILT } from "@lib/events/coreEvents";
@@ -290,8 +290,8 @@ describe.each(["Rebuild", "Standard Fetch", "Fast Fetch"] as const)(
 
 describe("ServiceRebuilder scheduled restart flags", () => {
     it.each([
-        ["Fetch", "scheduleFetch", FlagFilesHumanReadable.FETCH_ALL],
-        ["Rebuild", "scheduleRebuild", FlagFilesHumanReadable.REBUILD_ALL],
+        ["Fetch", "scheduleFetch", FlagFiles.FETCH_ALL],
+        ["Rebuild", "scheduleRebuild", FlagFiles.REBUILD_ALL],
     ] as const)("writes the %s flag and prepares state before requesting a restart", async (_name, method, flag) => {
         const { rebuilder, services } = createRebuilder();
         const prepare = vi.fn(async () => undefined);
@@ -325,8 +325,8 @@ describe("ServiceRebuilder scheduled restart flags", () => {
     });
 
     it.each([
-        ["Fetch", "scheduleFetch", FlagFilesHumanReadable.FETCH_ALL],
-        ["Rebuild", "scheduleRebuild", FlagFilesHumanReadable.REBUILD_ALL],
+        ["Fetch", "scheduleFetch", FlagFiles.FETCH_ALL],
+        ["Rebuild", "scheduleRebuild", FlagFiles.REBUILD_ALL],
     ] as const)("cleans up the %s flag when preparation fails", async (_name, method, flag) => {
         const { rebuilder, services } = createRebuilder();
         const error = new Error("settings could not be saved");

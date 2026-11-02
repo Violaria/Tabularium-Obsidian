@@ -38,7 +38,7 @@ vi.mock("@lib/mods.ts", async (importOriginal) => {
 });
 
 import type { FilePath } from "@lib/common/types";
-import { isAccepted, path2id_base } from "./path";
+import { isAccepted, path2id_base, shouldBeIgnored } from "./path";
 
 describe("path2id_base path case", () => {
     it("maps case variants to one document ID in case-insensitive mode", async () => {
@@ -100,5 +100,15 @@ describe("isAccepted matcher cache", () => {
         expect(isAccepted("scratch.tmp", replacement)).toBe(false);
 
         expect(minimatchStats.constructions).toBe(2);
+    });
+});
+
+describe("flag files are not synchronised", () => {
+    it("ignores Tabularium's flag files and the original plug-in's", () => {
+        for (const name of ["tabularium-suspend.md", "tabularium-fetch.md", "tabularium-rebuild.md"])
+            expect(shouldBeIgnored(name)).toBe(true);
+        for (const name of ["redflag.md", "redflag2.md", "redflag3.md", "flag_fetch.md", "flag_rebuild.md"])
+            expect(shouldBeIgnored(name)).toBe(true);
+        expect(shouldBeIgnored("notes/tabularium-fetch.md")).toBe(false);
     });
 });

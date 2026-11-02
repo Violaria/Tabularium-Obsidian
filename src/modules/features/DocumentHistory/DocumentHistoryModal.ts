@@ -212,14 +212,14 @@ export class DocumentHistoryModal extends Modal {
 
     prepareContentView(usePreformatted = true) {
         this.contentView.empty();
-        this.contentView.toggleClass("op-pre", usePreformatted);
+        this.contentView.toggleClass("tabularium-op-pre", usePreformatted);
     }
 
     appendTextDiff(diff: [number, string][]) {
         let hasOmitted = false;
         for (const [operation, text] of diff) {
             if (operation == DIFF_DELETE) {
-                this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "history-deleted" }), text);
+                this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "tabularium-history-deleted" }), text);
                 hasOmitted = false;
             } else if (operation == DIFF_EQUAL) {
                 if (this.diffOnly) {
@@ -228,10 +228,10 @@ export class DocumentHistoryModal extends Modal {
                         hasOmitted = true;
                     }
                 } else {
-                    this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "history-normal" }), text);
+                    this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "tabularium-history-normal" }), text);
                 }
             } else if (operation == DIFF_INSERT) {
-                this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "history-added" }), text);
+                this.appendSearchHighlightedText(this.contentView.createSpan({ cls: "tabularium-history-added" }), text);
                 hasOmitted = false;
             }
         }
@@ -259,13 +259,13 @@ export class DocumentHistoryModal extends Modal {
     }
 
     appendImageDiff(baseSrc: string, overlaySrc?: string) {
-        const wrap = this.contentView.createDiv({ cls: "ls-imgdiff-wrap" });
-        const overlay = wrap.createDiv({ cls: "overlay" });
-        overlay.createEl("img", { cls: "img-base" }, (img) => {
+        const wrap = this.contentView.createDiv({ cls: "tabularium-imgdiff-wrap" });
+        const overlay = wrap.createDiv({ cls: "tabularium-overlay" });
+        overlay.createEl("img", { cls: "tabularium-img-base" }, (img) => {
             img.src = baseSrc;
         });
         if (overlaySrc) {
-            overlay.createEl("img", { cls: "img-overlay" }, (img) => {
+            overlay.createEl("img", { cls: "tabularium-img-overlay" }, (img) => {
                 img.src = overlaySrc;
             });
         }
@@ -376,13 +376,13 @@ export class DocumentHistoryModal extends Modal {
      * Only effective when diff highlighting is enabled.
      */
     navigateDiff(direction: "prev" | "next") {
-        const diffElements = this.contentView.querySelectorAll(".history-added, .history-deleted");
+        const diffElements = this.contentView.querySelectorAll(".tabularium-history-added, .tabularium-history-deleted");
         if (diffElements.length === 0) return;
 
         // Remove previous focus highlight
-        const prevFocused = this.contentView.querySelector(".diff-focused");
+        const prevFocused = this.contentView.querySelector(".tabularium-diff-focused");
         if (prevFocused) {
-            prevFocused.classList.remove("diff-focused");
+            prevFocused.classList.remove("tabularium-diff-focused");
         }
 
         if (direction === "next") {
@@ -392,7 +392,7 @@ export class DocumentHistoryModal extends Modal {
         }
 
         const target = diffElements[this.currentDiffIndex];
-        target.classList.add("diff-focused");
+        target.classList.add("tabularium-diff-focused");
         target.scrollIntoView({ behavior: "smooth", block: "center" });
 
         this.diffNavIndicator.setText(`${this.currentDiffIndex + 1}/${diffElements.length}`);
@@ -405,7 +405,7 @@ export class DocumentHistoryModal extends Modal {
         this.currentDiffIndex = -1;
         if (this.diffNavIndicator) {
             if (this.showDiff) {
-                const diffElements = this.contentView.querySelectorAll(".history-added, .history-deleted");
+                const diffElements = this.contentView.querySelectorAll(".tabularium-history-added, .tabularium-history-deleted");
                 this.diffNavIndicator.setText(diffElements.length > 0 ? `0/${diffElements.length}` : "\u2014");
             } else {
                 this.diffNavIndicator.setText("\u2014");
@@ -544,19 +544,19 @@ export class DocumentHistoryModal extends Modal {
         this.titleEl.setText($msg("Document History"));
         contentEl.empty();
         this.fileInfo = contentEl.createDiv("");
-        this.fileInfo.addClass("op-info");
+        this.fileInfo.addClass("tabularium-op-info");
 
         // Search Row
         const searchRow = contentEl.createDiv("");
-        searchRow.addClass("op-info");
+        searchRow.addClass("tabularium-op-info");
         searchRow.addClass("search-row");
-        searchRow.addClass("history-search-row");
+        searchRow.addClass("tabularium-history-search-row");
 
         const searchInput = searchRow.createEl("input", {
             type: "text",
             placeholder: $msg("tabularium.history.search"),
         });
-        searchInput.addClass("history-search-input");
+        searchInput.addClass("tabularium-history-search-input");
         searchInput.addEventListener("input", () => {
             if (this.searchTimeout) {
                 compatGlobal.clearTimeout(this.searchTimeout);
@@ -578,15 +578,15 @@ export class DocumentHistoryModal extends Modal {
         });
 
         this.searchResultIndicator = searchRow.createSpan({ text: "" });
-        this.searchResultIndicator.addClass("history-search-result-indicator");
+        this.searchResultIndicator.addClass("tabularium-history-search-result-indicator");
 
         this.searchProgressIndicator = searchRow.createSpan({ text: "" });
-        this.searchProgressIndicator.addClass("history-search-progress-indicator");
+        this.searchProgressIndicator.addClass("tabularium-history-search-progress-indicator");
 
-        const revNavRow = contentEl.createDiv({ cls: "history-rev-nav-row" });
+        const revNavRow = contentEl.createDiv({ cls: "tabularium-history-rev-nav-row" });
 
         this.revPrevBtn = revNavRow.createEl("button", { text: "\u25C0" }, (e) => {
-            e.addClass("history-rev-nav-btn");
+            e.addClass("tabularium-history-rev-nav-btn");
             e.title = "Older revision";
             e.disabled = true;
             e.addEventListener("click", () => this.navigateVersion("older"));
@@ -605,25 +605,25 @@ export class DocumentHistoryModal extends Modal {
         });
 
         this.revNextBtn = revNavRow.createEl("button", { text: "\u25B6" }, (e) => {
-            e.addClass("history-rev-nav-btn");
+            e.addClass("tabularium-history-rev-nav-btn");
             e.title = "Newer revision";
             e.disabled = true;
             e.addEventListener("click", () => this.navigateVersion("newer"));
         });
 
         this.revNavIndicator = revNavRow.createSpan({ text: "\u2014" }, (e) => {
-            e.addClass("history-rev-indicator");
+            e.addClass("tabularium-history-rev-indicator");
         });
         const diffOptionsRow = contentEl.createDiv("");
-        diffOptionsRow.addClass("op-info");
-        diffOptionsRow.addClass("diff-options-row");
-        diffOptionsRow.addClass("history-diff-options-row");
+        diffOptionsRow.addClass("tabularium-op-info");
+        diffOptionsRow.addClass("tabularium-diff-options-row");
+        diffOptionsRow.addClass("tabularium-history-diff-options-row");
 
         const highlightDiffContainer = diffOptionsRow.createDiv("");
-        highlightDiffContainer.addClass("history-highlight-diff-container");
+        highlightDiffContainer.addClass("tabularium-history-highlight-diff-container");
 
         highlightDiffContainer.createEl("label", {}, (label) => {
-            label.addClass("history-highlight-diff-label");
+            label.addClass("tabularium-history-highlight-diff-label");
             label.createEl("input", { type: "checkbox" }, (checkbox) => {
                 if (this.showDiff) {
                     checkbox.checked = true;
@@ -654,37 +654,37 @@ export class DocumentHistoryModal extends Modal {
             });
         });
         diffOnlyLabel.appendText($msg("tabularium.history.diffOnly"));
-        diffOnlyLabel.addClass("diff-only-label");
+        diffOnlyLabel.addClass("tabularium-diff-only-label");
         diffOnlyLabel.setCssStyles({ display: this.showDiff ? "inline-block" : "none" });
         this.diffOnlyLabel = diffOnlyLabel;
 
         // Diff navigation buttons
         this.diffNavContainer = diffOptionsRow.createDiv("");
-        this.diffNavContainer.addClass("diff-nav");
+        this.diffNavContainer.addClass("tabularium-diff-nav");
         this.diffNavContainer.setCssStyles({ display: this.showDiff ? "flex" : "none" });
 
         this.diffNavContainer.createEl("button", { text: `\u25B2 ${$msg("tabularium.history.previous")}` }, (e) => {
-            e.addClass("diff-nav-btn");
+            e.addClass("tabularium-diff-nav-btn");
             e.addEventListener("click", () => {
                 this.navigateDiff("prev");
             });
         });
         this.diffNavContainer.createEl("button", { text: `\u25BC ${$msg("tabularium.history.next")}` }, (e) => {
-            e.addClass("diff-nav-btn");
+            e.addClass("tabularium-diff-nav-btn");
             e.addEventListener("click", () => {
                 this.navigateDiff("next");
             });
         });
         this.diffNavIndicator = this.diffNavContainer.createSpan({ text: "\u2014" });
-        this.diffNavIndicator.addClass("diff-nav-indicator");
+        this.diffNavIndicator.addClass("tabularium-diff-nav-indicator");
 
         this.info = contentEl.createDiv("");
-        this.info.addClass("op-info");
+        this.info.addClass("tabularium-op-info");
         fireAndForget(async () => await this.loadFile(this.initialRev));
         const div = contentEl.createDiv({ text: $msg("Loading old revisions...") });
         this.contentView = div;
-        div.addClass("op-scrollable");
-        div.addClass("op-pre");
+        div.addClass("tabularium-op-scrollable");
+        div.addClass("tabularium-op-pre");
         const buttons = contentEl.createDiv("");
         buttons.createEl("button", { text: $msg("Copy to clipboard") }, (e) => {
             e.addClass("mod-cta");

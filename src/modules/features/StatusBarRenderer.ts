@@ -1,4 +1,4 @@
-const INACTIVE_CLASS = "livesync-stat-inactive";
+const INACTIVE_CLASS = "tabularium-stat-inactive";
 
 export type StatusBarPart = {
     key: string;
@@ -42,19 +42,19 @@ export function createStatusBarRenderer(parent: HTMLElement): StatusBarRenderer 
     };
 
     const setWidth = (element: HTMLElement, width: string) => {
-        if (element.style.getPropertyValue("--livesync-stat-width") !== width) {
-            element.setCssProps({ "--livesync-stat-width": width });
+        if (element.style.getPropertyValue("--tabularium-stat-width") !== width) {
+            element.setCssProps({ "--tabularium-stat-width": width });
         }
     };
 
     const createItem = (key: string): RenderedItem => {
         const document = parent.ownerDocument;
         const element = parent.createSpan();
-        element.className = "livesync-stat-item livesync-stat-" + key;
+        element.className = "tabularium-stat-item tabularium-stat-" + key;
 
         const prefix = document.createTextNode("");
         const value = element.createSpan();
-        value.className = "livesync-stat-value";
+        value.className = "tabularium-stat-value";
         const valueText = document.createTextNode("");
         value.appendChild(valueText);
         value.hidden = true;

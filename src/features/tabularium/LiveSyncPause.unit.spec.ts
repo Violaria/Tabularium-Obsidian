@@ -11,7 +11,7 @@ function fakeCore(initial: Record<string, boolean>) {
     const core = {
         services: {
             setting: {
-                deviceValues,
+                config: deviceValues,
                 currentSettings: () => settings,
                 applyPartial: vi.fn(async (partial: Record<string, unknown>) => void Object.assign(settings, partial)),
             },

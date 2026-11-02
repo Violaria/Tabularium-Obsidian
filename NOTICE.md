@@ -1,0 +1,68 @@
+# Notices
+
+Tabularium for Obsidian is licensed under the MIT License (see `LICENSE`). It contains code from the projects below, which
+are also under the MIT License. Their copyright and permission notices are kept here, as their licences require.
+
+## Self-hosted LiveSync
+
+The plug-in started from Self-hosted LiveSync 1.0.40 (commit `935511c6`), https://github.com/vrtmrz/obsidian-livesync.
+
+```
+MIT License
+
+Copyright (c) 2021 vorotamoroz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Self-hosted LiveSync Commonlib
+
+The sync core in `packages/sync-core` is derived from Commonlib 0.2.1 (commit `3ecb95b`),
+https://github.com/vrtmrz/livesync-commonlib; `packages/sync-core/UPSTREAM.md` records the changes.
+
+```
+MIT License
+
+Copyright (c) 2022 vorotamoroz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Custom File Explorer sorting
+
+The built-in file sorting is Custom File Explorer sorting 3.2.0 (commit `6100b0c`) by SebastianMC,
+https://github.com/SebastianMC/obsidian-custom-sort. Its `package.json` declares the MIT License and names no copyright
+holder; it is used under that declaration. (Its repository also contains `LICENSE`, the notice of the Obsidian sample
+plug-in it started from, and `LICENSE.md`, a copy of the GNU GPL v3.)

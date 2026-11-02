@@ -13,7 +13,7 @@ import {
 import { VIEW_TYPE_LOG } from "@/modules/features/Log/LogPaneView.ts";
 import { getConfig, type AllSettingItemKey } from "@/modules/features/SettingDialogue/settingConstants.ts";
 import { NetworkWarningStyles } from "@tabularium/sync-core/compat/common/models/setting.const";
-import { FlagFilesHumanReadable, FlagFilesOriginal, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { FlagFiles, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { constructCustomRegExpList, splitCustomRegExpList } from "@tabularium/sync-core/compat/common/utils";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
@@ -334,7 +334,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         if (typeof choice !== "string") return;
         // The scheduled fetch after the restart takes this answer instead of asking again.
         await rememberFetchChoice(this.core, choice);
-        await this.core.storageAccess.writeFileAuto(FlagFilesHumanReadable.FETCH_ALL, "");
+        await this.core.storageAccess.writeFileAuto(FlagFiles.FETCH_ALL, "");
         this.core.services.appLifecycle.performRestart();
     }
 
@@ -378,7 +378,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
 
     private sorting(el: HTMLElement) {
         const sorting = this.owner.sorting;
-        if (!sorting) {
+        if (!sorting || sorting.steppedAside) {
             new Setting(el).setDesc($msg("tabularium.sorting.standalone"));
             return;
         }
@@ -435,7 +435,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
                 action("tabularium.settings.unlock", "tabularium.settings.unlockDesc", "tabularium.settings.unlock", () => this.unlock(), true);
         }
         action("tabularium.settings.suspend", "tabularium.settings.suspendDesc", "tabularium.settings.suspendAction", async () => {
-            await this.core.storageAccess.writeFileAuto(FlagFilesOriginal.SUSPEND_ALL, "");
+            await this.core.storageAccess.writeFileAuto(FlagFiles.SUSPEND_ALL, "");
             this.core.services.appLifecycle.performRestart();
         });
         action("tabularium.settings.resetLocal", "tabularium.settings.resetLocalDesc", "tabularium.settings.resetLocalAction", () => this.resetLocal(), true);
@@ -495,7 +495,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
             typeToConfirm: this.owner.tabularium!.connection!.vaultName,
         });
         if (!ok) return;
-        await this.core.storageAccess.writeFileAuto(FlagFilesHumanReadable.REBUILD_ALL, "");
+        await this.core.storageAccess.writeFileAuto(FlagFiles.REBUILD_ALL, "");
         // Confirmed here: the scheduled rebuild after the restart does not ask again.
         await this.core.services.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now()));
         this.core.services.appLifecycle.performRestart();

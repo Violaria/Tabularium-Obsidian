@@ -1,4 +1,4 @@
-import { FlagFilesHumanReadable } from "@lib/common/models/redflag.const";
+import { FlagFiles } from "@lib/common/models/redflag.const";
 import { REMOTE_COUCHDB, REMOTE_MINIO, REMOTE_P2P } from "@lib/common/models/setting.const";
 import { DEFAULT_SETTINGS } from "@lib/common/models/setting.const.defaults";
 import type { IFileHandler } from "@lib/interfaces/FileHandler";
@@ -341,11 +341,11 @@ Please enable them from the settings screen after setup is complete.`,
     }
 
     scheduleRebuild(prepareBeforeRestart?: () => Promise<void>): Promise<boolean> {
-        return this.scheduleInitialisation(FlagFilesHumanReadable.REBUILD_ALL, prepareBeforeRestart);
+        return this.scheduleInitialisation(FlagFiles.REBUILD_ALL, prepareBeforeRestart);
     }
 
     scheduleFetch(prepareBeforeRestart?: () => Promise<void>): Promise<boolean> {
-        return this.scheduleInitialisation(FlagFilesHumanReadable.FETCH_ALL, prepareBeforeRestart);
+        return this.scheduleInitialisation(FlagFiles.FETCH_ALL, prepareBeforeRestart);
     }
 
     private async _tryResetRemoteDatabase(): Promise<void> {

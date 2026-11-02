@@ -70,7 +70,7 @@ export class ConflictResolveModal extends Modal {
             const span = container.createSpan({ cls });
             span.setText(line);
             if (index < lines.length - 1) {
-                container.createSpan({ cls: "ls-mark-cr" });
+                container.createSpan({ cls: "tabularium-mark-cr" });
                 container.createEl("br");
             }
         });
@@ -78,18 +78,18 @@ export class ConflictResolveModal extends Modal {
 
     appendVersionInfo(container: HTMLDivElement, cls: string, name: string, date: string) {
         const line = container.createSpan({ cls });
-        line.createSpan({ text: name, cls: "conflict-dev-name" });
+        line.createSpan({ text: name, cls: "tabularium-conflict-dev-name" });
         line.appendText(`: ${date}`);
         container.createEl("br");
     }
 
     navigateDiff(direction: "prev" | "next") {
-        const diffElements = this.diffView.querySelectorAll(".added, .deleted");
+        const diffElements = this.diffView.querySelectorAll(".tabularium-added, .deleted");
         if (diffElements.length === 0) return;
 
-        const prevFocused = this.diffView.querySelector(".diff-focused");
+        const prevFocused = this.diffView.querySelector(".tabularium-diff-focused");
         if (prevFocused) {
-            prevFocused.classList.remove("diff-focused");
+            prevFocused.classList.remove("tabularium-diff-focused");
         }
 
         if (direction === "next") {
@@ -99,14 +99,14 @@ export class ConflictResolveModal extends Modal {
         }
 
         const target = diffElements[this.currentDiffIndex];
-        target.classList.add("diff-focused");
+        target.classList.add("tabularium-diff-focused");
         target.scrollIntoView({ behavior: "smooth", block: "center" });
         this.diffNavIndicator.setText(`${this.currentDiffIndex + 1}/${diffElements.length}`);
     }
 
     resetDiffNavigation() {
         this.currentDiffIndex = -1;
-        const diffElements = this.diffView.querySelectorAll(".added, .deleted");
+        const diffElements = this.diffView.querySelectorAll(".tabularium-added, .deleted");
         this.diffNavIndicator.setText(diffElements.length > 0 ? `0/${diffElements.length}` : "\u2014");
     }
 
@@ -141,25 +141,25 @@ export class ConflictResolveModal extends Modal {
         this.titleEl.setText(this.title);
         contentEl.empty();
         const diffOptionsRow = contentEl.createDiv("");
-        diffOptionsRow.addClass("diff-options-row");
+        diffOptionsRow.addClass("tabularium-diff-options-row");
         diffOptionsRow.createSpan({ text: this.filename });
 
         const diffNavContainer = diffOptionsRow.createDiv("");
-        diffNavContainer.addClass("diff-nav");
+        diffNavContainer.addClass("tabularium-diff-nav");
         diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.previous") }, (e) => {
-            e.addClass("diff-nav-btn");
+            e.addClass("tabularium-diff-nav-btn");
             e.addEventListener("click", () => this.navigateDiff("prev"));
         });
         diffNavContainer.createEl("button", { text: $msg("tabularium.conflict.next") }, (e) => {
-            e.addClass("diff-nav-btn");
+            e.addClass("tabularium-diff-nav-btn");
             e.addEventListener("click", () => this.navigateDiff("next"));
         });
         this.diffNavIndicator = diffNavContainer.createSpan({ text: "\u2014" });
-        this.diffNavIndicator.addClass("diff-nav-indicator");
+        this.diffNavIndicator.addClass("tabularium-diff-nav-indicator");
 
         this.diffView = contentEl.createDiv("");
-        this.diffView.addClass("op-scrollable");
-        this.diffView.addClass("ls-dialog");
+        this.diffView.addClass("tabularium-op-scrollable");
+        this.diffView.addClass("tabularium-dialog");
         let diffLength = 0;
         for (const v of this.result.diff) {
             const x1 = v[0];
@@ -171,43 +171,43 @@ export class ConflictResolveModal extends Modal {
             if (x1 == DIFF_DELETE) {
                 this.appendDiffFragment(this.diffView, x2, "deleted");
             } else if (x1 == DIFF_EQUAL) {
-                this.appendDiffFragment(this.diffView, x2, "normal");
+                this.appendDiffFragment(this.diffView, x2, "tabularium-normal");
             } else if (x1 == DIFF_INSERT) {
-                this.appendDiffFragment(this.diffView, x2, "added");
+                this.appendDiffFragment(this.diffView, x2, "tabularium-added");
             }
         }
 
         const div2 = contentEl.createDiv("");
-        div2.addClass("ls-dialog");
+        div2.addClass("tabularium-dialog");
         const date1 =
             new Date(this.result.left.mtime).toLocaleString() + (this.result.left.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
         const date2 =
             new Date(this.result.right.mtime).toLocaleString() + (this.result.right.deleted ? ` · ${$msg("tabularium.conflict.deleted")}` : "");
         this.appendVersionInfo(div2, "deleted", this.localName, date1);
-        this.appendVersionInfo(div2, "added", this.remoteName, date2);
-        const actionContainer = contentEl.createDiv("conflict-action-container");
+        this.appendVersionInfo(div2, "tabularium-added", this.remoteName, date2);
+        const actionContainer = contentEl.createDiv("tabularium-conflict-action-container");
         if (this.readOnly) {
             actionContainer.createEl("button", { text: $msg("Close") }, (e) => {
-                e.addClass("conflict-action-button");
+                e.addClass("tabularium-conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(CANCELLED));
             });
         } else {
             actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.localName }) }, (e) => {
-                e.addClass("conflict-action-button");
+                e.addClass("tabularium-conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.result.right.rev));
             });
             actionContainer.createEl("button", { text: $msg("Use ${name}", { name: this.remoteName }) }, (e) => {
-                e.addClass("conflict-action-button");
+                e.addClass("tabularium-conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.result.left.rev));
             });
             if (!this.pluginPickMode) {
                 actionContainer.createEl("button", { text: $msg("Concat both") }, (e) => {
-                    e.addClass("conflict-action-button");
+                    e.addClass("tabularium-conflict-action-button");
                     e.addEventListener("click", () => this.sendResponse(LEAVE_TO_SUBSEQUENT));
                 });
             }
             actionContainer.createEl("button", { text: $msg(this.pluginPickMode ? "tabularium.confirm.cancel" : "tabularium.conflict.later") }, (e) => {
-                e.addClass("conflict-action-button");
+                e.addClass("tabularium-conflict-action-button");
                 e.addEventListener("click", () => this.sendResponse(this.pluginPickMode ? CANCELLED : POSTPONED));
             });
         }

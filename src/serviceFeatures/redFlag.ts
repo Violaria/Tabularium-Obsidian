@@ -1,10 +1,7 @@
 import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { createInstanceLogFunction, type LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
-import {
-    FlagFilesHumanReadable,
-    FlagFilesOriginal,
-} from "@tabularium/sync-core/compat/common/models/redflag.const";
+import { FlagFiles } from "@tabularium/sync-core/compat/common/models/redflag.const";
 import FetchEverything from "@/modules/features/SetupWizard/dialogs/FetchEverything.svelte";
 import RebuildEverything from "@/modules/features/SetupWizard/dialogs/RebuildEverything.svelte";
 import { REMOTE_MINIO, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
@@ -132,13 +129,11 @@ export function createFetchAllFlagHandler(
 ): FlagFileHandler {
     // Check if fetch all flag is active
     const isFlagActive = async () =>
-        (await isFlagFileExist(host, FlagFilesOriginal.FETCH_ALL)) ||
-        (await isFlagFileExist(host, FlagFilesHumanReadable.FETCH_ALL));
+        await isFlagFileExist(host, FlagFiles.FETCH_ALL);
 
     // Cleanup fetch all flag files
     const cleanupFlag = async () => {
-        await deleteFlagFile(host, log, FlagFilesOriginal.FETCH_ALL);
-        await deleteFlagFile(host, log, FlagFilesHumanReadable.FETCH_ALL);
+        await deleteFlagFile(host, log, FlagFiles.FETCH_ALL);
     };
 
     // Handle the fetch all scheduled operation
@@ -498,13 +493,11 @@ export function createRebuildFlagHandler(
 ) {
     // Check if rebuild flag is active
     const isFlagActive = async () =>
-        (await isFlagFileExist(host, FlagFilesOriginal.REBUILD_ALL)) ||
-        (await isFlagFileExist(host, FlagFilesHumanReadable.REBUILD_ALL));
+        await isFlagFileExist(host, FlagFiles.REBUILD_ALL);
 
     // Cleanup rebuild flag files
     const cleanupFlag = async () => {
-        await deleteFlagFile(host, log, FlagFilesOriginal.REBUILD_ALL);
-        await deleteFlagFile(host, log, FlagFilesHumanReadable.REBUILD_ALL);
+        await deleteFlagFile(host, log, FlagFiles.REBUILD_ALL);
     };
 
     // Handle the rebuild everything scheduled operation
@@ -558,7 +551,7 @@ export function createSuspendFlagHandler(
     log: LogFunction
 ): FlagFileHandler {
     // Check if suspend flag is active
-    const isFlagActive = async () => await isFlagFileExist(host, FlagFilesOriginal.SUSPEND_ALL);
+    const isFlagActive = async () => await isFlagFileExist(host, FlagFiles.SUSPEND_ALL);
 
     // Handle the suspend all scheduled operation
     const onScheduled = async () => {

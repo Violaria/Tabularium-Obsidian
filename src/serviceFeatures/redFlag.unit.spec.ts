@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from "vitest";
 import { createServiceContext } from "@tabularium/sync-core/context";
 import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
-    FlagFilesHumanReadable,
-    FlagFilesOriginal,
+    FlagFiles,
+    UpstreamFlagFiles,
 } from "@tabularium/sync-core/compat/common/models/redflag.const";
 import { REMOTE_MINIO, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
 import {
@@ -199,16 +199,16 @@ describe("Red Flag Feature", () => {
         it("should return true if flag file exists", async () => {
             const host = createHostMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
-            const result = await isFlagFileExist(host as any, FlagFilesOriginal.FETCH_ALL);
+            const result = await isFlagFileExist(host as any, FlagFiles.FETCH_ALL);
             expect(result).toBe(true);
         });
 
         it("should return false if flag file does not exist", async () => {
             const host = createHostMock();
 
-            const result = await isFlagFileExist(host as any, FlagFilesOriginal.FETCH_ALL);
+            const result = await isFlagFileExist(host as any, FlagFiles.FETCH_ALL);
             expect(result).toBe(false);
         });
     });
@@ -218,12 +218,12 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
-            await deleteFlagFile(host as any, log, FlagFilesOriginal.FETCH_ALL);
+            await deleteFlagFile(host as any, log, FlagFiles.FETCH_ALL);
 
             const exists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.FETCH_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.FETCH_ALL)
             );
             expect(exists).toBe(false);
         });
@@ -232,7 +232,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            await expect(deleteFlagFile(host as any, log, FlagFilesOriginal.FETCH_ALL)).resolves.not.toThrow();
+            await expect(deleteFlagFile(host as any, log, FlagFiles.FETCH_ALL)).resolves.not.toThrow();
         });
 
         it("should log error if deletion fails", async () => {
@@ -240,9 +240,9 @@ describe("Red Flag Feature", () => {
             const log = createLoggerMock();
 
             host.mocks.storageAccess.delete.mockRejectedValueOnce(new Error("Delete failed"));
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
-            await deleteFlagFile(host as any, log, FlagFilesOriginal.FETCH_ALL);
+            await deleteFlagFile(host as any, log, FlagFiles.FETCH_ALL);
 
             expect(log).toHaveBeenCalled();
         });
@@ -429,7 +429,7 @@ describe("Red Flag Feature", () => {
         it("should apply writeLogToTheFile setting during suspension", async () => {
             const host = createHostMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const handler = createSuspendFlagHandler(host as any, createLoggerMock());
             const checkResult = await handler.check();
@@ -439,11 +439,11 @@ describe("Red Flag Feature", () => {
     });
 
     describe("Fetch All Flag Handler", () => {
-        it("should detect fetch all flag using original filename", async () => {
+        it("should detect Tabularium's fetch flag", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
             const handler = createFetchAllFlagHandler(host as any, log);
             const exists = await handler.check();
@@ -451,37 +451,15 @@ describe("Red Flag Feature", () => {
             expect(exists).toBe(true);
         });
 
-        it("should detect fetch all flag using human-readable filename", async () => {
+        it("should not respond to the original plug-in's flag files", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.FETCH_ALL);
+            for (const flag of UpstreamFlagFiles) host.mocks.storageAccess.files.add(flag);
 
-            const handler = createFetchAllFlagHandler(host as any, log);
-            const exists = await handler.check();
-
-            expect(exists).toBe(true);
-        });
-
-        it("should clean up both original and human-readable fetch all flag files", async () => {
-            const host = createHostMock();
-            const log = createLoggerMock();
-
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.FETCH_ALL);
-
-            await deleteFlagFile(host as any, log, FlagFilesOriginal.FETCH_ALL);
-            await deleteFlagFile(host as any, log, FlagFilesHumanReadable.FETCH_ALL);
-
-            const originalExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.FETCH_ALL)
-            );
-            const humanExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesHumanReadable.FETCH_ALL)
-            );
-
-            expect(originalExists).toBe(false);
-            expect(humanExists).toBe(false);
+            expect(await createFetchAllFlagHandler(host as any, log).check()).toBe(false);
+            expect(await createRebuildFlagHandler(host as any, log).check()).toBe(false);
+            expect(await createSuspendFlagHandler(host as any, log).check()).toBe(false);
         });
 
         it("should have priority 10", () => {
@@ -496,7 +474,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             // Stage 1: Overwrite all with remote files
             // Stage 2: Delete local files if not on remote (Clean overwrite)
             host.mocks.ui.confirm.confirmWithMessage
@@ -524,7 +502,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(SIMPLE_FETCH_STAGE1_DETAILED);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({
                 vault: "identical",
@@ -546,7 +524,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(false);
 
             const handler = createFetchAllFlagHandler(host as any, log);
@@ -564,7 +542,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.confirm.confirmWithMessage
                 .mockResolvedValueOnce(SIMPLE_FETCH_STAGE1_REMOTE_WINS)
                 .mockResolvedValueOnce(SIMPLE_FETCH_STAGE2_REMOTE_DELETE_ALL);
@@ -584,7 +562,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             Object.assign(host.mocks.setting.settings, {
                 remoteConfigurations: {
                     alpha: { name: "Alpha", uri: "sls+https://user:pass@example.com/db1" },
@@ -607,7 +585,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             Object.assign(host.mocks.setting.settings, {
                 remoteConfigurations: {
                     alpha: { name: "Alpha", uri: "sls+https://user:pass@example.com/db1" },
@@ -621,7 +599,7 @@ describe("Red Flag Feature", () => {
 
             expect(result).toBe(false);
             expect(host.mocks.ui.confirm.confirmWithMessage).not.toHaveBeenCalled();
-            expect(host.mocks.storageAccess.files.has(FlagFilesOriginal.FETCH_ALL)).toBe(false);
+            expect(host.mocks.storageAccess.files.has(FlagFiles.FETCH_ALL)).toBe(false);
             await expect(handler.check()).resolves.toBe(false);
             expect(host.mocks.setting.applyPartial).toHaveBeenCalledWith(
                 {
@@ -637,7 +615,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             Object.assign(host.mocks.setting.settings, {
                 remoteConfigurations: {
                     alpha: {
@@ -671,7 +649,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             Object.assign(host.mocks.setting.settings, {
                 remoteConfigurations: {
                     alpha: { name: "Alpha", uri: "sls+https://user:pass@example.com/db1" },
@@ -691,7 +669,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             Object.assign(host.mocks.setting.settings, {
                 remoteConfigurations: {
                     alpha: { name: "Alpha", uri: "sls+https://user:pass@example.com/db1" },
@@ -1093,7 +1071,7 @@ describe("Red Flag Feature", () => {
         it("does not ask again after Tabularium's settings page confirmed the rebuild", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             await host.mocks.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now()));
 
             await createRebuildFlagHandler(host as any, log).handle();
@@ -1105,7 +1083,7 @@ describe("Red Flag Feature", () => {
         it("asks again when the confirmation is old", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             await host.mocks.setting.config.setValue(REBUILD_CONFIRMED_KEY, String(Date.now() - 3_600_000));
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce("cancelled");
 
@@ -1118,7 +1096,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
             host.mocks.setting.settings.remoteType = REMOTE_P2P;
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce("cancelled");
 
             await createRebuildFlagHandler(host as any, log).handle();
@@ -1128,49 +1106,16 @@ describe("Red Flag Feature", () => {
             });
         });
 
-        it("should detect rebuild all flag using original filename", async () => {
+        it("should detect Tabularium's rebuild flag", async () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
 
             const handler = createRebuildFlagHandler(host as any, log);
             const exists = await handler.check();
 
             expect(exists).toBe(true);
-        });
-
-        it("should detect rebuild all flag using human-readable filename", async () => {
-            const host = createHostMock();
-            const log = createLoggerMock();
-
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.REBUILD_ALL);
-
-            const handler = createRebuildFlagHandler(host as any, log);
-            const exists = await handler.check();
-
-            expect(exists).toBe(true);
-        });
-
-        it("should clean up both original and human-readable rebuild all flag files", async () => {
-            const host = createHostMock();
-            const log = createLoggerMock();
-
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.REBUILD_ALL);
-
-            await deleteFlagFile(host as any, log, FlagFilesOriginal.REBUILD_ALL);
-            await deleteFlagFile(host as any, log, FlagFilesHumanReadable.REBUILD_ALL);
-
-            const originalExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.REBUILD_ALL)
-            );
-            const humanExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesHumanReadable.REBUILD_ALL)
-            );
-
-            expect(originalExists).toBe(false);
-            expect(humanExists).toBe(false);
         });
 
         it("should have priority 20", () => {
@@ -1190,7 +1135,7 @@ describe("Red Flag Feature", () => {
             host.mocks.storageAccess.delete.mockRejectedValueOnce(new Error("Delete failed"));
 
             try {
-                await host.mocks.storageAccess.delete(FlagFilesOriginal.FETCH_ALL, true);
+                await host.mocks.storageAccess.delete(FlagFiles.FETCH_ALL, true);
             } catch {
                 // Error handled
             }
@@ -1597,10 +1542,10 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
 
             // Add only human-readable flag
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
             const humanExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesHumanReadable.FETCH_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.FETCH_ALL)
             );
 
             expect(humanExists).toBe(true);
@@ -1610,10 +1555,10 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
 
             // Add only original flag
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
 
             const originalExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.REBUILD_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.REBUILD_ALL)
             );
 
             expect(originalExists).toBe(true);
@@ -1625,7 +1570,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
 
             const handler = createFetchAllFlagHandler(host as any, log);
             const result = await handler.check();
@@ -1637,7 +1582,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
 
             const handler = createRebuildFlagHandler(host as any, log);
             const result = await handler.check();
@@ -1649,7 +1594,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const handler = createSuspendFlagHandler(host as any, log);
             const result = await handler.check();
@@ -1684,7 +1629,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const handler = createSuspendFlagHandler(host as any, log);
             const checkResult = await handler.check();
@@ -1711,18 +1656,18 @@ describe("Red Flag Feature", () => {
         it("should handle multiple flag files existing simultaneously", async () => {
             const host = createHostMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const fetchExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.FETCH_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.FETCH_ALL)
             );
             const rebuildExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.REBUILD_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.REBUILD_ALL)
             );
             const suspendExists = await host.mocks.storageAccess.isExists(
-                host.mocks.storageAccess.normalisePath(FlagFilesOriginal.SUSPEND_ALL)
+                host.mocks.storageAccess.normalisePath(FlagFiles.SUSPEND_ALL)
             );
 
             expect(fetchExists).toBe(true);
@@ -1733,11 +1678,11 @@ describe("Red Flag Feature", () => {
         it("should cleanup all flags when processing completes", async () => {
             const host = createHostMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesHumanReadable.FETCH_ALL);
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
 
-            await host.mocks.storageAccess.delete(FlagFilesHumanReadable.FETCH_ALL);
-            await host.mocks.storageAccess.delete(FlagFilesOriginal.FETCH_ALL);
+            await host.mocks.storageAccess.delete(FlagFiles.FETCH_ALL);
+            await host.mocks.storageAccess.delete(FlagFiles.REBUILD_ALL);
 
             expect(host.mocks.storageAccess.files.size).toBe(0);
         });
@@ -1795,7 +1740,7 @@ describe("Red Flag Feature", () => {
     describe("flagHandlerToEventHandler integration", () => {
         it("should stop a detailed Fetch when remote-setting initialisation is cancelled", async () => {
             const host = createHostMock();
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(SIMPLE_FETCH_STAGE1_DETAILED);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({
                 vault: "independent",
@@ -1819,13 +1764,13 @@ describe("Red Flag Feature", () => {
                 },
                 true
             );
-            expect(host.mocks.storageAccess.files.has(FlagFilesOriginal.FETCH_ALL)).toBe(false);
+            expect(host.mocks.storageAccess.files.has(FlagFiles.FETCH_ALL)).toBe(false);
             expect(host.mocks.appLifecycle.performRestart).toHaveBeenCalledOnce();
         });
 
         it("should stop Rebuild before deleting local data when remote-setting initialisation is cancelled", async () => {
             const host = createHostMock();
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({
                 extra: { preventFetchingConfig: false },
             });
@@ -1847,13 +1792,13 @@ describe("Red Flag Feature", () => {
                 },
                 true
             );
-            expect(host.mocks.storageAccess.files.has(FlagFilesOriginal.REBUILD_ALL)).toBe(false);
+            expect(host.mocks.storageAccess.files.has(FlagFiles.REBUILD_ALL)).toBe(false);
             expect(host.mocks.appLifecycle.performRestart).toHaveBeenCalledOnce();
         });
 
         it("should let Rebuild use this device's settings when remote settings are unavailable", async () => {
             const host = createHostMock();
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({
                 extra: { preventFetchingConfig: false },
             });
@@ -1876,7 +1821,7 @@ describe("Red Flag Feature", () => {
                 }
             );
             expect(host.mocks.rebuilder.$rebuildEverything).toHaveBeenCalledOnce();
-            expect(host.mocks.storageAccess.files.has(FlagFilesOriginal.REBUILD_ALL)).toBe(false);
+            expect(host.mocks.storageAccess.files.has(FlagFiles.REBUILD_ALL)).toBe(false);
             expect(host.mocks.appLifecycle.performRestart).not.toHaveBeenCalled();
         });
 
@@ -1895,7 +1840,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.tweakValue.fetchRemotePreferred.mockResolvedValueOnce(availableRemoteTweaks({}));
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(SIMPLE_FETCH_STAGE1_DETAILED);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce("cancelled");
@@ -1913,7 +1858,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const handler = createSuspendFlagHandler(host as any, log);
             const eventHandler = flagHandlerToEventHandler(handler);
@@ -1943,7 +1888,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce("cancelled");
 
             const handler = createRebuildFlagHandler(host as any, log);
@@ -1958,7 +1903,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockRejectedValueOnce(new Error("Dialog failed"));
 
             const handler = createFetchAllFlagHandler(host as any, log);
@@ -1976,7 +1921,7 @@ describe("Red Flag Feature", () => {
             const log = createLoggerMock();
             host.mocks.tweakValue.fetchRemotePreferred.mockResolvedValue(availableRemoteTweaks({ customChunkSize: 1 }));
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.FETCH_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.FETCH_ALL);
             host.mocks.ui.confirm.confirmWithMessage.mockResolvedValueOnce(SIMPLE_FETCH_STAGE1_DETAILED);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({ vault: "identical", extra: {} });
             host.mocks.rebuilder.$fetchLocal.mockResolvedValueOnce();
@@ -2003,7 +1948,7 @@ describe("Red Flag Feature", () => {
                 })
             );
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.REBUILD_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.REBUILD_ALL);
             host.mocks.ui.dialogManager.openWithExplicitCancel.mockResolvedValueOnce({ extra: {} });
             host.mocks.rebuilder.$rebuildEverything.mockResolvedValueOnce();
             const handler = createRebuildFlagHandler(host as any, log);
@@ -2040,7 +1985,7 @@ describe("Red Flag Feature", () => {
             const host = createHostMock();
             const log = createLoggerMock();
 
-            host.mocks.storageAccess.files.add(FlagFilesOriginal.SUSPEND_ALL);
+            host.mocks.storageAccess.files.add(FlagFiles.SUSPEND_ALL);
 
             const handler = createSuspendFlagHandler(host as any, log);
             const eventHandler = flagHandlerToEventHandler(handler);

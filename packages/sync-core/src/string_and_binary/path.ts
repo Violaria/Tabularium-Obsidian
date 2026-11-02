@@ -6,13 +6,10 @@ import {
     type EntryHasPath,
     type FilePath,
     type FilePathWithPrefix,
-    FLAGMD_REDFLAG,
-    FLAGMD_REDFLAG2,
-    FLAGMD_REDFLAG3,
+    FlagFiles,
     PREFIX_OBFUSCATED,
     PREFIXMD_LOGFILE,
-    FLAGMD_REDFLAG2_HR,
-    FLAGMD_REDFLAG3_HR,
+    UpstreamFlagFiles,
     PREFIXMD_LOGFILE_UC,
 } from "@lib/common/types.ts";
 import { memorizeFuncWithLRUCache } from "@lib/common/utils.ts";
@@ -140,22 +137,9 @@ export function stripPrefix(prefixedPath: FilePathWithPrefix): FilePath {
     return expandFilePathPrefix(prefixedPath)[1] as FilePath;
 }
 
+const flagFiles: readonly string[] = [...Object.values(FlagFiles), ...UpstreamFlagFiles];
 export function shouldBeIgnored(filename: string): boolean {
-    if (filename == FLAGMD_REDFLAG) {
-        return true;
-    }
-    if (filename == FLAGMD_REDFLAG2) {
-        return true;
-    }
-    if (filename == FLAGMD_REDFLAG2_HR) {
-        return true;
-    }
-    if (filename == FLAGMD_REDFLAG3) {
-        return true;
-    }
-    if (filename == FLAGMD_REDFLAG3_HR) {
-        return true;
-    }
+    if (flagFiles.includes(filename)) return true;
     if (filename.startsWith(PREFIXMD_LOGFILE)) {
         return true;
     }
