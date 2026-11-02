@@ -1,4 +1,4 @@
-// Fails when the plug-in's style sheet or interface code uses a class name from the original Self-hosted LiveSync's style
+// Fails when the plug-in's style sheet or interface code uses a class name from the original Tabularium's style
 // sheet (upstreamStyleClasses.ts): in one vault the two plug-ins' styles would apply to each other's elements.
 import { upstreamStyleClasses } from "./upstreamStyleClasses.ts";
 
@@ -45,7 +45,7 @@ for (const file of files) {
 }
 
 if (problems.length) {
-    process.stderr.write(`Class names of the original Self-hosted LiveSync's style sheet:\n  ${problems.join("\n  ")}\n`);
+    process.stderr.write(`Class names of the original Tabularium's style sheet:\n  ${problems.join("\n  ")}\n`);
     process.exit(1);
 }
 process.stdout.write(`No class names of the original plug-in's style sheet in styles.css or ${files.length} interface files.\n`);

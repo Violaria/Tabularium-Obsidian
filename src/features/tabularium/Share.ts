@@ -4,7 +4,7 @@
 import { Modal, Notice, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
 import { mount, unmount } from "svelte";
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 import { getResolvedLang } from "@/core/common/translation";
 import { catalogues, type Language } from "../../../../server/ui/messages";
 import type { TabulariumServer } from "./ServerLogin";
@@ -40,7 +40,7 @@ export class TabulariumShare {
     constructor(
         private readonly plugin: Plugin,
         private readonly server: TabulariumServer,
-        private readonly core: LiveSyncCore,
+        private readonly core: PluginCore,
         private readonly sorting: () => TabulariumSorting | undefined
     ) {}
 
@@ -237,7 +237,7 @@ function confirm(app: Plugin["app"], title: string, body: string, action: string
     });
 }
 
-export function installShare(plugin: Plugin, server: TabulariumServer, core: LiveSyncCore, sorting: () => TabulariumSorting | undefined) {
+export function installShare(plugin: Plugin, server: TabulariumServer, core: PluginCore, sorting: () => TabulariumSorting | undefined) {
     const share = new TabulariumShare(plugin, server, core, sorting);
     share.install();
     return share;

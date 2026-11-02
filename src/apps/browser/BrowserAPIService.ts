@@ -8,7 +8,7 @@ import { _fetch } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 declare const MANIFEST_VERSION: string | undefined;
 declare const PACKAGE_VERSION: string | undefined;
 
-export interface LiveSyncBrowserAPIServiceOptions {
+export interface BrowserAPIServiceOptions {
     confirm: Confirm;
     getSystemVaultName(): string;
     appId?: string;
@@ -24,10 +24,10 @@ export interface LiveSyncBrowserAPIServiceOptions {
 }
 
 /** Browser application implementation of Commonlib's injected host API contract. */
-export class LiveSyncBrowserAPIService<T extends ServiceContext> extends InjectableAPIService<T> {
-    private readonly options: LiveSyncBrowserAPIServiceOptions;
+export class BrowserAPIService<T extends ServiceContext> extends InjectableAPIService<T> {
+    private readonly options: BrowserAPIServiceOptions;
 
-    constructor(context: T, options: LiveSyncBrowserAPIServiceOptions) {
+    constructor(context: T, options: BrowserAPIServiceOptions) {
         super(context);
         this.options = options;
         this.addLog.setHandler((message, level, key) => {

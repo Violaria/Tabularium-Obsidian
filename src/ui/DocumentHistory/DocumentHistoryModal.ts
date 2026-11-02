@@ -2,7 +2,7 @@ import { TFile, Modal, App, DIFF_DELETE, DIFF_EQUAL, DIFF_INSERT, diff_match_pat
 import { getPathFromTFile, isValidPath } from "@/obsidian/common/utils.ts";
 import { $msg } from "@/core/common/translation";
 import { decodeBinary, readString } from "@tabularium/sync-core/compat/string_and_binary/convert";
-import ObsidianLiveSyncPlugin from "@/main.ts";
+import TabulariumPlugin from "@/main.ts";
 import {
     type DocumentID,
     type FilePathWithPrefix,
@@ -16,7 +16,7 @@ import { isErrorOfMissingDoc } from "@tabularium/sync-core/compat/pouchdb/utils_
 import { fireAndForget, getDocData } from "@tabularium/sync-core/compat/common/utils";
 import { isPlainText, stripPrefix } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { scheduleOnceIfDuplicated } from "octagonal-wheels/concurrency/lock";
-import type { LiveSyncBaseCore } from "@/core/createCore.ts";
+import type { SyncCore } from "@/core/createCore.ts";
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import {
     DOCUMENT_HISTORY_PREFERENCE_KEYS,
@@ -58,8 +58,8 @@ function readDocument(w: LoadedEntry) {
     return getDocData(w.data);
 }
 export class DocumentHistoryModal extends Modal {
-    plugin: ObsidianLiveSyncPlugin;
-    core: LiveSyncBaseCore;
+    plugin: TabulariumPlugin;
+    core: SyncCore;
     get services() {
         return this.core.services;
     }
@@ -102,8 +102,8 @@ export class DocumentHistoryModal extends Modal {
 
     constructor(
         app: App,
-        core: LiveSyncBaseCore,
-        plugin: ObsidianLiveSyncPlugin,
+        core: SyncCore,
+        plugin: TabulariumPlugin,
         file: TFile | FilePathWithPrefix,
         id?: DocumentID,
         revision?: string
@@ -795,7 +795,7 @@ export class DocumentHistoryModal extends Modal {
                         Logger("The selected content was restored as a new revision.", LOG_LEVEL_NOTICE);
                     } else {
                         Logger(
-                            "The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.",
+                            "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.",
                             LOG_LEVEL_NOTICE
                         );
                     }

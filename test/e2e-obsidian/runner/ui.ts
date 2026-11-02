@@ -16,12 +16,12 @@ type ObsidianSettingsHost = typeof globalThis & {
     };
 };
 
-export type LiveSyncSettingsRenderer = "imperative" | "declarative";
+export type SettingsRenderer = "imperative" | "declarative";
 
-export type LiveSyncSettingsNavigator = {
+export type SettingsNavigator = {
     dialogue: Locator;
     page: Page;
-    renderer: LiveSyncSettingsRenderer;
+    renderer: SettingsRenderer;
     close(): Promise<void>;
     openPage(name: string): Promise<Locator>;
     returnToCatalogue(): Promise<void>;
@@ -91,13 +91,13 @@ function escapeRegExp(value: string): string {
 }
 
 /**
- * Open the Self-hosted LiveSync settings tab through the renderer selected by
+ * Open the Tabularium settings tab through the renderer selected by
  * the running Obsidian version.
  *
  * Obsidian 1.13 may open settings in a separate window. The returned navigator
  * owns that renderer difference for both supported settings implementations.
  */
-export async function openLiveSyncSettings(page: Page, timeoutMs = 10_000): Promise<LiveSyncSettingsNavigator> {
+export async function openPluginSettings(page: Page, timeoutMs = 10_000): Promise<SettingsNavigator> {
     let hostPage: Page | undefined;
     for (const candidate of page.context().pages()) {
         const hasSettingsHost = await candidate
@@ -158,7 +158,7 @@ export async function openLiveSyncSettings(page: Page, timeoutMs = 10_000): Prom
         undefined,
         { timeout: timeoutMs }
     );
-    const renderer: LiveSyncSettingsRenderer = (await imperativeRoot.isVisible()) ? "imperative" : "declarative";
+    const renderer: SettingsRenderer = (await imperativeRoot.isVisible()) ? "imperative" : "declarative";
 
     const returnToCatalogue = async (): Promise<void> => {
         if (renderer === "imperative" || (await firstDeclarativeEntry.isVisible())) return;

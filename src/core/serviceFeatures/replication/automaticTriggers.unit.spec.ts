@@ -4,7 +4,7 @@ import {
     DEFAULT_SETTINGS,
     REMOTE_P2P,
     type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 import { EVENT_FILE_SAVED, EVENT_SETTING_SAVED, eventHub } from "@/core/common/events";
@@ -161,7 +161,7 @@ describe("automatic replication triggers while P2P is active", () => {
             ...DEFAULT_SETTINGS,
             ignoreFiles: ".gitignore",
             syncOnlyRegEx: "^E2E/allowed/.*",
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
         const reprocessStoredDocuments = vi.fn(async () => 1);
         const resumeResultApplication = vi.fn();
         const suspendResultApplication = vi.fn();

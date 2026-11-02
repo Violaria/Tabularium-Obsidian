@@ -16,7 +16,7 @@ import type { Rebuilder } from "@lib/interfaces/DatabaseRebuilder";
 import type { StorageAccess } from "@lib/interfaces/StorageAccess";
 import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import { delay } from "octagonal-wheels/promises";
-import type { LiveSyncEventHub } from "@lib/hub/hub";
+import type { SyncEventHub } from "@lib/hub/hub";
 import { EVENT_DATABASE_REBUILT } from "@lib/events/coreEvents";
 import { ServiceModuleBase } from "@lib/serviceModules/ServiceModuleBase";
 import type { ControlService } from "@lib/services/base/ControlService";
@@ -59,7 +59,7 @@ function canResetCentralRemote(replicator: ReplicatorInstance): replicator is Ce
 }
 
 export interface ServiceRebuilderDependencies {
-    events: LiveSyncEventHub;
+    events: SyncEventHub;
     appLifecycle: AppLifecycleService;
     API: APIService;
     UI: UIService;
@@ -78,7 +78,7 @@ export interface ServiceRebuilderDependencies {
 }
 
 export class ServiceRebuilder extends ServiceModuleBase<ServiceRebuilderDependencies> implements Rebuilder {
-    private events: LiveSyncEventHub;
+    private events: SyncEventHub;
     private appLifecycle: AppLifecycleService;
     private API: APIService;
     private UI: UIService;

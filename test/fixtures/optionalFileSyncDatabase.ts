@@ -10,8 +10,8 @@ import {
     type DocumentID,
 } from "@tabularium/sync-core/compat/common/types";
 import { createTextBlob } from "@tabularium/sync-core/compat/common/utils";
-import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
-import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import { createSyncEventHub } from "@tabularium/sync-core/context";
+import { LocalDatabase, type LocalDatabaseEnv } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
 
 PouchDB.plugin(MemoryAdapter);
 
@@ -49,7 +49,7 @@ export async function createOptionalFileSyncDatabase() {
             id2path: (id: string, entry?: { path?: string }) => entry?.path ?? id,
             getPath: (entry: { path: FilePathWithPrefix }) => entry.path,
         },
-        context: { events: createLiveSyncEventHub() },
+        context: { events: createSyncEventHub() },
         database: { createPouchDBInstance: () => database },
         databaseEvents: {
             onDatabaseInitialisation: async () => true,
@@ -59,7 +59,7 @@ export async function createOptionalFileSyncDatabase() {
         },
         replicator: { onCloseActiveReplication: async () => true },
     };
-    const localDatabase = new LiveSyncLocalDB(name, { services } as unknown as LiveSyncLocalDBEnv);
+    const localDatabase = new LocalDatabase(name, { services } as unknown as LocalDatabaseEnv);
     if (!(await localDatabase.initializeDatabase())) {
         await database.destroy();
         throw new Error("The optional-file test database could not initialise");

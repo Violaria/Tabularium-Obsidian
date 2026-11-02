@@ -2,7 +2,7 @@ import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services
 import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
 import { ServiceFileHandler } from "@/core/serviceModules/FileHandler";
 import { StorageAccessManager } from "@tabularium/sync-core/compat/managers/StorageProcessingManager";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { FileAccessCLI } from "./FileAccessCLI";
 import { ServiceFileAccessCLI } from "./ServiceFileAccessImpl";
@@ -14,16 +14,16 @@ import { createFileReflectionProvenance } from "@/core/serviceModules/FileReflec
 
 /**
  * Initialize service modules for CLI version
- * This is the CLI equivalent of ObsidianLiveSyncPlugin.initialiseServiceModules
+ * This is the CLI equivalent of TabulariumPlugin.initialiseServiceModules
  *
  * @param basePath - The base path of the vault directory
- * @param core - The LiveSyncBaseCore instance
+ * @param core - The SyncCore instance
  * @param services - The service hub
  * @returns ServiceModules containing all initialized service modules
  */
 export function initialiseServiceModulesCLI(
     basePath: string,
-    core: LiveSyncBaseCore<ServiceContext>,
+    core: SyncCore<ServiceContext>,
     services: InjectableServiceHub<ServiceContext>,
     ignoreRules?: IgnoreRules,
     watchEnabled: boolean = false

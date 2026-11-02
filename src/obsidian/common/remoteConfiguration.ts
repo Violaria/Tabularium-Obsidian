@@ -1,11 +1,11 @@
 import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import {
     REMOTE_P2P,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 
 /** Returns whether the selected main remote represents the P2P-only setup. */
-export function isP2PMainRemote(settings: ObsidianLiveSyncSettings): boolean {
+export function isP2PMainRemote(settings: SyncSettings): boolean {
     if (settings.remoteType === REMOTE_P2P) return true;
 
     const activeId = settings.activeConfigurationId?.trim();

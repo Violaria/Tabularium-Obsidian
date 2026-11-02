@@ -2,14 +2,14 @@ import {
     LOG_LEVEL_NOTICE,
     type FilePath,
     type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import type { IConflictService, IVaultService } from "@tabularium/sync-core/compat/services/base/IService";
 import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import type { ReactiveSource } from "octagonal-wheels/dataobject/reactive";
 import { QueueProcessor } from "octagonal-wheels/concurrency/processor";
 
-export type ConflictCheckingSettings = Pick<ObsidianLiveSyncSettings, "checkConflictOnlyOnOpen">;
+export type ConflictCheckingSettings = Pick<SyncSettings, "checkConflictOnlyOnOpen">;
 
 export interface ConflictCheckingDependencies {
     readonly conflict: Pick<

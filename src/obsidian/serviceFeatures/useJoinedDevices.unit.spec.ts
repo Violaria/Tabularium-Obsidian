@@ -215,7 +215,7 @@ describe("joined devices service feature", () => {
         const items = data.notices.setItem.mock.calls.map(([, , item]) => item);
         expect(items.filter((item) => item.action)).toHaveLength(1);
         const messages = items.map((item) => item.message).join("\n");
-        expect(messages).toContain("Self-hosted LiveSync");
+        expect(messages).toContain("Tabularium");
         expect(messages).toMatch(/Newer.*2\.0\.0, 3\.0\.0/);
         expect(messages).toMatch(/Older.*0\.8\.0, 0\.9\.0/);
         expect(messages.match(/0\.8\.0/g)).toHaveLength(1);

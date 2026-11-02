@@ -40,7 +40,7 @@
         "i18n:yaml2json": "tsx _tools/yaml2json.ts",
         "pretest:unit": "npm run build:core",
         "test:unit": "vitest run --config vitest.config.unit.ts && npm run test --workspace @tabularium/sync-core",
-        "test:contract:contexts": "vitest run --config vitest.config.unit.ts src/obsidian/services/ObsidianServiceContext.unit.spec.ts src/apps/cli/services/NodeServiceContext.unit.spec.ts src/apps/browser/createLiveSyncBrowserServiceHub.unit.spec.ts",
+        "test:contract:contexts": "vitest run --config vitest.config.unit.ts src/obsidian/services/ObsidianServiceContext.unit.spec.ts src/apps/cli/services/NodeServiceContext.unit.spec.ts src/apps/browser/createBrowserServiceHub.unit.spec.ts",
         "test:contract:context:cli": "npm run build --workspace tabularium-cli && deno task --cwd src/apps/cli/testdeno test:setup-put-cat",
         "test:contract:context:obsidian": "npm run build && npm run test:e2e:obsidian:smoke",
         "test:e2e:cli": "npm run test:e2e:ci --workspace tabularium-cli",

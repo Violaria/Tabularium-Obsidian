@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { startObsidianPluginSession } from "@vrtmrz/obsidian-test-session";
 import {
-    startObsidianLiveSyncSession,
-    type StartObsidianLiveSyncSessionOptions,
+    startObsidianSession,
+    type StartObsidianSessionOptions,
 } from "./session.ts";
 
 vi.mock("@vrtmrz/obsidian-test-session", () => ({
@@ -16,7 +16,7 @@ vi.mock("@vrtmrz/obsidian-test-session", () => ({
     })),
 }));
 
-describe("LiveSync real-Obsidian session", () => {
+describe("Tabularium real-Obsidian session", () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
@@ -35,14 +35,14 @@ describe("LiveSync real-Obsidian session", () => {
             processMarker: "/tmp/upgrade-state",
             dispose: vi.fn(async () => undefined),
         };
-        const options: StartObsidianLiveSyncSessionOptions & { artifactRoot: string } = {
+        const options: StartObsidianSessionOptions & { artifactRoot: string } = {
             binary: "/Applications/Obsidian",
             cliBinary: "obsidian-cli",
             vault,
             artifactRoot: "/tmp/obsidian-livesync-0.25.83",
         };
 
-        await startObsidianLiveSyncSession(options);
+        await startObsidianSession(options);
 
         expect(startObsidianPluginSession).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -69,7 +69,7 @@ describe("LiveSync real-Obsidian session", () => {
             dispose: vi.fn(async () => undefined),
         };
 
-        await startObsidianLiveSyncSession({
+        await startObsidianSession({
             binary: "/Applications/Obsidian",
             cliBinary: "obsidian-cli",
             vault,

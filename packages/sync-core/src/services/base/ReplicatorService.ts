@@ -22,7 +22,7 @@ import type {
     ReplicatorProviderDefinitionMap,
 } from "@lib/replication/ReplicatorProvider.ts";
 import { CAPABILITY_SUPPORT_KINDS } from "@lib/replication/ProviderCapability.ts";
-import type { ObsidianLiveSyncSettings, RemoteDBSettings } from "@lib/common/types.ts";
+import type { SyncSettings, RemoteDBSettings } from "@lib/common/types.ts";
 import {
     ActiveReplicatorState,
     type ActiveReplicatorPublication,
@@ -235,7 +235,7 @@ export abstract class ReplicatorService<T extends ServiceContext = ServiceContex
     }
 
     private async createReplicator(
-        settingOverride: Partial<ObsidianLiveSyncSettings> = {}
+        settingOverride: Partial<SyncSettings> = {}
     ): Promise<ReplicatorInstance | undefined | false> {
         const currentSettings = this.settingService.currentSettings();
         const setting = { ...currentSettings, ...settingOverride };
@@ -243,8 +243,8 @@ export abstract class ReplicatorService<T extends ServiceContext = ServiceContex
     }
 
     private async createReplicatorForSetting(
-        setting: ObsidianLiveSyncSettings,
-        legacySettingOverride: Partial<ObsidianLiveSyncSettings> = {}
+        setting: SyncSettings,
+        legacySettingOverride: Partial<SyncSettings> = {}
     ): Promise<ReplicatorInstance | undefined | false> {
         const provider = this.getProviderDefinition(setting);
         if (provider) {
@@ -398,7 +398,7 @@ export abstract class ReplicatorService<T extends ServiceContext = ServiceContex
     private readonly legacyGetNewReplicator = firstResultFunction<ReplicatorFactoryCallback>("getNewReplicator");
 
     readonly getNewReplicator: MultipleHandlerFunction<ReplicatorFactoryCallback> = Object.assign(
-        async (settingOverride: Partial<ObsidianLiveSyncSettings> = {}) => await this.createReplicator(settingOverride),
+        async (settingOverride: Partial<SyncSettings> = {}) => await this.createReplicator(settingOverride),
         {
             addHandler: (callback: ReplicatorFactoryCallback) => this.legacyGetNewReplicator.addHandler(callback),
             removeHandler: (callback: ReplicatorFactoryCallback) => this.legacyGetNewReplicator.removeHandler(callback),

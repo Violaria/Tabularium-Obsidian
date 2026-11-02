@@ -17,9 +17,9 @@ import {
     type UnattendedOneShotRunner,
 } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { getCouchDBReplicatorConfigurationIdentity } from "./replicatorConfigurationIdentity";
 import {
     createCouchDBJoinedDevicesResourceFactory,
@@ -32,7 +32,7 @@ import {
 import { COUCHDB_CENTRAL_REMOTE_ADMINISTRATION_CAPABILITY } from "./centralRemoteAdministration";
 
 /** Host environment sufficient to construct every current central provider. */
-export type CentralReplicatorProviderHost = LiveSyncCouchDBReplicatorEnv;
+export type CentralReplicatorProviderHost = CouchDBReplicatorEnv;
 
 /** Minimal operation required by the central one-shot adapters. */
 interface OneShotOutcomeReplicator extends ReplicatorInstance {
@@ -75,7 +75,7 @@ const couchDBUnattendedOneShot: UnattendedOneShotRunner = async (instance, setti
 
 /**
  * Build the complete, deliberately concrete central-provider definitions (CouchDB only) for one
- * LiveSync host. This closed composition is not a runtime provider registry.
+ * Tabularium host. This closed composition is not a runtime provider registry.
  */
 export function createCentralReplicatorProviderDefinitions(
     host: CentralReplicatorProviderHost
@@ -90,7 +90,7 @@ export function createCentralReplicatorProviderDefinitions(
                 !!settings.couchDB_URI?.trim() &&
                 !!settings.couchDB_DBNAME?.trim(),
             configurationIdentity: getCouchDBReplicatorConfigurationIdentity,
-            create: () => Promise.resolve(new LiveSyncCouchDBReplicator(host)),
+            create: () => Promise.resolve(new CouchDBReplicator(host)),
             remoteResources: {
                 [REMOTE_RESOURCE_KINDS.JOINED_DEVICES]: supportedCapability(
                     createCouchDBJoinedDevicesResourceFactory(host)

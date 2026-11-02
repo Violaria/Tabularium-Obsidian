@@ -2,7 +2,7 @@ import { EVENT_ON_UNRESOLVED_ERROR } from "@lib/events/coreEvents";
 import { type LOG_LEVEL, LEVEL_NOTICE, LEVEL_INFO } from "octagonal-wheels/common/logger";
 import { createInstanceLogFunction } from "@lib/services/lib/logUtils";
 import type { AppLifecycleService } from "./AppLifecycleService";
-import type { LiveSyncEventHub } from "@lib/hub/hub";
+import type { SyncEventHub } from "@lib/hub/hub";
 
 export class UnresolvedErrorManager {
     private _log = createInstanceLogFunction("UnresolvedErrorManager");
@@ -42,7 +42,7 @@ export class UnresolvedErrorManager {
 
     constructor(
         appLifecycleService: AppLifecycleService,
-        private readonly events: LiveSyncEventHub
+        private readonly events: SyncEventHub
     ) {
         this.appLifecycleService = appLifecycleService;
         this.appLifecycleService.getUnresolvedMessages.addHandler(this._reportUnresolvedMessages.bind(this));

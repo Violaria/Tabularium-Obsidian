@@ -21,7 +21,7 @@ export interface ServiceModules {
     rebuilder: Rebuilder;
 }
 
-export interface LiveSyncHost {
+export interface SyncHost {
     services: IServiceHub;
     serviceModules: ServiceModules;
 }

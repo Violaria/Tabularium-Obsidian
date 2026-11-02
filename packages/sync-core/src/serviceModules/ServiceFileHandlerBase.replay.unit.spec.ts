@@ -10,9 +10,9 @@ import {
     type UXFileInfoStub,
 } from "@lib/common/types";
 import { compareMTime, createTextBlob, isDocContentSame, readContent } from "@lib/common/utils";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import type { FileReflectionProvenanceRecord } from "@lib/interfaces/FileReflectionProvenance";
-import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@lib/pouchdb/LiveSyncLocalDB";
+import { LocalDatabase, type LocalDatabaseEnv } from "@lib/pouchdb/LocalDatabase";
 import {
     ServiceDatabaseFileAccessBase,
     type ServiceDatabaseFileAccessDependencies,
@@ -80,9 +80,9 @@ async function createFixture() {
             compareMTime(file.stat.mtime, entry.mtime),
         markChangesAreSame: vi.fn(),
     };
-    const events = createLiveSyncEventHub();
+    const events = createSyncEventHub();
     const API = { addLog: vi.fn() };
-    const localDatabase = new LiveSyncLocalDB(name, {
+    const localDatabase = new LocalDatabase(name, {
         services: {
             API,
             setting,
@@ -97,7 +97,7 @@ async function createFixture() {
             },
             replicator: { onCloseActiveReplication: async () => true },
         },
-    } as unknown as LiveSyncLocalDBEnv);
+    } as unknown as LocalDatabaseEnv);
 
     try {
         expect(await localDatabase.initializeDatabase()).toBe(true);

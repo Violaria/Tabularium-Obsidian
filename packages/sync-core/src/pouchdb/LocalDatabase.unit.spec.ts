@@ -4,15 +4,15 @@ import MemoryAdapter from "pouchdb-adapter-memory";
 import replication from "pouchdb-replication";
 import { DEFAULT_SETTINGS, type DocumentID, type EntryDoc } from "@lib/common/types";
 import { createServiceContext } from "@lib/services/base/ServiceBase";
-import { LiveSyncLocalDB } from "./LiveSyncLocalDB";
+import { LocalDatabase } from "./LocalDatabase";
 
 const managerLifecycle = vi.hoisted(() => ({
     initialise: vi.fn(async () => undefined),
     teardown: vi.fn(async () => undefined),
 }));
 
-vi.mock("@lib/managers/LiveSyncManagers.ts", () => ({
-    LiveSyncManagers: class {
+vi.mock("@lib/managers/SyncManagers.ts", () => ({
+    SyncManagers: class {
         chunkManager = { emitEvent: vi.fn() };
         initialise = managerLifecycle.initialise;
         teardownManagers = managerLifecycle.teardown;
@@ -52,15 +52,15 @@ function revision(id: string, rev: string, history: string[], children: string[]
     } as unknown as EntryDoc;
 }
 
-function subjectFor(database: PouchDB.Database<EntryDoc>): LiveSyncLocalDB {
-    const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+function subjectFor(database: PouchDB.Database<EntryDoc>): LocalDatabase {
+    const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
     Object.assign(subject, { localDatabase: database });
     return subject;
 }
 
-describe("LiveSyncLocalDB.allChunks", () => {
+describe("LocalDatabase.allChunks", () => {
     let database: PouchDB.Database<EntryDoc>;
-    let subject: LiveSyncLocalDB;
+    let subject: LocalDatabase;
 
     beforeEach(() => {
         databaseSequence++;
@@ -207,10 +207,10 @@ describe("LiveSyncLocalDB.allChunks", () => {
     });
 });
 
-describe("LiveSyncLocalDB reset lifecycle", () => {
+describe("LocalDatabase reset lifecycle", () => {
     it("retires database consumers before tearing down managers", async () => {
         const order: string[] = [];
-        const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+        const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
         Object.assign(subject, {
             isReady: true,
             _managers: {
@@ -273,7 +273,7 @@ describe("LiveSyncLocalDB reset lifecycle", () => {
         const destroy = vi.fn(async () => {
             order.push("destroy");
         });
-        const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+        const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
         Object.assign(subject, {
             isReady: true,
             _managers: { teardownManagers },
@@ -320,7 +320,7 @@ describe("LiveSyncLocalDB reset lifecycle", () => {
 
     it("clears physical readiness when a reset hook rejects the transition", async () => {
         const destroy = vi.fn(async () => undefined);
-        const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+        const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
         Object.assign(subject, {
             isReady: true,
             _managers: {
@@ -352,7 +352,7 @@ describe("LiveSyncLocalDB reset lifecycle", () => {
     it("reports failure when the destroyed database cannot be reinitialised", async () => {
         const initialise = vi.fn(async () => false);
         const destroy = vi.fn(async () => undefined);
-        const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+        const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
         Object.assign(subject, {
             _managers: {
                 teardownManagers: vi.fn(async () => undefined),
@@ -382,7 +382,7 @@ describe("LiveSyncLocalDB reset lifecycle", () => {
     });
 });
 
-describe("LiveSyncLocalDB initialisation readiness", () => {
+describe("LocalDatabase initialisation readiness", () => {
     function createSubject(
         onDatabaseHasReady: () => Promise<boolean>,
         onDatabaseInitialisation = vi.fn(async () => true)
@@ -410,7 +410,7 @@ describe("LiveSyncLocalDB initialisation readiness", () => {
         const onCloseDatabase = vi.fn(async () => true);
         const onUnloadDatabase = vi.fn(async () => true);
         const context = createServiceContext();
-        const subject = new LiveSyncLocalDB("readiness", {
+        const subject = new LocalDatabase("readiness", {
             services: {
                 context,
                 API: { addLog: vi.fn() } as never,

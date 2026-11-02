@@ -1,6 +1,6 @@
 import { redactTurnSettingsForReport } from "./turnSettingsPrivacy";
 import { REMOTE_COUCHDB, REMOTE_MINIO } from "@tabularium/sync-core/compat/common/models/setting.const";
-import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/settings";
+import { DEFAULT_SETTINGS, type SyncSettings } from "@tabularium/sync-core/settings";
 import { generateCredentialObject } from "@tabularium/sync-core/compat/replication/httplib";
 import { parseHeaderValues } from "@tabularium/sync-core/compat/common/utils";
 import { requestToCouchDBWithCredentials } from "./utils";
@@ -8,7 +8,7 @@ import { LOG_LEVEL_VERBOSE, Logger } from "@tabularium/sync-core/compat/common/l
 import { isCloudantURI } from "@tabularium/sync-core/compat/pouchdb/utils_couchdb";
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { manifestVersion, packageVersion } from "@tabularium/sync-core/compat/common/coreEnvVars";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 function redactObject(obj: Record<string, unknown>, dotted: string, redactedValue = "REDACTED") {
     const keys = dotted.split(".");
     let current = obj;
@@ -25,7 +25,7 @@ function redactObject(obj: Record<string, unknown>, dotted: string, redactedValu
     }
     return obj;
 }
-export async function generateReport(settings: ObsidianLiveSyncSettings, core: LiveSyncBaseCore) {
+export async function generateReport(settings: SyncSettings, core: SyncCore) {
     let responseConfig: Record<string, unknown> = {};
     const REDACTED = "𝑅𝐸𝐷𝐴𝐶𝑇𝐸𝐷";
     if (settings.remoteType == REMOTE_COUCHDB) {
@@ -60,12 +60,12 @@ export async function generateReport(settings: ObsidianLiveSyncSettings, core: L
         responseConfig = { error: "Object Storage Synchronisation" };
         //
     }
-    const defaultKeys = Object.keys(DEFAULT_SETTINGS) as (keyof ObsidianLiveSyncSettings)[];
-    const pluginConfig = JSON.parse(JSON.stringify(settings)) as ObsidianLiveSyncSettings;
+    const defaultKeys = Object.keys(DEFAULT_SETTINGS) as (keyof SyncSettings)[];
+    const pluginConfig = JSON.parse(JSON.stringify(settings)) as SyncSettings;
     const pluginKeys = Object.keys(pluginConfig);
     for (const key of pluginKeys) {
-        if (defaultKeys.includes(key as keyof ObsidianLiveSyncSettings)) continue;
-        delete pluginConfig[key as keyof ObsidianLiveSyncSettings];
+        if (defaultKeys.includes(key as keyof SyncSettings)) continue;
+        delete pluginConfig[key as keyof SyncSettings];
     }
 
     redactTurnSettingsForReport(pluginConfig);

@@ -8,7 +8,7 @@ import {
     E2EEAlgorithmNames,
     E2EEAlgorithms,
     REMOTE_COUCHDB,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "./types";
 
 enum ConditionType {
@@ -33,12 +33,12 @@ type BaseRule<TType extends string, TValue> = {
     requireRebuildLocal?: boolean;
     recommendRebuild?: boolean;
     reason?: string;
-    reasonFunc?: (settings: Partial<ObsidianLiveSyncSettings>, translate: MessageTranslator) => string;
+    reasonFunc?: (settings: Partial<SyncSettings>, translate: MessageTranslator) => string;
     condition?: ConditionType[];
-    detectionFunc?: (settings: Partial<ObsidianLiveSyncSettings>) => boolean;
+    detectionFunc?: (settings: Partial<SyncSettings>) => boolean;
     value?: TValue;
     valueDisplay?: string;
-    valueDisplayFunc?: (settings: Partial<ObsidianLiveSyncSettings>) => string;
+    valueDisplayFunc?: (settings: Partial<SyncSettings>) => string;
     obsoleteValues?: TValue[];
 };
 
@@ -78,7 +78,7 @@ export type RuleForType<T> = T extends number
 
 // Doctor will not check the settings that are complicated objects like remoteConfigurations, and the rules for these settings should be defined separately if needed.
 type DoctorCheckSettings = Omit<
-    Partial<ObsidianLiveSyncSettings>,
+    Partial<SyncSettings>,
     "remoteConfigurations" | "pluginSyncExtendedSetting"
 >;
 
@@ -110,7 +110,7 @@ export const DoctorRegulationV0_24_16: DoctorRegulation = {
         },
         handleFilenameCaseSensitive: {
             value: false,
-            reason: "If Self-hosted LiveSync is Case-Sensitive, unexpected file operations may occur when synchronising with Windows, Android or other devices. This value should only be enabled if all devices have a Case-Sensitive file system.",
+            reason: "If Tabularium is Case-Sensitive, unexpected file operations may occur when synchronising with Windows, Android or other devices. This value should only be enabled if all devices have a Case-Sensitive file system.",
             requireRebuild: true,
             level: RuleLevel.Recommended,
         },
@@ -166,7 +166,7 @@ export const DoctorRegulationV0_24_30: DoctorRegulation = {
             value: 60,
             valueDisplay: "60 (detected on if less than 55)",
             level: RuleLevel.Recommended,
-            detectionFunc: (settings: Partial<ObsidianLiveSyncSettings>) =>
+            detectionFunc: (settings: Partial<SyncSettings>) =>
                 settings?.remoteType === REMOTE_COUCHDB &&
                 settings?.chunkSplitterVersion === "v3-rabin-karp" &&
                 !isCloudantURI(settings?.couchDB_URI || ""),
@@ -215,7 +215,7 @@ export const DoctorRegulationV1_0_33: DoctorRegulation = {
                 settings.encrypt === true &&
                 settings.usePathObfuscation === true &&
                 settings.E2EEAlgorithm === E2EEAlgorithms.V2,
-            reason: "E2EE V2 and Property Encryption can also protect file properties used by Hidden File Sync and Customisation Sync. This affects future writes; manually rebuild the remote database to protect existing properties, and update every synchronising client before enabling it, including devices currently running LiveSync.",
+            reason: "E2EE V2 and Property Encryption can also protect file properties used by Hidden File Sync and Customisation Sync. This affects future writes; manually rebuild the remote database to protect existing properties, and update every synchronising client before enabling it, including devices currently running Tabularium.",
         },
     },
 };
@@ -233,7 +233,7 @@ export const DoctorRegulationV1_0_40: DoctorRegulation = {
 export const DoctorRegulation = DoctorRegulationV1_0_40;
 
 export function checkUnsuitableValues(
-    setting: Partial<ObsidianLiveSyncSettings>,
+    setting: Partial<SyncSettings>,
     regulation: DoctorRegulation = DoctorRegulation
 ): DoctorRegulation {
     const result: DoctorRegulation = {
@@ -283,7 +283,7 @@ export type DoctorOptions = {
 };
 
 export type DoctorResult = {
-    settings: ObsidianLiveSyncSettings;
+    settings: SyncSettings;
     shouldRebuild: boolean;
     shouldRebuildLocal: boolean;
     isModified: boolean;
@@ -295,7 +295,7 @@ export type HasConfirm = {
 
 export async function performDoctorConsultation(
     env: HasConfirm,
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     {
         localRebuild = RebuildOptions.ConfirmIfRequired,
         remoteRebuild = RebuildOptions.ConfirmIfRequired,

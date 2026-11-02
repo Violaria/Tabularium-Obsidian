@@ -11,7 +11,7 @@ import {
     readAsBlob,
 } from "@tabularium/sync-core/compat/common/utils";
 import { isMetaEntry } from "@tabularium/sync-core/compat/common/types";
-import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LocalDatabase } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
 import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
 import type { KeyValueDatabase } from "@tabularium/sync-core/compat/interfaces/KeyValueDatabase";
@@ -28,7 +28,7 @@ type NoticeGroups = {
 
 /** Focused collaborators for the incomplete-document integrity scan and repair. */
 export interface IncompleteDocumentsDependencies {
-    readonly localDatabase: Pick<LiveSyncLocalDB, "findAllNormalDocs" | "getDBEntryFromMeta">;
+    readonly localDatabase: Pick<LocalDatabase, "findAllNormalDocs" | "getDBEntryFromMeta">;
     readonly getPath: StartupPathReader;
     readonly isTargetFile: (path: string) => Promise<boolean>;
     readonly storageAccess: Pick<StorageAccess, "readHiddenFileBinary" | "statHidden" | "getFileStub">;

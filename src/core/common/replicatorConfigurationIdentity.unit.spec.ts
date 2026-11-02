@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { createNewVaultSettings } from "@tabularium/sync-core/settings";
 import { getCouchDBReplicatorConfigurationIdentity } from "./replicatorConfigurationIdentity";
 
@@ -22,7 +22,7 @@ describe("active Replicator configuration identity", () => {
         );
     });
 
-    function configuredSettings(overrides: Partial<ObsidianLiveSyncSettings> = {}): ObsidianLiveSyncSettings {
+    function configuredSettings(overrides: Partial<SyncSettings> = {}): SyncSettings {
         return Object.assign(createNewVaultSettings(), {
             activeConfigurationId: "profile-a",
             couchDB_URI: "https://couch.example.test/base",
@@ -68,7 +68,7 @@ describe("active Replicator configuration identity", () => {
         ["E2EEAlgorithm", ""],
         ["permitEmptyPassphrase", true],
         ["enableCompression", true],
-    ] satisfies Array<[keyof ObsidianLiveSyncSettings, ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings]]>)(
+    ] satisfies Array<[keyof SyncSettings, SyncSettings[keyof SyncSettings]]>)(
         "detects a CouchDB %s change",
         (key, value) => {
             const settings = configuredSettings();

@@ -7,7 +7,7 @@ import replication from "pouchdb-replication";
 import type { EntryDoc, FilePathWithPrefix, UXFileInfo } from "@lib/common/types";
 import { DEFAULT_SETTINGS } from "@lib/common/types";
 import { compareMTime, createTextBlob, isDocContentSame } from "@lib/common/utils";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import { EntryManager, type EntryManagerOptions } from "@lib/managers/EntryManager/EntryManager";
 import { ConflictManager } from "@lib/managers/ConflictManager";
 import { ServiceDatabaseFileAccessBase, type ServiceDatabaseFileAccessDependencies } from "./ServiceDatabaseFileAccessBase";
@@ -76,7 +76,7 @@ async function fixture(revsLimit = 1000) {
             splitContent: async (note: { data: Blob }) => [await note.data.text()],
         } as EntryManagerOptions["splitter"],
     });
-    // The service normally receives LiveSyncLocalDB, which forwards these
+    // The service normally receives LocalDatabase, which forwards these
     // methods to EntryManager. This fixture keeps only the actual PouchDB path.
     const localDatabase = {
         getDBEntry: entries.getDBEntry.bind(entries),
@@ -104,7 +104,7 @@ async function fixture(revsLimit = 1000) {
         API: { addLog: vi.fn() },
         path: pathService,
         setting,
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         database: { localDatabase },
         vault: { isTargetFile: async () => true, isFileSizeTooLarge: () => false },
         storageAccess,

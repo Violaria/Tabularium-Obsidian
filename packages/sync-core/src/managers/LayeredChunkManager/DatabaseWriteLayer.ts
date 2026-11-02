@@ -1,4 +1,4 @@
-import { LiveSyncError } from "@lib/common/LSError";
+import { SyncError } from "@lib/common/LSError";
 import type { EntryLeaf, DocumentID, EntryDoc } from "@lib/common/types";
 import type { IWriteLayer } from "./ChunkLayerInterfaces";
 import type { ChunkWriteOptions, WriteResult } from "./types.ts";
@@ -26,7 +26,7 @@ export class DatabaseWriteLayer implements IWriteLayer {
 
             // Check for non-409 errors
             if (failed.some((res) => res.status !== 409)) {
-                throw new LiveSyncError(`Failed to write chunks: ${failed.map((res) => res.error).join(", ")}`, {
+                throw new SyncError(`Failed to write chunks: ${failed.map((res) => res.error).join(", ")}`, {
                     status: 500,
                 });
             }
@@ -56,10 +56,10 @@ export class DatabaseWriteLayer implements IWriteLayer {
 
             return writeResult;
         } catch (error) {
-            if (error instanceof LiveSyncError) {
+            if (error instanceof SyncError) {
                 throw error;
             }
-            throw new LiveSyncError(`Database write layer error!`, { status: 500, cause: error as Error });
+            throw new SyncError(`Database write layer error!`, { status: 500, cause: error as Error });
         }
     }
 }

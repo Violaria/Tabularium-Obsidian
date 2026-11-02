@@ -1,6 +1,6 @@
 import { WorkspaceLeaf } from "@/deps.ts";
 import GlobalHistoryComponent from "./GlobalHistory.svelte";
-import type ObsidianLiveSyncPlugin from "@/main.ts";
+import type TabulariumPlugin from "@/main.ts";
 import { SvelteItemView } from "@/ui/SvelteItemView.ts";
 import { mount } from "svelte";
 
@@ -16,7 +16,7 @@ export class GlobalHistoryView extends SvelteItemView {
         });
     }
 
-    plugin: ObsidianLiveSyncPlugin;
+    plugin: TabulariumPlugin;
     override icon = "clock";
     title: string = "";
     override navigation = true;
@@ -25,7 +25,7 @@ export class GlobalHistoryView extends SvelteItemView {
         return "clock";
     }
 
-    constructor(leaf: WorkspaceLeaf, plugin: ObsidianLiveSyncPlugin) {
+    constructor(leaf: WorkspaceLeaf, plugin: TabulariumPlugin) {
         super(leaf);
         this.plugin = plugin;
     }

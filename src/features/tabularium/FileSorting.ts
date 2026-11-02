@@ -2,7 +2,7 @@
 // order (the sort the user chose in Obsidian) is kept for everything the rules do not list.
 import { Component, MarkdownView, normalizePath, Notice, Platform, TFile, TFolder, type Menu, type MenuItem, type Plugin, type SettingDefinition, type TAbstractFile } from "obsidian";
 import { $msg } from "@/core/common/translation";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 import {
     arrange,
     bodyOf,
@@ -361,7 +361,7 @@ export class TabulariumSorting extends Component {
 }
 
 /** Not installed while the standalone plug-in is enabled; the settings page says that it sorts the files. */
-export function installFileSorting(plugin: Plugin, core: LiveSyncCore): TabulariumSorting | undefined {
+export function installFileSorting(plugin: Plugin, core: PluginCore): TabulariumSorting | undefined {
     if (plugin.app.plugins.enabledPlugins.has(STANDALONE_SORTING_ID)) return undefined;
     const sorting = plugin.addChild(new TabulariumSorting(plugin));
     sorting.stepAside = () => plugin.removeChild(sorting);

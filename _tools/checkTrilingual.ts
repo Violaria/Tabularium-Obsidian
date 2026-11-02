@@ -1,7 +1,7 @@
 // Tabularium ships English, Chinese and Latin. Every plug-in message — catalogue, Commonlib and provisional — must
 // exist in all three, and no plug-in or web page text may contain emoji. Run after `npm run i18n:bake`; exits non-zero with the offending keys.
 import { commonlibEnglishMessages } from "@tabularium/sync-core/context";
-import { liveSyncProvisionalEnglishMessages } from "../src/core/common/messages/LiveSyncProvisionalMessages.ts";
+import { provisionalEnglishMessages } from "../src/core/common/messages/ProvisionalMessages.ts";
 
 const fs = process.getBuiltinModule("node:fs");
 const path = process.getBuiltinModule("node:path");
@@ -9,7 +9,7 @@ const dir = path.resolve(import.meta.dirname, "../src/core/common/messagesJson")
 const load = (lang: string) => JSON.parse(fs.readFileSync(path.join(dir, `${lang}.json`), "utf8")) as Record<string, string>;
 const en = load("en");
 const catalogues = { zh: load("zh"), la: load("la") };
-const external: Record<string, string> = { ...commonlibEnglishMessages, ...liveSyncProvisionalEnglishMessages };
+const external: Record<string, string> = { ...commonlibEnglishMessages, ...provisionalEnglishMessages };
 
 const keys = [...new Set([...Object.keys(en), ...Object.keys(external)])].sort();
 const emoji = /\p{Extended_Pictographic}/u;
@@ -32,7 +32,7 @@ const upstreamName = /livesync/i;
 const exempt = (text: string) => text.replace(/\$\{[^}]*\}/g, "");
 for (const [lang, catalogue] of Object.entries(shown)) {
     const named = Object.entries(catalogue).filter(([, text]) => upstreamName.test(exempt(text)));
-    if (named.length) problems.push(`${lang}: ${named.length} texts name LiveSync\n  ${named.slice(0, 20).map(([key]) => key).join("\n  ")}`);
+    if (named.length) problems.push(`${lang}: ${named.length} texts name Tabularium\n  ${named.slice(0, 20).map(([key]) => key).join("\n  ")}`);
 }
 // Web pages: the types already require every language; check them for emoji too.
 const { catalogues: web } = await import("../../server/ui/messages.ts");

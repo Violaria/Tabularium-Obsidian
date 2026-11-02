@@ -1,13 +1,13 @@
 import type { RemoteDBSettings } from "@tabularium/sync-core/compat/common/types";
 import type { SecuritySeedResourceFactory } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
 /** Host environment sufficient to construct the Security Seed resource. */
-export type SecuritySeedResourceHost = LiveSyncCouchDBReplicatorEnv;
+export type SecuritySeedResourceHost = CouchDBReplicatorEnv;
 
 /** Minimal private Replicator surface required by a Security Seed resource. */
 interface SecuritySeedReplicator extends ResourceReplicator {
@@ -40,6 +40,6 @@ function createSecuritySeedResourceFactory(
 
 /** Build an unpublished, independently disposed CouchDB Security Seed resource. */
 export function createCouchDBSecuritySeedResourceFactory(host: SecuritySeedResourceHost): SecuritySeedResourceFactory {
-    return createSecuritySeedResourceFactory(() => new LiveSyncCouchDBReplicator(host));
+    return createSecuritySeedResourceFactory(() => new CouchDBReplicator(host));
 }
 

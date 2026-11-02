@@ -1,16 +1,16 @@
 /**
- * Read-only LiveSync runtime for the web notes page: the upstream core with an OPFS directory as its vault.
+ * Read-only Tabularium runtime for the web notes page: the upstream core with an OPFS directory as its vault.
  * Settings live in memory only, so the passphrase never reaches browser storage.
  */
-import { createCore, type LiveSyncBaseCore } from "@/core/createCore";
+import { createCore, type SyncCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
-import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { AbstractReplicator } from "@tabularium/sync-core/compat/replication/AbstractReplicator";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { useRemoteConfiguration } from "@tabularium/sync-core/compat/serviceFeatures/remoteConfig";
 import { stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { decrypt as decryptHKDF } from "octagonal-wheels/encryption/hkdf";
-import { createLiveSyncBrowserServiceHub } from "@/apps/browser/createLiveSyncBrowserServiceHub";
+import { createBrowserServiceHub } from "@/apps/browser/createBrowserServiceHub";
 import { initialiseServiceModulesFSAPI, type FSAPIServiceModules } from "@/apps/webapp/serviceModules/FSAPIServiceModules";
 import { basicAuth } from "./api";
 import type { VaultRecord } from "./store";
@@ -96,11 +96,11 @@ export async function clearLocalVault(userId: string, vaultId: string) {
 }
 
 export class NotesRuntime {
-    private core?: LiveSyncBaseCore<ServiceContext>;
+    private core?: SyncCore<ServiceContext>;
     private modules?: FSAPIServiceModules;
     /** The local database's change feed, cancelled when the vault closes. */
     private changes?: { cancel(): void };
-    private settings: ObsidianLiveSyncSettings;
+    private settings: SyncSettings;
 
     constructor(
         private readonly connection: NotesConnection,
@@ -129,7 +129,7 @@ export class NotesRuntime {
             autoSweepPlugins: false,
             autoSweepPluginsPeriodic: false,
             gcDelay: 0,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
     }
 
     private get auth() {
@@ -144,7 +144,7 @@ export class NotesRuntime {
     async start(saved: Pick<VaultRecord, "fetched" | "verifier" | "tweaks">): Promise<StartResult> {
         const { vaultId, userId } = this.connection;
         const root = await vaultDirectory(userId, vaultId, true);
-        const hub = createLiveSyncBrowserServiceHub<ServiceContext>({
+        const hub = createBrowserServiceHub<ServiceContext>({
             deviceValues: createWebStorageValueStore(window.localStorage, { prefix: storagePrefix(vaultId) }),
             getSystemVaultName: () => databaseName(vaultId),
             settings: {
@@ -201,9 +201,9 @@ export class NotesRuntime {
     }
 
     /** Runs a task on the replicator that is active now; the core replaces it whenever settings change. */
-    private async withReplicator<T>(task: (replicator: LiveSyncAbstractReplicator, settings: ObsidianLiveSyncSettings) => Promise<T>) {
+    private async withReplicator<T>(task: (replicator: AbstractReplicator, settings: SyncSettings) => Promise<T>) {
         const { services } = this.core;
-        const result = await services.replicator.runWithActiveReplicatorContext((context) => task(context.replicator as LiveSyncAbstractReplicator, services.setting.currentSettings()));
+        const result = await services.replicator.runWithActiveReplicatorContext((context) => task(context.replicator as AbstractReplicator, services.setting.currentSettings()));
         if (result === undefined) throw new NetworkError(t("notes.noConnection"));
         return result;
     }

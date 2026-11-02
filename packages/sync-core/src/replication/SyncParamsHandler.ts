@@ -6,7 +6,7 @@ import { createPBKDF2Salt } from "octagonal-wheels/encryption/hkdf";
 import { LOG_LEVEL_INFO, LOG_LEVEL_VERBOSE, Logger } from "@lib/common/logger.ts";
 import type { SyncParameters } from "@lib/common/types.ts";
 import { arrayBufferToBase64Single, base64ToArrayBufferInternalBrowser } from "@lib/string_and_binary/convert.ts";
-import { LiveSyncError } from "@lib/common/LSError.ts";
+import { SyncError } from "@lib/common/LSError.ts";
 
 /**
  * Creates a SyncParamsHandler for managing synchronisation parameters.
@@ -48,7 +48,7 @@ export function createSyncParamsHanderForServer(
 export function clearHandlers() {
     _handlers.clear();
 }
-export class SyncParamsHandlerError extends LiveSyncError {}
+export class SyncParamsHandlerError extends SyncError {}
 export class SyncParamsFetchError extends SyncParamsHandlerError {}
 export class SyncParamsNotFoundError extends SyncParamsHandlerError {}
 export class SyncParamsUpdateError extends SyncParamsHandlerError {}
@@ -78,7 +78,7 @@ export function createSyncParamsHandler({ put, get, create }: CreateSyncParamsHa
                     syncParams = await get();
                     Logger(`Fetched synchronisation parameters`, LOG_LEVEL_INFO);
                 } catch (ex) {
-                    if (LiveSyncError.isCausedBy(ex, SyncParamsNotFoundError)) {
+                    if (SyncError.isCausedBy(ex, SyncParamsNotFoundError)) {
                         // Expected error; we will create new synchronisation parameters.
                         Logger(`Synchronisation parameters not found, creating new ones`, LOG_LEVEL_INFO);
                         const newSyncParams = await create();

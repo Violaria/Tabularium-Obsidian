@@ -77,7 +77,7 @@ import {
     type HashAlgorithm,
     type HasSettings,
     type LocalDBSettings,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type P2PConnectionInfo,
     type P2PSyncSetting,
     type PluginSyncSettingEntry,
@@ -310,7 +310,7 @@ export type { EncryptionSettings };
 export { HashAlgorithms, type HashAlgorithm, ChunkAlgorithmNames, ChunkAlgorithms, type ChunkSplitterVersion };
 
 export type { RemoteDBSettings };
-export type { ObsidianLiveSyncSettings };
+export type { SyncSettings };
 
 export { DEFAULT_SETTINGS, NEW_VAULT_SETTINGS, SETTINGS_SCHEMA_DEFAULTS, createNewVaultSettings };
 export {

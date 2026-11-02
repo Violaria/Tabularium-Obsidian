@@ -1,5 +1,5 @@
-import type ObsidianLiveSyncPlugin from "@/main";
-import type { LiveSyncCore } from "@/main";
+import type TabulariumPlugin from "@/main";
+import type { PluginCore } from "@/main";
 import { type TFile } from "@/deps.ts";
 import { $msg } from "@/core/common/translation";
 import { eventHub } from "@/core/common/events.ts";
@@ -9,9 +9,9 @@ import { DocumentHistoryModal } from "@/ui/DocumentHistory/DocumentHistoryModal.
 import { fireAndForget } from "octagonal-wheels/promises";
 
 export class ModuleObsidianDocumentHistory {
-    readonly plugin: ObsidianLiveSyncPlugin;
-    readonly core: LiveSyncCore;
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    readonly plugin: TabulariumPlugin;
+    readonly core: PluginCore;
+    constructor(plugin: TabulariumPlugin, core: PluginCore) {
         this.plugin = plugin;
         this.core = core;
     }
@@ -72,7 +72,7 @@ export class ModuleObsidianDocumentHistory {
     }
 }
 
-export function installDocumentHistory(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+export function installDocumentHistory(plugin: TabulariumPlugin, core: PluginCore) {
     const component = new ModuleObsidianDocumentHistory(plugin, core);
     component.install();
     return component;

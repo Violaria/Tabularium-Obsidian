@@ -4,7 +4,7 @@ import {
     SETTING_VERSION_INITIAL,
     SETTING_VERSION_SUPPORT_CASE_INSENSITIVE,
 } from "./setting.const";
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 import { omitP2PRuntimeSettings } from "./setting.p2p";
 
 export const SettingsMigrationReviewCodes = {
@@ -34,14 +34,14 @@ export interface SettingsMigrationState {
 }
 
 export interface PreparedSettings extends SettingsMigrationState {
-    settings: ObsidianLiveSyncSettings;
+    settings: SyncSettings;
 }
 
 interface SettingsMigration {
     toVersion: number;
-    apply(settings: Partial<ObsidianLiveSyncSettings>): Partial<ObsidianLiveSyncSettings>;
+    apply(settings: Partial<SyncSettings>): Partial<SyncSettings>;
     reviewReason?(
-        settings: Partial<ObsidianLiveSyncSettings>,
+        settings: Partial<SyncSettings>,
         fromVersion: number
     ): SettingsMigrationReviewReason | undefined;
 }
@@ -62,9 +62,9 @@ const SETTINGS_MIGRATIONS: readonly SettingsMigration[] = [
 ];
 
 function cloneSettings(
-    source: Partial<ObsidianLiveSyncSettings>,
-    fallbacks: ObsidianLiveSyncSettings
-): ObsidianLiveSyncSettings {
+    source: Partial<SyncSettings>,
+    fallbacks: SyncSettings
+): SyncSettings {
     const persistableSource = omitP2PRuntimeSettings(source);
     return {
         ...fallbacks,
@@ -82,18 +82,18 @@ function cloneSettings(
     };
 }
 
-function storedSettingVersion(settings: Partial<ObsidianLiveSyncSettings>): number {
+function storedSettingVersion(settings: Partial<SyncSettings>): number {
     const version = settings.settingVersion;
     return typeof version === "number" && Number.isSafeInteger(version) && version >= SETTING_VERSION_INITIAL
         ? version
         : SETTING_VERSION_INITIAL;
 }
 
-function isBlankSettings(settings: Partial<ObsidianLiveSyncSettings> | undefined): boolean {
+function isBlankSettings(settings: Partial<SyncSettings> | undefined): boolean {
     return settings === undefined || Object.keys(settings).length === 0;
 }
 
-function inferLegacyConfiguredState(settings: Partial<ObsidianLiveSyncSettings>): boolean {
+function inferLegacyConfiguredState(settings: Partial<SyncSettings>): boolean {
     // This is the exact pre-1.0 inference: a missing flag meant configured
     // only when completing the stored document changed a legacy default.
     const completed = { ...SETTINGS_SCHEMA_DEFAULTS, ...settings };
@@ -108,7 +108,7 @@ function inferLegacyConfiguredState(settings: Partial<ObsidianLiveSyncSettings>)
  * take precedence over both sets of defaults.
  */
 export function prepareSettingsForLoad(
-    storedSettings: Partial<ObsidianLiveSyncSettings> | undefined
+    storedSettings: Partial<SyncSettings> | undefined
 ): PreparedSettings {
     if (isBlankSettings(storedSettings)) {
         return {
@@ -145,7 +145,7 @@ export function prepareSettingsForLoad(
         };
     }
 
-    let migrated: Partial<ObsidianLiveSyncSettings> = source;
+    let migrated: Partial<SyncSettings> = source;
     let targetVersion = sourceVersion;
     const reviewReasons: SettingsMigrationReviewReason[] = [];
     for (const migration of SETTINGS_MIGRATIONS) {

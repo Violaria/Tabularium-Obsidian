@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LOG_LEVEL_NOTICE, REMOTE_COUCHDB } from "@tabularium/sync-core/compat/common/types";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { createNewVaultSettings } from "@tabularium/sync-core/settings";
 
 const mocks = vi.hoisted(() => ({
@@ -30,8 +30,8 @@ vi.mock("@tabularium/sync-core/compat/pouchdb/negotiation", () => ({
     checkSyncInfo: mocks.checkSyncInfo,
 }));
 
-vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
-    LiveSyncCouchDBReplicator: class {
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator", () => ({
+    CouchDBReplicator: class {
         host: unknown;
         isMobile = vi.fn(() => false);
         connectRemoteCouchDBWithSetting = vi.fn();
@@ -59,7 +59,7 @@ import {
     createCouchDBSynchronisationInformationResourceFactory,
 } from "./replicatorResources";
 
-function createSettings(overrides: Partial<ObsidianLiveSyncSettings> = {}): ObsidianLiveSyncSettings {
+function createSettings(overrides: Partial<SyncSettings> = {}): SyncSettings {
     return Object.assign(createNewVaultSettings(), {
         remoteType: REMOTE_COUCHDB,
         couchDB_URI: "https://couch.example.test",
@@ -150,7 +150,7 @@ describe("replicator probe factories", () => {
         await expect(probe.check({ showResult: true })).resolves.toEqual({ ok: false, reason });
 
         expect(mocks.logger).toHaveBeenCalledTimes(1);
-        expect(translate).toHaveBeenCalledWith("liveSyncReplicator.couldNotConnectTo", {
+        expect(translate).toHaveBeenCalledWith("couchdbReplicator.couldNotConnectTo", {
             uri: settings.couchDB_URI,
             name: settings.couchDB_DBNAME,
             db: reason,

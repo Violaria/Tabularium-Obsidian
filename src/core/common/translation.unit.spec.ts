@@ -1,17 +1,17 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import { englishMessageTranslator } from "@tabularium/sync-core/context";
-import { $msg, setLang, translateLiveSyncMessage, translateNotice } from "@/core/common/translation";
+import { $msg, setLang, translateCatalogueMessage, translateNotice } from "@/core/common/translation";
 import { SUPPORTED_I18N_LANGS } from "@/core/common/rosetta";
-import { liveSyncProvisionalEnglishMessages } from "@/core/common/messages/LiveSyncProvisionalMessages";
+import { provisionalEnglishMessages } from "@/core/common/messages/ProvisionalMessages";
 
-describe("LiveSync-owned translation catalogue", () => {
+describe("Tabularium-owned translation catalogue", () => {
     afterEach(() => setLang("def"));
 
     it("selects a translated language without delegating catalogue ownership to Commonlib", () => {
         setLang("zh");
 
-        expect(translateLiveSyncMessage("moduleCheckRemoteSize.optionIncreaseLimit", { newMax: "800" })).toBe(
+        expect(translateCatalogueMessage("moduleCheckRemoteSize.optionIncreaseLimit", { newMax: "800" })).toBe(
             "增加到 800MB"
         );
         expect(SUPPORTED_I18N_LANGS).toContain("la");
@@ -40,18 +40,18 @@ describe("LiveSync-owned translation catalogue", () => {
 
     it("translates Commonlib texts from the catalogue and keeps Commonlib's English as the English text", () => {
         setLang("zh");
-        expect(translateLiveSyncMessage("Active Remote Type")).toBe("当前远程类型");
+        expect(translateCatalogueMessage("Active Remote Type")).toBe("当前远程类型");
         setLang("def");
-        expect(translateLiveSyncMessage("Active Remote Type")).toBe(englishMessageTranslator("Active Remote Type"));
+        expect(translateCatalogueMessage("Active Remote Type")).toBe(englishMessageTranslator("Active Remote Type"));
     });
 
     it("directs a compatibility pause to the dedicated review workflow", () => {
-        expect(translateLiveSyncMessage("Replicator.Message.VersionUpFlash")).toBe(
+        expect(translateCatalogueMessage("Replicator.Message.VersionUpFlash")).toBe(
             "Remote synchronisation is paused for compatibility review. Run the 'Review why synchronisation is paused' command for details and available actions."
         );
     });
 
-    it("uses LiveSync-owned provisional English without extending Commonlib's message contract", () => {
+    it("uses Tabularium-owned provisional English without extending Commonlib's message contract", () => {
         expect($msg("This file has unresolved conflicts.")).toBe("This file has unresolved conflicts.");
         expect($msg("More actions for ${DEVICE}", { DEVICE: "phone" })).toBe("More actions for phone");
         expect($msg("Connection settings")).toBe("Connection settings");
@@ -61,18 +61,18 @@ describe("LiveSync-owned translation catalogue", () => {
                 COUNT: "3",
             })
         ).toBe("This file has 3 unresolved versions. They will be reviewed one pair at a time.");
-        expect(translateLiveSyncMessage("This file has unresolved conflicts.")).toBe(
+        expect(translateCatalogueMessage("This file has unresolved conflicts.")).toBe(
             "This file has unresolved conflicts."
         );
     });
 
-    it("keeps the additional-device P2P Fetch explanation in the LiveSync-owned provisional catalogue", () => {
-        expect(liveSyncProvisionalEnglishMessages).toMatchObject({
+    it("keeps the additional-device P2P Fetch explanation in the Tabularium-owned provisional catalogue", () => {
+        expect(provisionalEnglishMessages).toMatchObject({
             "Setup Complete: Preparing to Fetch from Another Device":
                 "Setup Complete: Preparing to Fetch from Another Device",
             "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.":
                 "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.",
-            "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
+            "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
                 "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.",
             "Restart this device, then choose the source device when P2P Rebuild opens.":
                 "Restart this device, then choose the source device when P2P Rebuild opens.",

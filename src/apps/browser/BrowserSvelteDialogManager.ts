@@ -50,7 +50,7 @@ export class BrowserModal {
     }
 }
 
-export class LiveSyncBrowserDialog<T, U, C extends ServiceContext = ServiceContext> extends BrowserModal {
+export class BrowserDialog<T, U, C extends ServiceContext = ServiceContext> extends BrowserModal {
     private readonly session: SvelteDialogSession<T, U, C>;
 
     constructor(
@@ -87,7 +87,7 @@ export class BrowserSvelteDialogManager<T extends ServiceContext> extends Svelte
         component: ComponentHasResult<TT, TU>,
         initialData?: TU
     ): Promise<TT | undefined> {
-        const dialog = new LiveSyncBrowserDialog<TT, TU, T>(this.context, this.dependents, component, initialData);
+        const dialog = new BrowserDialog<TT, TU, T>(this.context, this.dependents, component, initialData);
         dialog.open();
         return await dialog.waitForClose();
     }

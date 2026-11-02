@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { DEFAULT_SETTINGS, REMOTE_MINIO, type ObsidianLiveSyncSettings } from "@lib/common/types";
+import { DEFAULT_SETTINGS, REMOTE_MINIO, type SyncSettings } from "@lib/common/types";
 import { SettingService } from "./SettingService";
 import { ServiceContext } from "./ServiceBase";
 
@@ -19,11 +19,11 @@ function createMapBackedValueStore(values = new Map<string, string>()) {
 type MapBackedValueStore = ReturnType<typeof createMapBackedValueStore>;
 
 class CapturingSettingService extends SettingService<ServiceContext> {
-    saved?: ObsidianLiveSyncSettings;
+    saved?: SyncSettings;
     constructor(context: ServiceContext, dependencies: any, deviceValues: MapBackedValueStore) {
         super(context, { ...dependencies, deviceValues } as any);
     }
-    protected async saveData(settings: ObsidianLiveSyncSettings) {
+    protected async saveData(settings: SyncSettings) {
         this.saved = structuredClone(settings);
     }
     protected async loadData() {

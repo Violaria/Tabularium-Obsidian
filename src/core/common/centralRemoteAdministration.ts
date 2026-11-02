@@ -3,7 +3,7 @@ import {
     type EntryMilestoneInfo,
     type RemoteDBSettings,
 } from "@tabularium/sync-core/compat/common/types";
-import type { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import type { CouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import {
     CENTRAL_REMOTE_ADMINISTRATION_FAILURE_REASONS,
     CENTRAL_REMOTE_ADMINISTRATION_OBSERVATION_KINDS,
@@ -45,7 +45,7 @@ type CentralMilestoneReaderPreparer = (
 ) => PreparedCentralMilestoneReader;
 
 type CouchDBAdministrationReplicator = CentralRemoteAdministrationReplicator &
-    Pick<LiveSyncCouchDBReplicator, "connectRemoteCouchDBWithSetting" | "isMobile">;
+    Pick<CouchDBReplicator, "connectRemoteCouchDBWithSetting" | "isMobile">;
 
 function isCentralRemoteAdministrationReplicator(
     replicator: ReplicatorInstance

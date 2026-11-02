@@ -3,13 +3,13 @@
 // upload instead. The record is a per-vault device value: it belongs to this device and vault, survives a restart and is
 // not synchronised.
 import type { Plugin } from "obsidian";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
 import { $msg } from "@/core/common/translation";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 
 export const LIVE_SYNC_PAUSE_KEY = "live-sync-paused";
 export const AUTOMATIC_TRIGGERS = [
@@ -20,14 +20,14 @@ export const AUTOMATIC_TRIGGERS = [
     "syncOnEditorSave",
     "syncOnFileOpen",
     "syncAfterMerge",
-] as const satisfies readonly (keyof ObsidianLiveSyncSettings)[];
-type Triggers = Pick<ObsidianLiveSyncSettings, (typeof AUTOMATIC_TRIGGERS)[number]>;
+] as const satisfies readonly (keyof SyncSettings)[];
+type Triggers = Pick<SyncSettings, (typeof AUTOMATIC_TRIGGERS)[number]>;
 
-export class LiveSyncPause {
+export class SyncPause {
     /** Read when the settings load, so menus that are built synchronously can ask. */
     paused = false;
 
-    constructor(private readonly core: LiveSyncCore) {}
+    constructor(private readonly core: PluginCore) {}
 
     private get values() {
         return this.core.services.setting.config;
@@ -74,8 +74,8 @@ export class LiveSyncPause {
 }
 
 /** The commands appear only when they apply; `connected` is asked each time. */
-export function installLiveSyncPause(plugin: Plugin, core: LiveSyncCore, connected: () => boolean) {
-    const pause = new LiveSyncPause(core);
+export function installSyncPause(plugin: Plugin, core: PluginCore, connected: () => boolean) {
+    const pause = new SyncPause(core);
     core.services.appLifecycle.onSettingLoaded.addHandler(async () => {
         await pause.load();
         plugin.addCommand({

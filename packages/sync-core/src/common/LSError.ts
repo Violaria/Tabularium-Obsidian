@@ -32,13 +32,13 @@ function getErrorCause(error: unknown): unknown {
 }
 
 /**
- * Error class for Self-hosted LiveSync errors.
- * This class extends the base LiveSyncError class and provides additional context for errors related to LiveSync operations.
+ * Error class for Tabularium errors.
+ * This class extends the base SyncError class and provides additional context for errors related to Tabularium operations.
  * It includes a name property and a cause property to capture the original error.
  * The status property returns the HTTP status code if available, defaulting to 500 for internal server errors.
  * The class also includes static methods to check whether an error is caused by a specific error class.
  */
-export class LiveSyncError extends Error implements ErrorWithCause {
+export class SyncError extends Error implements ErrorWithCause {
     override name = this.constructor.name;
     override cause?: Error | object | string;
     overrideStatus?: number;
@@ -60,7 +60,7 @@ export class LiveSyncError extends Error implements ErrorWithCause {
         return 500; // Default status code for internal server error
     }
     /**
-     * Constructs a new LiveSyncError instance.
+     * Constructs a new SyncError instance.
      * @param message The error message to be displayed.
      */
     constructor(message: string, options?: { cause?: unknown; status?: number }) {
@@ -83,9 +83,9 @@ export class LiveSyncError extends Error implements ErrorWithCause {
      * @param errorClass The error class to compare against.
      * @returns True if the error is caused by the specified error class; otherwise, false.
      * @example
-     * LiveSyncError.isCausedBy(someSyncParamsFetchError, SyncParamsNotFoundError); // Returns true if the error is caused by SyncParamsNotFoundError; this is usually represented as SyncParamsFetchError at the uppermost layer.
+     * SyncError.isCausedBy(someSyncParamsFetchError, SyncParamsNotFoundError); // Returns true if the error is caused by SyncParamsNotFoundError; this is usually represented as SyncParamsFetchError at the uppermost layer.
      */
-    static isCausedBy<T extends LiveSyncError>(error: unknown, errorClass: Constructor<T>): boolean {
+    static isCausedBy<T extends SyncError>(error: unknown, errorClass: Constructor<T>): boolean {
         if (!error) {
             return false;
         }
@@ -98,7 +98,7 @@ export class LiveSyncError extends Error implements ErrorWithCause {
                 // Avoid infinite loop in case of circular cause reference.
                 return false;
             }
-            return LiveSyncError.isCausedBy(cause, errorClass);
+            return SyncError.isCausedBy(cause, errorClass);
         }
         return false;
     }
@@ -107,7 +107,7 @@ export class LiveSyncError extends Error implements ErrorWithCause {
      * @param error The error to wrap.
      * @returns A new instance of the error class with the original error's message and stack trace.
      */
-    static fromError<T extends typeof LiveSyncError>(this: T, error: unknown): InstanceType<T> {
+    static fromError<T extends typeof SyncError>(this: T, error: unknown): InstanceType<T> {
         if (error instanceof this) {
             return error as InstanceType<T>;
         }
@@ -124,4 +124,4 @@ export class LiveSyncError extends Error implements ErrorWithCause {
     }
 }
 
-export class LiveSyncFatalError extends LiveSyncError {}
+export class SyncFatalError extends SyncError {}

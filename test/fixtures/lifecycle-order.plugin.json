@@ -103,7 +103,7 @@
     "30 <anonymous>"
   ],
   "appLifecycle.onLoad": [
-    "0 bound _onLiveSyncLoad"
+    "0 bound _onLoad"
   ],
   "appLifecycle.onLoaded": [
     "0 <anonymous>",
@@ -111,7 +111,7 @@
     "0 bound _everyOnload"
   ],
   "appLifecycle.onReady": [
-    "0 bound _onLiveSyncReady"
+    "0 bound _onReady"
   ],
   "appLifecycle.onResumed": [
     "0 <anonymous>"

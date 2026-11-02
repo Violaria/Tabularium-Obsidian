@@ -1,16 +1,16 @@
 import type { FilePath } from "@tabularium/sync-core/compat/common/types";
-import type ObsidianLiveSyncPlugin from "@/main";
-import type { LiveSyncCore } from "@/main";
+import type TabulariumPlugin from "@/main";
+import type { PluginCore } from "@/main";
 import { StorageEventManagerBase, type StorageEventManagerBaseDependencies } from "@tabularium/sync-core/compat/managers/StorageEventManager";
 import { ObsidianStorageEventManagerAdapter } from "./ObsidianStorageEventManagerAdapter";
 
 export class StorageEventManagerObsidian extends StorageEventManagerBase<ObsidianStorageEventManagerAdapter> {
-    core: LiveSyncCore;
+    core: PluginCore;
 
     // Necessary evil.
     // cmdHiddenFileSync: HiddenFileSync;
 
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore, dependencies: StorageEventManagerBaseDependencies) {
+    constructor(plugin: TabulariumPlugin, core: PluginCore, dependencies: StorageEventManagerBaseDependencies) {
         const adapter = new ObsidianStorageEventManagerAdapter(plugin, core, dependencies.fileProcessing);
         super(adapter, dependencies);
         this.core = core;

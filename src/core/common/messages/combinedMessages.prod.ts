@@ -35,7 +35,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "(e.g., primum in novo telephono callido constituens, a tabula rasa incipiens)",
         zh: "（例如：在新手机上首次设置，从零开始）",
     },
-    "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.":
+    "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.":
         {
             def: "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
             la: "(e.g. fragmenta online lege) Si haec optio activa est, Tabularium fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.",
@@ -132,10 +132,10 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "${MESSAGE_FALLBACK_DECRYPT_FAILED} (via plicae)",
         zh: "${MESSAGE_FALLBACK_DECRYPT_FAILED}（文件路径）",
     },
-    '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': {
-        def: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
-        la: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
-        zh: '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ',
+    '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ': {
+        def: '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ',
+        la: '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ',
+        zh: '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ',
     },
     "${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}": {
         def: "${title} Could not delete conflicted revision ${displayRev(deleteRevision)} of ${path}.",
@@ -282,7 +282,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Renovatio repositorii acervatim",
         zh: "批量数据库更新",
     },
-    "Batch database updates in LiveSync mode": {
+    "Batch database updates in live sync mode": {
         def: "Batch database updates in live sync",
         la: "Renovationes repositorii in modo vivo coniungere",
         zh: "实时同步时批量写入数据库",
@@ -525,6 +525,116 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Solum CouchDB. Versio 0 identitatem viarum hereditariam servat; versio 1 Unicode NFC utitur. Nomina plicarum physica non mutantur. Omnia instrumenta renova et synchronizationem siste, deinde ambo repositoria ex tabulario integro et auctoritativo reaedifica et in aliis instrumentis arcesse. Prius nomina plicarum inter se collidentia resolve. P2P et repositorium obiectorum versionem 1 non sustinent.",
             zh: "仅限 CouchDB。版本 0 保留旧版路径标识；版本 1 使用 Unicode NFC。实际文件名保持不变。请更新所有设备并停止同步，然后用一份完整且权威的笔记库重建两个数据库，再在其他设备上获取。请先解决文件名冲突。P2P 和对象存储不支持版本 1。",
         },
+    "couchdbReplicator.beforeLiveSync": {
+        def: "Before live sync, run a one-shot sync once...",
+        la: "Ante synchronizationem vivam semel synchronizationem singularem incipe...",
+        zh: "实时同步前，先执行一次单次同步...",
+    },
+    "couchdbReplicator.cantReplicateLowerValue": {
+        def: "We can't replicate more lower value.",
+        la: "Valorem minorem replicare non possumus.",
+        zh: "我们无法复制更小的值",
+    },
+    "couchdbReplicator.checkingLastSyncPoint": {
+        def: "Looking for the point last synchronized point.",
+        la: "Punctum ultimae synchronizationis quaeritur.",
+        zh: "查找上次同步点",
+    },
+    "couchdbReplicator.couldNotConnectTo": {
+        def: "Could not connect to ${uri} : ${name}\n(${db})",
+        la: "Ad ${uri} conecti non potuit : ${name}\n(${db})",
+        zh: "无法连接到 ${uri} : ${name}\n(${db})",
+    },
+    "couchdbReplicator.couldNotConnectToRemoteDb": {
+        def: "Could not connect to remote database: ${d}",
+        la: "Ad repositorium remotum conecti non potuit: ${d}",
+        zh: "无法连接到远程数据库：${d}",
+    },
+    "couchdbReplicator.couldNotConnectToServer": {
+        def: "The connection to the remote has been prevented, or failed.",
+        la: "Conexio ad remotum impedita est aut defecit.",
+        zh: "无法连接到服务器",
+    },
+    "couchdbReplicator.couldNotConnectToURI": {
+        def: "Could not connect to ${uri}:${dbRet}",
+        la: "Ad ${uri} conecti non potuit:${dbRet}",
+        zh: "无法连接到 ${uri}:${dbRet}",
+    },
+    "couchdbReplicator.couldNotMarkResolveRemoteDb": {
+        def: "Could not mark resolve remote database.",
+        la: "Repositorium remotum ut resolutum notari non potuit.",
+        zh: "无法标记并解决远程数据库",
+    },
+    "couchdbReplicator.lockRemoteDb": {
+        def: "Lock remote database to prevent data corruption",
+        la: "Obsera repositorium remotum ne data corrumpantur",
+        zh: "锁定远程数据库以防止数据损坏",
+    },
+    "couchdbReplicator.markDeviceResolved": {
+        def: "Mark this device as 'resolved'.",
+        la: "Nota hoc instrumentum ut “resolutum”.",
+        zh: "将此设备标记为“已解决”",
+    },
+    "couchdbReplicator.mismatchedTweakDetected": {
+        def: "Some mismatches have been detected in the configuration between devices. Running a manual replication will attempt to resolve this issue.",
+        la: "Aliquae discrepantiae in configuratione inter instrumenta detectae sunt. Replicatio manualis hanc rem resolvere conabitur.",
+        zh: "检测到设备之间的配置存在不一致。执行一次手动复制将尝试解决此问题。",
+    },
+    "couchdbReplicator.oneShotSyncBegin": {
+        def: "OneShot Sync begin... (${syncMode})",
+        la: "Synchronizatio OneShot incipit... (${syncMode})",
+        zh: "OneShot同步开始...(${syncMode})",
+    },
+    "couchdbReplicator.remoteDbCorrupted": {
+        def: "Remote database is newer or corrupted, make sure to latest version of Tabularium installed",
+        la: "Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit",
+        zh: "远程数据库较新或已损坏,请确保已安装最新版本的 Tabularium",
+    },
+    "couchdbReplicator.remoteDbCreatedOrConnected": {
+        def: "Remote Database Created or Connected",
+        la: "Repositorium remotum creatum vel conexum",
+        zh: "远程数据库已创建或连接",
+    },
+    "couchdbReplicator.remoteDbDestroyed": {
+        def: "Remote Database Destroyed",
+        la: "Repositorium remotum deletum",
+        zh: "远程数据库已销毁",
+    },
+    "couchdbReplicator.remoteDbDestroyError": {
+        def: "Something happened on Remote Database Destroy:",
+        la: "Aliquid accidit in deletione repositorii remoti:",
+        zh: "远程数据库销毁时发生错误：",
+    },
+    "couchdbReplicator.remoteDbMarkedResolved": {
+        def: "Remote database has been marked resolved.",
+        la: "Repositorium remotum ut resolutum notatum est.",
+        zh: "远程数据库已标记为已解决",
+    },
+    "couchdbReplicator.replicationClosed": {
+        def: "Replication closed",
+        la: "Replicatio clausa",
+        zh: "同步已关闭",
+    },
+    "couchdbReplicator.replicationInProgress": {
+        def: "Replication is already in progress",
+        la: "Replicatio iam in cursu est",
+        zh: "同步正在进行中",
+    },
+    "couchdbReplicator.retryLowerBatchSize": {
+        def: "Retry with lower batch size:${batch_size}/${batches_limit}",
+        la: "Iterum conare cum minore magnitudine acervi:${batch_size}/${batches_limit}",
+        zh: "使用更小的批量大小重试：${batch_size}/${batches_limit}",
+    },
+    "couchdbReplicator.syncBegin": {
+        def: "Live sync started...",
+        la: "Synchronizatio viva incipit...",
+        zh: "实时同步开始...",
+    },
+    "couchdbReplicator.unlockRemoteDb": {
+        def: "Unlock remote database to prevent data corruption",
+        la: "Resera repositorium remotum ne data corrumpantur",
+        zh: "解锁远程数据库以防止数据损坏",
+    },
     "Could not apply ${tryGetFilePath(info)} revision ${rev}; the selected revision is no longer live": {
         def: "Could not apply revision ${rev} of ${tryGetFilePath(info)}; the selected revision is no longer current",
         la: "Revisio ${rev} plicae ${tryGetFilePath(info)} applicari non potuit; revisio electa iam non viget",
@@ -1549,7 +1659,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nuntius gravis",
         zh: "重要通知",
     },
-    "In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.":
+    "In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.":
         {
             def: "In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.",
             la: "Hoc in casu, Tabularium metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.",
@@ -1679,122 +1789,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "live",
         la: "continua",
         zh: "实时",
-    },
-    "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
-        {
-            def: "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
-            la: "Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
-            zh: "Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置",
-        },
-    "liveSyncReplicator.beforeLiveSync": {
-        def: "Before live sync, run a one-shot sync once...",
-        la: "Ante synchronizationem vivam semel synchronizationem singularem incipe...",
-        zh: "实时同步前，先执行一次单次同步...",
-    },
-    "liveSyncReplicator.cantReplicateLowerValue": {
-        def: "We can't replicate more lower value.",
-        la: "Valorem minorem replicare non possumus.",
-        zh: "我们无法复制更小的值",
-    },
-    "liveSyncReplicator.checkingLastSyncPoint": {
-        def: "Looking for the point last synchronized point.",
-        la: "Punctum ultimae synchronizationis quaeritur.",
-        zh: "查找上次同步点",
-    },
-    "liveSyncReplicator.couldNotConnectTo": {
-        def: "Could not connect to ${uri} : ${name}\n(${db})",
-        la: "Ad ${uri} conecti non potuit : ${name}\n(${db})",
-        zh: "无法连接到 ${uri} : ${name}\n(${db})",
-    },
-    "liveSyncReplicator.couldNotConnectToRemoteDb": {
-        def: "Could not connect to remote database: ${d}",
-        la: "Ad repositorium remotum conecti non potuit: ${d}",
-        zh: "无法连接到远程数据库：${d}",
-    },
-    "liveSyncReplicator.couldNotConnectToServer": {
-        def: "The connection to the remote has been prevented, or failed.",
-        la: "Conexio ad remotum impedita est aut defecit.",
-        zh: "无法连接到服务器",
-    },
-    "liveSyncReplicator.couldNotConnectToURI": {
-        def: "Could not connect to ${uri}:${dbRet}",
-        la: "Ad ${uri} conecti non potuit:${dbRet}",
-        zh: "无法连接到 ${uri}:${dbRet}",
-    },
-    "liveSyncReplicator.couldNotMarkResolveRemoteDb": {
-        def: "Could not mark resolve remote database.",
-        la: "Repositorium remotum ut resolutum notari non potuit.",
-        zh: "无法标记并解决远程数据库",
-    },
-    "liveSyncReplicator.liveSyncBegin": {
-        def: "Live sync started...",
-        la: "Synchronizatio viva incipit...",
-        zh: "实时同步开始...",
-    },
-    "liveSyncReplicator.lockRemoteDb": {
-        def: "Lock remote database to prevent data corruption",
-        la: "Obsera repositorium remotum ne data corrumpantur",
-        zh: "锁定远程数据库以防止数据损坏",
-    },
-    "liveSyncReplicator.markDeviceResolved": {
-        def: "Mark this device as 'resolved'.",
-        la: "Nota hoc instrumentum ut “resolutum”.",
-        zh: "将此设备标记为“已解决”",
-    },
-    "liveSyncReplicator.mismatchedTweakDetected": {
-        def: "Some mismatches have been detected in the configuration between devices. Running a manual replication will attempt to resolve this issue.",
-        la: "Aliquae discrepantiae in configuratione inter instrumenta detectae sunt. Replicatio manualis hanc rem resolvere conabitur.",
-        zh: "检测到设备之间的配置存在不一致。执行一次手动复制将尝试解决此问题。",
-    },
-    "liveSyncReplicator.oneShotSyncBegin": {
-        def: "OneShot Sync begin... (${syncMode})",
-        la: "Synchronizatio OneShot incipit... (${syncMode})",
-        zh: "OneShot同步开始...(${syncMode})",
-    },
-    "liveSyncReplicator.remoteDbCorrupted": {
-        def: "Remote database is newer or corrupted, make sure to latest version of Tabularium installed",
-        la: "Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit",
-        zh: "远程数据库较新或已损坏,请确保已安装最新版本的 Tabularium",
-    },
-    "liveSyncReplicator.remoteDbCreatedOrConnected": {
-        def: "Remote Database Created or Connected",
-        la: "Repositorium remotum creatum vel conexum",
-        zh: "远程数据库已创建或连接",
-    },
-    "liveSyncReplicator.remoteDbDestroyed": {
-        def: "Remote Database Destroyed",
-        la: "Repositorium remotum deletum",
-        zh: "远程数据库已销毁",
-    },
-    "liveSyncReplicator.remoteDbDestroyError": {
-        def: "Something happened on Remote Database Destroy:",
-        la: "Aliquid accidit in deletione repositorii remoti:",
-        zh: "远程数据库销毁时发生错误：",
-    },
-    "liveSyncReplicator.remoteDbMarkedResolved": {
-        def: "Remote database has been marked resolved.",
-        la: "Repositorium remotum ut resolutum notatum est.",
-        zh: "远程数据库已标记为已解决",
-    },
-    "liveSyncReplicator.replicationClosed": {
-        def: "Replication closed",
-        la: "Replicatio clausa",
-        zh: "同步已关闭",
-    },
-    "liveSyncReplicator.replicationInProgress": {
-        def: "Replication is already in progress",
-        la: "Replicatio iam in cursu est",
-        zh: "同步正在进行中",
-    },
-    "liveSyncReplicator.retryLowerBatchSize": {
-        def: "Retry with lower batch size:${batch_size}/${batches_limit}",
-        la: "Iterum conare cum minore magnitudine acervi:${batch_size}/${batches_limit}",
-        zh: "使用更小的批量大小重试：${batch_size}/${batches_limit}",
-    },
-    "liveSyncReplicator.unlockRemoteDb": {
-        def: "Unlock remote database to prevent data corruption",
-        la: "Resera repositorium remotum ne data corrumpantur",
-        zh: "解锁远程数据库以防止数据损坏",
     },
     "Loading old revisions...": {
         def: "Loading old revisions...",
@@ -2060,61 +2054,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Yes",
         la: "Ita",
         zh: "是",
-    },
-    "moduleLiveSyncMain.logAdditionalSafetyScan": {
-        def: "Additional safety scan...",
-        la: "Perscrutatio securitatis addita...",
-        zh: "额外的安全扫描...",
-    },
-    "moduleLiveSyncMain.logLoadingPlugin": {
-        def: "Loading plugin...",
-        la: "Additamentum oneratur...",
-        zh: "正在加载插件...",
-    },
-    "moduleLiveSyncMain.logPluginInitCancelled": {
-        def: "Plugin initialisation was cancelled by a module",
-        la: "Initium additamenti a modulo abrogatum est",
-        zh: "插件初始化被某个模块取消",
-    },
-    "moduleLiveSyncMain.logPluginVersion": {
-        def: "Tabularium v${manifestVersion} ${packageVersion}",
-        la: "Tabularium v${manifestVersion} ${packageVersion}",
-        zh: "Tabularium v${manifestVersion} ${packageVersion}",
-    },
-    "moduleLiveSyncMain.logSafetyScanCompleted": {
-        def: "Additional safety scan completed",
-        la: "Perscrutatio securitatis addita perfecta",
-        zh: "额外的安全扫描完成",
-    },
-    "moduleLiveSyncMain.logSafetyScanFailed": {
-        def: "Additional safety scan has failed on a module",
-        la: "Perscrutatio securitatis addita in modulo defecit",
-        zh: "额外的安全扫描在某个模块上失败",
-    },
-    "moduleLiveSyncMain.logUnloadingPlugin": {
-        def: "Unloading plugin...",
-        la: "Additamentum exoneratur...",
-        zh: "正在卸载插件...",
-    },
-    "moduleLiveSyncMain.msgScramEnabled": {
-        def: "Tabularium has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
-        la: "Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.\n",
-        zh: "Tabularium 已被配置为忽略某些事件。这样对吗？\n\n| 类型 | 状态 | 说明 |\n|:---:|:---:|---|\n| 存储事件 | ${fileWatchingStatus} | 所有修改都将被忽略 |\n| 数据库事件 | ${parseReplicationStatus} | 所有同步的更改都将被推迟 |\n\n您想恢复它们并重启 Obsidian 吗？\n\n> [!DETAILS]-\n> 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。\n> 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。\n",
-    },
-    "moduleLiveSyncMain.optionKeepLiveSyncDisabled": {
-        def: "Keep live sync disabled",
-        la: "Retine synchronizationem vivam deactivatam",
-        zh: "保持实时同步关闭",
-    },
-    "moduleLiveSyncMain.optionResumeAndRestart": {
-        def: "Resume and restart Obsidian",
-        la: "Resume et Obsidian iterum incipe",
-        zh: "恢复并重启 Obsidian",
-    },
-    "moduleLiveSyncMain.titleScramEnabled": {
-        def: "Scram Enabled",
-        la: "Scram activum",
-        zh: "紧急停止已启用",
     },
     "moduleLocalDatabase.logWaitingForReady": {
         def: "Waiting for ready...",
@@ -3335,16 +3274,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "ELIGE",
         zh: "选择",
     },
-    "Self-hosted LiveSync cannot be initialised, exiting loading.": {
-        def: "Tabularium could not be initialised; loading has stopped.",
-        la: "Additamentum Tabularium initiari non potuit; oneratio desiit.",
-        zh: "Tabularium 无法初始化，已停止加载。",
-    },
-    "Self-hosted LiveSync has paused remote synchronisation for compatibility review.": {
-        def: "Tabularium has paused remote synchronisation for compatibility review.",
-        la: "Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.",
-        zh: "Tabularium 已暂停远程同步，以进行兼容性检查。",
-    },
     Send: {
         def: "Send",
         la: "Mitte",
@@ -3481,6 +3410,61 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Synchronizationem incipit cum plica servatur.",
         zh: "当文件保存时启动同步 ",
     },
+    "startupSequence.logAdditionalSafetyScan": {
+        def: "Additional safety scan...",
+        la: "Perscrutatio securitatis addita...",
+        zh: "额外的安全扫描...",
+    },
+    "startupSequence.logLoadingPlugin": {
+        def: "Loading plugin...",
+        la: "Additamentum oneratur...",
+        zh: "正在加载插件...",
+    },
+    "startupSequence.logPluginInitCancelled": {
+        def: "Plugin initialisation was cancelled by a module",
+        la: "Initium additamenti a modulo abrogatum est",
+        zh: "插件初始化被某个模块取消",
+    },
+    "startupSequence.logPluginVersion": {
+        def: "Tabularium v${manifestVersion} ${packageVersion}",
+        la: "Tabularium v${manifestVersion} ${packageVersion}",
+        zh: "Tabularium v${manifestVersion} ${packageVersion}",
+    },
+    "startupSequence.logSafetyScanCompleted": {
+        def: "Additional safety scan completed",
+        la: "Perscrutatio securitatis addita perfecta",
+        zh: "额外的安全扫描完成",
+    },
+    "startupSequence.logSafetyScanFailed": {
+        def: "Additional safety scan has failed on a module",
+        la: "Perscrutatio securitatis addita in modulo defecit",
+        zh: "额外的安全扫描在某个模块上失败",
+    },
+    "startupSequence.logUnloadingPlugin": {
+        def: "Unloading plugin...",
+        la: "Additamentum exoneratur...",
+        zh: "正在卸载插件...",
+    },
+    "startupSequence.msgScramEnabled": {
+        def: "Tabularium has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
+        la: "Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.\n",
+        zh: "Tabularium 已被配置为忽略某些事件。这样对吗？\n\n| 类型 | 状态 | 说明 |\n|:---:|:---:|---|\n| 存储事件 | ${fileWatchingStatus} | 所有修改都将被忽略 |\n| 数据库事件 | ${parseReplicationStatus} | 所有同步的更改都将被推迟 |\n\n您想恢复它们并重启 Obsidian 吗？\n\n> [!DETAILS]-\n> 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。\n> 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。\n",
+    },
+    "startupSequence.optionKeepSyncDisabled": {
+        def: "Keep live sync disabled",
+        la: "Retine synchronizationem vivam deactivatam",
+        zh: "保持实时同步关闭",
+    },
+    "startupSequence.optionResumeAndRestart": {
+        def: "Resume and restart Obsidian",
+        la: "Resume et Obsidian iterum incipe",
+        zh: "恢复并重启 Obsidian",
+    },
+    "startupSequence.titleScramEnabled": {
+        def: "Scram Enabled",
+        la: "Scram activum",
+        zh: "紧急停止已启用",
+    },
     Stat: {
         def: "Stat",
         la: "Status",
@@ -3612,6 +3596,22 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Synchronisation Issues Detected",
         la: "Difficultates synchronizationis detectae",
         zh: "检测到同步问题",
+    },
+    "Tabularium cannot be initialised, exiting loading.": {
+        def: "Tabularium could not be initialised; loading has stopped.",
+        la: "Additamentum Tabularium initiari non potuit; oneratio desiit.",
+        zh: "Tabularium 无法初始化，已停止加载。",
+    },
+    "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
+        {
+            def: "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
+            la: "Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
+            zh: "Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置",
+        },
+    "Tabularium has paused remote synchronisation for compatibility review.": {
+        def: "Tabularium has paused remote synchronisation for compatibility review.",
+        la: "Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.",
+        zh: "Tabularium 已暂停远程同步，以进行兼容性检查。",
     },
     "tabularium.confirm.cancel": {
         def: "Cancel",
@@ -5391,7 +5391,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Petitio fortasse defecit. Responsum ministratoris: ${r.status}: ${r.statusText}",
         zh: "请求可能失败了。服务器返回：${r.status}: ${r.statusText}",
     },
-    "The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync":
+    "The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable Tabularium":
         {
             def: "The request succeeded through the Obsidian API, but the native fetch API failed. Please check the CORS settings on the server. Until this is fixed, live synchronisation cannot be enabled.",
             la: "Petitio per API Obsidian successit, sed API fetch nativum defecit. Optiones CORS ministratoris inspice. Donec hoc corrigatur, synchronizatio continua activari non potest.",
@@ -5419,17 +5419,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Contentum selectum ut nova revisio restitutum est.",
         zh: "所选内容已恢复为新的修订。",
     },
-    "The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.":
-        {
-            def: "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Pick a file to resolve conflict' to review the file.",
-            la: "Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' plicam inspice.",
-            zh: "所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。",
-        },
     "The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.":
         {
             def: "The selected content was restored as a new revision. Other versions remain unresolved; use 'Pick a file to resolve conflict' to review them.",
             la: "Contentum selectum ut nova revisio restitutum est. Aliae versiones adhuc irresolutae manent; per 'Elige plicam ad discrepantiam solvendam' eas inspice.",
             zh: "所选内容已恢复为新的修订。其他版本仍未解决，请使用「选择要解决冲突的文件」查看。",
+        },
+    "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.":
+        {
+            def: "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Pick a file to resolve conflict' to review the file.",
+            la: "Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' plicam inspice.",
+            zh: "所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。",
         },
     "The selected local database is not ready for the rebuild download.": {
         def: "This device's database is not ready to receive the rebuild download.",
@@ -5534,7 +5534,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Commuta omnem synchronizationem",
         zh: "开关全部同步",
     },
-    "Toggle LiveSync": {
+    "Toggle live sync": {
         def: "Toggle live sync",
         la: "Commuta synchronizationem vivam",
         zh: "开关实时同步",
@@ -5819,7 +5819,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Versio",
         zh: "版本",
     },
-    "Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.":
+    "Wait for a bounded local quiet period before processing file updates in live sync mode, reducing intermediate database updates while delaying their reflection to remote devices.":
         {
             def: "In live sync, wait for a short local pause in editing (with an upper bound) before writing file changes to the database: fewer intermediate versions are written, but other devices receive the changes a little later.",
             la: "In modo vivo, post mutationem plicae breve otium locale (cum fine) exspectat antequam in repositorium scribat. Renovationes intermediae minuuntur, sed alia instrumenta mutationes serius accipiunt.",
@@ -5836,7 +5836,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "OBSERVA",
         zh: "监视",
     },
-    "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.":
+    "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.":
         {
             def: "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.",
             la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
@@ -5900,7 +5900,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Genus remotum activum",
         zh: "当前远程类型",
     },
-    "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
+    "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
         {
             la: "Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.",
             zh: "重启后，请选择一台在线的源设备进行首次获取。本设备上的本地数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。",
@@ -6636,7 +6636,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nomina in hac relatione",
         zh: "此报告中的名称",
     },
-    "Newer Self-hosted LiveSync versions detected: ${versions}.": {
+    "Newer Tabularium versions detected: ${versions}.": {
         la: "Versiones recentiores Tabularii detectae: ${versions}.",
         zh: "检测到较新的 Tabularium 版本：${versions}。",
     },
@@ -6679,7 +6679,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
             la: "Nunc eligere possumus quomodo fragmenta dividantur; V3 efficacissimum est. Si difficultates habes, quaeso hoc ad Default vel Legacy pone.",
             zh: "现在可以选择块的分割方式；V3 效率最高。如果遇到问题，请改为 Default 或 Legacy。",
         },
-    "Older Self-hosted LiveSync versions detected: ${versions}.": {
+    "Older Tabularium versions detected: ${versions}.": {
         la: "Versiones vetustiores Tabularii detectae: ${versions}.",
         zh: "检测到较旧的 Tabularium 版本：${versions}。",
     },
@@ -6860,7 +6860,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Recognosce instrumenta",
         zh: "查看设备",
     },
-    "Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.": {
+    "Reviewing and aligning Tabularium versions across devices is recommended.": {
         la: "Versiones Tabularii per instrumenta recognoscere et congruentes reddere commendatur.",
         zh: "建议检查并统一各设备上的 Tabularium 版本。",
     },

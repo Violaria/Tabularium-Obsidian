@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createServiceContext } from "@tabularium/sync-core/context";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { IAPIService } from "@tabularium/sync-core/compat/services/base/IService";
 import { MemoryValueStore } from "@vrtmrz/value-store";
 import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
@@ -25,7 +25,7 @@ describe("normaliseObsidianSettingsData", () => {
     });
 
     it("preserves stored settings", () => {
-        const settings = { isConfigured: false } as ObsidianLiveSyncSettings;
+        const settings = { isConfigured: false } as SyncSettings;
 
         expect(normaliseObsidianSettingsData(settings)).toBe(settings);
     });

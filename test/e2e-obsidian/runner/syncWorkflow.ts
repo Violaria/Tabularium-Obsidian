@@ -2,7 +2,7 @@ import { evalObsidianJson } from "./cli.ts";
 import { SERVICE_CONTEXT_MEMBERS } from "../../contracts/serviceContext.ts";
 import { DATABASE_COMPATIBILITY_VERSION_KEY } from "../../../src/obsidian/common/databaseCompatibility.ts";
 import { CURRENT_SETTING_VERSION } from "@tabularium/sync-core/compat/common/models/setting.const";
-import { type ObsidianLiveSyncSettings, VER } from "@tabularium/sync-core/compat/common/types";
+import { type SyncSettings, VER } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
 import type { CouchDbConfig } from "./couchdb.ts";
 import { withObsidianPage } from "./ui.ts";
@@ -59,7 +59,7 @@ export type ObsidianServiceContextContractResult = {
     serviceContextMismatches: string[];
     appCapabilityMatches: boolean;
     pluginCapabilityMatches: boolean;
-    liveSyncPluginCapabilityMatches: boolean;
+    tabulariumCapabilityMatches: boolean;
 };
 
 export type LocalDatabaseEntry = {
@@ -98,7 +98,7 @@ const E2E_PREFERRED_SETTINGS = {
 
 /**
  * The compatibility marker of a vault already reviewed, under Tabularium's device-value names by default; the original
- * Self-hosted LiveSync stores it without a prefix, under its own suffix.
+ * Tabularium stores it without a prefix, under its own suffix.
  */
 export function createE2eObsidianDeviceLocalState(
     vaultName: string,
@@ -195,7 +195,7 @@ export function createE2eCouchDbPluginData(
         ...E2E_PREFERRED_SETTINGS,
         ...overrides,
     };
-    upsertRemoteConfigurationInPlace(pluginData as ObsidianLiveSyncSettings, "couchdb", {
+    upsertRemoteConfigurationInPlace(pluginData as SyncSettings, "couchdb", {
         id: "e2e-couchdb",
         name: "E2E CouchDB",
         activate: true,
@@ -241,7 +241,7 @@ export async function configureCouchDb(
     );
 }
 
-export async function waitForLiveSyncCoreReady(
+export async function waitForCoreReady(
     cliBinary: string,
     env: NodeJS.ProcessEnv,
     timeoutMs = Number(process.env.E2E_OBSIDIAN_CORE_READY_TIMEOUT_MS ?? 20000)
@@ -290,7 +290,7 @@ export async function waitForLiveSyncCoreReady(
             ? ""
             : ` Last error: ${lastError instanceof Error ? lastError.message : String(lastError)}`;
     throw new Error(
-        `Timed out waiting for Self-hosted LiveSync core readiness: ${JSON.stringify(lastReadiness)}${errorSuffix}`
+        `Timed out waiting for Tabularium core readiness: ${JSON.stringify(lastReadiness)}${errorSuffix}`
     );
 }
 
@@ -323,7 +323,7 @@ export async function inspectObsidianServiceContextContract(
             "serviceContextMismatches:serviceNames.filter((name)=>services[name].context!==context),",
             "appCapabilityMatches:context.app===app,",
             "pluginCapabilityMatches:context.plugin===plugin,",
-            "liveSyncPluginCapabilityMatches:context.liveSyncPlugin===plugin,",
+            "tabulariumCapabilityMatches:context.tabulariumPlugin===plugin,",
             "});",
             "})()",
         ].join(""),
@@ -350,9 +350,9 @@ export function assertObsidianServiceContextContract(result: ObsidianServiceCont
     assertEqual(result.appCapabilityMatches, true, "The Obsidian Context lost its App capability.");
     assertEqual(result.pluginCapabilityMatches, true, "The Obsidian Context lost its Plugin capability.");
     assertEqual(
-        result.liveSyncPluginCapabilityMatches,
+        result.tabulariumCapabilityMatches,
         true,
-        "The Obsidian Context lost its Self-hosted LiveSync plug-in capability."
+        "The Obsidian Context lost its Tabularium plug-in capability."
     );
 }
 

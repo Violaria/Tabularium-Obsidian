@@ -1,5 +1,5 @@
 import { LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import {
@@ -13,7 +13,7 @@ import {
 import { PeriodicProcessor } from "@/core/common/PeriodicProcessor";
 
 type ReplicationSchedulingSettings = Pick<
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     "isConfigured" | "liveSync" | "syncOnStart" | "periodicReplication" | "periodicReplicationInterval"
 >;
 

@@ -3,7 +3,7 @@ import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianService
 import { KeyValueDBService } from "@tabularium/sync-core/compat/services/base/KeyValueDBService";
 import { reactiveSource } from "octagonal-wheels/dataobject/reactive";
 import type { ReplicatorServiceDependencies } from "@tabularium/sync-core/compat/services/base/ReplicatorService";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 
 type ActivityOptions = {
     label?: string;
@@ -14,7 +14,7 @@ type ObsidianReplicatorServiceDependencies = ReplicatorServiceDependencies & {
 };
 
 type SleepPreferenceSettings = Pick<
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     "allowSleepDuringSynchronisation" | "allowSleepDuringSynchronisationOnDesktop"
 >;
 

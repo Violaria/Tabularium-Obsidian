@@ -20,9 +20,9 @@ import { Logger } from "@lib/common/logger.ts";
 import { isErrorOfMissingDoc } from "./utils_couchdb.ts";
 
 import { EVENT_CHUNK_FETCHED } from "@lib/managers/ChunkFetcher.ts";
-import type { LiveSyncEventHub } from "@lib/hub/hub.ts";
+import type { SyncEventHub } from "@lib/hub/hub.ts";
 import { FallbackWeakRef } from "octagonal-wheels/common/polyfill";
-import { LiveSyncManagers } from "@lib/managers/LiveSyncManagers.ts";
+import { SyncManagers } from "@lib/managers/SyncManagers.ts";
 import type { AutoMergeResult } from "@lib/managers/ConflictManager.ts";
 import type { IServiceHub } from "@lib/services/base/IService.ts";
 import type { ServiceContext } from "@lib/services/base/ServiceBase.ts";
@@ -39,7 +39,7 @@ declare global {
 export type ChunkRetrievalResultSuccess = { _id: DocumentID; data: string; type: "leaf" };
 export type ChunkRetrievalResultError = { _id: DocumentID; error: string };
 export type ChunkRetrievalResult = ChunkRetrievalResultSuccess | ChunkRetrievalResultError;
-export interface LiveSyncLocalDBEnv {
+export interface LocalDatabaseEnv {
     // $$id2path(id: DocumentID, entry: EntryHasPath, stripPrefix?: boolean): FilePathWithPrefix;
     // $$path2id(filename: FilePathWithPrefix | FilePath, prefix?: string): Promise<DocumentID>;
     // $$createPouchDBInstance<T extends object>(
@@ -47,13 +47,13 @@ export interface LiveSyncLocalDBEnv {
     //     options?: PouchDB.Configuration.DatabaseConfiguration
     // ): PouchDB.Database<T>;
 
-    // $allOnDBUnload(db: LiveSyncLocalDB): void;
-    // $allOnDBClose(db: LiveSyncLocalDB): void;
-    // $everyOnInitializeDatabase(db: LiveSyncLocalDB): Promise<boolean>;
-    // $everyOnResetDatabase(db: LiveSyncLocalDB): Promise<boolean>;
-    // $$getReplicator: () => LiveSyncAbstractReplicator;
+    // $allOnDBUnload(db: LocalDatabase): void;
+    // $allOnDBClose(db: LocalDatabase): void;
+    // $everyOnInitializeDatabase(db: LocalDatabase): Promise<boolean>;
+    // $everyOnResetDatabase(db: LocalDatabase): Promise<boolean>;
+    // $$getReplicator: () => AbstractReplicator;
     // getSettings(): RemoteDBSettings;
-    // managers: LiveSyncManagers;
+    // managers: SyncManagers;
     services: Pick<IServiceHub, "API" | "database" | "databaseEvents" | "replicator" | "setting" | "path"> & {
         context: ServiceContext;
     };
@@ -70,14 +70,14 @@ export type GeneratedChunk = {
     piece: string;
 };
 
-export class LiveSyncLocalDB {
+export class LocalDatabase {
     auth: Credential;
     dbname: string;
     settings!: RemoteDBSettings;
     localDatabase!: PouchDB.Database<EntryDoc>;
     _log: LogFunction;
 
-    private _managers?: LiveSyncManagers;
+    private _managers?: SyncManagers;
     get managers() {
         if (!this._managers) {
             throw new Error("Managers are not ready yet.");
@@ -89,7 +89,7 @@ export class LiveSyncLocalDB {
 
     needScanning = false;
 
-    env: LiveSyncLocalDBEnv;
+    env: LocalDatabaseEnv;
 
     clearCaches() {
         this._managers?.clearCaches();
@@ -105,7 +105,7 @@ export class LiveSyncLocalDB {
         void this._prepareHashFunctions();
     }
 
-    offRemoteChunkFetchedHandler?: ReturnType<LiveSyncEventHub["onEvent"]>;
+    offRemoteChunkFetchedHandler?: ReturnType<SyncEventHub["onEvent"]>;
     private databaseCloseCleanup?: {
         database: PouchDB.Database<EntryDoc>;
         promise: Promise<void>;
@@ -113,14 +113,14 @@ export class LiveSyncLocalDB {
     /** Share owner retirement across every close path for one physical database lifetime. */
     private activeReplicationClose?: Promise<boolean>;
     private databaseUnloadNotification?: Promise<void>;
-    constructor(dbname: string, env: LiveSyncLocalDBEnv) {
+    constructor(dbname: string, env: LocalDatabaseEnv) {
         this.auth = {
             username: "",
             password: "",
         };
         this.dbname = dbname;
         this.env = env;
-        this._log = createInstanceLogFunction("LiveSyncLocalDB", this.env.services.API);
+        this._log = createInstanceLogFunction("LocalDatabase", this.env.services.API);
         this.refreshSettings();
     }
 
@@ -175,7 +175,7 @@ export class LiveSyncLocalDB {
         }
     }
 
-    private async teardownDatabaseDependencies(managers: LiveSyncManagers): Promise<void> {
+    private async teardownDatabaseDependencies(managers: SyncManagers): Promise<void> {
         try {
             await this.closeActiveReplication();
         } catch (error) {
@@ -192,7 +192,7 @@ export class LiveSyncLocalDB {
 
     private async rollbackFailedInitialisation(
         database: PouchDB.Database<EntryDoc>,
-        managers: LiveSyncManagers
+        managers: SyncManagers
     ): Promise<void> {
         this.isReady = false;
         this.offRemoteChunkFetchedHandler?.();
@@ -247,7 +247,7 @@ export class LiveSyncLocalDB {
         this.activeReplicationClose = undefined;
         this.databaseUnloadNotification = undefined;
 
-        const manager = new LiveSyncManagers({
+        const manager = new SyncManagers({
             database: this.localDatabase,
             APIService: this.env.services.API,
             pathService: this.env.services.path,

@@ -82,7 +82,7 @@ export class ControlService<T extends ServiceContext = ServiceContext>
         await this.services.settingService.onSettingRealised();
     }
 
-    private async _onLiveSyncUnload(): Promise<void> {
+    private async _onUnload(): Promise<void> {
         this.context.events.emitEvent(EVENT_PLUGIN_UNLOADED);
         const prepared = await this.services.appLifecycleService.onBeforeUnload();
         if (!prepared) this._log("Unload preparation failed; pending storage work may require recovery", LOG_LEVEL_URGENT);
@@ -99,7 +99,7 @@ export class ControlService<T extends ServiceContext = ServiceContext>
         }
         this.context.events.emitEvent(EVENT_PLATFORM_UNLOADED);
         this.context.events.offAll();
-        this._log(this.context.translate("moduleLiveSyncMain.logUnloadingPlugin"));
+        this._log(this.context.translate("startupSequence.logUnloadingPlugin"));
         if (!prepared) throw new Error("Unload preparation failed");
         return;
     }
@@ -111,7 +111,7 @@ export class ControlService<T extends ServiceContext = ServiceContext>
      */
     async onLoad() {
         if (!(await this.services.appLifecycleService.onLoad())) {
-            this._log("Self-hosted LiveSync cannot be initialised, exiting loading.", LOG_LEVEL_URGENT);
+            this._log("Tabularium cannot be initialised, exiting loading.", LOG_LEVEL_URGENT);
             return false;
         }
         return true;
@@ -130,6 +130,6 @@ export class ControlService<T extends ServiceContext = ServiceContext>
      * @returns
      */
     async onUnload() {
-        return await this._onLiveSyncUnload();
+        return await this._onUnload();
     }
 }

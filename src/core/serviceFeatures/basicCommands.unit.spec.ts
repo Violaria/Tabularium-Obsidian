@@ -141,7 +141,7 @@ describe("useBasicCommandsFeature", () => {
         });
     });
 
-    it("toggles LiveSync and persists the updated setting", async () => {
+    it("toggles live sync and persists the updated setting", async () => {
         const fixture = createFixture();
         await initialise(fixture);
 

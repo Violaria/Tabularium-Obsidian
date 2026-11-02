@@ -7,7 +7,7 @@ import {
     REMOTE_REQUEST_ACTIVITY_ICON,
 } from "../../../src/ui/statusBar/RemoteActivityStatus.ts";
 
-export const REMOTE_ACTIVITY_E2E_STATE_KEY = "__livesyncE2ERemoteActivity";
+export const REMOTE_ACTIVITY_E2E_STATE_KEY = "__tabulariumE2ERemoteActivity";
 export const REMOTE_ACTIVITY_GATE_KIND = {
     chunkFetch: "chunk-fetch",
     oneShot: "one-shot",

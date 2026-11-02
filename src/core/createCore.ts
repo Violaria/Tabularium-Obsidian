@@ -1,7 +1,7 @@
 import type PouchDB from "pouchdb-core";
 import {
     type HasSettings,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type EntryDoc,
 } from "@tabularium/sync-core/compat/common/types";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
@@ -9,16 +9,16 @@ import type { DatabaseFileAccess } from "@tabularium/sync-core/compat/interfaces
 import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
 import type { IFileHandler } from "@tabularium/sync-core/compat/interfaces/FileHandler";
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
-import type { LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
-import type { LiveSyncCouchDBReplicatorEnv } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
-import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
+import type { LocalDatabaseEnv } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
+import type { CouchDBReplicatorEnv } from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
+import type { AbstractReplicator } from "@tabularium/sync-core/compat/replication/AbstractReplicator";
 import type { ReplicatorInstance } from "@tabularium/sync-core/replication";
 import { useTargetFilters } from "@tabularium/sync-core/compat/serviceFeatures/targetFilter";
 import { useRemoteConfigurationMigration } from "@tabularium/sync-core/compat/serviceFeatures/remoteConfig";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableServiceHub";
 import { installTweakResolution } from "./coreFeatures/ModuleResolveMismatchedTweaks";
-import { installMainLifecycle } from "./main/ModuleLiveSyncMain";
+import { installMainLifecycle } from "./main/StartupSequence";
 import type { ServiceModules } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import { usePrepareDatabaseForUse } from "@tabularium/sync-core/compat/serviceFeatures/prepareDatabaseForUse";
 import { useReplicationScheduling, type ReplicationSchedulingControl } from "./serviceFeatures/replicationScheduling";
@@ -28,7 +28,7 @@ import { useConflictResolutionFeature } from "./serviceFeatures/conflictResoluti
 import { useBasicCommandsFeature } from "./serviceFeatures/basicCommands";
 
 /** Focused views returned by serviceFeatures which the host may consume during composition. */
-export interface LiveSyncCoreFeatureViews {
+export interface CoreFeatureViews {
     readonly replicationScheduling: ReplicationSchedulingControl;
 }
 
@@ -37,17 +37,17 @@ export interface StartupDatabaseOptions {
     readonly continueOnFileFailure?: boolean;
 }
 
-type CompatibilityReplicatorView = ReplicatorInstance & Partial<LiveSyncAbstractReplicator>;
+type CompatibilityReplicatorView = ReplicatorInstance & Partial<AbstractReplicator>;
 
 /** What an entry point gives `createCore`: its service hub, service modules, features and components. */
 export interface CoreOptions<T extends ServiceContext> {
     readonly hub: InjectableServiceHub<T>;
     /** The platform's storage, file and database access. */
-    readonly serviceModules: (core: LiveSyncBaseCore<T>, hub: InjectableServiceHub<T>) => ServiceModules;
+    readonly serviceModules: (core: SyncCore<T>, hub: InjectableServiceHub<T>) => ServiceModules;
     /** Platform features, registered after the core's own and before replication. */
-    readonly features?: (core: LiveSyncBaseCore<T>, views: LiveSyncCoreFeatureViews) => void;
+    readonly features?: (core: SyncCore<T>, views: CoreFeatureViews) => void;
     /** Platform components, registered last: after replication, basic commands and the start-up sequence. */
-    readonly components?: (core: LiveSyncBaseCore<T>) => void;
+    readonly components?: (core: SyncCore<T>) => void;
     readonly startupDatabaseOptions?: StartupDatabaseOptions;
 }
 
@@ -56,15 +56,15 @@ export interface CoreOptions<T extends ServiceContext> {
  * order they are registered: replicator providers, service modules, the core's features, the platform's features,
  * replication and basic commands, the start-up sequence and tweak resolution, then the platform's components.
  */
-export function createCore<T extends ServiceContext>(options: CoreOptions<T>): LiveSyncBaseCore<T> {
-    const core = new LiveSyncBaseCore(options.hub, options.startupDatabaseOptions);
+export function createCore<T extends ServiceContext>(options: CoreOptions<T>): SyncCore<T> {
+    const core = new SyncCore(options.hub, options.startupDatabaseOptions);
     core.services.replicator.registerReplicatorProviderDefinitions(createCentralReplicatorProviderDefinitions(core));
     core.setServiceModules(options.serviceModules(core, options.hub));
     useConflictResolutionFeature(core);
     useTargetFilters(core);
     usePrepareDatabaseForUse(core);
     useRemoteConfigurationMigration(core);
-    const views: LiveSyncCoreFeatureViews = Object.freeze({ replicationScheduling: useReplicationScheduling(core) });
+    const views: CoreFeatureViews = Object.freeze({ replicationScheduling: useReplicationScheduling(core) });
     options.features?.(core, views);
     useReplicationFeature(core);
     useBasicCommandsFeature(core);
@@ -75,8 +75,8 @@ export function createCore<T extends ServiceContext>(options: CoreOptions<T>): L
 }
 
 /** The assembled sync core: its services and service modules. Made by `createCore`. */
-export class LiveSyncBaseCore<T extends ServiceContext = ServiceContext>
-    implements LiveSyncLocalDBEnv, LiveSyncCouchDBReplicatorEnv, HasSettings<ObsidianLiveSyncSettings>
+export class SyncCore<T extends ServiceContext = ServiceContext>
+    implements LocalDatabaseEnv, CouchDBReplicatorEnv, HasSettings<SyncSettings>
 {
     constructor(
         readonly services: InjectableServiceHub<T>,
@@ -111,7 +111,7 @@ export class LiveSyncBaseCore<T extends ServiceContext = ServiceContext>
     /**
      * @obsolete Use services.setting.settings instead. Set the settings of the plug-in.
      */
-    set settings(value: ObsidianLiveSyncSettings) {
+    set settings(value: SyncSettings) {
         this.services.setting.settings = value;
     }
 
@@ -119,7 +119,7 @@ export class LiveSyncBaseCore<T extends ServiceContext = ServiceContext>
      * @obsolete Use services.setting.currentSettings instead. Get the settings of the plug-in.
      * @returns The current settings of the plug-in.
      */
-    getSettings(): ObsidianLiveSyncSettings {
+    getSettings(): SyncSettings {
         return this.settings;
     }
 

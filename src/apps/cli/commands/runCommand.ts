@@ -145,12 +145,12 @@ export async function runCommand(options: CLIOptions, context: CLICommandContext
                 return true;
             });
         } else {
-            log("LiveSync mode: restoring sync settings and starting continuous synchronisation where supported");
+            log("live sync mode: restoring sync settings and starting continuous synchronisation where supported");
             await restoreSyncSettings();
             // The applySettings() lifecycle fires onResumed → the provider-
             // independent scheduling feature, which starts Continuous when
             // supported. Do not call a concrete Replicator directly.
-            log("LiveSync active");
+            log("Tabularium active");
             const currentSettings = core.services.setting.currentSettings();
             if (!currentSettings.liveSync && !currentSettings.syncOnStart) {
                 writeStderrLine(

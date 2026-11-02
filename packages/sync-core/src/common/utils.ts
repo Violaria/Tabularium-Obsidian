@@ -15,7 +15,7 @@ import {
     type CustomRegExpSource,
     type ParsedCustomRegExp,
     type CustomRegExpSourceList,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type RemoteDBSettings,
     type P2PConnectionInfo,
     type BucketSyncSetting,
@@ -301,7 +301,7 @@ export function determineTypeFromBlob(data: Blob): "newnote" | "plain" {
  * @param settings Settings to inspect
  * @returns `true` when a modification-time limit is configured.
  */
-export function isRemediationModeActive(settings: Pick<ObsidianLiveSyncSettings, "maxMTimeForReflectEvents">): boolean {
+export function isRemediationModeActive(settings: Pick<SyncSettings, "maxMTimeForReflectEvents">): boolean {
     return (settings.maxMTimeForReflectEvents ?? 0) > 0;
 }
 
@@ -549,14 +549,14 @@ type RegExpSettingKey =
     | "syncInternalFilesIgnorePatterns"
     | "syncInternalFilesTargetPatterns"
     | "syncInternalFileOverwritePatterns";
-export function getFileRegExp(settings: ObsidianLiveSyncSettings | RemoteDBSettings, key: RegExpSettingKey) {
+export function getFileRegExp(settings: SyncSettings | RemoteDBSettings, key: RegExpSettingKey) {
     const flagCase = settings.handleFilenameCaseSensitive ? "" : "i";
     if (
         key === "syncInternalFilesIgnorePatterns" ||
         key === "syncInternalFilesTargetPatterns" ||
         key === "syncInternalFileOverwritePatterns"
     ) {
-        const regExp = (settings as ObsidianLiveSyncSettings)[key];
+        const regExp = (settings as SyncSettings)[key];
         return parseCustomRegExpList(regExp, flagCase, ",");
     }
     const regExp = settings[key];
@@ -579,7 +579,7 @@ export function copyTo<T extends object, U extends T>(source: U, target: T): voi
 // export function getConnectionSummaryCouchDB(settings: CouchDBConnection) { }
 // export function getConnectionSummaryE2EE(settings: EncryptionSettings) { }
 
-export function pickBucketSyncSettings(setting: ObsidianLiveSyncSettings): BucketSyncSetting {
+export function pickBucketSyncSettings(setting: SyncSettings): BucketSyncSetting {
     return {
         bucket: setting.bucket,
         region: setting.region,
@@ -593,7 +593,7 @@ export function pickBucketSyncSettings(setting: ObsidianLiveSyncSettings): Bucke
     };
 }
 
-export function pickCouchDBSyncSettings(setting: ObsidianLiveSyncSettings): CouchDBConnection {
+export function pickCouchDBSyncSettings(setting: SyncSettings): CouchDBConnection {
     return {
         couchDB_URI: setting.couchDB_URI,
         couchDB_USER: setting.couchDB_USER,
@@ -611,7 +611,7 @@ export function pickCouchDBSyncSettings(setting: ObsidianLiveSyncSettings): Couc
     };
 }
 
-export function pickEncryptionSettings(setting: ObsidianLiveSyncSettings | EncryptionSettings): EncryptionSettings {
+export function pickEncryptionSettings(setting: SyncSettings | EncryptionSettings): EncryptionSettings {
     return {
         E2EEAlgorithm: setting.E2EEAlgorithm,
         encrypt: setting.encrypt,
@@ -622,7 +622,7 @@ export function pickEncryptionSettings(setting: ObsidianLiveSyncSettings | Encry
         idDerivationKey: setting.idDerivationKey,
     };
 }
-export function pickP2PSyncSettings(setting: Partial<ObsidianLiveSyncSettings> & P2PConnectionInfo): P2PConnectionInfo {
+export function pickP2PSyncSettings(setting: Partial<SyncSettings> & P2PConnectionInfo): P2PConnectionInfo {
     return {
         P2P_Enabled: setting.P2P_Enabled,
         P2P_AppID: setting.P2P_AppID,

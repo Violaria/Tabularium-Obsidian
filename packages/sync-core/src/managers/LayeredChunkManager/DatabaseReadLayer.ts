@@ -1,5 +1,5 @@
 import { Logger, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
-import { LiveSyncError } from "@lib/common/LSError";
+import { SyncError } from "@lib/common/LSError";
 import type { EntryLeaf, DocumentID, EntryDoc } from "@lib/common/types";
 import type { IReadLayer } from "./ChunkLayerInterfaces";
 import type { ChunkReadOptions } from "./types.ts";
@@ -61,7 +61,7 @@ export class DatabaseReadLayer implements IReadLayer {
                     const chunk = row.doc;
                     resultMap.set(chunk._id, chunk);
                 } else if (!this.isMissingError(row)) {
-                    throw new LiveSyncError(`Failed to read chunk ${row.key}`, {
+                    throw new SyncError(`Failed to read chunk ${row.key}`, {
                         status: 404,
                         cause: this.getError(row),
                     });
@@ -73,7 +73,7 @@ export class DatabaseReadLayer implements IReadLayer {
                 }
             }
         } catch (error) {
-            if (error instanceof LiveSyncError) {
+            if (error instanceof SyncError) {
                 throw error;
             }
             // For other errors, treat as database read failure

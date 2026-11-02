@@ -1,13 +1,13 @@
-import type ObsidianLiveSyncPlugin from "@/main";
+import type TabulariumPlugin from "@/main";
 import { TabulariumSettingTab } from "@/features/tabularium/SettingTab.ts";
 import { EVENT_REQUEST_OPEN_SETTINGS, eventHub } from "@/core/common/events.ts";
-import type { LiveSyncCore } from "@/main.ts";
+import type { PluginCore } from "@/main.ts";
 import { openObsidianSettings } from "@/obsidian/common/obsidianSettings.ts";
 
 export class ModuleObsidianSettingDialogue {
-    readonly plugin: ObsidianLiveSyncPlugin;
-    readonly core: LiveSyncCore;
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    readonly plugin: TabulariumPlugin;
+    readonly core: PluginCore;
+    constructor(plugin: TabulariumPlugin, core: PluginCore) {
         this.plugin = plugin;
         this.core = core;
     }
@@ -42,7 +42,7 @@ export class ModuleObsidianSettingDialogue {
     }
 }
 
-export function installSettingTab(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+export function installSettingTab(plugin: TabulariumPlugin, core: PluginCore) {
     const component = new ModuleObsidianSettingDialogue(plugin, core);
     component.install();
     return component;

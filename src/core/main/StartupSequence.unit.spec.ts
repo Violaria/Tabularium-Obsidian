@@ -21,9 +21,9 @@ vi.mock("@tabularium/sync-core/compat/worker/bgWorker", () => ({
     initialiseWorkerModule: vi.fn(),
 }));
 
-import { ModuleLiveSyncMain } from "./ModuleLiveSyncMain.ts";
+import { StartupSequence } from "./StartupSequence.ts";
 
-describe("ModuleLiveSyncMain", () => {
+describe("StartupSequence", () => {
     it.each(["unlock", "cancel"] as const)(
         "keeps database and settings lifecycle behind a pending configuration load: %s",
         async (outcome) => {
@@ -52,7 +52,7 @@ describe("ModuleLiveSyncMain", () => {
                 replicator: {},
             };
             const host = { services, core: { services, addOns: [] }, _log: vi.fn() };
-            const pending = ModuleLiveSyncMain.prototype._onLiveSyncLoad.call(host as never);
+            const pending = StartupSequence.prototype._onLoad.call(host as never);
             await vi.waitFor(() => expect(loadSettings).toHaveBeenCalledOnce());
             expect(appLifecycle.onSettingLoaded).not.toHaveBeenCalled();
             expect(openDatabase).not.toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe("ModuleLiveSyncMain", () => {
             _log: log,
         };
 
-        const result = await ModuleLiveSyncMain.prototype._onLiveSyncReady.call(host as never);
+        const result = await StartupSequence.prototype._onReady.call(host as never);
 
         expect(result).toBe(false);
         expect(initialiseDatabase).toHaveBeenCalledWith(false, false, false, true);
@@ -131,7 +131,7 @@ describe("ModuleLiveSyncMain", () => {
             _log: log,
         };
 
-        const result = await ModuleLiveSyncMain.prototype._onLiveSyncReady.call(host as never);
+        const result = await StartupSequence.prototype._onReady.call(host as never);
 
         expect(result).toBe(true);
         expect(log).toHaveBeenCalledWith("Ui.Common.SomeFilesCouldNotBeSynchronised", LOG_LEVEL_NOTICE);
@@ -161,7 +161,7 @@ describe("ModuleLiveSyncMain", () => {
             _log: vi.fn(),
         };
 
-        await ModuleLiveSyncMain.prototype._onLiveSyncReady.call(host as never);
+        await StartupSequence.prototype._onReady.call(host as never);
 
         expect(initialiseDatabase).toHaveBeenCalledWith(false, false, true, false);
     });

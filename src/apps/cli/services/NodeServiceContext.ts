@@ -1,13 +1,13 @@
 import { eventHub } from "@/core/common/events";
-import { translateLiveSyncMessage } from "@/core/common/translation";
+import { translateCatalogueMessage } from "@/core/common/translation";
 import { ServiceContext, type StandardIo } from "@tabularium/sync-core/context";
 
-/** Host capabilities owned by one Self-hosted LiveSync CLI composition. */
+/** Host capabilities owned by one Tabularium CLI composition. */
 export class NodeServiceContext extends ServiceContext {
     constructor(
         readonly databasePath: string,
         readonly standardIo: StandardIo
     ) {
-        super({ events: eventHub, translate: translateLiveSyncMessage });
+        super({ events: eventHub, translate: translateCatalogueMessage });
     }
 }

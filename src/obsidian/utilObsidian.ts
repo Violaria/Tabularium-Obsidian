@@ -1,4 +1,4 @@
-// Obsidian to LiveSync Utils
+// Obsidian to Tabularium Utils
 
 import { TFile, type TAbstractFile, type TFolder } from "@/deps.ts";
 import { ICHeader } from "@/obsidian/common/types.ts";
@@ -14,7 +14,7 @@ import type {
     UXInternalFileInfoStub,
     UXStat,
 } from "@tabularium/sync-core/compat/common/types";
-import type { LiveSyncCore } from "@/main.ts";
+import type { PluginCore } from "@/main.ts";
 import type { FileAccessObsidian } from "@/obsidian/serviceModules/FileAccessObsidian.ts";
 
 function isUXStat(value: unknown): value is UXStat {
@@ -29,7 +29,7 @@ function isUXStat(value: unknown): value is UXStat {
 }
 
 export async function TFileToUXFileInfo(
-    core: LiveSyncCore,
+    core: PluginCore,
     file: TFile,
     prefix?: string,
     deleted?: boolean

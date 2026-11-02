@@ -1,6 +1,6 @@
 import type { RemoteDBSettings, RemotePreferredTweakResult } from "@lib/common/types.ts";
 import type { JoinedDevicesSnapshot, ForgetJoinedDeviceResult } from "./joinedDevices.ts";
-import type { RemoteDBStatus } from "./LiveSyncAbstractReplicator.ts";
+import type { RemoteDBStatus } from "./AbstractReplicator.ts";
 import { CAPABILITY_NOT_APPLICABLE, type CapabilitySupport } from "./ProviderCapability.ts";
 import type { InitialFetchFastForward } from "./couchdb/fastForward.ts";
 

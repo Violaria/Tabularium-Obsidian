@@ -1,5 +1,5 @@
 import type {
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     RemoteDBSettings,
     RemotePreferredTweakResult,
     TweakAssessment,
@@ -39,7 +39,7 @@ export abstract class TweakValueService<T extends ServiceContext = ServiceContex
      */
     abstract askResolvingMismatched(
         preferredSource: TweakValues,
-        updatePreferredRemote?: (setting: ObsidianLiveSyncSettings) => Promise<boolean>,
+        updatePreferredRemote?: (setting: SyncSettings) => Promise<boolean>,
         assessment?: TweakAssessment
     ): Promise<"OK" | "CHECKAGAIN" | "IGNORE">;
 

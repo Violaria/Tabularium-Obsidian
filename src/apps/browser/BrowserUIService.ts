@@ -8,7 +8,7 @@ import { UIService } from "@tabularium/sync-core/compat/services/implements/base
 import DialogToCopy from "@/ui/dialogs/dialogues/DialogueToCopy.svelte";
 import { BrowserSvelteDialogManager } from "./BrowserSvelteDialogManager";
 
-export interface LiveSyncBrowserUIServiceDependencies<T extends ServiceContext> {
+export interface BrowserUIServiceDependencies<T extends ServiceContext> {
     API: InjectableAPIService<T>;
     appLifecycle: AppLifecycleService<T>;
     config: IConfigService;
@@ -16,11 +16,11 @@ export interface LiveSyncBrowserUIServiceDependencies<T extends ServiceContext> 
     replicator: ReplicatorService<T>;
 }
 
-export class LiveSyncBrowserUIService<T extends ServiceContext> extends UIService<T> {
+export class BrowserUIService<T extends ServiceContext> extends UIService<T> {
     override get dialogToCopy() {
         return DialogToCopy;
     }
-    constructor(context: T, dependents: LiveSyncBrowserUIServiceDependencies<T>) {
+    constructor(context: T, dependents: BrowserUIServiceDependencies<T>) {
         const browserConfirm = dependents.API.confirm;
         const obsidianSvelteDialogManager = new BrowserSvelteDialogManager<T>(context, {
             appLifecycle: dependents.appLifecycle,

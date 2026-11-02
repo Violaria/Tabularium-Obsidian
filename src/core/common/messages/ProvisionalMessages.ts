@@ -1,12 +1,12 @@
 /**
- * Canonical English for LiveSync-owned messages whose wording is still being
+ * Canonical English for Tabularium-owned messages whose wording is still being
  * exercised. These keys remain application-owned and must not be added to
- * Commonlib merely to make them available to the LiveSync translator.
+ * Commonlib merely to make them available to the Tabularium translator.
  *
  * Move a message to the YAML catalogue when it is ready for translation, and
  * remove it from this map in the same change.
  */
-export const liveSyncProvisionalEnglishMessages = {
+export const provisionalEnglishMessages = {
     "Hidden File Sync is disabled on this device. Enable it in Sync Settings before using Automatic or initialising hidden files.":
         "Hidden File Sync is disabled on this device. Enable it in Sync Settings before using Automatic or initialising hidden files.",
     "Hidden File Sync initialisation was not started.": "Hidden File Sync initialisation was not started.",
@@ -45,9 +45,9 @@ export const liveSyncProvisionalEnglishMessages = {
     Refresh: "Refresh",
     "Plug-in version": "Plug-in version",
     Platform: "Platform",
-    "Older Self-hosted LiveSync versions detected: ${versions}.": "Older Tabularium versions detected: ${versions}.",
-    "Newer Self-hosted LiveSync versions detected: ${versions}.": "Newer Tabularium versions detected: ${versions}.",
-    "Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.":
+    "Older Tabularium versions detected: ${versions}.": "Older Tabularium versions detected: ${versions}.",
+    "Newer Tabularium versions detected: ${versions}.": "Newer Tabularium versions detected: ${versions}.",
+    "Reviewing and aligning Tabularium versions across devices is recommended.":
         "Reviewing and aligning Tabularium versions across devices is recommended.",
     Open: "Open",
     "Not recorded": "Not recorded",
@@ -136,7 +136,7 @@ export const liveSyncProvisionalEnglishMessages = {
     "Setup Complete: Preparing to Fetch from Another Device": "Setup Complete: Preparing to Fetch from Another Device",
     "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.":
         "The P2P connection has been configured successfully. The initial synchronisation data must now be fetched from an online source device.",
-    "After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
+    "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
         "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.",
     "Restart this device, then choose the source device when P2P Rebuild opens.":
         "Restart this device, then choose the source device when P2P Rebuild opens.",
@@ -398,4 +398,4 @@ export const liveSyncProvisionalEnglishMessages = {
         "The inspection could not finish. Close this dialogue and try again after database startup.",
 } as const;
 
-export type LiveSyncProvisionalMessageKey = keyof typeof liveSyncProvisionalEnglishMessages;
+export type ProvisionalMessageKey = keyof typeof provisionalEnglishMessages;

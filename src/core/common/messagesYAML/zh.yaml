@@ -5,7 +5,7 @@
 (e.g., after editing many files whilst offline): （例如：离线期间编辑了大量文件之后）
 (e.g., immediately after restoring on another computer, or having recovered from a backup): （例如：在另一台电脑上还原之后，或从备份恢复之后）
 (e.g., setting up for the first time on a new smartphone, starting from a clean slate): （例如：在新手机上首次设置，从零开始）
-(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (例如,在线读取块)如果启用此选项,Tabularium 将直接在线读取块,而不是在本地复制块。建议增加自定义块大小
+(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (例如,在线读取块)如果启用此选项,Tabularium 将直接在线读取块,而不是在本地复制块。建议增加自定义块大小
 (MB) If this is set, changes to local and remote files that are larger than this will be skipped. If the file becomes smaller again, a newer one will be used.: (MB)如果设置了此项,大于此大小的本地和远程文件的更改将被跳过。如果文件再次变小,将使用更新的文件
 (Mega chars): (百万字符)
 (Not recommended) If set, credentials will be stored in the file.: (不建议)如果设置,凭据将存储在文件中
@@ -185,7 +185,7 @@ If you understand the risks and still wish to proceed, select so.: 如果你明�
 Ignore: 忽略
 Ignore files: 忽略文件
 Ignore patterns: 忽略模式
-In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: 在此情形下，Tabularium 会为每个文件重建元数据并有意制造冲突。若文件内容完全相同，这些冲突将被自动解决。
+In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: 在此情形下，Tabularium 会为每个文件重建元数据并有意制造冲突。若文件内容完全相同，这些冲突将被自动解决。
 "Incoming:": 接收：
 Incubate Chunks in Document: 在文档中孵化块
 Interval (sec): 间隔(秒)
@@ -205,8 +205,8 @@ lang-la: Latina
 lang-zh: 中文
 Later: 稍后
 live: 实时
-LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置
-liveSyncReplicator:
+Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置
+couchdbReplicator:
   beforeLiveSync: 实时同步前，先执行一次单次同步...
   cantReplicateLowerValue: 我们无法复制更小的值
   checkingLastSyncPoint: 查找上次同步点
@@ -217,7 +217,7 @@ liveSyncReplicator:
   couldNotConnectToServer: 无法连接到服务器
   couldNotConnectToURI: 无法连接到 ${uri}:${dbRet}
   couldNotMarkResolveRemoteDb: 无法标记并解决远程数据库
-  liveSyncBegin: 实时同步开始...
+  syncBegin: 实时同步开始...
   lockRemoteDb: 锁定远程数据库以防止数据损坏
   markDeviceResolved: 将此设备标记为“已解决”
   mismatchedTweakDetected: 检测到设备之间的配置存在不一致。执行一次手动复制将尝试解决此问题。
@@ -303,7 +303,7 @@ moduleInputUIObsidian:
   defaultTitleSelect: 选择
   optionNo: 否
   optionYes: 是
-moduleLiveSyncMain:
+startupSequence:
   logAdditionalSafetyScan: 额外的安全扫描...
   logLoadingPlugin: 正在加载插件...
   logPluginInitCancelled: 插件初始化被某个模块取消
@@ -324,7 +324,7 @@ moduleLiveSyncMain:
     > [!DETAILS]-
     > 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。
     > 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。
-  optionKeepLiveSyncDisabled: 保持实时同步关闭
+  optionKeepSyncDisabled: 保持实时同步关闭
   optionResumeAndRestart: 恢复并重启 Obsidian
   titleScramEnabled: 紧急停止已启用
 moduleLocalDatabase:
@@ -935,7 +935,7 @@ tabularium:
 (RegExp) Skip changes to matching normal and hidden files, locally and remotely.: （正则表达式）跳过匹配的普通文件和隐藏文件在本地和远程的变更。
 Accepted: 已接受
 Active Remote Type: 当前远程类型
-After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: 重启后，请选择一台在线的源设备进行首次获取。本设备上的本地数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。
+After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: 重启后，请选择一台在线的源设备进行首次获取。本设备上的本地数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。
 All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.: 以下所有修订版本和块可用性都是本设备本地数据库的快照，不会查询远程。分享此报告前，请检查其中相对于笔记库的路径、文档标识符、由内容派生的块标识符和元数据。报告不包含文件内容。
 An ID source is required to enable this option.: 启用此选项需要提供 ID 来源。
 An exact target is already present; repair can remove the obsolete ID.: 已存在完全匹配的目标；修复可以移除过时的 ID。
@@ -1126,7 +1126,7 @@ More actions for ${FILE}: ${FILE} 的更多操作
 More actions for revision ${REVISION}: 修订版本 ${REVISION} 的更多操作
 Move remotely deleted files to the trash, instead of deleting. (This setting is ineffective from Obsidian v1.7.2 onwards, as deletion always respects your Obsidian preferences.): 将远程已删除的文件移到回收站，而不是直接删除。（从 Obsidian v1.7.2 起此设置无效，因为删除操作始终遵循你的 Obsidian 偏好设置。）
 Names in this report: 此报告中的名称
-'Newer Self-hosted LiveSync versions detected: ${versions}.': 检测到较新的 Tabularium 版本：${versions}。
+'Newer Tabularium versions detected: ${versions}.': 检测到较新的 Tabularium 版本：${versions}。
 No Synchronisation Settings Found: 未找到同步设置
 No central data-storage server is required, but a signalling relay is required for peer discovery. Both devices must be online at the same time. Vault data travels through the encrypted P2P connection, not through the signalling relay. Some features may be limited.: 不需要中央数据存储服务器，但需要信令中继来发现对等方。两台设备必须同时在线。笔记库数据通过加密的 P2P 连接传输，不经过信令中继。部分功能可能受限。
 No current Metadata document: 没有当前的元数据文档
@@ -1136,7 +1136,7 @@ No shared ancestor is available for this conflict. The live revisions remain ava
 Not accepted: 未接受
 Not recorded: 未记录
 Now we can choose how to split the chunks; V3 is the most efficient. If you have troubled, please make this Default or Legacy.: 现在可以选择块的分割方式；V3 效率最高。如果遇到问题，请改为 Default 或 Legacy。
-'Older Self-hosted LiveSync versions detected: ${versions}.': 检测到较旧的 Tabularium 版本：${versions}。
+'Older Tabularium versions detected: ${versions}.': 检测到较旧的 Tabularium 版本：${versions}。
 One-step repair is unavailable because this entry is ambiguous, no longer current, or unsafe to change.: 此条目含义不明确、已不是当前版本或更改不安全，因此无法一步修复。
 Open file: 打开文件
 Original names: 原始名称
@@ -1183,7 +1183,7 @@ Retry: 重试
 Retry reading revision: 重新读取修订版本
 Review device records for the active CouchDB or Object Storage connection.: 查看当前 CouchDB 或对象存储连接的设备记录。
 Review devices: 查看设备
-Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.: 建议检查并统一各设备上的 Tabularium 版本。
+Reviewing and aligning Tabularium versions across devices is recommended.: 建议检查并统一各设备上的 Tabularium 版本。
 Revision metadata is unavailable on this device: 本设备上没有修订版本的元数据
 Rotation Duration: 轮换时长
 Save report: 保存报告
@@ -1326,7 +1326,7 @@ Vault: 笔记库
 Vault and database revision: 笔记库与数据库修订版本
 Vault file: 笔记库文件
 Vault file is newer: 笔记库文件较新
-"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "即将获取远程数据。
+"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "即将获取远程数据。
 
 
   首先，应如何处理从此远程来源获取的数据？
@@ -1426,7 +1426,7 @@ SELECT: 选择
 SYNC: 同步
 Searching ${current}/${total}...: 正在搜索 ${current}/${total}...
 Searching...: 正在搜索...
-Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Tabularium 已暂停远程同步，以进行兼容性检查。
+Tabularium has paused remote synchronisation for compatibility review.: Tabularium 已暂停远程同步，以进行兼容性检查。
 Show: 显示
 To stop the countdown, tap anywhere on the dialogue: 要停止倒计时，请点击对话框任意位置
 "To:": 至：
@@ -1480,7 +1480,7 @@ moduleLog.syncStatusStarting: 正在连接
 moduleLog.syncStatusStopped: 未在同步
 "Show vault history": "显示库的历史记录"
 "Create conflict": "制造冲突"
-"Toggle LiveSync": "开关实时同步"
+"Toggle live sync": "开关实时同步"
 "Toggle All Sync.": "开关全部同步"
 "Scan storage and database again": "重新扫描存储与数据库"
 "Abort synchronization immediately": "立即中止同步"
@@ -1506,7 +1506,7 @@ The restored revision could not be created. The file may have changed during the
 The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.: 恢复的修订已保存到此设备的数据库，但无法写入库。
 The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.: 所选内容已恢复为新的修订。其他版本仍未解决，请使用「选择要解决冲突的文件」查看。
 The selected content was restored as a new revision.: 所选内容已恢复为新的修订。
-The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: 所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。
+The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: 所选内容已恢复为新的修订。Tabularium 无法确认是否还有其他版本，请使用「选择要解决冲突的文件」检查该文件。
 The restored file could not be opened in the editor.: 无法在编辑器中打开恢复的文件。
 Error in Setting Save Event: 保存设置时出错。
 ${file} is conflicted, merging process has been postponed.: ${file} 存在冲突，已推迟合并。
@@ -1671,11 +1671,11 @@ Database kept changing while reflecting ${path}: 将 ${path} 写入库时，数�
 Could not validate deletion of ${path}; preserved the database entry: 无法确认 ${path} 的删除，已保留数据库中的条目
 Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery: 无法根据库的当前状态核对 ${path} 已保存的文件操作，该操作仍待恢复
 Unload preparation failed; pending storage work may require recovery: 卸载前的准备失败，未完成的文件操作可能需要恢复
-Self-hosted LiveSync cannot be initialised, exiting loading.: Tabularium 无法初始化，已停止加载。
+Tabularium cannot be initialised, exiting loading.: Tabularium 无法初始化，已停止加载。
 Failed to reset KeyValueDB: 无法重置键值数据库
 Failed to open KeyValueDB: 无法打开键值数据库
 "The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": "请求可能失败了。服务器返回：${r.status}: ${r.statusText}"
-The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync: 通过 Obsidian API 的请求成功，但原生 fetch API 失败。请检查服务器的 CORS 设置。在此问题解决前，无法启用实时同步。
+The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable Tabularium: 通过 Obsidian API 的请求成功，但原生 fetch API 失败。请检查服务器的 CORS 设置。在此问题解决前，无法启用实时同步。
 "Failed to fetch by API. ${resp2.status}: ${msg}": "请求失败。${resp2.status}: ${msg}"
 Active replicator not found during directional ${direction}: 执行单向同步（${direction}）时未找到活动的同步连接
 The selected local database is not ready for the rebuild upload.: 这台设备的数据库尚未准备好进行重建上传。
@@ -1712,7 +1712,7 @@ Bulk sending chunks to remote database...: 正在把数据块发送到服务器�
   ${sendingDocs}/（已完成 ${sentDocsCount}）
 Bulk sending failed.: 数据块发送失败。
 The remote connectivity check timed out.: 检查与服务器的连接超时。
-'${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} '
+'${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} '
 Some requested chunks were not found in the remote database.: 服务器上找不到部分请求的数据块。
 "Collecting local files on the DB: ${count}": 正在把本机文件收入数据库：${count}
 "Processing: ${processedCount}/${pairs.length}": 正在处理：${processedCount}/${pairs.length}
@@ -1728,8 +1728,8 @@ Allow sleep during synchronisation: 同步时允许休眠
 Allow the operating system to sleep while finite synchronisation operations are in progress.: 进行有限次的同步操作时，允许操作系统进入休眠。
 Allow sleep during synchronisation on the desktop: 桌面端同步时允许休眠
 Desktop only. Allow sleep on this device even when the general option is disabled.: 仅桌面端。即使上面的通用选项关闭，也允许这台设备休眠。
-Batch database updates in LiveSync mode: 实时同步时批量写入数据库
-Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.: 实时同步模式下，文件改动后先等本地停止编辑一小段时间（有上限）再写入数据库。这样可以减少中间版本的写入，但其他设备会晚一些收到改动。
+Batch database updates in live sync mode: 实时同步时批量写入数据库
+Wait for a bounded local quiet period before processing file updates in live sync mode, reducing intermediate database updates while delaying their reflection to remote devices.: 实时同步模式下，文件改动后先等本地停止编辑一小段时间（有上限）再写入数据库。这样可以减少中间版本的写入，但其他设备会晚一些收到改动。
 Seconds. The quiet period after the latest pending update before local database processing becomes due.: 秒。最后一次改动之后，要停止编辑多久才写入本地数据库。
 Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: 秒。从第一次未写入的改动算起，最多等多久就写入本地数据库。这不保证写入数据库、网络传输或其他设备收到改动的完成时间。
 tabularium.syncMenu.title: 同步

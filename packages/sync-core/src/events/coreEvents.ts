@@ -1,4 +1,4 @@
-import type { FilePathWithPrefix, ObsidianLiveSyncSettings } from "@lib/common/types";
+import type { FilePathWithPrefix, SyncSettings } from "@lib/common/types";
 
 export const EVENT_LAYOUT_READY = "layout-ready";
 export const EVENT_PLUGIN_LOADED = "plugin-loaded";
@@ -41,7 +41,7 @@ declare global {
         [EVENT_PLUGIN_LOADED]: undefined;
         [EVENT_PLUGIN_UNLOADED]: undefined;
         [EVENT_FILE_SAVED]: undefined;
-        [EVENT_SETTING_SAVED]: ObsidianLiveSyncSettings;
+        [EVENT_SETTING_SAVED]: SyncSettings;
         [EVENT_LAYOUT_READY]: undefined;
         [EVENT_FILE_CHANGED]: { file: FilePathWithPrefix; automated: boolean };
         [EVENT_FILE_RENAMED]: { newPath: FilePathWithPrefix; old: FilePathWithPrefix };

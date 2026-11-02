@@ -1,7 +1,7 @@
 import { E2EEAlgorithms } from "./setting.const";
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 
-export const PREFERRED_BASE: Partial<ObsidianLiveSyncSettings> = {
+export const PREFERRED_BASE: Partial<SyncSettings> = {
     syncMaxSizeInMB: 50,
     customChunkSize: 0,
     chunkSplitterVersion: "v3-rabin-karp",
@@ -10,19 +10,19 @@ export const PREFERRED_BASE: Partial<ObsidianLiveSyncSettings> = {
     E2EEAlgorithm: E2EEAlgorithms.V2,
 };
 
-export const PREFERRED_SETTING_CLOUDANT: Partial<ObsidianLiveSyncSettings> = {
+export const PREFERRED_SETTING_CLOUDANT: Partial<SyncSettings> = {
     ...PREFERRED_BASE,
     sendChunksBulkMaxSize: 1,
     concurrencyOfReadChunksOnline: 100,
     minimumIntervalOfReadChunksOnline: 333,
 };
-export const PREFERRED_SETTING_SELF_HOSTED: Partial<ObsidianLiveSyncSettings> = {
+export const PREFERRED_SETTING_SELF_HOSTED: Partial<SyncSettings> = {
     ...PREFERRED_BASE,
     sendChunksBulkMaxSize: 1,
     concurrencyOfReadChunksOnline: 30,
     minimumIntervalOfReadChunksOnline: 25,
 };
-export const PREFERRED_JOURNAL_SYNC: Partial<ObsidianLiveSyncSettings> = {
+export const PREFERRED_JOURNAL_SYNC: Partial<SyncSettings> = {
     ...PREFERRED_BASE,
     concurrencyOfReadChunksOnline: 30,
     minimumIntervalOfReadChunksOnline: 25,

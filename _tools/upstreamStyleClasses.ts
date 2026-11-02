@@ -1,4 +1,4 @@
-// The class names of the original Self-hosted LiveSync's style sheet (styles.css at 935511c6, version 1.0.40), less the
+// The class names of the original Tabularium's style sheet (styles.css at 935511c6, version 1.0.40), less the
 // ones that are Obsidian's own: deleted, is-ios, is-mobile, modal, selected, setting-item, setting-item-control,
 // setting-item-description, setting-item-info, svg-icon and workspace-leaf-content appear in Obsidian's app.css. The
 // original's styles apply to any element with these classes, and Tabularium's to the original's, so neither the

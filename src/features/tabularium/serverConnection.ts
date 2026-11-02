@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { $msg } from "@/core/common/translation";
 import { serverError } from "./texts";
 
@@ -41,7 +41,7 @@ export const ENFORCED_SETTINGS = {
     // Peer-to-peer sync would bypass the gateway.
     P2P_Enabled: false,
     P2P_AutoStart: false,
-} as const satisfies Partial<ObsidianLiveSyncSettings>;
+} as const satisfies Partial<SyncSettings>;
 
 export class TabulariumApiError extends Error {
     readonly status: number;
@@ -135,17 +135,17 @@ export function connectionSettings(server: string, vaultId: string, device: Tabu
         passphrase,
         isConfigured: true,
         liveSync: true,
-    } satisfies Partial<ObsidianLiveSyncSettings>;
+    } satisfies Partial<SyncSettings>;
 }
 
 /** Values to restore when settings about to be saved would weaken a Tabularium connection. */
 export function enforcedOverrides(
-    next: ObsidianLiveSyncSettings,
-    previous: ObsidianLiveSyncSettings
-): Partial<ObsidianLiveSyncSettings> {
-    const overrides: Partial<ObsidianLiveSyncSettings> = {};
+    next: SyncSettings,
+    previous: SyncSettings
+): Partial<SyncSettings> {
+    const overrides: Partial<SyncSettings> = {};
     for (const [key, value] of Object.entries(ENFORCED_SETTINGS)) {
-        if (next[key as keyof ObsidianLiveSyncSettings] !== value) Object.assign(overrides, { [key]: value });
+        if (next[key as keyof SyncSettings] !== value) Object.assign(overrides, { [key]: value });
     }
     if (!next.passphrase && previous.passphrase) overrides.passphrase = previous.passphrase;
     return overrides;

@@ -1,12 +1,12 @@
 import {
     hasManagedP2PTurnConfiguration,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { pickP2PSyncSettings } from "@tabularium/sync-core/compat/common/utils";
 import { CLOUDFLARE_TURN_TYPE } from "@/integrations/cloudflare/settings";
 
 /** Include inactive profiles when deciding whether Markdown would disclose provider settings. */
-export function hasManagedTurnSettings(settings: Partial<ObsidianLiveSyncSettings>): boolean {
+export function hasManagedTurnSettings(settings: Partial<SyncSettings>): boolean {
     return (
         hasManagedP2PTurnConfiguration(settings) ||
         Object.values(settings.remoteConfigurations ?? {}).some(({ uri }) => {
@@ -20,7 +20,7 @@ export function hasManagedTurnSettings(settings: Partial<ObsidianLiveSyncSetting
 }
 
 /** Reports retain a recognised provider label and omit issued credentials. */
-export function redactTurnSettingsForReport(settings: Partial<ObsidianLiveSyncSettings>): void {
+export function redactTurnSettingsForReport(settings: Partial<SyncSettings>): void {
     if (settings.P2P_managedType) {
         settings.P2P_managedType =
             settings.P2P_managedType === CLOUDFLARE_TURN_TYPE ? CLOUDFLARE_TURN_TYPE : "redacted";
@@ -32,7 +32,7 @@ export function redactTurnSettingsForReport(settings: Partial<ObsidianLiveSyncSe
 }
 
 /** Managed connection profiles are shared through Setup URIs and QR codes. */
-export function omitManagedTurnProfilesFromMarkdown(settings: Partial<ObsidianLiveSyncSettings>): void {
+export function omitManagedTurnProfilesFromMarkdown(settings: Partial<SyncSettings>): void {
     delete settings.P2P_iceServers;
     delete settings.P2P_iceServersExpiresAt;
     if (!hasManagedTurnSettings(settings)) return;
@@ -46,9 +46,9 @@ export function omitManagedTurnProfilesFromMarkdown(settings: Partial<ObsidianLi
 
 /** Preserve the complete connection when Markdown omits its profile group. */
 export function preserveManagedTurnProfilesOnMarkdownImport(
-    incoming: Partial<ObsidianLiveSyncSettings>,
-    current: ObsidianLiveSyncSettings,
-    merged: ObsidianLiveSyncSettings
+    incoming: Partial<SyncSettings>,
+    current: SyncSettings,
+    merged: SyncSettings
 ): void {
     if (
         !hasManagedTurnSettings(current) ||

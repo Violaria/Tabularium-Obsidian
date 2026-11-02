@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@lib/common/types.ts";
+import type { SyncSettings } from "@lib/common/types.ts";
 import {
     CAPABILITY_SUPPORT_KINDS,
     NO_INTERACTION,
@@ -28,7 +28,7 @@ export interface TypedReplicationCoordinatorDependencies {
         | "runWithActiveReplicatorContext"
         | "runFiniteReplicationActivity"
     >;
-    readonly currentSettings: () => ObsidianLiveSyncSettings;
+    readonly currentSettings: () => SyncSettings;
     readonly checkReadiness: (showMessage: boolean, readiness: ReplicationReadinessRequirements) => Promise<boolean>;
     readonly handleFailure: (request: ReplicationFailureRequest) => Promise<boolean>;
     /**
@@ -258,7 +258,7 @@ export class TypedReplicationCoordinator {
     private async runAdmittedFiniteActivity(
         expectedContext: ActiveReplicatorContext,
         run: (context: ActiveReplicatorContext) => Promise<ReplicationOutcome>,
-        setting: ObsidianLiveSyncSettings,
+        setting: SyncSettings,
         interaction: InteractionAuthority,
         progressPresentation: ReplicationProgressPresentation
     ): Promise<ReplicationOutcome> {

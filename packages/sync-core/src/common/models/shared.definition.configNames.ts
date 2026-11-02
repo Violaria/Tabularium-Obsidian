@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 
 export const LEVEL_ADVANCED = "ADVANCED";
 export const LEVEL_POWER_USER = "POWER_USER";
@@ -15,7 +15,7 @@ export type ConfigurationItem = {
     isAdvanced?: boolean;
 };
 
-export const configurationNames: Partial<Record<keyof ObsidianLiveSyncSettings, ConfigurationItem>> = {
+export const configurationNames: Partial<Record<keyof SyncSettings, ConfigurationItem>> = {
     minimumChunkSize: {
         name: "Minimum Chunk Size (Not Configurable from the UI Now).",
     },
@@ -219,7 +219,7 @@ export function statusDisplay(status?: string): string {
  * @param alt
  * @returns
  */
-export function confName(key: keyof ObsidianLiveSyncSettings, alt: string = "") {
+export function confName(key: keyof SyncSettings, alt: string = "") {
     if (key in configurationNames) {
         return `${configurationNames[key]?.name}${statusDisplay(configurationNames[key]?.status)}`;
     } else {
@@ -233,7 +233,7 @@ export function confName(key: keyof ObsidianLiveSyncSettings, alt: string = "") 
  * @param alt
  * @returns
  */
-export function confDesc(key: keyof ObsidianLiveSyncSettings, alt?: string) {
+export function confDesc(key: keyof SyncSettings, alt?: string) {
     if (key in configurationNames) {
         if (configurationNames[key]?.desc) {
             return `${configurationNames[key]?.name}${statusDisplay(configurationNames[key]?.status)}`;

@@ -6,7 +6,7 @@ import type { App, ButtonComponent, Plugin, ReferenceCache, TFile } from "obsidi
 import { LOG_LEVEL_INFO } from "octagonal-wheels/common/logger";
 import { $msg } from "@/core/common/translation";
 import { ownStorageKeys } from "./ownNames";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 
 /** One broken link: where it is, what it says, and the files it could mean. */
 export interface BrokenLink {
@@ -37,7 +37,7 @@ function aliasOf(reference: ReferenceCache) {
 export class TabulariumLinkRepair {
     constructor(
         private readonly plugin: Plugin,
-        private readonly core: LiveSyncCore
+        private readonly core: PluginCore
     ) {}
 
     // Kept in this device's browser storage for this vault (Obsidian's own vault storage needs 1.8.7).
@@ -208,7 +208,7 @@ class BrokenLinksModal extends Modal {
     }
 }
 
-export function installLinkRepair(plugin: Plugin, core: LiveSyncCore) {
+export function installLinkRepair(plugin: Plugin, core: PluginCore) {
     const repair = new TabulariumLinkRepair(plugin, core);
     repair.install();
     return repair;

@@ -15,8 +15,8 @@ const constructorMocks = vi.hoisted(() => ({
     couchDBOneShot: vi.fn(async (..._args: unknown[]) => REPLICATION_COMPLETED),
 }));
 
-vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
-    LiveSyncCouchDBReplicator: class {
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator", () => ({
+    CouchDBReplicator: class {
         constructor(host: unknown) {
             constructorMocks.couchDB(host);
         }
@@ -56,7 +56,7 @@ describe("central Replicator provider definitions", () => {
         expect(definitions.get(REMOTE_P2P)).toBeUndefined();
     });
 
-    it("composes the CouchDB policy outside LiveSyncBaseCore", async () => {
+    it("composes the CouchDB policy outside SyncCore", async () => {
         const host = {} as Parameters<typeof createCentralReplicatorProviderDefinitions>[0];
         const definitions = createCentralReplicatorProviderDefinitions(host);
         const couchDB = definitions.get(REMOTE_COUCHDB)!;

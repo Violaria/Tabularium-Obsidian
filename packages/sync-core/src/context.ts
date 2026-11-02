@@ -10,7 +10,7 @@ export {
     type ServiceContextContract,
     type ServiceContextOptions,
 } from "@lib/services/base/ServiceBase";
-export { createLiveSyncEventHub, type LiveSyncEventHub } from "@lib/hub/hub";
+export { createSyncEventHub, type SyncEventHub } from "@lib/hub/hub";
 export {
     englishMessageTranslator,
     passthroughMessageTranslator,

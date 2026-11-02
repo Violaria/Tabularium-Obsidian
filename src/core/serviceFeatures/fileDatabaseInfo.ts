@@ -4,13 +4,13 @@ import type {
     FilePath,
     FilePathWithPrefix,
     LoadedEntry,
-    ObsidianLiveSyncSettings,
+    SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { getFileRegExp } from "@tabularium/sync-core/compat/common/utils";
 import { isNotFoundError } from "@tabularium/sync-core/compat/common/utils.doc";
 import { ICHeader, ICXHeader, PSCHeader } from "@tabularium/sync-core/compat/common/models/fileaccess.const";
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
-import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LocalDatabase } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
 import type { IPathService, IUIService } from "@tabularium/sync-core/compat/services/base/IService";
 import { addPrefix, stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
 
@@ -25,14 +25,14 @@ type DatabaseMeta = LoadedEntry & {
 
 export type FileDatabaseInfoCore = {
     localDatabase: Pick<
-        LiveSyncLocalDB,
+        LocalDatabase,
         "allDocsRaw" | "findAllDocs" | "getDBEntryFromMeta" | "getDBEntry" | "localDatabase"
     >;
     services: {
         path: Pick<IPathService, "path2id">;
         UI: IUIService;
     };
-    settings: ObsidianLiveSyncSettings;
+    settings: SyncSettings;
     storageAccess: Pick<
         StorageAccess,
         "getFileNames" | "getFilesIncludeHidden" | "isExistsIncludeHidden" | "statHidden"

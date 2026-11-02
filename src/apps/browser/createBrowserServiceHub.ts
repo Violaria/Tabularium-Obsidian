@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { KeyValueDatabaseFactory } from "@tabularium/sync-core/compat/interfaces/KeyValueDatabase";
 import { PouchDB } from "@tabularium/sync-core/compat/pouchdb/pouchdb-browser";
 import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
@@ -20,49 +20,49 @@ import { InjectableTestService } from "@tabularium/sync-core/compat/services/imp
 import { InjectableTweakValueService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableTweakValueService";
 import { InjectableVaultServiceCompat } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableVaultService";
 
-import { setLang, translateLiveSyncMessage } from "@/core/common/translation";
+import { setLang, translateCatalogueMessage } from "@/core/common/translation";
 import { BrowserConfirm } from "./BrowserConfirm";
 import { createBrowserKeyValueDatabaseFactory } from "./BrowserKeyValueDatabase";
-import { LiveSyncBrowserAPIService, type LiveSyncBrowserAPIServiceOptions } from "./LiveSyncBrowserAPIService";
-import { LiveSyncBrowserUIService } from "./LiveSyncBrowserUIService";
+import { BrowserAPIService, type BrowserAPIServiceOptions } from "./BrowserAPIService";
+import { BrowserUIService } from "./BrowserUIService";
 
-export interface LiveSyncBrowserSettingsPersistence {
-    load(): Promise<ObsidianLiveSyncSettings | undefined>;
-    save(settings: ObsidianLiveSyncSettings): Promise<void>;
+export interface BrowserSettingsPersistence {
+    load(): Promise<SyncSettings | undefined>;
+    save(settings: SyncSettings): Promise<void>;
 }
 
-export interface LiveSyncBrowserRestartPolicy {
+export interface BrowserRestartPolicy {
     schedule(): void;
     perform?: () => void;
     ask?: (message?: string) => void;
     isScheduled?: () => boolean;
 }
 
-export interface LiveSyncBrowserServiceHubOptions<T extends ServiceContext> {
+export interface BrowserServiceHubOptions<T extends ServiceContext> {
     deviceValues: ValueStore & ValueDeleter;
     context?: T;
     getSystemVaultName?: () => string;
-    settings?: LiveSyncBrowserSettingsPersistence;
-    restart?: LiveSyncBrowserRestartPolicy;
+    settings?: BrowserSettingsPersistence;
+    restart?: BrowserRestartPolicy;
     openKeyValueDatabase?: KeyValueDatabaseFactory;
-    API?: Omit<LiveSyncBrowserAPIServiceOptions, "confirm" | "getSystemVaultName">;
+    API?: Omit<BrowserAPIServiceOptions, "confirm" | "getSystemVaultName">;
 }
 
-class LiveSyncBrowserAppLifecycleService<T extends ServiceContext> extends InjectableAppLifecycleService<T> {}
+class BrowserAppLifecycleService<T extends ServiceContext> extends InjectableAppLifecycleService<T> {}
 
-class LiveSyncBrowserDatabaseService<T extends ServiceContext> extends DatabaseService<T> {}
+class BrowserDatabaseService<T extends ServiceContext> extends DatabaseService<T> {}
 
-class LiveSyncBrowserKeyValueDBService<T extends ServiceContext> extends KeyValueDBService<T> {}
+class BrowserKeyValueDBService<T extends ServiceContext> extends KeyValueDBService<T> {}
 
-/** LiveSync-owned service composition shared by WebApp and WebPeer. */
-export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends InjectableServiceHub<T> {
-    constructor(options: LiveSyncBrowserServiceHubOptions<T>) {
+/** Tabularium-owned service composition shared by WebApp and WebPeer. */
+export class BrowserServiceHub<T extends ServiceContext> extends InjectableServiceHub<T> {
+    constructor(options: BrowserServiceHubOptions<T>) {
         const context =
             options.context ??
             (new ServiceContext({
-                translate: translateLiveSyncMessage,
+                translate: translateCatalogueMessage,
             }) as T);
-        const API = new LiveSyncBrowserAPIService(context, {
+        const API = new BrowserAPIService(context, {
             ...options.API,
             confirm: new BrowserConfirm(context),
             getSystemVaultName: options.getSystemVaultName ?? (() => "livesync-browser"),
@@ -82,7 +82,7 @@ export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends Injecta
             settingsPersistence ? (settings) => settingsPersistence.save(settings) : () => Promise.resolve()
         );
 
-        const appLifecycle = new LiveSyncBrowserAppLifecycleService(context, {
+        const appLifecycle = new BrowserAppLifecycleService(context, {
             settingService: setting,
         });
         const restartPolicy = options.restart;
@@ -106,7 +106,7 @@ export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends Injecta
             settingService: setting,
             APIService: API,
         });
-        const database = new LiveSyncBrowserDatabaseService(context, {
+        const database = new BrowserDatabaseService(context, {
             pouchDB: PouchDB,
             path,
             vault,
@@ -133,7 +133,7 @@ export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends Injecta
             fileProcessingService: fileProcessing,
             databaseService: database,
         });
-        const keyValueDB = new LiveSyncBrowserKeyValueDBService(context, {
+        const keyValueDB = new BrowserKeyValueDBService(context, {
             openKeyValueDatabase: options.openKeyValueDatabase ?? createBrowserKeyValueDatabaseFactory(),
             appLifecycle,
             databaseEvents,
@@ -147,7 +147,7 @@ export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends Injecta
             APIService: API,
             replicatorService: replicator,
         });
-        const ui = new LiveSyncBrowserUIService(context, {
+        const ui = new BrowserUIService(context, {
             API,
             appLifecycle,
             config,
@@ -178,8 +178,8 @@ export class LiveSyncBrowserServiceHub<T extends ServiceContext> extends Injecta
     }
 }
 
-export function createLiveSyncBrowserServiceHub<T extends ServiceContext>(
-    options: LiveSyncBrowserServiceHubOptions<T>
-): LiveSyncBrowserServiceHub<T> {
-    return new LiveSyncBrowserServiceHub(options);
+export function createBrowserServiceHub<T extends ServiceContext>(
+    options: BrowserServiceHubOptions<T>
+): BrowserServiceHub<T> {
+    return new BrowserServiceHub(options);
 }

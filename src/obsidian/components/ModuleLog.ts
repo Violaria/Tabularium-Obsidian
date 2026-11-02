@@ -1,4 +1,4 @@
-import type ObsidianLiveSyncPlugin from "@/main";
+import type TabulariumPlugin from "@/main";
 import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { computed, reactive, reactiveSource, type ReactiveValue } from "octagonal-wheels/dataobject/reactive";
 import {
@@ -39,8 +39,8 @@ import {
 } from "@/ui/statusBar/StatusBarDisplay.ts";
 import { createFastForwardCheckedChangesDisplay, projectReplicationStatusLabel } from "@/ui/statusBar/ReplicationStatusLabel.ts";
 import { createStatusBarRenderer, type StatusBarPart, type StatusBarRenderer } from "@/ui/statusBar/StatusBarRenderer.ts";
-import type { LiveSyncCore } from "@/main.ts";
-import { LiveSyncError } from "@tabularium/sync-core/compat/common/LSError";
+import type { PluginCore } from "@/main.ts";
+import { SyncError } from "@tabularium/sync-core/compat/common/LSError";
 import { isValidPath } from "@/obsidian/common/utils.ts";
 import {
     isValidFilenameInAndroid,
@@ -63,7 +63,7 @@ const recentLogEntries = reactiveSource<LogEntry[]>([]);
 const globalLogFunction = (message: unknown, level?: number, key?: string) => {
     const messageX =
         message instanceof Error
-            ? new LiveSyncError("[Error Logged]: " + message.message, { cause: message })
+            ? new SyncError("[Error Logged]: " + message.message, { cause: message })
             : typeof message === "string"
               ? message
               : JSON.stringify(message);
@@ -126,10 +126,10 @@ const STATUS_MARKS = {
     conflicts: "≠",
 } as const;
 export class ModuleLog {
-    readonly plugin: ObsidianLiveSyncPlugin;
-    readonly core: LiveSyncCore;
+    readonly plugin: TabulariumPlugin;
+    readonly core: PluginCore;
     private readonly _log: ReturnType<typeof createInstanceLogFunction>;
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    constructor(plugin: TabulariumPlugin, core: PluginCore) {
         this.plugin = plugin;
         this.core = core;
         this._log = createInstanceLogFunction("ModuleLog", core.services.API);
@@ -567,7 +567,7 @@ ${stringifyYaml(info)}
         const timestamp = now.toLocaleString();
         let errorInfo = "";
         if (message instanceof Error) {
-            if (message instanceof LiveSyncError) {
+            if (message instanceof SyncError) {
                 if (message.cause && message.cause instanceof Error) {
                     const causedError = message.cause;
                     errorInfo = `${causedError?.name}:${causedError?.message}\n[StackTrace]: ${message.stack}\n[CausedBy]: ${causedError?.stack}`;
@@ -640,7 +640,7 @@ ${stringifyYaml(info)}
     }
 }
 
-export function installLog(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+export function installLog(plugin: TabulariumPlugin, core: PluginCore) {
     const component = new ModuleLog(plugin, core);
     component.install();
     return component;

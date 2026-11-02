@@ -1,15 +1,15 @@
 <script lang="ts">
-    import ObsidianLiveSyncPlugin from "@/main.ts";
+    import TabulariumPlugin from "@/main.ts";
     import { onDestroy, onMount } from "svelte";
     import type { AnyEntry, FilePathWithPrefix } from "@tabularium/sync-core/compat/common/types";
     import { getDocData, isAnyNote, isDocContentSame, readAsBlob } from "@tabularium/sync-core/compat/common/utils";
     import { diff_match_patch } from "@/deps.ts";
     import { DocumentHistoryModal } from "@/ui/DocumentHistory/DocumentHistoryModal.ts";
     import { isPlainText, stripAllPrefixes } from "@tabularium/sync-core/compat/string_and_binary/path";
-    import type { LiveSyncBaseCore } from "@/core/createCore.ts";
+    import type { SyncCore } from "@/core/createCore.ts";
     import { $msg as translateMessage } from "@/core/common/translation";
-    export let plugin: ObsidianLiveSyncPlugin;
-    export let core: LiveSyncBaseCore;
+    export let plugin: TabulariumPlugin;
+    export let core: SyncCore;
 
     let showDiffInfo = false;
     let showChunkCorrected = false;

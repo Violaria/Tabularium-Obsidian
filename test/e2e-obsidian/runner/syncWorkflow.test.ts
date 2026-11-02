@@ -11,9 +11,9 @@ import {
     assertE2eCompatibilityMarker,
     createE2eCouchDbPluginData,
     prepareRemote,
-    waitForLiveSyncCoreReady,
+    waitForCoreReady,
     type CompatibilityMarkerState,
-} from "./liveSyncWorkflow.ts";
+} from "./syncWorkflow.ts";
 
 describe("compatibility marker persistence", () => {
     it("waits for an accepted review to reach device-local storage", async () => {
@@ -71,7 +71,7 @@ describe("Real Obsidian core readiness", () => {
                 suspended: false,
             });
 
-        await expect(waitForLiveSyncCoreReady("obsidian-cli", {}, 1000)).resolves.toMatchObject({
+        await expect(waitForCoreReady("obsidian-cli", {}, 1000)).resolves.toMatchObject({
             databaseReady: true,
             appReady: true,
         });

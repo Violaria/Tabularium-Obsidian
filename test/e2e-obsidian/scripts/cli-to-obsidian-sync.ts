@@ -17,9 +17,9 @@ import {
     createE2eObsidianDeviceLocalState,
     prepareRemote,
     pushLocalChanges,
-    waitForLiveSyncCoreReady,
-} from "../runner/liveSyncWorkflow.ts";
-import { startObsidianLiveSyncSession, type ObsidianLiveSyncSession } from "../runner/session.ts";
+    waitForCoreReady,
+} from "../runner/syncWorkflow.ts";
+import { startObsidianSession, type ObsidianSession } from "../runner/session.ts";
 import { createTemporaryVault } from "../runner/vault.ts";
 import { evalObsidianJson } from "../runner/cli.ts";
 
@@ -27,7 +27,7 @@ process.env.E2E_OBSIDIAN_CLI_TIMEOUT_MS ??= "30000";
 process.env.E2E_OBSIDIAN_COUCHDB_TIMEOUT_MS ??= "30000";
 process.env.E2E_OBSIDIAN_FILE_TIMEOUT_MS ??= "30000";
 
-const liveSyncCli = resolve("src/apps/cli/dist/index.cjs");
+const syncCli = resolve("src/apps/cli/dist/index.cjs");
 const migrateUnicodePaths = process.env.E2E_OBSIDIAN_UNICODE_MIGRATION === "true";
 const unicodePaths = migrateUnicodePaths || process.env.E2E_OBSIDIAN_UNICODE_PATHS === "true";
 const useEncryption = !unicodePaths || process.env.E2E_OBSIDIAN_UNICODE_ENCRYPTION === "true";
@@ -36,7 +36,7 @@ const receivedNotePath = unicodePaths ? notePath.normalize("NFC") : notePath;
 const noteContent = [
     "# CLI to real Obsidian",
     "",
-    "This note was created by the Self-hosted LiveSync CLI.",
+    "This note was created by the Tabularium CLI.",
     "The real Obsidian plug-in must retrieve the same content from CouchDB.",
     "0123456789 abcdefghijklmnopqrstuvwxyz 0123456789 abcdefghijklmnopqrstuvwxyz",
     "",
@@ -44,7 +44,7 @@ const noteContent = [
 const e2eePassphrase = "real-obsidian-cli-compatibility-e2e";
 const editedNoteContent = `${noteContent}\nCLI in-place edit.\n`;
 
-type LiveSyncCliCommand = {
+type CliCommand = {
     executable: string;
     prefixArgs: string[];
 };
@@ -122,16 +122,16 @@ function parseCommandLine(value: string): string[] {
     return parts;
 }
 
-function resolveLiveSyncCliCommand(): LiveSyncCliCommand {
+function resolveCliCommand(): CliCommand {
     const override = process.env.LIVESYNC_CLI_COMMAND;
     if (override !== undefined) {
         const [executable, ...prefixArgs] = parseCommandLine(override);
         return { executable, prefixArgs };
     }
-    return { executable: process.execPath, prefixArgs: [liveSyncCli] };
+    return { executable: process.execPath, prefixArgs: [syncCli] };
 }
 
-async function runLiveSyncCli(command: LiveSyncCliCommand, args: string[], input?: string): Promise<CliResult> {
+async function runSyncCli(command: CliCommand, args: string[], input?: string): Promise<CliResult> {
     return await new Promise((resolvePromise, reject) => {
         const timeoutMs = Number(process.env.E2E_LIVESYNC_CLI_TIMEOUT_MS ?? 60000);
         const child = spawn(command.executable, [...command.prefixArgs, ...args], {
@@ -166,7 +166,7 @@ async function runLiveSyncCli(command: LiveSyncCliCommand, args: string[], input
             if (timedOut) {
                 reject(
                     new Error(
-                        `LiveSync CLI timed out after ${timeoutMs} ms\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
+                        `Tabularium CLI timed out after ${timeoutMs} ms\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`
                     )
                 );
                 return;
@@ -177,7 +177,7 @@ async function runLiveSyncCli(command: LiveSyncCliCommand, args: string[], input
             }
             reject(
                 new Error(
-                    `LiveSync CLI failed with ${signal ? `signal ${signal}` : `exit code ${String(code)}`}\n` +
+                    `Tabularium CLI failed with ${signal ? `signal ${signal}` : `exit code ${String(code)}`}\n` +
                         `stdout:\n${result.stdout}\nstderr:\n${result.stderr}`
                 )
             );
@@ -185,14 +185,14 @@ async function runLiveSyncCli(command: LiveSyncCliCommand, args: string[], input
     });
 }
 
-async function configureLiveSyncCli(
-    command: LiveSyncCliCommand,
+async function configureCli(
+    command: CliCommand,
     settingsPath: string,
     couchDb: Awaited<ReturnType<typeof loadCouchDbConfig>>,
     dbName: string,
     pathNormalizationVersion = unicodePaths ? 1 : 0
 ): Promise<void> {
-    await runLiveSyncCli(command, ["init-settings", "--force", settingsPath]);
+    await runSyncCli(command, ["init-settings", "--force", settingsPath]);
     const settings = JSON.parse(await readFile(settingsPath, "utf-8")) as Record<string, unknown>;
     Object.assign(settings, {
         couchDB_URI: couchDb.uri,
@@ -229,7 +229,7 @@ async function configureLiveSyncCli(
     await writeFile(settingsPath, `${JSON.stringify(settings, null, 2)}\n`, "utf-8");
 }
 
-async function startLiveSyncCliDaemon(command: LiveSyncCliCommand, databasePath: string, settingsPath: string) {
+async function startCliDaemon(command: CliCommand, databasePath: string, settingsPath: string) {
     const child = spawn(
         command.executable,
         [...command.prefixArgs, databasePath, "--settings", settingsPath, "--interval", "1", "daemon"],
@@ -274,18 +274,18 @@ async function startLiveSyncCliDaemon(command: LiveSyncCliCommand, databasePath:
 }
 
 async function writeCliNote(
-    command: LiveSyncCliCommand,
+    command: CliCommand,
     databasePath: string,
     settingsPath: string,
     sourcePath: string
 ): Promise<CliFileInfo> {
     await mkdir(dirname(sourcePath), { recursive: true });
     await writeFile(sourcePath, noteContent, "utf-8");
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "push", sourcePath, notePath]);
-    const info = await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "push", sourcePath, notePath]);
+    const info = await runSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
     const fileInfo = JSON.parse(info.stdout) as CliFileInfo;
     if (!fileInfo.id || !Array.isArray(fileInfo.children) || fileInfo.children.length === 0) {
-        throw new Error(`LiveSync CLI did not create complete metadata for ${notePath}: ${info.stdout}`);
+        throw new Error(`Tabularium CLI did not create complete metadata for ${notePath}: ${info.stdout}`);
     }
     const storagePath = join(databasePath, notePath);
     const originalStat = await stat(storagePath);
@@ -301,11 +301,11 @@ async function writeCliNote(
     ) {
         fileInfo.expectedCtime = Math.floor(originalStat.birthtimeMs);
     }
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "mirror"]);
-    const editedInfo = await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "mirror"]);
+    const editedInfo = await runSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
     const editedFileInfo = JSON.parse(editedInfo.stdout) as CliFileInfo;
     fileInfo.children = editedFileInfo.children;
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "sync"]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "sync"]);
     return fileInfo;
 }
 
@@ -334,7 +334,7 @@ async function waitForVaultContent(
 }
 
 async function migrateCliDatabases(
-    command: LiveSyncCliCommand,
+    command: CliCommand,
     cliState: string,
     databasePath: string,
     settingsPath: string,
@@ -342,12 +342,12 @@ async function migrateCliDatabases(
     dbName: string,
     legacyFileInfo: CliFileInfo
 ): Promise<CliFileInfo> {
-    await runLiveSyncCli(
+    await runSyncCli(
         command,
         [databasePath, "--settings", settingsPath, "put", receivedNotePath],
         "Obsolete composed-path content.\n"
     );
-    const aliasInfo = await runLiveSyncCli(command, [
+    const aliasInfo = await runSyncCli(command, [
         databasePath,
         "--settings",
         settingsPath,
@@ -357,8 +357,8 @@ async function migrateCliDatabases(
     const deletedAliasId = (JSON.parse(aliasInfo.stdout) as CliFileInfo).id;
     if (deletedAliasId === legacyFileInfo.id)
         throw new Error("The legacy Unicode fixture needs distinct Metadata IDs.");
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "rm", receivedNotePath]);
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "sync"]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "rm", receivedNotePath]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "sync"]);
     await waitForCouchDbDocs(couchDb, dbName, (docs) =>
         docs.some((doc) => doc._id === deletedAliasId && doc.deleted === true)
     );
@@ -366,9 +366,9 @@ async function migrateCliDatabases(
     const secondaryDatabasePath = join(cliState, "secondary-database");
     const secondarySettingsPath = join(cliState, "secondary-settings.json");
     await mkdir(secondaryDatabasePath, { recursive: true });
-    await configureLiveSyncCli(command, secondarySettingsPath, couchDb, dbName, 0);
-    await runLiveSyncCli(command, [secondaryDatabasePath, "--settings", secondarySettingsPath, "sync"]);
-    await runLiveSyncCli(command, [secondaryDatabasePath, "--settings", secondarySettingsPath, "mirror"]);
+    await configureCli(command, secondarySettingsPath, couchDb, dbName, 0);
+    await runSyncCli(command, [secondaryDatabasePath, "--settings", secondarySettingsPath, "sync"]);
+    await runSyncCli(command, [secondaryDatabasePath, "--settings", secondarySettingsPath, "mirror"]);
     assertEqual(
         await readFile(join(secondaryDatabasePath, notePath), "utf-8"),
         editedNoteContent,
@@ -380,8 +380,8 @@ async function migrateCliDatabases(
         settings.pathNormalizationVersion = 1;
         await writeFile(path, `${JSON.stringify(settings, null, 2)}\n`, "utf-8");
     }
-    await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "rebuild", "--force", "--write-settings"]);
-    const info = await runLiveSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
+    await runSyncCli(command, [databasePath, "--settings", settingsPath, "rebuild", "--force", "--write-settings"]);
+    const info = await runSyncCli(command, [databasePath, "--settings", settingsPath, "info", notePath]);
     const fileInfo = JSON.parse(info.stdout) as CliFileInfo;
     if (fileInfo.id === legacyFileInfo.id) {
         throw new Error("Rebuild retained the legacy NFD document ID.");
@@ -395,7 +395,7 @@ async function migrateCliDatabases(
             docs.some((doc) => Array.isArray(doc.used_features) && doc.used_features.includes("nfc-path-identity-v1"))
         );
     });
-    await runLiveSyncCli(command, [
+    await runSyncCli(command, [
         secondaryDatabasePath,
         "--settings",
         secondarySettingsPath,
@@ -403,7 +403,7 @@ async function migrateCliDatabases(
         "--force",
         "--write-settings",
     ]);
-    const secondaryInfo = await runLiveSyncCli(command, [
+    const secondaryInfo = await runSyncCli(command, [
         secondaryDatabasePath,
         "--settings",
         secondarySettingsPath,
@@ -435,11 +435,11 @@ async function migrateCliDatabases(
 }
 
 async function main(): Promise<void> {
-    const liveSyncCliCommand = resolveLiveSyncCliCommand();
+    const cliCommand = resolveCliCommand();
     if (process.env.LIVESYNC_CLI_COMMAND === undefined) {
-        await access(liveSyncCli).catch(() => {
+        await access(syncCli).catch(() => {
             throw new Error(
-                `Built LiveSync CLI was not found at ${liveSyncCli}. Run 'npm run build -w tabularium-cli' first, or set LIVESYNC_CLI_COMMAND.`
+                `Built Tabularium CLI was not found at ${syncCli}. Run 'npm run build -w tabularium-cli' first, or set LIVESYNC_CLI_COMMAND.`
             );
         });
     }
@@ -457,15 +457,15 @@ async function main(): Promise<void> {
     const cliSettingsPath = join(cliState, "settings.json");
     const cliSourcePath = join(cliState, "source", "cli-to-obsidian.md");
     const vault = await createTemporaryVault();
-    let session: ObsidianLiveSyncSession | undefined;
-    let daemon: Awaited<ReturnType<typeof startLiveSyncCliDaemon>> | undefined;
+    let session: ObsidianSession | undefined;
+    let daemon: Awaited<ReturnType<typeof startCliDaemon>> | undefined;
 
     try {
         await assertCouchDbReachable(couchDb);
         await createCouchDbDatabase(couchDb, dbName);
         await mkdir(cliDatabasePath, { recursive: true });
-        await configureLiveSyncCli(
-            liveSyncCliCommand,
+        await configureCli(
+            cliCommand,
             cliSettingsPath,
             couchDb,
             dbName,
@@ -473,21 +473,21 @@ async function main(): Promise<void> {
         );
 
         if (process.env.LIVESYNC_CLI_COMMAND === undefined) {
-            console.log(`Using locally built LiveSync CLI: ${liveSyncCli}`);
+            console.log(`Using locally built Tabularium CLI: ${syncCli}`);
         } else {
             console.log(
-                `Using LiveSync CLI command override: ${JSON.stringify(liveSyncCliCommand.executable)} ` +
-                    `with ${liveSyncCliCommand.prefixArgs.length} prefix argument(s)`
+                `Using Tabularium CLI command override: ${JSON.stringify(cliCommand.executable)} ` +
+                    `with ${cliCommand.prefixArgs.length} prefix argument(s)`
             );
         }
         console.log(`Using Obsidian executable: ${binary}`);
         console.log(`Temporary Obsidian vault: ${vault.path}`);
         console.log(`Temporary CouchDB database: ${dbName}`);
 
-        let cliFileInfo = await writeCliNote(liveSyncCliCommand, cliDatabasePath, cliSettingsPath, cliSourcePath);
+        let cliFileInfo = await writeCliNote(cliCommand, cliDatabasePath, cliSettingsPath, cliSourcePath);
         if (migrateUnicodePaths) {
             cliFileInfo = await migrateCliDatabases(
-                liveSyncCliCommand,
+                cliCommand,
                 cliState,
                 cliDatabasePath,
                 cliSettingsPath,
@@ -504,7 +504,7 @@ async function main(): Promise<void> {
             return ids.has(cliFileInfo.id) && cliFileInfo.children.every((childId) => ids.has(childId));
         });
 
-        session = await startObsidianLiveSyncSession({
+        session = await startObsidianSession({
             binary,
             cliBinary: obsidianCli.binary,
             vault,
@@ -527,7 +527,7 @@ async function main(): Promise<void> {
             ),
             localStorageEntries: createE2eObsidianDeviceLocalState(vault.name),
         });
-        await waitForLiveSyncCoreReady(obsidianCli.binary, session.cliEnv);
+        await waitForCoreReady(obsidianCli.binary, session.cliEnv);
         await prepareRemote(obsidianCli.binary, session.cliEnv);
         await pushLocalChanges(obsidianCli.binary, session.cliEnv);
 
@@ -610,8 +610,8 @@ async function main(): Promise<void> {
                 session.cliEnv
             );
             await pushLocalChanges(obsidianCli.binary, session.cliEnv);
-            await runLiveSyncCli(liveSyncCliCommand, [cliDatabasePath, "--settings", cliSettingsPath, "sync"]);
-            await runLiveSyncCli(liveSyncCliCommand, [cliDatabasePath, "--settings", cliSettingsPath, "mirror"]);
+            await runSyncCli(cliCommand, [cliDatabasePath, "--settings", cliSettingsPath, "sync"]);
+            await runSyncCli(cliCommand, [cliDatabasePath, "--settings", cliSettingsPath, "mirror"]);
             assertEqual(
                 await readFile(join(cliDatabasePath, notePath), "utf-8"),
                 returnedContent,
@@ -626,7 +626,7 @@ async function main(): Promise<void> {
                 }
             );
             // The mirror command intentionally keeps tombstoned local files. The daemon applies remote deletions.
-            daemon = await startLiveSyncCliDaemon(liveSyncCliCommand, cliDatabasePath, cliSettingsPath);
+            daemon = await startCliDaemon(cliCommand, cliDatabasePath, cliSettingsPath);
             await evalObsidianJson(
                 obsidianCli.binary,
                 [

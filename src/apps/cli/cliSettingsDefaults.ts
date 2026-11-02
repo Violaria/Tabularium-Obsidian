@@ -1,7 +1,7 @@
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { createNewVaultSettings } from "@tabularium/sync-core/settings";
 
-export function createDefaultCliSettings(): ObsidianLiveSyncSettings {
+export function createDefaultCliSettings(): SyncSettings {
     return {
         ...createNewVaultSettings(),
         useIndexedDBAdapter: false,

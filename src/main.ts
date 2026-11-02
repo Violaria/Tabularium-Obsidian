@@ -19,7 +19,7 @@ import { StorageEventManagerObsidian } from "./obsidian/managers/StorageEventMan
 import type { ServiceModules } from "./types.ts";
 import { setNoticeClass } from "@tabularium/sync-core/compat/mock_and_interop/wrapper";
 import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
-import { createCore, type LiveSyncBaseCore } from "./core/createCore.ts";
+import { createCore, type SyncCore } from "./core/createCore.ts";
 import { enableI18nFeature } from "./obsidian/serviceFeatures/onLayoutReady/enablei18n.ts";
 import { useOfflineScanner } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import { useRedFlagFeatures } from "./obsidian/serviceFeatures/redFlag.ts";
@@ -39,26 +39,26 @@ import { installFileSorting, type TabulariumSorting } from "./features/tabulariu
 import { installCollationNotes } from "./features/tabularium/CollationNotes.ts";
 import { installShare, type TabulariumShare } from "./features/tabularium/Share.ts";
 import { installSyncMenu } from "./features/tabularium/SyncMenu.ts";
-import { installLiveSyncPause, type LiveSyncPause } from "./features/tabularium/LiveSyncPause.ts";
+import { installSyncPause, type SyncPause } from "./features/tabularium/SyncPause.ts";
 import { installNamespaceMigration } from "./features/tabularium/NamespaceMigration.ts";
 import { installLinkRepair, type TabulariumLinkRepair } from "./features/tabularium/LinkRepair.ts";
 import { installEditorMenus, type TabulariumEditorMenus } from "./features/tabularium/EditorMenus.ts";
-export type LiveSyncCore = LiveSyncBaseCore<ObsidianServiceContext>;
-export default class ObsidianLiveSyncPlugin extends Plugin {
-    core: LiveSyncCore;
+export type PluginCore = SyncCore<ObsidianServiceContext>;
+export default class TabulariumPlugin extends Plugin {
+    core: PluginCore;
     sorting?: TabulariumSorting;
     tabularium?: TabulariumServer;
     kindle?: TabulariumKindle;
     share?: TabulariumShare;
     linkRepair?: TabulariumLinkRepair;
     editorMenus?: TabulariumEditorMenus;
-    livePause?: LiveSyncPause;
+    livePause?: SyncPause;
 
     /**
      * Initialise service modules.
      */
     private initialiseServiceModules(
-        core: LiveSyncBaseCore<ObsidianServiceContext>,
+        core: SyncCore<ObsidianServiceContext>,
         services: InjectableServiceHub<ObsidianServiceContext>
     ): ServiceModules {
         const storageAccessManager = new StorageAccessManager();
@@ -164,7 +164,7 @@ export default class ObsidianLiveSyncPlugin extends Plugin {
                 this.share = installShare(this, this.tabularium, core, () => this.sorting);
                 this.linkRepair = installLinkRepair(this, core);
                 this.editorMenus = installEditorMenus(this, core);
-                this.livePause = installLiveSyncPause(this, core, () => !!this.tabularium?.connection);
+                this.livePause = installSyncPause(this, core, () => !!this.tabularium?.connection);
                 installNamespaceMigration(this, core, this.tabularium);
                 useObsidianReplicationRibbonFeature(core);
                 useDatabaseDiagnosticsFeature(core);

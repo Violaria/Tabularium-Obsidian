@@ -1,6 +1,6 @@
 import { fireAndForget } from "octagonal-wheels/promises";
 import { VER } from "@tabularium/sync-core/compat/common/types";
-import type { LiveSyncCore } from "@/main.ts";
+import type { PluginCore } from "@/main.ts";
 import {
     COMPATIBILITY_PAUSE_SETTING_MESSAGE,
     DATABASE_COMPATIBILITY_VERSION_KEY,
@@ -32,7 +32,7 @@ export class CompatibilityReviewController {
     private disposed = false;
 
     constructor(
-        private readonly core: LiveSyncCore,
+        private readonly core: PluginCore,
         private readonly ui: CompatibilityReviewUi,
         private readonly currentVersion: number = VER
     ) {}
@@ -162,7 +162,7 @@ export class CompatibilityReviewController {
     }
 }
 
-export function useCompatibilityReview(core: LiveSyncCore, ui: CompatibilityReviewUi): CompatibilityReviewController {
+export function useCompatibilityReview(core: PluginCore, ui: CompatibilityReviewUi): CompatibilityReviewController {
     const controller = new CompatibilityReviewController(core, ui);
     core.services.appLifecycle.onSettingLoaded.addHandler(() => controller.initialise());
     core.services.appLifecycle.onLayoutReady.addHandler(() => {

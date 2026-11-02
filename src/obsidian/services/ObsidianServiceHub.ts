@@ -3,7 +3,7 @@ import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctio
 import { createWebStorageValueStore } from "@vrtmrz/value-store/web-storage";
 import { ObsidianServiceContext } from "@/obsidian/services/ObsidianServiceContext";
 import type { ServiceInstances } from "@tabularium/sync-core/compat/services/ServiceHub";
-import type ObsidianLiveSyncPlugin from "@/main";
+import type TabulariumPlugin from "@/main";
 import { ObsidianKeyValueDBService, ObsidianReplicatorService } from "./ObsidianServices";
 import { InjectableConflictService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableConflictService";
 import { InjectableDatabaseEventService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableDatabaseEventService";
@@ -31,7 +31,7 @@ import { DEVICE_VALUE_PREFIX } from "@/features/tabularium/ownNames";
 // InjectableServiceHub
 
 export class ObsidianServiceHub extends InjectableServiceHub<ObsidianServiceContext> {
-    constructor(plugin: ObsidianLiveSyncPlugin) {
+    constructor(plugin: TabulariumPlugin) {
         const notices = new KeyedNoticeManager();
         const noticeGroups = new ObsidianNoticeGroupManager();
         const context = new ObsidianServiceContext(plugin.app, plugin, plugin, notices, noticeGroups);

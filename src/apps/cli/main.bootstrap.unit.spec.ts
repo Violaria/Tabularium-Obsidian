@@ -5,7 +5,7 @@ import { join } from "node:path";
 import * as chokidar from "chokidar";
 import * as offlineScanner from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 import { ControlService } from "@tabularium/sync-core/compat/services/base/ControlService";
-import { type FilePathWithPrefix, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { type FilePathWithPrefix, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { ServiceFileHandler } from "@/core/serviceModules/FileHandler";
 import { ServiceFileAccessCLI } from "./serviceModules/ServiceFileAccessImpl";
 import { runCommand } from "./commands/runCommand";

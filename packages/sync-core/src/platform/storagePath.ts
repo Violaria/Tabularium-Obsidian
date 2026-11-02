@@ -10,7 +10,7 @@ export function validateStoragePath(storagePath: string, allowRoot = true): stri
         throw new Error("The storage root is not a valid entry path");
     }
 
-    // LiveSync normally rejects ':' in portable filenames before paths reach storage. A leading letter and colon
+    // Tabularium normally rejects ':' in portable filenames before paths reach storage. A leading letter and colon
     // therefore represents drive-qualified input or a leaked non-storage namespace, not a supported physical path.
     if (storagePath.startsWith("/") || storagePath.startsWith("\\") || /^[A-Za-z]:/.test(storagePath)) {
         throw new Error(`Storage paths must be relative to the configured root: ${storagePath}`);

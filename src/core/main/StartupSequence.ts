@@ -1,10 +1,10 @@
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { fireAndForget } from "octagonal-wheels/promises";
 import {
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import {
     EVENT_LAYOUT_READY,
@@ -18,12 +18,12 @@ import { initialiseWorkerModule } from "@tabularium/sync-core/compat/worker/bgWo
 import { manifestVersion, packageVersion } from "@tabularium/sync-core/compat/common/coreEnvVars";
 import { VaultScanResults } from "@tabularium/sync-core/compat/serviceFeatures/offlineScanner";
 
-export class ModuleLiveSyncMain {
-    readonly core: LiveSyncBaseCore;
+export class StartupSequence {
+    readonly core: SyncCore;
     private readonly _log: ReturnType<typeof createInstanceLogFunction>;
-    constructor(core: LiveSyncBaseCore) {
+    constructor(core: SyncCore) {
         this.core = core;
-        this._log = createInstanceLogFunction("ModuleLiveSyncMain", core.services.API);
+        this._log = createInstanceLogFunction("StartupSequence", core.services.API);
     }
     get services() {
         return this.core.services;
@@ -32,20 +32,20 @@ export class ModuleLiveSyncMain {
         return this.core.services.setting.settings;
     }
 
-    async _onLiveSyncReady() {
+    async _onReady() {
         if (!(await this.core.services.appLifecycle.onLayoutReady())) return false;
         eventHub.emitEvent(EVENT_LAYOUT_READY);
         if (this.settings.suspendFileWatching || this.settings.suspendParseReplicationResult) {
-            const ANSWER_KEEP = $msg("moduleLiveSyncMain.optionKeepLiveSyncDisabled");
-            const ANSWER_RESUME = $msg("moduleLiveSyncMain.optionResumeAndRestart");
-            const message = $msg("moduleLiveSyncMain.msgScramEnabled", {
+            const ANSWER_KEEP = $msg("startupSequence.optionKeepSyncDisabled");
+            const ANSWER_RESUME = $msg("startupSequence.optionResumeAndRestart");
+            const message = $msg("startupSequence.msgScramEnabled", {
                 fileWatchingStatus: this.settings.suspendFileWatching ? "suspended" : "active",
                 parseReplicationStatus: this.settings.suspendParseReplicationResult ? "suspended" : "active",
             });
             if (
                 (await this.core.confirm.askSelectStringDialogue(message, [ANSWER_KEEP, ANSWER_RESUME], {
                     defaultAction: ANSWER_KEEP,
-                    title: $msg("moduleLiveSyncMain.titleScramEnabled"),
+                    title: $msg("startupSequence.titleScramEnabled"),
                 })) == ANSWER_RESUME
             ) {
                 this.settings.suspendFileWatching = false;
@@ -76,18 +76,18 @@ export class ModuleLiveSyncMain {
         // await this.core.$$realizeSettingSyncMode();
         await this.services.control.applySettings();
         fireAndForget(async () => {
-            this._log($msg("moduleLiveSyncMain.logAdditionalSafetyScan"), LOG_LEVEL_VERBOSE);
+            this._log($msg("startupSequence.logAdditionalSafetyScan"), LOG_LEVEL_VERBOSE);
             if (!(await this.services.appLifecycle.onScanningStartupIssues())) {
-                this._log($msg("moduleLiveSyncMain.logSafetyScanFailed"), LOG_LEVEL_NOTICE);
+                this._log($msg("startupSequence.logSafetyScanFailed"), LOG_LEVEL_NOTICE);
             } else {
-                this._log($msg("moduleLiveSyncMain.logSafetyScanCompleted"), LOG_LEVEL_VERBOSE);
+                this._log($msg("startupSequence.logSafetyScanCompleted"), LOG_LEVEL_VERBOSE);
             }
         });
         return true;
     }
 
     _wireUpEvents() {
-        eventHub.onEvent(EVENT_SETTING_SAVED, (settings: ObsidianLiveSyncSettings) => {
+        eventHub.onEvent(EVENT_SETTING_SAVED, (settings: SyncSettings) => {
             fireAndForget(async () => {
                 try {
                     const lang = this.core.services.setting.currentSettings()?.displayLanguage;
@@ -107,23 +107,23 @@ export class ModuleLiveSyncMain {
         return Promise.resolve(true);
     }
 
-    async _onLiveSyncLoad(): Promise<boolean> {
+    async _onLoad(): Promise<boolean> {
         initialiseWorkerModule(this.services.context.events);
         await this.services.appLifecycle.onWireUpEvents();
         // debugger;
         eventHub.emitEvent(EVENT_PLUGIN_LOADED);
-        this._log($msg("moduleLiveSyncMain.logLoadingPlugin"));
+        this._log($msg("startupSequence.logLoadingPlugin"));
         if (!(await this.services.appLifecycle.onInitialise())) {
-            this._log($msg("moduleLiveSyncMain.logPluginInitCancelled"), LOG_LEVEL_NOTICE);
+            this._log($msg("startupSequence.logPluginInitCancelled"), LOG_LEVEL_NOTICE);
             return false;
         }
         // this.addUIs();
-        this._log($msg("moduleLiveSyncMain.logPluginVersion", { manifestVersion, packageVersion }));
+        this._log($msg("startupSequence.logPluginVersion", { manifestVersion, packageVersion }));
         await this.services.setting.loadSettings();
         // The chosen display language applies before commands are registered (onSettingLoaded and onLoaded).
         setLang(this.services.setting.currentSettings().displayLanguage);
         if (!(await this.services.appLifecycle.onSettingLoaded())) {
-            this._log($msg("moduleLiveSyncMain.logPluginInitCancelled"), LOG_LEVEL_NOTICE);
+            this._log($msg("startupSequence.logPluginInitCancelled"), LOG_LEVEL_NOTICE);
             return false;
         }
         await this.services.database.openDatabase({
@@ -138,7 +138,7 @@ export class ModuleLiveSyncMain {
         return true;
     }
 
-    // async _onLiveSyncUnload(): Promise<void> {
+    // async _onUnload(): Promise<void> {
     //     eventHub.emitEvent(EVENT_PLUGIN_UNLOADED);
     //     await this.services.appLifecycle.onBeforeUnload();
     //     cancelAllPeriodicTask();
@@ -158,7 +158,7 @@ export class ModuleLiveSyncMain {
     //     }
     //     eventHub.emitEvent(EVENT_PLATFORM_UNLOADED);
     //     eventHub.offAll();
-    //     this._log($msg("moduleLiveSyncMain.logUnloadingPlugin"));
+    //     this._log($msg("startupSequence.logUnloadingPlugin"));
     //     return;
     // }
 
@@ -213,14 +213,14 @@ export class ModuleLiveSyncMain {
         // services.appLifecycle.markIsReady.setHandler(this._markIsReady.bind(this));
         // services.appLifecycle.resetIsReady.setHandler(this._resetIsReady.bind(this));
         // services.appLifecycle.hasUnloaded.setHandler(this._isUnloaded.bind(this));
-        services.appLifecycle.onReady.addHandler(this._onLiveSyncReady.bind(this));
+        services.appLifecycle.onReady.addHandler(this._onReady.bind(this));
         services.appLifecycle.onWireUpEvents.addHandler(this._wireUpEvents.bind(this));
-        services.appLifecycle.onLoad.addHandler(this._onLiveSyncLoad.bind(this));
+        services.appLifecycle.onLoad.addHandler(this._onLoad.bind(this));
     }
 }
 
-export function installMainLifecycle(core: LiveSyncBaseCore) {
-    const component = new ModuleLiveSyncMain(core);
+export function installMainLifecycle(core: SyncCore) {
+    const component = new StartupSequence(core);
     component.install();
     return component;
 }

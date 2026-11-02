@@ -14,7 +14,7 @@ import {
     type FilePathWithPrefix,
     type LoadedEntry,
     REMOTE_COUCHDB,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type MetaEntry,
     RemoteTypes,
     type NoteEntry,
@@ -30,7 +30,7 @@ import type { NecessaryServicesInterfaces } from "@lib/interfaces/ServiceModule"
 import { isErrorOfMissingDoc } from "@lib/pouchdb/utils_couchdb";
 import { stripAllPrefixes } from "@lib/string_and_binary/path";
 import { ICHeader, ICXHeader, PSCHeader } from "@lib/common/models/fileaccess.const";
-import type { GeneratedChunk } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { GeneratedChunk } from "@lib/pouchdb/LocalDatabase";
 
 type Managers = {
     hashManager: HashManager;
@@ -488,7 +488,7 @@ function respondOldFashionedEntry(note: NoteEntry, dump = false) {
     return doc;
 }
 
-export function canUseOnDemandChunking(settings: ObsidianLiveSyncSettings) {
+export function canUseOnDemandChunking(settings: SyncSettings) {
     if (settings.remoteType !== REMOTE_COUCHDB) {
         return false;
     }
@@ -498,7 +498,7 @@ export function canUseOnDemandChunking(settings: ObsidianLiveSyncSettings) {
     return true;
 }
 
-function canFetchRemotely(settings: ObsidianLiveSyncSettings) {
+function canFetchRemotely(settings: SyncSettings) {
     if (!canUseOnDemandChunking(settings)) {
         return false;
     }
@@ -514,7 +514,7 @@ function canFetchRemotely(settings: ObsidianLiveSyncSettings) {
  */
 export function computeChunkRetrievalMethod(
     waitForReady: boolean,
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     localOnly = false
 ) {
     if (localOnly) {
@@ -546,7 +546,7 @@ export function computeChunkRetrievalMethod(
 
 async function respondEntryFromMeta(
     { localDatabase, chunkManager }: NecessaryManagers<"localDatabase" | "chunkManager">,
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     filename: FilePathWithPrefix | FilePath,
     meta: NewEntry | PlainEntry,
     dump: boolean,

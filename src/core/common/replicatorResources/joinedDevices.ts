@@ -6,9 +6,9 @@ import type {
     ForgetJoinedDeviceResult,
 } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
 interface JoinedDevicesReplicator extends ResourceReplicator {
@@ -25,9 +25,9 @@ function createResource(replicator: JoinedDevicesReplicator, snapshot: RemoteDBS
 }
 
 export function createCouchDBJoinedDevicesResourceFactory(
-    host: LiveSyncCouchDBReplicatorEnv
+    host: CouchDBReplicatorEnv
 ): JoinedDevicesResourceFactory {
     return (setting) =>
-        Promise.resolve(createResource(new LiveSyncCouchDBReplicator(host), snapshotRemoteSettings(setting)));
+        Promise.resolve(createResource(new CouchDBReplicator(host), snapshotRemoteSettings(setting)));
 }
 

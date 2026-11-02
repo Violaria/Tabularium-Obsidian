@@ -5,7 +5,7 @@ import {
     type DocumentID,
     type FilePath,
     type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@lib/common/types.ts";
 import { path2id_base } from "@lib/string_and_binary/path.ts";
 import { PathServiceCompat } from "@lib/services/implements/injectable/InjectablePathService.ts";
@@ -14,7 +14,7 @@ import { ServiceContext } from "./ServiceBase.ts";
 
 describe("PathService", () => {
     it("keeps obfuscated Metadata IDs stable after an E2EE passphrase change", async () => {
-        const settings: ObsidianLiveSyncSettings = {
+        const settings: SyncSettings = {
             ...DEFAULT_SETTINGS,
             encrypt: true,
             passphrase: "first E2EE passphrase",
@@ -31,7 +31,7 @@ describe("PathService", () => {
     });
 
     it("uses legacy document IDs while E2EE is off without discarding the saved ID key", async () => {
-        const settings: ObsidianLiveSyncSettings = {
+        const settings: SyncSettings = {
             ...DEFAULT_SETTINGS,
             encrypt: false,
             passphrase: "legacy path passphrase",
@@ -126,7 +126,7 @@ describe("PathService", () => {
     });
 
     it("uses an optional host path-obfuscation passphrase without changing the settings default", async () => {
-        const settings: ObsidianLiveSyncSettings = {
+        const settings: SyncSettings = {
             ...DEFAULT_SETTINGS,
             usePathObfuscation: true,
             passphrase: "content-secret",

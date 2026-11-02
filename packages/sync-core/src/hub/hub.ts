@@ -8,9 +8,9 @@ declare global {
 }
 
 /** An event hub owned by one Commonlib service context. */
-export type LiveSyncEventHub = EventHub<LSEvents>;
+export type SyncEventHub = EventHub<LSEvents>;
 
 /** Creates an isolated event hub for one Commonlib client or host composition. */
-export function createLiveSyncEventHub(): LiveSyncEventHub {
+export function createSyncEventHub(): SyncEventHub {
     return new EventHub<LSEvents>();
 }

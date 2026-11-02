@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { MemoryValueStore } from "@vrtmrz/value-store";
-import type { LiveSyncCore } from "@/main";
-import { AUTOMATIC_TRIGGERS, LIVE_SYNC_PAUSE_KEY, LiveSyncPause } from "./LiveSyncPause.ts";
+import type { PluginCore } from "@/main";
+import { AUTOMATIC_TRIGGERS, LIVE_SYNC_PAUSE_KEY, SyncPause } from "./SyncPause.ts";
 
 function fakeCore(initial: Record<string, boolean>) {
     const settings: Record<string, unknown> = { ...initial };
@@ -18,7 +18,7 @@ function fakeCore(initial: Record<string, boolean>) {
             control: { applySettings },
             replication: { replicateUserInitiated },
         },
-    } as unknown as LiveSyncCore;
+    } as unknown as PluginCore;
     return { core, settings, deviceValues, replicateUserInitiated, applySettings };
 }
 
@@ -35,7 +35,7 @@ const live = {
 describe("pausing live sync", () => {
     it("records every automatic trigger and switches all of them off", async () => {
         const { core, settings, deviceValues, applySettings } = fakeCore(live);
-        const pause = new LiveSyncPause(core);
+        const pause = new SyncPause(core);
         expect(pause.canPause()).toBe(true);
 
         await pause.pause();
@@ -49,7 +49,7 @@ describe("pausing live sync", () => {
 
     it("restores the recorded triggers on resume and leaves sending to the restarted live replication", async () => {
         const { core, settings, deviceValues, replicateUserInitiated, applySettings } = fakeCore(live);
-        const pause = new LiveSyncPause(core);
+        const pause = new SyncPause(core);
         await pause.pause();
         applySettings.mockClear();
 
@@ -64,7 +64,7 @@ describe("pausing live sync", () => {
 
     it("syncs once on resume when the recorded settings were not live", async () => {
         const { core, deviceValues, replicateUserInitiated } = fakeCore(live);
-        const pause = new LiveSyncPause(core);
+        const pause = new SyncPause(core);
         await deviceValues.setValue(LIVE_SYNC_PAUSE_KEY, JSON.stringify({ ...live, liveSync: false, syncOnSave: true }));
         await pause.load();
 
@@ -75,8 +75,8 @@ describe("pausing live sync", () => {
 
     it("stays paused across a restart", async () => {
         const first = fakeCore(live);
-        await new LiveSyncPause(first.core).pause();
-        const restarted = new LiveSyncPause(first.core);
+        await new SyncPause(first.core).pause();
+        const restarted = new SyncPause(first.core);
 
         await restarted.load();
 
@@ -85,12 +85,12 @@ describe("pausing live sync", () => {
 
     it("is not offered when the sync mode is periodic or on events", () => {
         const { core } = fakeCore({ ...live, liveSync: false, periodicReplication: true });
-        expect(new LiveSyncPause(core).canPause()).toBe(false);
+        expect(new SyncPause(core).canPause()).toBe(false);
     });
 
     it("forgets a recorded pause when cleared", async () => {
         const { core, deviceValues } = fakeCore(live);
-        const pause = new LiveSyncPause(core);
+        const pause = new SyncPause(core);
         await pause.pause();
 
         await pause.clear();

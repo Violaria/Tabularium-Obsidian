@@ -23,14 +23,14 @@ import {
 import { VIEW_TYPE_LOG } from "@/ui/Log/LogPaneView.ts";
 import { getConfig, type AllSettingItemKey } from "@/obsidian/settingConstants.ts";
 import { NetworkWarningStyles } from "@tabularium/sync-core/compat/common/models/setting.const";
-import { FlagFiles, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { FlagFiles, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { constructCustomRegExpList, splitCustomRegExpList } from "@tabularium/sync-core/compat/common/utils";
 import {
     REPLICATION_PROGRESS_PRESENTATIONS,
     USER_INITIATED_REPLICATION_AUTHORITY,
 } from "@tabularium/sync-core/replication";
-import type ObsidianLiveSyncPlugin from "@/main";
-import type { LiveSyncAbstractReplicator } from "@tabularium/sync-core/compat/replication/LiveSyncAbstractReplicator";
+import type TabulariumPlugin from "@/main";
+import type { AbstractReplicator } from "@tabularium/sync-core/compat/replication/AbstractReplicator";
 import { confirmAction } from "./Confirm";
 import { FETCH_CHOICES, rememberFetchChoice, type FetchChoice } from "@/obsidian/serviceFeatures/redFlag.simpleFetch";
 import { REBUILD_CONFIRMED_KEY } from "@/obsidian/serviceFeatures/redFlag";
@@ -122,9 +122,9 @@ const page = (name: string, items: Section, desc?: string): SettingDefinitionPag
 };
 
 export class TabulariumSettingTab extends PluginSettingTab {
-    private readonly owner: ObsidianLiveSyncPlugin;
+    private readonly owner: TabulariumPlugin;
 
-    constructor(plugin: ObsidianLiveSyncPlugin) {
+    constructor(plugin: TabulariumPlugin) {
         super(plugin.app, plugin);
         this.owner = plugin;
         // Saving settings (also from commands) asks for the page again, e.g. after a language change.
@@ -142,7 +142,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
     }
     /** The remote lock that a rebuild leaves, as the active replicator saw it on its last connection. */
     private get remoteLock() {
-        const replicator = this.core.services.replicator.getActiveReplicator() as Partial<LiveSyncAbstractReplicator> | undefined;
+        const replicator = this.core.services.replicator.getActiveReplicator() as Partial<AbstractReplicator> | undefined;
         return { locked: Boolean(replicator?.remoteLocked), accepted: !replicator?.remoteLockedAndDeviceNotAccepted };
     }
     private get connected() {
@@ -153,7 +153,7 @@ export class TabulariumSettingTab extends PluginSettingTab {
         return settings.liveSync ? "live" : settings.periodicReplication ? "periodic" : "events";
     }
 
-    private async save(partial: Partial<ObsidianLiveSyncSettings>) {
+    private async save(partial: Partial<SyncSettings>) {
         await this.core.services.setting.applyPartial(partial, true);
     }
 

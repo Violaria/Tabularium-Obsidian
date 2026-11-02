@@ -1,4 +1,4 @@
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { ConnectionStringParser } from "@tabularium/sync-core/compat/common/ConnectionString";
 import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import type { CLICommand } from "./commands/types";
@@ -17,7 +17,7 @@ const REMOTE_SETTINGS_WRITE_COMMANDS = new Set<CLICommand>([
     "remote-activate",
 ]);
 
-export const CLI_RUNTIME_ONLY_SETTING_KEYS = new Set<keyof ObsidianLiveSyncSettings>([
+export const CLI_RUNTIME_ONLY_SETTING_KEYS = new Set<keyof SyncSettings>([
     "disableCheckingConfigMismatch",
     "suspendFileWatching",
     "suspendParseReplicationResult",
@@ -28,7 +28,7 @@ function cloneJsonValue<T>(value: T): T {
     return JSON.parse(JSON.stringify(value)) as T;
 }
 
-export function cloneSettings(settings: ObsidianLiveSyncSettings): ObsidianLiveSyncSettings {
+export function cloneSettings(settings: SyncSettings): SyncSettings {
     return cloneJsonValue(settings);
 }
 
@@ -36,18 +36,18 @@ function settingValuesEqual(left: unknown, right: unknown): boolean {
     return JSON.stringify(left) === JSON.stringify(right);
 }
 
-export function settingsEqual(left: ObsidianLiveSyncSettings, right: ObsidianLiveSyncSettings): boolean {
+export function settingsEqual(left: SyncSettings, right: SyncSettings): boolean {
     return settingValuesEqual(left, right);
 }
 
-function settingsKeys(...settings: ObsidianLiveSyncSettings[]): Set<keyof ObsidianLiveSyncSettings> {
-    return new Set(settings.flatMap((value) => Object.keys(value) as Array<keyof ObsidianLiveSyncSettings>));
+function settingsKeys(...settings: SyncSettings[]): Set<keyof SyncSettings> {
+    return new Set(settings.flatMap((value) => Object.keys(value) as Array<keyof SyncSettings>));
 }
 
 function copySetting(
-    target: ObsidianLiveSyncSettings,
-    source: ObsidianLiveSyncSettings,
-    key: keyof ObsidianLiveSyncSettings
+    target: SyncSettings,
+    source: SyncSettings,
+    key: keyof SyncSettings
 ): void {
     const targetRecord = target as unknown as Record<string, unknown>;
     const sourceRecord = source as unknown as Record<string, unknown>;
@@ -58,8 +58,8 @@ function copySetting(
     }
 }
 
-function remoteSettingKeys(...settings: ObsidianLiveSyncSettings[]): Set<keyof ObsidianLiveSyncSettings> {
-    const keys = new Set<keyof ObsidianLiveSyncSettings>([
+function remoteSettingKeys(...settings: SyncSettings[]): Set<keyof SyncSettings> {
+    const keys = new Set<keyof SyncSettings>([
         "remoteConfigurations",
         "activeConfigurationId",
         "P2P_ActiveRemoteConfigurationId",
@@ -69,7 +69,7 @@ function remoteSettingKeys(...settings: ObsidianLiveSyncSettings[]): Set<keyof O
         for (const configuration of Object.values(current.remoteConfigurations ?? {})) {
             try {
                 const parsed = ConnectionStringParser.parse(configuration.uri);
-                for (const key of Object.keys(parsed.settings) as Array<keyof ObsidianLiveSyncSettings>) {
+                for (const key of Object.keys(parsed.settings) as Array<keyof SyncSettings>) {
                     keys.add(key);
                 }
             } catch {
@@ -81,10 +81,10 @@ function remoteSettingKeys(...settings: ObsidianLiveSyncSettings[]): Set<keyof O
 }
 
 export function changedSettingKeys(
-    before: ObsidianLiveSyncSettings,
-    after: ObsidianLiveSyncSettings
-): Set<keyof ObsidianLiveSyncSettings> {
-    const changed = new Set<keyof ObsidianLiveSyncSettings>();
+    before: SyncSettings,
+    after: SyncSettings
+): Set<keyof SyncSettings> {
+    const changed = new Set<keyof SyncSettings>();
     for (const key of settingsKeys(before, after)) {
         if (!settingValuesEqual(before[key], after[key])) {
             changed.add(key);
@@ -98,12 +98,12 @@ export function isSettingsWriteCommand(command: CLICommand): boolean {
 }
 
 export function reconcileDurableSettings(options: {
-    durableBase: ObsidianLiveSyncSettings;
-    runtimeBaseline: ObsidianLiveSyncSettings;
-    runtimeCurrent: ObsidianLiveSyncSettings;
-    preserveKeys: ReadonlySet<keyof ObsidianLiveSyncSettings>;
+    durableBase: SyncSettings;
+    runtimeBaseline: SyncSettings;
+    runtimeCurrent: SyncSettings;
+    preserveKeys: ReadonlySet<keyof SyncSettings>;
     command?: CLICommand;
-}): ObsidianLiveSyncSettings {
+}): SyncSettings {
     const durable = cloneSettings(options.durableBase);
     for (const key of settingsKeys(options.runtimeBaseline, options.runtimeCurrent)) {
         if (options.preserveKeys.has(key)) continue;
@@ -136,12 +136,12 @@ export function reconcileDurableSettings(options: {
 export function preserveStoredSetting(
     candidateText: string,
     originalText: string | undefined,
-    key: keyof ObsidianLiveSyncSettings
+    key: keyof SyncSettings
 ): string {
     if (originalText === undefined) return candidateText;
     try {
-        const candidate = JSON.parse(candidateText) as ObsidianLiveSyncSettings;
-        const original = JSON.parse(originalText) as ObsidianLiveSyncSettings;
+        const candidate = JSON.parse(candidateText) as SyncSettings;
+        const original = JSON.parse(originalText) as SyncSettings;
         if (Object.prototype.hasOwnProperty.call(original, key)) {
             copySetting(candidate, original, key);
         } else {
@@ -154,13 +154,13 @@ export function preserveStoredSetting(
 }
 
 export function applyStoredSetting(
-    target: ObsidianLiveSyncSettings,
+    target: SyncSettings,
     storedText: string | undefined,
-    key: keyof ObsidianLiveSyncSettings
+    key: keyof SyncSettings
 ): void {
     if (storedText === undefined) return;
     try {
-        const stored = JSON.parse(storedText) as ObsidianLiveSyncSettings;
+        const stored = JSON.parse(storedText) as SyncSettings;
         if (Object.prototype.hasOwnProperty.call(stored, key)) {
             copySetting(target, stored, key);
         } else {

@@ -13,7 +13,7 @@ import {
     type DiagnosticNameMode,
     type DiagnosticStatus,
 } from "@tabularium/sync-core/diagnostics";
-import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { REMOTE_COUCHDB, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
 import type { NecessaryServicesInterfaces } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
 import commonlibPackage from "@tabularium/sync-core/package.json";
@@ -88,7 +88,7 @@ export async function runDatabaseDiagnostic(
 ): Promise<DatabaseDiagnosticOutput> {
     const started = performance.now();
     const configuration = JSON.stringify(host.services.setting.currentSettings());
-    const settings = JSON.parse(configuration) as ObsidianLiveSyncSettings;
+    const settings = JSON.parse(configuration) as SyncSettings;
     const database = host.services.database.localDatabase.localDatabase;
     const isConfigurationCurrent = () =>
         JSON.stringify(host.services.setting.currentSettings()) === configuration &&

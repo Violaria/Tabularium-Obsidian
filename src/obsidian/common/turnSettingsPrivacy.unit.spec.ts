@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
     DEFAULT_SETTINGS,
     REMOTE_P2P,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import {
     SettingService,
@@ -19,8 +19,8 @@ import {
 } from "./turnSettingsPrivacy";
 
 class MemorySettingService extends SettingService {
-    saved?: ObsidianLiveSyncSettings;
-    protected saveData(settings: ObsidianLiveSyncSettings) {
+    saved?: SyncSettings;
+    protected saveData(settings: SyncSettings) {
         this.saved = structuredClone(settings);
         return Promise.resolve();
     }
@@ -70,7 +70,7 @@ describe("managed TURN settings privacy", () => {
             } as unknown as SettingServiceDependencies["APIService"],
         });
         service.settings = structuredClone(current);
-        const incoming: Partial<ObsidianLiveSyncSettings> = {
+        const incoming: Partial<SyncSettings> = {
             P2P_roomID: "imported-room",
             P2P_relays: "wss://imported-relay.example.test",
             P2P_passphrase: "imported-passphrase",

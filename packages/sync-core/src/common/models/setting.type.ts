@@ -12,7 +12,7 @@ import type {
 import type { CustomRegExpSourceList } from "./shared.type.util";
 import type { JWTAlgorithm } from "./auth.type";
 
-/** Display languages recognised by the current LiveSync settings schema. */
+/** Display languages recognised by the current Tabularium settings schema. */
 export type I18N_LANGS = "" | "def" | "de" | "es" | "fr" | "he" | "ja" | "ko" | "ru" | "zh" | "zh-tw";
 
 /**
@@ -106,7 +106,7 @@ interface SyncMethodSettings {
      * Synchronise in Live. This is an exclusive setting against other sync methods.
      */
     liveSync: boolean;
-    /** Explicitly enable batched local database updates in LiveSync mode; an absent value is false. */
+    /** Explicitly enable batched local database updates in live sync mode; an absent value is false. */
     batchSaveInLiveSync?: boolean;
     /**
      * automatically run sync on save.
@@ -130,7 +130,7 @@ interface SyncMethodSettings {
     /**
      * Desktop only, opt-in. Keep replication running while the window is hidden or minimised,
      * instead of suspending it until the window becomes visible again. The trigger is
-     * document.hidden, not window focus. Applies to the background-capable sync modes (LiveSync
+     * document.hidden, not window focus. Applies to the background-capable sync modes (Tabularium
      * and Periodic). Ignored on mobile. Default false.
      */
     keepReplicationActiveInBackground: boolean;
@@ -378,7 +378,7 @@ interface ModeSettings {
  */
 interface DebugModeSettings {
     /**
-     * Indicates whether the debug tools of Self-hosted LiveSync are enabled.
+     * Indicates whether the debug tools of Tabularium are enabled.
      */
     enableDebugTools: boolean;
     /**
@@ -591,7 +591,7 @@ export interface P2PConnectionInfo {
     /**
      * The Application ID for the P2P connection.
      * This is used to identify the application using the P2P network.
-     * In Self-hosted LiveSync, fixed to "self-hosted-livesync".
+     * In Tabularium, fixed to "self-hosted-livesync".
      */
     P2P_AppID: string;
 
@@ -1110,7 +1110,7 @@ export interface RemoteConfigurations {
      */
     P2P_ActiveRemoteConfigurationId: string;
 }
-interface ObsidianLiveSyncSettings_PluginSetting
+interface SyncSettings_PluginSetting
     extends
         SyncMethodSettings,
         UISettings,
@@ -1153,8 +1153,8 @@ export type RemoteDBSettings = CouchDBConnection &
     P2PSyncSetting &
     RemoteConfigurations;
 
-export type ObsidianLiveSyncSettings = ObsidianLiveSyncSettings_PluginSetting & RemoteDBSettings & LocalDBSettings;
+export type SyncSettings = SyncSettings_PluginSetting & RemoteDBSettings & LocalDBSettings;
 
-export interface HasSettings<T extends Partial<ObsidianLiveSyncSettings>> {
+export interface HasSettings<T extends Partial<SyncSettings>> {
     settings: T;
 }

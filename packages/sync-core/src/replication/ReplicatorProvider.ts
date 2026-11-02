@@ -1,4 +1,4 @@
-import type { RemoteDBSettings, ObsidianLiveSyncSettings, RemoteType } from "@lib/common/types.ts";
+import type { RemoteDBSettings, SyncSettings, RemoteType } from "@lib/common/types.ts";
 import type { ReplicatorInstance } from "./ReplicatorInstance.ts";
 import { supportedCapability, type CapabilitySupport, type SupportedCapability } from "./ProviderCapability.ts";
 import type { RemoteResourceCapabilities } from "./RemoteResource.ts";
@@ -266,7 +266,7 @@ export interface ReplicatorProviderDefinition<TKind extends RemoteType = RemoteT
     /** Project the fully merged effective settings to this provider's stable binding identity. */
     readonly configurationIdentity: (setting: RemoteDBSettings) => ReplicatorConfigurationIdentity;
     /** Construct a replicator from the fully merged effective settings. */
-    readonly create: (setting: ObsidianLiveSyncSettings) => Promise<ReplicatorInstance | undefined | false>;
+    readonly create: (setting: SyncSettings) => Promise<ReplicatorInstance | undefined | false>;
     /** Exhaustive provider-owned catalogue for finite remote resources. */
     readonly remoteResources: RemoteResourceCapabilities;
     /** Optional provider-owned central-remote administration runner. */
@@ -292,7 +292,7 @@ export interface ActiveReplicatorContext<TKind extends RemoteType = RemoteType> 
 /** Immutable source of one failed attempt, safe to carry after its reservation is released. */
 export interface ReplicationAttemptFailure {
     readonly context: ActiveReplicatorContext;
-    readonly setting: ObsidianLiveSyncSettings;
+    readonly setting: SyncSettings;
     readonly outcome: ReplicationFailed;
 }
 

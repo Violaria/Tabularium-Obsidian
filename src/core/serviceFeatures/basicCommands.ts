@@ -81,7 +81,7 @@ export function useBasicCommandsFeature(host: BasicCommandsHost): void {
 
         services.API.addCommand({
             id: "livesync-toggle",
-            name: $msg("Toggle LiveSync"),
+            name: $msg("Toggle live sync"),
             callback: async () => {
                 const settings = services.setting.currentSettings();
                 if (settings.liveSync) {

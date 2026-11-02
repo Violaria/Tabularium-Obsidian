@@ -23,7 +23,7 @@ import { HeadlessAPIService } from "@tabularium/sync-core/compat/services/implem
 import { NodeKeyValueDBService } from "./NodeKeyValueDBService";
 import { createNodeLocalStorage } from "./NodeLocalStorage";
 import { DatabaseService } from "@tabularium/sync-core/compat/services/base/DatabaseService";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { path as nodePath } from "@tabularium/sync-core/node";
 import type { KeyValueDBService } from "@tabularium/sync-core/compat/services/base/KeyValueDBService";
 import { PouchDB } from "@/apps/cli/lib/pouchdb-node";
@@ -59,7 +59,7 @@ type NodeUIServiceDependencies<T extends ServiceContext = ServiceContext> = {
 };
 class NodeDatabaseService<T extends NodeServiceContext> extends DatabaseService<T> {
     protected override modifyDatabaseOptions(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         name: string,
         options: PouchDB.Configuration.DatabaseConfiguration
     ): { name: string; options: PouchDB.Configuration.DatabaseConfiguration } {

@@ -1,6 +1,6 @@
 import type { IDatabaseService, IPathService, IVaultService, openDatabaseParameters } from "./IService";
 import { ServiceBase, type ServiceContext } from "./ServiceBase";
-import { LiveSyncLocalDB } from "@lib/pouchdb/LiveSyncLocalDB";
+import { LocalDatabase } from "@lib/pouchdb/LocalDatabase";
 import { handlers } from "@lib/services/lib/HandlerUtils";
 import { createInstanceLogFunction } from "@lib/services/lib/logUtils.ts";
 import type PouchDB from "pouchdb-core";
@@ -8,7 +8,7 @@ import type { PouchDBConstructor } from "@lib/pouchdb/PouchDBConstructor.ts";
 import { ExtraSuffixIndexedDB } from "@lib/common/models/shared.const.ts";
 import type { SettingService } from "./SettingService";
 import type { APIService } from "./APIService";
-import type { ObsidianLiveSyncSettings } from "@lib/common/models/setting.type";
+import type { SyncSettings } from "@lib/common/models/setting.type";
 import { LOG_LEVEL_VERBOSE } from "@lib/common/logger";
 
 export type DatabaseServiceDependencies = {
@@ -34,7 +34,7 @@ export abstract class DatabaseService<T extends ServiceContext = ServiceContext>
         this.services = dependencies;
     }
 
-    protected _localDatabase: LiveSyncLocalDB | null = null;
+    protected _localDatabase: LocalDatabase | null = null;
 
     protected services: DatabaseServiceDependencies;
 
@@ -55,7 +55,7 @@ export abstract class DatabaseService<T extends ServiceContext = ServiceContext>
     }
 
     protected modifyDatabaseOptions(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         name: string,
         options: PouchDB.Configuration.DatabaseConfiguration
     ): {
@@ -101,7 +101,7 @@ export abstract class DatabaseService<T extends ServiceContext = ServiceContext>
                 database: this,
             },
         };
-        const selectedDatabase = new LiveSyncLocalDB(vaultName, env);
+        const selectedDatabase = new LocalDatabase(vaultName, env);
         this._localDatabase = selectedDatabase;
         try {
             await this.onOpenDatabase(vaultName);
@@ -122,7 +122,7 @@ export abstract class DatabaseService<T extends ServiceContext = ServiceContext>
         return this._localDatabase != null && this._localDatabase.isReady;
     }
 
-    private async discardFailedActiveDatabase(database: LiveSyncLocalDB): Promise<void> {
+    private async discardFailedActiveDatabase(database: LocalDatabase): Promise<void> {
         if (this._localDatabase === database) {
             this._localDatabase = null;
         }
@@ -158,7 +158,7 @@ export abstract class DatabaseService<T extends ServiceContext = ServiceContext>
     /**
      * Reset the database selected by the current settings.
      *
-     * A `LiveSyncLocalDB` captures its name when constructed, so changing a
+     * A `LocalDatabase` captures its name when constructed, so changing a
      * suffix does not retarget the active instance. This operation selects and
      * opens the settings-derived database before resetting it when necessary.
      * The formerly active physical database is closed but not destroyed.

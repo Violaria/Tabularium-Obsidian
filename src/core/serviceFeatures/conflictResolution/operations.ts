@@ -8,7 +8,7 @@ import {
     NOT_CONFLICTED,
     type diff_check_result,
     type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { isCustomisationSyncMetadata, isPluginMetadata } from "@tabularium/sync-core/compat/common/typeUtils";
 import { TARGET_IS_NEW } from "@tabularium/sync-core/compat/common/models/shared.const.symbols";
@@ -21,9 +21,9 @@ import type {
     IReplicationService,
     IVaultService,
 } from "@tabularium/sync-core/compat/services/base/IService";
-import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import type { LocalDatabase } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
 import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
-import type { LiveSyncEventHub } from "@tabularium/sync-core/context";
+import type { SyncEventHub } from "@tabularium/sync-core/context";
 import type { StorageAccess } from "@tabularium/sync-core/compat/interfaces/StorageAccess";
 import { EVENT_CONFLICT_CANCELLED } from "@tabularium/sync-core/compat/events/coreEvents";
 import { NO_INTERACTION } from "@tabularium/sync-core/replication";
@@ -32,15 +32,15 @@ import diff_match_patch from "diff-match-patch";
 import { stripAllPrefixes, isPlainText } from "@tabularium/sync-core/compat/string_and_binary/path";
 
 export type ConflictResolutionSettings = Pick<
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     "disableMarkdownAutoMerge" | "resolveConflictsByNewerFile" | "syncAfterMerge" | "showMergeDialogOnlyOnActive"
 >;
 
 export interface ConflictResolutionOperationsDependencies {
-    readonly events: Pick<LiveSyncEventHub, "emitEvent">;
+    readonly events: Pick<SyncEventHub, "emitEvent">;
     readonly databaseFileAccess: Pick<DatabaseFileAccess, "fetchEntryMeta" | "getConflictedRevs" | "storeContent">;
     readonly fileHandler: Pick<IFileHandler, "deleteRevisionFromDB" | "dbToStorage">;
-    readonly localDatabase: () => Pick<LiveSyncLocalDB, "tryAutoMerge">;
+    readonly localDatabase: () => Pick<LocalDatabase, "tryAutoMerge">;
     readonly conflict: Pick<
         IConflictService,
         "queueCheckFor" | "resolveByDeletingRevision" | "resolveByUserInteraction"

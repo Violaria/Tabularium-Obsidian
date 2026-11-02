@@ -13,7 +13,7 @@ import {
 } from "../types";
 import { IncompatibleChangesInSpecificPattern } from "./tweak.definition";
 import { prepareSettingsForLoad, SettingsMigrationReviewCodes } from "./setting.lifecycle";
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 
 describe("prepareSettingsForLoad", () => {
     it("enables internal Metadata protection only for genuinely new settings", () => {
@@ -54,7 +54,7 @@ describe("prepareSettingsForLoad", () => {
     });
 
     it("completes legacy settings while preserving explicit synchronisation choices", () => {
-        const legacy: Partial<ObsidianLiveSyncSettings> = {
+        const legacy: Partial<SyncSettings> = {
             liveSync: true,
             syncOnSave: false,
             syncOnEditorSave: true,
@@ -75,7 +75,7 @@ describe("prepareSettingsForLoad", () => {
         expect(prepared.settings.allowSleepDuringSynchronisationOnDesktop).toBe(true);
     });
 
-    it("does not infer LiveSync batching from the legacy batch-save preference", () => {
+    it("does not infer Tabularium batching from the legacy batch-save preference", () => {
         const prepared = prepareSettingsForLoad({
             liveSync: true,
             batchSave: true,
@@ -85,7 +85,7 @@ describe("prepareSettingsForLoad", () => {
         expect(prepared.settings.batchSaveInLiveSync).toBe(false);
     });
 
-    it("preserves an explicit LiveSync batching choice across repeated loads", () => {
+    it("preserves an explicit Tabularium batching choice across repeated loads", () => {
         const first = prepareSettingsForLoad({
             liveSync: true,
             batchSave: true,
@@ -168,12 +168,12 @@ describe("prepareSettingsForLoad", () => {
         const differingKeys = Object.keys(SETTINGS_SCHEMA_DEFAULTS)
             .filter(
                 (key) =>
-                    JSON.stringify(SETTINGS_SCHEMA_DEFAULTS[key as keyof ObsidianLiveSyncSettings]) !==
-                    JSON.stringify(NEW_VAULT_SETTINGS[key as keyof ObsidianLiveSyncSettings])
+                    JSON.stringify(SETTINGS_SCHEMA_DEFAULTS[key as keyof SyncSettings]) !==
+                    JSON.stringify(NEW_VAULT_SETTINGS[key as keyof SyncSettings])
             )
             .sort();
         const deliberatelyUnsetKeys = Object.keys(NEW_VAULT_SETTINGS)
-            .filter((key) => NEW_VAULT_SETTINGS[key as keyof ObsidianLiveSyncSettings] === undefined)
+            .filter((key) => NEW_VAULT_SETTINGS[key as keyof SyncSettings] === undefined)
             .sort();
 
         expect(differingKeys).toEqual(["encryptInternalMetadata", "handleFilenameCaseSensitive", "usePluginSyncV2"]);

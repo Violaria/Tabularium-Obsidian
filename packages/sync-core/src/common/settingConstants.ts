@@ -4,7 +4,7 @@ import {
     DEFAULT_SETTINGS,
     configurationNames,
     type ConfigurationItem,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "./types.ts";
 
 type ExtractPropertiesByType<T, U> = {
@@ -22,7 +22,7 @@ import type { FilePath, FilePathWithPrefixLC, FilePathWithPrefix, DocumentID } f
 export type { FilePath, FilePathWithPrefixLC, FilePathWithPrefix, DocumentID };
 
 /**
- * Self-hosted LiveSync settings pane items.
+ * Tabularium settings pane items.
  */
 export type OnDialogSettings = {
     configPassphrase: string;
@@ -45,7 +45,7 @@ export const OnDialogSettingsDefault: OnDialogSettings = {
 };
 export const AllSettingDefault = { ...DEFAULT_SETTINGS, ...OnDialogSettingsDefault };
 
-export type AllSettings = ObsidianLiveSyncSettings & OnDialogSettings;
+export type AllSettings = SyncSettings & OnDialogSettings;
 export type AllStringItemKey = FilterStringKeys<AllSettings>;
 export type AllNumericItemKey = FilterNumberKeys<AllSettings>;
 export type AllBooleanItemKey = FilterBooleanKeys<AllSettings>;
@@ -193,12 +193,12 @@ export const SettingInformation: Partial<Record<keyof AllSettings, Configuration
         desc: "Reducing the frequency with which on-disk changes are reflected into the DB",
     },
     batchSaveInLiveSync: {
-        name: "Batch database updates in LiveSync mode",
-        desc: "Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.",
+        name: "Batch database updates in live sync mode",
+        desc: "Wait for a bounded local quiet period before processing file updates in live sync mode, reducing intermediate database updates while delaying their reflection to remote devices.",
     },
     readChunksOnline: {
         name: "Fetch chunks on demand",
-        desc: "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
+        desc: "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
     },
     syncMaxSizeInMB: {
         name: "Maximum file size",
@@ -337,7 +337,7 @@ export const SettingInformation: Partial<Record<keyof AllSettings, Configuration
     },
     additionalSuffixOfDatabaseName: {
         name: "Database suffix",
-        desc: "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
+        desc: "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
     },
     hashAlg: {
         name: configurationNames["hashAlg"]?.name || "",
@@ -475,10 +475,10 @@ function translateInfo(
 }
 function _getConfig(key: AllSettingItemKey) {
     if (key in configurationNames) {
-        return configurationNames[key as keyof ObsidianLiveSyncSettings];
+        return configurationNames[key as keyof SyncSettings];
     }
     if (key in SettingInformation) {
-        return SettingInformation[key as keyof ObsidianLiveSyncSettings];
+        return SettingInformation[key as keyof SyncSettings];
     }
     return false;
 }

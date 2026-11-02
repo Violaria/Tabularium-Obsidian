@@ -12,7 +12,7 @@ import {
     type EntryLeaf,
     type LoadedEntry,
     type MetaEntry,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { isChunk } from "@tabularium/sync-core/compat/common/typeUtils";
 import {
@@ -27,7 +27,7 @@ import { fireAndForget, isAnyNote, throttle } from "@tabularium/sync-core/compat
 import { Semaphore } from "octagonal-wheels/concurrency/semaphore_v2";
 import { serialized } from "octagonal-wheels/concurrency/lock";
 import type { ReactiveSource } from "octagonal-wheels/dataobject/reactive_v2";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import { isNotFoundError } from "@tabularium/sync-core/compat/common/utils.doc";
 import type PouchDB from "pouchdb-core";
 import { promiseWithResolvers, type PromiseWithResolvers } from "octagonal-wheels/promises";
@@ -36,11 +36,11 @@ import { $msg } from "@/core/common/translation";
 const KV_KEY_REPLICATION_RESULT_PROCESSOR_SNAPSHOT = "replicationResultProcessorSnapshot";
 const REPROCESS_BATCH_SIZE = 100;
 type ReplicateResultProcessorSettings = Pick<
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     "maxMTimeForReflectEvents" | "suspendParseReplicationResult"
 > & { pathNormalizationVersion?: 0 | 1 };
 type ReplicateResultProcessorServices = Pick<
-    LiveSyncBaseCore["services"],
+    SyncCore["services"],
     "appLifecycle" | "database" | "path" | "replication" | "vault"
 >;
 
@@ -59,8 +59,8 @@ type ReplicateResultProcessorServices = Pick<
  */
 interface ReplicateResultProcessorContext {
     readonly currentSettings: () => ReplicateResultProcessorSettings;
-    readonly getKeyValueDB: () => LiveSyncBaseCore["kvDB"];
-    readonly getLocalDatabase: () => LiveSyncBaseCore["localDatabase"];
+    readonly getKeyValueDB: () => SyncCore["kvDB"];
+    readonly getLocalDatabase: () => SyncCore["localDatabase"];
     readonly requestActiveReplicatorRetirement: () => void;
     readonly runLocalApplicationActivity: <T>(
         task: () => T | PromiseLike<T>,

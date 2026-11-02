@@ -1,6 +1,6 @@
-import type { AnyEntry, ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { AnyEntry, SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { NecessaryServices } from "@tabularium/sync-core/compat/interfaces/ServiceModule";
-import type { LiveSyncEventHub, ServiceContext } from "@tabularium/sync-core/context";
+import type { SyncEventHub, ServiceContext } from "@tabularium/sync-core/context";
 import type { LogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import type { ObsidianNoticeGroups } from "@/obsidian/services/ObsidianNoticeGroups";
 
@@ -9,7 +9,7 @@ export type StartupLifecycleValue<T> = T | (() => T);
 
 /** The minimum Context extension needed by the Obsidian start-up integrity check. */
 export type StartupLifecycleContext = ServiceContext & {
-    readonly events: LiveSyncEventHub;
+    readonly events: SyncEventHub;
     readonly noticeGroups: Pick<ObsidianNoticeGroups, "setItem" | "finish">;
 };
 
@@ -50,7 +50,7 @@ export interface StartupLifecycleFeatureOptions extends Partial<ConfiguredStartu
 }
 
 /** Minimal mutable settings view required by the obsolete bulk-send migration. */
-export type LegacyBulkSendSettings = Pick<ObsidianLiveSyncSettings, "sendChunksBulk" | "sendChunksBulkMaxSize">;
+export type LegacyBulkSendSettings = Pick<SyncSettings, "sendChunksBulk" | "sendChunksBulkMaxSize">;
 
 /** Keep path conversion visible at the incomplete-document operation boundary. */
 export type StartupPathReader = (entry: AnyEntry) => string;

@@ -1,18 +1,18 @@
 import { ChunkAlgorithms, E2EEAlgorithms } from "./setting.const";
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 import { DEFAULT_SETTINGS } from "./setting.const.defaults";
 
 export type TweakReconstruction = "none" | "recommended" | "required";
 
 type TweakCompatibilityRule = {
-    readonly key: keyof ObsidianLiveSyncSettings;
-    readonly templateValue: ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings];
+    readonly key: keyof SyncSettings;
+    readonly templateValue: SyncSettings[keyof SyncSettings];
     readonly reconstruction: TweakReconstruction;
-    readonly knownDefault?: ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings];
+    readonly knownDefault?: SyncSettings[keyof SyncSettings];
     readonly compatibleLossyOrder?: number;
     readonly specificPatterns?: readonly {
-        readonly from?: ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings];
-        readonly to?: ObsidianLiveSyncSettings[keyof ObsidianLiveSyncSettings];
+        readonly from?: SyncSettings[keyof SyncSettings];
+        readonly to?: SyncSettings[keyof SyncSettings];
         readonly reconstruction: Exclude<TweakReconstruction, "none">;
     }[];
 };
@@ -70,7 +70,7 @@ export type TweakComparedKey = (typeof TweakCompatibilityRules)[number]["key"];
 
 export const TweakValuesShouldMatchedTemplate = Object.fromEntries(
     TweakCompatibilityRules.map(({ key, templateValue }) => [key, templateValue])
-) as Pick<ObsidianLiveSyncSettings, TweakComparedKey>;
+) as Pick<SyncSettings, TweakComparedKey>;
 
 type TweakKeys = keyof TweakValues;
 
@@ -113,7 +113,7 @@ export const IncompatibleChangesInSpecificPattern: IncompatibleRecommendationPat
     }))
 ) as IncompatibleRecommendationPatterns<TweakKeys>[];
 
-export const TweakValuesRecommendedTemplate: Partial<ObsidianLiveSyncSettings> = {
+export const TweakValuesRecommendedTemplate: Partial<SyncSettings> = {
     useIgnoreFiles: false,
     useCustomRequestHandler: false,
 
@@ -133,21 +133,21 @@ export const TweakValuesRecommendedTemplate: Partial<ObsidianLiveSyncSettings> =
     handleFilenameCaseSensitive: false,
     E2EEAlgorithm: E2EEAlgorithms.V2,
     chunkSplitterVersion: ChunkAlgorithms.RabinKarp,
-} satisfies Partial<ObsidianLiveSyncSettings>;
-export const TweakValuesDefault: Partial<ObsidianLiveSyncSettings> = {
+} satisfies Partial<SyncSettings>;
+export const TweakValuesDefault: Partial<SyncSettings> = {
     ...Object.fromEntries(
         TweakCompatibilityRules.filter(
             (rule) => "knownDefault" in rule && rule.key !== "handleFilenameCaseSensitive"
         ).map(({ key, knownDefault }) => [key, knownDefault])
     ),
     tweakModified: DEFAULT_SETTINGS.tweakModified,
-} satisfies Partial<ObsidianLiveSyncSettings>;
+} satisfies Partial<SyncSettings>;
 
 export const TweakValuesTemplate = {
     ...TweakValuesRecommendedTemplate,
     ...TweakValuesShouldMatchedTemplate,
     tweakModified: 0,
-} satisfies Partial<ObsidianLiveSyncSettings>;
+} satisfies Partial<SyncSettings>;
 export type TweakValues = Partial<typeof TweakValuesTemplate>;
 
 export const DEVICE_ID_PREFERRED = "PREFERRED";

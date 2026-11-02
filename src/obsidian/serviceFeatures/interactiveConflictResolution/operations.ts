@@ -7,7 +7,7 @@ import {
     MISSING_OR_ERROR,
     type DocumentID,
     type FilePathWithPrefix,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type diff_result,
 } from "@tabularium/sync-core/compat/common/types";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
@@ -19,8 +19,8 @@ import type {
     IReplicationService,
     IVaultService,
 } from "@tabularium/sync-core/compat/services/base/IService";
-import type { LiveSyncLocalDB } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
-import type { LiveSyncEventHub } from "@tabularium/sync-core/context";
+import type { LocalDatabase } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
+import type { SyncEventHub } from "@tabularium/sync-core/context";
 import { fireAndForget } from "octagonal-wheels/promises";
 import { serialized } from "octagonal-wheels/concurrency/lock";
 import { NO_INTERACTION } from "@tabularium/sync-core/replication";
@@ -37,16 +37,16 @@ import {
 } from "./types";
 
 export interface InteractiveConflictResolutionOperationsDependencies {
-    readonly events: Pick<LiveSyncEventHub, "emitEvent">;
+    readonly events: Pick<SyncEventHub, "emitEvent">;
     readonly databaseFileAccess: Pick<DatabaseFileAccess, "getConflictedRevs" | "storeContent">;
-    readonly localDatabase: () => Pick<LiveSyncLocalDB, "getDBEntry" | "findAllDocs">;
+    readonly localDatabase: () => Pick<LocalDatabase, "getDBEntry" | "findAllDocs">;
     readonly confirm: Pick<Confirm, "askSelectString" | "askInPopup">;
     readonly path: Pick<IPathService, "getPath">;
     readonly vault: Pick<IVaultService, "getActiveFilePath">;
     readonly appLifecycle: Pick<IAppLifecycleService, "isSuspended">;
     readonly conflict: Pick<IConflictService, "queueCheckFor" | "ensureAllProcessed" | "resolveByDeletingRevision">;
     readonly replication: Pick<IReplicationService, "replicateUnattendedByEvent">;
-    readonly currentSettings: () => Pick<ObsidianLiveSyncSettings, "syncAfterMerge">;
+    readonly currentSettings: () => Pick<SyncSettings, "syncAfterMerge">;
     readonly createDialogue: ConflictResolveDialogueFactory;
     readonly log: LogFunction;
 }

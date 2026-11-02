@@ -6,8 +6,8 @@ import replication from "pouchdb-replication";
 import type { EntryDoc, FilePathWithPrefix, UXFileInfo } from "@tabularium/sync-core/compat/common/types";
 import { DEFAULT_SETTINGS } from "@tabularium/sync-core/compat/common/types";
 import { compareMTime, createTextBlob, readContent } from "@tabularium/sync-core/compat/common/utils";
-import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
-import { LiveSyncLocalDB, type LiveSyncLocalDBEnv } from "@tabularium/sync-core/compat/pouchdb/LiveSyncLocalDB";
+import { createSyncEventHub } from "@tabularium/sync-core/context";
+import { LocalDatabase, type LocalDatabaseEnv } from "@tabularium/sync-core/compat/pouchdb/LocalDatabase";
 import {
     ServiceDatabaseFileAccessBase,
     type ServiceDatabaseFileAccessDependencies,
@@ -51,9 +51,9 @@ async function makeDevice(name: string) {
             compareMTime(file.stat.mtime, entry.mtime),
         markChangesAreSame: vi.fn(),
     };
-    const events = createLiveSyncEventHub();
+    const events = createSyncEventHub();
     const API = { addLog: vi.fn() };
-    const localDatabase = new LiveSyncLocalDB(name, {
+    const localDatabase = new LocalDatabase(name, {
         services: {
             API,
             setting,
@@ -68,7 +68,7 @@ async function makeDevice(name: string) {
             },
             replicator: { onCloseActiveReplication: () => Promise.resolve(true) },
         },
-    } as unknown as LiveSyncLocalDBEnv);
+    } as unknown as LocalDatabaseEnv);
     await expect(localDatabase.initializeDatabase()).resolves.toBe(true);
     const storageAccess = {
         getStub: () => Promise.resolve(storage),
@@ -174,7 +174,7 @@ async function resolveFromCLI(device: Device, keep: string) {
 
 describe("file provenance across multiple devices and real CouchDB", () => {
     const databases: PouchDB.Database<EntryDoc>[] = [];
-    const owners: LiveSyncLocalDB[] = [];
+    const owners: LocalDatabase[] = [];
     afterEach(async () => {
         for (const owner of owners.splice(0)) {
             owner.offRemoteChunkFetchedHandler?.();

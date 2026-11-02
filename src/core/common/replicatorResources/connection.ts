@@ -5,17 +5,17 @@ import type {
     RemoteConnectionProbeOptions,
 } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { LOG_LEVEL_NOTICE, Logger } from "@tabularium/sync-core/compat/common/logger";
 import { createReplicatorDisposer, snapshotRemoteSettings } from "./shared";
 
 /** Host environment sufficient to construct the central connection probe. */
-export type ConnectionResourceHost = LiveSyncCouchDBReplicatorEnv;
+export type ConnectionResourceHost = CouchDBReplicatorEnv;
 
 function createCouchDBConnectionProbe(
-    replicator: LiveSyncCouchDBReplicator,
+    replicator: CouchDBReplicator,
     snapshot: RemoteDBSettings,
     host: ConnectionResourceHost
 ): RemoteConnectionProbe {
@@ -31,7 +31,7 @@ function createCouchDBConnectionProbe(
             if (typeof connection === "string") {
                 if (options.showResult) {
                     Logger(
-                        host.services.context.translate("liveSyncReplicator.couldNotConnectTo", {
+                        host.services.context.translate("couchdbReplicator.couldNotConnectTo", {
                             uri: snapshot.couchDB_URI,
                             name: snapshot.couchDB_DBNAME,
                             db: connection,
@@ -66,7 +66,7 @@ function createCouchDBConnectionProbe(
 export function createCouchDBConnectionProbeFactory(host: ConnectionResourceHost): ConnectionProbeFactory {
     return (setting) => {
         const snapshot = snapshotRemoteSettings(setting);
-        return Promise.resolve(createCouchDBConnectionProbe(new LiveSyncCouchDBReplicator(host), snapshot, host));
+        return Promise.resolve(createCouchDBConnectionProbe(new CouchDBReplicator(host), snapshot, host));
     };
 }
 

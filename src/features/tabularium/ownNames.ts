@@ -1,10 +1,10 @@
 // Tabularium's own names for what it keeps on a device. Obsidian gives every vault and every plug-in the same localStorage
-// and IndexedDB, and the original Self-hosted LiveSync names its local databases, device values and flag files exactly as
+// and IndexedDB, and the original sync plug-in names its local databases, device values and flag files exactly as
 // this plug-in did; in one vault the two would open the same local database. Here the database suffix is always
 // "tabularium" (which names the local database, the key-value database and the per-vault device values) and every device
 // value starts with "tabularium:". A device that synchronised under the old names fetches once into the new ones
 // (NamespaceMigration.ts). This module is loaded by the services, before the features.
-import { SuffixDatabaseName, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { SuffixDatabaseName, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
 
 export const DATABASE_SUFFIX = "tabularium";
@@ -54,7 +54,7 @@ export const formerStorageKeys = {
 export function adoptOwnNames(
     storage: Storage,
     vaultName: string,
-    settings: Partial<ObsidianLiveSyncSettings>
+    settings: Partial<SyncSettings>
 ): string | undefined {
     if (Object.keys(settings).length === 0 || settings.additionalSuffixOfDatabaseName === DATABASE_SUFFIX) return undefined;
     const from = settings.additionalSuffixOfDatabaseName ?? "";

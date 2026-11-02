@@ -83,7 +83,7 @@ describe("watchWindowVisibilityAsync — keepReplicationActiveInBackground", () 
         delete (globalThis as any).activeWindow;
     });
 
-    it("does NOT suspend on hide when enabled in LiveSync mode on the desktop app", async () => {
+    it("does NOT suspend on hide when enabled in live sync mode on the desktop app", async () => {
         const { module, appLifecycle } = setup({
             settings: { keepReplicationActiveInBackground: true, liveSync: true },
             hidden: true,
@@ -216,14 +216,14 @@ describe("watchWindowVisibilityAsync — keepReplicationActiveInBackground", () 
         expect(appLifecycle.onResumed).not.toHaveBeenCalled();
     });
 
-    it("forces onSuspending before the resume on becoming visible when enabled (LiveSync teardown)", async () => {
+    it("forces onSuspending before the resume on becoming visible when enabled (live sync teardown)", async () => {
         const { module, appLifecycle } = setup({
             settings: { keepReplicationActiveInBackground: true, liveSync: true },
             hidden: false,
             isLastHidden: true, // hidden -> visible transition
         });
         await module.watchWindowVisibilityAsync();
-        // Decision-logic only: on visible + enabled + LiveSync the handler calls onSuspending (the
+        // Decision-logic only: on visible + enabled + Tabularium the handler calls onSuspending (the
         // forced teardown) before onResuming. The actual stalled-channel replacement is exercised by
         // the manual integration test, not here.
         expect(appLifecycle.onSuspending).toHaveBeenCalledTimes(1);
@@ -234,7 +234,7 @@ describe("watchWindowVisibilityAsync — keepReplicationActiveInBackground", () 
         );
     });
 
-    it("defers the LiveSync teardown on becoming visible until bounded remote activity ends", async () => {
+    it("defers the live sync teardown on becoming visible until bounded remote activity ends", async () => {
         const { module, appLifecycle, boundedRemoteActivityCount } = setup({
             settings: { keepReplicationActiveInBackground: true, liveSync: true },
             hidden: false,

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_SETTINGS } from "./setting.const.defaults";
 import { createMarkdownSettings, mergeMarkdownSettings, prepareSettingsForPersistence } from "./setting.policy";
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 
-function settings(): ObsidianLiveSyncSettings {
+function settings(): SyncSettings {
     return {
         ...DEFAULT_SETTINGS,
         accessKey: "synthetic-access-key",
@@ -27,7 +27,7 @@ function settings(): ObsidianLiveSyncSettings {
     };
 }
 
-function profilesWithSpecialIds(): ObsidianLiveSyncSettings["remoteConfigurations"] {
+function profilesWithSpecialIds(): SyncSettings["remoteConfigurations"] {
     return JSON.parse(
         JSON.stringify(
             ["__proto__", "constructor", "prototype"].reduce(
@@ -90,7 +90,7 @@ describe("settings property policy", () => {
         expect(withCredentials).toMatchObject({ idDerivationVersion: 1, pathNormalizationVersion: 1 });
     });
 
-    it.each([false, true])("exports and imports an explicit LiveSync batching choice of %s", (value) => {
+    it.each([false, true])("exports and imports an explicit Tabularium batching choice of %s", (value) => {
         const original = { ...settings(), batchSaveInLiveSync: value };
         const exported = createMarkdownSettings(original, false);
         const imported = mergeMarkdownSettings(exported, settings());
@@ -99,7 +99,7 @@ describe("settings property policy", () => {
         expect(imported.batchSaveInLiveSync).toBe(value);
     });
 
-    it("does not infer LiveSync batching when importing legacy batch-save settings", () => {
+    it("does not infer Tabularium batching when importing legacy batch-save settings", () => {
         const current = { ...settings(), batchSaveInLiveSync: false };
         const imported = mergeMarkdownSettings({ liveSync: true, batchSave: true }, current);
 
@@ -121,7 +121,7 @@ describe("settings property policy", () => {
         "retains named profile IDs when importing with connection sharing %s",
         (includeCredentials) => {
             const original = { ...settings(), remoteConfigurations: profilesWithSpecialIds() };
-            const incoming: Pick<ObsidianLiveSyncSettings, "writeCredentialsForSettingSync" | "remoteConfigurations"> =
+            const incoming: Pick<SyncSettings, "writeCredentialsForSettingSync" | "remoteConfigurations"> =
                 {
                     writeCredentialsForSettingSync: includeCredentials,
                     remoteConfigurations: includeCredentials ? profilesWithSpecialIds() : {},
@@ -177,7 +177,7 @@ describe("settings property policy", () => {
         expect(() => prepareSettingsForPersistence(settings())).toThrow("not prepared for persistence");
     });
 
-    it("persists the LiveSync batching choice with connection credentials cleared", () => {
+    it("persists the Tabularium batching choice with connection credentials cleared", () => {
         const persisted = prepareSettingsForPersistence({ ...DEFAULT_SETTINGS, batchSaveInLiveSync: true });
 
         expect(persisted.batchSaveInLiveSync).toBe(true);

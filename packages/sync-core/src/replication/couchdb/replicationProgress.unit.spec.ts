@@ -2,13 +2,13 @@ import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import Replication from "pouchdb-replication";
 import type { EntryDoc, RemoteDBSettings } from "@lib/common/types.ts";
-import { LiveSyncAbstractReplicator } from "@lib/replication/LiveSyncAbstractReplicator.ts";
+import { AbstractReplicator } from "@lib/replication/AbstractReplicator.ts";
 import { EventEmitter } from "node:events";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { reactiveSource } from "octagonal-wheels/dataobject/reactive";
 import { DEFAULT_REPLICATION_STATICS } from "@lib/common/models/shared.definition.ts";
 import { createServiceContext } from "@lib/services/base/ServiceBase.ts";
-import { LiveSyncCouchDBReplicator } from "./LiveSyncReplicator.ts";
+import { CouchDBReplicator } from "./CouchDBReplicator.ts";
 
 PouchDB.plugin(MemoryAdapter).plugin(Replication);
 
@@ -22,7 +22,7 @@ function handler() {
 
 function fixture(localDatabase: object = {}) {
     const statistics = reactiveSource({ ...DEFAULT_REPLICATION_STATICS });
-    const replicator = new LiveSyncCouchDBReplicator({
+    const replicator = new CouchDBReplicator({
         services: {
             context: createServiceContext(),
             database: { localDatabase: { localDatabase } },
@@ -33,7 +33,7 @@ function fixture(localDatabase: object = {}) {
             replication: { parseSynchroniseResult: vi.fn().mockResolvedValue(true) },
             remote: { hadLastPostFailedBySize: false },
         },
-    } as unknown as ConstructorParameters<typeof LiveSyncCouchDBReplicator>[0]);
+    } as unknown as ConstructorParameters<typeof CouchDBReplicator>[0]);
     return { replicator, statistics };
 }
 
@@ -278,8 +278,8 @@ describe("checkpoint publication lifetime", () => {
     it("does not add CouchDB data to the shared provider default", () => {
         const { replicator, statistics } = fixture();
         // Exercise the shared projection independently of the CouchDB override.
-        const base = LiveSyncAbstractReplicator.prototype as unknown as {
-            getReplicationStatics(this: LiveSyncCouchDBReplicator): object;
+        const base = AbstractReplicator.prototype as unknown as {
+            getReplicationStatics(this: CouchDBReplicator): object;
         };
         expect(base.getReplicationStatics.call(replicator)).not.toHaveProperty("couchDB");
         expect(statistics.value).not.toHaveProperty("couchDB");

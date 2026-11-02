@@ -1,13 +1,13 @@
 import {
     VERSIONING_DOCID,
     type EntryDoc,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { assessTweakCompatibility } from "@tabularium/sync-core/settings";
 import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, Logger } from "octagonal-wheels/common/logger";
 import { skipIfDuplicated } from "octagonal-wheels/concurrency/lock";
 import { balanceChunkPurgedDBs, purgeUnreferencedChunks } from "@tabularium/sync-core/compat/pouchdb/chunks";
-import { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { CouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import {
     CENTRAL_COMPATIBILITY_REJECTION_REASONS,
     REPLICATION_PROGRESS_PRESENTATIONS,
@@ -18,7 +18,7 @@ import {
 } from "@tabularium/sync-core/replication";
 import { $msg } from "@/core/common/translation";
 import { usesLegacyIndexedDBAdapter } from "@/core/common/compatibilitySettings";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import type PouchDB from "pouchdb-core";
 
 async function canInterpretCleanupDatabase(db: PouchDB.Database<EntryDoc>): Promise<boolean> {
@@ -34,25 +34,25 @@ async function canInterpretCleanupDatabase(db: PouchDB.Database<EntryDoc>): Prom
 }
 
 type CentralCompatibilityRecoveryServices = Pick<
-    LiveSyncBaseCore["services"],
+    SyncCore["services"],
     "API" | "appLifecycle" | "replicator" | "setting" | "tweakValue"
 >;
 
 /** Collaborators for applying a compatibility decision to its failed publication. */
 interface CentralCompatibilityRecoveryContext {
-    readonly confirm: LiveSyncBaseCore["confirm"];
+    readonly confirm: SyncCore["confirm"];
     /** Obtain the database only when recovery runs, after initialisation or reset. */
-    readonly getLocalDatabase: () => LiveSyncBaseCore["localDatabase"];
-    readonly rebuilder: LiveSyncBaseCore["rebuilder"];
+    readonly getLocalDatabase: () => SyncCore["localDatabase"];
+    readonly rebuilder: SyncCore["rebuilder"];
     readonly services: CentralCompatibilityRecoveryServices;
 }
 
 interface PreferredRemoteTweakWriter extends ReplicatorInstance {
-    setPreferredRemoteTweakSettings(setting: ObsidianLiveSyncSettings): Promise<void>;
+    setPreferredRemoteTweakSettings(setting: SyncSettings): Promise<void>;
 }
 
 interface ResolvedRemoteWriter extends ReplicatorInstance {
-    markRemoteResolved(setting: ObsidianLiveSyncSettings): Promise<void>;
+    markRemoteResolved(setting: SyncSettings): Promise<void>;
 }
 
 function canSetPreferredRemoteTweakSettings(replicator: ReplicatorInstance): replicator is PreferredRemoteTweakWriter {
@@ -74,7 +74,7 @@ function canMarkRemoteResolved(replicator: ReplicatorInstance): replicator is Re
 export function createCentralCompatibilityRecovery(context: CentralCompatibilityRecoveryContext) {
     async function reconcileCleanedRemote(
         showProgress: boolean,
-        setting: ObsidianLiveSyncSettings,
+        setting: SyncSettings,
         expectedContext: ReplicationFailureRequest["context"]
     ) {
         Logger("The remote database has been cleaned.", showProgress ? LOG_LEVEL_NOTICE : LOG_LEVEL_INFO);
@@ -106,7 +106,7 @@ Even if you choose to clean up, you will see this option again if you exit Obsid
                     context.services.replicator.runWithActiveReplicatorContext(async (activeContext) => {
                         if (activeContext !== expectedContext) return;
                         const replicator = activeContext.replicator;
-                        if (!(replicator instanceof LiveSyncCouchDBReplicator)) return;
+                        if (!(replicator instanceof CouchDBReplicator)) return;
                         const localDatabase = context.getLocalDatabase();
                         const remoteDatabase = await replicator.connectRemoteCouchDBWithSetting(
                             setting,

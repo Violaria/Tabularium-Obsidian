@@ -3,14 +3,14 @@ import { promiseWithResolvers } from "octagonal-wheels/promises";
 import { REMOTE_COUCHDB, REMOTE_MINIO, REMOTE_P2P } from "@lib/common/models/setting.const";
 import { FlagFiles } from "@lib/common/models/redflag.const";
 import { ServiceRebuilder } from "./Rebuilder";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import { EVENT_DATABASE_REBUILT } from "@lib/events/coreEvents";
 import { REMOTE_RESOURCE_KINDS } from "@lib/replication";
 import { VERSIONING_DOCID } from "@lib/common/types";
 import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import { DEFAULT_SETTINGS, type EntryDoc } from "@lib/common/types";
-import { LiveSyncLocalDB } from "@lib/pouchdb/LiveSyncLocalDB";
+import { LocalDatabase } from "@lib/pouchdb/LocalDatabase";
 import { PathServiceCompat } from "@lib/services/implements/injectable/InjectablePathService";
 import { ServiceContext } from "@lib/services/base/ServiceBase";
 import type { ISettingService } from "@lib/services/base/IService";
@@ -81,7 +81,7 @@ function createRebuilder(initialDatabaseSuffix = "") {
         }
     });
     const services = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: {
             addLog: vi.fn(),
             getAppID: vi.fn(() => "app"),
@@ -231,7 +231,7 @@ describe.each(["Rebuild", "Standard Fetch", "Fast Fetch"] as const)(
             });
             try {
                 await seedPathIdentityDeletionCase(database, scenario);
-                const subject = Object.create(LiveSyncLocalDB.prototype) as LiveSyncLocalDB;
+                const subject = Object.create(LocalDatabase.prototype) as LocalDatabase;
                 Object.assign(subject, { localDatabase: database });
                 services.database.localDatabase = subject as never;
                 services.storageAccess.getFileNames.mockResolvedValue(

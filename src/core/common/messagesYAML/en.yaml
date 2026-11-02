@@ -12,7 +12,7 @@
 (e.g., setting up for the first time on a new smartphone, starting from a clean slate):
     (e.g., setting up for the first time on a new smartphone, starting from a
     clean slate)
-(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.:
+(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.:
     (ex. Read chunks online) If this option is enabled, Tabularium reads chunks
     online directly instead of replicating them locally. Increasing Custom chunk
     size is recommended.
@@ -205,7 +205,7 @@ Old content copied to clipboard: Old content copied to clipboard
 Please Confirm the Following: Please Confirm the Following
 Review why: Review why
 SELECT: SELECT
-Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Tabularium has paused remote synchronisation for compatibility review.
+Tabularium has paused remote synchronisation for compatibility review.: Tabularium has paused remote synchronisation for compatibility review.
 Show: Show
 SYNC: SYNC
 Failed to parse Setup-URI.: Failed to parse Setup-URI.
@@ -279,7 +279,7 @@ If you understand the risks and still wish to proceed, select so.: If you unders
 Ignore: Ignore
 Ignore files: Ignore files
 Ignore patterns: Ignore patterns
-In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.:
+In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.:
     In this scenario, Tabularium will recreate metadata for every file
     and deliberately generate conflicts. Where the file content is identical,
     these conflicts will be resolved automatically.
@@ -305,10 +305,10 @@ lang-la: Latina
 lang-zh: 中文
 Later: Later
 live: live
-LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.:
+Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.:
     Tabularium could not handle multiple vaults which have same name without
     different prefix, This should be automatically configured.
-liveSyncReplicator:
+couchdbReplicator:
     beforeLiveSync: Before live sync, run a one-shot sync once...
     cantReplicateLowerValue: We can't replicate more lower value.
     checkingLastSyncPoint: Looking for the point last synchronized point.
@@ -319,7 +319,7 @@ liveSyncReplicator:
     couldNotConnectToServer: The connection to the remote has been prevented, or failed.
     couldNotConnectToURI: Could not connect to ${uri}:${dbRet}
     couldNotMarkResolveRemoteDb: Could not mark resolve remote database.
-    liveSyncBegin: Live sync started...
+    syncBegin: Live sync started...
     lockRemoteDb: Lock remote database to prevent data corruption
     markDeviceResolved: Mark this device as 'resolved'.
     oneShotSyncBegin: OneShot Sync begin... (${syncMode})
@@ -422,7 +422,7 @@ moduleInputUIObsidian:
     defaultTitleSelect: Select
     optionNo: No
     optionYes: Yes
-moduleLiveSyncMain:
+startupSequence:
     logAdditionalSafetyScan: Additional safety scan...
     logLoadingPlugin: Loading plugin...
     logPluginInitCancelled: Plugin initialisation was cancelled by a module
@@ -456,7 +456,7 @@ moduleLiveSyncMain:
 
         > If you are not sure, you can try to rerun these processes. Make sure to
         back your vault up.
-    optionKeepLiveSyncDisabled: Keep live sync disabled
+    optionKeepSyncDisabled: Keep live sync disabled
     optionResumeAndRestart: Resume and restart Obsidian
     titleScramEnabled: Scram Enabled
 moduleLocalDatabase:
@@ -959,7 +959,7 @@ You should perform this operation only in exceptional circumstances, such as whe
 "Some files failed to synchronise. What would you like to do?": "Some files failed to synchronise. What would you like to do?"
 "Synchronisation Issues Detected": "Synchronisation Issues Detected"
 "Use the detailed flow": "Use the detailed flow"
-"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow."
+"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow."
 tabularium:
   sync:
     liveOn: Live sync on.
@@ -1053,7 +1053,7 @@ Vault history: Vault history
 We don't have any history for this note.: We don't have any history for this note.
 "Show vault history": "Show vault history"
 "Create conflict": "Create conflict"
-"Toggle LiveSync": "Toggle live sync"
+"Toggle live sync": "Toggle live sync"
 "Toggle All Sync.": "Toggle All Sync."
 "Scan storage and database again": "Scan storage and database again"
 "Abort synchronization immediately": "Abort synchronization immediately"
@@ -1217,7 +1217,7 @@ We don't have any history for this note.: We don't have any history for this not
 "The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.": "The restored revision was saved in this device's database, but it could not be written to the vault."
 "The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.": "The selected content was restored as a new revision. Other versions remain unresolved; use 'Pick a file to resolve conflict' to review them."
 "The selected content was restored as a new revision.": "The selected content was restored as a new revision."
-"The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.": "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Pick a file to resolve conflict' to review the file."
+"The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.": "The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Pick a file to resolve conflict' to review the file."
 "The restored file could not be opened in the editor.": "The restored file could not be opened in the editor."
 "Error in Setting Save Event": "Error while saving settings."
 "${file} is conflicted, merging process has been postponed.": "${file} has a conflict; merging has been postponed."
@@ -1367,11 +1367,11 @@ We don't have any history for this note.: We don't have any history for this not
 "Could not validate deletion of ${path}; preserved the database entry": "Could not confirm the deletion of ${path}; the database entry was kept"
 "Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery": "Could not check the saved file operation for ${path} against the vault; it remains pending for recovery"
 "Unload preparation failed; pending storage work may require recovery": "Preparing to unload failed; pending file operations may need recovery"
-"Self-hosted LiveSync cannot be initialised, exiting loading.": "Tabularium could not be initialised; loading has stopped."
+"Tabularium cannot be initialised, exiting loading.": "Tabularium could not be initialised; loading has stopped."
 "Failed to reset KeyValueDB": "Could not reset the key-value database"
 "Failed to open KeyValueDB": "Could not open the key-value database"
 "The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": "The request may have failed. Server response: ${r.status}: ${r.statusText}"
-"The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync": "The request succeeded through the Obsidian API, but the native fetch API failed. Please check the CORS settings on the server. Until this is fixed, live synchronisation cannot be enabled."
+"The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable Tabularium": "The request succeeded through the Obsidian API, but the native fetch API failed. Please check the CORS settings on the server. Until this is fixed, live synchronisation cannot be enabled."
 "Failed to fetch by API. ${resp2.status}: ${msg}": "The request failed. ${resp2.status}: ${msg}"
 "Active replicator not found during directional ${direction}": "No active synchronisation connection was found for the ${direction} synchronisation"
 "The selected local database is not ready for the rebuild upload.": "This device's database is not ready to be uploaded for the rebuild."
@@ -1406,7 +1406,7 @@ We don't have any history for this note.: We don't have any history for this not
 "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)": "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)"
 "Bulk sending failed.": "Sending data chunks failed."
 "The remote connectivity check timed out.": "The connection check to the server timed out."
-"${this.translate(\"liveSyncReplicator.couldNotConnectToServer\")} ${ret} ": "${this.translate(\"liveSyncReplicator.couldNotConnectToServer\")} ${ret} "
+"${this.translate(\"couchdbReplicator.couldNotConnectToServer\")} ${ret} ": "${this.translate(\"couchdbReplicator.couldNotConnectToServer\")} ${ret} "
 "Some requested chunks were not found in the remote database.": "Some requested data chunks were not found on the server."
 "Collecting local files on the DB: ${count}": "Collecting this device's files in the database: ${count}"
 "Processing: ${processedCount}/${pairs.length}": "Processing: ${processedCount}/${pairs.length}"
@@ -1422,8 +1422,8 @@ We don't have any history for this note.: We don't have any history for this not
 "Allow the operating system to sleep while finite synchronisation operations are in progress.": "Allow the operating system to sleep while finite synchronisation operations are in progress."
 "Allow sleep during synchronisation on the desktop": "Allow sleep during synchronisation on the desktop"
 "Desktop only. Allow sleep on this device even when the general option is disabled.": "Desktop only. Allow sleep on this device even when the general option is disabled."
-"Batch database updates in LiveSync mode": "Batch database updates in live sync"
-"Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.": "In live sync, wait for a short local pause in editing (with an upper bound) before writing file changes to the database: fewer intermediate versions are written, but other devices receive the changes a little later."
+"Batch database updates in live sync mode": "Batch database updates in live sync"
+"Wait for a bounded local quiet period before processing file updates in live sync mode, reducing intermediate database updates while delaying their reflection to remote devices.": "In live sync, wait for a short local pause in editing (with an upper bound) before writing file changes to the database: fewer intermediate versions are written, but other devices receive the changes a little later."
 "Secret Key": "Secret Key"
 "Seconds. The quiet period after the latest pending update before local database processing becomes due.": "Seconds. The quiet period after the latest pending update before local database processing becomes due."
 "Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.": "Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete."

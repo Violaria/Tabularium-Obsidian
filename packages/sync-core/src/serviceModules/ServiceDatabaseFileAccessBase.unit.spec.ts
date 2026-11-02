@@ -3,7 +3,7 @@ import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import replication from "pouchdb-replication";
 import type { DocumentID, EntryDoc, FilePathWithPrefix, LoadedEntry, UXFileInfo } from "@lib/common/types";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import {
     ServiceDatabaseFileAccessBase,
     type ServiceDatabaseFileAccessDependencies,
@@ -48,7 +48,7 @@ function createService(database: PouchDB.Database<EntryDoc>, id: DocumentID, rea
         }
     };
     const dependencies = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: { addLog: vi.fn() },
         vault: { isTargetFile: vi.fn().mockResolvedValue(true) },
         storageAccess: {},
@@ -267,7 +267,7 @@ describe("ServiceDatabaseFileAccessBase.storeWithLiveBaseRevision", () => {
     it("returns the exact child revision and emits the saved event only after a successful conditional write", async () => {
         const path = "restored.md" as FilePathWithPrefix;
         const id = "restored.md" as DocumentID;
-        const events = createLiveSyncEventHub();
+        const events = createSyncEventHub();
         const emitEvent = vi.spyOn(events, "emitEvent");
         const putDBEntryWithLiveBaseRevision = vi.fn().mockResolvedValue({
             ok: true,

@@ -3,7 +3,7 @@ import type { ServiceContext } from "@lib/services/base/ServiceBase";
 import { SettingService, type SettingServiceDependencies } from "@lib/services/base/SettingService";
 import { EVENT_REQUEST_RELOAD_SETTING_TAB } from "@lib/events/coreEvents";
 
-import type { ObsidianLiveSyncSettings } from "@lib/common/types";
+import type { SyncSettings } from "@lib/common/types";
 import type { PersistedSettings } from "@lib/common/models/setting.policy";
 import { handlers } from "@lib/services/lib/HandlerUtils";
 
@@ -20,5 +20,5 @@ export class InjectableSettingService<T extends ServiceContext> extends SettingS
         });
     }
     public saveData = handlers<{ saveData: (data: PersistedSettings) => Promise<void> }>().binder("saveData");
-    public loadData = handlers<{ loadData: () => Promise<ObsidianLiveSyncSettings | undefined> }>().binder("loadData");
+    public loadData = handlers<{ loadData: () => Promise<SyncSettings | undefined> }>().binder("loadData");
 }

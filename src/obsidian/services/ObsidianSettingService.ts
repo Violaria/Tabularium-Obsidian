@@ -1,4 +1,4 @@
-import { type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     EVENT_REQUEST_RELOAD_SETTING_TAB,
     EVENT_SETTING_SAVED,
@@ -11,9 +11,9 @@ import type { ObsidianServiceContext } from "@/obsidian/services/ObsidianService
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { adoptOwnNames } from "@/features/tabularium/ownNames";
 
-export function normaliseObsidianSettingsData(data: unknown): ObsidianLiveSyncSettings | undefined {
+export function normaliseObsidianSettingsData(data: unknown): SyncSettings | undefined {
     if (typeof data !== "object" || data === null || Array.isArray(data)) return undefined;
-    return data as ObsidianLiveSyncSettings;
+    return data as SyncSettings;
 }
 
 export class ObsidianSettingService<T extends ObsidianServiceContext> extends SettingService<T> {
@@ -28,11 +28,11 @@ export class ObsidianSettingService<T extends ObsidianServiceContext> extends Se
             return Promise.resolve(true);
         });
     }
-    protected override async saveData(data: ObsidianLiveSyncSettings): Promise<void> {
-        return await this.context.liveSyncPlugin.saveData(data);
+    protected override async saveData(data: SyncSettings): Promise<void> {
+        return await this.context.tabulariumPlugin.saveData(data);
     }
-    protected override async loadData(): Promise<ObsidianLiveSyncSettings | undefined> {
-        const data = normaliseObsidianSettingsData(await this.context.liveSyncPlugin.loadData());
+    protected override async loadData(): Promise<SyncSettings | undefined> {
+        const data = normaliseObsidianSettingsData(await this.context.tabulariumPlugin.loadData());
         if (data) adoptOwnNames(compatGlobal.localStorage, this.APIService.getSystemVaultName(), data);
         return data;
     }

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import { DatabaseReadLayer } from "./DatabaseReadLayer";
-import { LiveSyncError } from "@lib/common/LSError";
+import { SyncError } from "@lib/common/LSError";
 import type { DocumentID, EntryLeaf } from "@lib/common/types";
 
 // Set up PouchDB with memory adapter
@@ -133,14 +133,14 @@ describe("DatabaseReadLayer", () => {
         const wrongDoc = { _id: "wrong", type: "NOTE", data: "data" };
         await db.put(wrongDoc);
 
-        await expect(readLayer.read(["wrong" as DocumentID], {}, vi.fn())).rejects.toThrow(LiveSyncError);
+        await expect(readLayer.read(["wrong" as DocumentID], {}, vi.fn())).rejects.toThrow(SyncError);
     });
 
     it("should throw error for missing type", async () => {
         const noTypeDoc = { _id: "no-type", data: "data" };
         await db.put(noTypeDoc);
 
-        await expect(readLayer.read(["no-type" as DocumentID], {}, vi.fn())).rejects.toThrow(LiveSyncError);
+        await expect(readLayer.read(["no-type" as DocumentID], {}, vi.fn())).rejects.toThrow(SyncError);
     });
 
     it("should handle database errors gracefully", async () => {

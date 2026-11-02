@@ -1,8 +1,8 @@
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 import type { TaggedType } from "./shared.type.util";
 import { DEFAULT_SETTINGS } from "./setting.const.defaults";
 
-type PersistencePolicyFor<K extends keyof ObsidianLiveSyncSettings> = K extends "passphrase"
+type PersistencePolicyFor<K extends keyof SyncSettings> = K extends "passphrase"
     ? "passphrase"
     : K extends "idDerivationKey"
       ? "id-key"
@@ -10,12 +10,12 @@ type PersistencePolicyFor<K extends keyof ObsidianLiveSyncSettings> = K extends 
         ? "profiles"
         : K extends "deviceAndVaultName" | "P2P_DevicePeerName"
           ? "device"
-          : NonNullable<ObsidianLiveSyncSettings[K]> extends string
+          : NonNullable<SyncSettings[K]> extends string
             ? "include" | "connection" | "connection-context" | "omit"
             : "include" | "omit";
 
 type SettingsPropertyPolicyTable = {
-    [K in keyof ObsidianLiveSyncSettings]-?: SettingPropertyPolicy & { persistence: PersistencePolicyFor<K> };
+    [K in keyof SyncSettings]-?: SettingPropertyPolicy & { persistence: PersistencePolicyFor<K> };
 };
 
 export const SettingPolicies = {
@@ -240,16 +240,16 @@ const connectionKeys = settingKeys.filter(
 );
 const omittedPersistenceKeys = settingKeys.filter((key) => SETTINGS_PROPERTY_POLICY[key].persistence === "omit");
 
-export type ConnectionSettings = Pick<ObsidianLiveSyncSettings, ConnectionPayloadKey>;
+export type ConnectionSettings = Pick<SyncSettings, ConnectionPayloadKey>;
 export type ConfigurationCiphertext = TaggedType<string, "ConfigurationCiphertext">;
 export type PersistedSettings = TaggedType<
-    Omit<ObsidianLiveSyncSettings, ConnectionKey | "encryptedCouchDBConnection"> & {
+    Omit<SyncSettings, ConnectionKey | "encryptedCouchDBConnection"> & {
         [K in ConnectionKey]: "";
     } & { encryptedCouchDBConnection: ConfigurationCiphertext | "" },
     "PersistedSettings"
 >;
 export type MarkdownSettings = TaggedType<
-    Partial<Omit<ObsidianLiveSyncSettings, AlwaysOmittedMarkdownKey>> & {
+    Partial<Omit<SyncSettings, AlwaysOmittedMarkdownKey>> & {
         [K in AlwaysOmittedMarkdownKey]?: never;
     },
     "MarkdownSettings"
@@ -258,17 +258,17 @@ export type CredentialFreeMarkdownSettings = MarkdownSettings & {
     [K in MarkdownCredentialKey]?: never;
 };
 
-function copySetting<K extends keyof ObsidianLiveSyncSettings>(
-    target: Partial<ObsidianLiveSyncSettings>,
-    source: Partial<ObsidianLiveSyncSettings>,
+function copySetting<K extends keyof SyncSettings>(
+    target: Partial<SyncSettings>,
+    source: Partial<SyncSettings>,
     key: K
 ): void {
     if (key in source) target[key] = source[key];
     else delete target[key];
 }
 
-function cloneProfiles(settings: Partial<ObsidianLiveSyncSettings>): ObsidianLiveSyncSettings["remoteConfigurations"] {
-    const profiles: ObsidianLiveSyncSettings["remoteConfigurations"] = {};
+function cloneProfiles(settings: Partial<SyncSettings>): SyncSettings["remoteConfigurations"] {
+    const profiles: SyncSettings["remoteConfigurations"] = {};
     for (const [id, profile] of Object.entries(settings.remoteConfigurations ?? {})) {
         Object.defineProperty(profiles, id, {
             value: { ...profile },
@@ -282,18 +282,18 @@ function cloneProfiles(settings: Partial<ObsidianLiveSyncSettings>): ObsidianLiv
 
 /** Omit credentials and their dependent profile selections unless sharing is enabled. */
 export function createMarkdownSettings(
-    settings: Partial<ObsidianLiveSyncSettings>,
+    settings: Partial<SyncSettings>,
     includeCredentials: false
 ): CredentialFreeMarkdownSettings;
 export function createMarkdownSettings(
-    settings: Partial<ObsidianLiveSyncSettings>,
+    settings: Partial<SyncSettings>,
     includeCredentials?: boolean
 ): MarkdownSettings;
 export function createMarkdownSettings(
-    settings: Partial<ObsidianLiveSyncSettings>,
+    settings: Partial<SyncSettings>,
     includeCredentials = settings.writeCredentialsForSettingSync === true
 ): MarkdownSettings {
-    const output: Partial<ObsidianLiveSyncSettings> = {};
+    const output: Partial<SyncSettings> = {};
     for (const key of settingKeys) {
         const action = SETTINGS_PROPERTY_POLICY[key].markdown;
         if (action === "omit" || (action === "credentials" && !includeCredentials)) continue;
@@ -305,10 +305,10 @@ export function createMarkdownSettings(
 
 /** Keep local values for properties which Markdown is not permitted to replace. */
 export function mergeMarkdownSettings(
-    incoming: Partial<ObsidianLiveSyncSettings>,
-    current: ObsidianLiveSyncSettings
-): ObsidianLiveSyncSettings {
-    const merged: ObsidianLiveSyncSettings = { ...DEFAULT_SETTINGS, ...incoming };
+    incoming: Partial<SyncSettings>,
+    current: SyncSettings
+): SyncSettings {
+    const merged: SyncSettings = { ...DEFAULT_SETTINGS, ...incoming };
     for (const key of settingKeys) {
         const action = SETTINGS_PROPERTY_POLICY[key].markdown;
         if (action === "omit" || (action === "credentials" && merged.writeCredentialsForSettingSync !== true)) {
@@ -319,22 +319,22 @@ export function mergeMarkdownSettings(
     return merged;
 }
 
-export function selectConnectionSettings(settings: ObsidianLiveSyncSettings): ConnectionSettings {
+export function selectConnectionSettings(settings: SyncSettings): ConnectionSettings {
     const connection = {} as ConnectionSettings;
     for (const key of connectionKeys) connection[key] = settings[key];
     return connection;
 }
 
-export function hasConnectionSettings(settings: ObsidianLiveSyncSettings): boolean {
+export function hasConnectionSettings(settings: SyncSettings): boolean {
     return protectedConnectionKeys.some((key) => settings[key] !== "");
 }
 
-export function clearConnectionSettings(settings: ObsidianLiveSyncSettings): void {
+export function clearConnectionSettings(settings: SyncSettings): void {
     for (const key of connectionKeys) settings[key] = "";
 }
 
 /** Older encrypted payloads may omit properties added by later schema versions. */
-export function restoreConnectionSettings(settings: ObsidianLiveSyncSettings, payload: unknown): boolean {
+export function restoreConnectionSettings(settings: SyncSettings, payload: unknown): boolean {
     if (typeof payload !== "object" || payload === null || Array.isArray(payload)) return false;
     const connection = payload as Record<string, unknown>;
     if (connectionKeys.some((key) => key in connection && typeof connection[key] !== "string")) return false;
@@ -344,7 +344,7 @@ export function restoreConnectionSettings(settings: ObsidianLiveSyncSettings, pa
     return true;
 }
 
-export function omitUnpersistedSettings(settings: ObsidianLiveSyncSettings): void {
+export function omitUnpersistedSettings(settings: SyncSettings): void {
     for (const key of omittedPersistenceKeys) delete settings[key];
 }
 
@@ -355,7 +355,7 @@ export function requireConfigurationCiphertext(value: string): ConfigurationCiph
 }
 
 /** Grant the persistence type only after the runtime policy has been checked. */
-export function prepareSettingsForPersistence(settings: ObsidianLiveSyncSettings): PersistedSettings {
+export function prepareSettingsForPersistence(settings: SyncSettings): PersistedSettings {
     if (hasConnectionSettings(settings)) throw new Error("Connection settings were not prepared for persistence.");
     if (settings.encrypt && settings.passphrase !== "")
         throw new Error("The passphrase was not prepared for persistence.");

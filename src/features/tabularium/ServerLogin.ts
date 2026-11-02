@@ -1,10 +1,10 @@
 import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
 import { destructive, hint } from "./hint";
-import { REMOTE_COUCHDB, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { REMOTE_COUCHDB, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
 import { applySettingsWithScheduledInitialisation } from "@/obsidian/serviceFeatures/setupObsidian/setupActivationLifecycle.ts";
-import { LIVE_SYNC_PAUSE_KEY } from "./LiveSyncPause.ts";
-import type { LiveSyncCore } from "@/main";
+import { LIVE_SYNC_PAUSE_KEY } from "./SyncPause.ts";
+import type { PluginCore } from "@/main";
 import { $msg } from "@/core/common/translation";
 import {
     connectionSettings,
@@ -42,9 +42,9 @@ export class TabulariumServer {
     connection?: TabulariumConnection;
     readonly app: Plugin["app"];
     private readonly plugin: Plugin;
-    private readonly core: LiveSyncCore;
+    private readonly core: PluginCore;
 
-    constructor(plugin: Plugin, core: LiveSyncCore) {
+    constructor(plugin: Plugin, core: PluginCore) {
         this.plugin = plugin;
         this.app = plugin.app;
         this.core = core;
@@ -61,7 +61,7 @@ export class TabulariumServer {
     install() {
         const settings = this.core.services.setting;
         settings.onBeforeSaveSettingData.addHandler(
-            async (next: ObsidianLiveSyncSettings, previous: ObsidianLiveSyncSettings) => {
+            async (next: SyncSettings, previous: SyncSettings) => {
                 if (!this.connection) return;
                 const overrides = enforcedOverrides(next, previous);
                 if (Object.keys(overrides).length) new Notice($msg("tabularium.server.enforced"));
@@ -193,7 +193,7 @@ export class TabulariumServer {
                 ...connectionSettings(server, vault.id, device, passphrase),
                 remoteType: REMOTE_COUCHDB,
                 remoteConfigurations: {},
-            } as ObsidianLiveSyncSettings;
+            } as SyncSettings;
             upsertRemoteConfigurationInPlace(next, "couchdb", { id: "tabularium", activate: true, name: "Tabularium" });
             return await settings.adjustSettings(next);
         };
@@ -220,7 +220,7 @@ export class TabulariumServer {
                 const newSettings = await prepare();
                 settings.clearUsedPassphrase();
                 await settings.applyExternalSettings(newSettings, true);
-                // A device that synchronised with LiveSync before keeps that local database, whose documents carry IDs
+                // A device that synchronised through the original plug-in before keeps that local database, whose documents carry IDs
                 // without path obfuscation; the gateway refuses them. The upload starts from an empty database that the
                 // restart fills from the vault's files.
                 if (initialise === "upload") {
@@ -504,7 +504,7 @@ class ServerModal extends Modal {
     }
 }
 
-export function installTabulariumServer(plugin: Plugin, core: LiveSyncCore) {
+export function installTabulariumServer(plugin: Plugin, core: PluginCore) {
     const server = new TabulariumServer(plugin, core);
     server.install();
     return server;

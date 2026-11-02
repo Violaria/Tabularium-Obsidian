@@ -1,4 +1,4 @@
-import type ObsidianLiveSyncPlugin from "@/main";
+import type TabulariumPlugin from "@/main";
 import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { EVENT_FILE_RENAMED, EVENT_LEAF_ACTIVE_CHANGED, eventHub } from "@/core/common/events.js";
 import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
@@ -13,7 +13,7 @@ import {
     hiddenFilesEventCount,
     hiddenFilesProcessingCount,
 } from "@tabularium/sync-core/compat/mock_and_interop/stores";
-import type { LiveSyncCore } from "@/main.ts";
+import type { PluginCore } from "@/main.ts";
 import { compatGlobal } from "@tabularium/sync-core/compat/common/coreEnvFunctions";
 import { NO_INTERACTION } from "@tabularium/sync-core/replication";
 
@@ -35,10 +35,10 @@ type CodeMirrorAdapter = {
 };
 
 export class ModuleObsidianEvents {
-    readonly plugin: ObsidianLiveSyncPlugin;
-    readonly core: LiveSyncCore;
+    readonly plugin: TabulariumPlugin;
+    readonly core: PluginCore;
     private readonly _log: ReturnType<typeof createInstanceLogFunction>;
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    constructor(plugin: TabulariumPlugin, core: PluginCore) {
         this.plugin = plugin;
         this.core = core;
         this._log = createInstanceLogFunction("ModuleObsidianEvents", core.services.API);
@@ -257,10 +257,10 @@ export class ModuleObsidianEvents {
             );
         }
 
-        // Desktop opt-in (LiveSync/Periodic only): keep the background channel running while the
+        // Desktop opt-in (Tabularium/Periodic only): keep the background channel running while the
         // window is hidden, instead of suspending on hide. On hide we skip the suspend for both
-        // modes (LiveSync's continuous replication and Periodic's timer both stall otherwise);
-        // becoming visible reopens normally, and for LiveSync additionally forces a teardown first
+        // modes (Tabularium's continuous replication and Periodic's timer both stall otherwise);
+        // becoming visible reopens normally, and for Tabularium additionally forces a teardown first
         // (see the resume branch) so a stalled continuous channel is always replaced.
         const keepActiveInBackground = this.keepReplicationActiveInBackground();
 
@@ -279,7 +279,7 @@ export class ModuleObsidianEvents {
                 this.deferLifecycleUntilBoundedActivityEnds();
                 return;
             }
-            // Only the continuous (LiveSync) channel can go stalled-but-not-terminated: PouchDB
+            // Only the continuous (Tabularium) channel can go stalled-but-not-terminated: PouchDB
             // emits paused/retry while the replicator keeps its AbortController set, so the reopen
             // below would no-op on exactly the channel that needs replacing. Force a teardown first
             // so becoming visible always re-establishes a fresh channel (restoring the default's
@@ -425,7 +425,7 @@ export class ModuleObsidianEvents {
     }
 }
 
-export function installObsidianEvents(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+export function installObsidianEvents(plugin: TabulariumPlugin, core: PluginCore) {
     const component = new ModuleObsidianEvents(plugin, core);
     component.install();
     return component;

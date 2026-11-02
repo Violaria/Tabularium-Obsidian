@@ -13,7 +13,7 @@ import * as contentUtils from "@lib/common/utils";
 import { createBinaryBlob, createTextBlob } from "@lib/common/utils";
 import { encodeBinary } from "@lib/string_and_binary/convert";
 import { ServiceFileHandlerBase, type ServiceFileHandlerDependencies } from "./ServiceFileHandlerBase";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import type { FileReflectionProvenanceRecord } from "@lib/interfaces/FileReflectionProvenance";
 
 class TestFileHandler extends ServiceFileHandlerBase {}
@@ -120,7 +120,7 @@ function createHandler(
         currentSettings: vi.fn().mockReturnValue({ writeDocumentsIfConflicted: false, pathNormalizationVersion }),
     };
     const deps = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: { addLog: vi.fn() },
         databaseFileAccess,
         storageAccess,
@@ -324,7 +324,7 @@ function createRenameHandler(caseInsensitive: boolean, oldEntry: MetaEntry | fal
         path2id: vi.fn().mockImplementation(async (path: string) => (caseInsensitive ? path.toLowerCase() : path)),
     };
     const deps = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: { addLog: vi.fn() },
         databaseFileAccess,
         storageAccess: { getStub: vi.fn().mockResolvedValue(null), normalisePath: (path: string) => path },
@@ -384,7 +384,7 @@ function createRestoredEventHandler(
         isFileSizeTooLarge: vi.fn((size: number) => options.isFileSizeTooLarge?.(size) ?? false),
     };
     const dependencies = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: { addLog: vi.fn() },
         databaseFileAccess: {
             fetchEntryMeta: vi.fn(async (path: string) =>
@@ -495,7 +495,7 @@ function createConflictedOperationHandler() {
         markChangesAreSame: vi.fn(),
     };
     const deps = {
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         API: { addLog: vi.fn() },
         databaseFileAccess,
         storageAccess,

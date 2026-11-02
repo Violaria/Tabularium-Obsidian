@@ -1,13 +1,13 @@
-import type ObsidianLiveSyncPlugin from "@/main";
-import type { LiveSyncCore } from "@/main";
+import type TabulariumPlugin from "@/main";
+import type { PluginCore } from "@/main";
 import { VIEW_TYPE_GLOBAL_HISTORY, GlobalHistoryView } from "@/ui/GlobalHistory/GlobalHistoryView.ts";
 import type { WorkspaceLeaf } from "@/deps.ts";
 import { $msg } from "@/core/common/translation";
 
 export class ModuleObsidianGlobalHistory {
-    readonly plugin: ObsidianLiveSyncPlugin;
-    readonly core: LiveSyncCore;
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+    readonly plugin: TabulariumPlugin;
+    readonly core: PluginCore;
+    constructor(plugin: TabulariumPlugin, core: PluginCore) {
         this.plugin = plugin;
         this.core = core;
     }
@@ -39,7 +39,7 @@ export class ModuleObsidianGlobalHistory {
     }
 }
 
-export function installGlobalHistory(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore) {
+export function installGlobalHistory(plugin: TabulariumPlugin, core: PluginCore) {
     const component = new ModuleObsidianGlobalHistory(plugin, core);
     component.install();
     return component;

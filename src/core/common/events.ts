@@ -1,4 +1,4 @@
-import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
+import { createSyncEventHub } from "@tabularium/sync-core/context";
 
 export const EVENT_PLUGIN_LOADED = "plugin-loaded";
 export const EVENT_PLUGIN_UNLOADED = "plugin-unloaded";
@@ -45,9 +45,9 @@ declare global {
 export * from "@tabularium/sync-core/compat/events/coreEvents";
 
 /**
- * Self-hosted LiveSync's host event channel.
+ * Tabularium's host event channel.
  *
- * Commonlib does not own a process-global channel. Each LiveSync host context is
+ * Commonlib does not own a process-global channel. Each Tabularium host context is
  * composed with this channel while legacy host UI modules migrate to context.events.
  */
-export const eventHub = createLiveSyncEventHub();
+export const eventHub = createSyncEventHub();

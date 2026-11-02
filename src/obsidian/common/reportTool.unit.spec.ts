@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { DEFAULT_SETTINGS } from "@tabularium/sync-core/settings";
 import { REMOTE_P2P } from "@tabularium/sync-core/compat/common/types";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import { generateReport } from "./reportTool";
 
 vi.mock("./utils", () => ({ requestToCouchDBWithCredentials: vi.fn() }));
@@ -19,7 +19,7 @@ describe("TURN credentials in diagnostic reports", () => {
             idDerivationKey: key,
             encryptedIdDerivationKey: wrapper,
         };
-        const core = { services: { vault: { isStorageInsensitive: () => false } } } as unknown as LiveSyncBaseCore;
+        const core = { services: { vault: { isStorageInsensitive: () => false } } } as unknown as SyncCore;
         const report = await generateReport(settings, core);
         const text = JSON.stringify(report);
         expect(text).not.toContain(key);
@@ -44,7 +44,7 @@ describe("TURN credentials in diagnostic reports", () => {
                 },
             },
         };
-        const core = { services: { vault: { isStorageInsensitive: () => false } } } as unknown as LiveSyncBaseCore;
+        const core = { services: { vault: { isStorageInsensitive: () => false } } } as unknown as SyncCore;
         const report = await generateReport(settings, core);
         const text = JSON.stringify(report);
         expect(text).not.toContain(token);

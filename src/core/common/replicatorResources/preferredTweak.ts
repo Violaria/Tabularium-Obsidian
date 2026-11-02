@@ -1,13 +1,13 @@
 import type { RemoteDBSettings, RemotePreferredTweakResult } from "@tabularium/sync-core/compat/common/types";
 import type { PreferredTweakProbe, PreferredTweakProbeFactory } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { createReplicatorDisposer, snapshotRemoteSettings, type ResourceReplicator } from "./shared";
 
 /** Host environment sufficient to construct the preferred-tweak probe. */
-export type PreferredTweakResourceHost = LiveSyncCouchDBReplicatorEnv;
+export type PreferredTweakResourceHost = CouchDBReplicatorEnv;
 
 interface PreferredTweakReplicator extends ResourceReplicator {
     getRemotePreferredTweakValues(setting: RemoteDBSettings): Promise<RemotePreferredTweakResult>;
@@ -27,7 +27,7 @@ function createPreferredTweakProbe(
 export function createCouchDBPreferredTweakProbeFactory(host: PreferredTweakResourceHost): PreferredTweakProbeFactory {
     return (setting) => {
         const snapshot = snapshotRemoteSettings(setting);
-        return Promise.resolve(createPreferredTweakProbe(new LiveSyncCouchDBReplicator(host), snapshot));
+        return Promise.resolve(createPreferredTweakProbe(new CouchDBReplicator(host), snapshot));
     };
 }
 

@@ -58,10 +58,10 @@ export function useJoinedDevicesFeature(host: JoinedDevicesHost, notices: Obsidi
             notices.setItem(noticeGroup, direction, {
                 message:
                     direction === "newer"
-                        ? $msg("Newer Self-hosted LiveSync versions detected: ${versions}.", {
+                        ? $msg("Newer Tabularium versions detected: ${versions}.", {
                               versions: versions.join(", "),
                           })
-                        : $msg("Older Self-hosted LiveSync versions detected: ${versions}.", {
+                        : $msg("Older Tabularium versions detected: ${versions}.", {
                               versions: versions.join(", "),
                           }),
             });
@@ -70,7 +70,7 @@ export function useJoinedDevicesFeature(host: JoinedDevicesHost, notices: Obsidi
         if (!updated) return;
         notices.removeItem(noticeGroup, "review");
         notices.setItem(noticeGroup, "review", {
-            message: $msg("Reviewing and aligning Self-hosted LiveSync versions across devices is recommended."),
+            message: $msg("Reviewing and aligning Tabularium versions across devices is recommended."),
             action: {
                 label: $msg("Review devices"),
                 onSelect: () => {

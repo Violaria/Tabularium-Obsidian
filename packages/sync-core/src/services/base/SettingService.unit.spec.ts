@@ -9,7 +9,7 @@ import {
 } from "@lib/common/types";
 import { SettingService } from "./SettingService";
 import { ServiceContext } from "./ServiceBase";
-import type { ObsidianLiveSyncSettings } from "@lib/common/types";
+import type { SyncSettings } from "@lib/common/types";
 import { ConnectionStringParser } from "@lib/common/ConnectionString";
 import { encryptString } from "@lib/encryption/stringEncryption";
 
@@ -41,23 +41,23 @@ function deviceNameStoreKey(suffix = DEFAULT_SETTINGS.additionalSuffixOfDatabase
 }
 
 class TestSettingService extends SettingService<ServiceContext> {
-    lastSavedSetting?: ObsidianLiveSyncSettings;
+    lastSavedSetting?: SyncSettings;
     readonly localItems: Map<string, string>;
     constructor(context: ServiceContext, dependencies: any, deviceValues: MapBackedValueStore) {
         super(context, { ...dependencies, deviceValues } as any);
         this.localItems = deviceValues.values;
     }
-    protected saveData(setting: ObsidianLiveSyncSettings): Promise<void> {
+    protected saveData(setting: SyncSettings): Promise<void> {
         this.lastSavedSetting = JSON.parse(JSON.stringify(setting));
         return Promise.resolve();
     }
-    protected loadData(): Promise<ObsidianLiveSyncSettings | undefined> {
+    protected loadData(): Promise<SyncSettings | undefined> {
         return Promise.resolve(undefined);
     }
 }
 
 function createService(
-    onDisplayLanguageChanged?: (language: ObsidianLiveSyncSettings["displayLanguage"]) => void,
+    onDisplayLanguageChanged?: (language: SyncSettings["displayLanguage"]) => void,
     options: { vaultName?: string; deviceValues?: MapBackedValueStore } = {}
 ) {
     const deviceValues = options.deviceValues ?? createMapBackedValueStore();
@@ -90,7 +90,7 @@ const MANAGED_FIELDS = {
     P2P_managedToken: "secret-token",
 };
 
-function managedP2PProfileURI(settings: ObsidianLiveSyncSettings): string {
+function managedP2PProfileURI(settings: SyncSettings): string {
     return ConnectionStringParser.serialize({
         type: "p2p",
         settings: {
@@ -101,7 +101,7 @@ function managedP2PProfileURI(settings: ObsidianLiveSyncSettings): string {
     });
 }
 
-function centralProfileURI(settings: ObsidianLiveSyncSettings): string {
+function centralProfileURI(settings: SyncSettings): string {
     return ConnectionStringParser.serialize({
         type: "couchdb",
         settings: {
@@ -647,7 +647,7 @@ describe("SettingService", () => {
                 p2p: { id: "p2p", name: "P2P", uri: managedP2PProfileURI(managedSettings), isEncrypted: false },
             },
         };
-        let notified: ObsidianLiveSyncSettings | undefined;
+        let notified: SyncSettings | undefined;
         service.onSettingSaved.addHandler(async (settings) => {
             notified = settings;
             return true;
@@ -747,7 +747,7 @@ describe("SettingService", () => {
         };
 
         await service.saveSettingData();
-        const encrypted = JSON.parse(JSON.stringify(service.lastSavedSetting!)) as ObsidianLiveSyncSettings;
+        const encrypted = JSON.parse(JSON.stringify(service.lastSavedSetting!)) as SyncSettings;
 
         const decrypted = await service.decryptSettings(encrypted);
 
@@ -817,7 +817,7 @@ describe("SettingService", () => {
             },
             activeConfigurationId: "couch",
             P2P_ActiveRemoteConfigurationId: "p2p",
-        } as ObsidianLiveSyncSettings);
+        } as SyncSettings);
 
         await service.loadSettings();
 
@@ -828,7 +828,7 @@ describe("SettingService", () => {
 
     it("loadSettings should persist the detected schema version without changing explicit sync choices", async () => {
         const service = createService();
-        const storedSettings: Partial<ObsidianLiveSyncSettings> = {
+        const storedSettings: Partial<SyncSettings> = {
             ...DEFAULT_SETTINGS,
             liveSync: true,
             syncOnSave: true,

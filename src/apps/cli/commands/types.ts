@@ -1,5 +1,5 @@
-import { LiveSyncBaseCore } from "@/core/createCore";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { SyncCore } from "@/core/createCore";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { NodeServiceContext } from "@/apps/cli/services/NodeServiceContext";
 import type { ReplicationSchedulingControl } from "@/core/serviceFeatures/replicationScheduling";
 
@@ -49,12 +49,12 @@ export interface CLIOptions {
 export interface CLICommandContext {
     databasePath: string;
     vaultPath: string;
-    core: LiveSyncBaseCore<NodeServiceContext>;
+    core: SyncCore<NodeServiceContext>;
     /** Host-composition view used only to coordinate daemon-owned recurring work. */
     replicationScheduling: ReplicationSchedulingControl;
     settingsPath: string;
     originalSyncSettings: Pick<
-        ObsidianLiveSyncSettings,
+        SyncSettings,
         | "liveSync"
         | "syncOnStart"
         | "periodicReplication"

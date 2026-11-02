@@ -6,9 +6,9 @@ import {
 } from "@vrtmrz/obsidian-test-session";
 import type { TemporaryVault } from "./vault.ts";
 
-export type ObsidianLiveSyncSession = ObsidianPluginSession;
+export type ObsidianSession = ObsidianPluginSession;
 
-export type StartObsidianLiveSyncSessionOptions = {
+export type StartObsidianSessionOptions = {
     binary: string;
     cliBinary: string;
     vault: TemporaryVault;
@@ -21,9 +21,9 @@ export type StartObsidianLiveSyncSessionOptions = {
     env?: NodeJS.ProcessEnv;
 };
 
-export async function startObsidianLiveSyncSession(
-    options: StartObsidianLiveSyncSessionOptions
-): Promise<ObsidianLiveSyncSession> {
+export async function startObsidianSession(
+    options: StartObsidianSessionOptions
+): Promise<ObsidianSession> {
     return await startObsidianPluginSession({
         binary: options.binary,
         cliBinary: options.cliBinary,

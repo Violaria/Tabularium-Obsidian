@@ -1,8 +1,8 @@
 import type { SynchronisationInformationResourceFactory } from "@tabularium/sync-core/replication";
 import {
-    LiveSyncCouchDBReplicator,
-    type LiveSyncCouchDBReplicatorEnv,
-} from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+    CouchDBReplicator,
+    type CouchDBReplicatorEnv,
+} from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { checkSyncInfo } from "@tabularium/sync-core/compat/pouchdb/negotiation";
 import { createReplicatorDisposer, snapshotRemoteSettings } from "./shared";
 
@@ -15,11 +15,11 @@ import { createReplicatorDisposer, snapshotRemoteSettings } from "./shared";
  * caller can report an operational failure separately.
  */
 export function createCouchDBSynchronisationInformationResourceFactory(
-    host: LiveSyncCouchDBReplicatorEnv
+    host: CouchDBReplicatorEnv
 ): SynchronisationInformationResourceFactory {
     return (setting) => {
         const snapshot = snapshotRemoteSettings(setting);
-        const replicator = new LiveSyncCouchDBReplicator(host);
+        const replicator = new CouchDBReplicator(host);
         return Promise.resolve({
             check: async () => {
                 const connection = await replicator.connectRemoteCouchDBWithSetting(

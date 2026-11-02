@@ -4,7 +4,7 @@ import { initialiseServiceModulesCLI } from "./serviceModules/CLIServiceModules"
 import {
     LOG_LEVEL_VERBOSE,
     type LOG_LEVEL,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import type { InjectableSettingService } from "@tabularium/sync-core/compat/services/implements/injectable/InjectableSettingService";
 import {
@@ -83,7 +83,7 @@ function printHelp(standardIo: StandardIo): void {
     writeStdoutLine(
         standardIo,
         `
-Self-hosted LiveSync CLI
+Tabularium CLI
 
 Usage:
   livesync-cli <database-path> [options] <command> [command-args]
@@ -137,31 +137,31 @@ Options:
                            Preserve the former zero exit code when remote-administration verification fails
 
 Examples:
-    livesync-cli ./my-database                        Run daemon (LiveSync mode)
-    livesync-cli ./my-database --interval 30          Run daemon (polling every 30s)
-    livesync-cli ./my-database sync
-    livesync-cli ./my-database --settings ./custom-settings.json push ./note.md folder/note.md
-    livesync-cli ./my-database pull folder/note.md ./exports/note.md
-    livesync-cli ./my-database pull-rev folder/note.md ./exports/note.old.md 3-abcdef
-    echo "Hello" | livesync-cli ./my-database put notes/hello.md
-    livesync-cli ./my-database cat notes/hello.md
-    livesync-cli ./my-database cat-rev notes/hello.md 3-abcdef
-    livesync-cli ./my-database ls notes/
-    livesync-cli ./my-database info notes/hello.md
-    livesync-cli ./my-database rm notes/hello.md
-    livesync-cli ./my-database resolve notes/hello.md 3-abcdef
-    livesync-cli ./my-database remote-add my-remote "sls+https://user:pass@example.com/db"
-    livesync-cli ./my-database remote-ls
-    livesync-cli ./my-database remote-export remote-abc123
-    livesync-cli ./my-database remote-set remote-abc123 "sls+s3://ak:sk@example.com/?endpoint=https%3A%2F%2Fs3.example.com&bucket=mybucket"
-    livesync-cli ./my-database remote-activate remote-abc123
-    livesync-cli ./my-database remote-rm remote-abc123
-    livesync-cli ./my-database mark-resolved remote-abc123
-    livesync-cli ./my-database unlock-remote remote-abc123
-    livesync-cli ./my-database lock-remote remote-abc123
-    livesync-cli ./my-database remote-status remote-abc123
+    tabularium-cli ./my-database                        Run daemon (live sync mode)
+    tabularium-cli ./my-database --interval 30          Run daemon (polling every 30s)
+    tabularium-cli ./my-database sync
+    tabularium-cli ./my-database --settings ./custom-settings.json push ./note.md folder/note.md
+    tabularium-cli ./my-database pull folder/note.md ./exports/note.md
+    tabularium-cli ./my-database pull-rev folder/note.md ./exports/note.old.md 3-abcdef
+    echo "Hello" | tabularium-cli ./my-database put notes/hello.md
+    tabularium-cli ./my-database cat notes/hello.md
+    tabularium-cli ./my-database cat-rev notes/hello.md 3-abcdef
+    tabularium-cli ./my-database ls notes/
+    tabularium-cli ./my-database info notes/hello.md
+    tabularium-cli ./my-database rm notes/hello.md
+    tabularium-cli ./my-database resolve notes/hello.md 3-abcdef
+    tabularium-cli ./my-database remote-add my-remote "sls+https://user:pass@example.com/db"
+    tabularium-cli ./my-database remote-ls
+    tabularium-cli ./my-database remote-export remote-abc123
+    tabularium-cli ./my-database remote-set remote-abc123 "sls+s3://ak:sk@example.com/?endpoint=https%3A%2F%2Fs3.example.com&bucket=mybucket"
+    tabularium-cli ./my-database remote-activate remote-abc123
+    tabularium-cli ./my-database remote-rm remote-abc123
+    tabularium-cli ./my-database mark-resolved remote-abc123
+    tabularium-cli ./my-database unlock-remote remote-abc123
+    tabularium-cli ./my-database lock-remote remote-abc123
+    tabularium-cli ./my-database remote-status remote-abc123
     livesync-cli init-settings ./data.json
-    livesync-cli ./my-database --verbose
+    tabularium-cli ./my-database --verbose
         `
     );
 }
@@ -406,7 +406,7 @@ export async function main(
         process.exit(1);
     }
 
-    infoLog(`Self-hosted LiveSync CLI`);
+    infoLog(`Tabularium CLI`);
     infoLog(`Database Path: ${databasePath}`);
     infoLog(`Vault Path:    ${vaultPath}`);
     infoLog(`Settings: ${settingsPath}`);
@@ -471,7 +471,7 @@ export async function main(
     let preparedSettingsRevision = 0;
 
     (settingService as InjectableSettingService<NodeServiceContext>).saveData.setHandler(
-        async (data: ObsidianLiveSyncSettings) => {
+        async (data: SyncSettings) => {
             try {
                 latestPreparedSettingsText = JSON.stringify(data, null, 2);
                 preparedSettingsRevision++;
@@ -486,10 +486,10 @@ export async function main(
     );
 
     (settingService as InjectableSettingService<NodeServiceContext>).loadData.setHandler(
-        async (): Promise<ObsidianLiveSyncSettings | undefined> => {
+        async (): Promise<SyncSettings | undefined> => {
             try {
                 const content = await fs.readFile(settingsPath, "utf-8");
-                const data = JSON.parse(content) as ObsidianLiveSyncSettings;
+                const data = JSON.parse(content) as SyncSettings;
                 if (options.verbose) {
                     writeStderrLine(standardIo, `[Settings] Loaded from ${settingsPath}`);
                 }
@@ -504,7 +504,7 @@ export async function main(
         }
     );
 
-    // Create LiveSync core
+    // Create Tabularium core
     let replicationScheduling: ReplicationSchedulingControl | undefined;
     const core = createCore<NodeServiceContext>({
         hub: serviceHubInstance,
@@ -584,11 +584,11 @@ export async function main(
 
     // Start the core
     try {
-        infoLog(`[Starting] Initializing LiveSync...`);
+        infoLog(`[Starting] Initializing Tabularium...`);
 
         const loadResult = await core.services.control.onLoad();
         if (!loadResult) {
-            writeStderrLine(standardIo, `[Error] Failed to initialize LiveSync`);
+            writeStderrLine(standardIo, `[Error] Failed to initialize Tabularium`);
             process.exit(1);
         }
         const settingsAfterLoadText = latestPreparedSettingsText
@@ -618,7 +618,7 @@ export async function main(
             if (!readyResult) await core.services.control.onUnload();
         }
         if (!readyResult) {
-            throw new Error("Failed to initialise LiveSync.");
+            throw new Error("Failed to initialise Tabularium.");
         }
         if (vaultSyncMode?.scanOnStartup === false) {
             // Keep the startup reset clean, then enable scans for the explicit Rebuild or Fetch operation.
@@ -636,14 +636,14 @@ export async function main(
             preserveKeys: transientSettingKeys,
         });
 
-        infoLog(`[Ready] LiveSync is running`);
+        infoLog(`[Ready] Tabularium is running`);
         infoLog(`[Ready] Press Ctrl+C to stop`);
         infoLog("");
 
         // Check if configured
         const settings = core.services.setting.currentSettings();
         if (!settings.isConfigured) {
-            writeStderrLine(standardIo, `[Warning] LiveSync is not configured yet`);
+            writeStderrLine(standardIo, `[Warning] Tabularium is not configured yet`);
             writeStderrLine(standardIo, `[Warning] Please edit ${settingsPath} to configure CouchDB connection`);
             writeStderrLine(standardIo);
             writeStderrLine(standardIo, `Required settings:`);
@@ -653,7 +653,7 @@ export async function main(
             writeStderrLine(standardIo, `  - couchDB_DBNAME: Database name`);
             writeStderrLine(standardIo);
         } else {
-            infoLog(`[Info] LiveSync is configured and ready`);
+            infoLog(`[Info] Tabularium is configured and ready`);
             infoLog(`[Info] Database: ${settings.couchDB_URI}/${settings.couchDB_DBNAME}`);
             infoLog("");
         }

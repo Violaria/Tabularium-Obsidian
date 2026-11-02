@@ -13,7 +13,7 @@ import {
     type MetaEntry,
     isMetaEntry,
     type UXFileInfoStub,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type LOG_LEVEL,
     type AnyEntry,
 } from "@lib/common/types";
@@ -695,9 +695,9 @@ export function canProceedScan(
 
     const settings = host.services.setting.currentSettings();
 
-    // Check if LiveSync is configured
+    // Check if Tabularium is configured
     const ERR_NOT_CONFIGURED =
-        "LiveSync is not configured yet. Synchronising between the storage and the local database is now prevented.";
+        "Tabularium is not configured yet. Synchronising between the storage and the local database is now prevented.";
     if (!settings.isConfigured) {
         errorManager.showError(ERR_NOT_CONFIGURED, showingNotice ? LOG_LEVEL_NOTICE : LOG_LEVEL_INFO);
         return false;
@@ -730,7 +730,7 @@ export function canProceedScan(
  * @returns
  */
 export function convertCase<T extends FilePathWithPrefix>(
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     path: T
 ): FilePathWithPrefixLC {
     const normalisedPath = normalisePathForIdentity(path, getPathNormalizationVersion(settings));
@@ -742,7 +742,7 @@ export function convertCase<T extends FilePathWithPrefix>(
 
 export async function collectFilesOnStorage(
     host: NecessaryServices<"vault", "storageAccess">,
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     log: LogFunction
 ) {
     log("Collecting local files on the storage", LOG_LEVEL_VERBOSE);
@@ -772,7 +772,7 @@ export async function collectFilesOnStorage(
 
 export async function collectDatabaseFiles(
     host: NecessaryServices<"database" | "vault" | "path", never>,
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     log: LogFunction,
     showingNotice: boolean
 ) {

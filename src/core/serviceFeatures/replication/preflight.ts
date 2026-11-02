@@ -4,9 +4,9 @@ import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE, Logger } from "oct
 import { MARK_LOG_NETWORK_ERROR } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { UnresolvedErrorManager } from "@tabularium/sync-core/compat/services/base/UnresolvedErrorManager";
 import { REMOTE_RESOURCE_KINDS } from "@tabularium/sync-core/replication";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 
-type ReplicationPreflightServices = Pick<LiveSyncBaseCore["services"], "API" | "replicator" | "setting">;
+type ReplicationPreflightServices = Pick<SyncCore["services"], "API" | "replicator" | "setting">;
 
 interface ReplicationPreflightContext {
     readonly services: ReplicationPreflightServices;

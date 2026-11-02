@@ -18,14 +18,14 @@ import { shouldBeIgnored, isPlainText, stripAllPrefixes } from "@lib/string_and_
 import { LOG_LEVEL_VERBOSE } from "octagonal-wheels/common/logger";
 import { serialized } from "octagonal-wheels/concurrency/lock_v2";
 import { ServiceModuleBase } from "@lib/serviceModules/ServiceModuleBase";
-import type { LiveSyncEventHub } from "@lib/hub/hub";
+import type { SyncEventHub } from "@lib/hub/hub";
 import { EVENT_FILE_SAVED } from "@lib/events/coreEvents";
 import { getDatabasePathFromUXFileInfo, getStoragePathFromUXFileInfo, isInternalMetadata } from "@lib/common/typeUtils";
 import { createBlob, createTextBlob, determineTypeFromBlob, isDocContentSame, readContent } from "@lib/common/utils";
 import { ICHeader } from "@lib/common/models/fileaccess.const";
 
 export interface ServiceDatabaseFileAccessDependencies {
-    events: LiveSyncEventHub;
+    events: SyncEventHub;
     API: APIService;
     vault: VaultService;
     storageAccess: StorageAccess;
@@ -48,7 +48,7 @@ export class ServiceDatabaseFileAccessBase
     extends ServiceModuleBase<ServiceDatabaseFileAccessDependencies>
     implements DatabaseFileAccess
 {
-    private events: LiveSyncEventHub;
+    private events: SyncEventHub;
     private vault: VaultService;
     private storageAccess: StorageAccess;
     private path: PathService;

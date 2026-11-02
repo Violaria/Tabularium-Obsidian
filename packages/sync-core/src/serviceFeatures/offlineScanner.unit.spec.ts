@@ -26,7 +26,7 @@ import {
 import { prepareDatabaseForUse } from "./prepareDatabaseForUse";
 import { type LogFunction, createInstanceLogFunction } from "@lib/services/lib/logUtils";
 import { BASE_IS_NEW, EVEN, TARGET_IS_NEW } from "@lib/common/models/shared.const.symbols";
-import type { MetaEntry, UXFileInfoStub, FilePathWithPrefix, ObsidianLiveSyncSettings } from "@lib/common/types";
+import type { MetaEntry, UXFileInfoStub, FilePathWithPrefix, SyncSettings } from "@lib/common/types";
 import { LOG_LEVEL_DEBUG, LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE } from "@lib/common/types";
 import { createServiceContext } from "@lib/services/base/ServiceBase";
 
@@ -44,7 +44,7 @@ describe("convertCase", () => {
     it("should return path as-is when handleFilenameCaseSensitive is true", () => {
         const settings = {
             handleFilenameCaseSensitive: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const path = "Test/File.md" as FilePathWithPrefix;
         const result = convertCase(settings, path);
@@ -55,7 +55,7 @@ describe("convertCase", () => {
     it("should return lowercase path when handleFilenameCaseSensitive is false", () => {
         const settings = {
             handleFilenameCaseSensitive: false,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const path = "Test/File.md" as FilePathWithPrefix;
         const result = convertCase(settings, path);
@@ -69,25 +69,25 @@ describe("convertCase", () => {
 
         expect(
             convertCase(
-                { handleFilenameCaseSensitive: true, pathNormalizationVersion: 0 } as ObsidianLiveSyncSettings,
+                { handleFilenameCaseSensitive: true, pathNormalizationVersion: 0 } as SyncSettings,
                 nfdPath as FilePathWithPrefix
             )
         ).toBe(nfdPath);
         expect(
             convertCase(
-                { handleFilenameCaseSensitive: false, pathNormalizationVersion: 0 } as ObsidianLiveSyncSettings,
+                { handleFilenameCaseSensitive: false, pathNormalizationVersion: 0 } as SyncSettings,
                 nfdPath as FilePathWithPrefix
             )
         ).toBe(nfdPath.toLowerCase());
         expect(
             convertCase(
-                { handleFilenameCaseSensitive: true, pathNormalizationVersion: 1 } as ObsidianLiveSyncSettings,
+                { handleFilenameCaseSensitive: true, pathNormalizationVersion: 1 } as SyncSettings,
                 nfdPath as FilePathWithPrefix
             )
         ).toBe(nfcPath);
         expect(
             convertCase(
-                { handleFilenameCaseSensitive: false, pathNormalizationVersion: 1 } as ObsidianLiveSyncSettings,
+                { handleFilenameCaseSensitive: false, pathNormalizationVersion: 1 } as SyncSettings,
                 nfdPath as FilePathWithPrefix
             )
         ).toBe(nfcPath.toLowerCase());
@@ -201,7 +201,7 @@ describe("canProceedScan", () => {
         logger = createLogger("TestLogger");
     });
 
-    it("should return false if LiveSync is not configured", () => {
+    it("should return false if Tabularium is not configured", () => {
         const errorManager = {
             showError: vi.fn(),
             clearError: vi.fn(),
@@ -540,7 +540,7 @@ describe("collectFilesOnStorage", () => {
 
         const settings = {
             handleFilenameCaseSensitive: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const result = await collectFilesOnStorage(host, settings, logger);
 
@@ -575,7 +575,7 @@ describe("collectFilesOnStorage", () => {
 
         const settings = {
             handleFilenameCaseSensitive: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const result = await collectFilesOnStorage(host, settings, logger);
 
@@ -604,7 +604,7 @@ describe("collectFilesOnStorage", () => {
 
         const settings = {
             handleFilenameCaseSensitive: false,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const result = await collectFilesOnStorage(host, settings, logger);
 
@@ -658,7 +658,7 @@ describe("collectDatabaseFiles", () => {
 
         const settings = {
             handleFilenameCaseSensitive: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const result = await collectDatabaseFiles(host, settings, logger, false);
 
@@ -735,7 +735,7 @@ describe("collectDatabaseFiles", () => {
 
         const settings = {
             handleFilenameCaseSensitive: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const result = await collectDatabaseFiles(host, settings, logger, false);
 

@@ -121,7 +121,7 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
         constructor(...args: ConstructorParameters<TBase>) {
             super(...args);
         }
-        // plugin: ObsidianLiveSyncPlugin;
+        // plugin: TabulariumPlugin;
         private _context!: C;
         get context(): C {
             return this._context;
@@ -131,7 +131,7 @@ export function SvelteDialogMixIn<TBase extends Constructor<IModalBase>>(
         component!: ComponentHasResult<T, U>;
         result?: T;
         initialData?: U;
-        title: string = "Self-hosted LiveSync - Setup Wizard";
+        title: string = "Tabularium - Setup Wizard";
 
         initDialog(
             context: C,

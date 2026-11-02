@@ -4,7 +4,7 @@ import { setLang } from "@/core/common/translation";
 // The messages are checked in Chinese.
 beforeAll(() => setLang("zh"));
 afterAll(() => setLang("def"));
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import {
     connectionSettings,
     enforcedOverrides,
@@ -67,7 +67,7 @@ describe("TabulariumApi", () => {
 
 describe("connection settings", () => {
     const device = { id: "d", username: "d", password: "device-secret", expiresAt: 1 };
-    it("points LiveSync at the gateway with enforced encryption", () => {
+    it("points Tabularium at the gateway with enforced encryption", () => {
         expect(connectionSettings("https://server.test/", "vault-id", device, "passphrase")).toMatchObject({
             couchDB_URI: "https://server.test/sync",
             couchDB_DBNAME: "vault-id",
@@ -94,7 +94,7 @@ describe("connection settings", () => {
             P2P_Enabled: false,
             P2P_AutoStart: false,
             passphrase: "kept",
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
         expect(enforcedOverrides(previous, previous)).toEqual({});
         const weakened = {
             ...previous,
@@ -102,7 +102,7 @@ describe("connection settings", () => {
             usePathObfuscation: false,
             syncInternalFiles: true,
             passphrase: "",
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
         expect(enforcedOverrides(weakened, previous)).toEqual({
             encrypt: true,
             usePathObfuscation: true,

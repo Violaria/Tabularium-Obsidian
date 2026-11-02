@@ -20,7 +20,7 @@ import { createInstanceLogFunction, MARK_LOG_NETWORK_ERROR, type LogFunction } f
 import { runWithTrackedPhysicalRequest } from "@lib/services/lib/remoteActivity.ts";
 import type PouchDB from "pouchdb-core";
 import type { PouchDBConstructor } from "@lib/pouchdb/PouchDBConstructor.ts";
-import { LiveSyncError } from "@lib/common/LSError";
+import { SyncError } from "@lib/common/LSError";
 import type { OwnedCouchDBConnection, RemoteConnectionOpenOptions } from "./RemoteConnection.ts";
 
 type RemoteConnectionScope = {
@@ -360,7 +360,7 @@ export abstract class RemoteService<T extends ServiceContext = ServiceContext>
                             );
                             if (resp2.status / 100 == 2) {
                                 this.showError(
-                                    "The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync",
+                                    "The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable Tabularium",
                                     LOG_LEVEL_NOTICE
                                 );
                                 return resp2;
@@ -436,7 +436,7 @@ export abstract class RemoteService<T extends ServiceContext = ServiceContext>
             const info = await db.info();
             return { ...connection, info };
         } catch (ex) {
-            const exMsg = ex instanceof Error ? ex : LiveSyncError.fromError(ex);
+            const exMsg = ex instanceof Error ? ex : SyncError.fromError(ex);
             const msg = `${exMsg.name}:${exMsg.message}`;
             this._log(ex, LOG_LEVEL_VERBOSE);
             await closeAfterConnectionFailure();

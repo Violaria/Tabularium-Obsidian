@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { LiveSyncLocalDB } from "@lib/pouchdb/LiveSyncLocalDB";
-import { LiveSyncLocalDB as LiveSyncLocalDBClass } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { LocalDatabase } from "@lib/pouchdb/LocalDatabase";
+import { LocalDatabase as LocalDatabaseClass } from "@lib/pouchdb/LocalDatabase";
 import { ServiceContext } from "./ServiceBase";
 import { DatabaseService } from "./DatabaseService";
 import type { openDatabaseParameters } from "./IService";
 
 class TestDatabaseService extends DatabaseService {
-    setActiveDatabase(database: LiveSyncLocalDB | null) {
+    setActiveDatabase(database: LocalDatabase | null) {
         this._localDatabase = database;
     }
 }
@@ -16,7 +16,7 @@ function localDatabase(name: string, resetResult = true) {
         dbname: name,
         close: vi.fn(async () => undefined),
         resetDatabase: vi.fn(async () => resetResult),
-    } as unknown as LiveSyncLocalDB;
+    } as unknown as LocalDatabase;
 }
 
 function createDatabaseService(selectedDatabaseName = "vault-current") {
@@ -42,7 +42,7 @@ afterEach(() => {
 describe("DatabaseService active database ownership", () => {
     it("does not retain an active database whose physical readiness was rejected", async () => {
         const service = createDatabaseService();
-        const initialise = vi.spyOn(LiveSyncLocalDBClass.prototype, "initializeDatabase").mockResolvedValueOnce(false);
+        const initialise = vi.spyOn(LocalDatabaseClass.prototype, "initializeDatabase").mockResolvedValueOnce(false);
 
         await expect(service.openDatabase(openParameters)).resolves.toBe(false);
 
@@ -54,7 +54,7 @@ describe("DatabaseService active database ownership", () => {
     it("does not retain an active database whose physical initialisation threw", async () => {
         const error = new Error("physical initialisation failed");
         const service = createDatabaseService();
-        vi.spyOn(LiveSyncLocalDBClass.prototype, "initializeDatabase").mockRejectedValueOnce(error);
+        vi.spyOn(LocalDatabaseClass.prototype, "initializeDatabase").mockRejectedValueOnce(error);
 
         await expect(service.openDatabase(openParameters)).rejects.toBe(error);
 

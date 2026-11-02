@@ -4,7 +4,7 @@ import {
     Logger,
     type LOG_LEVEL,
 } from "@tabularium/sync-core/compat/common/logger";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { countCompromisedChunks } from "@tabularium/sync-core/compat/pouchdb/negotiation";
 import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
@@ -16,7 +16,7 @@ interface CompromisedChunkCounter {
 
 /** Focused collaborators for checking and recovering insecure chunks. */
 export interface CompromisedChunksDependencies {
-    readonly settings: Pick<ObsidianLiveSyncSettings, "encrypt">;
+    readonly settings: Pick<SyncSettings, "encrypt">;
     readonly localDatabase: {
         readonly localDatabase: Parameters<typeof countCompromisedChunks>[0];
     };

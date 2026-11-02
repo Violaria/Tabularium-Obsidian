@@ -10,10 +10,10 @@ import {
 import { REMOTE_COUCHDB, REMOTE_MINIO, REMOTE_P2P } from "@lib/common/models/setting.const";
 import { ConnectionStringParser } from "@lib/common/ConnectionString";
 import { P2P_DEFAULT_SETTINGS } from "@lib/common/models/setting.const.defaults";
-import type { ObsidianLiveSyncSettings } from "@lib/common/models/setting.type";
+import type { SyncSettings } from "@lib/common/models/setting.type";
 
 describe("Remote Configuration Migration", () => {
-    let mockSettings: Partial<ObsidianLiveSyncSettings>;
+    let mockSettings: Partial<SyncSettings>;
     let mockHost: any;
 
     beforeEach(() => {
@@ -29,7 +29,7 @@ describe("Remote Configuration Migration", () => {
         mockHost = {
             services: {
                 setting: {
-                    currentSettings: vi.fn(() => mockSettings as ObsidianLiveSyncSettings),
+                    currentSettings: vi.fn(() => mockSettings as SyncSettings),
                     saveSettingData: vi.fn(() => Promise.resolve()),
                 },
                 appLifecycle: {
@@ -141,7 +141,7 @@ describe("Remote Configuration Migration", () => {
         mockSettings.couchDB_PASSWORD = "password";
         mockSettings.couchDB_DBNAME = "vault";
 
-        const result = migrateLegacyRemoteConfigurationsInPlace(mockSettings as ObsidianLiveSyncSettings);
+        const result = migrateLegacyRemoteConfigurationsInPlace(mockSettings as SyncSettings);
 
         expect(result).toBe(true);
         expect(mockSettings.remoteConfigurations?.["legacy-couchdb"]?.uri).toContain(
@@ -209,7 +209,7 @@ describe("Remote Configuration Activation", () => {
                     isEncrypted: false,
                 },
             },
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         expect(activateRemoteConfiguration(settings, "manual")).toBe(settings);
         expect(settings.P2P_managedType).toBeUndefined();
@@ -232,7 +232,7 @@ describe("Remote Configuration Activation", () => {
                     isEncrypted: false,
                 },
             },
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         expect(activateP2PRemoteConfiguration(settings, "manual")).toBe(settings);
         expect(settings.P2P_managedType).toBeUndefined();
@@ -291,7 +291,7 @@ describe("Remote Configuration Registration", () => {
             jwtSub: "",
             jwtExpDuration: 5,
             useRequestAPI: false,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const profile = upsertRemoteConfigurationInPlace(settings, "couchdb", { activate: true });
 
@@ -325,7 +325,7 @@ describe("Remote Configuration Registration", () => {
             useCustomRequestHandler: false,
             bucketCustomHeaders: "",
             forcePathStyle: true,
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const profile = upsertRemoteConfigurationInPlace(settings, "s3", {
             id: "onboarding-s3",
@@ -358,7 +358,7 @@ describe("Remote Configuration Registration", () => {
             P2P_turnServers: "",
             P2P_turnUsername: "",
             P2P_turnCredential: "",
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const profile = upsertRemoteConfigurationInPlace(settings, "p2p", {
             id: "onboarding-p2p",
@@ -394,7 +394,7 @@ describe("Remote Configuration Registration", () => {
             P2P_turnServers: "",
             P2P_turnUsername: "",
             P2P_turnCredential: "",
-        } as ObsidianLiveSyncSettings;
+        } as SyncSettings;
 
         const profile = upsertRemoteConfigurationInPlace(settings, "p2p", {
             id: "p2p",
@@ -425,8 +425,8 @@ describe("Remote Configuration Registration", () => {
             jwtSub: "",
             jwtExpDuration: 5,
             useRequestAPI: false,
-        } as ObsidianLiveSyncSettings;
-        const before = JSON.parse(JSON.stringify(settings)) as ObsidianLiveSyncSettings;
+        } as SyncSettings;
+        const before = JSON.parse(JSON.stringify(settings)) as SyncSettings;
 
         expect(() =>
             upsertRemoteConfigurationInPlace(settings, "couchdb", {

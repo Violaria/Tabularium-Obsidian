@@ -2,7 +2,7 @@ import type { InjectableServiceHub } from "@tabularium/sync-core/compat/services
 import { ServiceRebuilder } from "@tabularium/sync-core/compat/serviceModules/Rebuilder";
 
 import { StorageAccessManager } from "@tabularium/sync-core/compat/managers/StorageProcessingManager";
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import type { ServiceContext } from "@tabularium/sync-core/context";
 import { FileAccessFSAPI } from "./FileAccessFSAPI";
 import { ServiceFileAccessFSAPI } from "./ServiceFileAccessImpl";
@@ -19,16 +19,16 @@ export interface FSAPIServiceModules extends ServiceModules {
 
 /**
  * Initialize service modules for FileSystem API webapp version
- * This is the webapp equivalent of ObsidianLiveSyncPlugin.initialiseServiceModules
+ * This is the webapp equivalent of TabulariumPlugin.initialiseServiceModules
  *
  * @param rootHandle - The root FileSystemDirectoryHandle for the vault
- * @param core - The LiveSyncBaseCore instance
+ * @param core - The SyncCore instance
  * @param services - The service hub
  * @returns ServiceModules containing all initialized service modules
  */
 export function initialiseServiceModulesFSAPI(
     rootHandle: FileSystemDirectoryHandle,
-    core: LiveSyncBaseCore<ServiceContext>,
+    core: SyncCore<ServiceContext>,
     services: InjectableServiceHub<ServiceContext>
 ): FSAPIServiceModules {
     const storageAccessManager = new StorageAccessManager();

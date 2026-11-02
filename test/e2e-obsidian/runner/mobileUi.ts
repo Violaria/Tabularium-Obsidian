@@ -26,7 +26,7 @@ async function applyObsidianMobileTestMode(
     port: number,
     enabled: boolean,
     timeoutMs: number,
-    waitForLiveSync: boolean
+    waitForSync: boolean
 ): Promise<void> {
     await withObsidianPage(port, async (page) => {
         await page.setViewportSize(enabled ? mobileViewport : desktopViewport);
@@ -43,15 +43,15 @@ async function applyObsidianMobileTestMode(
         // renderer.
         try {
             await page.waitForFunction(
-                ({ nextEnabled, waitForLiveSync }) => {
+                ({ nextEnabled, waitForSync }) => {
                     const obsidianApp = (globalThis as ObsidianTestGlobal).app;
                     return (
                         document.body.classList.contains("is-mobile") === nextEnabled &&
                         obsidianApp?.workspace?.layoutReady === true &&
-                        (!waitForLiveSync || obsidianApp?.plugins?.plugins["tabularium"] !== undefined)
+                        (!waitForSync || obsidianApp?.plugins?.plugins["tabularium"] !== undefined)
                     );
                 },
-                { nextEnabled: enabled, waitForLiveSync },
+                { nextEnabled: enabled, waitForSync },
                 { timeout: timeoutMs }
             );
         } catch (error) {
@@ -61,7 +61,7 @@ async function applyObsidianMobileTestMode(
                     appIsMobile: obsidianApp?.isMobile ?? null,
                     bodyClasses: document.body.className,
                     documentReadyState: document.readyState,
-                    liveSyncLoaded: obsidianApp?.plugins?.plugins["tabularium"] !== undefined,
+                    pluginLoaded: obsidianApp?.plugins?.plugins["tabularium"] !== undefined,
                     viewport: { width: window.innerWidth, height: window.innerHeight },
                     workspaceLayoutReady: obsidianApp?.workspace?.layoutReady ?? null,
                 };
@@ -70,7 +70,7 @@ async function applyObsidianMobileTestMode(
             await mkdir(outputDirectory, { recursive: true });
             const screenshotPath = join(
                 outputDirectory,
-                waitForLiveSync ? "mobile-mode-transition.failure.png" : "mobile-mode-before-plugin-start.failure.png"
+                waitForSync ? "mobile-mode-transition.failure.png" : "mobile-mode-before-plugin-start.failure.png"
             );
             await page.screenshot({ path: screenshotPath, fullPage: true });
             const detail = error instanceof Error ? error.message : String(error);
@@ -91,7 +91,7 @@ async function applyObsidianMobileTestMode(
     });
 }
 
-/** Enters mobile emulation before LiveSync's first load in a controlled session. */
+/** Enters mobile emulation before Tabularium's first load in a controlled session. */
 export async function setObsidianMobileTestModeBeforePluginStart(
     port: number,
     enabled: boolean,

@@ -8,12 +8,12 @@ import {
 } from "@tabularium/sync-core/context";
 import { LOG_KIND_WARNING, notice } from "octagonal-wheels/common/logger";
 import type { TaggedType } from "octagonal-wheels/common/types";
-import { SUPPORTED_I18N_LANGS, type AllMessageKeys, type I18N_LANGS, type LiveSyncCatalogueMessageKey } from "./rosetta";
+import { SUPPORTED_I18N_LANGS, type AllMessageKeys, type I18N_LANGS, type CatalogueMessageKey } from "./rosetta";
 import { allMessages } from "./messages/combinedMessages.prod.ts";
 import {
-    liveSyncProvisionalEnglishMessages,
-    type LiveSyncProvisionalMessageKey,
-} from "./messages/LiveSyncProvisionalMessages.ts";
+    provisionalEnglishMessages,
+    type ProvisionalMessageKey,
+} from "./messages/ProvisionalMessages.ts";
 
 /** Obsidian's interface languages mapped to ours; Latin is not offered by Obsidian and is chosen in the settings. */
 export function languageForObsidian(obsidianLanguage: string): I18N_LANGS {
@@ -63,7 +63,7 @@ export function setLang(lang: string) {
 function _getMessage(key: string, lang: I18N_LANGS) {
     if (key.trim() == "") return key;
 
-    const provisionalEnglish = liveSyncProvisionalEnglishMessages[key as LiveSyncProvisionalMessageKey];
+    const provisionalEnglish = provisionalEnglishMessages[key as ProvisionalMessageKey];
     const msgs =
         allMessages[key] ?? (provisionalEnglish === undefined ? undefined : ({ def: provisionalEnglish } as const));
     if (msgs === undefined && isCommonlibMessageKey(key)) return englishMessageTranslator(key);
@@ -96,7 +96,7 @@ export function $t(message: string, lang?: I18N_LANGS) {
 }
 
 export function translateIfAvailable(message: string, lang?: I18N_LANGS) {
-    if (message.trim() == "" || (!isLiveSyncMessageKey(message) && !isCommonlibMessageKey(message))) return message;
+    if (message.trim() == "" || (!isCatalogueMessageKey(message) && !isCommonlibMessageKey(message))) return message;
     return $t(message, lang);
 }
 
@@ -126,7 +126,7 @@ function patterns() {
  * translation. Text not in the catalogue is shown as it is.
  */
 export function translateNotice(message: string): string {
-    if (isLiveSyncMessageKey(message)) return $t(message);
+    if (isCatalogueMessageKey(message)) return $t(message);
     for (const { key, pattern, names } of patterns()) {
         const match = pattern.exec(message);
         if (!match) continue;
@@ -141,8 +141,8 @@ function isCommonlibMessageKey(key: string): key is CommonlibMessageKey {
     return key in commonlibEnglishMessages;
 }
 
-function isLiveSyncMessageKey(key: string): key is LiveSyncCatalogueMessageKey {
-    return key in allMessages || key in liveSyncProvisionalEnglishMessages;
+function isCatalogueMessageKey(key: string): key is CatalogueMessageKey {
+    return key in allMessages || key in provisionalEnglishMessages;
 }
 
 /**
@@ -174,10 +174,10 @@ export function $msg<T extends AllMessageKeys>(
     return msg as TaggedType<string, T>;
 }
 
-/** Supplies the LiveSync-owned language catalogue through the Commonlib host boundary. */
-export type LiveSyncMessageTranslator = MessageTranslator<AllMessageKeys>;
+/** Supplies the Tabularium-owned language catalogue through the Commonlib host boundary. */
+export type CatalogueMessageTranslator = MessageTranslator<AllMessageKeys>;
 
-export const translateLiveSyncMessage: LiveSyncMessageTranslator = (key, params) => {
-    if (!isLiveSyncMessageKey(key)) return englishMessageTranslator(key, params);
+export const translateCatalogueMessage: CatalogueMessageTranslator = (key, params) => {
+    if (!isCatalogueMessageKey(key)) return englishMessageTranslator(key, params);
     return $msg(key, params === undefined ? undefined : { ...params });
 };

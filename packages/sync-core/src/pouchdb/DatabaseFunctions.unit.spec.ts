@@ -7,7 +7,7 @@ import {
     REMOTE_COUCHDB,
     REMOTE_MINIO,
 } from "@lib/common/types.ts";
-import { ensureRemoteIsCompatible } from "./LiveSyncDBFunctions.ts";
+import { ensureRemoteIsCompatible } from "./DatabaseFunctions.ts";
 
 const VERSION_RANGE = { min: 0, max: 2 } as const;
 const DEVICE_INFO: DeviceInfo = {

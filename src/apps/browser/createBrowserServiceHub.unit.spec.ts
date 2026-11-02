@@ -9,21 +9,21 @@ import {
     SERVICE_CONTEXT_MEMBERS,
 } from "../../../test/contracts/serviceContext";
 import {
-    createLiveSyncBrowserServiceHub,
-    type LiveSyncBrowserServiceHubOptions,
-} from "./createLiveSyncBrowserServiceHub";
+    createBrowserServiceHub,
+    type BrowserServiceHubOptions,
+} from "./createBrowserServiceHub";
 
 afterEach(() => {
     vi.unstubAllGlobals();
 });
 
-describe("LiveSync browser service context contract", () => {
+describe("Tabularium browser service context contract", () => {
     it("preserves one injected context and its API results throughout the Webapp composition", () => {
         const context = createServiceContext({
             translate: (key) => `webapp:${key}`,
         });
         const deviceValues = new MemoryValueStore();
-        const hub = createLiveSyncBrowserServiceHub({ context, deviceValues });
+        const hub = createBrowserServiceHub({ context, deviceValues });
 
         expect(observeServiceContext(context, "moduleLocalDatabase.logWaitingForReady")).toEqual({
             translation: "webapp:moduleLocalDatabase.logWaitingForReady",
@@ -43,7 +43,7 @@ describe("LiveSync browser service context contract", () => {
         const savedSettings: (typeof DEFAULT_SETTINGS)[] = [];
         const restartCalls: string[] = [];
         const nativeFetch = vi.fn(async () => new Response("ok"));
-        const options: LiveSyncBrowserServiceHubOptions<ReturnType<typeof createServiceContext>> = {
+        const options: BrowserServiceHubOptions<ReturnType<typeof createServiceContext>> = {
             deviceValues,
             getSystemVaultName: () => "browser-vault",
             settings: {
@@ -66,7 +66,7 @@ describe("LiveSync browser service context contract", () => {
             },
         };
 
-        const hub = createLiveSyncBrowserServiceHub(options);
+        const hub = createBrowserServiceHub(options);
 
         expect(hub.setting.deviceValues).toBe(deviceValues);
         expect(hub.config).toBe(hub.setting.config);
@@ -91,11 +91,11 @@ describe("LiveSync browser service context contract", () => {
     it("keeps each browser composition bound to its own device value store", async () => {
         const firstValues = new MemoryValueStore();
         const secondValues = new MemoryValueStore();
-        const firstHub = createLiveSyncBrowserServiceHub({
+        const firstHub = createBrowserServiceHub({
             deviceValues: firstValues,
             getSystemVaultName: () => "first-vault",
         });
-        const secondHub = createLiveSyncBrowserServiceHub({
+        const secondHub = createBrowserServiceHub({
             deviceValues: secondValues,
             getSystemVaultName: () => "second-vault",
         });

@@ -3,7 +3,7 @@ import {
     LOG_LEVEL_NOTICE,
     LOG_LEVEL_VERBOSE,
     type LOG_LEVEL,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type RemoteDBSettings,
 } from "@lib/common/types";
 import { handlers } from "@lib/services/lib/HandlerUtils";
@@ -473,7 +473,7 @@ export abstract class ReplicationService<T extends ServiceContext = ServiceConte
             this._log(this.context.translate("Replicator.Message.SomeModuleFailed"), LOG_LEVEL_NOTICE);
             return false;
         }
-        const captureSetting = (): Readonly<ObsidianLiveSyncSettings> => {
+        const captureSetting = (): Readonly<SyncSettings> => {
             const detachedSetting = asCopy(this.settingService.currentSettings());
             if (admission === DIRECTIONAL_REPLICATION_ADMISSION.EXPLICIT_REBUILD) {
                 // The confirmed recovery may run while ordinary replication stays
@@ -485,7 +485,7 @@ export abstract class ReplicationService<T extends ServiceContext = ServiceConte
         };
         const setting = captureSetting();
         let expectedContext: ActiveReplicatorContext | undefined;
-        const run = async (attemptSetting: Readonly<ObsidianLiveSyncSettings>): Promise<ReplicationOutcome> => {
+        const run = async (attemptSetting: Readonly<SyncSettings>): Promise<ReplicationOutcome> => {
             const admitted = await this.replicatorService.runWithActiveReplicatorContext((context) => {
                 if (expectedContext && context !== expectedContext) {
                     return replicationBlocked("not-ready");
@@ -566,7 +566,7 @@ export abstract class ReplicationService<T extends ServiceContext = ServiceConte
     private _getReplicatorAndPerform(
         action: string,
         perform: (
-            setting: ObsidianLiveSyncSettings,
+            setting: SyncSettings,
             replicator: LegacyCentralRemoteAdministrationAdapter
         ) => Promise<void>
     ) {

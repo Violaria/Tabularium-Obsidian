@@ -10,7 +10,7 @@ import {
 import type { ChunkManager } from "@lib/managers/ChunkManager";
 import type { ContentSplitter } from "@lib/ContentSplitter/ContentSplitters";
 import type { HashManager } from "@lib/managers/HashManager/HashManager";
-import type { GeneratedChunk } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { GeneratedChunk } from "@lib/pouchdb/LocalDatabase";
 import type { IPathService, ISettingService } from "@lib/services/base/IService";
 import { assertDatabasePathIdentity } from "@lib/pouchdb/pathIdentityCompatibility";
 import {

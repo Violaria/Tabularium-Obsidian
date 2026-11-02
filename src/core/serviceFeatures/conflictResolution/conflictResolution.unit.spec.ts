@@ -11,7 +11,7 @@ import {
     type FilePath,
     type FilePathWithPrefix,
     type MetaEntry,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 import { EVENT_CONFLICT_CANCELLED } from "@tabularium/sync-core/compat/events/coreEvents";
 import { NO_INTERACTION } from "@tabularium/sync-core/replication";
@@ -29,7 +29,7 @@ type ConflictLeaf = {
 
 type HarnessOptions = {
     files?: FilePathWithPrefix[];
-    settings?: Partial<ObsidianLiveSyncSettings>;
+    settings?: Partial<SyncSettings>;
     activeFile?: FilePathWithPrefix;
     compose?: boolean;
 };

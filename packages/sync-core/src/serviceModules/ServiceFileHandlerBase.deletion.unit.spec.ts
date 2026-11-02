@@ -6,7 +6,7 @@ import Replication from "pouchdb-replication";
 import type { EntryDoc, FilePathWithPrefix, MetaEntry, UXFileInfo, UXFileInfoStub } from "@lib/common/types";
 import { DEFAULT_SETTINGS } from "@lib/common/types";
 import { compareMTime, createTextBlob, readContent } from "@lib/common/utils";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import { EntryManager, type EntryManagerOptions } from "@lib/managers/EntryManager/EntryManager";
 import {
     ServiceDatabaseFileAccessBase,
@@ -90,7 +90,7 @@ function createPeer(deleteMetadataOfDeletedFiles: boolean) {
         } as EntryManagerOptions["splitter"],
     });
     // Keep the real EntryManager and PouchDB revision tree behind the same
-    // forwarding methods provided by LiveSyncLocalDB in maintained hosts.
+    // forwarding methods provided by LocalDatabase in maintained hosts.
     const localDatabase = {
         getDBEntry: entries.getDBEntry.bind(entries),
         getDBEntryMeta: entries.getDBEntryMeta.bind(entries),
@@ -121,7 +121,7 @@ function createPeer(deleteMetadataOfDeletedFiles: boolean) {
         API: { addLog: vi.fn() },
         path: pathService,
         setting,
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         database: { localDatabase },
         vault: { isTargetFile: async () => true, isFileSizeTooLarge: () => false },
         storageAccess,

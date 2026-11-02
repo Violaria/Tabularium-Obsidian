@@ -4,7 +4,7 @@ import {
     DEFAULT_SETTINGS,
     REMOTE_COUCHDB,
     type ConfigPassphraseStore,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@lib/common/types";
 import { SettingService } from "./SettingService";
 import { ServiceContext } from "./ServiceBase";
@@ -48,8 +48,8 @@ function deferred<T>() {
 }
 
 class ConfigurationSettingService extends SettingService<ServiceContext> {
-    saved?: ObsidianLiveSyncSettings;
-    readonly writes: ObsidianLiveSyncSettings[] = [];
+    saved?: SyncSettings;
+    readonly writes: SyncSettings[] = [];
     readonly localItems: Map<string, string>;
     private readonly valueStore: MapBackedValueStore;
     get failLocalWrites(): number {
@@ -65,12 +65,12 @@ class ConfigurationSettingService extends SettingService<ServiceContext> {
         this.valueStore = deviceValues;
         this.localItems = deviceValues.values;
     }
-    protected async saveData(settings: ObsidianLiveSyncSettings): Promise<void> {
+    protected async saveData(settings: SyncSettings): Promise<void> {
         if (this.failDataWrites-- > 0) throw new Error("synthetic settings write failure");
         this.saved = structuredClone(settings);
         this.writes.push(structuredClone(settings));
     }
-    protected async loadData(): Promise<ObsidianLiveSyncSettings | undefined> {
+    protected async loadData(): Promise<SyncSettings | undefined> {
         return this.saved && structuredClone(this.saved);
     }
 }
@@ -117,7 +117,7 @@ function createService(version: 0 | 1 = 1, deviceValues = createMapBackedValueSt
     return { service, askString, addLog };
 }
 
-function expectSecrets(actual: ObsidianLiveSyncSettings, expected: ObsidianLiveSyncSettings): void {
+function expectSecrets(actual: SyncSettings, expected: SyncSettings): void {
     expect(actual.couchDB_URI).toBe(expected.couchDB_URI);
     expect(actual.couchDB_PASSWORD).toBe(expected.couchDB_PASSWORD);
     expect(actual.passphrase).toBe(expected.passphrase);

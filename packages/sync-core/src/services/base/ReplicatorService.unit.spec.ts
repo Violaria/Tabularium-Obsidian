@@ -4,7 +4,7 @@ import { ServiceContext } from "./ServiceBase.ts";
 import type { AsyncActivityOptions, AsyncActivityRunner } from "@lib/interfaces/AsyncActivityRunner.ts";
 import { REMOTE_COUCHDB, REMOTE_MINIO } from "@lib/common/types.ts";
 import { defaultLogger, LOG_LEVEL_INFO, setGlobalLogFunction } from "@lib/common/logger.ts";
-import type { LiveSyncAbstractReplicator } from "@lib/replication/LiveSyncAbstractReplicator.ts";
+import type { AbstractReplicator } from "@lib/replication/AbstractReplicator.ts";
 import {
     CAPABILITY_NOT_APPLICABLE,
     CENTRAL_REMOTE_REPLICATION_READINESS,
@@ -136,7 +136,7 @@ function createProviderFixture(
         initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
         terminateSync: vi.fn(),
         closeReplication: vi.fn(),
-    } as unknown as LiveSyncAbstractReplicator;
+    } as unknown as AbstractReplicator;
     const definition: ReplicatorProviderDefinition<typeof REMOTE_COUCHDB> = {
         kind: REMOTE_COUCHDB,
         diagnosticName: "CouchDB",
@@ -218,7 +218,7 @@ describe("ReplicatorService lifecycle", () => {
         const replicator = {
             initializeDatabaseForReplication,
             closeReplication,
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const dependencies = {
             settingService: {
                 currentSettings: () => ({
@@ -298,7 +298,7 @@ describe("ReplicatorService lifecycle", () => {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             terminateSync,
             closeReplication,
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_COUCHDB> = {
             kind: REMOTE_COUCHDB,
             diagnosticName: "CouchDB",
@@ -469,7 +469,7 @@ describe("ReplicatorService lifecycle", () => {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             terminateSync,
             closeReplication,
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_COUCHDB> = {
             kind: REMOTE_COUCHDB,
             diagnosticName: "CouchDB",
@@ -576,7 +576,7 @@ describe("ReplicatorService lifecycle", () => {
                 return true;
             }),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const dependencies = {
             settingService: {
                 currentSettings: () => ({
@@ -637,11 +637,11 @@ describe("ReplicatorService lifecycle", () => {
         const legacyReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const providerReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -762,7 +762,7 @@ describe("ReplicatorService lifecycle", () => {
         const replicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -803,18 +803,18 @@ describe("ReplicatorService lifecycle", () => {
             remoteType: REMOTE_MINIO,
             activeConfigurationId: "profile-a",
         };
-        let resolveCandidate!: (replicator: LiveSyncAbstractReplicator) => void;
-        const candidateGate = new Promise<LiveSyncAbstractReplicator>((resolve) => {
+        let resolveCandidate!: (replicator: AbstractReplicator) => void;
+        const candidateGate = new Promise<AbstractReplicator>((resolve) => {
             resolveCandidate = resolve;
         });
         const oldReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const newReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -885,11 +885,11 @@ describe("ReplicatorService lifecycle", () => {
             closeReplication: vi.fn(async () => await closeGate),
             markRemoteResolved: vi.fn().mockResolvedValue(undefined),
             markRemoteLocked: vi.fn().mockResolvedValue(undefined),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const newReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const lock = vi.fn(async () => {
             markAdministrationStarted();
             await administrationGate;
@@ -954,11 +954,11 @@ describe("ReplicatorService lifecycle", () => {
         const oldReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const newReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -1027,11 +1027,11 @@ describe("ReplicatorService lifecycle", () => {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             terminateSync: vi.fn(),
             closeReplication: vi.fn().mockRejectedValueOnce(closeError).mockResolvedValueOnce(undefined),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const newReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -1077,14 +1077,14 @@ describe("ReplicatorService lifecycle", () => {
             activeConfigurationId: "profile-a",
         };
         let realiseSettings!: () => Promise<boolean>;
-        let resolveCandidate!: (replicator: LiveSyncAbstractReplicator) => void;
-        const candidateGate = new Promise<LiveSyncAbstractReplicator>((resolve) => {
+        let resolveCandidate!: (replicator: AbstractReplicator) => void;
+        const candidateGate = new Promise<AbstractReplicator>((resolve) => {
             resolveCandidate = resolve;
         });
         const staleReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -1146,7 +1146,7 @@ describe("ReplicatorService lifecycle", () => {
         const oldReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -1187,7 +1187,7 @@ describe("ReplicatorService lifecycle", () => {
         const candidate = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const configurationIdentity = vi
             .fn()
             .mockReturnValueOnce("profile-a")
@@ -1229,7 +1229,7 @@ describe("ReplicatorService lifecycle", () => {
         const replicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication,
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const definition: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",
@@ -1290,11 +1290,11 @@ describe("ReplicatorService lifecycle", () => {
                 contextObservedDuringClose = service.getActiveReplicatorContext();
                 return closeGate;
             }),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const newReplicator = {
             initializeDatabaseForReplication: vi.fn().mockResolvedValue(true),
             closeReplication: vi.fn(),
-        } as unknown as LiveSyncAbstractReplicator;
+        } as unknown as AbstractReplicator;
         const minio: ReplicatorProviderDefinition<typeof REMOTE_MINIO> = {
             kind: REMOTE_MINIO,
             diagnosticName: "Object Storage",

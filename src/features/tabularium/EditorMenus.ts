@@ -3,7 +3,7 @@
 // web notes uses (formatting.ts), so the same action gives the same Markdown on both sides. Obsidian's own editor and its
 // live preview stay as they are; only the selected range changes.
 import { Menu, sanitizeHTMLToDom, type Editor, type Plugin } from "@/deps";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 import { StateField, type EditorState } from "@codemirror/state";
 import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
 import { $msg } from "@/core/common/translation";
@@ -49,7 +49,7 @@ function formatView(view: EditorView, kind: Format) {
 export class TabulariumEditorMenus {
     constructor(
         private readonly plugin: Plugin,
-        private readonly core: LiveSyncCore
+        private readonly core: PluginCore
     ) {}
 
     private get menuKey() {
@@ -134,7 +134,7 @@ export class TabulariumEditorMenus {
     }
 }
 
-export function installEditorMenus(plugin: Plugin, core: LiveSyncCore) {
+export function installEditorMenus(plugin: Plugin, core: PluginCore) {
     const menus = new TabulariumEditorMenus(plugin, core);
     menus.install();
     return menus;

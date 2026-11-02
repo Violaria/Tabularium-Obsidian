@@ -21,7 +21,7 @@ import { computeFileContentHash } from "@lib/common/fileContentHash.ts";
 import { EVENT_CONFLICT_CANCELLED } from "@lib/events/coreEvents";
 import { shouldBeIgnored, stripAllPrefixes } from "@lib/string_and_binary/path";
 import { Semaphore } from "octagonal-wheels/concurrency/semaphore";
-import type { LiveSyncEventHub } from "@lib/hub/hub";
+import type { SyncEventHub } from "@lib/hub/hub";
 import type { IFileHandler, StoreFileOptions } from "@lib/interfaces/FileHandler.ts";
 import { ServiceModuleBase } from "@lib/serviceModules/ServiceModuleBase";
 import type { APIService } from "@lib/services/base/APIService.ts";
@@ -43,7 +43,7 @@ import type {
 } from "@lib/interfaces/FileReflectionProvenance.ts";
 
 export interface ServiceFileHandlerDependencies {
-    events: LiveSyncEventHub;
+    events: SyncEventHub;
     API: APIService;
     databaseFileAccess: DatabaseFileAccess;
     storageAccess: StorageAccess;
@@ -121,7 +121,7 @@ export abstract class ServiceFileHandlerBase
     extends ServiceModuleBase<ServiceFileHandlerDependencies>
     implements IFileHandler
 {
-    private events: LiveSyncEventHub;
+    private events: SyncEventHub;
     private databaseFileAccess: DatabaseFileAccess;
     private storageAccess: StorageAccess;
     private conflict: ConflictService;

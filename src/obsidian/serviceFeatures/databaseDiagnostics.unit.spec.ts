@@ -3,7 +3,7 @@ import {
     DEFAULT_SETTINGS,
     REMOTE_COUCHDB,
     REMOTE_P2P,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
 } from "@tabularium/sync-core/compat/common/types";
 
 const diagnosticsMocks = vi.hoisted(() => ({ analyseOptions: vi.fn() }));
@@ -25,7 +25,7 @@ function fixture() {
     const path = "Private/日本語.md";
     const body = "private file contents";
     const bytes = new TextEncoder().encode(body);
-    const settings: ObsidianLiveSyncSettings = {
+    const settings: SyncSettings = {
         ...DEFAULT_SETTINGS,
         remoteType: REMOTE_P2P,
         readChunksOnline: true,

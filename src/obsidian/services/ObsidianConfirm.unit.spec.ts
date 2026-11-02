@@ -32,14 +32,14 @@ vi.mock("@/deps", () => ({
 }));
 
 import { EVENT_PLUGIN_UNLOADED } from "@/core/common/events";
-import { createLiveSyncEventHub } from "@tabularium/sync-core/context";
+import { createSyncEventHub } from "@tabularium/sync-core/context";
 import { ObsidianConfirm } from "./ObsidianConfirm";
 import type { ObsidianServiceContext } from "./ObsidianServiceContext";
 
 function createConfirm() {
     const app = { id: "app" };
     const plugin = { app };
-    const events = createLiveSyncEventHub();
+    const events = createSyncEventHub();
     const notices = {
         show: vi.fn(),
         hide: vi.fn(),

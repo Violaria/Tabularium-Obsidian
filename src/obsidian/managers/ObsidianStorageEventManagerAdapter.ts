@@ -11,8 +11,8 @@ import type {
     IStorageEventWatchHandlers,
 } from "@tabularium/sync-core/compat/managers/adapters";
 import type { FileEventItemSentinel } from "@tabularium/sync-core/compat/managers/StorageEventManager";
-import type ObsidianLiveSyncPlugin from "@/main";
-import type { LiveSyncCore } from "@/main";
+import type TabulariumPlugin from "@/main";
+import type { PluginCore } from "@/main";
 import type { FileProcessingService } from "@tabularium/sync-core/compat/services/base/FileProcessingService";
 import { InternalFileToUXFileInfoStub, TFileToUXFileInfoStub } from "@/obsidian/utilObsidian";
 
@@ -45,7 +45,7 @@ class ObsidianTypeGuardAdapter implements IStorageEventTypeGuardAdapter<TFile, T
  * Obsidian-specific persistence adapter
  */
 class ObsidianPersistenceAdapter implements IStorageEventPersistenceAdapter {
-    constructor(private core: LiveSyncCore) {}
+    constructor(private core: PluginCore) {}
 
     async saveSnapshot(snapshot: (FileEventItem | FileEventItemSentinel)[]): Promise<void> {
         await this.core.kvDB.set("storage-event-manager-snapshot", snapshot);
@@ -89,7 +89,7 @@ class ObsidianConverterAdapter implements IStorageEventConverterAdapter<TFile> {
  * Obsidian-specific watch adapter
  */
 class ObsidianWatchAdapter implements IStorageEventWatchAdapter {
-    constructor(private plugin: ObsidianLiveSyncPlugin) {}
+    constructor(private plugin: TabulariumPlugin) {}
 
     beginWatch(handlers: IStorageEventWatchHandlers): Promise<void> {
         const plugin = this.plugin;
@@ -127,7 +127,7 @@ export class ObsidianStorageEventManagerAdapter implements IStorageEventManagerA
     readonly status: ObsidianStatusAdapter;
     readonly converter: ObsidianConverterAdapter;
 
-    constructor(plugin: ObsidianLiveSyncPlugin, core: LiveSyncCore, fileProcessing: FileProcessingService) {
+    constructor(plugin: TabulariumPlugin, core: PluginCore, fileProcessing: FileProcessingService) {
         this.typeGuard = new ObsidianTypeGuardAdapter();
         this.persistence = new ObsidianPersistenceAdapter(core);
         this.watch = new ObsidianWatchAdapter(plugin);

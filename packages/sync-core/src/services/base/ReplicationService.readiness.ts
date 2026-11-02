@@ -1,4 +1,4 @@
-import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, type LOG_LEVEL, type ObsidianLiveSyncSettings } from "@lib/common/types";
+import { LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, type LOG_LEVEL, type SyncSettings } from "@lib/common/types";
 import {
     CENTRAL_REMOTE_REPLICATION_READINESS,
     type ReplicationReadinessRequirements,
@@ -11,7 +11,7 @@ import { evaluateReadiness, type ReadinessCondition, type ReadinessEvaluationRes
 export interface ReplicationReadinessGates {
     readonly isApplicationReady: () => boolean;
     readonly runPolicyChecks: (showMessage: boolean) => Promise<boolean>;
-    readonly currentSettings: () => Pick<ObsidianLiveSyncSettings, "versionUpFlash">;
+    readonly currentSettings: () => Pick<SyncSettings, "versionUpFlash">;
     readonly isCleanupRunning: () => boolean;
     readonly isOnline: () => boolean;
 }

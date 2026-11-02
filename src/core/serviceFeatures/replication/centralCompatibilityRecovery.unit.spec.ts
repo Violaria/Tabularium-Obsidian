@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { VERSIONING_DOCID, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { VERSIONING_DOCID, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { assessTweakCompatibility } from "@tabularium/sync-core/settings";
 import { defaultLogger, LOG_LEVEL_INFO, LOG_LEVEL_NOTICE, setGlobalLogFunction } from "octagonal-wheels/common/logger";
 import {
@@ -16,11 +16,11 @@ const chunkMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("@tabularium/sync-core/compat/pouchdb/chunks", () => chunkMocks);
-vi.mock("@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator", () => ({
-    LiveSyncCouchDBReplicator: class {},
+vi.mock("@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator", () => ({
+    CouchDBReplicator: class {},
 }));
 
-import { LiveSyncCouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/LiveSyncReplicator";
+import { CouchDBReplicator } from "@tabularium/sync-core/compat/replication/couchdb/CouchDBReplicator";
 import { createCentralCompatibilityRecovery } from "./centralCompatibilityRecovery";
 
 describe("central compatibility recovery", () => {
@@ -42,7 +42,7 @@ describe("central compatibility recovery", () => {
             services: { replicator: {} },
         } as never);
 
-        await recovery.reconcileCleanedRemote(true, {} as ObsidianLiveSyncSettings, {} as never);
+        await recovery.reconcileCleanedRemote(true, {} as SyncSettings, {} as never);
 
         expect(chunkMocks.purgeUnreferencedChunks).not.toHaveBeenCalled();
         expect(confirmWithMessage).not.toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe("central compatibility recovery", () => {
             services: { replicator: {} },
         } as never);
 
-        await recovery.reconcileCleanedRemote(true, {} as ObsidianLiveSyncSettings, {} as never);
+        await recovery.reconcileCleanedRemote(true, {} as SyncSettings, {} as never);
 
         expect(chunkMocks.purgeUnreferencedChunks).toHaveBeenCalledWith(expect.anything(), true);
         expect(confirmWithMessage).toHaveBeenCalledOnce();
@@ -339,7 +339,7 @@ describe("central compatibility recovery", () => {
             close: vi.fn(async () => undefined),
         };
         const close = vi.fn(async () => undefined);
-        const activeReplicator = Object.assign(new LiveSyncCouchDBReplicator({} as never), {
+        const activeReplicator = Object.assign(new CouchDBReplicator({} as never), {
             connectRemoteCouchDBWithSetting: vi.fn(async () => ({ db: remoteDatabase, close })),
             openOneShotReplication,
             markRemoteResolved: vi.fn(async () => undefined),
@@ -371,7 +371,7 @@ describe("central compatibility recovery", () => {
             },
         } as never);
 
-        await recovery.reconcileCleanedRemote(true, {} as ObsidianLiveSyncSettings, expectedContext as never);
+        await recovery.reconcileCleanedRemote(true, {} as SyncSettings, expectedContext as never);
 
         expect(runBoundedRemoteActivity).toHaveBeenCalledWith(expect.any(Function), {
             label: "database-cleanup",

@@ -1,10 +1,10 @@
-import { createLiveSyncEventHub, type LiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub, type SyncEventHub } from "@lib/hub/hub";
 import { englishMessageTranslator, type MessageTranslator } from "@lib/services/base/MessageTranslator";
 
 /** Capabilities shared by services which belong to one Commonlib client. */
 export interface ServiceContextOptions {
     /** An isolated event channel. A new channel is created when omitted. */
-    events?: LiveSyncEventHub;
+    events?: SyncEventHub;
     /** Optional host-provided translation. Canonical English is used when omitted. */
     translate?: MessageTranslator;
 }
@@ -17,17 +17,17 @@ export interface ServiceContextOptions {
  * unchanged to every service in one composition.
  */
 export interface ServiceContextContract {
-    readonly events: LiveSyncEventHub;
+    readonly events: SyncEventHub;
     readonly translate: MessageTranslator;
 }
 
 /** Instance-owned capabilities shared by a composed set of Commonlib services. */
 export class ServiceContext implements ServiceContextContract {
-    readonly events: LiveSyncEventHub;
+    readonly events: SyncEventHub;
     readonly translate: MessageTranslator;
 
     constructor(options: ServiceContextOptions = {}) {
-        this.events = options.events ?? createLiveSyncEventHub();
+        this.events = options.events ?? createSyncEventHub();
         this.translate = options.translate ?? englishMessageTranslator;
     }
 }

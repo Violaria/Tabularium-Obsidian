@@ -1,6 +1,6 @@
 import { WorkspaceLeaf } from "@/deps.ts";
 import LogPaneComponent from "./LogPane.svelte";
-import type ObsidianLiveSyncPlugin from "@/main.ts";
+import type TabulariumPlugin from "@/main.ts";
 import { SvelteItemView } from "@/ui/SvelteItemView.ts";
 import { $msg } from "@/core/common/translation";
 import { mount } from "svelte";
@@ -18,7 +18,7 @@ export class LogPaneView extends SvelteItemView {
         });
     }
 
-    plugin: ObsidianLiveSyncPlugin;
+    plugin: TabulariumPlugin;
     override icon = "view-log";
     title: string = "";
     override navigation = false;
@@ -27,7 +27,7 @@ export class LogPaneView extends SvelteItemView {
         return "view-log";
     }
 
-    constructor(leaf: WorkspaceLeaf, plugin: ObsidianLiveSyncPlugin) {
+    constructor(leaf: WorkspaceLeaf, plugin: TabulariumPlugin) {
         super(leaf);
         this.plugin = plugin;
     }

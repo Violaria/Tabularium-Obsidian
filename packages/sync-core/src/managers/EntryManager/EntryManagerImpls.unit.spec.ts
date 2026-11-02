@@ -25,7 +25,7 @@ import type {
     FilePathWithPrefix,
     LoadedEntry,
     SavingEntry,
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     NewEntry,
     PlainEntry,
 } from "@lib/common/types";
@@ -57,11 +57,11 @@ let dbCounter = 0;
 /**
  * Create mock services for testing
  */
-function createMockServices(settings: Partial<ObsidianLiveSyncSettings> = {}) {
+function createMockServices(settings: Partial<SyncSettings> = {}) {
     const fullSettings = {
         ...DEFAULT_SETTINGS,
         ...settings,
-    } as ObsidianLiveSyncSettings;
+    } as SyncSettings;
 
     const mockSettingService: ISettingService = {
         currentSettings: vi.fn(() => fullSettings),
@@ -1237,7 +1237,7 @@ describe("EntryManagerImpls", () => {
                 ...DEFAULT_SETTINGS,
                 remoteType: REMOTE_COUCHDB,
                 useOnlyLocalChunk: false,
-            } as ObsidianLiveSyncSettings;
+            } as SyncSettings;
 
             expect(canUseOnDemandChunking(settings)).toBe(true);
         });
@@ -1247,7 +1247,7 @@ describe("EntryManagerImpls", () => {
                 ...DEFAULT_SETTINGS,
                 remoteType: REMOTE_COUCHDB,
                 useOnlyLocalChunk: true,
-            } as ObsidianLiveSyncSettings;
+            } as SyncSettings;
 
             expect(canUseOnDemandChunking(settings)).toBe(false);
         });
@@ -1257,7 +1257,7 @@ describe("EntryManagerImpls", () => {
                 ...DEFAULT_SETTINGS,
                 remoteType: "minio" as any,
                 useOnlyLocalChunk: false,
-            } as ObsidianLiveSyncSettings;
+            } as SyncSettings;
 
             expect(canUseOnDemandChunking(settings)).toBe(false);
         });
@@ -1358,7 +1358,7 @@ describe("EntryManagerImpls", () => {
                 ...DEFAULT_SETTINGS,
                 remoteType: testCase.remoteType,
                 useOnlyLocalChunk: testCase.useOnlyLocalChunk,
-            } as ObsidianLiveSyncSettings;
+            } as SyncSettings;
 
             expect(computeChunkRetrievalMethod(testCase.waitForReady, settings)).toEqual(testCase.expected);
         });
@@ -1370,7 +1370,7 @@ describe("EntryManagerImpls", () => {
                     ...DEFAULT_SETTINGS,
                     remoteType: REMOTE_COUCHDB,
                     useOnlyLocalChunk: false,
-                } as ObsidianLiveSyncSettings;
+                } as SyncSettings;
 
                 expect(computeChunkRetrievalMethod(waitForReady, { ...base, readChunksOnline: true })).toEqual(
                     computeChunkRetrievalMethod(waitForReady, { ...base, readChunksOnline: false })

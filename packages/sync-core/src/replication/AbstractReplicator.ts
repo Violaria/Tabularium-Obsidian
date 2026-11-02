@@ -37,7 +37,7 @@ export type ReplicationStat = {
  * provider capabilities and their ownership are declared separately by the
  * replication provider contracts.
  */
-export interface LiveSyncReplicatorEnv {
+export interface ReplicatorEnv {
     services: RequiredServices<
         | "API"
         | "appLifecycle"
@@ -66,7 +66,7 @@ export type RemoteDBStatus = {
  * The additional abstract members remain temporarily for existing maintenance
  * and setup consumers and are not capabilities promised by every provider.
  */
-export abstract class LiveSyncAbstractReplicator implements ReplicatorInstance {
+export abstract class AbstractReplicator implements ReplicatorInstance {
     syncStatus: DatabaseConnectingStatus = "NOT_CONNECTED";
     docArrived = 0;
     docSent = 0;
@@ -128,7 +128,7 @@ export abstract class LiveSyncAbstractReplicator implements ReplicatorInstance {
             return false;
         }
     }
-    env: LiveSyncReplicatorEnv;
+    env: ReplicatorEnv;
     async initializeDatabaseForReplication(): Promise<boolean> {
         const db = this.rawDatabase;
         try {
@@ -151,7 +151,7 @@ export abstract class LiveSyncAbstractReplicator implements ReplicatorInstance {
         return false;
     }
 
-    constructor(env: LiveSyncReplicatorEnv) {
+    constructor(env: ReplicatorEnv) {
         this.env = env;
         // initialize local node information.
     }

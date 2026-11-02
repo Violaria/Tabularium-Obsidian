@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_SETTINGS, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import { DEFAULT_SETTINGS, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { activateRemoteConfiguration } from "@tabularium/sync-core/remote-configurations";
 import {
     applyStoredSetting,
@@ -10,7 +10,7 @@ import {
     reconcileDurableSettings,
 } from "./settingsPersistence";
 
-function settings(overrides: Partial<ObsidianLiveSyncSettings> = {}): ObsidianLiveSyncSettings {
+function settings(overrides: Partial<SyncSettings> = {}): SyncSettings {
     return Object.assign(cloneSettings(DEFAULT_SETTINGS), overrides);
 }
 

@@ -128,7 +128,7 @@ export class ObsidianConfirm<T extends ObsidianServiceContext = ObsidianServiceC
         opt: { title?: string; defaultAction: T[number]; timeout?: number }
     ): Promise<T[number] | false> {
         const defaultTitle = $msg("moduleInputUIObsidian.defaultTitleSelect");
-        // Commonlib owns the transport decision, while LiveSync owns the
+        // Commonlib owns the transport decision, while Tabularium owns the
         // concrete Obsidian view which lets users revise that decision.
         const presentedMessage =
             opt.title === "P2P Connection Request"

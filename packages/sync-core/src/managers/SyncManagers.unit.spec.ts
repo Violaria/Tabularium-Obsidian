@@ -13,11 +13,11 @@ vi.mock("@lib/managers/HashManager/HashManager.ts", () => ({
 }));
 vi.mock("@lib/ContentSplitter/ContentSplitters.ts", () => ({ ContentSplitter: class {} }));
 
-import { LiveSyncManagers } from "./LiveSyncManagers";
+import { SyncManagers } from "./SyncManagers";
 
-describe("LiveSyncManagers", () => {
+describe("SyncManagers", () => {
     it("releases ID keys from both the current hash manager and the entry manager when retiring them", async () => {
-        const managers = new LiveSyncManagers({
+        const managers = new SyncManagers({
             database: {} as never,
             databaseService: {} as never,
             settingService: {} as never,
@@ -54,7 +54,7 @@ describe("LiveSyncManagers", () => {
 
         expect(
             () =>
-                new LiveSyncManagers({
+                new SyncManagers({
                     database: {} as never,
                     databaseService: databaseService as never,
                     settingService: {} as never,

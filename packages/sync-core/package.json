@@ -224,10 +224,10 @@
             "import": "./dist/mock_and_interop/wrapper.js",
             "default": "./dist/mock_and_interop/wrapper.js"
         },
-        "./compat/pouchdb/LiveSyncLocalDB": {
-            "types": "./src/pouchdb/LiveSyncLocalDB.ts",
-            "import": "./dist/pouchdb/LiveSyncLocalDB.js",
-            "default": "./dist/pouchdb/LiveSyncLocalDB.js"
+        "./compat/pouchdb/LocalDatabase": {
+            "types": "./src/pouchdb/LocalDatabase.ts",
+            "import": "./dist/pouchdb/LocalDatabase.js",
+            "default": "./dist/pouchdb/LocalDatabase.js"
         },
         "./compat/pouchdb/chunks": {
             "types": "./src/pouchdb/chunks.ts",
@@ -249,20 +249,20 @@
             "import": "./dist/pouchdb/utils_couchdb.js",
             "default": "./dist/pouchdb/utils_couchdb.js"
         },
-        "./compat/replication/LiveSyncAbstractReplicator": {
-            "types": "./src/replication/LiveSyncAbstractReplicator.ts",
-            "import": "./dist/replication/LiveSyncAbstractReplicator.js",
-            "default": "./dist/replication/LiveSyncAbstractReplicator.js"
+        "./compat/replication/AbstractReplicator": {
+            "types": "./src/replication/AbstractReplicator.ts",
+            "import": "./dist/replication/AbstractReplicator.js",
+            "default": "./dist/replication/AbstractReplicator.js"
         },
         "./compat/replication/SyncParamsHandler": {
             "types": "./src/replication/SyncParamsHandler.ts",
             "import": "./dist/replication/SyncParamsHandler.js",
             "default": "./dist/replication/SyncParamsHandler.js"
         },
-        "./compat/replication/couchdb/LiveSyncReplicator": {
-            "types": "./src/replication/couchdb/LiveSyncReplicator.ts",
-            "import": "./dist/replication/couchdb/LiveSyncReplicator.js",
-            "default": "./dist/replication/couchdb/LiveSyncReplicator.js"
+        "./compat/replication/couchdb/CouchDBReplicator": {
+            "types": "./src/replication/couchdb/CouchDBReplicator.ts",
+            "import": "./dist/replication/couchdb/CouchDBReplicator.js",
+            "default": "./dist/replication/couchdb/CouchDBReplicator.js"
         },
         "./compat/replication/httplib": {
             "types": "./src/replication/httplib.ts",
@@ -614,8 +614,8 @@
             "compat/mock_and_interop/wrapper": [
                 "src/mock_and_interop/wrapper.ts"
             ],
-            "compat/pouchdb/LiveSyncLocalDB": [
-                "src/pouchdb/LiveSyncLocalDB.ts"
+            "compat/pouchdb/LocalDatabase": [
+                "src/pouchdb/LocalDatabase.ts"
             ],
             "compat/pouchdb/chunks": [
                 "src/pouchdb/chunks.ts"
@@ -629,14 +629,14 @@
             "compat/pouchdb/utils_couchdb": [
                 "src/pouchdb/utils_couchdb.ts"
             ],
-            "compat/replication/LiveSyncAbstractReplicator": [
-                "src/replication/LiveSyncAbstractReplicator.ts"
+            "compat/replication/AbstractReplicator": [
+                "src/replication/AbstractReplicator.ts"
             ],
             "compat/replication/SyncParamsHandler": [
                 "src/replication/SyncParamsHandler.ts"
             ],
-            "compat/replication/couchdb/LiveSyncReplicator": [
-                "src/replication/couchdb/LiveSyncReplicator.ts"
+            "compat/replication/couchdb/CouchDBReplicator": [
+                "src/replication/couchdb/CouchDBReplicator.ts"
             ],
             "compat/replication/httplib": [
                 "src/replication/httplib.ts"

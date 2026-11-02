@@ -46,7 +46,7 @@ export type {
     TweakTransitionReason,
 } from "./common/models/tweak.compatibility.ts";
 export type { TweakReconstruction, TweakValues } from "./common/models/tweak.definition.ts";
-export type { ObsidianLiveSyncSettings, RemoteDBSettings, RemoteTypeSettings } from "./common/models/setting.type.ts";
+export type { SyncSettings, RemoteDBSettings, RemoteTypeSettings } from "./common/models/setting.type.ts";
 export {
     SETTINGS_PROPERTY_POLICY,
     SettingPolicies,

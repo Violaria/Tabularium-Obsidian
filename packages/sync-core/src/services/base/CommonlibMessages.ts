@@ -27,8 +27,8 @@ export const commonlibEnglishMessages = {
     "(Not recommended) If set, credentials will be stored in the file.":
         "(Not recommended) If set, credentials will be stored in the file.",
     "(Obsolete) Use an old adapter for compatibility": "(Obsolete) Use an old adapter for compatibility",
-    "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.":
-        "(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
+    "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.":
+        "(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.",
     "Access Key": "Access Key",
     "Active Remote Type": "Active Remote Type",
     "Always prompt merge conflicts": "Always prompt merge conflicts",
@@ -83,7 +83,7 @@ export const commonlibEnglishMessages = {
         "Hi! Config Doctor has been activated because of ${activateReason}!\nAnd, unfortunately some configurations were detected as potential problems.\nPlease be assured. Let's solve them one by one.\n\nTo let you know ahead of time, we will ask you about the following items.\n\n${issues}\n\nShall we get started?",
     "Doctor.Dialogue.MainFix":
         "\n## ${name}\n\n| Current | Ideal |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**Recommendation Level:** ${level}\n\n### Why this has been detected?\n\n${reason}\n\n${note}\n\nFix this to the ideal value?",
-    "Doctor.Dialogue.Title": "Self-hosted LiveSync Config Doctor",
+    "Doctor.Dialogue.Title": "Tabularium Config Doctor",
     "Doctor.Dialogue.TitleAlmostDone": "Almost done!",
     "Doctor.Dialogue.TitleFix": "Fix issue ${current}/${total}",
     "Doctor.Level.Must": "Must",
@@ -182,8 +182,8 @@ export const commonlibEnglishMessages = {
     "Key ID": "Key ID",
     "Keypair or pre-shared key": "Keypair or pre-shared key",
     "Last tweak modified timestamp": "Last tweak modified timestamp",
-    "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
-        "LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
+    "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
+        "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
     "Longest chunk line threshold value (Not Configurable from the UI Now).":
         "Longest chunk line threshold value (Not Configurable from the UI Now).",
     "MB (0 to disable).": "MB (0 to disable).",
@@ -362,30 +362,30 @@ export const commonlibEnglishMessages = {
     "Write logs into the file": "Write logs into the file",
     "You can enable this setting to process the files with size mismatches, these files can be created by some APIs or integrations.":
         "You can enable this setting to process the files with size mismatches, these files can be created by some APIs or integrations.",
-    "liveSyncReplicator.beforeLiveSync": "Before LiveSync, start OneShot once...",
-    "liveSyncReplicator.cantReplicateLowerValue": "We can't replicate more lower value.",
-    "liveSyncReplicator.checkingLastSyncPoint": "Looking for the point last synchronized point.",
-    "liveSyncReplicator.couldNotConnectTo": "Could not connect to ${uri} : ${name}\n(${db})",
-    "liveSyncReplicator.couldNotConnectToRemoteDb": "Could not connect to remote database: ${d}",
-    "liveSyncReplicator.couldNotConnectToServer": "The connection to the remote has been prevented, or failed.",
-    "liveSyncReplicator.couldNotConnectToURI": "Could not connect to ${uri}:${dbRet}",
-    "liveSyncReplicator.couldNotMarkResolveRemoteDb": "Could not mark resolve remote database.",
-    "liveSyncReplicator.liveSyncBegin": "LiveSync begin...",
-    "liveSyncReplicator.lockRemoteDb": "Lock remote database to prevent data corruption",
-    "liveSyncReplicator.markDeviceResolved": "Mark this device as 'resolved'.",
-    "liveSyncReplicator.mismatchedTweakDetected":
+    "couchdbReplicator.beforeLiveSync": "Before Tabularium, start OneShot once...",
+    "couchdbReplicator.cantReplicateLowerValue": "We can't replicate more lower value.",
+    "couchdbReplicator.checkingLastSyncPoint": "Looking for the point last synchronized point.",
+    "couchdbReplicator.couldNotConnectTo": "Could not connect to ${uri} : ${name}\n(${db})",
+    "couchdbReplicator.couldNotConnectToRemoteDb": "Could not connect to remote database: ${d}",
+    "couchdbReplicator.couldNotConnectToServer": "The connection to the remote has been prevented, or failed.",
+    "couchdbReplicator.couldNotConnectToURI": "Could not connect to ${uri}:${dbRet}",
+    "couchdbReplicator.couldNotMarkResolveRemoteDb": "Could not mark resolve remote database.",
+    "couchdbReplicator.syncBegin": "Tabularium begin...",
+    "couchdbReplicator.lockRemoteDb": "Lock remote database to prevent data corruption",
+    "couchdbReplicator.markDeviceResolved": "Mark this device as 'resolved'.",
+    "couchdbReplicator.mismatchedTweakDetected":
         "Some mismatches have been detected in the configuration between devices. Running a manual replication will attempt to resolve this issue.",
-    "liveSyncReplicator.oneShotSyncBegin": "OneShot Sync begin... (${syncMode})",
-    "liveSyncReplicator.remoteDbCorrupted":
+    "couchdbReplicator.oneShotSyncBegin": "OneShot Sync begin... (${syncMode})",
+    "couchdbReplicator.remoteDbCorrupted":
         "Remote database is newer or corrupted; make sure the latest version of the plug-in is installed",
-    "liveSyncReplicator.remoteDbCreatedOrConnected": "Remote Database Created or Connected",
-    "liveSyncReplicator.remoteDbDestroyError": "Something happened on Remote Database Destroy:",
-    "liveSyncReplicator.remoteDbDestroyed": "Remote Database Destroyed",
-    "liveSyncReplicator.remoteDbMarkedResolved": "Remote database has been marked resolved.",
-    "liveSyncReplicator.replicationClosed": "Replication closed",
-    "liveSyncReplicator.replicationInProgress": "Replication is already in progress",
-    "liveSyncReplicator.retryLowerBatchSize": "Retry with lower batch size:${batch_size}/${batches_limit}",
-    "liveSyncReplicator.unlockRemoteDb": "Unlock remote database to prevent data corruption",
+    "couchdbReplicator.remoteDbCreatedOrConnected": "Remote Database Created or Connected",
+    "couchdbReplicator.remoteDbDestroyError": "Something happened on Remote Database Destroy:",
+    "couchdbReplicator.remoteDbDestroyed": "Remote Database Destroyed",
+    "couchdbReplicator.remoteDbMarkedResolved": "Remote database has been marked resolved.",
+    "couchdbReplicator.replicationClosed": "Replication closed",
+    "couchdbReplicator.replicationInProgress": "Replication is already in progress",
+    "couchdbReplicator.retryLowerBatchSize": "Retry with lower batch size:${batch_size}/${batches_limit}",
+    "couchdbReplicator.unlockRemoteDb": "Unlock remote database to prevent data corruption",
     "moduleCheckRemoteSize.logCheckingStorageSizes": "Checking storage sizes",
     "moduleCheckRemoteSize.logCurrentStorageSize": "Remote storage size: ${measuredSize}",
     "moduleCheckRemoteSize.logExceededWarning": "Remote storage size: ${measuredSize} exceeded ${notifySize}",
@@ -393,7 +393,7 @@ export const commonlibEnglishMessages = {
     "moduleCheckRemoteSize.msgConfirmRebuild":
         "This may take a bit of a long time. Do you really want to rebuild everything now?",
     "moduleCheckRemoteSize.msgDatabaseGrowing":
-        "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Self-hosted LiveSync does not delete the actual data even if you delete it to speed up the process. It is roughly documented.\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
+        "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Tabularium does not delete the actual data even if you delete it to speed up the process. It is roughly documented.\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
     "moduleCheckRemoteSize.msgSetDBCapacity":
         "We can set a maximum database capacity warning, **to take action before running out of space on the remote storage**.\nDo you want to enable this?\n\n> [!MORE]-\n> - 0: Do not warn about storage size.\n>   This is recommended if you have enough space on the remote storage especially you have self-hosted. And you can check the storage size and rebuild manually.\n> - 800: Warn if the remote storage size exceeds 800MB.\n>   This is recommended if you are using fly.io with 1GB limit or IBM Cloudant.\n> - 2000: Warn if the remote storage size exceeds 2GB.\n\nIf we have reached the limit, we will be asked to enlarge the limit step by step.\n",
     "moduleCheckRemoteSize.noticeExceeded":
@@ -409,7 +409,7 @@ export const commonlibEnglishMessages = {
     "moduleCheckRemoteSize.optionReview": "Review options",
     "moduleCheckRemoteSize.titleDatabaseSizeLimitExceeded": "Remote storage size exceeded the limit",
     "moduleCheckRemoteSize.titleDatabaseSizeNotify": "Setting up database size notification",
-    "moduleLiveSyncMain.logUnloadingPlugin": "Unloading plugin...",
+    "startupSequence.logUnloadingPlugin": "Unloading plugin...",
     "moduleLocalDatabase.logWaitingForReady": "Waiting for ready...",
     password: "password",
     username: "username",

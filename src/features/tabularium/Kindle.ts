@@ -1,6 +1,6 @@
 import { Modal, Notice, Setting, TFile, TFolder, requestUrl, type Plugin, type TAbstractFile } from "obsidian";
 import type { TabulariumServer } from "./ServerLogin";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 import { $msg } from "@/core/common/translation";
 import { MAX_BOOK_BYTES, assembleBook, notesIn, type BookSource } from "./kindleBook";
 import { bookTexts, serverError } from "./texts";
@@ -43,7 +43,7 @@ export class TabulariumKindle {
         });
     }
 
-    install(core: LiveSyncCore) {
+    install(core: PluginCore) {
         const { app } = this.plugin;
         // Registered once the display language is known, so the command names follow it.
         core.services.appLifecycle.onSettingLoaded.addHandler(() => {
@@ -191,7 +191,7 @@ class KindleModal extends Modal {
     }
 }
 
-export function installKindle(plugin: Plugin, server: TabulariumServer, core: LiveSyncCore) {
+export function installKindle(plugin: Plugin, server: TabulariumServer, core: PluginCore) {
     const kindle = new TabulariumKindle(plugin, server);
     kindle.install(core);
     return kindle;

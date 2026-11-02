@@ -8,8 +8,8 @@ import {
 import { $msg } from "@/core/common/translation";
 import { eventHub } from "@/core/common/events.ts";
 import { EVENT_REQUEST_SHOW_HISTORY } from "@/obsidian/common/obsidianEvents.ts";
-import type { LiveSyncCore } from "@/main";
-import type { LiveSyncPause } from "./LiveSyncPause.ts";
+import type { PluginCore } from "@/main";
+import type { SyncPause } from "./SyncPause.ts";
 
 /** Not in Obsidian's published typings; the sorting component uses the same call. */
 type SubmenuItem = MenuItem & { setSubmenu(): Menu };
@@ -20,9 +20,9 @@ type SubmenuItem = MenuItem & { setSubmenu(): Menu };
  */
 export function installSyncMenu(
     plugin: Plugin,
-    core: LiveSyncCore,
+    core: PluginCore,
     connected: () => boolean,
-    livePause: () => LiveSyncPause | undefined
+    livePause: () => SyncPause | undefined
 ) {
     const fill = (menu: Menu, file: TFile | undefined, flat: boolean) => {
         type Action = "now" | "pause" | "resume" | "history";

@@ -15,7 +15,7 @@ import type {
 } from "@lib/services/base/IService.ts";
 import { createInstanceLogFunction, type LogFunction } from "@lib/services/lib/logUtils.ts";
 
-export interface LiveSyncManagersOptions<TSettingService extends ISettingService = ISettingService> {
+export interface SyncManagersOptions<TSettingService extends ISettingService = ISettingService> {
     database: PouchDB.Database<EntryDoc>;
     databaseService: IDatabaseService;
     settingService: TSettingService;
@@ -23,7 +23,7 @@ export interface LiveSyncManagersOptions<TSettingService extends ISettingService
     replicatorService: IReplicatorService;
     APIService: IAPIService;
 }
-export class LiveSyncManagers {
+export class SyncManagers {
     protected _pathService: IPathService;
     protected _replicatorService: IReplicatorService;
     protected _settingService: ISettingService;
@@ -37,15 +37,15 @@ export class LiveSyncManagers {
     entryManager: EntryManager;
     conflictManager: ConflictManager;
 
-    protected options: LiveSyncManagersOptions;
+    protected options: SyncManagersOptions;
     protected log: LogFunction;
-    constructor(options: LiveSyncManagersOptions) {
+    constructor(options: SyncManagersOptions) {
         this.options = options;
         this._APIService = options.APIService;
         this._pathService = options.pathService;
         this._replicatorService = options.replicatorService;
         this._settingService = options.settingService;
-        this.log = createInstanceLogFunction("LiveSyncManagers", this._APIService);
+        this.log = createInstanceLogFunction("SyncManagers", this._APIService);
         const { changeManager, hashManager, splitter, chunkManager, chunkFetcher, entryManager, conflictManager } =
             this.getManagerMembers();
         this.changeManager = changeManager;
@@ -58,7 +58,7 @@ export class LiveSyncManagers {
     }
 
     async teardownManagers() {
-        this.log("Teardown LiveSync Managers...", LOG_LEVEL_VERBOSE);
+        this.log("Teardown sync managers...", LOG_LEVEL_VERBOSE);
         this.hashManager?.clearCaches();
         this.entryManager?.hashManager?.clearCaches();
         if (this.changeManager) {
@@ -73,12 +73,12 @@ export class LiveSyncManagers {
             this.chunkManager.destroy();
             this.chunkManager = undefined!;
         }
-        this.log("Teardown LiveSync Managers... Done");
+        this.log("Teardown sync managers... Done");
         return await Promise.resolve();
     }
 
     protected getManagerMembers() {
-        this.log("Creating LiveSync Managers...");
+        this.log("Creating sync managers...");
         const database = this.options.database;
 
         const changeManager = new ChangeManager<EntryDoc>({
@@ -117,7 +117,7 @@ export class LiveSyncManagers {
             database,
             pathService: this._pathService,
         });
-        this.log("LiveSync Managers have been created");
+        this.log("sync managers have been created");
         return {
             changeManager,
             hashManager,
@@ -129,12 +129,12 @@ export class LiveSyncManagers {
         };
     }
     async initialise() {
-        this.log("Initialising LiveSync Managers...", LOG_LEVEL_VERBOSE);
+        this.log("Initialising sync managers...", LOG_LEVEL_VERBOSE);
         await this.splitter.initialise({
             settingService: this.options.settingService,
         });
         await this.hashManager.initialise();
-        this.log("LiveSync Manager has been initialised");
+        this.log("Tabularium Manager has been initialised");
     }
     async reinitialise() {
         await this.teardownManagers();

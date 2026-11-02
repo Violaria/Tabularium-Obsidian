@@ -89,13 +89,13 @@ export abstract class KeyValueDBService<T extends ServiceContext = ServiceContex
         }
         return true;
     }
-    // Called when another database; LiveSyncLocalDB, is being unloaded.
+    // Called when another database; LocalDatabase, is being unloaded.
     // We need to close our KeyValueDB to avoid IndexedDB locking issues.
     private async _onOtherDatabaseUnload() {
         if (this._kvDB) await this.tryCloseKvDB();
         return Promise.resolve(true);
     }
-    // Also, Called when another database; LiveSyncLocalDB, is being closed.
+    // Also, Called when another database; LocalDatabase, is being closed.
     // We need to close our KeyValueDB to avoid IndexedDB locking issues.
     private async _onOtherDatabaseClose() {
         if (this._kvDB) await this.tryCloseKvDB();

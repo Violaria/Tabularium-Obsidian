@@ -1,5 +1,5 @@
 /**
- * Content-Splitter for Self-hosted LiveSync.
+ * Content-Splitter for Tabularium.
  * Splits content into manageable chunks for efficient storage and synchronisation.
  */
 import { type FilePathWithPrefix } from "@lib/common/types.ts";

@@ -7,7 +7,7 @@ import {
     REMOTE_COUCHDB,
 } from "./setting.const";
 import { PREFERRED_BASE } from "./setting.const.preferred";
-import { AutoAccepting, type ObsidianLiveSyncSettings, type P2PSyncSetting } from "./setting.type";
+import { AutoAccepting, type SyncSettings, type P2PSyncSetting } from "./setting.type";
 import type { CustomRegExpSourceList } from "./shared.type.util";
 
 export const P2P_DEFAULT_SETTINGS: P2PSyncSetting = {
@@ -41,7 +41,7 @@ export const P2P_DEFAULT_SETTINGS: P2PSyncSetting = {
  * Keep these values compatible with existing installations. Defaults intended
  * only for a newly created Vault belong in {@link NEW_VAULT_SETTINGS}.
  */
-export const SETTINGS_SCHEMA_DEFAULTS: ObsidianLiveSyncSettings = {
+export const SETTINGS_SCHEMA_DEFAULTS: SyncSettings = {
     remoteType: REMOTE_COUCHDB,
     useCustomRequestHandler: false,
     couchDB_URI: "",
@@ -212,12 +212,12 @@ export const SETTINGS_SCHEMA_DEFAULTS: ObsidianLiveSyncSettings = {
 };
 
 /**
- * Initial values for a Vault which has never stored Self-hosted LiveSync settings.
+ * Initial values for a Vault which has never stored Tabularium settings.
  *
  * This object is deliberately separate from schema fallbacks so that future
  * releases can improve new-user defaults without changing existing choices.
  */
-export const NEW_VAULT_SETTINGS: ObsidianLiveSyncSettings = {
+export const NEW_VAULT_SETTINGS: SyncSettings = {
     ...SETTINGS_SCHEMA_DEFAULTS,
     ...PREFERRED_BASE,
     encryptInternalMetadata: true,
@@ -226,7 +226,7 @@ export const NEW_VAULT_SETTINGS: ObsidianLiveSyncSettings = {
 };
 
 /** Create an independently mutable copy of the current new-Vault settings. */
-export function createNewVaultSettings(): ObsidianLiveSyncSettings {
+export function createNewVaultSettings(): SyncSettings {
     return {
         ...NEW_VAULT_SETTINGS,
         remoteConfigurations: {},

@@ -176,7 +176,7 @@ describe("ConflictManager", () => {
     });
 
     it("retains named properties when merging JSON revisions", async () => {
-        const marker = "livesyncSyntheticJSONConflictMarker";
+        const marker = "syntheticJSONConflictMarker";
         const before = Object.getOwnPropertyDescriptors(Object.prototype);
         const path = "synthetic-properties.json" as FilePathWithPrefix;
         const left = JSON.parse(

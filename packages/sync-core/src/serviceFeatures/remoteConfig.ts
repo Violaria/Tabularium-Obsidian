@@ -1,6 +1,6 @@
 import { LOG_LEVEL_NOTICE, LOG_LEVEL_VERBOSE, type LOG_LEVEL } from "@lib/common/logger";
 import { ConnectionStringParser, type RemoteConfigurationResult } from "@lib/common/ConnectionString";
-import type { ObsidianLiveSyncSettings, RemoteConfiguration, RemoteDBSettings } from "@lib/common/models/setting.type";
+import type { SyncSettings, RemoteConfiguration, RemoteDBSettings } from "@lib/common/models/setting.type";
 import { REMOTE_COUCHDB, REMOTE_MINIO, REMOTE_P2P } from "@lib/common/models/setting.const";
 import type { NecessaryServices } from "@lib/interfaces/ServiceModule";
 import { createInstanceLogFunction } from "@lib/services/lib/logUtils";
@@ -11,7 +11,7 @@ export type RemoteConfigHost = NecessaryServices<
 >;
 
 export function migrateLegacyRemoteConfigurationsInPlace(
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     log?: (message: string, level?: LOG_LEVEL) => void
 ): boolean {
     const hasText = (value: unknown): value is string => typeof value === "string" && value.trim() !== "";
@@ -108,7 +108,7 @@ export interface UpsertRemoteConfigurationOptions {
 
 function toRemoteConfigurationResult(
     type: SerializableRemoteConfigurationType,
-    settings: ObsidianLiveSyncSettings
+    settings: SyncSettings
 ): RemoteConfigurationResult {
     if (type === "couchdb") {
         return { type, settings };
@@ -190,7 +190,7 @@ function allocateRemoteConfigurationName(
  * plaintext at this boundary; `SettingService` applies configured at-rest encryption when saving it.
  */
 export function upsertRemoteConfigurationInPlace(
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     type: SerializableRemoteConfigurationType,
     options: UpsertRemoteConfigurationOptions = {}
 ): RemoteConfiguration {
@@ -232,7 +232,7 @@ export function upsertRemoteConfigurationInPlace(
 /**
  * Keep compatibility for users who were already using P2P as their main active remote.
  */
-export function migrateP2PActiveRemoteConfigurationIdInPlace(settings: ObsidianLiveSyncSettings): boolean {
+export function migrateP2PActiveRemoteConfigurationIdInPlace(settings: SyncSettings): boolean {
     if ((settings.P2P_ActiveRemoteConfigurationId ?? "").trim() !== "") {
         return false;
     }
@@ -281,9 +281,9 @@ export async function migrateToMultipleRemoteConfigurations(host: RemoteConfigHo
  * Logic to switch the active configuration.
  */
 export function activateRemoteConfiguration(
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     id: string
-): ObsidianLiveSyncSettings | false {
+): SyncSettings | false {
     const config = settings.remoteConfigurations?.[id];
     if (!config) return false;
 
@@ -313,9 +313,9 @@ export function activateRemoteConfiguration(
  * while keeping the current `remoteType` unchanged.
  */
 export function activateP2PRemoteConfiguration(
-    settings: ObsidianLiveSyncSettings,
+    settings: SyncSettings,
     id: string
-): ObsidianLiveSyncSettings | false {
+): SyncSettings | false {
     const config = settings.remoteConfigurations?.[id];
     if (!config) return false;
 

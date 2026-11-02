@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { applyPatch, generatePatchObj, mergeObject } from "./utils.patch";
 
-const marker = "livesyncSyntheticPrototypeMarker";
+const marker = "syntheticPrototypeMarker";
 const propertyNames = ["__proto__", "constructor", "prototype", "proto", "toString"];
 const intrinsics = [Object.prototype, Object, Function.prototype, Object.prototype.toString];
 let snapshots: { target: object; descriptors: PropertyDescriptorMap; prototype: object | null }[];

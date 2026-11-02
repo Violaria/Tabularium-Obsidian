@@ -17,7 +17,7 @@
 (e.g., after editing many files whilst offline): (e.g., postquam multas plicas sine conexione emendavisti)
 (e.g., immediately after restoring on another computer, or having recovered from a backup): (e.g., statim post restitutionem in alio computatro, vel post recuperationem ex exemplari tutelari)
 (e.g., setting up for the first time on a new smartphone, starting from a clean slate): (e.g., primum in novo telephono callido constituens, a tabula rasa incipiens)
-(ex. Read chunks online) If this option is enabled, LiveSync reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (e.g. fragmenta online lege) Si haec optio activa est, Tabularium fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.
+(ex. Read chunks online) If this option is enabled, Tabularium reads chunks online directly instead of replicating them locally. Increasing Custom chunk size is recommended.: (e.g. fragmenta online lege) Si haec optio activa est, Tabularium fragmenta online directe legit pro iis localiter replicandis. Magnitudinem fragmenti propriam augere commendatur.
 +1 week: +1 hebdomas
 ', please select the option that best describes the current state of your Vault. The application will then check your files in the most appropriate way based on your selection.': ', quaeso optionem elige quae statum praesentem tabularii tui optime describit. Applicatio deinde plicas tuas modo aptissimo secundum electionem tuam inspiciet.'
 ACCEPTED: ACCEPTUM
@@ -29,7 +29,7 @@ Activate: Activa
 Active Remote Type: Genus remotum activum
 Advanced: Provecta
 Advanced Settings: Optiones provectae
-After restarting, select an online source device for the initial Fetch. The local LiveSync database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.
+After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.: Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.
 After that, synchronise to a brand new vault on each other device with the new remote one by one.: Deinde, in quoque alio instrumento singillatim cum novo remoto in tabularium omnino novum synchroniza.
 All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.: Omnes recensiones et praesto esse fragmentorum infra sunt imago momentanea repositorii localis huius instrumenti; remotum non interrogatur. Viam relativam ad tabularium, identificatorem documenti, identificatores fragmentorum ex contento derivatos et metadata recense antequam hanc relationem communices. Contenta plicarum omittuntur.
 Always prompt merge conflicts: Semper de discrepantiis conflandis interroga
@@ -341,7 +341,7 @@ Ignore: Ignora
 Ignore files: Plicae ignorandae
 Ignore patterns: Exemplaria ignoranda
 Import an ID recovery code: Importa codicem recuperationis ID
-In this scenario, Self-hosted LiveSync will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: Hoc in casu, Tabularium metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.
+In this scenario, Tabularium will recreate metadata for every file and deliberately generate conflicts. Where the file content is identical, these conflicts will be resolved automatically.: Hoc in casu, Tabularium metadata omnium plicarum recreabit et consulto discrepantias generabit. Ubi contentum plicae idem est, hae discrepantiae automatice resolventur.
 Include in the P2P synchronisation command: Include in mandato synchronizationis P2P
 Include remote database: Include repositorium remotum
 'Incoming:': 'Advenientia:'
@@ -383,7 +383,7 @@ Later: Postea
 Learn more about P2P connections: Plura de conexionibus P2P disce
 Learn more about signalling and TURN: Plura de significatione et TURN disce
 Leave this input empty to keep the saved ID key.: Hunc campum vacuum relinque ut clavem ID servatam retineas.
-LiveSync could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.
+Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.: Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.
 Loading joined devices…: Instrumenta adiuncta onerantur…
 Local file diagnostic report: Relatio diagnostica plicae localis
 Lock: Obsera
@@ -426,7 +426,7 @@ NEW: NOVUM
 Name: Nomen
 Names in this report: Nomina in hac relatione
 Network warning style: Modus monitorum retis
-'Newer Self-hosted LiveSync versions detected: ${versions}.': 'Versiones recentiores Tabularii detectae: ${versions}.'
+'Newer Tabularium versions detected: ${versions}.': 'Versiones recentiores Tabularii detectae: ${versions}.'
 No Synchronisation Settings Found: Nullae optiones synchronizationis inventae
 No central data-storage server is required, but a signalling relay is required for peer discovery. Both devices must be online at the same time. Vault data travels through the encrypted P2P connection, not through the signalling relay. Some features may be limited.: Nullus ministrator centralis ad data servanda requiritur, sed nuntius signorum (relay) ad pares inveniendos requiritur. Ambo instrumenta simul in linea esse debent. Data tabularii per conexionem P2P cryptatam, non per nuntium signorum, transeunt. Quaedam facultates fortasse limitatae erunt.
 No current Metadata document: Nullum documentum metadatorum currens
@@ -449,7 +449,7 @@ Obsidian version: Versio Obsidian
 Of course, we can back up the data before proceeding.: Scilicet data antequam pergimus servare (exemplar tutelae facere) possumus.
 'Off': Inactivum
 Ok: Bene
-'Older Self-hosted LiveSync versions detected: ${versions}.': 'Versiones vetustiores Tabularii detectae: ${versions}.'
+'Older Tabularium versions detected: ${versions}.': 'Versiones vetustiores Tabularii detectae: ${versions}.'
 'On': Activum
 One-step repair is unavailable because this entry is ambiguous, no longer current, or unsafe to change.: Reparatio uno gradu non praesto est, quia haec inscriptio ambigua est, non iam currens, vel ad mutandum non tuta.
 Open: Aperi
@@ -577,7 +577,7 @@ Retry reading revision: Iterum conare recensionem legere
 Rev: Rec.
 Review device records for the active CouchDB or Object Storage connection.: Recognosce notitias instrumentorum conexionis CouchDB vel repositorii obiectorum activae.
 Review devices: Recognosce instrumenta
-Reviewing and aligning Self-hosted LiveSync versions across devices is recommended.: Versiones Tabularii per instrumenta recognoscere et congruentes reddere commendatur.
+Reviewing and aligning Tabularium versions across devices is recommended.: Versiones Tabularii per instrumenta recognoscere et congruentes reddere commendatur.
 Revision metadata is unavailable on this device: Metadata recensionis in hoc instrumento non praesto sunt
 Revoke: Revoca
 Room ID: ID conclavis
@@ -894,7 +894,7 @@ Vault file: Plica tabularii
 Vault file is newer: Plica tabularii recentior est
 Verbose Log: Acta prolixa
 Warning! This will have a serious impact on performance. And the logs will not be synchronised under the default name. Please be careful with logs; they often contain your confidential information.: Monitum! Hoc celeritatem graviter afficiet. Et acta sub nomine praedefinito non synchronizabuntur. Cave cum actis; saepe notitiam tuam secretam continent.
-"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Self-hosted LiveSync and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Self-hosted LiveSync. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "Data remota mox recipiemus.
+"We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.": "Data remota mox recipiemus.
 
 
   Primum, quomodo data ex hoc fonte remoto recepta tractabimus?
@@ -931,30 +931,30 @@ lang-def: '%{lang_def}'
 lang-la: Latina
 lang-zh: 中文
 live: continua
-liveSyncReplicator.beforeLiveSync: Ante synchronizationem vivam semel synchronizationem singularem incipe...
-liveSyncReplicator.cantReplicateLowerValue: Valorem minorem replicare non possumus.
-liveSyncReplicator.checkingLastSyncPoint: Punctum ultimae synchronizationis quaeritur.
-liveSyncReplicator.couldNotConnectTo: 'Ad ${uri} conecti non potuit : ${name}
+couchdbReplicator.beforeLiveSync: Ante synchronizationem vivam semel synchronizationem singularem incipe...
+couchdbReplicator.cantReplicateLowerValue: Valorem minorem replicare non possumus.
+couchdbReplicator.checkingLastSyncPoint: Punctum ultimae synchronizationis quaeritur.
+couchdbReplicator.couldNotConnectTo: 'Ad ${uri} conecti non potuit : ${name}
 
   (${db})'
-liveSyncReplicator.couldNotConnectToRemoteDb: 'Ad repositorium remotum conecti non potuit: ${d}'
-liveSyncReplicator.couldNotConnectToServer: Conexio ad remotum impedita est aut defecit.
-liveSyncReplicator.couldNotConnectToURI: Ad ${uri} conecti non potuit:${dbRet}
-liveSyncReplicator.couldNotMarkResolveRemoteDb: Repositorium remotum ut resolutum notari non potuit.
-liveSyncReplicator.liveSyncBegin: Synchronizatio viva incipit...
-liveSyncReplicator.lockRemoteDb: Obsera repositorium remotum ne data corrumpantur
-liveSyncReplicator.markDeviceResolved: Nota hoc instrumentum ut “resolutum”.
-liveSyncReplicator.mismatchedTweakDetected: Aliquae discrepantiae in configuratione inter instrumenta detectae sunt. Replicatio manualis hanc rem resolvere conabitur.
-liveSyncReplicator.oneShotSyncBegin: Synchronizatio OneShot incipit... (${syncMode})
-liveSyncReplicator.remoteDbCorrupted: Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit
-liveSyncReplicator.remoteDbCreatedOrConnected: Repositorium remotum creatum vel conexum
-liveSyncReplicator.remoteDbDestroyError: 'Aliquid accidit in deletione repositorii remoti:'
-liveSyncReplicator.remoteDbDestroyed: Repositorium remotum deletum
-liveSyncReplicator.remoteDbMarkedResolved: Repositorium remotum ut resolutum notatum est.
-liveSyncReplicator.replicationClosed: Replicatio clausa
-liveSyncReplicator.replicationInProgress: Replicatio iam in cursu est
-liveSyncReplicator.retryLowerBatchSize: Iterum conare cum minore magnitudine acervi:${batch_size}/${batches_limit}
-liveSyncReplicator.unlockRemoteDb: Resera repositorium remotum ne data corrumpantur
+couchdbReplicator.couldNotConnectToRemoteDb: 'Ad repositorium remotum conecti non potuit: ${d}'
+couchdbReplicator.couldNotConnectToServer: Conexio ad remotum impedita est aut defecit.
+couchdbReplicator.couldNotConnectToURI: Ad ${uri} conecti non potuit:${dbRet}
+couchdbReplicator.couldNotMarkResolveRemoteDb: Repositorium remotum ut resolutum notari non potuit.
+couchdbReplicator.syncBegin: Synchronizatio viva incipit...
+couchdbReplicator.lockRemoteDb: Obsera repositorium remotum ne data corrumpantur
+couchdbReplicator.markDeviceResolved: Nota hoc instrumentum ut “resolutum”.
+couchdbReplicator.mismatchedTweakDetected: Aliquae discrepantiae in configuratione inter instrumenta detectae sunt. Replicatio manualis hanc rem resolvere conabitur.
+couchdbReplicator.oneShotSyncBegin: Synchronizatio OneShot incipit... (${syncMode})
+couchdbReplicator.remoteDbCorrupted: Repositorium remotum recentius aut corruptum est; cura ut versio novissima Tabularii installata sit
+couchdbReplicator.remoteDbCreatedOrConnected: Repositorium remotum creatum vel conexum
+couchdbReplicator.remoteDbDestroyError: 'Aliquid accidit in deletione repositorii remoti:'
+couchdbReplicator.remoteDbDestroyed: Repositorium remotum deletum
+couchdbReplicator.remoteDbMarkedResolved: Repositorium remotum ut resolutum notatum est.
+couchdbReplicator.replicationClosed: Replicatio clausa
+couchdbReplicator.replicationInProgress: Replicatio iam in cursu est
+couchdbReplicator.retryLowerBatchSize: Iterum conare cum minore magnitudine acervi:${batch_size}/${batches_limit}
+couchdbReplicator.unlockRemoteDb: Resera repositorium remotum ne data corrumpantur
 logPane.autoScroll: Volutatio automatica
 logPane.logWindowOpened: Fenestra actorum aperta
 logPane.pause: Intermitte
@@ -1032,14 +1032,14 @@ moduleInputUIObsidian.defaultTitleConfirmation: Confirmatio
 moduleInputUIObsidian.defaultTitleSelect: Elige
 moduleInputUIObsidian.optionNo: Non
 moduleInputUIObsidian.optionYes: Ita
-moduleLiveSyncMain.logAdditionalSafetyScan: Perscrutatio securitatis addita...
-moduleLiveSyncMain.logLoadingPlugin: Additamentum oneratur...
-moduleLiveSyncMain.logPluginInitCancelled: Initium additamenti a modulo abrogatum est
-moduleLiveSyncMain.logPluginVersion: Tabularium v${manifestVersion} ${packageVersion}
-moduleLiveSyncMain.logSafetyScanCompleted: Perscrutatio securitatis addita perfecta
-moduleLiveSyncMain.logSafetyScanFailed: Perscrutatio securitatis addita in modulo defecit
-moduleLiveSyncMain.logUnloadingPlugin: Additamentum exoneratur...
-moduleLiveSyncMain.msgScramEnabled: 'Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?
+startupSequence.logAdditionalSafetyScan: Perscrutatio securitatis addita...
+startupSequence.logLoadingPlugin: Additamentum oneratur...
+startupSequence.logPluginInitCancelled: Initium additamenti a modulo abrogatum est
+startupSequence.logPluginVersion: Tabularium v${manifestVersion} ${packageVersion}
+startupSequence.logSafetyScanCompleted: Perscrutatio securitatis addita perfecta
+startupSequence.logSafetyScanFailed: Perscrutatio securitatis addita in modulo defecit
+startupSequence.logUnloadingPlugin: Additamentum exoneratur...
+startupSequence.msgScramEnabled: 'Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?
 
 
   | Genus | Status | Nota |
@@ -1061,9 +1061,9 @@ moduleLiveSyncMain.msgScramEnabled: 'Tabularium configuratum est ut aliquos even
   > Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.
 
   '
-moduleLiveSyncMain.optionKeepLiveSyncDisabled: Retine synchronizationem vivam deactivatam
-moduleLiveSyncMain.optionResumeAndRestart: Resume et Obsidian iterum incipe
-moduleLiveSyncMain.titleScramEnabled: Scram activum
+startupSequence.optionKeepSyncDisabled: Retine synchronizationem vivam deactivatam
+startupSequence.optionResumeAndRestart: Resume et Obsidian iterum incipe
+startupSequence.titleScramEnabled: Scram activum
 moduleLocalDatabase.logWaitingForReady: Exspectatur dum paratum sit...
 moduleLog.pathComponentTooLong: Haec via nomen plicae vel thecae longius quam ${maxBytes} octetis UTF-8 continet. In aliquibus systematibus plicarum Android et Linux fortasse non funget.
 moduleLog.showLog: Monstra acta
@@ -1270,7 +1270,7 @@ SELECT: ELIGE
 SYNC: SYNCHRONIZA
 Searching ${current}/${total}...: Quaeritur ${current}/${total}...
 Searching...: Quaeritur...
-Self-hosted LiveSync has paused remote synchronisation for compatibility review.: Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.
+Tabularium has paused remote synchronisation for compatibility review.: Tabularium synchronizationem remotam ad compatibilitatem recognoscendam intermisit.
 Show: Monstra
 To stop the countdown, tap anywhere on the dialogue: Ut numerationem retrorsum sistas, ubivis in dialogo tange
 "To:": "Ad:"
@@ -1324,7 +1324,7 @@ moduleLog.syncStatusStarting: Conectitur
 moduleLog.syncStatusStopped: Non synchronizatur
 "Show vault history": "Monstra historiam tabularii"
 "Create conflict": "Crea discrepantiam"
-"Toggle LiveSync": "Commuta synchronizationem vivam"
+"Toggle live sync": "Commuta synchronizationem vivam"
 "Toggle All Sync.": "Commuta omnem synchronizationem"
 "Scan storage and database again": "Perlustra iterum repositorium plicarum et repositorium"
 "Abort synchronization immediately": "Synchronizationem statim abrumpe"
@@ -1521,7 +1521,7 @@ The restored revision could not be created. The file may have changed during the
 The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.: Revisio restituta in repositorio huius instrumenti servata est, sed in tabularium scribi non potuit.
 The selected content was restored as a new revision. Other versions remain unresolved; use 'Inspect conflicts and file/database differences' to review them.: Contentum selectum ut nova revisio restitutum est. Aliae versiones adhuc irresolutae manent; per 'Elige plicam ad discrepantiam solvendam' eas inspice.
 The selected content was restored as a new revision.: Contentum selectum ut nova revisio restitutum est.
-The selected content was restored as a new revision. LiveSync could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' plicam inspice.
+The selected content was restored as a new revision. Tabularium could not confirm whether other versions remain; use 'Inspect conflicts and file/database differences' to review the file.: Contentum selectum ut nova revisio restitutum est. Tabularium confirmare non potuit an aliae versiones supersint; per 'Elige plicam ad discrepantiam solvendam' plicam inspice.
 The restored file could not be opened in the editor.: Plica restituta in editore aperiri non potuit.
 Error in Setting Save Event: Error in optionibus servandis.
 ${file} is conflicted, merging process has been postponed.: ${file} discrepantiam habet; coniunctio dilata est.
@@ -1686,11 +1686,11 @@ Database kept changing while reflecting ${path}: Dum ${path} in tabularium scrib
 Could not validate deletion of ${path}; preserved the database entry: Deletio plicae ${path} confirmari non potuit; inscriptio in repositorio servata est
 Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery: Operatio servata plicae ${path} cum statu praesenti tabularii comparari non potuit; ad restitutionem pendet
 Unload preparation failed; pending storage work may require recovery: Praeparatio ad exonerandum defecit; operationes plicarum pendentes fortasse restituendae sunt
-Self-hosted LiveSync cannot be initialised, exiting loading.: Additamentum Tabularium initiari non potuit; oneratio desiit.
+Tabularium cannot be initialised, exiting loading.: Additamentum Tabularium initiari non potuit; oneratio desiit.
 Failed to reset KeyValueDB: Repositorium clavium et valorum restitui non potuit
 Failed to open KeyValueDB: Repositorium clavium et valorum aperiri non potuit
 "The request may have failed. The reason sent by the server: ${r.status}: ${r.statusText}": "Petitio fortasse defecit. Responsum ministratoris: ${r.status}: ${r.statusText}"
-The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable LiveSync: Petitio per API Obsidian successit, sed API fetch nativum defecit. Optiones CORS ministratoris inspice. Donec hoc corrigatur, synchronizatio continua activari non potest.
+The request was successful by API. But the native fetch API failed! Please check CORS settings on the remote database!. While this condition, you cannot enable Tabularium: Petitio per API Obsidian successit, sed API fetch nativum defecit. Optiones CORS ministratoris inspice. Donec hoc corrigatur, synchronizatio continua activari non potest.
 "Failed to fetch by API. ${resp2.status}: ${msg}": "Petitio defecit. ${resp2.status}: ${msg}"
 Active replicator not found during directional ${direction}: Nulla conexio synchronizationis activa inventa est ad synchronizationem ${direction}
 The selected local database is not ready for the rebuild upload.: Repositorium huius instrumenti nondum paratum est ut ad reaedificationem sursum mittatur.
@@ -1727,7 +1727,7 @@ Bulk sending chunks to remote database...: Fragmenta ad ministratorem mittuntur�
   ${sendingDocs}/(${sentDocsCount} perfecta)
 Bulk sending failed.: Missio fragmentorum defecit.
 The remote connectivity check timed out.: Probatio conexionis cum ministratore tempus excessit.
-'${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("liveSyncReplicator.couldNotConnectToServer")} ${ret} '
+'${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ': '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} '
 Some requested chunks were not found in the remote database.: Quaedam fragmenta petita in ministratore non inventa sunt.
 "Collecting local files on the DB: ${count}": "Plicae huius instrumenti in repositorio colliguntur: ${count}"
 "Processing: ${processedCount}/${pairs.length}": "Tractantur: ${processedCount}/${pairs.length}"
@@ -1743,8 +1743,8 @@ Allow sleep during synchronisation: Somnum per synchronizationem permittere
 Allow the operating system to sleep while finite synchronisation operations are in progress.: Systema operativum dormire sinit dum synchronizationes finitae fiunt.
 Allow sleep during synchronisation on the desktop: Somnum per synchronizationem in computatro permittere
 Desktop only. Allow sleep on this device even when the general option is disabled.: Tantum in computatro. Hoc instrumentum dormire sinit etiam si optio generalis non est accensa.
-Batch database updates in LiveSync mode: Renovationes repositorii in modo vivo coniungere
-Wait for a bounded local quiet period before processing file updates in LiveSync mode, reducing intermediate database updates while delaying their reflection to remote devices.: In modo vivo, post mutationem plicae breve otium locale (cum fine) exspectat antequam in repositorium scribat. Renovationes intermediae minuuntur, sed alia instrumenta mutationes serius accipiunt.
+Batch database updates in live sync mode: Renovationes repositorii in modo vivo coniungere
+Wait for a bounded local quiet period before processing file updates in live sync mode, reducing intermediate database updates while delaying their reflection to remote devices.: In modo vivo, post mutationem plicae breve otium locale (cum fine) exspectat antequam in repositorium scribat. Renovationes intermediae minuuntur, sed alia instrumenta mutationes serius accipiunt.
 Seconds. The quiet period after the latest pending update before local database processing becomes due.: Secundae. Otium post ultimam mutationem antequam repositorium locale scribatur.
 Seconds. The maximum intentional wait from the first pending update before local database processing becomes due. This does not guarantee when database processing, network delivery, or reflection to another device will complete.: Secundae. Maxima exspectatio a prima mutatione nondum scripta antequam repositorium locale scribatur. Non praestat quando scriptura, transmissio per rete aut adventus in alio instrumento perficiatur.
 tabularium.syncMenu.title: Synchronizatio

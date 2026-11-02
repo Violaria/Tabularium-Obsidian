@@ -1,7 +1,7 @@
 // Foreground part of Worker-off-loaded functions
 
 import { promiseWithResolvers } from "octagonal-wheels/promises.js";
-import type { LiveSyncEventHub } from "@lib/hub/hub.ts";
+import type { SyncEventHub } from "@lib/hub/hub.ts";
 //@ts-ignore
 import WorkerX from "./bg.worker.ts?worker&inline";
 import { EVENT_PLATFORM_UNLOADED } from "@lib/events/coreEvents";
@@ -115,7 +115,7 @@ function initialiseWorkers() {
 
 let workers: WorkerInstance[] = [];
 let offPlatformUnloaded: (() => void) | undefined;
-export function initialiseWorkerModule(events: LiveSyncEventHub) {
+export function initialiseWorkerModule(events: SyncEventHub) {
     if (workers.length > 0) {
         terminateWorker();
     }

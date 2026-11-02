@@ -9,7 +9,7 @@ import {
     omitP2PRuntimeSettings,
     prepareSettingsForLoad,
     type ConfigPassphraseStore,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type SettingsMigrationState,
 } from "@lib/common/types";
 import { handlers } from "@lib/services/lib/HandlerUtils";
@@ -48,13 +48,13 @@ export interface SettingServiceDependencies {
     /** Host-owned exact-key storage, created once for this application instance. */
     deviceValues: ValueStore & ValueDeleter;
     /** Optional host hook for applying the loaded display language to its catalogue. */
-    onDisplayLanguageChanged?: (language: ObsidianLiveSyncSettings["displayLanguage"]) => void;
+    onDisplayLanguageChanged?: (language: SyncSettings["displayLanguage"]) => void;
 }
 
 interface PreparedSettingSave {
     persisted: PersistedSettings;
-    runtime: ObsidianLiveSyncSettings;
-    patch: Partial<ObsidianLiveSyncSettings>;
+    runtime: SyncSettings;
+    patch: Partial<SyncSettings>;
     passphrase: string | false;
 }
 
@@ -73,12 +73,12 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     /** Device values scoped by the current Vault name and database suffix. */
     readonly config: ValueStore & ValueDeleter;
 
-    _settings!: ObsidianLiveSyncSettings;
+    _settings!: SyncSettings;
 
     get settings() {
         return this._settings;
     }
-    set settings(value: ObsidianLiveSyncSettings) {
+    set settings(value: SyncSettings) {
         this._settings = value;
     }
 
@@ -86,9 +86,9 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     protected abstract saveData(setting: PersistedSettings): Promise<void>;
 
     // Load setting from the runtime storage.
-    protected abstract loadData(): Promise<ObsidianLiveSyncSettings | undefined>;
+    protected abstract loadData(): Promise<SyncSettings | undefined>;
 
-    private _lastPersistedSettings?: ObsidianLiveSyncSettings;
+    private _lastPersistedSettings?: SyncSettings;
     private _settingsMigrationState?: SettingsMigrationState;
     private saveQueue: Promise<void> = Promise.resolve();
 
@@ -114,7 +114,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
      * Adjust the given settings, e.g., migrate old settings to new format.
      * @param settings The settings to adjust.
      */
-    adjustSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings> {
+    adjustSettings(settings: SyncSettings): Promise<SyncSettings> {
         if (
             migrateLegacyRemoteConfigurationsInPlace(settings, (message) => {
                 this._log(message, LOG_LEVEL_NOTICE);
@@ -262,7 +262,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
     }
 
-    private async prepareConfigurationKeyChange(settings: ObsidianLiveSyncSettings, targetKey: string): Promise<void> {
+    private async prepareConfigurationKeyChange(settings: SyncSettings, targetKey: string): Promise<void> {
         for (const config of Object.values(settings.remoteConfigurations)) {
             if (config.isEncrypted && this.isPlainConfigurationUri(config.uri)) config.isEncrypted = false;
         }
@@ -307,12 +307,12 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     }
 
     private async prepareSettingSave(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         selectedPassphrase?: string
     ): Promise<PreparedSettingSave> {
         const previousSettings = this._lastPersistedSettings ?? this.cloneSettings(this.settings);
         const hookResults = await this.onBeforeSaveSettingData(settings, previousSettings);
-        const savedPatch: Partial<ObsidianLiveSyncSettings> = {};
+        const savedPatch: Partial<SyncSettings> = {};
         for (const patch of hookResults) {
             if (patch instanceof Error || !patch) continue;
             Object.assign(settings, patch);
@@ -416,7 +416,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     }
 
     private async encryptRemoteConfigurationUris(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         passphrase: string
     ): Promise<void> {
         const configs = settings.remoteConfigurations || {};
@@ -471,7 +471,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     }
 
     private async decryptRemoteConfigurationUris(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         passphrase: string
     ): Promise<boolean> {
         let verified = false;
@@ -551,12 +551,12 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     /**
      * Get the current settings.
      */
-    currentSettings(): ObsidianLiveSyncSettings {
+    currentSettings(): SyncSettings {
         return this.settings;
     }
 
     updateSettings(
-        updateFn: (settings: ObsidianLiveSyncSettings) => ObsidianLiveSyncSettings,
+        updateFn: (settings: SyncSettings) => SyncSettings,
         saveImmediately?: boolean
     ): Promise<void> {
         try {
@@ -572,7 +572,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
         return Promise.resolve();
     }
-    async applyExternalSettings(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void> {
+    async applyExternalSettings(partial: Partial<SyncSettings>, saveImmediately?: boolean): Promise<void> {
         try {
             this.settings = await this.adjustSettings({
                 ...this.settings,
@@ -588,7 +588,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
         return Promise.resolve();
     }
-    applyPartial(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void> {
+    applyPartial(partial: Partial<SyncSettings>, saveImmediately?: boolean): Promise<void> {
         try {
             this.settings = { ...this.settings, ...partial };
         } catch (ex) {
@@ -601,7 +601,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
         return Promise.resolve();
     }
-    getPassphrase(settings: ObsidianLiveSyncSettings) {
+    getPassphrase(settings: SyncSettings) {
         const methods: Record<ConfigPassphraseStore, () => Promise<string | false>> = {
             "": () => Promise.resolve("*"),
             LOCALSTORAGE: () => this.deviceValues.getValue("ls-setting-passphrase", ""),
@@ -620,14 +620,14 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
 
     private usedPassphrase?: { store: ConfigPassphraseStore; value: string };
 
-    private getSavingPassphrase(settings: ObsidianLiveSyncSettings): Promise<string | false> {
+    private getSavingPassphrase(settings: SyncSettings): Promise<string | false> {
         if (settings.configPassphraseStore === "ASK_AT_LAUNCH" && this.usedPassphrase?.store === "ASK_AT_LAUNCH") {
             return Promise.resolve(this.usedPassphrase.value);
         }
         return this.getPassphrase(settings);
     }
 
-    private rememberPassphrase(settings: ObsidianLiveSyncSettings, passphrase: string): void {
+    private rememberPassphrase(settings: SyncSettings, passphrase: string): void {
         this.usedPassphrase = { store: settings.configPassphraseStore, value: passphrase };
     }
     /**
@@ -649,15 +649,15 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
         return false;
     }
-    async encryptConfigurationItem(src: string, settings: ObsidianLiveSyncSettings, passphrase?: string) {
+    async encryptConfigurationItem(src: string, settings: SyncSettings, passphrase?: string) {
         return this.encryptConfigurationItemWith(src, settings, encryptString, passphrase);
     }
-    private async encryptPlainConfigurationItem(src: string, settings: ObsidianLiveSyncSettings, passphrase?: string) {
+    private async encryptPlainConfigurationItem(src: string, settings: SyncSettings, passphrase?: string) {
         return this.encryptConfigurationItemWith(src, settings, encryptWithEphemeralSalt, passphrase);
     }
     private async encryptConfigurationItemWith(
         src: string,
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         encrypt: (source: string, passphrase: string) => Promise<string>,
         selectedPassphrase?: string
     ) {
@@ -682,7 +682,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
      * Decrypt the given settings.
      * @param settings The settings to decrypt.
      */
-    async decryptSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings> {
+    async decryptSettings(settings: SyncSettings): Promise<SyncSettings> {
         this.validateStoredIdConfiguration(settings);
         const passphrase = await this.getPassphrase(settings);
         const result = await this.decryptSettingsWithPassphrase(settings, passphrase);
@@ -691,9 +691,9 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
     }
 
     private async decryptSettingsWithPassphrase(
-        settings: ObsidianLiveSyncSettings,
+        settings: SyncSettings,
         passphrase: string | false
-    ): Promise<{ settings: ObsidianLiveSyncSettings; verified: boolean }> {
+    ): Promise<{ settings: SyncSettings; verified: boolean }> {
         let verified = false;
         this.validateStoredIdConfiguration(settings);
         if (settings.idDerivationVersion === 1) {
@@ -759,7 +759,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         return { settings, verified };
     }
 
-    private hasProtectedConfiguration(settings: ObsidianLiveSyncSettings): boolean {
+    private hasProtectedConfiguration(settings: SyncSettings): boolean {
         return !!(
             settings.encryptedCouchDBConnection ||
             (settings.encrypt && settings.encryptedPassphrase) ||
@@ -770,7 +770,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         );
     }
 
-    private validateStoredIdConfiguration(settings: ObsidianLiveSyncSettings): void {
+    private validateStoredIdConfiguration(settings: SyncSettings): void {
         if (settings.idDerivationVersion !== 1) {
             configuredIdKey(settings);
         } else if (!settings.encryptedIdDerivationKey) {
@@ -787,7 +787,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
     }
 
-    private async loadConfiguration(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings> {
+    private async loadConfiguration(settings: SyncSettings): Promise<SyncSettings> {
         if (settings.configPassphraseStore !== "LOCALSTORAGE" || !this.hasProtectedConfiguration(settings)) {
             return this.decryptSettings(settings);
         }
@@ -955,7 +955,7 @@ export abstract class SettingService<T extends ServiceContext = ServiceContext>
         }
     }
 
-    private cloneSettings(settings: ObsidianLiveSyncSettings): ObsidianLiveSyncSettings {
+    private cloneSettings(settings: SyncSettings): SyncSettings {
         return {
             ...omitP2PRuntimeSettings(settings),
             remoteConfigurations: Object.fromEntries(

@@ -1,4 +1,4 @@
-import type { LiveSyncBaseCore } from "@/core/createCore";
+import type { SyncCore } from "@/core/createCore";
 import { createInstanceLogFunction } from "@tabularium/sync-core/compat/services/lib/logUtils";
 import { Logger, LOG_LEVEL_NOTICE } from "octagonal-wheels/common/logger";
 import { extractObject } from "octagonal-wheels/object";
@@ -7,7 +7,7 @@ import {
     configurationNames,
     statusDisplay,
     type TweakValues,
-    type ObsidianLiveSyncSettings,
+    type SyncSettings,
     type RemoteDBSettings,
     type RemotePreferredTweakResult,
     RemotePreferredTweakStatuses,
@@ -26,7 +26,7 @@ import {
 } from "@tabularium/sync-core/replication";
 
 interface PreferredRemoteTweakWriter extends ReplicatorInstance {
-    setPreferredRemoteTweakSettings(setting: ObsidianLiveSyncSettings): Promise<void>;
+    setPreferredRemoteTweakSettings(setting: SyncSettings): Promise<void>;
 }
 
 function canSetPreferredRemoteTweakSettings(replicator: ReplicatorInstance): replicator is PreferredRemoteTweakWriter {
@@ -40,7 +40,7 @@ function canSetPreferredRemoteTweakSettings(replicator: ReplicatorInstance): rep
  * Localised counterpart of Commonlib's `confName()`, which takes no translator.
  * Same shape: label plus status suffix, and an empty string for an unknown key.
  */
-function localisedConfName(key: keyof ObsidianLiveSyncSettings): string {
+function localisedConfName(key: keyof SyncSettings): string {
     const info = configurationNames[key];
     if (!info) return "";
     return `${translateIfAvailable(info.name)}${statusDisplay(info.status)}`;
@@ -98,14 +98,14 @@ function mismatchTable(assessment: TweakAssessment, direction?: "adoptPreferred"
 }
 
 /** Kept only while resolving a decision; this can contain credentials and must never be logged. */
-function resolutionSettingsSignature(settings: ObsidianLiveSyncSettings): string {
+function resolutionSettingsSignature(settings: SyncSettings): string {
     return JSON.stringify({ ...settings, autoAcceptCompatibleTweak: settings.autoAcceptCompatibleTweak ?? true });
 }
 
 export class ModuleResolvingMismatchedTweaks {
-    readonly core: LiveSyncBaseCore;
+    readonly core: SyncCore;
     private readonly _log: ReturnType<typeof createInstanceLogFunction>;
-    constructor(core: LiveSyncBaseCore) {
+    constructor(core: SyncCore) {
         this.core = core;
         this._log = createInstanceLogFunction("ModuleResolvingMismatchedTweaks", core.services.API);
     }
@@ -171,7 +171,7 @@ export class ModuleResolvingMismatchedTweaks {
      * @param previous
      * @returns
      */
-    async _onBeforeSaveSettingData(next: ObsidianLiveSyncSettings, previous: ObsidianLiveSyncSettings) {
+    async _onBeforeSaveSettingData(next: SyncSettings, previous: SyncSettings) {
         const tweakKeys = Object.keys(TweakValuesTemplate) as (keyof TweakValues)[];
         const tweakKeysForUpdate = tweakKeys.filter((key) => key !== "tweakModified");
         const hasChangedTweak = tweakKeysForUpdate.some((key) => next[key] !== previous[key]);
@@ -302,7 +302,7 @@ export class ModuleResolvingMismatchedTweaks {
 
     async _askResolvingMismatchedTweaks(
         preferredSource: TweakValues,
-        updatePreferredRemote?: (setting: ObsidianLiveSyncSettings) => Promise<boolean>,
+        updatePreferredRemote?: (setting: SyncSettings) => Promise<boolean>,
         assessment = assessTweakCompatibility(this.settings, preferredSource)
     ): Promise<"OK" | "CHECKAGAIN" | "IGNORE"> {
         const signature = resolutionSettingsSignature(this.settings);
@@ -470,7 +470,7 @@ export class ModuleResolvingMismatchedTweaks {
     }
 }
 
-export function installTweakResolution(core: LiveSyncBaseCore) {
+export function installTweakResolution(core: SyncCore) {
     const component = new ModuleResolvingMismatchedTweaks(core);
     component.install();
     return component;

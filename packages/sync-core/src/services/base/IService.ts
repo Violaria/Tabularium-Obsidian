@@ -15,7 +15,7 @@ import type {
     LoadedEntry,
     MetaEntry,
     MISSING_OR_ERROR,
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     RemoteDBSettings,
     RemotePreferredTweakResult,
     SettingsMigrationState,
@@ -25,7 +25,7 @@ import type {
     UXFileInfoStub,
 } from "@lib/common/types";
 
-import type { LiveSyncLocalDB } from "@lib/pouchdb/LiveSyncLocalDB";
+import type { LocalDatabase } from "@lib/pouchdb/LocalDatabase";
 import type { ReplicatorInstance } from "@lib/replication/ReplicatorInstance";
 import type { SimpleStore } from "octagonal-wheels/databases/SimpleStoreBase";
 import type { Confirm } from "@lib/interfaces/Confirm";
@@ -147,7 +147,7 @@ export interface openDatabaseParameters {
     databaseEvents: DatabaseEventService;
 }
 export interface IDatabaseService {
-    localDatabase: LiveSyncLocalDB;
+    localDatabase: LocalDatabase;
     createPouchDBInstance<T extends object>(
         name?: string,
         options?: PouchDB.Configuration.DatabaseConfiguration
@@ -166,17 +166,17 @@ export interface IDatabaseService {
     isDatabaseReady(): boolean;
 }
 export interface IDatabaseEventService {
-    onUnloadDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+    onUnloadDatabase(db: LocalDatabase): Promise<boolean>;
 
-    onCloseDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+    onCloseDatabase(db: LocalDatabase): Promise<boolean>;
 
-    onDatabaseInitialisation(db: LiveSyncLocalDB): Promise<boolean>;
+    onDatabaseInitialisation(db: LocalDatabase): Promise<boolean>;
 
     onDatabaseInitialised(showNotice: boolean): Promise<boolean>;
 
     onDatabaseHasReady(): Promise<boolean>;
 
-    onResetDatabase(db: LiveSyncLocalDB): Promise<boolean>;
+    onResetDatabase(db: LocalDatabase): Promise<boolean>;
 
     initialiseDatabase(
         showingNotice?: boolean,
@@ -299,7 +299,7 @@ export interface IReplicatorService {
 }
 
 export type ReplicatorFactoryCallback = (
-    settingOverride?: Partial<ObsidianLiveSyncSettings>
+    settingOverride?: Partial<SyncSettings>
 ) => Promise<ReplicatorInstance | undefined | false>;
 export type ReplicatorFactoryHandler = MultipleHandlerFunction<ReplicatorFactoryCallback>;
 export interface IReplicationService {
@@ -479,9 +479,9 @@ export interface ISettingService {
 
     clearUsedPassphrase(): void;
 
-    decryptSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings>;
+    decryptSettings(settings: SyncSettings): Promise<SyncSettings>;
 
-    adjustSettings(settings: ObsidianLiveSyncSettings): Promise<ObsidianLiveSyncSettings>;
+    adjustSettings(settings: SyncSettings): Promise<SyncSettings>;
 
     loadSettings(): Promise<void>;
 
@@ -499,27 +499,27 @@ export interface ISettingService {
     readonly config: IConfigService;
 
     onBeforeSaveSettingData(
-        nextSettings: ObsidianLiveSyncSettings,
-        previousSettings: ObsidianLiveSyncSettings
-    ): Promise<(Partial<ObsidianLiveSyncSettings> | void)[]>;
+        nextSettings: SyncSettings,
+        previousSettings: SyncSettings
+    ): Promise<(Partial<SyncSettings> | void)[]>;
 
     saveSettingData(): Promise<void>;
 
     /** Save a new configuration wrapper and its device-local key, retaining the protected values. */
     changeConfigurationEncryption(store: ConfigPassphraseStore, passphrase?: string): Promise<void>;
 
-    currentSettings(): ObsidianLiveSyncSettings;
+    currentSettings(): SyncSettings;
 
     updateSettings(
-        updateFn: (current: ObsidianLiveSyncSettings) => ObsidianLiveSyncSettings,
+        updateFn: (current: SyncSettings) => SyncSettings,
         saveImmediately?: boolean
     ): Promise<void>;
-    applyExternalSettings(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void>;
-    applyPartial(partial: Partial<ObsidianLiveSyncSettings>, saveImmediately?: boolean): Promise<void>;
+    applyExternalSettings(partial: Partial<SyncSettings>, saveImmediately?: boolean): Promise<void>;
+    applyPartial(partial: Partial<SyncSettings>, saveImmediately?: boolean): Promise<void>;
 
-    onSettingLoaded(settings: ObsidianLiveSyncSettings): Promise<boolean>;
-    onSettingChanged(settings: ObsidianLiveSyncSettings): Promise<boolean>;
-    onSettingSaved(settings: ObsidianLiveSyncSettings): Promise<boolean>;
+    onSettingLoaded(settings: SyncSettings): Promise<boolean>;
+    onSettingChanged(settings: SyncSettings): Promise<boolean>;
+    onSettingSaved(settings: SyncSettings): Promise<boolean>;
 }
 export interface ITweakValueService {
     fetchRemotePreferred(trialSetting: RemoteDBSettings): Promise<RemotePreferredTweakResult>;
@@ -531,7 +531,7 @@ export interface ITweakValueService {
 
     askResolvingMismatched(
         preferredSource: TweakValues,
-        updatePreferredRemote?: (setting: ObsidianLiveSyncSettings) => Promise<boolean>,
+        updatePreferredRemote?: (setting: SyncSettings) => Promise<boolean>,
         assessment?: TweakAssessment
     ): Promise<"OK" | "CHECKAGAIN" | "IGNORE">;
 

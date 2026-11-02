@@ -5,7 +5,7 @@ import { FlagFiles } from "@tabularium/sync-core/compat/common/models/redflag.co
 import FetchEverything from "@/ui/SetupWizard/dialogs/FetchEverything.svelte";
 import RebuildEverything from "@/ui/SetupWizard/dialogs/RebuildEverything.svelte";
 import { REMOTE_MINIO, REMOTE_P2P } from "@tabularium/sync-core/compat/common/models/setting.const";
-import { assessTweakCompatibility, type ObsidianLiveSyncSettings } from "@tabularium/sync-core/settings";
+import { assessTweakCompatibility, type SyncSettings } from "@tabularium/sync-core/settings";
 import { RemotePreferredTweakStatuses } from "@tabularium/sync-core/compat/common/models/tweak.definition";
 import {
     TYPE_BACKUP_SKIPPED,
@@ -223,7 +223,7 @@ export function createFetchAllFlagHandler(
 export async function adjustSettingToRemote(
     host: NecessaryServices<"tweakValue" | "UI" | "setting", never>,
     log: LogFunction,
-    config: ObsidianLiveSyncSettings,
+    config: SyncSettings,
     operation: InitialisationOperation = "fetch"
 ): Promise<boolean> {
     while (true) {
@@ -313,7 +313,7 @@ export async function adjustSettingToRemote(
         config = {
             ...config,
             ...assessment.adoptPreferred.changes,
-        } satisfies ObsidianLiveSyncSettings;
+        } satisfies SyncSettings;
         await host.services.setting.applyExternalSettings(config, true);
         log($msg("RedFlag.RemoteSettings.Applied"), LOG_LEVEL_NOTICE);
         return true;
@@ -330,7 +330,7 @@ export async function adjustSettingToRemoteIfNeeded(
     host: NecessaryServices<"tweakValue" | "UI" | "setting", never>,
     log: LogFunction,
     extra: { preventFetchingConfig: boolean } | null,
-    config: ObsidianLiveSyncSettings,
+    config: SyncSettings,
     operation: InitialisationOperation = "fetch"
 ): Promise<boolean> {
     if (extra?.preventFetchingConfig) {
@@ -407,8 +407,8 @@ export async function processVaultInitialisation(
     const saved = await host.services.setting.config.getValue(SYNC_MODE_KEY, "");
     const current = host.services.setting.currentSettings();
     const syncMode = saved
-        ? (JSON.parse(saved) as Partial<ObsidianLiveSyncSettings>)
-        : (Object.fromEntries(SYNC_MODE_KEYS.map((key) => [key, current[key]])) as Partial<ObsidianLiveSyncSettings>);
+        ? (JSON.parse(saved) as Partial<SyncSettings>)
+        : (Object.fromEntries(SYNC_MODE_KEYS.map((key) => [key, current[key]])) as Partial<SyncSettings>);
     if (!saved) await host.services.setting.config.setValue(SYNC_MODE_KEY, JSON.stringify(syncMode));
     try {
         // Disable batch saving and file watching during initialisation.

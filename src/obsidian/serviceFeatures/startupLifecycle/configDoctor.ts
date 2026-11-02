@@ -1,5 +1,5 @@
 import { performDoctorConsultation, RebuildOptions } from "@tabularium/sync-core/compat/common/configForDoc";
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import type { Confirm } from "@tabularium/sync-core/compat/interfaces/Confirm";
 import type { Rebuilder } from "@tabularium/sync-core/compat/interfaces/DatabaseRebuilder";
 import type { MessageTranslator } from "@tabularium/sync-core/context";
@@ -8,8 +8,8 @@ import type { MessageTranslator } from "@tabularium/sync-core/context";
 export interface ConfigDoctorDependencies {
     readonly confirm: Confirm;
     readonly translate: MessageTranslator;
-    readonly settings: ObsidianLiveSyncSettings;
-    readonly setSettings: (settings: ObsidianLiveSyncSettings) => void;
+    readonly settings: SyncSettings;
+    readonly setSettings: (settings: SyncSettings) => void;
     readonly saveSettings: () => Promise<void>;
     readonly rebuilder: Pick<Rebuilder, "scheduleRebuild" | "scheduleFetch">;
     readonly performRestart: () => void;

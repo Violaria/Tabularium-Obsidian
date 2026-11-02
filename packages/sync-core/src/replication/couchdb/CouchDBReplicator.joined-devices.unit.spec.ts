@@ -7,7 +7,7 @@ import {
     type EntryMilestoneInfo,
     type RemoteDBSettings,
 } from "@lib/common/types.ts";
-import { LiveSyncCouchDBReplicator } from "./LiveSyncReplicator.ts";
+import { CouchDBReplicator } from "./CouchDBReplicator.ts";
 
 const DEVICE_INFO: DeviceInfo = {
     app_version: "app",
@@ -47,7 +47,7 @@ function createReplicator(
     const localDB = { get: vi.fn(async () => nodeInfo) };
     const close = vi.fn(async () => {});
     const setting = {} as RemoteDBSettings;
-    const replicator = new LiveSyncCouchDBReplicator({
+    const replicator = new CouchDBReplicator({
         services: {
             API: { isMobile: () => false },
             database: { localDatabase: { localDatabase: localDB } },
@@ -61,7 +61,7 @@ function createReplicator(
     return { close, connect, localDB, replicator, setting };
 }
 
-describe("LiveSyncCouchDBReplicator joined devices", () => {
+describe("CouchDBReplicator joined devices", () => {
     it("projects the remote milestone and closes the trial connection", async () => {
         const remoteDB = {
             get: vi.fn(async () => createMilestone()),

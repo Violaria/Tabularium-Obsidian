@@ -1,6 +1,6 @@
-import type { ObsidianLiveSyncSettings } from "./setting.type";
+import type { SyncSettings } from "./setting.type";
 
-export const KeyIndexOfSettings: Record<keyof ObsidianLiveSyncSettings, number> = {
+export const KeyIndexOfSettings: Record<keyof SyncSettings, number> = {
     remoteType: 0,
     useCustomRequestHandler: 1,
     couchDB_URI: 2,

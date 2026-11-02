@@ -1,10 +1,10 @@
-import type { ObsidianLiveSyncSettings } from "@tabularium/sync-core/compat/common/types";
+import type { SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { fireAndForget } from "octagonal-wheels/promises";
 import { scheduleTask } from "octagonal-wheels/concurrency/task";
 import { EVENT_FILE_SAVED, EVENT_SETTING_SAVED, eventHub } from "@/core/common/events";
 
 type ReflectionFilterSettings = Pick<
-    ObsidianLiveSyncSettings,
+    SyncSettings,
     | "handleFilenameCaseSensitive"
     | "ignoreFiles"
     | "maxMTimeForReflectEvents"
@@ -16,7 +16,7 @@ type ReflectionFilterSettings = Pick<
 >;
 
 interface AutomaticReplicationTriggerContext {
-    readonly currentSettings: () => ObsidianLiveSyncSettings;
+    readonly currentSettings: () => SyncSettings;
     readonly isSuspended: () => boolean;
     readonly replicateDatabaseEvent: () => Promise<unknown>;
     readonly reprocessStoredDocuments: () => Promise<number>;

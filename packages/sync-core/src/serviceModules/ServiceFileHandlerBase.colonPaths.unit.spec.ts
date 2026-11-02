@@ -5,7 +5,7 @@ import MemoryAdapter from "pouchdb-adapter-memory";
 import type { EntryDoc, FilePathWithPrefix, UXFileInfo } from "@lib/common/types";
 import { DEFAULT_SETTINGS } from "@lib/common/types";
 import { createTextBlob, isDocContentSame, readContent } from "@lib/common/utils";
-import { createLiveSyncEventHub } from "@lib/hub/hub";
+import { createSyncEventHub } from "@lib/hub/hub";
 import { EntryManager, type EntryManagerOptions } from "@lib/managers/EntryManager/EntryManager";
 import { PathServiceCompat } from "@lib/services/implements/injectable/InjectablePathService";
 import { ServiceContext } from "@lib/services/base/ServiceBase";
@@ -105,7 +105,7 @@ async function fixture(usePathObfuscation: boolean) {
         API: { addLog: vi.fn() },
         path: pathService,
         setting,
-        events: createLiveSyncEventHub(),
+        events: createSyncEventHub(),
         database: { localDatabase },
         vault: { isTargetFile: async () => true, isFileSizeTooLarge: () => false },
         storageAccess,

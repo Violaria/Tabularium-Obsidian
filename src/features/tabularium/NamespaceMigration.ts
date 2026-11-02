@@ -8,7 +8,7 @@ import { FlagFiles, UpstreamFlagFiles } from "@tabularium/sync-core/compat/commo
 import { legacyDatabaseCompatibilityVersionKey } from "@/obsidian/common/databaseCompatibility";
 import { rememberFetchChoice } from "@/obsidian/serviceFeatures/redFlag.simpleFetch";
 import { $msg } from "@/core/common/translation";
-import type { LiveSyncCore } from "@/main";
+import type { PluginCore } from "@/main";
 import type { TabulariumServer } from "./ServerLogin";
 import { OpenKeyValueDatabase } from "@/obsidian/common/KeyValueDB";
 import { FILE_REFLECTION_PROVENANCE_STORE } from "@/core/serviceModules/FileReflectionProvenance";
@@ -18,7 +18,7 @@ import { formerStorageKeys, namesFor, NAMESPACE_MIGRATION_KEY } from "./ownNames
 export const UPSTREAM_PLUGIN_ID = "obsidian-livesync";
 
 /** Removes what the old names held on this device: the local databases, the vault's device values and flag files. */
-export async function removeOldNames(core: LiveSyncCore, storage: Storage, from: string) {
+export async function removeOldNames(core: PluginCore, storage: Storage, from: string) {
     const vaultName = core.services.API.getSystemVaultName();
     const old = namesFor(vaultName, from);
     await core.services.database.createPouchDBInstance(old.localDatabase).destroy();
@@ -42,7 +42,7 @@ export async function removeOldNames(core: LiveSyncCore, storage: Storage, from:
  * edit made before the upgrade and not yet sent would come back as a conflict. With the records, it is stored on top of
  * the revision it was edited from. The old database is only read; it is left for removeOldNames.
  */
-export async function carryOverProvenance(core: LiveSyncCore, oldKeyValueDatabase: string) {
+export async function carryOverProvenance(core: PluginCore, oldKeyValueDatabase: string) {
     const existing = await indexedDB.databases();
     if (!existing.some((database) => database.name === oldKeyValueDatabase)) {
         core.services.API.addLog(`No ${oldKeyValueDatabase} to carry base revisions over from`, LOG_LEVEL_INFO);
@@ -61,7 +61,7 @@ export async function carryOverProvenance(core: LiveSyncCore, oldKeyValueDatabas
 }
 
 /** Why the server cannot be used for the fetch right now, or undefined when it can. */
-async function unavailable(core: LiveSyncCore, server: TabulariumServer) {
+async function unavailable(core: PluginCore, server: TabulariumServer) {
     const settings = core.services.setting.currentSettings();
     try {
         const response = await core.services.API.nativeFetch(`${settings.couchDB_URI}/${settings.couchDB_DBNAME}`, {
@@ -80,7 +80,7 @@ async function unavailable(core: LiveSyncCore, server: TabulariumServer) {
  */
 export function installNamespaceMigration(
     plugin: Plugin,
-    core: LiveSyncCore,
+    core: PluginCore,
     server: TabulariumServer,
     storage: Storage = window.localStorage
 ) {

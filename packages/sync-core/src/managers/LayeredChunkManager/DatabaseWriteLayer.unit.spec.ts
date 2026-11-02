@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import PouchDB from "pouchdb-core";
 import MemoryAdapter from "pouchdb-adapter-memory";
 import { DatabaseWriteLayer } from "./DatabaseWriteLayer";
-import { LiveSyncError } from "@lib/common/LSError";
+import { SyncError } from "@lib/common/LSError";
 import type { DocumentID, EntryLeaf } from "@lib/common/types";
 import type { WriteResult } from "./types.ts";
 
@@ -155,7 +155,7 @@ describe("DatabaseWriteLayer", () => {
         expect(result.processed.duplicated).toBe(1); // chunk-1 duplicated
     });
 
-    it("should throw LiveSyncError for non-409 database errors", async () => {
+    it("should throw SyncError for non-409 database errors", async () => {
         const chunk = createMockLeaf("chunk-1");
         const nextFn = createMockNextFn();
 
@@ -170,32 +170,32 @@ describe("DatabaseWriteLayer", () => {
             },
         ] as any);
 
-        await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(LiveSyncError);
+        await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(SyncError);
 
         await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(
             "Failed to write chunks"
         );
     });
 
-    it("should throw LiveSyncError when database operation fails", async () => {
+    it("should throw SyncError when database operation fails", async () => {
         const chunk = createMockLeaf("chunk-1");
         const nextFn = createMockNextFn();
 
         // Mock bulkDocs to throw an error
         vi.spyOn(db, "bulkDocs").mockRejectedValue(new Error("Database connection lost"));
 
-        await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(LiveSyncError);
+        await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(SyncError);
 
         await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(
             "Database write layer error"
         );
     });
 
-    it("should preserve LiveSyncError when re-thrown", async () => {
+    it("should preserve SyncError when re-thrown", async () => {
         const chunk = createMockLeaf("chunk-1");
         const nextFn = createMockNextFn();
 
-        const originalError = new LiveSyncError("Custom error", { status: 500 });
+        const originalError = new SyncError("Custom error", { status: 500 });
         vi.spyOn(db, "bulkDocs").mockRejectedValue(originalError);
 
         await expect(writeLayer.write([chunk], {}, "origin-1" as DocumentID, nextFn)).rejects.toThrow(originalError);

@@ -5,7 +5,7 @@ export const PREFIXMD_LOGFILE_UC = "LIVESYNC_LOG_";
 
 /**
  * Tabularium's flag files at the vault root: each asks the plug-in to suspend, fetch or rebuild at the next start. Their
- * names are its own, so the original Self-hosted LiveSync in the same vault does not respond to them, nor Tabularium to
+ * names are its own, so the original sync plug-in in the same vault does not respond to them, nor Tabularium to
  * the original's.
  */
 export const FlagFiles = {

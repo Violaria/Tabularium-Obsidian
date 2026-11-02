@@ -2,7 +2,7 @@ import type {
     BucketSyncSetting,
     CouchDBConnection,
     EncryptionSettings,
-    ObsidianLiveSyncSettings,
+    SyncSettings,
 } from "@tabularium/sync-core/compat/common/models/setting.type";
 
 export const TYPE_IDENTICAL = "identical";
@@ -104,7 +104,7 @@ export type SelectMethodExistingResultType =
 
 export type SetupRemoteResultType = typeof TYPE_COUCHDB | typeof TYPE_BUCKET | typeof TYPE_P2P | typeof TYPE_CANCELLED;
 
-export type UseSetupURIResultType = typeof TYPE_CANCELLED | ObsidianLiveSyncSettings;
+export type UseSetupURIResultType = typeof TYPE_CANCELLED | SyncSettings;
 
 export type SetupRemoteE2EEResultType = typeof TYPE_CANCELLED | EncryptionSettings;
 export type SetupRemoteE2EEInitialData = {
