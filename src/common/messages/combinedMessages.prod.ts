@@ -4228,6 +4228,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.",
         zh: "插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。",
     },
+    "tabularium.release.0.25.0": {
+        def: "The plug-in is about a fifth smaller. Its sync core is now part of Tabularium and keeps only the connection to the Tabularium server; the code for object storage and peer-to-peer sync is gone. A device whose settings still name object storage or peer-to-peer does not try to use them and connects through Tabularium as usual.",
+        la: "Additamentum fere quinta parte minus est. Nucleus synchronizationis nunc pars Tabularii est et solum nexum cum ministratore Tabularii servat; codex repositorii obiectorum et synchronizationis inter pares sublatus est. Instrumentum cuius optiones adhuc repositorium obiectorum aut synchronizationem inter pares nominant eis non utitur et per Tabularium ut solet conectit.",
+        zh: "插件小了约五分之一。同步核心并入 Tabularium，只保留与 Tabularium 服务器的连接，对象存储和 P2P 同步的代码已删除。设置里仍写着对象存储或 P2P 的设备不会去使用它们，照常通过 Tabularium 连接。",
+    },
     "tabularium.release.0.3.0": {
         def: "Connect with a Tabularium login; Send to Kindle; web notes; credentials renew themselves.",
         la: "Conexio per rationem Tabularium; ad Kindle mittere; commentarii interretiales; tesserae sponte renovantur.",

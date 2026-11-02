@@ -1112,6 +1112,7 @@
     "tabularium.release.0.24.3": "SSH 主机中登记为禁止的主机，Tabularius 在任何档位都不会抓取指向它的网页（跳转之后也一样）。",
     "tabularium.release.0.24.4": "Tabularius 经服务器抓取网页时每次新建连接，之前抓取留下的连接不能再跳过权限档位和禁止主机的地址检查。",
     "tabularium.release.0.24.5": "插件删除了 Tabularium 早已停用的上游功能代码（P2P 同步、引导向导、Setup URI 与二维码、隐藏文件与自定义同步），以及约一千条不再使用的词条。设置中仍开着这些功能的设备，它们保持关闭。本历史中 0.20.0 一条重新显示说明文字。",
+    "tabularium.release.0.25.0": "插件小了约五分之一。同步核心并入 Tabularium，只保留与 Tabularium 服务器的连接，对象存储和 P2P 同步的代码已删除。设置里仍写着对象存储或 P2P 的设备不会去使用它们，照常通过 Tabularium 连接。",
     "tabularium.release.0.3.0": "用 Tabularium 账户登录连接；发送到 Kindle；云笔记；凭据自动续期。",
     "tabularium.release.0.4.0": "界面支持英文、中文和拉丁语；云笔记可以编辑。",
     "tabularium.release.0.5.0": "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
