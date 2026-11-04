@@ -46,6 +46,20 @@ describe("TabulariumApi", () => {
         await api.logout();
         expect(fetcher.mock.calls.filter(([url]) => url.endsWith("/sessions/current"))).toHaveLength(1);
     });
+    it("reports the client when issuing, and uses the device's credentials to join and to revoke itself", async () => {
+        const fetcher = vi.fn(async (_url: string, _init: RequestInit) => reply(200, { name: "Obsidian · Linux" }));
+        const api = new TabulariumApi("https://server.test", fetcher);
+        const client = { id: "machine", name: "Obsidian · Linux", installation: "app" };
+        await api.issueDevice("v", client);
+        expect(fetcher.mock.calls[0]![0]).toBe("https://server.test/api/v1/vaults/v/devices");
+        expect(JSON.parse(fetcher.mock.calls[0]![1].body as string)).toEqual({ name: "Obsidian · Linux", machine: { id: "machine" }, installation: "app" });
+        expect(await api.joinClient(client, "Basic device")).toEqual({ name: "Obsidian · Linux" });
+        expect(fetcher.mock.calls[1]![0]).toBe("https://server.test/api/v1/devices/current/machine");
+        expect((fetcher.mock.calls[1]![1].headers as Record<string, string>).authorization).toBe("Basic device");
+        await api.revokeDevice("Basic device");
+        expect(fetcher.mock.calls[2]![0]).toBe("https://server.test/api/v1/devices/current");
+        expect(fetcher.mock.calls[2]![1].method).toBe("DELETE");
+    });
     it("maps server errors and network failures to readable messages", async () => {
         const api = new TabulariumApi("https://server.test", async () =>
             reply(401, { error: "Invalid username or password" })

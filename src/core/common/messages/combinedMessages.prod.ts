@@ -3894,9 +3894,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "主题",
     },
     "tabularium.help.connect.body": {
-        def: "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, name this device, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect forgets the connection on this device only; the device stays listed on the server until it is removed there.\n\nDevice credentials last 30 days and renew themselves while the device is used.",
-        la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et tesseram arcanam tabularii scribe.\n\nTabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere conexionem in hoc tantum instrumento obliviscitur.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
-        zh: "打开「连接」，用 Tabularium 服务器上的账户登录。选择已有的笔记库或新建一个，填写设备名和笔记库的密码短语。\n\n已有的笔记库会先下载到这台设备；新建的笔记库由这台设备的文件填充。换用其他笔记库时点「重新登录或换笔记库」。「断开」只让这台设备忘记连接，服务器上的设备记录要在网页上删除。\n\n设备凭据有效期 30 天，设备在使用时会自动续期。",
+        def: "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect revokes this device's credentials and clears the connection.\n\nDevice credentials last 30 days and renew themselves while the device is used.",
+        la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, et tesseram arcanam tabularii scribe.\n\nTabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere testimonia huius instrumenti revocat et conexionem delet.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
+        zh: "打开「连接」，用 Tabularium 服务器上的账户登录。选择已有的笔记库或新建一个，填写笔记库的密码短语。\n\n已有的笔记库会先下载到这台设备；新建的笔记库由这台设备的文件填充。换用其他笔记库时点「重新登录或换笔记库」。「断开」撤销这台设备的凭据并清除连接。\n\n设备凭据有效期 30 天，设备在使用时会自动续期。",
     },
     "tabularium.help.connect.title": {
         def: "Connecting and changing vaults",
@@ -4313,6 +4313,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis.",
         zh: "服务器：Tabularius 配方提供各提供商接口的全部参数；新增本机提供商 TensorRT-LLM。",
     },
+    "tabularium.release.1.1.0": {
+        def: "Devices are named automatically; the vaults of one machine count as one device; signing in again replaces the old credentials; disconnecting revokes them; invalid credentials are reported at start-up. Server: a Devices page in account settings; the Clerk's device cannot be revoked on its own.",
+        la: "Instrumenta sponte nominantur; tabularia unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest.",
+        zh: "设备自动命名，同一台机器的各库归为一台，重新登录替换旧凭据，断开时撤销凭据；凭据失效时启动即提示。服务器：账户设置新增「设备」页，书记员的设备不能单独撤销。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
@@ -4363,11 +4368,6 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "${device}, testimonia valida usque ad ${date}",
         zh: "${device}，凭据有效期至 ${date}",
     },
-    "tabularium.server.deviceName": {
-        def: "Device name",
-        la: "Nomen instrumenti",
-        zh: "设备名称",
-    },
     "tabularium.server.disconnect": {
         def: "Disconnect",
         la: "Disiunge",
@@ -4379,9 +4379,9 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "已断开 Tabularium 服务器。",
     },
     "tabularium.server.disconnectHint": {
-        def: "Disconnecting only clears this device's connection settings; notes are kept. Revoke the device credentials in the console.",
-        la: "Disiunctio tantum optiones conexionis huius instrumenti delet; commentarii retinentur. Testimonia instrumenti in consola revoca.",
-        zh: "断开只清除本机的连接设置，笔记保留。服务器上的设备凭据请在控制台撤销。",
+        def: "Disconnecting revokes this device's credentials and clears its connection settings; notes are kept.",
+        la: "Disiunctio testimonia huius instrumenti revocat et optiones conexionis delet; commentarii retinentur.",
+        zh: "断开会撤销本机的凭据并清除连接设置，笔记保留。",
     },
     "tabularium.server.enforced": {
         def: "Tabularium requires end-to-end encryption and path obfuscation; those settings have been restored.",

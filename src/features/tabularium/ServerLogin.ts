@@ -1,4 +1,4 @@
-import { Modal, Notice, Setting, normalizePath, type Plugin } from "obsidian";
+import { Modal, Notice, Platform, Setting, normalizePath, type Plugin } from "obsidian";
 import { destructive, hint } from "./hint";
 import { REMOTE_COUCHDB, type SyncSettings } from "@tabularium/sync-core/compat/common/types";
 import { upsertRemoteConfigurationInPlace } from "@tabularium/sync-core/remote-configurations";
@@ -15,6 +15,7 @@ import {
     type TabulariumDevice,
     type TabulariumVault,
 } from "./serverConnection";
+import { clientId, clientName } from "./clientIdentity";
 
 export interface ConnectOptions {
     server: string;
@@ -22,7 +23,6 @@ export interface ConnectOptions {
     password: string;
     newPassword?: string;
     vault: { id: string } | { create: string };
-    deviceName: string;
     passphrase: string;
 }
 /** A new vault is empty, so the device uploads through ordinary sync; an existing vault is fetched first. */
@@ -52,6 +52,15 @@ export class TabulariumServer {
 
     private get appId() {
         return this.app.appId ?? "";
+    }
+
+    /** What this plug-in reports to the server: the machine, and this Obsidian vault as an installation on it. */
+    client() {
+        return {
+            id: clientId(window.localStorage),
+            name: clientName(Platform),
+            installation: this.appId || this.app.vault.getName(),
+        };
     }
 
     private get file() {
@@ -93,6 +102,7 @@ export class TabulariumServer {
             const current = settings.currentSettings();
             const overrides = enforcedOverrides(current, current);
             if (Object.keys(overrides).length) await settings.applyPartial(overrides, true);
+            void this.joinClient();
             return true;
         });
         this.app.workspace.onLayoutReady(() => {
@@ -136,6 +146,28 @@ export class TabulariumServer {
         }
     }
 
+    /**
+     * Reports this client at each start with the credentials it has. Connections made before the server knew clients join
+     * this way, a name changed on the web arrives here, and revoked credentials are told at once instead of showing up
+     * as sync errors. Being offline or on an older server is not reported: the next start tries again.
+     */
+    async joinClient() {
+        const connection = this.connection;
+        if (!connection) return false;
+        try {
+            const { name } = await this.api(connection.server).joinClient(this.client(), this.deviceAuthorization());
+            if (this.connection !== connection) return false;
+            if (connection.joined && connection.deviceName === name) return true;
+            this.connection = { ...connection, deviceName: name, joined: true };
+            await this.plugin.app.vault.adapter.write(this.file, JSON.stringify(this.connection, null, 2));
+            return true;
+        } catch (error) {
+            if (!(error instanceof TabulariumApiError)) throw error;
+            if (error.status === 401) new Notice($msg("tabularium.server.credentialsInvalid"));
+            return false;
+        }
+    }
+
     api(server: string) {
         return new TabulariumApi(server, (url, init) => this.core.services.API.nativeFetch(url, init));
     }
@@ -158,7 +190,7 @@ export class TabulariumServer {
                     : await api.createVault(target.create);
             if (!vault) throw new TabulariumApiError(404, $msg("tabularium.server.vaultMissing"));
             if (vault.state !== "ready") throw new TabulariumApiError(409, "Vault is not ready");
-            device = await api.issueDevice(vault.id, options.deviceName);
+            device = await api.issueDevice(vault.id, this.client());
         } finally {
             await api.logout();
         }
@@ -166,7 +198,6 @@ export class TabulariumServer {
             api.server,
             vault,
             device,
-            options.deviceName,
             options.passphrase,
             "id" in options.vault ? "fetch" : "upload"
         );
@@ -180,7 +211,6 @@ export class TabulariumServer {
         server: string,
         vault: TabulariumVault,
         device: TabulariumDevice,
-        deviceName: string,
         passphrase: string,
         initialise: Initialise
     ) {
@@ -202,9 +232,10 @@ export class TabulariumServer {
             vaultId: vault.id,
             vaultName: vault.name,
             deviceId: device.id,
-            deviceName,
+            deviceName: device.machineName ?? this.client().name,
             expiresAt: device.expiresAt,
             appId: this.appId,
+            joined: Boolean(device.machineName),
         };
         const write = async () => {
             // Nothing synchronises until the new settings and an empty local database are in place, and data.json is
@@ -244,8 +275,15 @@ export class TabulariumServer {
         return true;
     }
 
-    /** Forgets the connection on this device; the server keeps the device until it is revoked there. */
+    /** Revokes this device's credentials and forgets the connection. An unreachable server keeps them until they expire. */
     async disconnect() {
+        const connection = this.connection;
+        if (connection)
+            await this.api(connection.server)
+                .revokeDevice(this.deviceAuthorization())
+                .catch((error: unknown) => {
+                    if (!(error instanceof TabulariumApiError)) throw error;
+                });
         await this.forget();
         await this.core.services.control.applySettings();
     }
@@ -426,7 +464,6 @@ class ServerModal extends Modal {
         const values = {
             vault: vaults[0]?.id ?? "",
             name: this.app.vault.getName(),
-            device: `Obsidian ${this.app.vault.getName()}`,
             passphrase: "",
             confirm: "",
         };
@@ -445,9 +482,6 @@ class ServerModal extends Modal {
                 new Setting(contentEl)
                     .setName($msg("tabularium.server.newVaultName"))
                     .addText((t) => t.setValue(values.name).onChange((v) => (values.name = v)));
-            new Setting(contentEl)
-                .setName($msg("tabularium.server.deviceName"))
-                .addText((t) => t.setValue(values.device).onChange((v) => (values.device = v)));
             hint(
                 new Setting(contentEl).setName($msg("tabularium.server.passphrase")),
                 creating() ? $msg("tabularium.server.passphraseNew") : $msg("tabularium.server.passphraseExisting")
@@ -473,14 +507,13 @@ class ServerModal extends Modal {
                             const vault = creating()
                                 ? await this.api!.createVault(values.name)
                                 : vaults.find((v) => v.id === values.vault)!;
-                            const device = await this.api!.issueDevice(vault.id, values.device);
+                            const device = await this.api!.issueDevice(vault.id, this.server.client());
                             await this.api!.logout();
                             this.close();
                             await this.server.apply(
                                 this.api!.server,
                                 vault,
                                 device,
-                                values.device,
                                 values.passphrase,
                                 creating() ? "upload" : "fetch"
                             );

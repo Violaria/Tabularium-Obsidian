@@ -984,7 +984,7 @@ tabularium:
     vault: Vault
     device: This device
     deviceExpiry: "${device}, credentials valid until ${date}"
-    disconnectHint: Disconnecting only clears this device's connection settings; notes are kept. Revoke the device credentials in the console.
+    disconnectHint: Disconnecting revokes this device's credentials and clears its connection settings; notes are kept.
     signInAgain: Sign in again
     disconnect: Disconnect
     disconnected: Disconnected from the Tabularium server.
@@ -999,7 +999,6 @@ tabularium:
     passwordsDiffer: The two passwords do not match.
     newVault: New vault
     newVaultName: New vault name
-    deviceName: Device name
     passphrase: E2EE passphrase
     passphraseNew: Notes are encrypted on this device before upload; the server cannot read them. A lost passphrase cannot be recovered.
     passphraseExisting: Enter the passphrase this vault uses on your other devices.
@@ -1082,7 +1081,7 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.conflict.tooLarge": "The differences are too large to show."
 "tabularium.conflict.vaultAndDatabase": "File and synchronised copy"
 "tabularium.conflict.vaultFile": "File in the vault"
-"tabularium.help.connect.body": "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, name this device, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect forgets the connection on this device only; the device stays listed on the server until it is removed there.\n\nDevice credentials last 30 days and renew themselves while the device is used."
+"tabularium.help.connect.body": "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect revokes this device's credentials and clears the connection.\n\nDevice credentials last 30 days and renew themselves while the device is used."
 "tabularium.help.connect.title": "Connecting and changing vaults"
 "tabularium.help.errors.body": "Credentials no longer valid: the device was removed on the server or its credentials expired. Sign in again.\n\nEncryption settings refused: this device's settings differ from the vault's. Disconnect and connect again.\n\nA rebuild is in progress: wait until the owner ends it on the web.\n\nA note does not synchronise: check the size limit and the excluded files under Sync, and look in the log.\n\nThe first synchronisation of a large vault takes a while; keep Obsidian open until the status shows Up to date."
 "tabularium.help.errors.title": "Common problems"
@@ -1517,6 +1516,7 @@ We don't have any history for this note.: We don't have any history for this not
 "tabularium.release.0.24.3": "Tabularius never fetches a web page from a host registered as forbidden among the SSH hosts, in any permission mode, including after a redirect."
 "tabularium.release.0.24.4": "Each web page Tabularius fetches through the server opens its own connection, so a connection left open by an earlier fetch can no longer skip the address check of the permission mode or the forbidden hosts."
 "tabularium.release.0.24.5": "Code for upstream features that Tabularium had already switched off (peer-to-peer sync, the set-up wizard, Setup URIs and QR codes, hidden-file and customisation sync) is removed from the plug-in, along with about a thousand unused messages. A device whose settings still turn those features on keeps them off. The 0.20.0 entry of this history shows its text again."
+"tabularium.release.1.1.0": "Devices are named automatically; the vaults of one machine count as one device; signing in again replaces the old credentials; disconnecting revokes them; invalid credentials are reported at start-up. Server: a Devices page in account settings; the Clerk's device cannot be revoked on its own."
 "tabularium.release.1.0.3": "Server: Tabularius recipes offer every parameter of each provider's API; TensorRT-LLM as a local provider."
 "tabularium.release.1.0.2": "Code changes from the directory review; no change in use."
 "tabularium.release.1.0.1": "Device values are kept in each vault's own storage. Release files are built and attested by GitHub."

@@ -1145,9 +1145,8 @@ tabularium.server.connectedTo: Conexum ad ${vault}
 tabularium.server.credentialsInvalid: Testimonia instrumenti Tabularium non iam valida sunt. Iterum inire in “Conexio ministratoris”.
 tabularium.server.device: Hoc instrumentum
 tabularium.server.deviceExpiry: ${device}, testimonia valida usque ad ${date}
-tabularium.server.deviceName: Nomen instrumenti
 tabularium.server.disconnect: Disiunge
-tabularium.server.disconnectHint: Disiunctio tantum optiones conexionis huius instrumenti delet; commentarii retinentur. Testimonia instrumenti in consola revoca.
+tabularium.server.disconnectHint: Disiunctio testimonia huius instrumenti revocat et optiones conexionis delet; commentarii retinentur.
 tabularium.server.disconnected: A ministratore Tabularium disiunctum.
 tabularium.server.enforced: Tabularium cryptationem ab extremo ad extremum et obscurationem viarum requirit; hae optiones restitutae sunt.
 tabularium.server.foreignConnection: Conexio alterius tabularii erat; deleta est.
@@ -1425,10 +1424,10 @@ moduleLog.syncStatusStopped: Non synchronizatur
 "tabularium.settings.version": "Tabularium ${version}"
 "tabularium.settings.aboutDesc": "Additamentum ministratoris Tabularium proprii. Pars eius ex codice vorotamoroz sub licentia MIT derivatur; notitiae in NOTICE.md in capsa additamenti sunt."
 "tabularium.help.connect.title": "Coniungere et tabularium mutare"
-"tabularium.help.connect.body": "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, instrumento nomen da et tesseram arcanam tabularii scribe.
+"tabularium.help.connect.body": "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, et tesseram arcanam tabularii scribe.
 
 
-  Tabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere conexionem in hoc tantum instrumento obliviscitur.
+  Tabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere testimonia huius instrumenti revocat et conexionem delet.
 
 
   Tesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur."
@@ -1836,6 +1835,7 @@ tabularium.release.0.24.2: Sententiae arcanae et claves in paginis interretis ru
 tabularium.release.0.24.3: Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.
 tabularium.release.0.24.4: Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.
 tabularium.release.0.24.5: Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.
+"tabularium.release.1.1.0": "Instrumenta sponte nominantur; tabularia unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest."
 "tabularium.release.1.0.3": "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis."
 "tabularium.release.1.0.2": "Codex ad recensionem indicis mutatus; usus idem manet."
 "tabularium.release.1.0.1": "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur."

@@ -12,6 +12,14 @@ export interface TabulariumConnection {
     expiresAt: number;
     /** Obsidian's ID of the vault that signed in; a plug-in folder copied into another vault does not connect there. */
     appId?: string;
+    /** The credentials are under this machine's client on the server. Connections from before 1.1 join at start-up. */
+    joined?: boolean;
+}
+/** How this plug-in identifies itself to the server; see clientIdentity.ts. */
+export interface TabulariumClient {
+    id: string;
+    name: string;
+    installation: string;
 }
 export interface TabulariumUser {
     id: string;
@@ -28,6 +36,8 @@ export interface TabulariumDevice {
     username: string;
     password: string;
     expiresAt: number;
+    /** The server's name for this machine; absent on a server without clients. */
+    machineName?: string;
 }
 type Fetcher = (url: string, init: RequestInit) => Promise<Response>;
 
@@ -110,8 +120,25 @@ export class TabulariumApi {
     createVault(name: string): Promise<TabulariumVault> {
         return this.request("/vaults", "POST", { name });
     }
-    issueDevice(vaultId: string, name: string): Promise<TabulariumDevice> {
-        return this.request(`/vaults/${encodeURIComponent(vaultId)}/devices`, "POST", { name });
+    issueDevice(vaultId: string, client: TabulariumClient): Promise<TabulariumDevice> {
+        return this.request(`/vaults/${encodeURIComponent(vaultId)}/devices`, "POST", {
+            name: client.name,
+            machine: { id: client.id },
+            installation: client.installation,
+        });
+    }
+    /** Puts the device whose sync credentials are given under its client; returns the client's name. */
+    joinClient(client: TabulariumClient, deviceAuthorization: string): Promise<{ name: string }> {
+        return this.request(
+            "/devices/current/machine",
+            "POST",
+            { name: client.name, machine: { id: client.id }, installation: client.installation },
+            deviceAuthorization
+        );
+    }
+    /** Revokes the device whose sync credentials are given. */
+    revokeDevice(deviceAuthorization: string): Promise<unknown> {
+        return this.request("/devices/current", "DELETE", undefined, deviceAuthorization);
     }
     /** Restarts the expiry of the device whose sync credentials are given; the secret stays the same. */
     renewDevice(deviceAuthorization: string): Promise<{ expiresAt: number }> {
