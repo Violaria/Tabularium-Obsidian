@@ -67,6 +67,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "${filename} discrepantiam habet. Coniunctio differtur donec plica aperiatur.",
         zh: "${filename} 存在冲突。合并将推迟到打开该文件时进行。",
     },
+    "[ReplicateResultProcessor] ${message}": {
+        def: "[ReplicateResultProcessor] ${message}",
+        la: "[Tractatio eventus synchronizationis] ${message}",
+        zh: "[同步结果处理] ${message}",
+    },
     "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)": {
         def: "↑ Uploading chunks \n${sendingDocs}/(${sentDocsCount} done)",
         la: "↑ Fragmenta mittuntur \n${sendingDocs}/(${sentDocsCount} perfecta)",
@@ -131,6 +136,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "${MESSAGE_FALLBACK_DECRYPT_FAILED} (file path)",
         la: "${MESSAGE_FALLBACK_DECRYPT_FAILED} (via plicae)",
         zh: "${MESSAGE_FALLBACK_DECRYPT_FAILED}（文件路径）",
+    },
+    "${path} has been merged automatically": {
+        def: "${path} has been merged automatically",
+        la: "${path} sponte coniunctum est",
+        zh: "${path} 已自动合并",
     },
     '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ': {
         def: '${this.translate("couchdbReplicator.couldNotConnectToServer")} ${ret} ',
@@ -817,6 +827,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Decryptatio defecit.",
         zh: "解密失败。",
     },
+    "Decryption with HKDF failed.": {
+        def: "Decryption with HKDF failed.",
+        la: "Decryptatio HKDF defecit.",
+        zh: "HKDF 解密失败。",
+    },
     Default: {
         def: "Default",
         la: "Praedefinitum",
@@ -1020,7 +1035,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Doctor.Dialogue.MainFix": {
         def: "\n## ${name}\n\n| Current | Ideal |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**Recommendation Level:** ${level}\n\n### Why this has been detected?\n\n${reason}\n\n${note}\n\nFix this to the ideal value?",
         la: "\n## ${name}\n\n| Praesens | Idealis |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**Gradus commendationis:** ${level}\n\n### Cur hoc detectum est?\n\n${reason}\n\n${note}\n\nCorrigerene ad valorem idealem?",
-        zh: "\n## ${name}\n\n| Current | Ideal |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**Recommendation Level:** ${level}\n\n### Why this has been detected?\n\n${reason}\n\n${note}\n\nFix this to the ideal value?",
+        zh: "\n## ${name}\n\n| 当前 | 理想 |\n|:---:|:---:|\n| ${current} | ${ideal} |\n\n**建议级别：** ${level}\n\n### 为什么检测到这一项？\n\n${reason}\n\n${note}\n\n把它改成理想值吗？",
     },
     "Doctor.Dialogue.Title": {
         def: "Tabularium Config Doctor",
@@ -1080,7 +1095,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Doctor.RULES.E2EE_V02500.REASON": {
         def: "The End-to-End Encryption has got now more robust and faster. Also because, the previous E2EE was found to be compromised in a re-conducted code review. It should be applied as soon as possible. Really apologises for your inconvenience. And, this setting is not forward compatible. All synchronised devices must be updated to v0.25.0 or higher. Rebuilds are not required and will be converted from the new transfer to the new format, However, it is recommended to rebuild whenever possible.",
         la: "Cryptatio ab extremo ad extremum nunc firmior et celerior facta est. Etiam quia cryptatio E2EE prior in iterata codicis recensione violata esse inventa est. Quam primum applicanda est. Valde nos paenitet incommodi tui. Praeterea haec optio non est prorsus compatibilis. Omnia instrumenta synchronizata ad v0.25.0 vel superiorem renovanda sunt. Reaedificationes non requiruntur, et data in novam formam per novam translationem convertentur; attamen quotiens fieri potest reaedificare commendatur.",
-        zh: "The End-to-End Encryption has got now more robust and faster. Also because, the previous E2EE was found to be compromised in a re-conducted code review. It should be applied as soon as possible. Really apologises for your inconvenience. And, this setting is not forward compatible. All synchronised devices must be updated to v0.25.0 or higher. Rebuilds are not required and will be converted from the new transfer to the new format, However, it is recommended to rebuild whenever possible.",
+        zh: "端到端加密现在更可靠、更快；代码复查还发现旧的加密方式有缺陷，应尽快启用。这项设置不向前兼容，所有同步的设备都要更新到 v0.25.0 以上。不必重建，传输时会转换成新格式，但建议有条件时重建一次。",
     },
     "Document History": {
         def: "Document History",
@@ -1167,6 +1182,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Encryption failed.",
         la: "Cryptatio defecit.",
         zh: "加密失败。",
+    },
+    "Encryption with HKDF failed.": {
+        def: "Encryption with HKDF failed.",
+        la: "Cryptatio HKDF defecit.",
+        zh: "HKDF 加密失败。",
     },
     "End-to-End Encryption": {
         def: "End-to-End Encryption",
@@ -1268,6 +1288,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Configuratio ministratoris “${id}” decryptari non potuit. Tesseram arcanam et configurationem inspice.",
         zh: "无法解密服务器配置“${id}”。请检查密码短语和配置。",
     },
+    "Failed to decrypt the data with V1 method. Cannot encrypt with HKDF.": {
+        def: "Could not decrypt the data with the V1 method, so it cannot be encrypted with HKDF.",
+        la: "Data modo V1 decryptari non potuerunt; HKDF cryptari nequeunt.",
+        zh: "无法用 V1 方式解密数据，因此不能用 HKDF 加密。",
+    },
     "Failed to encode split QR Code (${ex2?.message || String(ex2)})": {
         def: "Could not encode the split QR code (${ex2?.message || String(ex2)})",
         la: "Codex QR divisus confici non potuit (${ex2?.message || String(ex2)})",
@@ -1307,6 +1332,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Could not obtain the passphrase while saving data.json. Please check the configuration.",
         la: "Dum data.json servatur, tessera arcana obtineri non potuit. Configurationem inspice.",
         zh: "保存 data.json 时无法获取密码短语，请检查配置。",
+    },
+    "Failed to obtain PBKDF2 salt (Security Seed) for replication": {
+        def: "Could not get the security seed (PBKDF2 salt) for synchronising.",
+        la: "Semen securitatis (sal PBKDF2) ad synchronizationem obtineri non potuit.",
+        zh: "无法获取同步所需的安全种子（PBKDF2 盐）。",
     },
     "Failed to open KeyValueDB": {
         def: "Could not open the key-value database",
@@ -1718,12 +1748,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "K.P2P": {
         def: "Peer-to-Peer",
         la: "Par ad Par",
-        zh: "Peer-to-Peer",
+        zh: "点对点",
     },
     "K.Peer": {
         def: "Peer",
         la: "Par",
-        zh: "Peer",
+        zh: "对等设备",
     },
     "K.ScanCustomization": {
         def: "Scan customization",
@@ -2525,32 +2555,32 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "P2P.NotEnabled": {
         def: "Peer-to-Peer Sync is not enabled. We cannot open a new connection.",
         la: "Synchronizatio inter pares non activum est. Novam conexionem aperire non possumus.",
-        zh: "Peer-to-Peer同步 is not enabled. We cannot open a new connection.",
+        zh: "Peer-to-Peer同步未启用，无法建立新连接。",
     },
     "P2P.ReplicatorInstanceMissing": {
         def: "P2P Sync replicator is not found, possibly not have been configured or enabled.",
         la: "Replicator synchronizationis P2P non inventus est; fortasse non constitutus vel non activatus est.",
-        zh: "P2P Sync replicator is not found, possibly not have been configured or enabled.",
+        zh: "找不到 P2P 同步器，可能尚未配置或启用。",
     },
     "P2P.SeemsOffline": {
         def: "Peer ${name} seems offline, skipped.",
         la: "Par ${name} extra lineam esse videtur; praetermissus est.",
-        zh: "Peer ${name} seems offline, skipped.",
+        zh: "设备 ${name} 似乎离线，已跳过。",
     },
     "P2P.SyncAlreadyRunning": {
         def: "P2P Sync is already running.",
         la: "Synchronizatio P2P iam currit.",
-        zh: "P2P Sync is already running.",
+        zh: "P2P 同步已在进行中。",
     },
     "P2P.SyncCompleted": {
         def: "P2P Sync completed.",
         la: "Synchronizatio P2P perfecta est.",
-        zh: "P2P Sync completed.",
+        zh: "P2P 同步已完成。",
     },
     "P2P.SyncStartedWith": {
         def: "P2P Sync with ${name} have been started.",
         la: "Synchronizatio P2P cum ${name} incepta est.",
-        zh: "P2P Sync with ${name} have been started.",
+        zh: "已开始与 ${name} 进行 P2P 同步。",
     },
     Passphrase: {
         def: "Passphrase",
@@ -3034,62 +3064,62 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Replicator.Dialogue.Locked.Action.Dismiss": {
         def: "Cancel for reconfirmation",
         la: "Abroga ad reconfirmandum",
-        zh: "Cancel for reconfirmation",
+        zh: "取消，稍后再确认",
     },
     "Replicator.Dialogue.Locked.Action.Fetch": {
         def: "Reset Synchronisation on This Device",
         la: "Synchronizationem in hoc instrumento restitue",
-        zh: "Reset Synchronisation on This Device",
+        zh: "重置这台设备的同步",
     },
     "Replicator.Dialogue.Locked.Action.Unlock": {
         def: "Unlock the remote database",
         la: "Resera repositorium remotum",
-        zh: "Unlock the remote database",
+        zh: "解除服务器数据库的锁定",
     },
     "Replicator.Dialogue.Locked.Message": {
         def: "Remote database is locked. This is due to a rebuild on one of the terminals.\nThe device is therefore asked to withhold the connection to avoid database corruption.\n\nThere are three options that we can do:\n\n- Reset Synchronisation on This Device\n  The most preferred and reliable way. This will dispose the local database once, and reset all synchronisation information from the remote database again, In most case, we can perform this safely. However, it takes some time and should be done in stable network.\n- Unlock the remote database\n  This method can only be used if we are already reliably synchronised by other replication methods. This does not simply mean that we have the same files. If you are not sure, you should avoid it.\n- Cancel for reconfirmation\n    This will cancel the operation. And we will asked again on next request.\n",
         la: "Repositorium remotum obseratum est. Hoc fit propter reaedificationem in uno ex terminalibus.\nInstrumentum igitur rogatur ut a conexione abstineat, ne repositorium corrumpatur.\n\nTres optiones habemus:\n\n- Synchronizationem in hoc instrumento restitue\n  Modus maxime praeferendus et fidissimus. Hoc repositorium locale semel abiciet et omnes notitias synchronizationis ex repositorio remoto denuo restituet. Plerumque hoc tuto facere possumus. Tamen aliquantum temporis requirit et in rete stabili faciendum est.\n- Resera repositorium remotum\n  Hic modus adhiberi potest tantum si iam per alios modos replicationis certo synchronizati sumus. Hoc non solum significat nos easdem plicas habere. Si incertus es, eum vitare debes.\n- Abroga ad reconfirmandum\n    Hoc operationem abrogabit. Et proxima petitione iterum rogabimur.\n",
-        zh: "Remote database is locked. This is due to a rebuild on one of the terminals.\nThe device is therefore asked to withhold the connection to avoid database corruption.\n\nThere are three options that we can do:\n\n- Reset Synchronisation on This Device\n  The most preferred and reliable way. This will dispose the local database once, and fetch all from the remote database again, In most case, we can perform this safely. However, it takes some time and should be done in stable network.\n- Unlock the remote database\n  This method can only be used if we are already reliably synchronised by other replication methods. This does not simply mean that we have the same files. If you are not sure, you should avoid it.\n- Cancel for reconfirmation\n    This will cancel the operation. And we will asked again on next request.\n",
+        zh: "服务器数据库已锁定，因为有一台设备做过重建。为避免损坏数据库，这台设备暂不连接。\n\n有三种处理方式：\n\n- 重置这台设备的同步\n  最可靠的方式：清空本地数据库，再从服务器取回全部内容。通常是安全的，但需要一些时间，请在网络稳定时进行。\n- 解除服务器数据库的锁定\n  只有确定已经通过其他方式完全同步时才可使用，文件相同并不等于已经同步。不确定就不要选。\n- 取消，稍后再确认\n  取消这次操作，下次同步时再询问。\n",
     },
     "Replicator.Dialogue.Locked.Message.Fetch": {
         def: "Fetch all has been scheduled. Plug-in will be restarted to perform it.",
         la: "Arcessere omnia constitutum est. Additamentum denuo incipiet ut id exsequatur.",
-        zh: "Fetch all has been scheduled. Plug-in will be restarted to perform it.",
+        zh: "已安排取回全部内容，插件将重启以执行。",
     },
     "Replicator.Dialogue.Locked.Message.Unlocked": {
         def: "The remote database has been unlocked. Please retry the operation.",
         la: "Repositorium remotum reseratum est. Quaeso operationem iterum conare.",
-        zh: "The remote database has been unlocked. Please retry the operation.",
+        zh: "服务器数据库已解除锁定，请重试。",
     },
     "Replicator.Dialogue.Locked.Title": {
         def: "Locked",
         la: "Obseratum",
-        zh: "Locked",
+        zh: "已锁定",
     },
     "Replicator.Message.Cleaned": {
         def: "Database cleaning up is in process. replication has been cancelled",
         la: "Purgatio repositorii in processu est; replicatio abrogata est",
-        zh: "Database cleaning up is in process. replication has been cancelled",
+        zh: "正在清理数据库，同步已取消。",
     },
     "Replicator.Message.InitialiseFatalError": {
         def: "No replicator is available, this is the fatal error.",
         la: "Nullus replicator praesto est; hic error fatalis est.",
-        zh: "No replicator is available, this is the fatal error.",
+        zh: "没有可用的同步器，这是严重错误。",
     },
     "Replicator.Message.Pending": {
         def: "Some file events are pending. Replication has been cancelled.",
         la: "Quidam eventus plicarum pendent. Replicatio abrogata est.",
-        zh: "Some file events are pending. Replication has been cancelled.",
+        zh: "有文件事件尚未处理，同步已取消。",
     },
     "Replicator.Message.SomeModuleFailed": {
         def: "Replication has been cancelled by some module failure",
         la: "Replicatio ob defectum alicuius moduli abrogata est",
-        zh: "Replication has been cancelled by some module failure",
+        zh: "某个模块失败，同步已取消。",
     },
     "Replicator.Message.VersionUpFlash": {
         def: "Remote synchronisation is paused for compatibility review. Run the 'Review why synchronisation is paused' command for details and available actions.",
         la: "Synchronizatio remota ad compatibilitatem recognoscendam suspensa est. Mandatum 'Review why synchronisation is paused' exsequere ad singula et actiones praesto.",
-        zh: "An update has been detected. Please open the Settings dialogue and check the Change Log. Replication has been cancelled.",
+        zh: "检测到更新。请打开设置查看更新日志。同步已取消。",
     },
     "Requires restart of Obsidian": {
         def: "Requires restart of Obsidian",
@@ -3560,6 +3590,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sync automatically after merging files",
         la: "Synchroniza automatice post plicas conflatas",
         zh: "合并文件后自动同步",
+    },
+    "SYNC DATABASE AND STORAGE: ${getPathFromEntry(host, doc)} has been skipped due to file size exceeding the limit": {
+        def: "Sync: ${getPathFromEntry(host, doc)} was skipped because the file is larger than the limit",
+        la: "Synchronizatio: ${getPathFromEntry(host, doc)} praeteritum est, quia limitem magnitudinis excedit",
+        zh: "同步数据库与本地文件：${getPathFromEntry(host, doc)} 超过大小限制，已跳过",
     },
     "Sync Mode": {
         def: "Sync Mode",
@@ -4318,6 +4353,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Instrumenta sponte nominantur; tabularia unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest.",
         zh: "设备自动命名，同一台机器的各库归为一台，重新登录替换旧凭据，断开时撤销凭据；凭据失效时启动即提示。服务器：账户设置新增「设备」页，书记员的设备不能单独撤销。",
     },
+    "tabularium.release.1.1.1": {
+        def: "Signing in to an existing vault asks once what to do with notes on the device; the server wins by default and files only on the device are kept. Notices and dialogues are complete in Chinese. Server: the client log and prompt preview open in dialogs, sign-in goes to the home page, revoked devices are deleted, the activity log, inactive shares, delivery history and command log can be cleared, and vaults can be compacted.",
+        la: "Ineundo tabularium exstans semel quaeritur quid de commentariis instrumenti fiat; ministrator praevalet et plicae solum in instrumento servantur. Nuntia et dialogi Sinice completi sunt. Ministrator: acta clientis et praevisio mandati in dialogis aperiuntur, post ingressum ad paginam primam itur, instrumenta revocata delentur, acta, communicata irrita, historia missionum et acta mandatorum purgari possunt, tabularia comprimi possunt.",
+        zh: "登录已有笔记库时一次选定如何处理本机笔记，默认以服务器为准、保留本机独有的文件；提示与对话框的中文补全。服务器：客户端日志与提示词预览改为弹窗，登录后回到首页，撤销的设备直接删除，操作记录、失效分享、发送记录与命令记录可清理，笔记库可压缩。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
@@ -4402,6 +4442,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "The server address is not valid.",
         la: "Inscriptio ministratoris non valida est.",
         zh: "服务器地址无效。",
+    },
+    "tabularium.server.localNotes": {
+        def: "Notes already on this device",
+        la: "Commentarii iam in hoc instrumento",
+        zh: "本机已有的笔记",
+    },
+    "tabularium.server.localNotesHint": {
+        def: "Comparing times can replace newer notes on the server with an old copy.",
+        la: "Tempora comparare commentarios recentiores in ministratore vetere exemplari substituere potest.",
+        zh: "比较时间可能用旧副本覆盖服务器上较新的笔记。",
     },
     "tabularium.server.newPassword": {
         def: "New password",
@@ -5396,6 +5446,16 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Repositorium ministratoris cum hac versione non congruit. Additamentum renova.",
         zh: "服务器上的数据库与当前版本不兼容，请更新插件。",
     },
+    "The remote database requires migration from generation ${version}.": {
+        def: "The remote database requires migration from generation ${version}.",
+        la: "Data in ministratore a generatione ${version} migrari debent.",
+        zh: "服务器数据库需要从版本 ${version} 迁移。",
+    },
+    "The remote database version document is invalid.": {
+        def: "The remote database version document is invalid.",
+        la: "Documentum versionis datorum in ministratore invalidum est.",
+        zh: "服务器数据库的版本文档无效。",
+    },
     "The remote document IDs do not match the configured ID key.": {
         def: "The document IDs on the server do not match the configured ID key.",
         la: "Indices documentorum in ministratore clavi indicum constitutae non congruunt.",
@@ -5572,52 +5632,52 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "TweakMismatchResolve.Action.Dismiss": {
         def: "Dismiss",
         la: "Dimitte",
-        zh: "Dismiss",
+        zh: "忽略",
     },
     "TweakMismatchResolve.Action.UseConfigured": {
         def: "Use configured settings",
         la: "Adhibe optiones configuratas",
-        zh: "Use configured settings",
+        zh: "使用已配置的设置",
     },
     "TweakMismatchResolve.Action.UseMine": {
         def: "Update remote database settings",
         la: "Renova optiones repositorii remoti",
-        zh: "Update remote database settings",
+        zh: "更新服务器数据库的设置",
     },
     "TweakMismatchResolve.Action.UseMineAcceptIncompatible": {
         def: "Update remote database settings but keep as is",
         la: "Renova optiones repositorii remoti sed serva ut sunt",
-        zh: "Update remote database settings but keep as is",
+        zh: "更新服务器数据库的设置，其余保持不变",
     },
     "TweakMismatchResolve.Action.UseMineWithRebuild": {
         def: "Update remote database settings and rebuild again",
         la: "Renova optiones repositorii remoti et iterum reaedifica",
-        zh: "Update remote database settings and rebuild again",
+        zh: "更新服务器数据库的设置并重建",
     },
     "TweakMismatchResolve.Action.UseRemote": {
         def: "Apply settings to this device",
         la: "Applica optiones huic instrumento",
-        zh: "Apply settings to this device",
+        zh: "把设置应用到这台设备",
     },
     "TweakMismatchResolve.Action.UseRemoteAcceptIncompatible": {
         def: "Apply settings to this device, but and ignore incompatibility",
         la: "Applica optiones huic instrumento, sed incongruentiam neglege",
-        zh: "Apply settings to this device, but and ignore incompatibility",
+        zh: "把设置应用到这台设备，并忽略不兼容",
     },
     "TweakMismatchResolve.Action.UseRemoteWithRebuild": {
         def: "Apply settings to this device, and fetch again",
         la: "Applica optiones huic instrumento, et iterum arcesse",
-        zh: "Apply settings to this device, and fetch again",
+        zh: "把设置应用到这台设备并重新取回",
     },
     "TweakMismatchResolve.Message.Main": {
         def: "\nThe settings in the remote database are as follows. These values are configured by other devices, which are synchronised with this device at least once.\n\nIf you want to use these settings, please select Use configured settings.\nIf you want to keep the settings of this device, please select Dismiss.\n\n${table}\n\n>[!TIP]\n> If you want to synchronise all settings, please use `Sync settings via markdown` after applying minimal configuration with this feature.\n\n${additionalMessage}",
         la: "\nOptiones in repositorio remoto sunt hae. Hi valores ab aliis instrumentis configurati sunt, quae cum hoc instrumento saltem semel synchronizata sunt.\n\nSi has optiones adhibere vis, selige Adhibe optiones configuratas.\nSi optiones huius instrumenti servare vis, selige Dimitte.\n\n${table}\n\n>[!TIP]\n> Si omnes optiones synchronizare vis, post configurationem minimam hac facultate applicatam `Sync settings via markdown` adhibe.\n\n${additionalMessage}",
-        zh: "\nThe settings in the remote database are as follows. These values are configured by other devices, which are synchronised with this device at least once.\n\nIf you want to use these settings, please select Use configured settings.\nIf you want to keep the settings of this device, please select Dismiss.\n\n${table}\n\n>[!TIP]\n> If you want to synchronise all settings, please use `Sync settings via markdown` after applying minimal configuration with this feature.\n\n${additionalMessage}",
+        zh: "\n服务器数据库中的设置如下，这些值由至少同步过一次的其他设备配置。\n\n要使用这些设置，选择 使用已配置的设置。\n要保留这台设备的设置，选择 忽略。\n\n${table}\n\n${additionalMessage}",
     },
     "TweakMismatchResolve.Message.MainTweakResolving": {
         def: "Your configuration has not been matched with the one on the remote server.\n\nFollowing configuration should be matched:\n\n${table}\n\nLet us know your decision.\n\n${additionalMessage}",
         la: "Configuratio tua cum ea in ministratore remoto non congruit.\n\nConfiguratio sequens congruere debet:\n\n${table}\n\nNobis consilium tuum indica.\n\n${additionalMessage}",
-        zh: "Your configuration has not been matched with the one on the remote server.\n\nFollowing configuration should be matched:\n\n${table}\n\nLet us know your decision.\n\n${additionalMessage}",
+        zh: "你的配置与服务器上的不一致。\n\n以下配置需要一致：\n\n${table}\n\n请选择如何处理。\n\n${additionalMessage}",
     },
     "TweakMismatchResolve.Message.mineUpdated": {
         def: "The device configuration have been adjusted.",
@@ -5632,27 +5692,27 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "TweakMismatchResolve.Message.UseRemote.WarningRebuildRecommended": {
         def: "\n>[!NOTICE]\n> Some changes are compatible but may consume extra storage and transfer volumes. A rebuild is recommended. However, a rebuild may not be performed at present, but may be implemented in future maintenance.\n> ***Please ensure that you have time and are connected to a stable network to apply!***",
         la: "\n>[!NOTICE]\n> Quaedam mutationes congruunt sed fortasse plus spatii et transmissionis consument. Reaedificatio commendatur. Reaedificatio tamen nunc fieri non debet, sed in futura curatione fieri potest.\n> ***Cura ut tempus habeas et retiaculo stabili conexus sis antequam applices!***",
-        zh: "\n>[!NOTICE]\n> Some changes are compatible but may consume extra storage and transfer volumes. A rebuild is recommended. However, a rebuild may not be performed at present, but may be implemented in future maintenance.\n> ***Please ensure that you have time and are connected to a stable network to apply!***",
+        zh: "\n>[!NOTICE]\n> 有些改动是兼容的，但可能多占存储和流量，建议重建。可以现在不做，留到以后维护时进行。\n> ***请确保有时间，并且网络稳定。***",
     },
     "TweakMismatchResolve.Message.UseRemote.WarningRebuildRequired": {
         def: "\n>[!WARNING]\n> Some remote configurations are not compatible with the local database of this device. Rebuilding the local database will be required.\n> ***Please ensure that you have time and are connected to a stable network to apply!***",
         la: "\n>[!WARNING]\n> Quaedam configurationes remotae cum repositorio locali huius instrumenti non congruunt. Repositorium locale reaedificandum erit.\n> ***Cura ut tempus habeas et retiaculo stabili conexus sis antequam applices!***",
-        zh: "\n>[!WARNING]\n> Some remote configurations are not compatible with the local database of this device. Rebuilding the local database will be required.\n> ***Please ensure that you have time and are connected to a stable network to apply!***",
+        zh: "\n>[!WARNING]\n> 有些服务器配置与这台设备的本地数据库不兼容，需要重建本地数据库。\n> ***请确保有时间，并且网络稳定。***",
     },
     "TweakMismatchResolve.Message.WarningIncompatibleRebuildRecommended": {
         def: "\n>[!NOTICE]\n> We have detected that some of the values are different to make incompatible the local database with the remote database.\n> Some changes are compatible but may consume extra storage and transfer volumes. A rebuild is recommended. However, a rebuild may not be performed at present, but may be implemented in future maintenance.\n> If you want to rebuild, it takes a few minutes or more. **Make sure it is safe to perform it now.**",
         la: "\n>[!NOTICE]\n> Animadvertimus quosdam valores differre, ita ut repositorium locale cum remoto non congruat.\n> Quaedam mutationes congruunt sed fortasse plus spatii et transmissionis consument. Reaedificatio commendatur. Reaedificatio tamen nunc fieri non debet, sed in futura curatione fieri potest.\n> Si reaedificare vis, pauca minuta aut plura requiruntur. **Cura ut nunc id tuto fieri possit.**",
-        zh: "\n>[!NOTICE]\n> We have detected that some of the values are different to make incompatible the local database with the remote database.\n> Some changes are compatible but may consume extra storage and transfer volumes. A rebuild is recommended. However, a rebuild may not be performed at present, but may be implemented in future maintenance.\n> If you want to rebuild, it takes a few minutes or more. **Make sure it is safe to perform it now.**",
+        zh: "\n>[!NOTICE]\n> 检测到部分取值不同，使本地数据库与服务器数据库不兼容。\n> 有些改动是兼容的，但可能多占存储和流量，建议重建。可以现在不做，留到以后维护时进行。\n> 重建需要几分钟或更久。**请确认现在可以进行。**",
     },
     "TweakMismatchResolve.Message.WarningIncompatibleRebuildRequired": {
         def: "\n>[!WARNING]\n> We have detected that some of the values are different to make incompatible the local database with the remote database.\n> Either local or remote rebuilds are required. Both of them takes a few minutes or more. **Make sure it is safe to perform it now.**",
         la: "\n>[!WARNING]\n> Animadvertimus quosdam valores differre, ita ut repositorium locale cum remoto non congruat.\n> Aut localis aut remota reaedificatio requiritur. Utraque pauca minuta aut plura requirit. **Cura ut nunc id tuto fieri possit.**",
-        zh: "\n>[!WARNING]\n> We have detected that some of the values are different to make incompatible the local database with the remote database.\n> Either local or remote rebuilds are required. Both of them takes a few minutes or more. **Make sure it is safe to perform it now.**",
+        zh: "\n>[!WARNING]\n> 检测到部分取值不同，使本地数据库与服务器数据库不兼容。\n> 需要重建本地或服务器数据库，都要几分钟或更久。**请确认现在可以进行。**",
     },
     "TweakMismatchResolve.Table": {
         def: "| Value name | This device | On Remote |\n|: --- |: ---- :|: ---- :|\n${rows}\n\n",
         la: "| Nomen valoris | Hoc instrumentum | In remoto |\n|: --- |: ---- :|: ---- :|\n${rows}\n\n",
-        zh: "| Value name | This device | On Remote |\n|: --- |: ---- :|: ---- :|\n${rows}\n\n",
+        zh: "| 配置项 | 这台设备 | 服务器 |\n|: --- |: ---- :|: ---- :|\n${rows}\n\n",
     },
     "TweakMismatchResolve.Table.Row": {
         def: "| ${name} | ${self} | ${remote} |",
@@ -5662,17 +5722,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "TweakMismatchResolve.Title": {
         def: "Configuration Mismatch Detected",
         la: "Incongruentia configurationis detecta",
-        zh: "Configuration Mismatch Detected",
+        zh: "检测到配置不一致",
     },
     "TweakMismatchResolve.Title.TweakResolving": {
         def: "Configuration Mismatch Detected",
         la: "Incongruentia configurationis detecta",
-        zh: "Configuration Mismatch Detected",
+        zh: "检测到配置不一致",
     },
     "TweakMismatchResolve.Title.UseRemoteConfig": {
         def: "Use Remote Configuration",
         la: "Adhibe configurationem remotam",
-        zh: "Use Remote Configuration",
+        zh: "使用服务器配置",
     },
     "Ui.Common.LocalDatabaseInitialisationFailed": {
         def: "Tabularium cannot synchronise. Generate a report to review the detailed log.",
@@ -5754,10 +5814,30 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Versio cryptationis ignota. Decryptari non potest.",
         zh: "未知的加密版本，无法解密。",
     },
+    "Unknown features are in use: ${identifiers}": {
+        def: "Unknown features are in use: ${identifiers}",
+        la: "Facultates ignotae adhibentur: ${identifiers}",
+        zh: "正在使用未知功能：${identifiers}",
+    },
     "Unload preparation failed; pending storage work may require recovery": {
         def: "Preparing to unload failed; pending file operations may need recovery",
         la: "Praeparatio ad exonerandum defecit; operationes plicarum pendentes fortasse restituendae sunt",
         zh: "卸载前的准备失败，未完成的文件操作可能需要恢复",
+    },
+    "Unsupported remote database generation: ${version}": {
+        def: "Unsupported remote database generation: ${version}",
+        la: "Generatio datorum in ministratore non sustinetur: ${version}",
+        zh: "不支持的服务器数据库版本：${version}",
+    },
+    "UPDATE DATABASE: ${file.path} has been skipped due to file size exceeding the limit": {
+        def: "Database update: ${file.path} was skipped because the file is larger than the limit",
+        la: "Renovatio datorum: ${file.path} praeteritum est, quia limitem magnitudinis excedit",
+        zh: "更新数据库：${file.path} 超过大小限制，已跳过",
+    },
+    "UPDATE STORAGE: ${path} has been skipped due to file size exceeding the limit": {
+        def: "Storage update: ${path} was skipped because the file is larger than the limit",
+        la: "Renovatio plicarum: ${path} praeteritum est, quia limitem magnitudinis excedit",
+        zh: "更新本地文件：${path} 超过大小限制，已跳过",
     },
     URL: {
         def: "URL",
@@ -7263,7 +7343,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "TURN Key ID": {
         la: "ID clavis TURN",
-        zh: "TURN Key ID",
+        zh: "TURN 密钥 ID",
     },
     "TURN Key ID contains unsupported characters.": {
         la: "ID clavis TURN characteres non sustentos continet.",

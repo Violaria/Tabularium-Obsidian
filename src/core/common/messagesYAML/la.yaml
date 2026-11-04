@@ -1146,6 +1146,8 @@ tabularium.server.credentialsInvalid: Testimonia instrumenti Tabularium non iam 
 tabularium.server.device: Hoc instrumentum
 tabularium.server.deviceExpiry: ${device}, testimonia valida usque ad ${date}
 tabularium.server.disconnect: Disiunge
+tabularium.server.localNotes: Commentarii iam in hoc instrumento
+tabularium.server.localNotesHint: Tempora comparare commentarios recentiores in ministratore vetere exemplari substituere potest.
 tabularium.server.disconnectHint: Disiunctio testimonia huius instrumenti revocat et optiones conexionis delet; commentarii retinentur.
 tabularium.server.disconnected: A ministratore Tabularium disiunctum.
 tabularium.server.enforced: Tabularium cryptationem ab extremo ad extremum et obscurationem viarum requirit; hae optiones restitutae sunt.
@@ -1835,6 +1837,7 @@ tabularium.release.0.24.2: Sententiae arcanae et claves in paginis interretis ru
 tabularium.release.0.24.3: Tabularius paginam ab hospite inter hospites SSH ut vetito inscripto numquam petit, in nullo gradu potestatis, ne post redirectionem quidem.
 tabularium.release.0.24.4: Quaeque pagina quam Tabularius per ministratorem petit suum nexum aperit, ne nexus a priore petitione relictus examen inscriptionis gradus potestatis aut hospitum vetitorum praetereat.
 tabularium.release.0.24.5: Codex functionum superiorum quae Tabularium iam exstinxerat (synchronizatio inter pares, ductor instituendi, Setup URI et codices QR, synchronizatio fasciculorum occultorum et accommodationum) ex additamento tollitur, una cum mille fere nuntiis non adhibitis. Instrumentum cuius optiones has functiones adhuc accendunt eas exstinctas servat. Pars 0.20.0 huius historiae textum suum iterum ostendit.
+"tabularium.release.1.1.1": "Ineundo tabularium exstans semel quaeritur quid de commentariis instrumenti fiat; ministrator praevalet et plicae solum in instrumento servantur. Nuntia et dialogi Sinice completi sunt. Ministrator: acta clientis et praevisio mandati in dialogis aperiuntur, post ingressum ad paginam primam itur, instrumenta revocata delentur, acta, communicata irrita, historia missionum et acta mandatorum purgari possunt, tabularia comprimi possunt."
 "tabularium.release.1.1.0": "Instrumenta sponte nominantur; tabularia unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest."
 "tabularium.release.1.0.3": "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis."
 "tabularium.release.1.0.2": "Codex ad recensionem indicis mutatus; usus idem manet."
@@ -1873,3 +1876,16 @@ tabularium.release.0.25.0: Additamentum fere quinta parte minus est. Nucleus syn
 "tabularium.sorting.convertUnsupported": "Hae regulae ut index scribi non possunt et omittuntur:\n${lines}"
 "tabularium.sorting.convertMoved": "Hae capsae in regulis capsae superioris non enumerabantur; nunc post res non enumeratas veniunt: ${folders}"
 "tabularium.sorting.converted": "Regulae ordinandi nunc in ${path} sunt."
+"[ReplicateResultProcessor] ${message}": "[Tractatio eventus synchronizationis] ${message}"
+"Failed to obtain PBKDF2 salt (Security Seed) for replication": "Semen securitatis (sal PBKDF2) ad synchronizationem obtineri non potuit."
+"Failed to decrypt the data with V1 method. Cannot encrypt with HKDF.": "Data modo V1 decryptari non potuerunt; HKDF cryptari nequeunt."
+"Encryption with HKDF failed.": "Cryptatio HKDF defecit."
+"Decryption with HKDF failed.": "Decryptatio HKDF defecit."
+"${path} has been merged automatically": "${path} sponte coniunctum est"
+"UPDATE DATABASE: ${file.path} has been skipped due to file size exceeding the limit": "Renovatio datorum: ${file.path} praeteritum est, quia limitem magnitudinis excedit"
+"UPDATE STORAGE: ${path} has been skipped due to file size exceeding the limit": "Renovatio plicarum: ${path} praeteritum est, quia limitem magnitudinis excedit"
+"SYNC DATABASE AND STORAGE: ${getPathFromEntry(host, doc)} has been skipped due to file size exceeding the limit": "Synchronizatio: ${getPathFromEntry(host, doc)} praeteritum est, quia limitem magnitudinis excedit"
+"Unknown features are in use: ${identifiers}": "Facultates ignotae adhibentur: ${identifiers}"
+"Unsupported remote database generation: ${version}": "Generatio datorum in ministratore non sustinetur: ${version}"
+"The remote database version document is invalid.": "Documentum versionis datorum in ministratore invalidum est."
+"The remote database requires migration from generation ${version}.": "Data in ministratore a generatione ${version} migrari debent."

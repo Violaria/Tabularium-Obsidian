@@ -285,10 +285,7 @@ describe("LayeredChunkManager Integration Tests", () => {
             // Read non-existent chunks (will trigger missing chunks event)
             const promise = chunkManager.read(["missing-1" as DocumentID, "missing-2" as DocumentID], { waitForDelivery: true });
 
-            // Wait a bit for event to be emitted
-            await new Promise((resolve) => setTimeout(resolve, 5));
-
-            expect(listener).toHaveBeenCalled();
+            await vi.waitFor(() => expect(listener).toHaveBeenCalled());
             expect(listener).toHaveBeenCalledWith(expect.arrayContaining(["missing-1", "missing-2"]));
 
             await promise; // Clean up

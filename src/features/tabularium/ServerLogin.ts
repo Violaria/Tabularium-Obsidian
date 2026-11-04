@@ -16,6 +16,7 @@ import {
     type TabulariumVault,
 } from "./serverConnection";
 import { clientId, clientName } from "./clientIdentity";
+import { rememberFetchChoice, type FetchChoice } from "@/obsidian/serviceFeatures/redFlag.simpleFetch";
 
 export interface ConnectOptions {
     server: string;
@@ -24,6 +25,8 @@ export interface ConnectOptions {
     newPassword?: string;
     vault: { id: string } | { create: string };
     passphrase: string;
+    /** What happens to files already on this device when an existing vault is fetched. */
+    fetch?: FetchChoice;
 }
 /** A new vault is empty, so the device uploads through ordinary sync; an existing vault is fetched first. */
 type Initialise = "upload" | "fetch";
@@ -199,7 +202,8 @@ export class TabulariumServer {
             vault,
             device,
             options.passphrase,
-            "id" in options.vault ? "fetch" : "upload"
+            "id" in options.vault ? "fetch" : "upload",
+            options.fetch
         );
     }
 
@@ -212,7 +216,8 @@ export class TabulariumServer {
         vault: TabulariumVault,
         device: TabulariumDevice,
         passphrase: string,
-        initialise: Initialise
+        initialise: Initialise,
+        fetchChoice: FetchChoice = "remote-keep"
     ) {
         const settings = this.core.services.setting;
         /** The settings for this connection, from the current ones. */
@@ -259,6 +264,8 @@ export class TabulariumServer {
                     if (!(await database.resetDatabaseForCurrentSettings({ databaseEvents, replicator })))
                         throw new Error($msg("tabularium.server.resetFailed"));
                 }
+                // Decided at sign-in, once for all files: asking file by file lets an old copy replace newer notes.
+                if (initialise === "fetch") await rememberFetchChoice(this.core, fetchChoice);
                 // The login wrote new sync settings, so a pause recorded before no longer applies.
                 await this.core.services.setting.config.delete(LIVE_SYNC_PAUSE_KEY);
                 // The connection is recorded last, once the settings are in place.
@@ -464,6 +471,7 @@ class ServerModal extends Modal {
         const values = {
             vault: vaults[0]?.id ?? "",
             name: this.app.vault.getName(),
+            fetch: "remote-keep" as FetchChoice,
             passphrase: "",
             confirm: "",
         };
@@ -482,6 +490,12 @@ class ServerModal extends Modal {
                 new Setting(contentEl)
                     .setName($msg("tabularium.server.newVaultName"))
                     .addText((t) => t.setValue(values.name).onChange((v) => (values.name = v)));
+            if (!creating() && this.app.vault.getFiles().length > 0)
+                hint(new Setting(contentEl).setName($msg("tabularium.server.localNotes")), $msg("tabularium.server.localNotesHint")).addDropdown((d) => {
+                    for (const choice of ["remote-keep", "newer-keep"] as const)
+                        d.addOption(choice, $msg(`tabularium.settings.fetch.${choice}` as never));
+                    d.setValue(values.fetch).onChange((v) => (values.fetch = v as FetchChoice));
+                });
             hint(
                 new Setting(contentEl).setName($msg("tabularium.server.passphrase")),
                 creating() ? $msg("tabularium.server.passphraseNew") : $msg("tabularium.server.passphraseExisting")
@@ -515,7 +529,8 @@ class ServerModal extends Modal {
                                 vault,
                                 device,
                                 values.passphrase,
-                                creating() ? "upload" : "fetch"
+                                creating() ? "upload" : "fetch",
+                                values.fetch
                             );
                         })
                     )

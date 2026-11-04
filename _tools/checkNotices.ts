@@ -54,7 +54,16 @@ for (const file of scanned) {
         const level = (arg: ts.Expression) =>
             isNoticeLevel(arg) ||
             (ts.isConditionalExpression(arg) && (isNoticeLevel(arg.whenTrue) || isNoticeLevel(arg.whenFalse)));
-        if (ts.isCallExpression(node) && node.arguments.length > 1 && node.arguments.slice(1).some(level))
+        // A logger's level held in a variable may be the notice level when the program runs.
+        const variableLevel = (call: ts.CallExpression) =>
+            /(^|\.)(Logger|_log|log)$/.test(call.expression.getText(source)) &&
+            call.arguments.length > 1 &&
+            (ts.isIdentifier(call.arguments[1]) || ts.isPropertyAccessExpression(call.arguments[1])) &&
+            !/LOG_LEVEL_(VERBOSE|INFO|DEBUG)$/.test(call.arguments[1].getText(source));
+        if (
+            ts.isCallExpression(node) &&
+            ((node.arguments.length > 1 && node.arguments.slice(1).some(level)) || variableLevel(node))
+        )
             argument = node.arguments[0];
         if (ts.isNewExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === "Notice")
             argument = node.arguments?.[0];
@@ -79,7 +88,6 @@ const catalogue = Object.fromEntries(
     ])
 );
 const missing = [...found].filter(([text]) => !catalogue.zh[text] || !catalogue.la[text] || !catalogue.en[text]);
-
 if (process.argv.includes("--list")) {
     process.stdout.write(
         JSON.stringify(Object.fromEntries(missing.map(([text, where]) => [text, where])), null, 2) + "\n"
@@ -90,4 +98,14 @@ if (process.argv.includes("--list")) {
     process.exit(1);
 } else {
     process.stdout.write(`${found.size} notices in English, Chinese and Latin.\n`);
+}
+// A Chinese entry that is still English falls through this check when only its presence is tested.
+const words = (value: string) => /[A-Za-z]{4,}/.test(value.replace(/\$\{[^}]*\}|%\{[^}]*\}/g, ""));
+const NAMES = /^(lang-|startupSequence\.logPluginVersion|tabularium\.settings\.version|moduleCheckRemoteSize\.option)/;
+const english = Object.entries(catalogue.zh)
+    .filter(([key, value]) => !NAMES.test(key) && words(value) && !/[\u4e00-\u9fff]/.test(value))
+    .map(([key]) => key);
+if (english.length) {
+    process.stderr.write(`${english.length} Chinese entries are still in English:\n  ${english.join("\n  ")}\n`);
+    process.exit(1);
 }
