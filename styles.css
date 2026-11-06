@@ -1064,8 +1064,7 @@ body.is-mobile .tabularium-compatibility-review-notice {
 .markdown-source-view .tabularium-sensitive-rendered {
     background: color-mix(in srgb, var(--interactive-accent) 18%, transparent);
     border-radius: 2px;
-    text-decoration: underline dotted color-mix(in srgb, var(--interactive-accent) 80%, transparent);
-    text-underline-offset: 3px;
+    border-bottom: 1px dotted color-mix(in srgb, var(--interactive-accent) 80%, transparent);
 }
 .tabularium-sensitive-eye,
 .markdown-source-view .tabularium-sensitive-rendered::after {
