@@ -4373,6 +4373,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Notae Secretum facilius videntur: in editore, tabulis praevisionis vivae inclusis, colorem et oculum rubrum habent; lectio non mutatur. Emendata: duo instrumentorum ordines cum textus in cellula tabulae praevisionis vivae eligitur; historia versionum 1.2.0 carebat.",
         zh: "敏感标记更明显：编辑器里（包括实时预览的表格）带底色和红色眼睛角标，阅读视图不变。修复：实时预览的表格单元格里选中文字时出现两个工具栏；版本历史缺少 1.2.0。",
     },
+    "tabularium.release.1.2.2": {
+        def: "Sensitive marks draw their dotted line with a bottom border, as the Obsidian review asks.",
+        la: "Notae Secretum lineam punctatam margine inferiore ducunt, ut recognitio Obsidian postulat.",
+        zh: "敏感标记的虚线改用下边框绘制，符合 Obsidian 审核要求。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",
