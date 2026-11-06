@@ -1013,6 +1013,9 @@ body.is-mobile .tabularium-compatibility-review-notice {
     border-radius: var(--radius-m);
     box-shadow: var(--shadow-s);
 }
+.cm-editor .cm-tooltip.tabularium-format-menu.is-unfocused {
+    display: none;
+}
 /* CodeMirror makes the toolbar itself the tooltip: its theme's tooltip frame gives way to the toolbar's. */
 .cm-editor .cm-tooltip.tabularium-format-menu {
     background: var(--background-primary);
@@ -1057,7 +1060,23 @@ body.is-mobile .tabularium-compatibility-review-notice {
     background: var(--background-modifier-border);
 }
 
-.tabularium-sensitive {
-    text-decoration: underline dotted color-mix(in srgb, currentColor 45%, transparent);
+.tabularium-sensitive,
+.markdown-source-view .tabularium-sensitive-rendered {
+    background: color-mix(in srgb, var(--interactive-accent) 18%, transparent);
+    border-radius: 2px;
+    text-decoration: underline dotted color-mix(in srgb, var(--interactive-accent) 80%, transparent);
     text-underline-offset: 3px;
+}
+.tabularium-sensitive-eye,
+.markdown-source-view .tabularium-sensitive-rendered::after {
+    background-color: var(--text-error);
+    content: "";
+    display: inline-block;
+    height: 0.75em;
+    margin-inline-start: 1px;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") center / contain no-repeat;
+    pointer-events: none;
+    position: relative;
+    top: -0.45em;
+    width: 0.75em;
 }

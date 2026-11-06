@@ -1,8 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { format } from "./formatting";
 import { renderNote } from "./render";
-import { MARK_CLOSE as C, MARK_OPEN as O, MASKED, countMarked, maskMarked, stripMarks, toggleMark } from "./sensitive";
+import { MARK_CLOSE as C, MARK_OPEN as O, MASKED, countMarked, markedParts, maskMarked, stripMarks, toggleMark } from "./sensitive";
 import { buildShare, reviewTree, type ShareSource } from "./share/package";
+
+describe("markedParts", () => {
+    it("splits text at marked spans, without the marks", () => {
+        expect(markedParts(`a ${O}b${C} c ${O}d`)).toEqual([
+            { text: "a ", marked: false },
+            { text: "b", marked: true },
+            { text: " c ", marked: false },
+            { text: "d", marked: true },
+        ]);
+        expect(markedParts(`e${C}f`)).toEqual([{ text: "ef", marked: false }]);
+    });
+});
 
 const applied = (text: string, from: number, to: number) => {
     const edit = toggleMark(text, from, to);

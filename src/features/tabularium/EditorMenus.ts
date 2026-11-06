@@ -5,13 +5,12 @@
 import { Menu, sanitizeHTMLToDom, type Editor, type Plugin } from "@/deps";
 import type { PluginCore } from "@/main";
 import { StateField, type EditorState } from "@codemirror/state";
-import { EditorView, showTooltip, type Tooltip } from "@codemirror/view";
+import { EditorView, showTooltip, type Tooltip, type ViewUpdate } from "@codemirror/view";
 import { $msg } from "@/core/common/translation";
 import { ownStorageKeys } from "./ownNames";
 import { format, insertTemplate, type Format, type Template, type TextEdit } from "./formatting";
 import { FORMAT_ACTIONS, HEADINGS, INSERT_ACTIONS, LINE_ACTIONS } from "./editorActions";
-import { hasMarks, stripMarks } from "./sensitive";
-import { sensitiveMarks } from "./sensitiveEditor";
+import { sensitiveMarks, showMarked } from "./sensitiveEditor";
 
 /** Turned off per device and vault, like automatic link repair: plug-in settings are synced, habits are not. */
 
@@ -88,11 +87,9 @@ export class TabulariumEditorMenus {
         );
         plugin.registerEditorExtension(this.toolbarExtension());
         plugin.registerEditorExtension(sensitiveMarks);
-        // The reading view holds the note's text as it is: sensitive marks go, so copying leaves them behind.
-        plugin.registerMarkdownPostProcessor((element) => {
-            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-            for (let node = walker.nextNode(); node; node = walker.nextNode()) if (hasMarks(node.nodeValue ?? "")) node.nodeValue = stripMarks(node.nodeValue ?? "");
-        });
+        // Rendered text loses its marks, so copying leaves them behind. Reading view shows it plain; the tables live preview
+        // draws with the same renderer show the span.
+        plugin.registerMarkdownPostProcessor((element) => showMarked(element));
     }
 
     private commands() {
@@ -108,13 +105,29 @@ export class TabulariumEditorMenus {
         const tooltipOf = (state: EditorState): readonly Tooltip[] => {
             const range = state.selection.main;
             if (range.empty || state.readOnly || !this.toolbar) return [];
-            return [{ pos: range.from, end: range.to, above: true, strictSide: false, arrow: false, create: (view) => ({ dom: this.toolbarDom(view) }) }];
+            return [{ pos: range.from, end: range.to, above: true, strictSide: false, arrow: false, create: (view) => this.toolbarView(view) }];
         };
         return StateField.define<readonly Tooltip[]>({
             create: tooltipOf,
             update: (value, transaction) => (transaction.docChanged || transaction.selection ? tooltipOf(transaction.state) : value),
             provide: (field) => showTooltip.computeN([field], (state) => state.field(field)),
         });
+    }
+
+    /** Live preview edits a table cell in an editor of its own while the note's editor keeps a selection: the focused one shows. */
+    private toolbarView(view: EditorView) {
+        const dom = this.toolbarDom(view);
+        const follow = () => dom.toggleClass("is-unfocused", !view.hasFocus);
+        follow();
+        return {
+            dom,
+            mount: follow,
+            update: (update: ViewUpdate) => {
+                if (!update.focusChanged) return;
+                follow();
+                view.requestMeasure();
+            },
+        };
     }
 
     private toolbarDom(view: EditorView) {

@@ -4368,6 +4368,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Nota nova Secretum: signa invisibilia tesseras et similia circumdant, legenti nihil mutatur. Communicationes secreta tegunt ex more, pro textu notato •••••• ponentes; optio Sine exscriptione contentum ut imagines pingit. Emendata: nexus cum cognomine in tabulis ut referentiae tractantur; communicatio una deficiens ceteras non impedit; loci commentariorum in communicatione a viis pendent et nexus ad titulos valent; dies exitus localis ostenditur. Ministrator: communicationes a commentariis in rete servatae post synchronizationem et iterum aperiendo mutationes assequuntur; Tabularius textum notatum ante modellum tegit.",
         zh: "新增「敏感」标记：不可见字符包住密码等内容，阅读时看不出差别。分享默认脱敏，标记内容替换为 ••••••；可选禁止复制，分享页把内容绘制成图像。修复：表格里带别名的链接按引用处理；一个分享更新失败不影响其他分享；分享内的笔记地址由路径决定，指向标题的链接可用；到期日按本地日期显示。服务器：云笔记负责的分享在同步后和重新打开时补上其他设备的改动；Tabularius 把标记内容遮盖后发给模型。",
     },
+    "tabularium.release.1.2.1": {
+        def: "Sensitive marks are easier to see: in the editor, live preview tables included, they have a tint and a red eye; reading view is unchanged. Fixes: two toolbars when selecting text in a live preview table cell; version history lacked 1.2.0.",
+        la: "Notae Secretum facilius videntur: in editore, tabulis praevisionis vivae inclusis, colorem et oculum rubrum habent; lectio non mutatur. Emendata: duo instrumentorum ordines cum textus in cellula tabulae praevisionis vivae eligitur; historia versionum 1.2.0 carebat.",
+        zh: "敏感标记更明显：编辑器里（包括实时预览的表格）带底色和红色眼睛角标，阅读视图不变。修复：实时预览的表格单元格里选中文字时出现两个工具栏；版本历史缺少 1.2.0。",
+    },
     "tabularium.server.address": {
         def: "Server address",
         la: "Inscriptio ministratoris",

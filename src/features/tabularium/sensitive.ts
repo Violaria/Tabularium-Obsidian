@@ -15,6 +15,18 @@ export const stripMarks = (text: string) => text.replaceAll(MARK_OPEN, "").repla
 export const hasMarks = (text: string) => text.includes(MARK_OPEN) || text.includes(MARK_CLOSE);
 export const maskMarked = (text: string) => text.replace(SPAN(), MASKED).replaceAll(MARK_CLOSE, "");
 export const countMarked = (text: string) => [...text.matchAll(SPAN())].length;
+/** Text split at its marked spans, without the marks. */
+export function markedParts(text: string) {
+    const parts: { text: string; marked: boolean }[] = [];
+    let at = 0;
+    for (const match of text.matchAll(SPAN())) {
+        if (match.index > at) parts.push({ text: stripMarks(text.slice(at, match.index)), marked: false });
+        parts.push({ text: stripMarks(match[0]), marked: true });
+        at = match.index + match[0].length;
+    }
+    if (at < text.length) parts.push({ text: stripMarks(text.slice(at)), marked: false });
+    return parts;
+}
 
 /** What stays outside a mark at the start of a line: indentation and list, quote, heading and table prefixes. */
 const LINE_PREFIX = /^\s*(?:(?:#{1,6} |> ?|[-*+] \[[ xX]\] |[-*+] |\d+[.)] |\| ?)\s*)*/;
