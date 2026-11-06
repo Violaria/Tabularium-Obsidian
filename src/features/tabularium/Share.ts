@@ -150,6 +150,7 @@ export class TabulariumShare {
             name: folder ? item.name || this.plugin.app.vault.getName() : item.basename,
             base: base || this.server.connection!.server,
             existing,
+            unreadable: shares.filter((s) => !s.record).length,
         }).open();
     }
 
@@ -165,13 +166,22 @@ export class TabulariumShare {
         const renames = this.renames.splice(0);
         this.changed.clear();
         if (!paths.length || !this.server.connection) return;
+        // Being offline is not reported: the changes stay, and the next change tries again.
+        const retry = () => {
+            for (const path of paths) this.changed.add(path);
+            this.renames.push(...renames);
+        };
         try {
-            const { withdrawn } = await this.sharing().refresh({ paths, renames });
+            const { withdrawn, failed } = await this.sharing().refresh({ paths, renames });
             for (const share of withdrawn) new Notice(shareText("share.withdrawnDeleted", { address: share.view.slug }));
+            for (const { share, error } of failed) {
+                if (error instanceof ShareError) new Notice(shareText("share.updateFailedOne", { address: share.view.slug, error: shareText("share.tooLarge", { size: `${Math.ceil(error.size / 1048576)} MB` }) }));
+                else this.core.services.API.addLog(`Updating share ${share.view.slug} failed: ${error instanceof Error ? error.message : String(error)}`, LOG_LEVEL_INFO, "share");
+            }
+            if (failed.some(({ error }) => !(error instanceof ShareError))) retry();
         } catch (error) {
-            // Being offline is not reported: the next change tries again.
-            if (error instanceof ShareError) new Notice(shareText("share.updateFailed", { error: error.code === "tooLarge" ? shareText("share.tooLarge", { size: `${Math.ceil(error.size / 1048576)} MB` }) : shareText("share.empty") }));
-            else this.core.services.API.addLog(`Updating shares failed: ${error instanceof Error ? error.message : String(error)}`, LOG_LEVEL_INFO, "share");
+            this.core.services.API.addLog(`Updating shares failed: ${error instanceof Error ? error.message : String(error)}`, LOG_LEVEL_INFO, "share");
+            retry();
         }
     }
 }
@@ -184,6 +194,7 @@ interface DialogProps {
     name: string;
     base: string;
     existing?: Awaited<ReturnType<Sharing["list"]>>["shares"][number];
+    unreadable: number;
 }
 class ShareModal extends Modal {
     private component?: ReturnType<typeof mount>;

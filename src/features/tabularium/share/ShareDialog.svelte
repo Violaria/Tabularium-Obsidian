@@ -3,7 +3,7 @@
     // that lie outside what is shared so the owner decides each one; colours come from the web pages' tokens or,
     // inside Obsidian, from its own variables.
     import { untrack } from "svelte";
-    import { reviewTree, sharedByDefault, type ReviewNode, type ShareSource } from "./package";
+    import { countSensitive, reviewTree, sharedByDefault, type ReviewNode, type ShareSource } from "./package";
     import { ShareError, Sharing, type OwnShare, type ShareMode } from "./sharing";
 
     type Texts = (key: string, params?: Record<string, string | number>) => string;
@@ -15,6 +15,8 @@
         name: string;
         base: string;
         existing?: OwnShare;
+        /** Shares of this vault that were made with another passphrase; their records cannot be read here. */
+        unreadable: number;
         t: Texts;
         serverError: (code: string) => string;
         formatDate: (time: number) => string;
@@ -22,7 +24,7 @@
         confirmRevoke: () => Promise<boolean>;
         close: () => void;
     }
-    let { sharing, source, target, folder, name, base, existing, t, serverError, formatDate, confirmRevoke, close }: Props = $props();
+    let { sharing, source, target, folder, name, base, existing, unreadable, t, serverError, formatDate, confirmRevoke, close }: Props = $props();
 
     const DAY = 86_400_000;
     // The dialog starts from the share as it was when opened; later changes come from saving here.
@@ -32,9 +34,17 @@
     let mode = $state<ShareMode>(initial?.view.mode ?? "encrypted");
     let slug = $state("");
     let expiry = $state(initial ? (initial.view.expiresAt === null ? "forever" : "custom") : "30");
-    let until = $state(initial?.view.expiresAt ? new Date(initial.view.expiresAt).toISOString().slice(0, 10) : "");
+    /** A date as the date picker shows it, in the device's own time zone. */
+    const dayOf = (time: number) => {
+        const date = new Date(time);
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    };
+    let until = $state(initial?.view.expiresAt ? dayOf(initial.view.expiresAt) : "");
     let password = $state(record?.password ?? "");
     let indexable = $state(initial?.view.indexable ?? false);
+    let desensitize = $state(record?.desensitize !== false);
+    let protect = $state(record?.protect === true);
+    let marked = $state(0);
     let authorised = $state(new Set<string>(record?.authorised ?? []));
     // References the owner has seen: those from the share's record and those shown in this dialog.
     const known = new Set<string>(record?.reviewed ?? []);
@@ -50,7 +60,8 @@
 
     /** Lists the references again; references seen for the first time get their default choice. */
     async function load() {
-        const next = await reviewTree(source, target, folder, (path) => authorised.has(path));
+        const next = await reviewTree(source, target, folder, (path) => authorised.has(path), desensitize);
+        marked = await countSensitive(source, target, folder, [...authorised]);
         const added = shownPaths(next).filter((path) => !known.has(path));
         if (added.length) {
             const defaults = new Set(authorised);
@@ -91,7 +102,12 @@
     const size = (value: number) => (value < 1024 * 1024 ? `${Math.ceil(value / 1024)} KB` : `${(value / 1024 / 1024).toFixed(1)} MB`);
     function expiresAt() {
         if (expiry === "forever") return null;
-        if (expiry === "custom") return until ? new Date(`${until}T23:59:59`).getTime() : null;
+        if (expiry === "custom") {
+            // The date shown for this share, left as it is, keeps the exact time.
+            const current = share?.view.expiresAt;
+            if (current && until === dayOf(current)) return current;
+            return until ? new Date(`${until}T23:59:59`).getTime() : null;
+        }
         return Date.now() + Number(expiry) * DAY;
     }
 
@@ -107,6 +123,8 @@
                 expiresAt: expiresAt(),
                 password,
                 indexable: mode === "public" && indexable,
+                desensitize,
+                protect,
                 authorised: [...authorised].filter((path) => shown.has(path)),
                 reviewed: [...shown],
             }, share);
@@ -159,86 +177,89 @@
 
 <div class="share">
     <h2>{t("share.title", { name })}</h2>
-    {#if initial && !record}
-        <p class="error" role="alert">{t("share.otherPassphrase")}</p>
-        <div class="buttons"><span class="spacer"></span><button onclick={close}>{t("share.close")}</button></div>
-    {:else}
-        {#if error}<p class="error" role="alert">{error}</p>{/if}
-        {#if share}
-            <div class="result">
-                <label for="share-link">{t("share.link")}{@render tip(share.view.mode === "encrypted" ? t("share.linkKeyHint") : t("share.publicWarning"))}</label>
-                <div class="row">
-                    <input id="share-link" readonly value={link} onfocus={(event) => event.currentTarget.select()} />
-                    <button class="primary mod-cta" onclick={copy}>{copied ? t("share.copied") : t("share.copy")}</button>
-                </div>
-                <small>
-                    {t("share.views", { count: share.view.views })}{share.view.updatedAt ? ` · ${t("share.updated", { time: formatDate(share.view.updatedAt) })}` : ""}
-                </small>
+    {#if error}<p class="error" role="alert">{error}</p>{/if}
+    {#if unreadable > 0}<p class="warn">{t("share.otherPassphrase", { count: unreadable })}</p>{/if}
+    {#if share}
+        <div class="result">
+            <label for="share-link">{t("share.link")}{@render tip(share.view.mode === "encrypted" ? t("share.linkKeyHint") : t("share.publicWarning"))}</label>
+            <div class="row">
+                <input id="share-link" readonly value={link} onfocus={(event) => event.currentTarget.select()} />
+                <button class="primary mod-cta" onclick={copy}>{copied ? t("share.copied") : t("share.copy")}</button>
             </div>
-        {/if}
-        {#if record && record.unreviewed > 0}
-            <p class="warn">{t("share.unreviewed", { count: record.unreviewed })}</p>
-        {/if}
-
-        <fieldset disabled={busy}>
-            <legend>{t("share.mode")}{#if share}{@render tip(t("share.modeFixed"))}{/if}</legend>
-            <label class="choice">
-                <input type="radio" name="share-mode" value="encrypted" bind:group={mode} disabled={!!share} />
-                <span><strong>{t("share.encrypted")}</strong>{@render tip(t("share.encryptedHint"))}</span>
-            </label>
-            <label class="choice">
-                <input type="radio" name="share-mode" value="public" bind:group={mode} disabled={!!share} />
-                <span><strong>{t("share.public")}</strong>{@render tip(t("share.publicHint"))}</span>
-            </label>
-        </fieldset>
-
-        <div class="grid">
-            {#if !share}
-                <label>
-                    <span>{t("share.address")}{@render tip(t("share.addressHint"))}</span>
-                    <span class="address"><span class="prefix">/s/</span><input bind:value={slug} placeholder={t("share.addressRandom")} disabled={busy} autocomplete="off" /></span>
-                </label>
-            {/if}
-            <label>
-                <span>{t("share.expiry")}</span>
-                <select bind:value={expiry} disabled={busy}>
-                    <option value="1">{t("share.day1")}</option>
-                    <option value="7">{t("share.day7")}</option>
-                    <option value="30">{t("share.day30")}</option>
-                    <option value="forever">{t("share.forever")}</option>
-                    <option value="custom">{t("share.custom")}</option>
-                </select>
-                {#if expiry === "custom"}<input type="date" bind:value={until} min={new Date(Date.now() + DAY).toISOString().slice(0, 10)} disabled={busy} />{/if}
-            </label>
-            <label>
-                <span>{t("share.password")}{@render tip(t("share.passwordHint"))}</span>
-                <input type="text" bind:value={password} autocomplete="off" disabled={busy} />
-            </label>
-            {#if mode === "public"}
-                <label class="check"><input type="checkbox" bind:checked={indexable} disabled={busy} />{t("share.indexable")}</label>
-            {/if}
-        </div>
-
-        <section class="references">
-            <h3>{t("share.references")}{@render tip(t("share.referencesHint"))}</h3>
-            {#if loading}
-                <p class="muted">{t("share.loading")}</p>
-            {:else if nodes.length}
-                {@render references(nodes)}
-            {:else}
-                <p class="muted">{t("share.noReferences")}</p>
-            {/if}
-        </section>
-
-        <div class="buttons">
-            {#if share}<button class="danger mod-destructive" onclick={revoke} disabled={busy}>{t("share.revoke")}</button>{/if}
-            <span class="spacer"></span>
-            <button onclick={close} disabled={busy}>{share ? t("share.close") : t("share.cancel")}</button>
-            <button class="primary mod-cta" onclick={save} disabled={busy || loading || (expiry === "custom" && !until)}>
-                {busy ? t("share.saving") : share ? t("share.save") : t("share.create")}
-            </button>
+            <small>
+                {t("share.views", { count: share.view.views })}{share.view.updatedAt ? ` · ${t("share.updated", { time: formatDate(share.view.updatedAt) })}` : ""}
+                · {t(share.record && sharing.updatesHere(share.record) ? "share.updatesHere" : "share.updatesElsewhere")}
+            </small>
         </div>
     {/if}
+    {#if record && record.unreviewed > 0}
+        <p class="warn">{t("share.unreviewed", { count: record.unreviewed })}</p>
+    {/if}
+
+    <fieldset disabled={busy}>
+        <legend>{t("share.mode")}{#if share}{@render tip(t("share.modeFixed"))}{/if}</legend>
+        <label class="choice">
+            <input type="radio" name="share-mode" value="encrypted" bind:group={mode} disabled={!!share} />
+            <span><strong>{t("share.encrypted")}</strong>{@render tip(t("share.encryptedHint"))}</span>
+        </label>
+        <label class="choice">
+            <input type="radio" name="share-mode" value="public" bind:group={mode} disabled={!!share} />
+            <span><strong>{t("share.public")}</strong>{@render tip(t("share.publicHint"))}</span>
+        </label>
+    </fieldset>
+
+    <div class="grid">
+        {#if !share}
+            <label>
+                <span>{t("share.address")}{@render tip(t("share.addressHint"))}</span>
+                <span class="address"><span class="prefix">/s/</span><input bind:value={slug} placeholder={t("share.addressRandom")} disabled={busy} autocomplete="off" /></span>
+            </label>
+        {/if}
+        <label>
+            <span>{t("share.expiry")}</span>
+            <select bind:value={expiry} disabled={busy}>
+                <option value="1">{t("share.day1")}</option>
+                <option value="7">{t("share.day7")}</option>
+                <option value="30">{t("share.day30")}</option>
+                <option value="forever">{t("share.forever")}</option>
+                <option value="custom">{t("share.custom")}</option>
+            </select>
+            {#if expiry === "custom"}<input type="date" bind:value={until} min={dayOf(Date.now() + DAY)} disabled={busy} />{/if}
+        </label>
+        <label>
+            <span>{t("share.password")}{@render tip(t("share.passwordHint"))}</span>
+            <input type="text" bind:value={password} autocomplete="off" disabled={busy} />
+        </label>
+        {#if mode === "public"}
+            <label class="check"><input type="checkbox" checked={indexable && !protect} onchange={(event) => (indexable = event.currentTarget.checked)} disabled={busy || protect} />{t("share.indexable")}</label>
+        {/if}
+        <label class="check">
+            <input type="checkbox" bind:checked={desensitize} onchange={() => void load().catch((e) => (error = message(e)))} disabled={busy} />{t("share.desensitize")}{#if marked}<small>{t("share.markedCount", { count: marked })}</small>{/if}{@render tip(t("share.desensitizeHint"))}
+        </label>
+        <label class="check">
+            <input type="checkbox" bind:checked={protect} disabled={busy} />{t("share.protect")}{@render tip(t("share.protectHint"))}
+        </label>
+    </div>
+
+    <section class="references">
+        <h3>{t("share.references")}{@render tip(t("share.referencesHint"))}</h3>
+        {#if loading}
+            <p class="muted">{t("share.loading")}</p>
+        {:else if nodes.length}
+            {@render references(nodes)}
+        {:else}
+            <p class="muted">{t("share.noReferences")}</p>
+        {/if}
+    </section>
+
+    <div class="buttons">
+        {#if share}<button class="danger mod-destructive" onclick={revoke} disabled={busy}>{t("share.revoke")}</button>{/if}
+        <span class="spacer"></span>
+        <button onclick={close} disabled={busy}>{share ? t("share.close") : t("share.cancel")}</button>
+        <button class="primary mod-cta" onclick={save} disabled={busy || loading || (expiry === "custom" && !until)}>
+            {busy ? t("share.saving") : share ? t("share.save") : t("share.create")}
+        </button>
+    </div>
 </div>
 
 <style>

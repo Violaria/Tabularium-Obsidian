@@ -1056,3 +1056,8 @@ body.is-mobile .tabularium-compatibility-review-notice {
     margin: 0 3px;
     background: var(--background-modifier-border);
 }
+
+.tabularium-sensitive {
+    text-decoration: underline dotted color-mix(in srgb, currentColor 45%, transparent);
+    text-underline-offset: 3px;
+}

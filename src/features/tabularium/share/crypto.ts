@@ -83,6 +83,12 @@ export interface ShareRecord {
      * and any device refreshes them.
      */
     uploader?: string;
+    /** False to share marked text as written; marked text is left out otherwise, also on records from before this choice. */
+    desensitize?: boolean;
+    /** The page shows drawings of the text instead of the text; see the viewer. */
+    protect?: boolean;
+    /** What the vault held when the content was last built; a device that was away compares it with what it holds now. */
+    built?: string;
 }
 export async function sealRecord(key: CryptoKey, record: ShareRecord) {
     return toBase64Url(await encrypt(key, encoder.encode(JSON.stringify(record))));

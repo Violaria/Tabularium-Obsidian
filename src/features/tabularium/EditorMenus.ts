@@ -10,6 +10,8 @@ import { $msg } from "@/core/common/translation";
 import { ownStorageKeys } from "./ownNames";
 import { format, insertTemplate, type Format, type Template, type TextEdit } from "./formatting";
 import { FORMAT_ACTIONS, HEADINGS, INSERT_ACTIONS, LINE_ACTIONS } from "./editorActions";
+import { hasMarks, stripMarks } from "./sensitive";
+import { sensitiveMarks } from "./sensitiveEditor";
 
 /** Turned off per device and vault, like automatic link repair: plug-in settings are synced, habits are not. */
 
@@ -85,6 +87,12 @@ export class TabulariumEditorMenus {
             })
         );
         plugin.registerEditorExtension(this.toolbarExtension());
+        plugin.registerEditorExtension(sensitiveMarks);
+        // The reading view holds the note's text as it is: sensitive marks go, so copying leaves them behind.
+        plugin.registerMarkdownPostProcessor((element) => {
+            const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+            for (let node = walker.nextNode(); node; node = walker.nextNode()) if (hasMarks(node.nodeValue ?? "")) node.nodeValue = stripMarks(node.nodeValue ?? "");
+        });
     }
 
     private commands() {

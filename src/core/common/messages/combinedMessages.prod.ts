@@ -3873,6 +3873,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         la: "Citatio",
         zh: "引用",
     },
+    "tabularium.editor.sensitive": {
+        def: "Sensitive",
+        la: "Secretum",
+        zh: "敏感",
+    },
     "tabularium.editor.strike": {
         def: "Strikethrough",
         la: "Linea transversa",
@@ -4357,6 +4362,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Signing in to an existing vault asks once what to do with notes on the device; the server wins by default and files only on the device are kept. Notices and dialogues are complete in Chinese. Server: the client log and prompt preview open in dialogs, sign-in goes to the home page, revoked devices are deleted, the activity log, inactive shares, delivery history and command log can be cleared, and vaults can be compacted.",
         la: "Ineundo tabularium exstans semel quaeritur quid de commentariis instrumenti fiat; ministrator praevalet et plicae solum in instrumento servantur. Nuntia et dialogi Sinice completi sunt. Ministrator: acta clientis et praevisio mandati in dialogis aperiuntur, post ingressum ad paginam primam itur, instrumenta revocata delentur, acta, communicata irrita, historia missionum et acta mandatorum purgari possunt, tabularia comprimi possunt.",
         zh: "登录已有笔记库时一次选定如何处理本机笔记，默认以服务器为准、保留本机独有的文件；提示与对话框的中文补全。服务器：客户端日志与提示词预览改为弹窗，登录后回到首页，撤销的设备直接删除，操作记录、失效分享、发送记录与命令记录可清理，笔记库可压缩。",
+    },
+    "tabularium.release.1.2.0": {
+        def: "New Sensitive mark: invisible characters around passwords and the like, with no visible change when reading. Shares desensitize by default, replacing marked text with ••••••; the no-copy option draws shared content as images. Fixes: aliased links in tables count as references; one share failing to update leaves the others alone; note addresses in a share follow their paths and heading links work; expiry shows the local date. Server: shares kept by web notes catch up after sync and on reopening; Tabularius masks marked text before it reaches the model.",
+        la: "Nota nova Secretum: signa invisibilia tesseras et similia circumdant, legenti nihil mutatur. Communicationes secreta tegunt ex more, pro textu notato •••••• ponentes; optio Sine exscriptione contentum ut imagines pingit. Emendata: nexus cum cognomine in tabulis ut referentiae tractantur; communicatio una deficiens ceteras non impedit; loci commentariorum in communicatione a viis pendent et nexus ad titulos valent; dies exitus localis ostenditur. Ministrator: communicationes a commentariis in rete servatae post synchronizationem et iterum aperiendo mutationes assequuntur; Tabularius textum notatum ante modellum tegit.",
+        zh: "新增「敏感」标记：不可见字符包住密码等内容，阅读时看不出差别。分享默认脱敏，标记内容替换为 ••••••；可选禁止复制，分享页把内容绘制成图像。修复：表格里带别名的链接按引用处理；一个分享更新失败不影响其他分享；分享内的笔记地址由路径决定，指向标题的链接可用；到期日按本地日期显示。服务器：云笔记负责的分享在同步后和重新打开时补上其他设备的改动；Tabularius 把标记内容遮盖后发给模型。",
     },
     "tabularium.server.address": {
         def: "Server address",

@@ -3,9 +3,11 @@
 // given the note and a selection, it returns the replacement and the selection afterwards. Nothing is reformatted
 // outside the replaced range.
 
+import { toggleMark } from "./sensitive";
+
 export type InlineFormat = "bold" | "italic" | "strike" | "highlight" | "code";
 export type LineFormat = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "quote" | "bullet" | "numbered" | "task";
-export type Format = InlineFormat | LineFormat | "link" | "clear";
+export type Format = InlineFormat | LineFormat | "link" | "clear" | "sensitive";
 
 /** A replacement of `from`–`to` with `insert`, and the selection that follows (offsets in the new text). */
 export interface TextEdit {
@@ -116,6 +118,7 @@ export function format(text: string, from: number, to: number, kind: Format, wor
     if (from > to) [from, to] = [to, from];
     if (kind === "link") return link(text, from, to, words);
     if (kind === "clear") return clear(text, from, to);
+    if (kind === "sensitive") return toggleMark(text, from, to);
     if (kind in MARKS) return inline(text, from, to, kind as InlineFormat);
     return lines(text, from, to, kind as LineFormat);
 }

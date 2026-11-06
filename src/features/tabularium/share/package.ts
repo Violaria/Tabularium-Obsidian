@@ -5,6 +5,8 @@ import { FORMER_NAMES, PREFIXMD_LOGFILE } from "@tabularium/sync-core/compat/com
 // that was not shared. Both clients (web notes and the plug-in) build identical shares with this module.
 import { resolveLinkpath } from "@/features/tabularium/linkpath";
 import { outsideCode, stripFrontMatter } from "@/features/tabularium/render";
+import { countMarked, maskMarked, stripMarks } from "@/features/tabularium/sensitive";
+import { toBase64Url } from "./crypto";
 
 export type ReferenceKind = "note" | "image" | "file";
 export interface Reference {
@@ -23,8 +25,10 @@ export interface ShareSource {
     files: readonly string[];
     read(path: string): Promise<string>;
     readBinary(path: string): Promise<Uint8Array>;
-    /** The folder's files in display order (the vault's sortspec.md rules). */
+    /** The folder's files in display order (the vault's Collation.md rules). */
     tree(folder: string): ShareTreeNode;
+    /** The file's current revision, on clients that catch up on changes made while they were away. */
+    revision?(path: string): string;
 }
 
 const IMAGE = /\.(png|jpe?g|gif|svg|webp|bmp|avif)$/i;
@@ -62,6 +66,16 @@ export function rewriteReferences(markdown: string, from: string, files: readonl
         return path ? { path, kind: kindOf(path), embed } : undefined;
     };
     const denied = (reference: Reference) => `share:denied:${reference.kind}`;
+    /** The address of a shared note keeps the heading the link names; a block reference (`#^id`) opens the note. */
+    const heading = (written: string) => {
+        const at = written.indexOf("#");
+        const name = at < 0 ? "" : written.slice(at + 1).trim();
+        return name && !name.startsWith("^") ? `#${encodeURIComponent(name).replace(/[()]/g, (c) => `%${c.charCodeAt(0).toString(16)}`)}` : "";
+    };
+    const address = (reference: Reference, written: string) => {
+        const href = decide(reference);
+        return href !== null && reference.kind === "note" ? href + heading(written) : href;
+    };
     const decodeHref = (href: string) => {
         const plain = href.startsWith("<") ? href.slice(1, -1) : href;
         try {
@@ -76,22 +90,28 @@ export function rewriteReferences(markdown: string, from: string, files: readonl
         if (SCHEME.test(value) || value.startsWith("#")) return value;
         const reference = resolve(decodeHref(value), attribute.toLowerCase() === "src");
         if (!reference) return value;
-        return decide(reference) ?? denied(reference);
+        return address(reference, decodeHref(value)) ?? denied(reference);
     };
     return outsideCode(stripFrontMatter(markdown), (part) =>
         part
             .replace(/%%[\s\S]*?%%/g, "")
             .replace(/<!--[\s\S]*?-->/g, "")
             .replace(/<[a-zA-Z][^>]*>/g, (tag) =>
-                tag.replace(/\b(src|href)(\s*=\s*)("([^"]*)"|'([^']*)')/gi, (_all, attribute: string, equals: string, quoted: string, double?: string, single?: string) => {
-                    const quote = quoted[0];
-                    return `${attribute}${equals}${quote}${htmlReference(attribute, double ?? single ?? "")}${quote}`;
+                tag.replace(/\b(src|href)(\s*=\s*)(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/gi, (whole, attribute: string, equals: string, double?: string, single?: string, bare?: string) => {
+                    const quote = whole.slice(attribute.length + equals.length)[0];
+                    const value = double ?? single ?? bare ?? "";
+                    return bare === undefined ? `${attribute}${equals}${quote}${htmlReference(attribute, value)}${quote}` : `${attribute}${equals}${htmlReference(attribute, value)}`;
                 })
             )
-            .replace(/(!?)\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g, (whole, bang: string, target: string, alias: string | undefined) => {
+            // Inside a table the pipe is written as \\|.
+            .replace(/(!?)\[\[([^\]|]+?)\\?(?:\|([^\]]*))?\]\]/g, (whole, bang: string, target: string, alias: string | undefined) => {
                 const reference = resolve(target.trim(), bang === "!");
-                if (!reference) return whole;
-                const href = decide(reference);
+                if (!reference) {
+                    const own = bang ? "" : heading(target);
+                    // A heading of this note: the viewer scrolls to it.
+                    return own && target.trim().startsWith("#") ? `[${(alias ?? target.trim().slice(1)).replace(/[[\]]/g, "")}](${own})` : whole;
+                }
+                const href = address(reference, target);
                 if (href === null) return `${bang}[](${denied(reference)})`;
                 const text = bang ? (alias ?? "").replace(/^\d+(x\d+)?$/, "") : (alias ?? titleOf(target.replace(/[#^].*$/, "").trim()));
                 return `${bang}[${text.replace(/[[\]]/g, "")}](${href})`;
@@ -100,14 +120,14 @@ export function rewriteReferences(markdown: string, from: string, files: readonl
                 if (SCHEME.test(href) || href.startsWith("#")) return whole;
                 const reference = resolve(decodeHref(href), bang === "!");
                 if (!reference) return whole;
-                const target = decide(reference);
+                const target = address(reference, decodeHref(href));
                 return target === null ? `${bang}[](${denied(reference)})` : `${bang}[${text}](${target}${title})`;
             })
             .replace(/^( {0,3}\[[^\]\n]+\]:[ \t]*)(<[^>\n]+>|\S+)(.*)$/gm, (whole, label: string, href: string, rest: string) => {
                 if (SCHEME.test(href) || href.startsWith("#")) return whole;
                 const reference = resolve(decodeHref(href), false);
                 if (!reference) return whole;
-                const target = decide(reference);
+                const target = address(reference, decodeHref(href));
                 return `${label}${target ?? denied(reference)}${target === null ? "" : rest}`;
             })
     );
@@ -132,17 +152,28 @@ export interface ReviewNode extends Reference {
 /** Embedded images and attachments are shared by default; linked and embedded notes are not. */
 export const sharedByDefault = (reference: Reference) => reference.embed && reference.kind !== "note";
 
+/** A note's text as it leaves the device: marked text replaced or, when the owner chose, as written without its marks. */
+const asShared = (text: string, desensitize: boolean) => (desensitize ? maskMarked(text) : stripMarks(text));
+
+/** How many marked passages the target and the given notes hold. */
+export async function countSensitive(source: ShareSource, target: string, folder: boolean, also: readonly string[]) {
+    let count = 0;
+    for (const path of new Set([...included(target, folder, source.files), ...also.filter((path) => source.files.includes(path))]))
+        if (kindOf(path) === "note") count += countMarked(await source.read(path));
+    return count;
+}
+
 /**
  * The references of the target that lie outside it, nested under the allowed notes that make them. `allowed` decides
- * which notes are opened further (the owner's current choice).
+ * which notes are opened further (the owner's current choice). What sharing replaces is not read for references.
  */
-export async function reviewTree(source: ShareSource, target: string, folder: boolean, allowed: (path: string) => boolean) {
+export async function reviewTree(source: ShareSource, target: string, folder: boolean, allowed: (path: string) => boolean, desensitize = true) {
     const inside = new Set(included(target, folder, source.files));
     const listed = new Set<string>();
     const walk = async (notes: string[]): Promise<ReviewNode[]> => {
         const nodes: ReviewNode[] = [];
         for (const note of notes) {
-            for (const reference of referencesOf(await source.read(note), note, source.files)) {
+            for (const reference of referencesOf(asShared(await source.read(note), desensitize), note, source.files)) {
                 if (inside.has(reference.path) || listed.has(reference.path)) continue;
                 listed.add(reference.path);
                 nodes.push({ ...reference, children: [] });
@@ -166,6 +197,8 @@ export interface Manifest {
     generatedAt: number;
     /** The shared note, or the first note of a folder. */
     start?: string;
+    /** The viewer draws the text instead of placing it in the page. */
+    protect?: boolean;
     tree?: ManifestNode[];
     notes: Record<string, { title: string }>;
     files: Record<string, { name: string; type: string }>;
@@ -179,30 +212,39 @@ export interface BuiltShare {
 }
 
 /**
+ * The name of a file in a share, the same for every build, so an address like `?note=<id>` keeps pointing at its note
+ * when the folder changes. An encrypted share derives it from the link's key, so the server cannot test a guessed path.
+ */
+export async function shareId(path: string, key?: Uint8Array) {
+    const data = new TextEncoder().encode(path);
+    const hash = key
+        ? await crypto.subtle.sign("HMAC", await crypto.subtle.importKey("raw", key.slice().buffer, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]), data)
+        : await crypto.subtle.digest("SHA-256", data);
+    return `${kindOf(path) === "note" ? "n" : "a"}${toBase64Url(new Uint8Array(hash).subarray(0, 16))}`;
+}
+
+/**
  * Builds the share. Every file of the target is included; a reference outside it is included when the owner allowed
  * it (`authorised`), recursively for allowed notes. References not in `reviewed` are left out and returned.
  */
-export async function buildShare(source: ShareSource, options: { title: string; target: string; folder: boolean; authorised: Set<string>; reviewed: Set<string> }): Promise<BuiltShare> {
+export async function buildShare(source: ShareSource, options: { title: string; target: string; folder: boolean; authorised: Set<string>; reviewed: Set<string>; idKey?: Uint8Array; desensitize?: boolean; protect?: boolean }): Promise<BuiltShare> {
     const encoder = new TextEncoder();
+    const named = new Map<string, string>();
+    for (const path of source.files) named.set(path, await shareId(path, options.idKey));
     const inside = included(options.target, options.folder, source.files);
     const ids = new Map<string, string>();
     const queue: string[] = [];
-    const manifest: Manifest = { v: 1, title: options.title, kind: options.folder ? "folder" : "note", generatedAt: Date.now(), notes: {}, files: {} };
+    const manifest: Manifest = { v: 1, title: options.title, kind: options.folder ? "folder" : "note", generatedAt: Date.now(), notes: {}, files: {}, ...(options.protect ? { protect: true } : {}) };
     const files = new Map<string, Uint8Array>();
     const unreviewed = new Set<string>();
-    let notes = 0;
-    let attachments = 0;
     const idOf = (path: string) => {
         let id = ids.get(path);
         if (id) return id;
+        id = named.get(path)!;
         if (kindOf(path) === "note") {
-            id = `n${++notes}`;
             manifest.notes[id] = { title: titleOf(path) };
             queue.push(path);
-        } else {
-            id = `a${++attachments}`;
-            manifest.files[id] = { name: nameOf(path), type: typeOf(path) };
-        }
+        } else manifest.files[id] = { name: nameOf(path), type: typeOf(path) };
         ids.set(path, id);
         return id;
     };
@@ -210,7 +252,7 @@ export async function buildShare(source: ShareSource, options: { title: string; 
     const shared = new Set(inside);
     while (queue.length) {
         const path = queue.shift()!;
-        const text = rewriteReferences(await source.read(path), path, source.files, (reference) => {
+        const text = rewriteReferences(asShared(await source.read(path), options.desensitize !== false), path, source.files, (reference) => {
             if (shared.has(reference.path)) return `share:${idOf(reference.path)}`;
             if (!options.reviewed.has(reference.path)) {
                 unreviewed.add(reference.path);

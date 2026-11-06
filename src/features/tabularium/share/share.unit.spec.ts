@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { contentKey, decrypt, encrypt, newShareKey, openRecord, sealRecord, vaultShareKey, type ShareRecord } from "./crypto";
-import { buildShare, encodeBundle, referencesOf, reviewTree, rewriteReferences, sharedByDefault, type ShareSource, type ShareTreeNode } from "./package";
+import { buildShare, encodeBundle, referencesOf, reviewTree, rewriteReferences, shareId, sharedByDefault, type ShareSource, type ShareTreeNode } from "./package";
 import { Sharing, type ShareApi, type ShareView } from "./sharing";
 
 const encoder = new TextEncoder();
@@ -79,6 +79,16 @@ describe("references", () => {
         expect(text).toBe('<img src="share:n1" width="80"> <a href=\'share:denied:note\'>x</a> <a href="https://example.com/a">web</a>  `<img src="chart.png">`');
         expect(referencesOf(html, "Projects/Plan.md", files).map((reference) => [reference.path, reference.embed])).toEqual([["Projects/chart.png", true], ["Secret Diary.md", false]]);
     });
+    it("reads links in tables, whose pipe is escaped", () => {
+        const table = "| [[Secret Diary\\|my diary]] | ![[chart.png\\|300]] |\n|---|---|\n";
+        expect(referencesOf(table, "Projects/Plan.md", files).map((reference) => reference.path)).toEqual(["Secret Diary.md", "Projects/chart.png"]);
+        expect(rewriteReferences(table, "Projects/Plan.md", files, () => null)).toBe("| [](share:denied:note) | ![](share:denied:image) |\n|---|---|\n");
+    });
+    it("keeps headings of links, and treats unquoted HTML attributes like quoted ones", () => {
+        const to = () => "share:n2";
+        expect(rewriteReferences("[[Plan#The (first) part]] [[Plan#^block]] [x](Plan.md#Next) [[#Here|there]] [[#Here]]", "Projects/Budget.md", files, to)).toBe("[Plan](share:n2#The%20%28first%29%20part) [Plan](share:n2) [x](share:n2#Next) [there](#Here) [Here](#Here)");
+        expect(rewriteReferences("<img src=chart.png>", "Projects/Plan.md", files, () => null)).toBe("<img src=share:denied:image>");
+    });
     it("lists references outside the target, opening the allowed notes", async () => {
         const closed = await reviewTree(source, "Projects/Plan.md", false, () => false);
         expect(closed.map((node) => [node.path, node.children.length])).toEqual([
@@ -96,31 +106,42 @@ describe("building a share", () => {
     it("includes allowed references, leaves out the rest and counts references found after the review", async () => {
         const reviewed = new Set(["Secret Diary.md", "Projects/Budget.md", "Projects/chart.png", "Archive/scan one.pdf"]);
         const built = await buildShare(source, { title: "Plan", target: "Projects/Plan.md", folder: false, authorised: new Set(["Projects/Budget.md", "Projects/chart.png"]), reviewed });
-        expect(built.manifest.notes).toEqual({ n1: { title: "Plan" }, n2: { title: "Budget" } });
-        expect(built.manifest.files).toEqual({ a1: { name: "chart.png", type: "image/png" } });
-        expect(built.manifest.start).toBe("n1");
-        const plan = decoder.decode(built.files.get("n1"));
-        expect(plan).toContain("[Budget](share:n2)");
-        expect(plan).toContain("![](share:a1)");
-        expect(plan).toContain("![](share:denied:file)");
+        const [plan, budget, chart] = await Promise.all(["Projects/Plan.md", "Projects/Budget.md", "Projects/chart.png"].map((path) => shareId(path)));
+        expect(built.manifest.notes).toEqual({ [plan]: { title: "Plan" }, [budget]: { title: "Budget" } });
+        expect(built.manifest.files).toEqual({ [chart]: { name: "chart.png", type: "image/png" } });
+        expect(built.manifest.start).toBe(plan);
+        const planText = decoder.decode(built.files.get(plan));
+        expect(planText).toContain(`[Budget](share:${budget})`);
+        expect(planText).toContain(`![](share:${chart})`);
+        expect(planText).toContain("![](share:denied:file)");
         // Budget's image was never shown to the owner: left out and counted.
         expect(built.unreviewed).toEqual(["Projects/receipt.png"]);
-        expect(decoder.decode(built.files.get("n2"))).toContain("![](share:denied:image)");
-        expect(decoder.decode(built.files.get("n2"))).toContain("[Plan](share:n1)");
+        expect(decoder.decode(built.files.get(budget))).toContain("![](share:denied:image)");
+        expect(decoder.decode(built.files.get(budget))).toContain(`[Plan](share:${plan})`);
         const everything = [...built.files.values()].map((data) => decoder.decode(data)).join("\n") + JSON.stringify(built.manifest);
         expect(everything).not.toMatch(/Secret|private|Hidden|scan one|receipt/);
     });
     it("shares a folder with its tree in display order", async () => {
         const built = await buildShare(source, { title: "Projects", target: "Projects", folder: true, authorised: new Set(), reviewed: new Set(["Secret Diary.md", "Archive/scan one.pdf"]) });
+        const id = (path: string) => shareId(path);
         expect(built.manifest.tree).toEqual([
-            { name: "Plan", id: "n1" },
-            { name: "Sub", children: [{ name: "Notes", id: "n3" }] },
-            { name: "Budget", id: "n2" },
-            { name: "chart.png", id: "a1" },
-            { name: "receipt.png", id: "a2" },
+            { name: "Plan", id: await id("Projects/Plan.md") },
+            { name: "Sub", children: [{ name: "Notes", id: await id("Projects/Sub/Notes.md") }] },
+            { name: "Budget", id: await id("Projects/Budget.md") },
+            { name: "chart.png", id: await id("Projects/chart.png") },
+            { name: "receipt.png", id: await id("Projects/receipt.png") },
         ]);
-        expect(built.manifest.start).toBe("n1");
+        expect(built.manifest.start).toBe(await id("Projects/Plan.md"));
         expect(built.unreviewed).toEqual([]);
+    });
+    it("keeps the name of each note when files are added, and hides it behind the link's key", async () => {
+        const before = await buildShare(source, { title: "Projects", target: "Projects", folder: true, authorised: new Set(), reviewed: new Set() });
+        const after = await buildShare({ ...source, files: ["Projects/Aardvark.md", ...files], read: async (path) => notes[path] ?? "new" }, { title: "Projects", target: "Projects", folder: true, authorised: new Set(), reviewed: new Set() });
+        for (const [id, note] of Object.entries(before.manifest.notes)) expect(after.manifest.notes[id]).toEqual(note);
+        const key = newShareKey();
+        expect(await shareId("a.md", key)).toBe(await shareId("a.md", key));
+        expect(await shareId("a.md", key)).not.toBe(await shareId("a.md"));
+        expect(await shareId("a.md", key)).toMatch(/^n[A-Za-z0-9_-]{22}$/);
     });
     it("frames files for upload", () => {
         const bundle = encodeBundle(new Map([["manifest", new Uint8Array([7, 8])], ["n1", new Uint8Array([9])]]));
@@ -169,6 +190,41 @@ describe("refreshing shares after changes", () => {
         await sharing("desktop").refresh({ paths: ["Notes/b.md", "Archive/b.md"], renames: [] });
         expect(await target("s0")).toBe("Archive/b.md");
         expect(revoked).toEqual([]);
+    });
+    it("updates the other shares when one fails", async () => {
+        const { api, uploads, sharing } = await setup(["a.md", "b.md"], [{ target: "a.md", folder: false }, { target: "b.md", folder: false }]);
+        const upload = api.upload;
+        api.upload = async (id, bundle) => {
+            if (id === "s0") throw new Error("offline");
+            return upload(id, bundle);
+        };
+        const { updated, failed } = await sharing("desktop").refresh({ paths: ["a.md", "b.md"], renames: [] });
+        expect(updated).toBe(1);
+        expect(uploads).toEqual(["s1"]);
+        expect(failed.map(({ share }) => share.view.id)).toEqual(["s0"]);
+    });
+    it("catches up on what changed while the device was away, and only then", async () => {
+        const { api, uploads, revoked } = await setup([], []);
+        const revisions: Record<string, string> = { "a.md": "1", "b.md": "1" };
+        const key = await vaultShareKey("passphrase", "vault-1");
+        const views: ShareView[] = [];
+        for (const [i, target] of ["a.md", "b.md", "gone.md"].entries())
+            views.push({ id: `s${i}`, slug: `s${i}`, vaultId: "vault-1", mode: "public", sealed: await sealRecord(key, { v: 1, key: "", password: "", target, folder: false, authorised: [], reviewed: [], unreviewed: 0, uploader: "web" }), expiresAt: null, password: false, indexable: false, views: 0, size: 0, createdAt: 0, updatedAt: null, state: "active" });
+        api.list = async () => ({ base: "", maxBytes: Infinity, shares: views });
+        api.update = async (id, body) => Object.assign(views.find((v) => v.id === id)!, body);
+        api.upload = async (id) => (uploads.push(id), views.find((v) => v.id === id)!);
+        api.revoke = async (id) => {
+            revoked.push(id);
+            views.find((v) => v.id === id)!.state = "revoked";
+        };
+        const web = new Sharing(api, "vault-1", "passphrase", "Vault", async () => ({ files: Object.keys(revisions), revision: (path) => revisions[path], read: async () => "text", readBinary: async () => new Uint8Array(), tree: (folder) => ({ name: folder, path: folder, folder: true, children: [] }) }), "web");
+        expect((await web.catchUp()).updated).toBe(2);
+        expect(revoked).toEqual(["s2"]);
+        uploads.length = 0;
+        expect((await web.catchUp()).updated).toBe(0);
+        revisions["b.md"] = "2";
+        expect((await web.catchUp()).updated).toBe(1);
+        expect(uploads).toEqual(["s1"]);
     });
     it("is withdrawn when its note is deleted", async () => {
         const { revoked, sharing } = await setup(["other.md"], [{ target: "gone.md", folder: false }]);

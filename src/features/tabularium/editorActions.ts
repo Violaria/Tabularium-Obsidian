@@ -19,6 +19,7 @@ export const FORMAT_ACTIONS: FormatAction[] = [
     { id: "highlight", icon: svg('<path d="m9 15 6.5-6.5a2.1 2.1 0 0 0-3-3L6 12l-1 4z"/><path d="M4 20h16"/>') },
     { id: "code", icon: svg('<path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4"/>') },
     { id: "link", icon: svg('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'), key: "Mod-k" },
+    { id: "sensitive", icon: svg('<path d="M10.7 5.1A10 10 0 0 1 12 5c4.6 0 8.4 3.2 9.6 7a10.6 10.6 0 0 1-2.4 3.8M6.6 6.6A10.7 10.7 0 0 0 2.4 12c1.2 3.8 5 7 9.6 7a9.8 9.8 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18"/>') },
 ];
 /** Line formats, after a separator; headings open a small list of levels. */
 export const LINE_ACTIONS: FormatAction[] = [
