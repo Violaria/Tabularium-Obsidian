@@ -2,12 +2,13 @@
     "name": "@tabularium/sync-core",
     "version": "0.2.1",
     "private": true,
-    "description": "Shared data, storage, and replication primitives for Self-hosted LiveSync clients.",
+    "description": "Data, storage, and replication core of the Tabularium clients.",
     "type": "module",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vrtmrz/livesync-commonlib.git"
+        "url": "git+https://github.com/Violaria/Tabularium-Obsidian.git",
+        "directory": "packages/sync-core"
     },
     "scripts": {
         "build": "node _tools/build-package.mjs",
