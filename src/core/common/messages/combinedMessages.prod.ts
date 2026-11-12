@@ -2,7 +2,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     ", please select the option that best describes the current state of your Vault. The application will then check your files in the most appropriate way based on your selection.":
         {
             def: ", please select the option that best describes the current state of your Vault. The application will then check your files in the most appropriate way based on your selection.",
-            la: ", quaeso optionem elige quae statum praesentem tabularii tui optime describit. Applicatio deinde plicas tuas modo aptissimo secundum electionem tuam inspiciet.",
+            la: ", quaeso optionem elige quae statum praesentem armarii tui optime describit. Applicatio deinde plicas tuas modo aptissimo secundum electionem tuam inspiciet.",
             zh: "，请选择最符合你库当前状态的选项。程序会根据你的选择，用最合适的方式检查你的文件。",
         },
     "(BETA) Always overwrite with a newer file": {
@@ -214,7 +214,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "After that, synchronise to a brand new vault on each other device with the new remote one by one.": {
         def: "After that, synchronise to a brand new vault on each other device with the new remote one by one.",
-        la: "Deinde, in quoque alio instrumento singillatim cum novo remoto in tabularium omnino novum synchroniza.",
+        la: "Deinde, in quoque alio instrumento singillatim cum novo remoto in armarium omnino novum synchroniza.",
         zh: "之后，在其他设备上逐个用新的远端同步到一个全新的库。",
     },
     "Allow sleep during synchronisation": {
@@ -532,7 +532,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "CouchDB only. Version 0 preserves legacy path identity; version 1 uses Unicode NFC. Physical file names stay unchanged. Update every device and stop synchronisation, then Rebuild both databases from a complete authoritative Vault and Fetch on the other devices. Resolve colliding file names first. P2P and Object Storage do not support version 1.":
         {
             def: "CouchDB only. Version 0 preserves legacy path identity; version 1 uses Unicode NFC. Physical file names stay unchanged. Update every device and stop synchronisation, then Rebuild both databases from a complete authoritative Vault and Fetch on the other devices. Resolve colliding file names first. P2P and Object Storage do not support version 1.",
-            la: "Solum CouchDB. Versio 0 identitatem viarum hereditariam servat; versio 1 Unicode NFC utitur. Nomina plicarum physica non mutantur. Omnia instrumenta renova et synchronizationem siste, deinde ambo repositoria ex tabulario integro et auctoritativo reaedifica et in aliis instrumentis arcesse. Prius nomina plicarum inter se collidentia resolve. P2P et repositorium obiectorum versionem 1 non sustinent.",
+            la: "Solum CouchDB. Versio 0 identitatem viarum hereditariam servat; versio 1 Unicode NFC utitur. Nomina plicarum physica non mutantur. Omnia instrumenta renova et synchronizationem siste, deinde ambo repositoria ex armario integro et auctoritativo reaedifica et in aliis instrumentis arcesse. Prius nomina plicarum inter se collidentia resolve. P2P et repositorium obiectorum versionem 1 non sustinent.",
             zh: "仅限 CouchDB。版本 0 保留旧版路径标识；版本 1 使用 Unicode NFC。实际文件名保持不变。请更新所有设备并停止同步，然后用一份完整且权威的笔记库重建两个数据库，再在其他设备上获取。请先解决文件名冲突。P2P 和对象存储不支持版本 1。",
         },
     "couchdbReplicator.beforeLiveSync": {
@@ -682,7 +682,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Could not mark ${file.path} as revision ${baseRevision}; the storage content differs": {
         def: "Could not mark ${file.path} as revision ${baseRevision}; the content in the vault differs",
-        la: "${file.path} ut revisio ${baseRevision} notari non potuit; contentum in tabulario differt",
+        la: "${file.path} ut revisio ${baseRevision} notari non potuit; contentum in armario differt",
         zh: "无法将 ${file.path} 标记为修订 ${baseRevision}：库中的内容不同",
     },
     "Could not preserve the unknown conflict branch for ${file.path}": {
@@ -723,7 +723,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Could not validate the saved storage operation for ${path} against current storage; the operation remains pending for recovery":
         {
             def: "Could not check the saved file operation for ${path} against the vault; it remains pending for recovery",
-            la: "Operatio servata plicae ${path} cum statu praesenti tabularii comparari non potuit; ad restitutionem pendet",
+            la: "Operatio servata plicae ${path} cum statu praesenti armarii comparari non potuit; ad restitutionem pendet",
             zh: "无法根据库的当前状态核对 ${path} 已保存的文件操作，该操作仍待恢复",
         },
     "Could not write the resolved content to the storage: ${path}": {
@@ -774,7 +774,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "Database and storage reflection has been resumed!": {
         def: "Changes between the database and the vault are being applied again.",
-        la: "Reflexio inter repositorium et tabularium resumpta est.",
+        la: "Reflexio inter repositorium et armarium resumpta est.",
         zh: "数据库与库中文件之间的更改已恢复相互应用。",
     },
     "Database cleanup cancelled: ${describeRemoteFeatureRejection(assessment)}": {
@@ -794,7 +794,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Database kept changing while reflecting ${path}": {
         def: "The database kept changing while ${path} was being written to the vault",
-        la: "Dum ${path} in tabularium scribitur, repositorium mutari non desiit",
+        la: "Dum ${path} in armarium scribitur, repositorium mutari non desiit",
         zh: "将 ${path} 写入库时，数据库仍在不断变化",
     },
     "Database Name": {
@@ -1543,7 +1543,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "How should files that were deleted on other devices be handled?\n\n- **${NEWER_CLEANUP}**: Delete local files if they were deleted on remote.\n  This is useful if you want to keep your vault clean and consistent across devices, but please make sure you have a backup if there is already any important data in your vault.\n- **${NEWER_SYNC_ALL}**: Recreate remote files even if they were deleted on remote.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.":
         {
             def: "How should files that were deleted on other devices be handled?\n\n- **${NEWER_CLEANUP}**: Delete local files if they were deleted on remote.\n  This is useful if you want to keep your vault clean and consistent across devices, but please make sure you have a backup if there is already any important data in your vault.\n- **${NEWER_SYNC_ALL}**: Recreate remote files even if they were deleted on remote.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.",
-            la: "Quomodo tractandae sunt plicae quae in aliis instrumentis deletae sunt?\n\n- **${NEWER_CLEANUP}**: Dele plicas locales si in remoto deletae sunt.\n  Hoc utile est si tabularium tuum mundum et constans per instrumenta servare vis, sed cura ut exemplar tutelare habeas si iam data magni momenti in tabulario tuo sunt.\n- **${NEWER_SYNC_ALL}**: Plicas remotas recrea etiamsi in remoto deletae sunt.\n  Haec optio omnes plicas tuas locales servabit, sed duplicata efficere potest si plicae localiter sed non remote exstant. Haec duplicata post synchronizationem manu purgare potes.",
+            la: "Quomodo tractandae sunt plicae quae in aliis instrumentis deletae sunt?\n\n- **${NEWER_CLEANUP}**: Dele plicas locales si in remoto deletae sunt.\n  Hoc utile est si armarium tuum mundum et constans per instrumenta servare vis, sed cura ut exemplar tutelare habeas si iam data magni momenti in armario tuo sunt.\n- **${NEWER_SYNC_ALL}**: Plicas remotas recrea etiamsi in remoto deletae sunt.\n  Haec optio omnes plicas tuas locales servabit, sed duplicata efficere potest si plicae localiter sed non remote exstant. Haec duplicata post synchronizationem manu purgare potes.",
             zh: "应如何处理在其他设备上已删除的文件？\n\n- **${NEWER_CLEANUP}**：如果文件在远程已删除，则删除本地文件。\n  如果你希望笔记库在各设备之间保持整洁一致，此选项很有用；但如果笔记库中已有重要数据，请确保已做好备份。\n- **${NEWER_SYNC_ALL}**：即使文件在远程已删除，也重新创建远程文件。\n  此选项会保留所有本地文件，但如果有文件只存在于本地而不在远程，可能会产生重复。同步完成后可以手动清理这些重复文件。",
         },
     "How to display network errors when the sync server is unreachable.": {
@@ -1558,17 +1558,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "I am unable to create a backup of my Vault.": {
         def: "I am unable to create a backup of my Vault.",
-        la: "Exemplar tutelare tabularii mei creare non possum.",
+        la: "Exemplar tutelare armarii mei creare non possum.",
         zh: "我无法备份我的库。",
     },
     "I am unable to create a backup of my Vaults.": {
         def: "I am unable to create a backup of my Vaults.",
-        la: "Exemplar tutelare tabulariorum meorum creare non possum.",
+        la: "Exemplar tutelare armariorum meorum creare non possum.",
         zh: "我无法备份我的库。",
     },
     "I have created a backup of my Vault.": {
         def: "I have created a backup of my Vault.",
-        la: "Exemplar tutelare tabularii mei creavi.",
+        la: "Exemplar tutelare armarii mei creavi.",
         zh: "我已备份我的库。",
     },
     "I understand that all changes made on other smartphones or computers possibly could be lost.": {
@@ -1661,7 +1661,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "If you have unsynchronised changes in your Vault on this device, they will likely diverge from the server's versions after the reset. This may result in a large number of file conflicts.":
         {
             def: "If you have unsynchronised changes in your Vault on this device, they will likely diverge from the server's versions after the reset. This may result in a large number of file conflicts.",
-            la: "Si mutationes non synchronizatas in tabulario tuo in hoc instrumento habes, post restitutionem verisimiliter a versionibus ministratoris discedent. Hoc magnum numerum discrepantiarum plicarum efficere potest.",
+            la: "Si mutationes non synchronizatas in armario tuo in hoc instrumento habes, post restitutionem verisimiliter a versionibus ministratoris discedent. Hoc magnum numerum discrepantiarum plicarum efficere potest.",
             zh: "如果本设备的库中有未同步的更改，重置后它们很可能与服务器上的版本产生分歧。这可能导致大量文件冲突。",
         },
     "If you understand the risks and still wish to proceed, select so.": {
@@ -1997,7 +1997,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "moduleCheckRemoteSize.msgDatabaseGrowing": {
         def: "**Your database is getting larger!** But do not worry, we can address it now. The time before running out of space on the remote storage.\n\n| Measured size | Configured size |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> If you have been using it for many years, there may be unreferenced chunks - that is, garbage - accumulating in the database. Therefore, we recommend rebuilding everything. It will probably become much smaller.\n>\n> If the volume of your vault is simply increasing, it is better to rebuild everything after organizing the files. Tabularium does not delete the actual data even if you delete it to speed up the process. It is roughly documented.\n>\n> If you don't mind the increase, you can increase the notification limit by 100MB. This is the case if you are running it on your own server. However, it is better to rebuild everything from time to time.\n>\n\n> [!WARNING]\n> If you perform rebuild everything, make sure all devices are synchronised. The plug-in will merge as much as possible, though.\n",
-        la: "**Repositorium tuum crescit!** Sed noli sollicitari, rem nunc tractare possumus. Tempus antequam spatium in repositorio remoto deficiat.\n\n| Magnitudo mensa | Magnitudo configurata |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> Si eo per multos annos usus es, fragmenta sine relatione - id est, purgamenta - in repositorio cumulari possunt. Itaque omnia reaedificare suademus. Verisimiliter multo minus fiet.\n>\n> Si moles tabularii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere documentatum est.\n>\n> Si incrementum non curas, limitem notificationis 100MB augere potes. Hoc fit si in ministratore tuo proprio id curris. Attamen melius est omnia interdum reaedificare.\n>\n\n> [!WARNING]\n> Si omnia reaedificas, cura ut omnia instrumenta synchronizata sint. Additamentum tamen quam plurimum conflabit.\n",
+        la: "**Repositorium tuum crescit!** Sed noli sollicitari, rem nunc tractare possumus. Tempus antequam spatium in repositorio remoto deficiat.\n\n| Magnitudo mensa | Magnitudo configurata |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> Si eo per multos annos usus es, fragmenta sine relatione - id est, purgamenta - in repositorio cumulari possunt. Itaque omnia reaedificare suademus. Verisimiliter multo minus fiet.\n>\n> Si moles armarii tui simpliciter crescit, melius est omnia reaedificare postquam plicas ordinaveris. Tabularium data ipsa non delet, etiam si ea deles, ut processus acceleretur. Hoc fere documentatum est.\n>\n> Si incrementum non curas, limitem notificationis 100MB augere potes. Hoc fit si in ministratore tuo proprio id curris. Attamen melius est omnia interdum reaedificare.\n>\n\n> [!WARNING]\n> Si omnia reaedificas, cura ut omnia instrumenta synchronizata sint. Additamentum tamen quam plurimum conflabit.\n",
         zh: "**您的数据库正在变大！** 但别担心,我们现在可以解决它。在远程存储空间用完之前还有时间。\n\n| 测量大小 | 配置大小 |\n| --- | --- |\n| ${estimatedSize} | ${maxSize} |\n\n> [!MORE]-\n> 如果您已经使用了很多年,数据库中可能会积累未引用的 chunks——也就是垃圾。因此,我们建议重建所有内容。它可能会变得小得多。\n>\n> 如果您的库容量只是在增加,最好在整理文件后重建所有内容。即使您为了加速过程删除了文件,Tabularium 也不会删除实际数据。这大致有文档记录。\n>\n> 如果您不介意增加,可以将通知限制增加 100MB。如果您在自己的服务器上运行,就是这种情况。但是,最好还是不时地重建所有内容。\n>\n\n> [!WARNING]\n> 如果您执行重建所有内容,请确保所有设备都已同步。尽管如此,插件会尽可能地合并\n",
     },
     "moduleCheckRemoteSize.msgSetDBCapacity": {
@@ -2212,7 +2212,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "moduleLog.statusQueueStorage": {
         def: "Changes waiting to be written to the vault",
-        la: "Mutationes in tabularium inscribendae",
+        la: "Mutationes in armarium inscribendae",
         zh: "等待写入笔记库的变更",
     },
     "moduleLog.statusRemoteOperation": {
@@ -2322,7 +2322,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "moduleMigration.insecureChunkExist.message": {
         def: "Some chunks are not securely stored and are not encrypted in databases.\n**Please rebuild the database to fix this issue**.\n\nIf your Remote Database is not configured with SSL, or using less-secure credentials, **you are at risk of exposing sensitive data**.\n\nNote: Please upgrade your Tabularium v0.25.6 or higher on all your devices, and back your vault up surely.\nNote2: Rebuild Everything and Fetch consumes a bit of time and traffic, please do it in off-peak hours and ensure a stable network connection.\n",
-        la: "Aliqua fragmenta non tuto servata nec in repositoriis cryptata sunt.\n**Quaeso repositorium reaedifica ut hanc rem corrigas**.\n\nSi repositorium remotum tuum sine SSL configuratum est, vel testimoniis minus tutis utitur, **periculum est ne data sensibilia patefiant**.\n\nNota: Quaeso Tabularium ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et tabularium tuum certe serva.\nNota 2: “Omnia reaedifica” et “Arcesse” aliquantum temporis et commeatus consumunt; quaeso fac horis minus frequentatis et cura conexionem retis stabilem.\n",
+        la: "Aliqua fragmenta non tuto servata nec in repositoriis cryptata sunt.\n**Quaeso repositorium reaedifica ut hanc rem corrigas**.\n\nSi repositorium remotum tuum sine SSL configuratum est, vel testimoniis minus tutis utitur, **periculum est ne data sensibilia patefiant**.\n\nNota: Quaeso Tabularium ad v0.25.6 vel superiorem in omnibus instrumentis tuis renova, et armarium tuum certe serva.\nNota 2: “Omnia reaedifica” et “Arcesse” aliquantum temporis et commeatus consumunt; quaeso fac horis minus frequentatis et cura conexionem retis stabilem.\n",
         zh: "一些块未安全存储，并且在数据库中未加密\n**请重建数据库以修复此问题**.\n\n如果你的远程数据库未配置 SSL，或者使用了不安全的凭据 **你可能面临暴露敏感数据的风险**.\n\n注意：请在所有设备上将 Tabularium 升级到 v0.25.6 或更高版本，并确保备份你的保险库\n\n注意2：重建所有内容和获取操作会消耗一些时间和流量，请在非高峰时段进行，并确保网络连接稳定\n",
     },
     "moduleMigration.insecureChunkExist.title": {
@@ -2499,7 +2499,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Only an ordinary valid Vault path can be restored from Document History.": {
         def: "Only a valid, ordinary vault path can be restored from Document History.",
-        la: "Ex Historia documenti restitui potest sola via ordinaria et valida in tabulario.",
+        la: "Ex Historia documenti restitui potest sola via ordinaria et valida in armario.",
         zh: "只有普通且有效的库路径才能从文档历史记录中恢复。",
     },
     Open: {
@@ -2669,7 +2669,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Preserved ${path}: a current storage item contradicts its deletion event": {
         def: "Kept ${path}: an item now in the vault contradicts its deletion event",
-        la: "${path} servatus est: res praesens in tabulario eventui deletionis repugnat",
+        la: "${path} servatus est: res praesens in armario eventui deletionis repugnat",
         zh: "已保留 ${path}：库中现有的项目与其删除事件矛盾",
     },
     "Preserved ${path}: rename target ${targetPath} is still selected": {
@@ -2785,7 +2785,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "RedFlag.Fetch.Completed": {
         def: "Fetch everything operation completed. Vault files will be gradually synced.",
-        la: "Arcessitio omnium perfecta. Plicae tabularii paulatim synchronizabuntur.",
+        la: "Arcessitio omnium perfecta. Plicae armarii paulatim synchronizabuntur.",
         zh: "获取全部内容的操作已完成。笔记库中的文件将逐步同步。",
     },
     "RedFlag.Fetch.InitialisationCancelled": {
@@ -2800,12 +2800,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "RedFlag.Initialisation.Error": {
         def: "Error during vault initialisation.",
-        la: "Error dum tabularium initiatur.",
+        la: "Error dum armarium initiatur.",
         zh: "笔记库初始化时出错。",
     },
     "RedFlag.Initialisation.ProcessError": {
         def: "Error during vault initialisation process.",
-        la: "Error in processu initiandi tabularii.",
+        la: "Error in processu initiandi armarii.",
         zh: "笔记库初始化过程中出错。",
     },
     "RedFlag.Rebuild.Cancelled": {
@@ -2982,7 +2982,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Remediation mode: the files in storage are not stored in the database before fetching.": {
         def: "Remediation mode: files in the vault are not saved to the database before fetching.",
-        la: "Modus remedii: plicae tabularii ante arcessitionem in repositorio non servantur.",
+        la: "Modus remedii: plicae armarii ante arcessitionem in repositorio non servantur.",
         zh: "修复模式：获取前不会把库中的文件存入数据库。",
     },
     "remote -> local: Done": {
@@ -3169,7 +3169,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Restoring the selected revision failed before Vault reflection completed. Review the file with 'Inspect conflicts and file/database differences' before retrying.":
         {
             def: "Restoring the selected revision failed before it was written to the vault. Check the file before retrying.",
-            la: "Restitutio revisionis selectae defecit antequam in tabularium scriberetur. Plicam inspice antequam iterum conaris.",
+            la: "Restitutio revisionis selectae defecit antequam in armarium scriberetur. Plicam inspice antequam iterum conaris.",
             zh: "所选修订在写入库之前恢复失败。请先检查该文件，再重试。",
         },
     "Resuming fast database fetch from sequence: ${checkpoint.sequence}": {
@@ -3386,7 +3386,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Show vault history": {
         def: "Show vault history",
-        la: "Monstra historiam tabularii",
+        la: "Monstra historiam armarii",
         zh: "显示库的历史记录",
     },
     "Show verbose log. Please enable if you report an issue.": {
@@ -3402,7 +3402,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Since you have chosen to overwrite all local files with remote data, **how would you like to handle local files that are not present in the remote database?**\n\n- **${DELETE_ALL}**: Local-only files and remote-deleted files will be removed.\n  This option will make your local vault exactly the same as the remote database, but please make sure you have a backup if there is any important data in your vault.\n- **${DELETE_NONE}**: All existing local files will be preserved.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.":
         {
             def: "Since you have chosen to overwrite all local files with remote data, **how would you like to handle local files that are not present in the remote database?**\n\n- **${DELETE_ALL}**: Local-only files and remote-deleted files will be removed.\n  This option will make your local vault exactly the same as the remote database, but please make sure you have a backup if there is any important data in your vault.\n- **${DELETE_NONE}**: All existing local files will be preserved.\n  This option will keep all your local files, but it may cause duplicates if there are files that exist on local but not on remote. You can clean up these duplicates manually after the synchronisation.",
-            la: "Quoniam omnes plicas locales datis remotis superscribere elegisti, **quomodo plicas locales tractare vis quae in repositorio remoto non adsunt?**\n\n- **${DELETE_ALL}**: plicae solum locales et plicae remote deletae removebuntur.\n  Haec optio tabularium tuum locale prorsus idem ac repositorium remotum reddet, sed quaeso cura ut exemplar tutelae habeas si qua data gravia in tabulario tuo sunt.\n- **${DELETE_NONE}**: omnes plicae locales exstantes servabuntur.\n  Haec optio omnes plicas tuas locales servabit, sed duplicata efficere potest si plicae localiter sed non remote exstant. Haec duplicata post synchronizationem manu purgare potes.",
+            la: "Quoniam omnes plicas locales datis remotis superscribere elegisti, **quomodo plicas locales tractare vis quae in repositorio remoto non adsunt?**\n\n- **${DELETE_ALL}**: plicae solum locales et plicae remote deletae removebuntur.\n  Haec optio armarium tuum locale prorsus idem ac repositorium remotum reddet, sed quaeso cura ut exemplar tutelae habeas si qua data gravia in armario tuo sunt.\n- **${DELETE_NONE}**: omnes plicae locales exstantes servabuntur.\n  Haec optio omnes plicas tuas locales servabit, sed duplicata efficere potest si plicae localiter sed non remote exstant. Haec duplicata post synchronizationem manu purgare potes.",
             zh: "由于你选择了用远程数据覆盖所有本地文件，**远程数据库中不存在的本地文件应如何处理？**\n\n- **${DELETE_ALL}**：删除仅存在于本地的文件和远程已删除的文件。\n  此选项会让本地笔记库与远程数据库完全一致，但如果笔记库中有重要数据，请确保已做好备份。\n- **${DELETE_NONE}**：保留所有现有的本地文件。\n  此选项会保留所有本地文件，但如果有文件只存在于本地而不在远程，可能会产生重复。同步完成后可以手动清理这些重复文件。",
         },
     "Some files failed to synchronise. What would you like to do?": {
@@ -3477,7 +3477,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "startupSequence.msgScramEnabled": {
         def: "Tabularium has been configured to ignore some events. Is this correct?\n\n| Type | Status | Note |\n|:---:|:---:|---|\n| Storage Events | ${fileWatchingStatus} | Every modification will be ignored |\n| Database Events | ${parseReplicationStatus} | Every synchronised change will be postponed |\n\nDo you want to resume them and restart Obsidian?\n\n> [!DETAILS]-\n> These flags are set by the plug-in while rebuilding, or fetching. If the process ends abnormally, it may be kept unintended.\n> If you are not sure, you can try to rerun these processes. Make sure to back your vault up.\n",
-        la: "Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut tabularium tuum ante servetur.\n",
+        la: "Tabularium configuratum est ut aliquos eventus neglegat. Rectumne est?\n\n| Genus | Status | Nota |\n|:---:|:---:|---|\n| Eventus repositorii | ${fileWatchingStatus} | Omnis mutatio neglegetur |\n| Eventus repositorii datorum | ${parseReplicationStatus} | Omnis mutatio synchronizata differetur |\n\nVisne eos resumere et Obsidian iterum incipere?\n\n> [!DETAILS]-\n> Haec signa ab additamento ponuntur dum reaedificat vel arcessit. Si processus abnormiter finitur, praeter intentionem retineri possunt.\n> Si non certus es, hos processus iterum currere conari potes. Cura ut armarium tuum ante servetur.\n",
         zh: "Tabularium 已被配置为忽略某些事件。这样对吗？\n\n| 类型 | 状态 | 说明 |\n|:---:|:---:|---|\n| 存储事件 | ${fileWatchingStatus} | 所有修改都将被忽略 |\n| 数据库事件 | ${parseReplicationStatus} | 所有同步的更改都将被推迟 |\n\n您想恢复它们并重启 Obsidian 吗？\n\n> [!DETAILS]-\n> 这些标志是在重建或获取时由插件设置的。如果过程异常结束,它们可能会被无意中保留。\n> 如果您不确定,可以尝试重新运行这些过程。请确保备份您的库。\n",
     },
     "startupSequence.optionKeepSyncDisabled": {
@@ -3542,7 +3542,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Storage kept changing while saving ${path}; a fresh event is required": {
         def: "${path} kept changing in the vault while being saved; a new change event is required",
-        la: "${path} dum servatur in tabulario mutari non desiit; novus eventus mutationis requiritur",
+        la: "${path} dum servatur in armario mutari non desiit; novus eventus mutationis requiritur",
         zh: "保存 ${path} 时文件仍在不断变化，需要新的变更事件",
     },
     "Storage operation remains pending after a failure": {
@@ -3568,7 +3568,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Suspending reflection: Database and storage changes will not be reflected in each other until completely finished the fetching.":
         {
             def: "Pausing reflection: changes in the database and in the vault will not be applied to each other until fetching has finished.",
-            la: "Reflexio suspenditur: mutationes repositorii et tabularii inter se non applicabuntur donec arcessitio perfecta sit.",
+            la: "Reflexio suspenditur: mutationes repositorii et armarii inter se non applicabuntur donec arcessitio perfecta sit.",
             zh: "暂停相互应用：获取完成前，数据库与库中文件的更改不会互相应用。",
         },
     Sync: {
@@ -3640,7 +3640,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.":
         {
             def: "Tabularium could not handle multiple vaults which have same name without different prefix, This should be automatically configured.",
-            la: "Tabularium plura tabularia eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
+            la: "Tabularium plura armaria eodem nomine sine praefixo diverso tractare non potuit. Hoc automatice configurari debet.",
             zh: "Tabularium 无法处理具有相同名称但没有不同前缀的多个库。这应该自动配置",
         },
     "Tabularium has paused remote synchronisation for compatibility review.": {
@@ -3655,7 +3655,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.confirm.typeName": {
         def: "Type the vault name ${name} to confirm",
-        la: "Nomen tabularii ${name} scribe ut confirmes",
+        la: "Nomen armarii ${name} scribe ut confirmes",
         zh: "输入笔记库名称 ${name} 以确认",
     },
     "tabularium.conflict.base": {
@@ -3725,7 +3725,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.conflict.vaultFile": {
         def: "File in the vault",
-        la: "Plica in tabulario",
+        la: "Plica in armario",
         zh: "库中的文件",
     },
     "tabularium.editor.bold": {
@@ -3935,17 +3935,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.help.connect.body": {
         def: "Open Connection and sign in with your account on the Tabularium server. Choose an existing vault or create a new one, and enter the vault's passphrase.\n\nAn existing vault is fetched to this device first; a new vault is filled from this device's files. To use another vault, choose Sign in again or change vault. Disconnect revokes this device's credentials and clears the connection.\n\nDevice credentials last 30 days and renew themselves while the device is used.",
-        la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Tabularium exstans elige vel novum crea, et tesseram arcanam tabularii scribe.\n\nTabularium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud tabularium adhibeas, 'Iterum intrare vel tabularium mutare' elige. Disiungere testimonia huius instrumenti revocat et conexionem delet.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
+        la: "Aperi Conexionem et ratione tua in ministratore Tabularium intra. Armarium exstans elige vel novum crea, et tesseram arcanam armarii scribe.\n\nArmarium exstans primum ad hoc instrumentum arcessitur; novum ex plicis huius instrumenti impletur. Ut aliud armarium adhibeas, 'Iterum intrare vel armarium mutare' elige. Disiungere testimonia huius instrumenti revocat et conexionem delet.\n\nTesserae instrumenti triginta dies valent et dum adhibetur sponte renovantur.",
         zh: "打开「连接」，用 Tabularium 服务器上的账户登录。选择已有的笔记库或新建一个，填写笔记库的密码短语。\n\n已有的笔记库会先下载到这台设备；新建的笔记库由这台设备的文件填充。换用其他笔记库时点「重新登录或换笔记库」。「断开」撤销这台设备的凭据并清除连接。\n\n设备凭据有效期 30 天，设备在使用时会自动续期。",
     },
     "tabularium.help.connect.title": {
         def: "Connecting and changing vaults",
-        la: "Coniungere et tabularium mutare",
+        la: "Coniungere et armarium mutare",
         zh: "连接与更换笔记库",
     },
     "tabularium.help.errors.body": {
         def: "Credentials no longer valid: the device was removed on the server or its credentials expired. Sign in again.\n\nEncryption settings refused: this device's settings differ from the vault's. Disconnect and connect again.\n\nA rebuild is in progress: wait until the owner ends it on the web.\n\nA note does not synchronise: check the size limit and the excluded files under Sync, and look in the log.\n\nThe first synchronisation of a large vault takes a while; keep Obsidian open until the status shows Up to date.",
-        la: "Tesserae non iam valent: instrumentum in ministratore remotum est vel tesserae exspiraverunt. Iterum intra.\n\nOptiones ciphrationis recusatae: optiones huius instrumenti a tabulario discrepant. Disiunge et iterum coniunge.\n\nReaedificatio agitur: exspecta donec dominus eam finiat.\n\nCommentarius non synchronizatur: modum magnitudinis et plicas exclusas in Synchronizatione inspice, et acta lege.\n\nPrima synchronizatio magni tabularii tempus requirit; Obsidian apertum tene donec 'Synchronizatum' ostendatur.",
+        la: "Tesserae non iam valent: instrumentum in ministratore remotum est vel tesserae exspiraverunt. Iterum intra.\n\nOptiones ciphrationis recusatae: optiones huius instrumenti a armario discrepant. Disiunge et iterum coniunge.\n\nReaedificatio agitur: exspecta donec dominus eam finiat.\n\nCommentarius non synchronizatur: modum magnitudinis et plicas exclusas in Synchronizatione inspice, et acta lege.\n\nPrima synchronizatio magni armarii tempus requirit; Obsidian apertum tene donec 'Synchronizatum' ostendatur.",
         zh: "凭据失效：设备已在服务器上删除，或凭据过期。重新登录即可。\n\n加密设置被拒：这台设备的设置与笔记库不一致。断开后重新连接。\n\n正在重建：等所有者在网页上结束重建。\n\n某篇笔记不同步：检查「同步」中的大小上限和排除的文件，并查看日志。\n\n大的笔记库首次同步需要一段时间，保持 Obsidian 打开，直到状态显示「已同步」。",
     },
     "tabularium.help.errors.title": {
@@ -3955,7 +3955,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.help.migrate.body": {
         def: "Tabularium can run beside other sync plug-ins in the same vault: each synchronises with its own server, and they do not share local databases, settings or flag files. To move your notes, connect to the vault on the Tabularium server that already holds them, so this device fetches it; then turn the old plug-in off, or keep it.\n\nIf another plug-in also synchronises plug-in folders, exclude ${pluginDir} there: it holds this device's credentials.",
-        la: "Tabularium cum aliis additamentis synchronizationis in eodem tabulario simul currere potest: utrumque cum suo ministratore synchronizat, neque repositoria localia, optiones aut fasciculos signorum communicant. Ut commentarios transferas, tabularium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine.\n\nSi aliud additamentum etiam capsas additamentorum synchronizat, ibi ${pluginDir} exclude: ibi sunt credentialia huius instrumenti.",
+        la: "Tabularium cum aliis additamentis synchronizationis in eodem armario simul currere potest: utrumque cum suo ministratore synchronizat, neque repositoria localia, optiones aut fasciculos signorum communicant. Ut commentarios transferas, armarium in ministratore Tabularii coniunge quod eos iam continet, ut hoc instrumentum id arcessat; deinde additamentum vetus exstingue, aut retine.\n\nSi aliud additamentum etiam capsas additamentorum synchronizat, ibi ${pluginDir} exclude: ibi sunt credentialia huius instrumenti.",
         zh: "Tabularium 可以与其他同步插件在同一个库中同时运行：各自同步到自己的服务器，互不使用对方的本地数据库、设置和标记文件。要把笔记迁到 Tabularium，连接 Tabularium 服务器上已经存有这些笔记的笔记库，这台设备会从服务器获取；之后可以关闭旧插件，也可以保留它。\n\n其他插件也同步插件目录时，在它的设置中排除 ${pluginDir}：那里存着这台设备的凭据。",
     },
     "tabularium.help.migrate.title": {
@@ -3965,17 +3965,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.help.passphrase.body": {
         def: "Notes are encrypted on each device with the vault's passphrase before they are sent; the server cannot read them. Every device of a vault uses the same passphrase.\n\nThe passphrase cannot be recovered. If it is lost, the notes on the server cannot be decrypted; devices that still have the files can create a new vault from them.",
-        la: "Commentarii in quoque instrumento tessera arcana tabularii ciphrantur antequam mittantur; ministrator eos legere non potest. Omnia instrumenta eiusdem tabularii eadem tessera arcana utuntur.\n\nTessera arcana recuperari non potest. Si amittitur, commentarii in ministratore deciphrari non possunt; instrumenta quae plicas habent novum tabularium ex eis creare possunt.",
+        la: "Commentarii in quoque instrumento tessera arcana armarii ciphrantur antequam mittantur; ministrator eos legere non potest. Omnia instrumenta eiusdem armarii eadem tessera arcana utuntur.\n\nTessera arcana recuperari non potest. Si amittitur, commentarii in ministratore deciphrari non possunt; instrumenta quae plicas habent novum armarium ex eis creare possunt.",
         zh: "笔记在每台设备上用笔记库的密码短语加密后才发送，服务器无法读取。同一个笔记库的所有设备使用同一个密码短语。\n\n密码短语无法找回。丢失后服务器上的笔记无法解密；仍有文件的设备可以用这些文件新建笔记库。",
     },
     "tabularium.help.passphrase.title": {
         def: "The vault passphrase",
-        la: "Tessera arcana tabularii",
+        la: "Tessera arcana armarii",
         zh: "笔记库的密码短语",
     },
     "tabularium.help.rebuild.body": {
         def: "A rebuild replaces the vault on the server with one device's files, for example to clean up old data. The owner authorises the device on the web (Account settings, Vaults and devices, Rebuild vault), then runs Overwrite the server with this device in Maintenance on that device.\n\nAfterwards the vault is locked. Each other device shows Vault locked and must fetch from the server. When all of them have fetched, unlock the vault here or on the web.",
-        la: "Reaedificatio tabularium in ministratore plicis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.\n\nPostea tabularium clauditur. Cetera instrumenta 'Tabularium clausum' ostendunt et iterum arcessere debent. Cum omnia arcessiverint, hic vel in pagina interretiali resera.",
+        la: "Reaedificatio armarium in ministratore plicis unius instrumenti substituit, exempli gratia ut vetera data purgentur. Dominus instrumentum in pagina interretiali permittit, deinde in eo 'Ministratorem ex hoc instrumento rescribere' in Cura agit.\n\nPostea armarium clauditur. Cetera instrumenta 'Armarium clausum' ostendunt et iterum arcessere debent. Cum omnia arcessiverint, hic vel in pagina interretiali resera.",
         zh: "重建用一台设备的文件替换服务器上的笔记库，例如清理旧数据。所有者先在网页（账户设置 → 笔记库与设备 → 重建笔记库）授权设备，再在那台设备的「维护」中执行「用这台设备覆盖服务器」。\n\n之后笔记库会被锁定。其他设备会显示「笔记库已锁定」，需要从服务器重新获取。都获取后，在这里或网页上解除锁定。",
     },
     "tabularium.help.rebuild.title": {
@@ -4140,12 +4140,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.links.noCandidate": {
         def: "No file of this name in the vault; repair it by hand.",
-        la: "Nulla plica huius nominis in tabulario; manu refice.",
+        la: "Nulla plica huius nominis in armario; manu refice.",
         zh: "笔记库中没有同名文件，请手动修改。",
     },
     "tabularium.links.none": {
         def: "No broken links in this vault.",
-        la: "Nulli nexus fracti in hoc tabulario.",
+        la: "Nulli nexus fracti in hoc armario.",
         zh: "这个笔记库中没有断链。",
     },
     "tabularium.links.repair": {
@@ -4165,7 +4165,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.migration.fetching": {
         def: "Tabularium now keeps its local data under names of its own, apart from other sync plug-ins. Fetching this vault from the server once; newer files win and files only on this device are kept.",
-        la: "Tabularium nunc data sua localia sub nominibus propriis servat, ab aliis additamentis synchronizationis separata. Hoc tabularium semel a servitore repetitur: recentiora servantur, et quae in hoc solo instrumento sunt manent.",
+        la: "Tabularium nunc data sua localia sub nominibus propriis servat, ab aliis additamentis synchronizationis separata. Hoc armarium semel a servitore repetitur: recentiora servantur, et quae in hoc solo instrumento sunt manent.",
         zh: "Tabularium 现在把本机数据放在自己的名字下，与其他同步插件分开。正在从服务器取回一次这个笔记库：较新的文件保留，只在本机的文件也保留。",
     },
     "tabularium.migration.waiting": {
@@ -4175,7 +4175,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.12.0": {
         def: "Tabularium names throughout the plug-in; large vaults synchronise reliably; misleading version notices removed.",
-        la: "Nomina Tabularium ubique in additamento; magna tabularia certius synchronizantur; monita versionum fallacia remota.",
+        la: "Nomina Tabularium ubique in additamento; magna armaria certius synchronizantur; monita versionum fallacia remota.",
         zh: "插件中全部改用 Tabularium 的名称；大笔记库同步更可靠；去掉误导性的版本提示。",
     },
     "tabularium.release.0.13.0": {
@@ -4225,7 +4225,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.20.0": {
         def: "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours.",
-        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, tabularium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
+        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, armarium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
         zh: "书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。",
     },
     "tabularium.release.0.21.0": {
@@ -4285,12 +4285,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.26.0": {
         def: 'You can pause live sync: "Pause live sync" and "Resume live sync" in the Sync menu of a note or folder, or in the command palette. While paused, edits stay on this device and "Sync now" still sends them. The plug-in now keeps its local data under names of its own, so it can be enabled in the same vault as other sync plug-ins and as Custom File Explorer sorting; after the update, each device fetches its vault from the server once, without signing in again. File sorting now reads an indented list in the body of sortspec.md, with notes after " —— "; rules in the front matter take effect once converted in Settings → File sorting, and until then the file list keeps Obsidian\'s order.',
-        la: "Synchronizationem vivam suspendere potes: «Synchronizationem vivam suspende» et «Synchronizationem vivam resume» in indice «Synchronizatio» commentarii aut capsae, vel in tabula mandatorum. Dum suspensa est, mutationes in hoc instrumento manent et «Synchroniza nunc» eas adhuc mittit. Additamentum nunc data sua localia sub nominibus propriis servat, itaque in eodem tabulario cum aliis additamentis synchronizationis et cum Custom File Explorer sorting accendi potest; post renovationem quodque instrumentum tabularium suum semel a ministratore arcessit, sine nova inscriptione. Ordo plicarum nunc indicem gradatum in corpore sortspec.md legit, notis post « —— » scriptis; regulae in front matter tum demum valent cum in Optiones → Ordo plicarum convertuntur, et interea index plicarum ordinem Obsidian servat.",
+        la: "Synchronizationem vivam suspendere potes: «Synchronizationem vivam suspende» et «Synchronizationem vivam resume» in indice «Synchronizatio» commentarii aut capsae, vel in tabula mandatorum. Dum suspensa est, mutationes in hoc instrumento manent et «Synchroniza nunc» eas adhuc mittit. Additamentum nunc data sua localia sub nominibus propriis servat, itaque in eodem armario cum aliis additamentis synchronizationis et cum Custom File Explorer sorting accendi potest; post renovationem quodque instrumentum armarium suum semel a ministratore arcessit, sine nova inscriptione. Ordo plicarum nunc indicem gradatum in corpore sortspec.md legit, notis post « —— » scriptis; regulae in front matter tum demum valent cum in Optiones → Ordo plicarum convertuntur, et interea index plicarum ordinem Obsidian servat.",
         zh: "可以暂停实时同步：笔记或文件夹右键「同步」菜单，或命令面板中的「暂停实时同步」「恢复实时同步」。暂停期间编辑留在本机，「立即同步」仍可上传。插件的本机数据改用自己的名字，可以与其他同步插件、Custom File Explorer sorting 在同一个笔记库中同时启用；更新后每台设备会从服务器取回一次笔记库，不需要重新登录。文件排序改为读取 sortspec.md 正文中的缩进列表，「 —— 」后面可以写说明；front matter 中的旧规则要在设置页「文件排序」中转换后才生效，转换之前文件列表按 Obsidian 的排序显示。",
     },
     "tabularium.release.0.26.1": {
         def: "Server only: the Tabularius curation rules in a vault's own prompt also change to the list in sortspec.md when the server is upgraded, where they were still as first written. The plug-in is unchanged.",
-        la: "Solum ministrator: regulae ordinandi Tabularii in praecepto tabularii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
+        la: "Solum ministrator: regulae ordinandi Tabularii in praecepto armarii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
         zh: "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。",
     },
     "tabularium.release.0.26.2": {
@@ -4310,7 +4310,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.26.5": {
         def: "A plug-in folder copied from another vault no longer connects to that vault: its connection is cleared at start.",
-        la: "Plica additamenti ex alio tabulario exscripta ad illud non iam conectitur: conexio initio deletur.",
+        la: "Plica additamenti ex alio armario exscripta ad illud non iam conectitur: conexio initio deletur.",
         zh: "从其他笔记库复制来的插件文件夹不再连接原笔记库，启动时清除连接。",
     },
     "tabularium.release.0.26.6": {
@@ -4330,7 +4330,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.5.0": {
         def: "Tabularius, the AI clerk, answers questions about a vault and proposes changes (0.5 to 0.11).",
-        la: "Tabularius, scriba artificialis, de tabulario respondet et mutationes proponit (0.5 ad 0.11).",
+        la: "Tabularius, scriba artificialis, de armario respondet et mutationes proponit (0.5 ad 0.11).",
         zh: "书记员（Tabularius）回答关于笔记库的问题并提出修改（0.5 至 0.11）。",
     },
     "tabularium.release.1.0.0": {
@@ -4340,7 +4340,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.1.0.1": {
         def: "Device values are kept in each vault's own storage. Release files are built and attested by GitHub.",
-        la: "Valores instrumenti in repositorio proprio cuiusque tabularii servantur. Plicae editionum a GitHub construuntur et attestantur.",
+        la: "Valores instrumenti in repositorio proprio cuiusque armarii servantur. Plicae editionum a GitHub construuntur et attestantur.",
         zh: "设备值改存在各笔记库自己的存储中。Release 文件由 GitHub 构建并附构建来源证明。",
     },
     "tabularium.release.1.0.2": {
@@ -4355,12 +4355,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.1.1.0": {
         def: "Devices are named automatically; the vaults of one machine count as one device; signing in again replaces the old credentials; disconnecting revokes them; invalid credentials are reported at start-up. Server: a Devices page in account settings; the Clerk's device cannot be revoked on its own.",
-        la: "Instrumenta sponte nominantur; tabularia unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest.",
+        la: "Instrumenta sponte nominantur; armaria unius machinae unum instrumentum sunt; iterum ineundo vetera testimonia substituuntur; disiunctio ea revocat; testimonia invalida in initio nuntiantur. Ministrator: pagina Instrumentorum in optionibus rationis; instrumentum scribae solum revocari non potest.",
         zh: "设备自动命名，同一台机器的各库归为一台，重新登录替换旧凭据，断开时撤销凭据；凭据失效时启动即提示。服务器：账户设置新增「设备」页，书记员的设备不能单独撤销。",
     },
     "tabularium.release.1.1.1": {
         def: "Signing in to an existing vault asks once what to do with notes on the device; the server wins by default and files only on the device are kept. Notices and dialogues are complete in Chinese. Server: the client log and prompt preview open in dialogs, sign-in goes to the home page, revoked devices are deleted, the activity log, inactive shares, delivery history and command log can be cleared, and vaults can be compacted.",
-        la: "Ineundo tabularium exstans semel quaeritur quid de commentariis instrumenti fiat; ministrator praevalet et plicae solum in instrumento servantur. Nuntia et dialogi Sinice completi sunt. Ministrator: acta clientis et praevisio mandati in dialogis aperiuntur, post ingressum ad paginam primam itur, instrumenta revocata delentur, acta, communicata irrita, historia missionum et acta mandatorum purgari possunt, tabularia comprimi possunt.",
+        la: "Ineundo armarium exstans semel quaeritur quid de commentariis instrumenti fiat; ministrator praevalet et plicae solum in instrumento servantur. Nuntia et dialogi Sinice completi sunt. Ministrator: acta clientis et praevisio mandati in dialogis aperiuntur, post ingressum ad paginam primam itur, instrumenta revocata delentur, acta, communicata irrita, historia missionum et acta mandatorum purgari possunt, armaria comprimi possunt.",
         zh: "登录已有笔记库时一次选定如何处理本机笔记，默认以服务器为准、保留本机独有的文件；提示与对话框的中文补全。服务器：客户端日志与提示词预览改为弹窗，登录后回到首页，撤销的设备直接删除，操作记录、失效分享、发送记录与命令记录可清理，笔记库可压缩。",
     },
     "tabularium.release.1.2.0": {
@@ -4455,7 +4455,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.server.foreignConnection": {
         def: "Connection belonged to another vault; cleared.",
-        la: "Conexio alterius tabularii erat; deleta est.",
+        la: "Conexio alterius armarii erat; deleta est.",
         zh: "连接属于其他笔记库，已清除。",
     },
     "tabularium.server.invalidAddress": {
@@ -4480,12 +4480,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.server.newVault": {
         def: "New vault",
-        la: "Novum tabularium",
+        la: "Novum armarium",
         zh: "新建笔记库",
     },
     "tabularium.server.newVaultName": {
         def: "New vault name",
-        la: "Nomen novi tabularii",
+        la: "Nomen novi armarii",
         zh: "新笔记库名称",
     },
     "tabularium.server.notConnected": {
@@ -4515,7 +4515,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.server.passphraseExisting": {
         def: "Enter the passphrase this vault uses on your other devices.",
-        la: "Inscribe tesseram arcanam qua hoc tabularium in aliis instrumentis tuis utitur.",
+        la: "Inscribe tesseram arcanam qua hoc armarium in aliis instrumentis tuis utitur.",
         zh: "输入这个笔记库在其他设备上使用的 E2EE 密码短语。",
     },
     "tabularium.server.passphraseNew": {
@@ -4595,12 +4595,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.server.vault": {
         def: "Vault",
-        la: "Tabularium",
+        la: "Armarium",
         zh: "笔记库",
     },
     "tabularium.server.vaultMissing": {
         def: "The vault does not exist.",
-        la: "Tabularium non exstat.",
+        la: "Armarium non exstat.",
         zh: "笔记库不存在。",
     },
     "tabularium.serverError.Change initial password first": {
@@ -4650,7 +4650,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.serverError.Vault is not ready": {
         def: "The vault is not ready yet. Retry provisioning in the server console.",
-        la: "Tabularium nondum paratum est. Praeparationem in consola ministratoris iterum conare.",
+        la: "Armarium nondum paratum est. Praeparationem in consola ministratoris iterum conare.",
         zh: "笔记库尚未创建完成，请在服务器控制台重试建库。",
     },
     "tabularium.settings.about": {
@@ -4730,7 +4730,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.changeVault": {
         def: "Sign in again or change vault",
-        la: "Iterum intrare vel tabularium mutare",
+        la: "Iterum intrare vel armarium mutare",
         zh: "重新登录或换笔记库",
     },
     "tabularium.settings.checkLinks": {
@@ -4815,7 +4815,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.fetch.remote-deleteDesc": {
         def: "This vault becomes exactly what the server has. Files that exist only on this device are deleted.",
-        la: "Hoc tabularium fit idem atque in ministratore. Plicae tantum hic exstantes delentur.",
+        la: "Hoc armarium fit idem atque in ministratore. Plicae tantum hic exstantes delentur.",
         zh: "这个库变得与服务器完全一致。只在本机的文件会被删除。",
     },
     "tabularium.settings.fetch.remote-keep": {
@@ -4835,7 +4835,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.fetchBody": {
         def: "The plug-in restarts, discards this device's local database and fetches the vault from the server. Choose how the notes on this device are reconciled with the server's.",
-        la: "Additamentum iterum incipit, repositorium locale abicit et tabularium a ministratore arcessit. Elige quomodo commentarii huius instrumenti cum commentariis ministratoris concilientur.",
+        la: "Additamentum iterum incipit, repositorium locale abicit et armarium a ministratore arcessit. Elige quomodo commentarii huius instrumenti cum commentariis ministratoris concilientur.",
         zh: "插件会重启，丢弃这台设备的本地数据库，再从服务器获取笔记库。请选择本机笔记与服务器上的笔记如何对齐。",
     },
     "tabularium.settings.fetchDesc": {
@@ -4895,17 +4895,17 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.locked": {
         def: "Vault locked",
-        la: "Tabularium clausum",
+        la: "Armarium clausum",
         zh: "笔记库已锁定",
     },
     "tabularium.settings.lockedAccepted": {
         def: "The vault was rebuilt on the server and this device has fetched it. Unlock it once every other device has fetched it too.",
-        la: "Tabularium reaedificatum est et hoc instrumentum id arcessivit. Resera cum cetera quoque arcessiverint.",
+        la: "Armarium reaedificatum est et hoc instrumentum id arcessivit. Resera cum cetera quoque arcessiverint.",
         zh: "服务器上的笔记库已重建，这台设备已重新获取。其他设备也都重新获取后再解除锁定。",
     },
     "tabularium.settings.lockedNotAccepted": {
         def: "The vault was rebuilt on the server. This device must fetch it again before it can synchronise; then the vault can be unlocked.",
-        la: "Tabularium in ministratore reaedificatum est. Hoc instrumentum id iterum arcessere debet antequam synchronizet; deinde reserari potest.",
+        la: "Armarium in ministratore reaedificatum est. Hoc instrumentum id iterum arcessere debet antequam synchronizet; deinde reserari potest.",
         zh: "服务器上的笔记库已重建。这台设备需要先从服务器重新获取，之后才能同步；之后可以解除锁定。",
     },
     "tabularium.settings.log": {
@@ -4975,7 +4975,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.notConnectedDesc": {
         def: "Sign in to a Tabularium server and choose a vault to synchronise this one with.",
-        la: "In ministratorem Tabularium intra et tabularium elige quocum hoc synchronizetur.",
+        la: "In ministratorem Tabularium intra et armarium elige quocum hoc synchronizetur.",
         zh: "登录 Tabularium 服务器并选择要与这个库同步的笔记库。",
     },
     "tabularium.settings.open": {
@@ -4995,22 +4995,22 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.overwriteBody": {
         def: "The plug-in restarts and uploads this device's files as a new database for the vault. The server keeps the previous database, and the owner can switch back to it on the web.\n\nWithout the owner's authorisation for this device the server refuses, and nothing changes.",
-        la: "Additamentum iterum incipit et plicas huius instrumenti ut novum repositorium tabularii mittit. Ministrator prius repositorium servat, ad quod dominus redire potest.\n\nSine permissu domini ministrator recusat neque quicquam mutatur.",
+        la: "Additamentum iterum incipit et plicas huius instrumenti ut novum repositorium armarii mittit. Ministrator prius repositorium servat, ad quod dominus redire potest.\n\nSine permissu domini ministrator recusat neque quicquam mutatur.",
         zh: "插件会重启，把这台设备的文件上传为笔记库的新数据库。服务器保留原来的数据库，所有者可以在网页上切回。\n\n这台设备没有得到所有者授权时，服务器会拒绝，不会有任何改变。",
     },
     "tabularium.settings.overwriteDesc": {
         def: "Replaces the vault on the server with this device's files. The vault's owner must first authorise this device under Account settings, Vaults and devices, Rebuild vault, on the web.",
-        la: "Tabularium in ministratore plicis huius instrumenti substituit. Dominus prius hoc instrumentum in pagina interretiali permittere debet: Optiones rationis, Tabularia et instrumenta, Tabularium reaedificare.",
+        la: "Armarium in ministratore plicis huius instrumenti substituit. Dominus prius hoc instrumentum in pagina interretiali permittere debet: Optiones rationis, Armaria et instrumenta, Armarium reaedificare.",
         zh: "用这台设备的文件替换服务器上的笔记库。需要笔记库所有者先在网页「账户设置 → 笔记库与设备 → 重建笔记库」中授权这台设备。",
     },
     "tabularium.settings.overwriteImpact": {
         def: "The vault is locked afterwards: every other device must fetch it from the server again, and changes on them that were not synchronised are lost.",
-        la: "Postea tabularium clauditur: cetera instrumenta id iterum arcessere debent, et mutationes non synchronizatae amittuntur.",
+        la: "Postea armarium clauditur: cetera instrumenta id iterum arcessere debent, et mutationes non synchronizatae amittuntur.",
         zh: "之后笔记库会被锁定：其他每台设备都要从服务器重新获取，它们上面未同步的修改会丢失。",
     },
     "tabularium.settings.overwriteTitle": {
         def: "Overwrite the vault on the server?",
-        la: "Tabularium in ministratore rescribere?",
+        la: "Armarium in ministratore rescribere?",
         zh: "覆盖服务器上的笔记库？",
     },
     "tabularium.settings.pending": {
@@ -5045,7 +5045,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.resetLocalBody": {
         def: "The notes in this vault are not deleted. Until you fetch from the server, this device does not synchronise.",
-        la: "Commentarii huius tabularii non delentur. Donec a ministratore arcessas, hoc instrumentum non synchronizat.",
+        la: "Commentarii huius armarii non delentur. Donec a ministratore arcessas, hoc instrumentum non synchronizat.",
         zh: "这个库中的笔记不会被删除。从服务器重新获取之前，这台设备不会同步。",
     },
     "tabularium.settings.resetLocalDesc": {
@@ -5165,7 +5165,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.unlockBody": {
         def: "All devices can synchronise with the vault again.",
-        la: "Omnia instrumenta iterum cum tabulario synchronizare poterunt.",
+        la: "Omnia instrumenta iterum cum armario synchronizare poterunt.",
         zh: "所有设备都可以再与这个笔记库同步。",
     },
     "tabularium.settings.unlockDesc": {
@@ -5175,12 +5175,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.settings.unlockImpact": {
         def: "A device that has not fetched the vault since the rebuild may then send old data back to the server.",
-        la: "Instrumentum quod post reaedificationem tabularium non arcessivit vetera data ad ministratorem remittere potest.",
+        la: "Instrumentum quod post reaedificationem armarium non arcessivit vetera data ad ministratorem remittere potest.",
         zh: "重建后还没有重新获取的设备，解锁后可能把旧数据发回服务器。",
     },
     "tabularium.settings.unlockTitle": {
         def: "Unlock the vault?",
-        la: "Tabularium reserare?",
+        la: "Armarium reserare?",
         zh: "解除笔记库锁定？",
     },
     "tabularium.settings.version": {
@@ -5295,7 +5295,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.sorting.standalone": {
         def: "Custom File Explorer sorting is enabled in this vault and sorts the file explorer, so the built-in file sorting stays off. If you disable it, the built-in sorting returns the next time Tabularium loads.",
-        la: "In hoc tabulario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit.",
+        la: "In hoc armario Custom File Explorer sorting adhibetur et indicem plicarum ordinat, itaque ordinatio interna non adhibetur. Si id deactivas, ordinatio interna proximo Tabularii initio redit.",
         zh: "这个笔记库启用了 Custom File Explorer sorting，文件列表由它排序，内置的文件排序不启用。停用它之后，下次加载 Tabularium 时内置排序恢复。",
     },
     "tabularium.sorting.statusBar": {
@@ -5376,7 +5376,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "The current database revision could not be read. The Vault was not changed.": {
         def: "The current revision in the database could not be read. The vault was not changed.",
-        la: "Revisio praesens in repositorio legi non potuit. Tabularium non mutatum est.",
+        la: "Revisio praesens in repositorio legi non potuit. Armarium non mutatum est.",
         zh: "无法读取数据库中的当前修订。库未作任何更改。",
     },
     "The delay for consecutive on-demand fetches": {
@@ -5404,7 +5404,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "The files in this Vault are almost identical to the server's.": {
         def: "The files in this Vault are almost identical to the server's.",
-        la: "Plicae in hoc tabulario fere eaedem sunt atque eae ministratoris.",
+        la: "Plicae in hoc armario fere eaedem sunt atque eae ministratoris.",
         zh: "本库中的文件与服务器上的几乎一致。",
     },
     "The Hash algorithm for chunk IDs": {
@@ -5505,13 +5505,13 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "The restored revision could not be created. The file may have changed during the operation, and the Vault was not changed.":
         {
             def: "The restored revision could not be created. The file may have changed during the operation. The vault was not changed.",
-            la: "Revisio restituta creari non potuit. Plica fortasse dum res agebatur mutata est. Tabularium non mutatum est.",
+            la: "Revisio restituta creari non potuit. Plica fortasse dum res agebatur mutata est. Armarium non mutatum est.",
             zh: "无法创建恢复的修订。文件可能在操作过程中发生了变化。库未作任何更改。",
         },
     "The restored revision was saved in the local database, but it could not be reflected to the Vault. Use 'Inspect conflicts and file/database differences' to review and apply it.":
         {
             def: "The restored revision was saved in this device's database, but it could not be written to the vault.",
-            la: "Revisio restituta in repositorio huius instrumenti servata est, sed in tabularium scribi non potuit.",
+            la: "Revisio restituta in repositorio huius instrumenti servata est, sed in armarium scribi non potuit.",
             zh: "恢复的修订已保存到此设备的数据库，但无法写入库。",
         },
     "The selected content was restored as a new revision.": {
@@ -5563,7 +5563,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "The storage file has been changed but exceeds the maximum size. Skipping: ${param.file.path}": {
         def: "A file changed in the vault but exceeds the maximum size. Skipping: ${param.file.path}",
-        la: "Plica in tabulario mutata est, sed magnitudinem maximam excedit. Praeteritur: ${param.file.path}",
+        la: "Plica in armario mutata est, sed magnitudinem maximam excedit. Praeteritur: ${param.file.path}",
         zh: "库中有文件发生变化，但超过了最大大小。已跳过：${param.file.path}",
     },
     "There are no conflicted documents": {
@@ -5578,7 +5578,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "There may be differences between the files in this Vault and the server.": {
         def: "There may be differences between the files in this Vault and the server.",
-        la: "Fortasse differentiae sunt inter plicas in hoc tabulario et ministratorem.",
+        la: "Fortasse differentiae sunt inter plicas in hoc armario et ministratorem.",
         zh: "本库中的文件与服务器上可能存在差异。",
     },
     "This device": {
@@ -5589,7 +5589,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "This is an extremely powerful operation. We strongly recommend that you copy your Vault folder to a safe location.":
         {
             def: "This is an extremely powerful operation. We strongly recommend that you copy your Vault folder to a safe location.",
-            la: "Haec operatio est vehementissima. Valde suademus ut thecam tabularii tui in locum tutum exscribas.",
+            la: "Haec operatio est vehementissima. Valde suademus ut thecam armarii tui in locum tutum exscribas.",
             zh: "这是一项影响极大的操作。我们强烈建议先把库文件夹复制到安全位置。",
         },
     "This passphrase will not be copied to another device. It will be set to `Default` until you configure it again.": {
@@ -5600,12 +5600,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "This procedure will first delete all existing synchronisation data from the server. Following this, the server data will be completely rebuilt, using the current state of your Vault on this device (including its local database) as":
         {
             def: "This procedure will first delete all existing synchronisation data from the server. Following this, the server data will be completely rebuilt, using the current state of your Vault on this device (including its local database) as",
-            la: "Haec ratio primum omnia data synchronizationis exstantia ex ministratore delebit. Deinde data ministratoris omnino reaedificabuntur, statu praesenti tabularii tui in hoc instrumento (repositorio locali incluso) adhibito ut",
+            la: "Haec ratio primum omnia data synchronizationis exstantia ex ministratore delebit. Deinde data ministratoris omnino reaedificabuntur, statu praesenti armarii tui in hoc instrumento (repositorio locali incluso) adhibito ut",
             zh: "此操作会先删除服务器上所有现有的同步数据。随后，服务器数据将被完全重建，以本设备上你库的当前状态（包括其本地数据库）作为",
         },
     "This Vault is empty, or contains only new files that are not on the server.": {
         def: "This Vault is empty, or contains only new files that are not on the server.",
-        la: "Hoc tabularium vacuum est, aut solas plicas novas continet quae in ministratore non sunt.",
+        la: "Hoc armarium vacuum est, aut solas plicas novas continet quae in ministratore non sunt.",
         zh: "本库为空，或只包含服务器上没有的新文件。",
     },
     "This will rebuild the local database on this device using the most recent data from the server. This action is designed to resolve synchronisation inconsistencies and restore correct functionality.":
@@ -5791,7 +5791,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Ui.SetupWizard.RebuildEverythingP2P.ConfirmLocalResetNote": {
         def: "The files currently in this Vault are used to rebuild it.",
-        la: "Plicae quae nunc in hoc tabulario sunt ad id reaedificandum adhibentur.",
+        la: "Plicae quae nunc in hoc armario sunt ad id reaedificandum adhibentur.",
         zh: "将使用本库中当前的文件来重建它。",
     },
     "Ui.SetupWizard.RebuildEverythingP2P.ConfirmTitle": {
@@ -5801,12 +5801,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Ui.SetupWizard.RebuildEverythingP2P.Guidance": {
         def: "This procedure will discard the local database on this device and rebuild it from the current files in this Vault. It does not delete or overwrite data on another device.",
-        la: "Haec ratio repositorium locale in hoc instrumento abiciet et ex plicis praesentibus in hoc tabulario reaedificabit. Data in alio instrumento neque delet neque superscribit.",
+        la: "Haec ratio repositorium locale in hoc instrumento abiciet et ex plicis praesentibus in hoc armario reaedificabit. Data in alio instrumento neque delet neque superscribit.",
         zh: "此操作会丢弃本设备的本地数据库，并用本库中当前的文件重建。它不会删除或覆盖其他设备上的数据。",
     },
     "Ui.SetupWizard.RebuildEverythingP2P.Note": {
         def: "Keep this device online after initialisation so that another device can fetch the Vault from it.",
-        la: "Post initiationem hoc instrumentum conexum serva ut aliud instrumentum tabularium ex eo arcessere possit.",
+        la: "Post initiationem hoc instrumentum conexum serva ut aliud instrumentum armarium ex eo arcessere possit.",
         zh: "初始化后请保持本设备在线，以便其他设备从它获取库。",
     },
     "Ui.SetupWizard.RebuildEverythingP2P.Proceed": {
@@ -5926,7 +5926,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Vault history": {
         def: "Vault history",
-        la: "Historia tabularii",
+        la: "Historia armarii",
         zh: "笔记库历史",
     },
     "Verbose Log": {
@@ -5959,7 +5959,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.":
         {
             def: "We are about to retrieve the remote data.\n\nFirstly, how shall we handle the data retrieved from this remote source?\n\n- **${NEWER_WINS}**: Compares the modified time of files and takes the newer one.\n  If you have been using Tabularium and have made changes on multiple devices, this option may be suitable for you as it tries to merge changes based on modified time.\n- **${REMOTE_WINS}**: Remote data is the source of truth.\n  If you are new to using Tabularium. This option may be easiest to understand and get started with.\n  It will overwrite all your local files with the remote data, so please make sure you have a backup if there is any important data in your vault.\n- **${DETAILED}**: Opens the detailed setup wizard.\n  If you want to have more control over the synchronisation process, or want to review the changes before applying, you can choose this option to use the detailed flow.",
-            la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in tabulario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
+            la: "Data remota mox recipiemus.\n\nPrimum, quomodo data ex hoc fonte remoto recepta tractabimus?\n\n- **${NEWER_WINS}**: Tempora mutationis plicarum comparat et recentiorem sumit.\n  Si Tabularium iam adhibuisti et in pluribus instrumentis mutationes fecisti, haec optio tibi fortasse apta est, quia mutationes secundum tempus mutationis conflare conatur.\n- **${REMOTE_WINS}**: Data remota fons veritatis sunt.\n  Si Tabularium primum adhibes, haec optio fortasse facillima est ad intellegendum et incipiendum.\n  Omnes plicas tuas locales datis remotis superscribet, itaque cura ut exemplar tutum habeas si qua data magni momenti in armario tuo sunt.\n- **${DETAILED}**: Ductorem institutionis accuratum aperit.\n  Si processum synchronizationis magis regere vis, aut mutationes ante applicationem recensere vis, hanc optionem eligere potes ut processum accuratum adhibeas.",
             zh: "即将获取远程数据。\n\n首先，应如何处理从此远程来源获取的数据？\n\n- **${NEWER_WINS}**：比较文件的修改时间，采用较新的版本。\n  如果你一直在使用 Tabularium，并在多台设备上做过修改，此选项可能适合你，因为它会尝试根据修改时间合并变更。\n- **${REMOTE_WINS}**：以远程数据为准。\n  如果你刚开始使用 Tabularium，此选项可能最容易理解和上手。\n  它会用远程数据覆盖所有本地文件，因此如果笔记库中有重要数据，请确保已做好备份。\n- **${DETAILED}**：打开详细设置向导。\n  如果你希望更好地控制同步过程，或想在应用前查看变更，可以选择此选项使用详细流程。",
         },
     "We don't have any history for this note.": {
@@ -5970,7 +5970,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "We recommend that you copy your Vault folder to a safe location. This will provide a safeguard in case a large number of conflicts arise, or if you accidentally synchronise with an incorrect destination.":
         {
             def: "We recommend that you copy your Vault folder to a safe location. This will provide a safeguard in case a large number of conflicts arise, or if you accidentally synchronise with an incorrect destination.",
-            la: "Suademus ut thecam tabularii tui in locum tutum exscribas. Hoc praesidium praebebit si multae discrepantiae oriuntur, aut si per errorem cum destinatione falsa synchronizas.",
+            la: "Suademus ut thecam armarii tui in locum tutum exscribas. Hoc praesidium praebebit si multae discrepantiae oriuntur, aut si per errorem cum destinatione falsa synchronizas.",
             zh: "我们建议你把库文件夹复制到安全位置。这样在出现大量冲突，或不小心同步到错误目标时，能多一层保障。",
         },
     "When you save a file in the editor, start a sync automatically": {
@@ -5996,7 +5996,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     "You should perform this operation only in exceptional circumstances, such as when the server data is completely corrupted, when changes on all other devices are no longer needed, or when the database size has become unusually large in comparison to the Vault size.":
         {
             def: "You should perform this operation only in exceptional circumstances, such as when the server data is completely corrupted, when changes on all other devices are no longer needed, or when the database size has become unusually large in comparison to the Vault size.",
-            la: "Hanc operationem tantum in condicionibus extraordinariis perficere debes, ut cum data ministratoris omnino corrupta sunt, cum mutationes in omnibus aliis instrumentis non iam necessariae sunt, aut cum magnitudo repositorii prae magnitudine tabularii insolite magna facta est.",
+            la: "Hanc operationem tantum in condicionibus extraordinariis perficere debes, ut cum data ministratoris omnino corrupta sunt, cum mutationes in omnibus aliis instrumentis non iam necessariae sunt, aut cum magnitudo repositorii prae magnitudine armarii insolite magna facta est.",
             zh: "你只应在特殊情况下执行此操作，例如服务器数据完全损坏、其他所有设备上的更改都不再需要，或数据库体积相对于库体积异常庞大时。",
         },
     "(RegExp) Limit normal files to matching paths. Leave empty to allow all normal file paths. Hidden File Sync uses its own target patterns.":
@@ -6022,12 +6022,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "After restarting, select an online source device for the initial Fetch. The local database on this device will be rebuilt from that source. Unsynchronised files in this Vault may conflict with the fetched data.":
         {
-            la: "Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc tabulario cum datis arcessitis discrepare possunt.",
+            la: "Post iteratum initium, instrumentum fontis online elige ad primam arcessionem. Repositorium Tabularium locale in hoc instrumento ex illo fonte reaedificabitur. Plicae non synchronizatae in hoc armario cum datis arcessitis discrepare possunt.",
             zh: "重启后，请选择一台在线的源设备进行首次获取。本设备上的本地数据库将根据该源设备重建。本笔记库中未同步的文件可能与获取的数据产生冲突。",
         },
     "All revisions and chunk availability below are a snapshot of this device's local database; the remote is not queried. Review the Vault-relative path, document identifier, content-derived chunk identifiers, and metadata before sharing this report. File contents are omitted.":
         {
-            la: "Omnes recensiones et praesto esse fragmentorum infra sunt imago momentanea repositorii localis huius instrumenti; remotum non interrogatur. Viam relativam ad tabularium, identificatorem documenti, identificatores fragmentorum ex contento derivatos et metadata recense antequam hanc relationem communices. Contenta plicarum omittuntur.",
+            la: "Omnes recensiones et praesto esse fragmentorum infra sunt imago momentanea repositorii localis huius instrumenti; remotum non interrogatur. Viam relativam ad armarium, identificatorem documenti, identificatores fragmentorum ex contento derivatos et metadata recense antequam hanc relationem communices. Contenta plicarum omittuntur.",
             zh: "以下所有修订版本和块可用性都是本设备本地数据库的快照，不会查询远程。分享此报告前，请检查其中相对于笔记库的路径、文档标识符、由内容派生的块标识符和元数据。报告不包含文件内容。",
         },
     "An exact target is already present; repair can remove the obsolete ID.": {
@@ -6055,19 +6055,19 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "应用 ID",
     },
     "Apply database revision ${REVISION} to ${FILE}? The current Vault file will be overwritten.": {
-        la: "Applicarene recensionem repositorii ${REVISION} ad ${FILE}? Plica tabularii praesens superscribetur.",
+        la: "Applicarene recensionem repositorii ${REVISION} ad ${FILE}? Plica armarii praesens superscribetur.",
         zh: "将数据库修订版本 ${REVISION} 应用到 ${FILE}？笔记库中的当前文件将被覆盖。",
     },
     "Apply database revision to Vault": {
-        la: "Applica recensionem repositorii ad tabularium",
+        la: "Applica recensionem repositorii ad armarium",
         zh: "将数据库修订版本应用到笔记库",
     },
     "Apply logical deletion ${REVISION} to ${FILE}? The current Vault file will be removed.": {
-        la: "Applicarene deletionem logicam ${REVISION} ad ${FILE}? Plica tabularii praesens removebitur.",
+        la: "Applicarene deletionem logicam ${REVISION} ad ${FILE}? Plica armarii praesens removebitur.",
         zh: "将逻辑删除 ${REVISION} 应用到 ${FILE}？笔记库中的当前文件将被移除。",
     },
     "Apply logical deletion to Vault": {
-        la: "Applica deletionem logicam ad tabularium",
+        la: "Applica deletionem logicam ad armarium",
         zh: "将逻辑删除应用到笔记库",
     },
     "Apply pending changes now": {
@@ -6079,7 +6079,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "仅应用设置（高级）",
     },
     "Apply this revision to Vault": {
-        la: "Applica hanc recensionem ad tabularium",
+        la: "Applica hanc recensionem ad armarium",
         zh: "将此修订版本应用到笔记库",
     },
     "Auto-accept compatible tweak mismatches": {
@@ -6161,7 +6161,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "块分割器",
     },
     "Compare with Vault": {
-        la: "Compara cum tabulario",
+        la: "Compara cum armario",
         zh: "与笔记库比较",
     },
     "Configure TURN when a direct connection cannot be established or when you select TURN relay only.": {
@@ -6260,7 +6260,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "当前 ID 恢复码",
     },
     "Current Vault file": {
-        la: "Plica tabularii praesens",
+        la: "Plica armarii praesens",
         zh: "笔记库中的当前文件",
     },
     "Custom headers for requesting the bucket. e.g. `x-custom-header1: value1\n x-custom-header2: value2`": {
@@ -6284,7 +6284,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "数据库修订版本较新",
     },
     "DB ${DATABASE_TIME} · Vault ${VAULT_TIME} · Δtime ${DIFFERENCE} ms (${RELATION})": {
-        la: "Repositorium ${DATABASE_TIME} · Tabularium ${VAULT_TIME} · Δtempus ${DIFFERENCE} ms (${RELATION})",
+        la: "Repositorium ${DATABASE_TIME} · Armarium ${VAULT_TIME} · Δtempus ${DIFFERENCE} ms (${RELATION})",
         zh: "数据库 ${DATABASE_TIME} · 笔记库 ${VAULT_TIME} · Δ时间 ${DIFFERENCE} ms（${RELATION}）",
     },
     "DB: recorded ${RECORDED} B · decoded ${DECODED} B · Δsize ${DIFFERENCE} B": {
@@ -6308,7 +6308,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "诊断报告",
     },
     "Differs from Vault": {
-        la: "A tabulario differt",
+        la: "A armario differt",
         zh: "与笔记库不同",
     },
     "Discard branch": {
@@ -6317,7 +6317,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Discard database branch ${REVISION} of ${FILE}? This creates a logical deletion for that exact live branch. The current Vault file will not be changed.":
         {
-            la: "Abicerene ramum repositorii ${REVISION} plicae ${FILE}? Hoc deletionem logicam illius ipsius rami vivi creat. Plica tabularii praesens non mutabitur.",
+            la: "Abicerene ramum repositorii ${REVISION} plicae ${FILE}? Hoc deletionem logicam illius ipsius rami vivi creat. Plica armarii praesens non mutabitur.",
             zh: "丢弃 ${FILE} 的数据库分支 ${REVISION}？这会为该活动分支创建一个逻辑删除。笔记库中的当前文件不会改变。",
         },
     "Discard database revision ${REVISION} of ${FILE}? This creates a logical deletion for that exact live revision. Missing content cannot be recovered by this action.":
@@ -6421,7 +6421,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Find matching paths in this Vault and local Metadata, then prepare a follow-up report using the same pseudonyms.":
         {
-            la: "Vias congruentes in hoc tabulario et in metadatis localibus inveni, deinde relationem sequentem eisdem pseudonymis utentem para.",
+            la: "Vias congruentes in hoc armario et in metadatis localibus inveni, deinde relationem sequentem eisdem pseudonymis utentem para.",
             zh: "在本笔记库和本地元数据中查找匹配的路径，然后使用相同的化名准备后续报告。",
         },
     "Follow changes": {
@@ -6450,7 +6450,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "要忘记此设备记录吗？",
     },
     "Forgetting the record does not delete Vault files or revoke credentials.": {
-        la: "Memoriae oblivio plicas tabularii non delet nec testimonia revocat.",
+        la: "Memoriae oblivio plicas armarii non delet nec testimonia revocat.",
         zh: "忘记记录不会删除笔记库中的文件，也不会吊销凭据。",
     },
     "Forgetting…": {
@@ -6561,7 +6561,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Inspect normal-file Metadata, current conflicts, and suspect content against the Vault. Remote inspection supports CouchDB. Older history is excluded; findings do not authorise deletion.":
         {
-            la: "Metadata plicarum ordinariarum, discrepantias praesentes et contentum suspectum cum tabulario confer. Inspectio remota CouchDB sustinet. Historia vetustior excluditur; inventa deletionem non permittunt.",
+            la: "Metadata plicarum ordinariarum, discrepantias praesentes et contentum suspectum cum armario confer. Inspectio remota CouchDB sustinet. Historia vetustior excluditur; inventa deletionem non permittunt.",
             zh: "对照笔记库检查普通文件的元数据、当前冲突和可疑内容。远程检查支持 CouchDB。不包括较早的历史记录；检查结果不代表可以删除。",
         },
     "Inspection cancelled. The report contains only the evidence collected so far.": {
@@ -6678,11 +6678,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "手动",
     },
     "Mark this revision as the Vault version": {
-        la: "Nota hanc recensionem ut versionem tabularii",
+        la: "Nota hanc recensionem ut versionem armarii",
         zh: "将此修订版本标记为笔记库版本",
     },
     "Matches Vault": {
-        la: "Cum tabulario congruit",
+        la: "Cum armario congruit",
         zh: "与笔记库一致",
     },
     "Maximum compatibility": {
@@ -6711,12 +6711,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Metadata document ID repair and the ordinary Vault scan completed. Run this inspection again after synchronisation.":
         {
-            la: "Reparatio ID documentorum metadatorum et perlustratio ordinaria tabularii perfectae sunt. Hanc inspectionem post synchronizationem iterum exsequere.",
+            la: "Reparatio ID documentorum metadatorum et perlustratio ordinaria armarii perfectae sunt. Hanc inspectionem post synchronizationem iterum exsequere.",
             zh: "元数据文档 ID 修复和常规笔记库扫描已完成。请在同步后再次运行此检查。",
         },
     "Metadata document ID repair completed, but the ordinary Vault scan did not run. Keep synchronisation paused, resolve the scan condition, then run 'Scan storage and database again'.":
         {
-            la: "Reparatio ID documentorum metadatorum perfecta est, sed perlustratio ordinaria tabularii non est exsecuta. Synchronizationem suspensam tene, condicionem perlustrationis resolve, deinde “Scan storage and database again” exsequere.",
+            la: "Reparatio ID documentorum metadatorum perfecta est, sed perlustratio ordinaria armarii non est exsecuta. Synchronizationem suspensam tene, condicionem perlustrationis resolve, deinde “Scan storage and database again” exsequere.",
             zh: "元数据文档 ID 修复已完成，但常规笔记库扫描没有运行。请保持同步暂停，解决扫描条件后，再运行「再次扫描存储和数据库」。",
         },
     "Metadata entry requires review and was left unchanged": {
@@ -6762,7 +6762,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "No central data-storage server is required, but a signalling relay is required for peer discovery. Both devices must be online at the same time. Vault data travels through the encrypted P2P connection, not through the signalling relay. Some features may be limited.":
         {
-            la: "Nullus ministrator centralis ad data servanda requiritur, sed nuntius signorum (relay) ad pares inveniendos requiritur. Ambo instrumenta simul in linea esse debent. Data tabularii per conexionem P2P cryptatam, non per nuntium signorum, transeunt. Quaedam facultates fortasse limitatae erunt.",
+            la: "Nullus ministrator centralis ad data servanda requiritur, sed nuntius signorum (relay) ad pares inveniendos requiritur. Ambo instrumenta simul in linea esse debent. Data armarii per conexionem P2P cryptatam, non per nuntium signorum, transeunt. Quaedam facultates fortasse limitatae erunt.",
             zh: "不需要中央数据存储服务器，但需要信令中继来发现对等方。两台设备必须同时在线。笔记库数据通过加密的 P2P 连接传输，不经过信令中继。部分功能可能受限。",
         },
     "No current Metadata document": {
@@ -6775,7 +6775,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "No matches were found in current Vault paths or current local Metadata. Older history and remote-only files are not searched.":
         {
-            la: "Nihil congruens inventum est in viis tabularii currentibus neque in metadatis localibus currentibus. Historia vetustior et plicae solum remotae non quaeruntur.",
+            la: "Nihil congruens inventum est in viis armarii currentibus neque in metadatis localibus currentibus. Historia vetustior et plicae solum remotae non quaeruntur.",
             zh: "在当前笔记库路径或当前本地元数据中未找到匹配项。不会搜索较早的历史记录和仅存在于远程的文件。",
         },
     "No shared ancestor is available for this conflict. The live revisions remain available for explicit review.": {
@@ -6895,12 +6895,12 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "已复制恢复码。",
     },
     "Recreate chunks for current Vault files": {
-        la: "Recrea fragmenta plicarum tabularii currentium",
+        la: "Recrea fragmenta plicarum armarii currentium",
         zh: "为笔记库中的当前文件重新创建块",
     },
     "Recreate chunks from the files currently present in this Vault. This cannot reconstruct unavailable historical or conflict content.":
         {
-            la: "Recrea fragmenta ex plicis quae nunc in hoc tabulario adsunt. Hoc contenta historica vel discrepantiarum quae non iam praesto sunt reconstruere non potest.",
+            la: "Recrea fragmenta ex plicis quae nunc in hoc armario adsunt. Hoc contenta historica vel discrepantiarum quae non iam praesto sunt reconstruere non potest.",
             zh: "根据本笔记库中当前存在的文件重新创建块。此操作无法重建已不可用的历史内容或冲突内容。",
         },
     "Recreate current chunks": {
@@ -7002,7 +7002,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Scan Vault files and local-database Metadata for conflicts, missing chunks, identity mismatches, and differences. Each result provides actions for one exact entry or revision.":
         {
-            la: "Perscrutare plicas tabularii et metadata repositorii localis ad discrepantias, fragmenta deficientia, identitates non congruentes et differentias inveniendas. Quisque eventus actiones pro una certa inscriptione vel recensione praebet.",
+            la: "Perscrutare plicas armarii et metadata repositorii localis ad discrepantias, fragmenta deficientia, identitates non congruentes et differentias inveniendas. Quisque eventus actiones pro una certa inscriptione vel recensione praebet.",
             zh: "扫描笔记库文件和本地数据库元数据，查找冲突、缺失的块、标识不匹配和差异。每个结果都针对某个确切的条目或修订版本提供操作。",
         },
     "Search cancelled. Matches found so far are shown.": {
@@ -7011,7 +7011,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "Search current Vault paths and current local Metadata only. Older history and remote-only files are not searched.":
         {
-            la: "Quaere solum in viis tabularii currentibus et metadatis localibus currentibus. Historia vetustior et plicae solum remotae non quaeruntur.",
+            la: "Quaere solum in viis armarii currentibus et metadatis localibus currentibus. Historia vetustior et plicae solum remotae non quaeruntur.",
             zh: "只搜索当前笔记库路径和当前本地元数据。不会搜索较早的历史记录和仅存在于远程的文件。",
         },
     "Set an ID key": {
@@ -7105,11 +7105,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "停止跟随此设备的变更",
     },
     "Store Vault file as a child of this revision": {
-        la: "Serva plicam tabularii ut filiam huius recensionis",
+        la: "Serva plicam armarii ut filiam huius recensionis",
         zh: "将笔记库文件存储为此修订版本的子版本",
     },
     "Store Vault file as a new local database document": {
-        la: "Serva plicam tabularii ut novum documentum repositorii localis",
+        la: "Serva plicam armarii ut novum documentum repositorii localis",
         zh: "将笔记库文件存储为新的本地数据库文档",
     },
     "Stored document ID: ${ID}": {
@@ -7231,7 +7231,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "The project's public signalling relay is a best-effort convenience operated by the project author. It does not store Vault contents, but signalling metadata may be visible to the relay. Availability and log retention are not guaranteed. You can replace it with your own Nostr-compatible relay.":
         {
-            la: "Relay signorum publicum huius incepti commoditas est ab auctore incepti pro facultate praebita. Contenta tabularii non servat, sed metadata signorum relay visibilia esse possunt. Neque praesto esse neque acta servandi ratio praestatur. Id cum relay tuo Nostr congruenti substituere potes.",
+            la: "Relay signorum publicum huius incepti commoditas est ab auctore incepti pro facultate praebita. Contenta armarii non servat, sed metadata signorum relay visibilia esse possunt. Neque praesto esse neque acta servandi ratio praestatur. Id cum relay tuo Nostr congruenti substituere potes.",
             zh: "项目的公共信令中继由项目作者尽力提供，仅为方便使用。它不存储笔记库内容，但中继可能看到信令元数据。不保证可用性和日志保留策略。你可以替换为自己的兼容 Nostr 的中继。",
         },
     "The recovery code could not be copied. Select and copy the visible code instead.": {
@@ -7426,35 +7426,35 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         zh: "使用本设备的设置",
     },
     Vault: {
-        la: "Tabularium",
+        la: "Armarium",
         zh: "笔记库",
     },
     "Vault and database revision": {
-        la: "Tabularium et recensio repositorii",
+        la: "Armarium et recensio repositorii",
         zh: "笔记库与数据库修订版本",
     },
     "Vault file": {
-        la: "Plica tabularii",
+        la: "Plica armarii",
         zh: "笔记库文件",
     },
     "Vault file is newer": {
-        la: "Plica tabularii recentior est",
+        la: "Plica armarii recentior est",
         zh: "笔记库文件较新",
     },
     "Vault matches winner": {
-        la: "Tabularium cum victrice congruit",
+        la: "Armarium cum victrice congruit",
         zh: "笔记库与胜出版本一致",
     },
     "Vault: ${SIZE} B · ${TIME}": {
-        la: "Tabularium: ${SIZE} B · ${TIME}",
+        la: "Armarium: ${SIZE} B · ${TIME}",
         zh: "笔记库：${SIZE} B · ${TIME}",
     },
     "Vault: ${VAULT} B · Δsize vs DB ${DIFFERENCE} B": {
-        la: "Tabularium: ${VAULT} B · Δmagnitudo contra repositorium ${DIFFERENCE} B",
+        la: "Armarium: ${VAULT} B · Δmagnitudo contra repositorium ${DIFFERENCE} B",
         zh: "笔记库：${VAULT} B · 与数据库的 Δ大小 ${DIFFERENCE} B",
     },
     "Vault: missing": {
-        la: "Tabularium: deest",
+        la: "Armarium: deest",
         zh: "笔记库：缺失",
     },
     "WebRTC encrypts data between your devices, including when it passes through TURN. The TURN provider cannot read the transferred data. It can see network addresses and traffic volume.":
@@ -7464,7 +7464,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         },
     "When enabled, this device notifies connected peers after a local change. The notification contains no Vault data; a peer which follows this device then fetches the change through the encrypted P2P connection.":
         {
-            la: "Si activa est, hoc instrumentum pares conexos post mutationem localem certiores facit. Nuntius nulla data tabularii continet; par qui hoc instrumentum sequitur deinde mutationem per conexionem P2P cryptatam arcessit.",
+            la: "Si activa est, hoc instrumentum pares conexos post mutationem localem certiores facit. Nuntius nulla data armarii continet; par qui hoc instrumentum sequitur deinde mutationem per conexionem P2P cryptatam arcessit.",
             zh: "启用后，本设备在本地发生变更后会通知已连接的对等方。通知中不包含笔记库数据；跟随本设备的对等方随后会通过加密的 P2P 连接获取变更。",
         },
     "While enabled, it causes very performance impact but debugging replication testing and other features will be enabled. Please disable this if you have not read the source code. Requires restart of Obsidian. Sometimes there is no implementation.":
