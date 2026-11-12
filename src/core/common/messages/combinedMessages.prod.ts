@@ -4225,7 +4225,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.20.0": {
         def: "Tabularius answers read like notes (tables, code, Mermaid diagrams) and take attachments: pictures, text files and PDFs; web search is switched on per conversation. Web notes draws Mermaid diagrams, keeps the vault open when you come back from a citation, and opens linked notes at the top. Shared pages follow the sharer's colours.",
-        la: "Responsa Tabularii ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, armarium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
+        la: "Responsa quae Tabularius dat ut commentarii ostenduntur (tabulae, codex, diagrammata Mermaid) et plicas accipiunt: imagines, plicas textus et PDF; quaestio in interrete per colloquium accenditur. Commentarii in interrete diagrammata Mermaid pingunt, armarium apertum servant cum a citatione reverteris, et commentarios coniunctos ab initio aperiunt. Paginae communicatae colores communicantis sequuntur.",
         zh: "书记员的回答按笔记的样式显示（表格、代码、Mermaid 图），并可添加附件：图片、文本文件和 PDF；联网搜索按对话开启。云笔记画出 Mermaid 图，从引用回来时笔记库保持打开，打开链接的笔记从开头显示。分享页使用分享者的配色。",
     },
     "tabularium.release.0.21.0": {
@@ -4235,7 +4235,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.22.0": {
         def: "A quieter web interface with depth: the content floats as a sheet beside the sidebar, states are dots, actions are icons with their names in tooltips, large headings are set in a serif. Clerk conversations can be renamed, grouped into projects and archived from each conversation's menu. Web notes show the sync state beside the vault name and can fold the file tree away. Share pages draw Mermaid diagrams; code blocks are highlighted in about sixty languages.",
-        la: "Facies interretialis quietior et profundior: contentum ut charta iuxta latus fluitat, status punctis, actiones iconibus cum nominibus in titulis, tituli magni litteris serifatis. Colloquia Tabularii renominari, in incepta disponi et in archivum reponi possunt ex indice cuiusque colloquii. Commentarii interretis statum synchronizationis iuxta nomen arcae ostendunt et indicem plicarum condere possunt. Paginae communicatae diagrammata Mermaid pingunt; codicis segmenta circiter sexaginta linguis colorantur.",
+        la: "Facies interretialis quietior et profundior: contentum ut charta iuxta latus fluitat, status punctis, actiones iconibus cum nominibus in titulis, tituli magni litteris serifatis. Colloquia scribae renominari, in incepta disponi et in archivum reponi possunt ex indice cuiusque colloquii. Commentarii interretis statum synchronizationis iuxta nomen armarii ostendunt et indicem plicarum condere possunt. Paginae communicatae diagrammata Mermaid pingunt; codicis segmenta circiter sexaginta linguis colorantur.",
         zh: "网页界面更安静、有层次：内容区像一张纸浮在侧栏旁，状态用圆点，操作用图标、名称在悬浮提示里，大标题用衬线字体。书记员的对话可以在每个对话的菜单里重命名、归入项目、归档。云笔记的同步状态显示在笔记库名旁，文件树可以收起。分享页画出 Mermaid 图；代码块支持约六十种语言的着色。",
     },
     "tabularium.release.0.23.0": {
@@ -4245,7 +4245,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.23.1": {
         def: "Password managers no longer put their autofill button on the web pages' ordinary fields (the clerk's message box, searches, settings); sign-in and password fields work with them as before.",
-        la: "Custodes tesserarum (ut Bitwarden) iam non in campis communibus paginarum interretis (capsa nuntii Tabularii, quaestiones, optiones) bullam suam implendi ponunt; campi ingressus et tesserae ut antea cum eis operantur.",
+        la: "Custodes tesserarum (ut Bitwarden) iam non in campis communibus paginarum interretis (capsa nuntii scribae, quaestiones, optiones) bullam suam implendi ponunt; campi ingressus et tesserae ut antea cum eis operantur.",
         zh: "密码管理器（如 Bitwarden）不再在网页的普通输入框（书记员输入框、查找框、各项设置）上出现自动填充按钮；登录与修改密码的输入框照常可以自动填充。",
     },
     "tabularium.release.0.24.0": {
@@ -4290,7 +4290,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.0.26.1": {
         def: "Server only: the Tabularius curation rules in a vault's own prompt also change to the list in sortspec.md when the server is upgraded, where they were still as first written. The plug-in is unchanged.",
-        la: "Solum ministrator: regulae ordinandi Tabularii in praecepto armarii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
+        la: "Solum ministrator: regulae ordinandi quas Tabularius sequitur, in praecepto armarii proprio scriptae, si adhuc ut primum scriptae sunt, renovato ministratore quoque ad indicem in sortspec.md mutantur. Additamentum non mutatur.",
         zh: "只改服务器：写在笔记库提示词里的 Tabularius 整理规则，若仍是原文，也随服务器升级改为 sortspec.md 正文列表的写法。插件没有变化。",
     },
     "tabularium.release.0.26.2": {
@@ -4350,7 +4350,7 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
     },
     "tabularium.release.1.0.3": {
         def: "Server: Tabularius recipes offer every parameter of each provider's API; TensorRT-LLM as a local provider.",
-        la: "Ministrator: rationes Tabularii omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis.",
+        la: "Ministrator: rationes quibus Tabularius utitur omnia praebitorum mandata praebent; TensorRT-LLM ut praebitor localis.",
         zh: "服务器：Tabularius 配方提供各提供商接口的全部参数；新增本机提供商 TensorRT-LLM。",
     },
     "tabularium.release.1.1.0": {
@@ -4377,6 +4377,11 @@ export const allMessages: Readonly<Record<string, Readonly<Record<string, string
         def: "Sensitive marks draw their dotted line with a bottom border, as the Obsidian review asks.",
         la: "Notae Secretum lineam punctatam margine inferiore ducunt, ut recognitio Obsidian postulat.",
         zh: "敏感标记的虚线改用下边框绘制，符合 Obsidian 审核要求。",
+    },
+    "tabularium.release.1.2.3": {
+        def: "Latin interface: a vault is called armarium, set apart from the name Tabularium; sentences about Tabularius name it in the nominative.",
+        la: "Lingua Latina: quae antea tabularia dicebantur nunc armaria sunt, ut a nomine Tabularium distinguantur; sententiae ubi Tabularius nominatur casum nominativum adhibent.",
+        zh: "拉丁语界面：笔记库改称 armarium，与 Tabularium 这个名字区分开；提到 Tabularius 的句子改用主格。",
     },
     "tabularium.server.address": {
         def: "Server address",

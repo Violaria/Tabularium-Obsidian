@@ -275,7 +275,7 @@ export const catalogues = {
         "error.Proposal not found": "Propositum non inventum.",
         "error.Proposal is not pending": "Hoc propositum iam adhibitum aut reiectum est.",
         "error.The hosted client is not in sync": "Tabularius synchronizationem huius armarii nondum perfecit. Mox iterum tempta.",
-        "error.Proposal cannot be applied": "Armarium mutatum est; hoc propositum adhiberi non potest. Reice id et novum a Tabulario pete.",
+        "error.Proposal cannot be applied": "Armarium mutatum est; hoc propositum adhiberi non potest. Reice id et novum pete; Tabularius id proponet.",
         "error.Wrong passphrase": "Tessera non recta est.",
         "error.Confirmation required": "Confirma ministratorem hoc armarium legere licere.",
         "error.Tabularius is not configured": "Tabularius in hoc ministratore non est constitutus. Administrator praebitorem in configuratione ministratoris statuit.",
